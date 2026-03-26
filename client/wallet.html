@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GX Eon V2 - Wallet Web3</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #000000;
+  color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+/* Sidebar */
+#sidebar {
+  width: 260px;
+  background: #000000;
+  border-right: 1px solid #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px 16px;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.agents-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agent-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #aaa;
+  text-align: left;
+  width: 100%;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.agent-btn:hover {
+  border-color: #00aaff;
+  color: #ffffff;
+  background: #111;
+}
+
+.agent-btn.active {
+  background: #00aaff;
+  border-color: #00aaff;
+  color: #000000;
+}
+
+.agent-btn .icon {
+  font-size: 18px;
+}
+
+/* Main Content Area */
+#content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+/* Header */
+.header {
+  padding: 16px 24px;
+  background: #0a0a0a;
+  border-bottom: 1px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header h1 span {
+  color: #00aaff;
+}
+
+/* Main */
+.main {
+  flex: 1;
+  padding: 24px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Balance Display */
+.balance-card {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.balance-label {
+  font-size: 14px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.balance-value {
+  font-size: 48px;
+  font-weight: 700;
+  color: #00ff88;
+  margin-bottom: 8px;
+}
+
+.balance-currency {
+  font-size: 18px;
+  color: #666;
+}
+
+/* Action Buttons */
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  justify-content: center;
+}
+
+.action-btn {
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn.primary {
+  background: #00aaff;
+  color: #000000;
+}
+
+.action-btn.primary:hover {
+  background: #33bbff;
+  transform: translateY(-1px);
+}
+
+.action-btn.secondary {
+  background: #1a1a1a;
+  color: #ffffff;
+  border: 1px solid #2a2a2a;
+}
+
+.action-btn.secondary:hover {
+  border-color: #00aaff;
+  color: #00aaff;
+}
+
+/* Transaction History */
+.transactions-card {
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.card-header {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transactions-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #888;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.transactions-table td {
+  padding: 16px;
+  font-size: 14px;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.transactions-table tr:last-child td {
+  border-bottom: none;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.success {
+  background: rgba(0, 255, 136, 0.1);
+  color: #00ff88;
+}
+
+.status-badge.pending {
+  background: rgba(255, 170, 0, 0.1);
+  color: #ffaa00;
+}
+
+.status-badge.error {
+  background: rgba(255, 68, 68, 0.1);
+  color: #ff4444;
+}
+
+/* Footer */
+.footer {
+  padding: 12px 24px;
+  background: #0a0a0a;
+  border-top: 1px solid #1a1a1a;
+  text-align: center;
+  font-size: 12px;
+  color: #666;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 14px 20px;
+  background: #1a1a1a;
+  border-radius: 10px;
+  border-left: 4px solid #00aaff;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  transform: translateX(400px);
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.toast.error {
+  border-left-color: #ff4444;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00aaff;
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <div class="sidebar-title">GX Eon V2 - Módulos</div>
+  <div class="agents-grid">
+    <a href="/" class="agent-btn" data-agent="orchestrator">
+      <span class="icon">⚡</span>
+      <span>Orchestrator</span>
+    </a>
+    <a href="/wallet.html" class="agent-btn active" data-agent="wallet">
+      <span class="icon">💰</span>
+      <span>Wallet Web3</span>
+    </a>
+    <a href="/agents.html" class="agent-btn" data-agent="monetized_agents">
+      <span class="icon">🤖</span>
+      <span>Agentes Autônomos</span>
+    </a>
+    <a href="/apis.html" class="agent-btn" data-agent="external_apis">
+      <span class="icon">🌐</span>
+      <span>APIs Inteligentes</span>
+    </a>
+    <a href="/microtasks.html" class="agent-btn" data-agent="microtasks">
+      <span class="icon">📝</span>
+      <span>Microtasks Automáticas</span>
+    </a>
+    <a href="/contracts.html" class="agent-btn" data-agent="contracts">
+      <span class="icon">📜</span>
+      <span>Smart Contracts</span>
+    </a>
+    <a href="/logs.html" class="agent-btn" data-agent="dashboard">
+      <span class="icon">📊</span>
+      <span>Logs & Dashboard</span>
+    </a>
+  </div>
+</div>
+
+<!-- Content Area -->
+<div id="content-area">
+  <div class="header">
+    <h1><span>💰</span> Wallet Web3</h1>
+  </div>
+
+  <div class="main">
+  <!-- Balance Display -->
+  <div class="balance-card">
+    <div class="balance-label">Saldo Atual</div>
+    <div class="balance-value" id="balance">2.4587</div>
+    <div class="balance-currency">ETH</div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="actions">
+    <button class="action-btn primary" onclick="connectWallet()">
+      <span>🔗</span> Conectar MetaMask
+    </button>
+    <button class="action-btn secondary" onclick="sendPayment()">
+      <span>💸</span> Enviar Pagamento
+    </button>
+  </div>
+
+  <!-- Transaction History -->
+  <div class="transactions-card">
+    <div class="card-header">
+      <span>📜</span> Histórico de Transações
+    </div>
+    <table class="transactions-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Tipo</th>
+          <th>Valor</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="transaction-list">
+        <tr>
+          <td>26/03/2026 14:30</td>
+          <td>Recebimento</td>
+          <td style="color: #00ff88;">+0.500 ETH</td>
+          <td><span class="status-badge success">Confirmado</span></td>
+        </tr>
+        <tr>
+          <td>26/03/2026 12:15</td>
+          <td>Pagamento</td>
+          <td style="color: #ff4444;">-0.125 ETH</td>
+          <td><span class="status-badge success">Confirmado</span></td>
+        </tr>
+        <tr>
+          <td>26/03/2026 10:00</td>
+          <td>Microtask Reward</td>
+          <td style="color: #00ff88;">+0.002 ETH</td>
+          <td><span class="status-badge pending">Pendente</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="footer">
+  GX Eon V2 &copy; 2026 - Wallet Web3 Module
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+function showToast(message, type = 'info') {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.className = 'toast' + (type === 'error' ? ' error' : '');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function connectWallet() {
+  showToast('Conectando MetaMask...', 'info');
+  setTimeout(() => {
+    showToast('MetaMask conectado com sucesso!', 'success');
+    document.getElementById('balance').textContent = (Math.random() * 5 + 0.5).toFixed(4);
+  }, 1500);
+}
+
+function sendPayment() {
+  showToast('Abrindo interface de pagamento...', 'info');
+  setTimeout(() => {
+    showToast('Pagamento enviado!', 'success');
+  }, 1000);
+}
+
+// Update balance periodically
+setInterval(() => {
+  const current = parseFloat(document.getElementById('balance').textContent);
+  const change = (Math.random() - 0.5) * 0.01;
+  document.getElementById('balance').textContent = (current + change).toFixed(4);
+}, 5000);
+</script>
+
+</body>
+</html>

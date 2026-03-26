@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GX Eon V2 - Agentes Autônomos</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #000000; color: #ffffff; min-height: 100vh; display: flex; flex-direction: row; overflow: hidden; }
+
+/* Sidebar */
+#sidebar {
+  width: 260px;
+  background: #000000;
+  border-right: 1px solid #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px 16px;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.agents-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agent-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #aaa;
+  text-align: left;
+  width: 100%;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.agent-btn:hover {
+  border-color: #00aaff;
+  color: #ffffff;
+  background: #111;
+}
+
+.agent-btn.active {
+  background: #00aaff;
+  border-color: #00aaff;
+  color: #000000;
+}
+
+.agent-btn .icon {
+  font-size: 18px;
+}
+
+/* Content Area */
+#content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.header { padding: 16px 24px; background: #0a0a0a; border-bottom: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: center; }
+.header h1 { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.header h1 span { color: #00aaff; }
+.main { flex: 1; padding: 24px; max-width: 1400px; width: 100%; margin: 0 auto; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; text-align: center; }
+.stat-value { font-size: 32px; font-weight: 700; color: #00aaff; }
+.stat-label { font-size: 12px; color: #888; text-transform: uppercase; margin-top: 4px; }
+.actions { display: flex; gap: 12px; margin-bottom: 24px; justify-content: center; }
+.action-btn { padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; display: flex; align-items: center; gap: 8px; }
+.action-btn.primary { background: #00aaff; color: #000000; }
+.action-btn.primary:hover { background: #33bbff; transform: translateY(-1px); }
+.action-btn.secondary { background: #1a1a1a; color: #ffffff; border: 1px solid #2a2a2a; }
+.action-btn.secondary:hover { border-color: #00aaff; color: #00aaff; }
+.agents-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 16px; padding: 24px; }
+.card-header { font-size: 18px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.agents-table { width: 100%; border-collapse: collapse; }
+.agents-table th { text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #888; border-bottom: 1px solid #1a1a1a; }
+.agents-table td { padding: 16px; font-size: 14px; border-bottom: 1px solid #1a1a1a; }
+.agents-table tr:last-child td { border-bottom: none; }
+.status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+.status-badge.active { background: rgba(0, 255, 136, 0.1); color: #00ff88; }
+.status-badge.idle { background: rgba(136, 136, 136, 0.1); color: #888; }
+.status-badge.running { background: rgba(0, 170, 255, 0.1); color: #00aaff; }
+.priority-badge { padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.priority-badge.high { background: #ff4444; color: #fff; }
+.priority-badge.medium { background: #ffaa00; color: #000; }
+.priority-badge.low { background: #00ff88; color: #000; }
+.control-btn { padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; border: 1px solid #2a2a2a; background: transparent; color: #888; transition: all 0.2s; }
+.control-btn:hover { border-color: #00aaff; color: #00aaff; }
+.footer { padding: 12px 24px; background: #0a0a0a; border-top: 1px solid #1a1a1a; text-align: center; font-size: 12px; color: #666; }
+.toast { position: fixed; top: 20px; right: 20px; padding: 14px 20px; background: #1a1a1a; border-radius: 10px; border-left: 4px solid #00aaff; font-size: 14px; font-weight: 500; color: #ffffff; transform: translateX(400px); transition: transform 0.3s ease; z-index: 1000; }
+.toast.show { transform: translateX(0); }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #00aaff; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <div class="sidebar-title">GX Eon V2 - Módulos</div>
+  <div class="agents-grid">
+    <a href="/" class="agent-btn" data-agent="orchestrator">
+      <span class="icon">⚡</span>
+      <span>Orchestrator</span>
+    </a>
+    <a href="/wallet.html" class="agent-btn" data-agent="wallet">
+      <span class="icon">💰</span>
+      <span>Wallet Web3</span>
+    </a>
+    <a href="/agents.html" class="agent-btn active" data-agent="monetized_agents">
+      <span class="icon">🤖</span>
+      <span>Agentes Autônomos</span>
+    </a>
+    <a href="/apis.html" class="agent-btn" data-agent="external_apis">
+      <span class="icon">🌐</span>
+      <span>APIs Inteligentes</span>
+    </a>
+    <a href="/microtasks.html" class="agent-btn" data-agent="microtasks">
+      <span class="icon">📝</span>
+      <span>Microtasks Automáticas</span>
+    </a>
+    <a href="/contracts.html" class="agent-btn" data-agent="contracts">
+      <span class="icon">📜</span>
+      <span>Smart Contracts</span>
+    </a>
+    <a href="/logs.html" class="agent-btn" data-agent="dashboard">
+      <span class="icon">📊</span>
+      <span>Logs & Dashboard</span>
+    </a>
+  </div>
+</div>
+
+<!-- Content Area -->
+<div id="content-area">
+<div class="header">
+  <h1><span>🤖</span> Agentes Autônomos</h1>
+</div>
+<div class="main">
+  <div class="stats">
+    <div class="stat-card"><div class="stat-value" id="active-count">4</div><div class="stat-label">Agentes Ativos</div></div>
+    <div class="stat-card"><div class="stat-value" id="task-count">12</div><div class="stat-label">Tasks Executadas</div></div>
+    <div class="stat-card"><div class="stat-value" id="earnings">0.045</div><div class="stat-label">ETH Gerado</div></div>
+    <div class="stat-card"><div class="stat-value">98.5%</div><div class="stat-label">Uptime</div></div>
+  </div>
+  <div class="actions">
+    <button class="action-btn primary" onclick="createAgent()"><span>➕</span> Criar Agente</button>
+    <button class="action-btn secondary" onclick="startAll()"><span>▶️</span> Iniciar Todos</button>
+    <button class="action-btn secondary" onclick="stopAll()"><span>⏸️</span> Parar Todos</button>
+  </div>
+  <div class="agents-card">
+    <div class="card-header"><span>🎯</span> Lista de Agentes</div>
+    <table class="agents-table">
+      <thead>
+        <tr><th>Nome</th><th>Status</th><th>Task Atual</th><th>Prioridade</th><th>Ações</th></tr>
+      </thead>
+      <tbody id="agents-list">
+        <tr><td><strong>ResearchBot_01</strong></td><td><span class="status-badge active">Ativo</span></td><td>Análise de mercado</td><td><span class="priority-badge high">Alta</span></td><td><button class="control-btn" onclick="stopAgent('ResearchBot_01')">Parar</button></td></tr>
+        <tr><td><strong>TraderBot_Alpha</strong></td><td><span class="status-badge running">Executando</span></td><td>Execução de trade</td><td><span class="priority-badge high">Alta</span></td><td><button class="control-btn" onclick="stopAgent('TraderBot_Alpha')">Parar</button></td></tr>
+        <tr><td><strong>ContentGen_X</strong></td><td><span class="status-badge idle">Idle</span></td><td>Aguardando task</td><td><span class="priority-badge medium">Média</span></td><td><button class="control-btn" onclick="startAgent('ContentGen_X')">Iniciar</button></td></tr>
+        <tr><td><strong>DataValidator_02</strong></td><td><span class="status-badge active">Ativo</span></td><td>Validação de dados</td><td><span class="priority-badge low">Baixa</span></td><td><button class="control-btn" onclick="stopAgent('DataValidator_02')">Parar</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="footer">GX Eon V2 © 2026 - Agentes Autônomos Module</div>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+function createAgent() { showToast('Criando novo agente...'); setTimeout(()=>showToast('Agente criado com sucesso!'),1500); }
+function startAll() { showToast('Iniciando todos os agentes...'); }
+function stopAll() { showToast('Parando todos os agentes...'); }
+function startAgent(name) { showToast(`Iniciando ${name}...`); }
+function stopAgent(name) { showToast(`Parando ${name}...`); }
+setInterval(()=>{ document.getElementById('earnings').textContent=(parseFloat(document.getElementById('earnings').textContent)+0.001).toFixed(3); },10000);
+</script>
+</body>
+</html>

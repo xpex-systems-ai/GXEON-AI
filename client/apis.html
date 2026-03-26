@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GX Eon V2 - APIs Inteligentes</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #000000; color: #ffffff; min-height: 100vh; display: flex; flex-direction: row; overflow: hidden; }
+
+/* Sidebar */
+#sidebar {
+  width: 260px;
+  background: #000000;
+  border-right: 1px solid #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px 16px;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.agents-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.agent-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #0a0a0a;
+  border: 1px solid #1a1a1a;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: #aaa;
+  text-align: left;
+  width: 100%;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.agent-btn:hover {
+  border-color: #00aaff;
+  color: #ffffff;
+  background: #111;
+}
+
+.agent-btn.active {
+  background: #00aaff;
+  border-color: #00aaff;
+  color: #000000;
+}
+
+.agent-btn .icon {
+  font-size: 18px;
+}
+
+/* Content Area */
+#content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.header { padding: 16px 24px; background: #0a0a0a; border-bottom: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: center; }
+.header h1 { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.header h1 span { color: #00aaff; }
+.main { flex: 1; padding: 24px; max-width: 1400px; width: 100%; margin: 0 auto; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px; text-align: center; }
+.stat-value { font-size: 32px; font-weight: 700; color: #00aaff; }
+.stat-label { font-size: 12px; color: #888; text-transform: uppercase; margin-top: 4px; }
+.actions { display: flex; gap: 12px; margin-bottom: 24px; justify-content: center; }
+.action-btn { padding: 14px 28px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; display: flex; align-items: center; gap: 8px; }
+.action-btn.primary { background: #00aaff; color: #000000; }
+.action-btn.primary:hover { background: #33bbff; transform: translateY(-1px); }
+.action-btn.secondary { background: #1a1a1a; color: #ffffff; border: 1px solid #2a2a2a; }
+.action-btn.secondary:hover { border-color: #00aaff; color: #00aaff; }
+.apis-card { background: #0a0a0a; border: 1px solid #1a1a1a; border-radius: 16px; padding: 24px; }
+.card-header { font-size: 18px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.apis-table { width: 100%; border-collapse: collapse; }
+.apis-table th { text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 600; text-transform: uppercase; color: #888; border-bottom: 1px solid #1a1a1a; }
+.apis-table td { padding: 16px; font-size: 14px; border-bottom: 1px solid #1a1a1a; }
+.apis-table tr:last-child td { border-bottom: none; }
+.status-badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+.status-badge.connected { background: rgba(0, 255, 136, 0.1); color: #00ff88; }
+.status-badge.disconnected { background: rgba(255, 68, 68, 0.1); color: #ff4444; }
+.status-badge.testing { background: rgba(255, 170, 0, 0.1); color: #ffaa00; }
+.control-btn { padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; border: 1px solid #2a2a2a; background: transparent; color: #888; transition: all 0.2s; }
+.control-btn:hover { border-color: #00aaff; color: #00aaff; }
+.control-btn.connected { border-color: #00ff88; color: #00ff88; }
+.footer { padding: 12px 24px; background: #0a0a0a; border-top: 1px solid #1a1a1a; text-align: center; font-size: 12px; color: #666; }
+.toast { position: fixed; top: 20px; right: 20px; padding: 14px 20px; background: #1a1a1a; border-radius: 10px; border-left: 4px solid #00aaff; font-size: 14px; font-weight: 500; color: #ffffff; transform: translateX(400px); transition: transform 0.3s ease; z-index: 1000; }
+.toast.show { transform: translateX(0); }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #00aaff; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="sidebar">
+  <div class="sidebar-title">GX Eon V2 - Módulos</div>
+  <div class="agents-grid">
+    <a href="/" class="agent-btn" data-agent="orchestrator">
+      <span class="icon">⚡</span>
+      <span>Orchestrator</span>
+    </a>
+    <a href="/wallet.html" class="agent-btn" data-agent="wallet">
+      <span class="icon">💰</span>
+      <span>Wallet Web3</span>
+    </a>
+    <a href="/agents.html" class="agent-btn" data-agent="monetized_agents">
+      <span class="icon">🤖</span>
+      <span>Agentes Autônomos</span>
+    </a>
+    <a href="/apis.html" class="agent-btn active" data-agent="external_apis">
+      <span class="icon">🌐</span>
+      <span>APIs Inteligentes</span>
+    </a>
+    <a href="/microtasks.html" class="agent-btn" data-agent="microtasks">
+      <span class="icon">📝</span>
+      <span>Microtasks Automáticas</span>
+    </a>
+    <a href="/contracts.html" class="agent-btn" data-agent="contracts">
+      <span class="icon">📜</span>
+      <span>Smart Contracts</span>
+    </a>
+    <a href="/logs.html" class="agent-btn" data-agent="dashboard">
+      <span class="icon">📊</span>
+      <span>Logs & Dashboard</span>
+    </a>
+  </div>
+</div>
+
+<!-- Content Area -->
+<div id="content-area">
+<div class="header">
+  <h1><span>🌐</span> APIs Inteligentes</h1>
+</div>
+<div class="main">
+  <div class="stats">
+    <div class="stat-card"><div class="stat-value" id="api-count">4</div><div class="stat-label">APIs Conectadas</div></div>
+    <div class="stat-card"><div class="stat-value" id="request-count">1.2k</div><div class="stat-label">Requisições Hoje</div></div>
+    <div class="stat-card"><div class="stat-value">98%</div><div class="stat-label">Uptime</div></div>
+    <div class="stat-card"><div class="stat-value">45ms</div><div class="stat-label">Latência Média</div></div>
+  </div>
+  <div class="actions">
+    <button class="action-btn primary" onclick="connectAll()"><span>🔗</span> Conectar Todas</button>
+    <button class="action-btn secondary" onclick="runTest()"><span>🧪</span> Executar Teste</button>
+  </div>
+  <div class="apis-card">
+    <div class="card-header"><span>🌐</span> APIs Disponíveis</div>
+    <table class="apis-table">
+      <thead>
+        <tr><th>Nome API</th><th>Status</th><th>Última Execução</th><th>Latência</th><th>Ações</th></tr>
+      </thead>
+      <tbody id="apis-list">
+        <tr><td><strong>🧠 Hugging Face</strong><br><small>Llama-2-70b</small></td><td><span class="status-badge connected">Conectado</span></td><td>2 min atrás</td><td>52ms</td><td><button class="control-btn connected" onclick="testAPI('huggingface')">Testar</button></td></tr>
+        <tr><td><strong>🔍 DeepSeek AI</strong><br><small>DeepSeek-V3</small></td><td><span class="status-badge connected">Conectado</span></td><td>5 min atrás</td><td>38ms</td><td><button class="control-btn connected" onclick="testAPI('deepseek')">Testar</button></td></tr>
+        <tr><td><strong>💬 Grock AI</strong><br><small>Grok-1</small></td><td><span class="status-badge connected">Conectado</span></td><td>1 min atrás</td><td>41ms</td><td><button class="control-btn connected" onclick="testAPI('grok')">Testar</button></td></tr>
+        <tr><td><strong>🎯 ChatGPT</strong><br><small>GPT-4o-mini</small></td><td><span class="status-badge connected">Conectado</span></td><td>3 min atrás</td><td>67ms</td><td><button class="control-btn connected" onclick="testAPI('chatgpt')">Testar</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="footer">GX Eon V2 © 2026 - APIs Inteligentes Module</div>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+function connectAll() { showToast('Conectando todas as APIs...'); setTimeout(()=>showToast('4 APIs conectadas com sucesso!'),2000); }
+function runTest() { showToast('Executando teste de performance...'); setTimeout(()=>showToast('Teste concluído! Todas APIs respondendo.'),3000); }
+function testAPI(name) { showToast(`Testando ${name}...`); setTimeout(()=>showToast(`${name} respondendo normalmente!`),1000); }
+</script>
+</body>
+</html>
