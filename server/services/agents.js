@@ -738,35 +738,203 @@ const agentConfig = {
   bitensor: { name: 'Bitensor Analytics', type: 'analytics' },
   web3: { name: 'Metamask / Web3 Tasks', type: 'blockchain', smart_contracts: true },
   marketplace: { name: 'Marketplace de Agents', type: 'core', monetization: true },
-  liquidation: { name: 'Liquidação Automática', type: 'core', auto_workflow: true },
-  wallet: { name: 'Wallet Web3', type: 'blockchain', plug_and_play: true },
-  microtasks: { name: 'Microtasks Automáticas', type: 'automation', monetization: true, auto_execute: true },
-  contracts: { name: 'Smart Contracts', type: 'blockchain', auto_payment: true },
-  monetized_agents: { name: 'Agentes Autônomos Monetizados', type: 'ai_agents', self_monetizing: true },
-  external_apis: { name: 'APIs Externas Inteligentes', type: 'multi_api', keyless: true, parallel: true }
+}
+
+const supabase = supabaseUrl && supabaseKey 
+  ? createClient(supabaseUrl, supabaseKey)
+  : null;
+
+// Brain AI Controller
+const brainAI = {
+  status: process.env.BRAIN_STATUS || 'active',
+  role: 'central_ai_controller',
+  
+  async processCommand(command, context = {}) {
+    if (this.status !== 'active') {
+      return { error: 'Brain AI is not active' };
+    }
+    
+    // Route command to appropriate agent
+    const agent = context.agent || 'orchestrator';
+    return await executeAgent(agent, { command, context });
+  }
 };
 
-// Execute agent by ID
-async function executeAgent(agentId, payload) {
-  const agent = agents[agentId];
-  if (!agent) {
-    throw new Error(`Agente não encontrado: ${agentId}`);
+// Execute agent task
+async function executeAgent(agentType, params) {
+  const taskRecord = await logTask(agentType, params.task_name || 'execute', params);
+  
+  try {
+    let result;
+    
+    switch (agentType) {
+      case 'orchestrator':
+        result = await orchestratorAI(params);
+        break;
+      case 'wallet':
+        result = await walletService(params);
+        break;
+      case 'microtasks':
+        result = await microtaskService(params);
+        break;
+      case 'contracts':
+        result = await contractService(params);
+        break;
+      default:
+        result = await genericAIProcess(agentType, params);
+    }
+    
+    await updateTaskStatus(taskRecord.id, 'completed', result);
+    
+    // Trigger payment if configured
+    if (process.env.PAYMENT_ON_TASK_COMPLETION === 'true' && params.user_id) {
+      await registerPayment(params.user_id, params.reward || 0.0001, 'ETH', null);
+    }
+    
+    return { success: true, result, task_id: taskRecord.id };
+  } catch (error) {
+    await updateTaskStatus(taskRecord.id, 'failed', { error: error.message });
+    throw error;
+  }
+}
+
+// Orchestrator AI
+async function orchestratorAI(params) {
+  // Analyze request and route to appropriate agents
+  const availableAgents = ['wallet', 'microtasks', 'contracts', 'apis'];
+  
+  return {
+    orchestrated: true,
+    agents: availableAgents,
+    command: params.command,
+    timestamp: new Date().toISOString()
+  };
+}
+
+// Wallet Service
+async function walletService(params) {
+  const walletAddress = process.env.WEB3_WALLET_ADDRESS;
+  
+  return {
+    wallet_connected: !!walletAddress,
+    address: walletAddress,
+    network: process.env.WEB3_NETWORK || 'Ethereum',
+    action: params.action
+  };
+}
+
+// Microtask Service
+async function microtaskService(params) {
+  if (process.env.MICROTASKS_ENABLED !== 'true') {
+    return { error: 'Microtasks not enabled' };
   }
   
-  return await agent(payload);
+  return {
+    microtask_processed: true,
+    task: params.task_name,
+    reward: params.reward || 0.0001
+  };
 }
 
+// Contract Service
+async function contractService(params) {
+  return {
+    contract_executed: true,
+    contract_type: params.contract_type || 'generic'
+  };
+}
+
+// Generic AI Process
+async function genericAIProcess(agentType, params) {
+  return {
+    processed: true,
+    agent: agentType,
+    input: params,
+    output: `Processed by ${agentType} agent`
+  };
+}
+
+// Database Operations
+async function logTask(agent, taskName, payload) {
+  if (!supabase) return { id: 'local-' + Date.now() };
+  
+  const { data, error } = await supabase
+    .from('tasks')
+    .insert({ agent, task_name: taskName, payload, status: 'running' })
+    .select()
+    .single();
+    
+  if (error) throw error;
+  return data;
+}
+
+async function updateTaskStatus(taskId, status, result) {
+  if (!supabase) return;
+  
+  await supabase
+    .from('tasks')
+    .update({ status, result })
+    .eq('id', taskId);
+}
+
+async function registerPayment(userId, amount, currency, txHash) {
+  if (!supabase) return { id: 'local-' + Date.now() };
+  
+  const { data, error } = await supabase
+    .from('payments')
+    .insert({ 
+      user_id: userId, 
+      amount, 
+      currency, 
+      tx_hash: txHash,
+      status: txHash ? 'confirmed' : 'pending'
+    })
+    .select()
+    .single();
+    
+  if (error) throw error;
+  return data;
+}
+
+async function logEvent(module, action, message, metadata = {}) {
+  if (!supabase) {
+    console.log(`[${module}] ${action}: ${message}`);
+    return { id: 'local-' + Date.now() };
+  }
+  
+  const { data, error } = await supabase
+    .from('logs')
+    .insert({ module, action, message, metadata })
+    .select()
+    .single();
+    
+  if (error) throw error;
+  return data;
+}
+
+// Get agent status
 function getAgentStatus() {
-  return Object.keys(agentConfig).map(id => ({
-    id,
-    ...agentConfig[id],
-    available: !!agents[id]
-  }));
+  return {
+    brain: process.env.BRAIN_STATUS,
+    vector_db: process.env.VECTOR_DB_STATUS,
+    huggingface: process.env.HUGGINGFACE_STATUS,
+    deepseek: process.env.DEEPSEEK_STATUS,
+    grok: process.env.GROK_STATUS,
+    chatgpt: process.env.CHATGPT_STATUS,
+    bitensor: process.env.BITENSOR_STATUS,
+    monetization: {
+      plugin_play: process.env.MONETIZATION_PLUGIN_PLAY,
+      smart_contracts: process.env.MONETIZATION_SMART_CONTRACTS,
+      agents: process.env.MONETIZATION_AGENTS,
+      microtasks: process.env.MONETIZATION_MICROTASKS
+    }
+  };
 }
 
-module.exports = {
-  agents,
-  agentConfig,
-  executeAgent,
-  getAgentStatus
+module.exports = { 
+  executeAgent, 
+  getAgentStatus, 
+  brainAI, 
+  logEvent,
+  registerPayment 
 };

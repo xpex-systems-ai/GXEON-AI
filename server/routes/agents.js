@@ -247,4 +247,21 @@ router.get('/logs/export', async (req, res) => {
   }
 });
 
+const { executeTaskEdgeFunction, registerPaymentEdgeFunction, logEventEdgeFunction } = require('../edge-functions');
+
+// Edge Function: execute_task
+router.post('/edge/execute_task', executeTaskEdgeFunction);
+
+// Edge Function: register_payment
+router.post('/edge/register_payment', registerPaymentEdgeFunction);
+
+// Edge Function: log_event
+router.post('/edge/log_event', logEventEdgeFunction);
+
+// GXEON Supreme Config endpoint
+router.get('/config', (req, res) => {
+  const gxeonConfig = require('../../gxeon.config.js');
+  res.json(gxeonConfig.getPublicConfig());
+});
+
 module.exports = router;
