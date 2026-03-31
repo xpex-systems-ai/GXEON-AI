@@ -1,38 +1,30 @@
 // Safe Supabase Initialization - Lazy loaded with validation
 const fetch = require('node-fetch');
-const { createClient } = require('@supabase/supabase-js');
 
-let supabaseInstance = null;
+let _supabase = null;
 
 function getSupabaseClient() {
-  if (supabaseInstance) return supabaseInstance;
+  if (_supabase) return _supabase;
 
   try {
-    const url = process.env.SUPABASE_PROJECT_URL;
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-    if (!url || !key || !url.startsWith('http')) {
+    if (!supabaseUrl || !supabaseKey || !supabaseUrl.startsWith('http')) {
       console.warn('[Agents] Supabase env vars missing or invalid - running in local mode');
       return null;
     }
 
-    supabaseInstance = createClient(url, key);
-    console.log('[Agents] Supabase initialized successfully');
+    const { createClient } = require('@supabase/supabase-js');
+    _supabase = createClient(supabaseUrl, supabaseKey);
 
-    return supabaseInstance;
-  } catch (err) {
-    console.error('[Agents] Supabase init error:', err.message);
+    console.log('[Agents] Supabase initialized successfully');
+    return _supabase;
+  } catch (error) {
+    console.error('[Agents] Supabase init error:', error.message);
     return null;
   }
 }
-
-// Backward compatibility - direct reference uses getter
-const supabase = new Proxy({}, {
-  get: (target, prop) => {
-    const client = getSupabaseClient();
-    return client ? client[prop] : null;
-  }
-});
 
 // Agent implementations
 const agents = {
@@ -773,10 +765,6 @@ const agentConfig = {
   marketplace: { name: 'Marketplace de Agents', type: 'core', monetization: true },
 }
 
-const supabase = supabaseUrl && supabaseKey 
-  ? createClient(supabaseUrl, supabaseKey)
-  : null;
-
 // Brain AI Controller
 const brainAI = {
   status: process.env.BRAIN_STATUS || 'active',
@@ -887,62 +875,85 @@ async function genericAIProcess(agentType, params) {
   };
 }
 
-// Database Operations
+// Database Operations - Safe Supabase Access
 async function logTask(agent, taskName, payload) {
-  if (!supabase) return { id: 'local-' + Date.now() };
-  
-  const { data, error } = await supabase
-    .from('tasks')
-    .insert({ agent, task_name: taskName, payload, status: 'running' })
-    .select()
-    .single();
-    
-  if (error) throw error;
-  return data;
+  const client = getSupabaseClient();
+  if (!client) return { id: 'local-' + Date.now() };
+
+  try {
+    const { data, error } = await client
+      .from('tasks')
+      .insert({ agent, task_name: taskName, payload, status: 'running' })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('[Agents] logTask error:', err.message);
+    return { id: 'local-' + Date.now() };
+  }
 }
 
 async function updateTaskStatus(taskId, status, result) {
-  if (!supabase) return;
-  
-  await supabase
-    .from('tasks')
-    .update({ status, result })
-    .eq('id', taskId);
+  const client = getSupabaseClient();
+  if (!client) return;
+
+  try {
+    await client
+      .from('tasks')
+      .update({ status, result })
+      .eq('id', taskId);
+  } catch (err) {
+    console.error('[Agents] updateTaskStatus error:', err.message);
+  }
 }
 
 async function registerPayment(userId, amount, currency, txHash) {
-  if (!supabase) return { id: 'local-' + Date.now() };
-  
-  const { data, error } = await supabase
-    .from('payments')
-    .insert({ 
-      user_id: userId, 
-      amount, 
-      currency, 
-      tx_hash: txHash,
-      status: txHash ? 'confirmed' : 'pending'
-    })
-    .select()
-    .single();
-    
-  if (error) throw error;
-  return data;
+  const client = getSupabaseClient();
+  if (!client) return { id: 'local-' + Date.now() };
+
+  try {
+    const { data, error } = await client
+      .from('payments')
+      .insert({
+        user_id: userId,
+        amount,
+        currency,
+        tx_hash: txHash,
+        status: txHash ? 'confirmed' : 'pending'
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('[Agents] registerPayment error:', err.message);
+    return { id: 'local-' + Date.now() };
+  }
 }
 
 async function logEvent(module, action, message, metadata = {}) {
-  if (!supabase) {
+  const client = getSupabaseClient();
+  if (!client) {
     console.log(`[${module}] ${action}: ${message}`);
     return { id: 'local-' + Date.now() };
   }
-  
-  const { data, error } = await supabase
-    .from('logs')
-    .insert({ module, action, message, metadata })
-    .select()
-    .single();
-    
-  if (error) throw error;
-  return data;
+
+  try {
+    const { data, error } = await client
+      .from('logs')
+      .insert({ module, action, message, metadata })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.error('[Agents] logEvent error:', err.message);
+    return { id: 'local-' + Date.now() };
+  }
 }
 
 // Get agent status
