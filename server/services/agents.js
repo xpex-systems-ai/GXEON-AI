@@ -1,5 +1,38 @@
-// Agent Services Layer - GXEON V2.0
+// Safe Supabase Initialization - Lazy loaded with validation
 const fetch = require('node-fetch');
+const { createClient } = require('@supabase/supabase-js');
+
+let supabaseInstance = null;
+
+function getSupabaseClient() {
+  if (supabaseInstance) return supabaseInstance;
+
+  try {
+    const url = process.env.SUPABASE_PROJECT_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!url || !key || !url.startsWith('http')) {
+      console.warn('[Agents] Supabase env vars missing or invalid - running in local mode');
+      return null;
+    }
+
+    supabaseInstance = createClient(url, key);
+    console.log('[Agents] Supabase initialized successfully');
+
+    return supabaseInstance;
+  } catch (err) {
+    console.error('[Agents] Supabase init error:', err.message);
+    return null;
+  }
+}
+
+// Backward compatibility - direct reference uses getter
+const supabase = new Proxy({}, {
+  get: (target, prop) => {
+    const client = getSupabaseClient();
+    return client ? client[prop] : null;
+  }
+});
 
 // Agent implementations
 const agents = {

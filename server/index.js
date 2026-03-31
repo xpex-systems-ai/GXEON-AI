@@ -4,6 +4,20 @@ const path = require('path');
 
 require('dotenv').config({ path: path.join(__dirname, '../config/secure/.env') });
 
+// Startup ENV Validation
+const requiredEnv = [
+  'SUPABASE_PROJECT_URL',
+  'SUPABASE_SERVICE_ROLE_KEY'
+];
+
+const missingEnv = requiredEnv.filter(v => !process.env[v]);
+
+if (missingEnv.length > 0) {
+  console.warn('[Startup] Missing ENV variables:', missingEnv);
+} else {
+  console.log('[Startup] ENV OK');
+}
+
 const chatRoute = require('./routes/chat');
 const configRoute = require('./routes/config');
 const agentRoutes = require('./routes/agents');
