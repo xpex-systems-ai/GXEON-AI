@@ -1,4 +1,4 @@
-import { Terminal, RefreshCw, AlertCircle, Info, AlertTriangle, XCircle } from 'lucide-react';
+import { Terminal, RefreshCw, Info, AlertTriangle, XCircle } from 'lucide-react';
 import { useState } from 'react';
 
 interface LogEntry {
