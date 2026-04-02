@@ -1,5 +1,10 @@
 import { Dashboard } from './pages';
+import ErrorBoundary from './components/ErrorBoundary';
 
 export function App() {
-  return <Dashboard />;
+  return (
+    <ErrorBoundary>
+      <Dashboard />
+    </ErrorBoundary>
+  );
 }
