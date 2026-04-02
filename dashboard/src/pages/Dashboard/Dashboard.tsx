@@ -23,15 +23,38 @@ export function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch(`${(import.meta as any).env?.VITE_API_URL || 'http://localhost:3000'}/api/stats`);
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success) {
-            setStats(data.stats);
-          }
+        if (!fetch) {
+          console.error("[Dashboard] fetch not available");
+          return;
+        }
+        
+        const apiUrl = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000';
+        const response = await fetch(`${apiUrl}/api/stats`);
+        
+        if (!response || !response.ok) {
+          console.warn("[Dashboard] API response invalid:", response?.status);
+          return;
+        }
+        
+        const data = await response.json();
+        console.log("[Dashboard] API DATA:", data);
+        
+        if (!data) {
+          console.warn("[Dashboard] No data returned from API");
+          return;
+        }
+        
+        if (data.success) {
+          setStats({
+            agents: data.stats?.agents || 0,
+            tasks: data.stats?.tasks || 0,
+            completed: data.stats?.completed || 0,
+            pending: data.stats?.pending || 0,
+            balance: data.stats?.balance || 0
+          });
         }
       } catch (error) {
-        console.error('Failed to fetch stats:', error);
+        console.error('[Dashboard] Failed to fetch stats:', error);
       }
     };
 
