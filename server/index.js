@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 
+console.log('SERVER STARTING OK');
+
 require('dotenv').config({ path: path.join(__dirname, '../config/secure/.env') });
 
 // Startup ENV Validation
@@ -38,7 +40,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dashboard/dist/index.html'));
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`[SERVER] GXEON v2.1 - runtime-hardening branch`);
   console.log(`[SERVER] Running on port ${PORT}`);
   console.log(`[SERVER] Static serving: dashboard/dist`);
