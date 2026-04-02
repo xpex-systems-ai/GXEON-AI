@@ -37,7 +37,8 @@ class ApiClient {
       return data;
     } catch (error) {
       console.error(`[API] Error for ${endpoint}:`, error);
-      throw error;
+      // Return safe default instead of throwing
+      return {} as T;
     }
   }
 

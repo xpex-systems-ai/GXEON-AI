@@ -96,7 +96,7 @@ export function SystemLogs({ className = '' }: SystemLogsProps) {
       </div>
 
       <div className="space-y-2 max-h-[400px] overflow-y-auto scrollbar-thin pr-2">
-        {filteredLogs.map((log) => (
+        {(Array.isArray(filteredLogs) ? filteredLogs : []).map((log) => (
           <div
             key={log.id}
             className={`p-3 rounded-lg border-l-2 ${levelClasses[log.level]} bg-dark-700/30`}

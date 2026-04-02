@@ -12,7 +12,7 @@ export function AgentsList({ className = '' }: AgentsListProps) {
     interval: 5000,
   });
 
-  const agents = data?.agents || [];
+  const agents = Array.isArray(data?.agents) ? data.agents : [];
 
   // Format relative time
   const getRelativeTime = (lastSeen?: string) => {
@@ -62,7 +62,7 @@ export function AgentsList({ className = '' }: AgentsListProps) {
       )}
 
       <div className="space-y-2 max-h-[400px] overflow-y-auto scrollbar-thin pr-2">
-        {agents.map((agent) => (
+        {(Array.isArray(agents) ? agents : []).map((agent) => (
           <div
             key={agent.id}
             className="flex items-center justify-between p-3 bg-dark-700/50 rounded-lg border border-dark-600 hover:border-neon/20 transition-colors"
@@ -105,7 +105,7 @@ export function AgentsList({ className = '' }: AgentsListProps) {
       {agents.length > 0 && (
         <div className="mt-4 pt-4 border-t border-dark-600">
           <div className="flex items-center justify-between text-xs text-gray-500">
-            <span>{agents.filter(a => a.status === 'active').length} active</span>
+            <span>{(Array.isArray(agents) ? agents.filter(a => a?.status === 'active') : []).length} active</span>
             <span>Auto-refresh: 5s</span>
           </div>
         </div>
