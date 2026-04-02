@@ -5,7 +5,10 @@ const fs = require('fs');
 
 console.log('SERVER STARTING OK');
 
-require('dotenv').config({ path: path.join(__dirname, '../config/secure/.env') });
+const envPath = path.join(__dirname, '../config/secure/.env');
+if (fs.existsSync(envPath)) {
+  require('dotenv').config({ path: envPath });
+}
 
 // Startup ENV Validation
 const requiredEnv = [
