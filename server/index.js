@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 
 console.log('SERVER STARTING OK');
 
@@ -33,12 +34,28 @@ app.use(express.json());
 app.use('/chat', chatRoute);
 app.use('/api', configRoute);
 app.use('/api', agentRoutes);
-app.use(express.static(path.join(__dirname, '../dashboard/dist')));
 
-// Fallback route for SPA
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dashboard/dist/index.html'));
-});
+// Safe static serving with fallback
+const distPath = path.join(__dirname, '../dashboard/dist');
+
+if (fs.existsSync(distPath)) {
+  app.use(express.static(distPath));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+} else {
+  console.warn('⚠️ Frontend build not found at:', distPath);
+  console.warn('Run: cd dashboard && npm run build');
+  
+  // Serve API-only fallback
+  app.get('/', (req, res) => {
+    res.json({ 
+      status: 'API Only - Frontend build missing',
+      endpoints: ['/api/agents', '/api/tasks', '/api/stats']
+    });
+  });
+}
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`[SERVER] GXEON v2.1 - runtime-hardening branch`);
