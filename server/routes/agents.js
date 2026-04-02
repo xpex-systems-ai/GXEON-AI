@@ -464,6 +464,109 @@ router.post('/agents/:id/heartbeat', (req, res) => {
   });
 });
 
+// POST /wallet/connect - Connect browser extension wallet
+router.post('/wallet/connect', async (req, res) => {
+  try {
+    const { address, chainId } = req.body;
+    
+    if (!address) {
+      return res.status(400).json({
+        success: false,
+        error: 'Wallet address required'
+      });
+    }
+    
+    console.log('[Extension] Wallet connected:', address);
+    
+    res.json({
+      success: true,
+      message: 'Wallet connected',
+      address,
+      chainId: chainId || 1
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// GET /wallet/balance - Get wallet balance
+router.get('/wallet/balance', async (req, res) => {
+  try {
+    const { address } = req.query;
+    
+    // Mock balance - in production this would query blockchain
+    res.json({
+      success: true,
+      address,
+      balance: 0.5,
+      currency: 'ETH'
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST /payments/register - Register payment for completed task
+router.post('/payments/register', async (req, res) => {
+  try {
+    const { walletAddress, taskId, amount, currency } = req.body;
+    
+    const paymentId = `payment_${Date.now()}`;
+    
+    console.log('[Extension] Payment registered:', {
+      paymentId,
+      walletAddress,
+      taskId,
+      amount,
+      currency
+    });
+    
+    res.json({
+      success: true,
+      paymentId,
+      status: 'pending',
+      amount,
+      currency
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST /analytics/start - Start analytics tracking
+router.post('/analytics/start', async (req, res) => {
+  try {
+    const { startTime, source } = req.body;
+    
+    console.log('[Extension] Analytics tracking started:', { startTime, source });
+    
+    res.json({
+      success: true,
+      sessionId: `session_${Date.now()}`,
+      startTime
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// POST /analytics/stop - Stop analytics tracking
+router.post('/analytics/stop', async (req, res) => {
+  try {
+    const { duration, metrics } = req.body;
+    
+    console.log('[Extension] Analytics tracking stopped:', { duration, metrics });
+    
+    res.json({
+      success: true,
+      duration,
+      summary: metrics
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Edge Functions
 router.post('/edge/execute_task', executeTaskEdgeFunction);
 router.post('/edge/register_payment', registerPaymentEdgeFunction);
