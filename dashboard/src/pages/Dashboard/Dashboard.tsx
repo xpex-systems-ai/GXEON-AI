@@ -1,6 +1,7 @@
 import { Cpu, Zap, Activity, BarChart3, Users, CheckCircle, Clock, Wallet } from 'lucide-react';
 import { StatusCard, AgentsList, SystemLogs } from '../../components';
 import { useState, useEffect } from 'react';
+import { API_BASE } from '../../config/api';
 
 interface Stats {
   agents: number;
@@ -28,7 +29,7 @@ export function Dashboard() {
           return;
         }
         
-        const apiUrl = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000';
+        const apiUrl = API_BASE || 'http://localhost:3000';
         const response = await fetch(`${apiUrl}/api/stats`);
         
         if (!response || !response.ok) {

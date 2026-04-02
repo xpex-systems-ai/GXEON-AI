@@ -1,16 +1,24 @@
-const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:3000';
+import { API_BASE } from '../config/api';
+
+const API_URL = API_BASE || (import.meta as any).env?.VITE_API_URL || '';
 
 class ApiClient {
   private baseUrl: string;
 
   constructor() {
     this.baseUrl = API_URL;
+    console.log('[API] Base URL:', this.baseUrl || 'Using relative paths');
   }
 
   private async fetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     
     try {
+      if (!fetch) {
+        console.error('[API] fetch not available');
+        throw new Error('fetch not available');
+      }
+      
       const response = await fetch(url, {
         ...options,
         headers: {
@@ -19,13 +27,16 @@ class ApiClient {
         },
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      if (!response || !response.ok) {
+        console.warn(`[API] Response invalid for ${endpoint}:`, response?.status);
+        throw new Error(`HTTP ${response?.status || 'unknown'}`);
       }
 
-      return await response.json();
+      const data = await response.json();
+      console.log(`[API] Data from ${endpoint}:`, data);
+      return data;
     } catch (error) {
-      console.error(`API Error for ${endpoint}:`, error);
+      console.error(`[API] Error for ${endpoint}:`, error);
       throw error;
     }
   }
