@@ -1,7 +1,7 @@
 import { Cpu, Zap, Activity, BarChart3, Users, CheckCircle, Clock, Wallet } from 'lucide-react';
 import { StatusCard, AgentsList, SystemLogs } from '../../components';
 import { useState, useEffect } from 'react';
-import { API_BASE } from '../../config/api';
+import { API_BASE, safeFetchWrapper } from '../../utils/safeFetch';
 
 interface Stats {
   agents: number;
@@ -24,29 +24,10 @@ export function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // Safe fetch check using typeof
-        if (typeof fetch !== 'function') {
-          console.error("[Dashboard] fetch not available");
-          return;
-        }
-        
-        const apiUrl = API_BASE || 'http://localhost:3000';
-        const response = await fetch(`${apiUrl}/api/stats`);
-        
-        if (!response || !response.ok) {
-          console.warn("[Dashboard] API response invalid:", response?.status);
-          return;
-        }
-        
-        const data = await response.json();
+        const data = await safeFetchWrapper(`${API_BASE}/api/stats`);
         console.log("[Dashboard] API DATA:", data);
         
-        if (!data) {
-          console.warn("[Dashboard] No data returned from API");
-          return;
-        }
-        
-        if (data.success) {
+        if (data?.success) {
           setStats({
             agents: data.stats?.agents || 0,
             tasks: data.stats?.tasks || 0,

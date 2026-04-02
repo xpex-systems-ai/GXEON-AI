@@ -1,48 +1,18 @@
-import { API_BASE } from '../config/api';
+import { API_BASE, safeFetchWrapper } from './safeFetch';
 
-const API_URL = API_BASE || (import.meta as any).env?.VITE_API_URL || '';
+const API_URL = API_BASE;
 
 class ApiClient {
   private baseUrl: string;
 
   constructor() {
     this.baseUrl = API_URL;
-    console.log('[API] Base URL:', this.baseUrl || 'Using relative paths');
+    console.log('[API] Base URL:', this.baseUrl);
   }
 
   private async fetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-    
-    try {
-      // Safe fetch check - window.fetch for browser environment
-      const fetchFn = typeof window !== 'undefined' && window.fetch ? window.fetch : fetch;
-      
-      if (typeof fetchFn !== 'function') {
-        console.error('[API] fetch not available');
-        return { error: 'fetch not available' } as unknown as T;
-      }
-      
-      const response = await fetchFn(url, {
-        ...options,
-        headers: {
-          'Content-Type': 'application/json',
-          ...options?.headers,
-        },
-      });
-
-      if (!response || !response.ok) {
-        console.warn(`[API] Response invalid for ${endpoint}:`, response?.status);
-        throw new Error(`HTTP ${response?.status || 'unknown'}`);
-      }
-
-      const data = await response.json();
-      console.log(`[API] Data from ${endpoint}:`, data);
-      return data || {} as T;
-    } catch (error) {
-      console.error(`[API] Error for ${endpoint}:`, error);
-      // Return safe default instead of throwing
-      return {} as T;
-    }
+    return safeFetchWrapper<T>(url, options);
   }
 
   async getHealth() {
