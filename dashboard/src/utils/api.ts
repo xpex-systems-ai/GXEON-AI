@@ -14,12 +14,15 @@ class ApiClient {
     const url = `${this.baseUrl}${endpoint}`;
     
     try {
-      if (!fetch) {
+      // Safe fetch check - window.fetch for browser environment
+      const fetchFn = typeof window !== 'undefined' && window.fetch ? window.fetch : fetch;
+      
+      if (typeof fetchFn !== 'function') {
         console.error('[API] fetch not available');
-        throw new Error('fetch not available');
+        return { error: 'fetch not available' } as unknown as T;
       }
       
-      const response = await fetch(url, {
+      const response = await fetchFn(url, {
         ...options,
         headers: {
           'Content-Type': 'application/json',
@@ -34,7 +37,7 @@ class ApiClient {
 
       const data = await response.json();
       console.log(`[API] Data from ${endpoint}:`, data);
-      return data;
+      return data || {} as T;
     } catch (error) {
       console.error(`[API] Error for ${endpoint}:`, error);
       // Return safe default instead of throwing

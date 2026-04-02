@@ -24,7 +24,8 @@ export function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        if (!fetch) {
+        // Safe fetch check using typeof
+        if (typeof fetch !== 'function') {
           console.error("[Dashboard] fetch not available");
           return;
         }
