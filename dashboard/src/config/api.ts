@@ -1,4 +1,3 @@
 // API Configuration for production and development
-const API_BASE = (import.meta as any).env?.VITE_API_URL || '';
-
-export { API_BASE };
+// Update this with your Railway URL
+export const API_BASE = 'https://YOUR_RAILWAY_APP.up.railway.app';
