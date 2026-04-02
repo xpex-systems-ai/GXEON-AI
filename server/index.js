@@ -23,7 +23,7 @@ const configRoute = require('./routes/config');
 const agentRoutes = require('./routes/agents');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -31,13 +31,16 @@ app.use(express.json());
 app.use('/chat', chatRoute);
 app.use('/api', configRoute);
 app.use('/api', agentRoutes);
-app.use(express.static(path.join(__dirname, '../client')));
+app.use(express.static(path.join(__dirname, '../dashboard/dist')));
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/index.html'));
+// Fallback route for SPA
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dashboard/dist/index.html'));
 });
 
 app.listen(PORT, () => {
-  console.log(`GXEON rodando na porta ${PORT}`);
-  console.log('OpenRouter Key:', process.env.OPENROUTER_API_KEY ? 'Carregada' : 'Não encontrada');
+  console.log(`[SERVER] GXEON v2.1 - runtime-hardening branch`);
+  console.log(`[SERVER] Running on port ${PORT}`);
+  console.log(`[SERVER] Static serving: dashboard/dist`);
+  console.log(`[SERVER] OpenRouter Key: ${process.env.OPENROUTER_API_KEY ? 'Loaded ✓' : 'Missing ✗'}`);
 });

@@ -1,7 +1,5 @@
 import { Cpu, Zap, Activity, BarChart3, Users, CheckCircle, Clock, Wallet } from 'lucide-react';
 import { StatusCard, AgentsList, SystemLogs } from '../../components';
-import { useAutoRefresh } from '../../hooks/useAutoRefresh';
-import { apiClient } from '../../utils/api';
 import { useState, useEffect } from 'react';
 
 interface Stats {

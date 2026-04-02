@@ -1,4 +1,4 @@
-import { Terminal, RefreshCw, Info, AlertTriangle, XCircle } from 'lucide-react';
+import { Terminal, Info, AlertTriangle, XCircle } from 'lucide-react';
 import { useState } from 'react';
 
 interface LogEntry {
@@ -92,12 +92,6 @@ export function SystemLogs({ className = '' }: SystemLogsProps) {
             <option value="warn">Warning</option>
             <option value="error">Error</option>
           </select>
-          <button
-            className="p-2 hover:bg-dark-700 rounded-lg transition-colors"
-            title="Refresh logs"
-          >
-            <RefreshCw className="w-4 h-4 text-gray-400" />
-          </button>
         </div>
       </div>
 
