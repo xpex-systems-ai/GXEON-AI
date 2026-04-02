@@ -41,28 +41,66 @@ class ApiClient {
 
   async getAgents() {
     return this.fetch<{
+      success: boolean;
       agents: Array<{
         id: string;
         name: string;
-        type: string;
         status: string;
+        lastSeen?: string;
       }>;
-      status: {
-        brain: string;
-        vector_db: string;
-        huggingface: string;
-        deepseek: string;
-        grok: string;
-        chatgpt: string;
-        bitensor: string;
-        monetization: {
-          plugin_play: string;
-          smart_contracts: string;
-          agents: string;
-          microtasks: string;
-        };
+    }>('/api/agents');
+  }
+
+  async getTasks() {
+    return this.fetch<{
+      success: boolean;
+      tasks: Array<{
+        id: string;
+        type: string;
+        url: string;
+        status: string;
+        createdAt: string;
+      }>;
+    }>('/api/tasks');
+  }
+
+  async getStats() {
+    return this.fetch<{
+      success: boolean;
+      stats: {
+        agents: number;
+        tasks: number;
+        completed: number;
+        pending: number;
+        balance: number;
       };
-    }>('/agents');
+    }>('/api/stats');
+  }
+
+  async createTask(type: string, url: string) {
+    return this.fetch<{
+      success: boolean;
+      task: {
+        id: string;
+        type: string;
+        url: string;
+        status: string;
+        createdAt: string;
+      };
+    }>('/api/tasks', {
+      method: 'POST',
+      body: JSON.stringify({ type, url }),
+    });
+  }
+
+  async submitTaskResult(taskId: string, result: string) {
+    return this.fetch<{
+      success: boolean;
+      message: string;
+    }>('/api/tasks/result', {
+      method: 'POST',
+      body: JSON.stringify({ taskId, result }),
+    });
   }
 
   async getLogs() {

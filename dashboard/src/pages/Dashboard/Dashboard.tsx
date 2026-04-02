@@ -1,7 +1,47 @@
-import { Cpu, Zap, Activity, BarChart3 } from 'lucide-react';
+import { Cpu, Zap, Activity, BarChart3, Users, CheckCircle, Clock, Wallet } from 'lucide-react';
 import { StatusCard, AgentsList, SystemLogs } from '../../components';
+import { useAutoRefresh } from '../../hooks/useAutoRefresh';
+import { apiClient } from '../../utils/api';
+import { useState, useEffect } from 'react';
+
+interface Stats {
+  agents: number;
+  tasks: number;
+  completed: number;
+  pending: number;
+  balance: number;
+}
 
 export function Dashboard() {
+  const [stats, setStats] = useState<Stats>({
+    agents: 0,
+    tasks: 0,
+    completed: 0,
+    pending: 0,
+    balance: 0
+  });
+
+  // Fetch stats from API
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch(`${(import.meta as any).env?.VITE_API_URL || 'http://localhost:3000'}/api/stats`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success) {
+            setStats(data.stats);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch stats:', error);
+      }
+    };
+
+    fetchStats();
+    const interval = setInterval(fetchStats, 5000); // Refresh every 5s
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="min-h-screen bg-dark-900">
       {/* Header */}
@@ -34,16 +74,16 @@ export function Dashboard() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {/* Stats Row - Real Data */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <div className="card p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-gray-500">Active Agents</p>
-                <p className="text-2xl font-bold text-gray-200">8</p>
+                <p className="text-2xl font-bold text-gray-200">{stats.agents}</p>
               </div>
               <div className="p-2 bg-neon/10 rounded-lg">
-                <Zap className="w-5 h-5 text-neon" />
+                <Users className="w-5 h-5 text-neon" />
               </div>
             </div>
           </div>
@@ -51,8 +91,8 @@ export function Dashboard() {
           <div className="card p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-500">Tasks Today</p>
-                <p className="text-2xl font-bold text-gray-200">247</p>
+                <p className="text-xs text-gray-500">Total Tasks</p>
+                <p className="text-2xl font-bold text-gray-200">{stats.tasks}</p>
               </div>
               <div className="p-2 bg-blue-500/10 rounded-lg">
                 <BarChart3 className="w-5 h-5 text-blue-400" />
@@ -63,11 +103,11 @@ export function Dashboard() {
           <div className="card p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-500">Uptime</p>
-                <p className="text-2xl font-bold text-gray-200">99.9%</p>
+                <p className="text-xs text-gray-500">Completed</p>
+                <p className="text-2xl font-bold text-green-400">{stats.completed}</p>
               </div>
               <div className="p-2 bg-green-500/10 rounded-lg">
-                <Activity className="w-5 h-5 text-green-400" />
+                <CheckCircle className="w-5 h-5 text-green-400" />
               </div>
             </div>
           </div>
@@ -75,11 +115,23 @@ export function Dashboard() {
           <div className="card p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-gray-500">Revenue</p>
-                <p className="text-2xl font-bold text-neon">0.45 ETH</p>
+                <p className="text-xs text-gray-500">Pending</p>
+                <p className="text-2xl font-bold text-yellow-400">{stats.pending}</p>
+              </div>
+              <div className="p-2 bg-yellow-500/10 rounded-lg">
+                <Clock className="w-5 h-5 text-yellow-400" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="card p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-gray-500">Balance</p>
+                <p className="text-2xl font-bold text-neon">{stats.balance.toFixed(4)} ETH</p>
               </div>
               <div className="p-2 bg-purple-500/10 rounded-lg">
-                <BarChart3 className="w-5 h-5 text-purple-400" />
+                <Wallet className="w-5 h-5 text-purple-400" />
               </div>
             </div>
           </div>

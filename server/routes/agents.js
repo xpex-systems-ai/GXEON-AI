@@ -249,13 +249,224 @@ router.get('/logs/export', async (req, res) => {
 
 const { executeTaskEdgeFunction, registerPaymentEdgeFunction, logEventEdgeFunction } = require('../edge-functions');
 
-// Edge Function: execute_task
+// ===== REAL AGENT SYSTEM ENDPOINTS =====
+
+// In-memory task queue for real agent processing
+const taskQueue = [];
+const taskResults = [];
+const activeAgents = new Map();
+
+// GET /agents - List all active agents
+router.get('/agents', (req, res) => {
+  const agentsList = Array.from(activeAgents.values()).map(agent => ({
+    id: agent.id,
+    name: agent.name,
+    status: agent.status,
+    lastSeen: agent.lastSeen
+  }));
+  
+  // Add default agent if none registered
+  if (agentsList.length === 0) {
+    agentsList.push({
+      id: 'agent_01',
+      name: 'GXEON Agent 01',
+      status: 'active',
+      lastSeen: new Date().toISOString()
+    });
+  }
+  
+  res.json({
+    success: true,
+    agents: agentsList
+  });
+});
+
+// GET /tasks - List all tasks
+router.get('/tasks', (req, res) => {
+  res.json({
+    success: true,
+    tasks: taskQueue.map(t => ({
+      id: t.id,
+      type: t.type,
+      url: t.url,
+      status: t.status,
+      createdAt: t.createdAt
+    }))
+  });
+});
+
+// POST /tasks - Create new task
+router.post('/tasks', (req, res) => {
+  const { type, url } = req.body;
+  
+  if (!type || !url) {
+    return res.status(400).json({
+      success: false,
+      error: 'Missing required fields: type, url'
+    });
+  }
+  
+  const task = {
+    id: `task_${Date.now()}`,
+    type,
+    url,
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+    result: null
+  };
+  
+  taskQueue.push(task);
+  
+  res.json({
+    success: true,
+    task: {
+      id: task.id,
+      type: task.type,
+      url: task.url,
+      status: task.status,
+      createdAt: task.createdAt
+    }
+  });
+});
+
+// GET /tasks/next - Get next pending task for agent
+router.get('/tasks/next', (req, res) => {
+  const pendingTask = taskQueue.find(t => t.status === 'pending');
+  
+  if (!pendingTask) {
+    return res.json({
+      success: true,
+      task: null,
+      message: 'No pending tasks'
+    });
+  }
+  
+  // Mark as in-progress
+  pendingTask.status = 'in-progress';
+  pendingTask.startedAt = new Date().toISOString();
+  
+  res.json({
+    success: true,
+    task: {
+      id: pendingTask.id,
+      type: pendingTask.type,
+      url: pendingTask.url
+    }
+  });
+});
+
+// POST /tasks/result - Submit task result
+router.post('/tasks/result', (req, res) => {
+  const { taskId, result } = req.body;
+  
+  if (!taskId || result === undefined) {
+    return res.status(400).json({
+      success: false,
+      error: 'Missing required fields: taskId, result'
+    });
+  }
+  
+  const task = taskQueue.find(t => t.id === taskId);
+  
+  if (!task) {
+    return res.status(404).json({
+      success: false,
+      error: 'Task not found'
+    });
+  }
+  
+  // Update task
+  task.status = 'completed';
+  task.result = result;
+  task.completedAt = new Date().toISOString();
+  
+  // Store result
+  taskResults.push({
+    taskId,
+    result,
+    completedAt: task.completedAt
+  });
+  
+  res.json({
+    success: true,
+    message: 'Task result recorded',
+    task: {
+      id: task.id,
+      type: task.type,
+      status: task.status,
+      result: task.result
+    }
+  });
+});
+
+// GET /stats - System statistics
+router.get('/stats', (req, res) => {
+  const completedTasks = taskQueue.filter(t => t.status === 'completed').length;
+  const pendingTasks = taskQueue.filter(t => t.status === 'pending').length;
+  const agentCount = activeAgents.size || 1;
+  
+  res.json({
+    success: true,
+    stats: {
+      agents: agentCount,
+      tasks: taskQueue.length,
+      completed: completedTasks,
+      pending: pendingTasks,
+      balance: 0 // Real balance would come from blockchain
+    }
+  });
+});
+
+// POST /agents/register - Register a new agent
+router.post('/agents/register', (req, res) => {
+  const { id, name } = req.body;
+  
+  if (!id || !name) {
+    return res.status(400).json({
+      success: false,
+      error: 'Missing required fields: id, name'
+    });
+  }
+  
+  const agent = {
+    id,
+    name,
+    status: 'active',
+    lastSeen: new Date().toISOString()
+  };
+  
+  activeAgents.set(id, agent);
+  
+  res.json({
+    success: true,
+    agent
+  });
+});
+
+// POST /agents/:id/heartbeat - Agent heartbeat
+router.post('/agents/:id/heartbeat', (req, res) => {
+  const { id } = req.params;
+  const agent = activeAgents.get(id);
+  
+  if (!agent) {
+    return res.status(404).json({
+      success: false,
+      error: 'Agent not found'
+    });
+  }
+  
+  agent.lastSeen = new Date().toISOString();
+  agent.status = 'active';
+  
+  res.json({
+    success: true,
+    agent
+  });
+});
+
+// Edge Functions
 router.post('/edge/execute_task', executeTaskEdgeFunction);
-
-// Edge Function: register_payment
 router.post('/edge/register_payment', registerPaymentEdgeFunction);
-
-// Edge Function: log_event
 router.post('/edge/log_event', logEventEdgeFunction);
 
 // GXEON Supreme Config endpoint

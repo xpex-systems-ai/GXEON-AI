@@ -1,21 +1,10 @@
-import { Bot, Brain, Database, Sparkles, Zap, RefreshCw, AlertCircle, Cpu } from 'lucide-react';
+import { Bot, Users, RefreshCw, AlertCircle, Clock } from 'lucide-react';
 import { useAutoRefresh } from '../../hooks/useAutoRefresh';
 import { apiClient } from '../../utils/api';
 
 interface AgentsListProps {
   className?: string;
 }
-
-const agentIcons: Record<string, React.ReactNode> = {
-  orchestrator: <Brain className="w-4 h-4" />,
-  vectordb: <Database className="w-4 h-4" />,
-  huggingface: <Sparkles className="w-4 h-4" />,
-  deepseek: <Sparkles className="w-4 h-4" />,
-  grok: <Zap className="w-4 h-4" />,
-  chatgpt: <Bot className="w-4 h-4" />,
-  bitensor: <Cpu className="w-4 h-4" />,
-  default: <Bot className="w-4 h-4" />,
-};
 
 export function AgentsList({ className = '' }: AgentsListProps) {
   const { data, loading, error, refresh } = useAutoRefresh({
@@ -24,13 +13,25 @@ export function AgentsList({ className = '' }: AgentsListProps) {
   });
 
   const agents = data?.agents || [];
-  const status = data?.status;
+
+  // Format relative time
+  const getRelativeTime = (lastSeen?: string) => {
+    if (!lastSeen) return 'Never';
+    const date = new Date(lastSeen);
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+    return `${Math.floor(diff / 86400)}d ago`;
+  };
 
   return (
     <div className={`card-hover ${className}`}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-gray-200 flex items-center gap-2">
-          <Bot className="w-5 h-5 text-neon" />
+          <Users className="w-5 h-5 text-neon" />
           Active Agents
           <span className="text-sm text-gray-500">({agents.length})</span>
         </h3>
@@ -68,11 +69,14 @@ export function AgentsList({ className = '' }: AgentsListProps) {
           >
             <div className="flex items-center gap-3">
               <div className="p-2 bg-dark-600 rounded-lg text-neon">
-                {agentIcons[agent.id] || agentIcons.default}
+                <Bot className="w-4 h-4" />
               </div>
               <div>
                 <p className="text-gray-200 font-medium">{agent.name}</p>
-                <p className="text-xs text-gray-500">{agent.type}</p>
+                <p className="text-xs text-gray-500 flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  {getRelativeTime(agent.lastSeen)}
+                </p>
               </div>
             </div>
             <span
@@ -91,28 +95,18 @@ export function AgentsList({ className = '' }: AgentsListProps) {
 
         {agents.length === 0 && !loading && !error && (
           <div className="text-center py-8 text-gray-500">
-            <Bot className="w-8 h-8 mx-auto mb-2 opacity-50" />
-            <p>No agents available</p>
+            <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
+            <p>No agents connected</p>
+            <p className="text-xs mt-1">Agents will appear when they register</p>
           </div>
         )}
       </div>
 
-      {status && (
+      {agents.length > 0 && (
         <div className="mt-4 pt-4 border-t border-dark-600">
-          <h4 className="text-sm font-medium text-gray-400 mb-2">System Status</h4>
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div className="flex items-center justify-between p-2 bg-dark-700/50 rounded">
-              <span className="text-gray-500">Brain</span>
-              <span className={status.brain === 'active' ? 'text-green-400' : 'text-gray-400'}>
-                {status.brain}
-              </span>
-            </div>
-            <div className="flex items-center justify-between p-2 bg-dark-700/50 rounded">
-              <span className="text-gray-500">Vector DB</span>
-              <span className={status.vector_db === 'active' ? 'text-green-400' : 'text-gray-400'}>
-                {status.vector_db}
-              </span>
-            </div>
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            <span>{agents.filter(a => a.status === 'active').length} active</span>
+            <span>Auto-refresh: 5s</span>
           </div>
         </div>
       )}
