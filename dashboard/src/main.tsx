@@ -1,3 +1,6 @@
+// Import fetch polyfill before React loads
+import 'whatwg-fetch';
+
 // Ensure fetch is available globally before React loads
 import './utils/safeFetch';
 

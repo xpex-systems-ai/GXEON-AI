@@ -3,27 +3,15 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
-console.log('SERVER STARTING OK');
+console.log('[SERVER] Starting GXEON...');
 
-require('dotenv').config({ path: path.join(__dirname, '../config/secure/.env') });
-
-// Startup ENV Validation
-const requiredEnv = [
-  'SUPABASE_PROJECT_URL',
-  'SUPABASE_SERVICE_ROLE_KEY'
-];
-
-const missingEnv = requiredEnv.filter(v => !process.env[v]);
-
-if (missingEnv.length > 0) {
-  console.warn('[Startup] Missing ENV variables:', missingEnv);
-} else {
-  console.log('[Startup] ENV OK');
+// Safe dotenv load - don't fail if .env missing
+try {
+  require('dotenv').config({ path: path.join(__dirname, '../config/secure/.env') });
+  console.log('[SERVER] Environment loaded');
+} catch (e) {
+  console.log('[SERVER] No .env file found, using Railway env vars');
 }
-
-const chatRoute = require('./routes/chat');
-const configRoute = require('./routes/config');
-const agentRoutes = require('./routes/agents');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,35 +19,47 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use('/chat', chatRoute);
-app.use('/api', configRoute);
-app.use('/api', agentRoutes);
+// Health check endpoint - CRITICAL for Railway
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
-// Safe static serving with fallback
+// Root endpoint
+app.get('/', (req, res) => {
+  res.send('GXEON BACKEND ONLINE');
+});
+
+// Load routes safely
+try {
+  const chatRoute = require('./routes/chat');
+  const configRoute = require('./routes/config');
+  const agentRoutes = require('./routes/agents');
+  
+  app.use('/chat', chatRoute);
+  app.use('/api', configRoute);
+  app.use('/api', agentRoutes);
+  console.log('[SERVER] Routes loaded');
+} catch (e) {
+  console.warn('[SERVER] Some routes failed to load:', e.message);
+}
+
+// Static serving with fallback
 const distPath = path.join(__dirname, '../dashboard/dist');
-
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));
-
   app.get('*', (req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });
 } else {
-  console.warn('⚠️ Frontend build not found at:', distPath);
-  console.warn('Run: cd dashboard && npm run build');
-  
-  // Serve API-only fallback
   app.get('/', (req, res) => {
     res.json({ 
-      status: 'API Only - Frontend build missing',
-      endpoints: ['/api/agents', '/api/tasks', '/api/stats']
+      status: 'API Only',
+      endpoints: ['/health', '/api/agents', '/api/tasks', '/api/stats']
     });
   });
 }
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`[SERVER] GXEON v2.1 - runtime-hardening branch`);
-  console.log(`[SERVER] Running on port ${PORT}`);
-  console.log(`[SERVER] Static serving: dashboard/dist`);
-  console.log(`[SERVER] OpenRouter Key: ${process.env.OPENROUTER_API_KEY ? 'Loaded ✓' : 'Missing ✗'}`);
+  console.log(`[SERVER] GXEON running on port ${PORT}`);
+  console.log(`[SERVER] Health: http://localhost:${PORT}/health`);
 });
