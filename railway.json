@@ -2,10 +2,10 @@
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "npm install"
+    "buildCommand": "npm install && cd dashboard && npm install && npm run build"
   },
   "deploy": {
-    "startCommand": "node core/modules/railway_startup.js && node server/index.js",
+    "startCommand": "node server/index.js",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
     "healthcheckPath": "/health",
