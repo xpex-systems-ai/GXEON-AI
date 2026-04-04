@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/gxeon-icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GXEON Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      // CRITICAL: Ensure fetch is available before React loads
+      if (typeof window !== 'undefined' && typeof window.fetch !== 'function') {
+        console.warn('[HTML] Fetch not available, creating polyfill');
+        window.fetch = function(url, opts) {
+          console.error('[Fetch Polyfill] Fetch not available, returning empty response');
+          return Promise.resolve({
+            ok: false,
+            status: 503,
+            statusText: 'Fetch API not available',
+            json: function() { return Promise.resolve({ error: 'Fetch API not available', url: url }); },
+            text: function() { return Promise.resolve(''); },
+            headers: new Headers(),
+            url: url || '',
+            type: 'error',
+            redirected: false,
+            body: null,
+            bodyUsed: false,
+            clone: function() { return this; },
+            arrayBuffer: function() { return Promise.resolve(new ArrayBuffer(0)); },
+            blob: function() { return Promise.resolve(new Blob()); },
+            formData: function() { return Promise.resolve(new FormData()); }
+          });
+        };
+      }
+    </script>
+    <script type="module" crossorigin src="/assets/index-Cr0jQUvL.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Ce74lyiN.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
