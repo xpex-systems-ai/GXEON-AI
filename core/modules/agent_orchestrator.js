@@ -1,4 +1,7 @@
-require('dotenv').config();
+// Load env vars with fallback for Railway
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+require('dotenv').config({ path: path.join(__dirname, '../../config/secure/.env') });
 
 const { exec } = require('child_process');
 

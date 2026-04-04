@@ -1,16 +1,26 @@
 /**
- * GXEON_MODULE_02: Execution Agent v1.1 (Production Ready)
+ * GXEON_MODULE_02: Execution Agent v1.2 (Railway Ready)
  */
 
-require('dotenv').config();
+// Load env vars with fallback for Railway
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+require('dotenv').config({ path: path.join(__dirname, '../../config/secure/.env') });
 
 const { createClient } = require('@supabase/supabase-js');
 const axios = require('axios');
 
-const supabase = createClient(
-  process.env.SUPABASE_URL || process.env.SUPABASE_PROJECT_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+// Validate env vars
+const SUPABASE_URL = process.env.SUPABASE_URL || process.env.SUPABASE_PROJECT_URL;
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!SUPABASE_URL || !SUPABASE_KEY) {
+  console.error('[GX_EXECUTION] ❌ Missing Supabase credentials. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY');
+  console.error('[GX_EXECUTION] Railway: Add env vars in Railway Dashboard → Variables');
+  process.exit(1);
+}
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 /**
  * FETCH + LOCK TASKS
