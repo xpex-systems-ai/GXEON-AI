@@ -3,10 +3,23 @@
 
 const { createClient } = require('@supabase/supabase-js');
 
-// Initialize Supabase client
-const supabaseUrl = process.env.SUPABASE_PROJECT_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Lazily-initialized Supabase client — created on first use so the module
+// can be loaded even when credentials are not yet configured.
+let _supabase = null;
+
+function getSupabaseClient() {
+  if (_supabase) return _supabase;
+
+  const supabaseUrl = process.env.SUPABASE_PROJECT_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    return null;
+  }
+
+  _supabase = createClient(supabaseUrl, supabaseKey);
+  return _supabase;
+}
 
 // ==========================================
 // Edge Function: execute_task
@@ -18,6 +31,14 @@ async function executeTaskEdgeFunction(req, res) {
     if (!agent || !task_name) {
       return res.status(400).json({ 
         error: 'Missing required parameters: agent, task_name' 
+      });
+    }
+
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return res.status(503).json({
+        error: 'Supabase is not configured. Set SUPABASE_PROJECT_URL and SUPABASE_SERVICE_ROLE_KEY.',
+        status: 'unavailable'
       });
     }
     
@@ -112,6 +133,14 @@ async function registerPaymentEdgeFunction(req, res) {
         error: 'Missing required parameters: user_id, amount'
       });
     }
+
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return res.status(503).json({
+        error: 'Supabase is not configured. Set SUPABASE_PROJECT_URL and SUPABASE_SERVICE_ROLE_KEY.',
+        status: 'unavailable'
+      });
+    }
     
     // Verify user exists
     const { data: user, error: userError } = await supabase
@@ -173,6 +202,14 @@ async function logEventEdgeFunction(req, res) {
     if (!module || !action || !message) {
       return res.status(400).json({
         error: 'Missing required parameters: module, action, message'
+      });
+    }
+
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return res.status(503).json({
+        error: 'Supabase is not configured. Set SUPABASE_PROJECT_URL and SUPABASE_SERVICE_ROLE_KEY.',
+        status: 'unavailable'
       });
     }
     
