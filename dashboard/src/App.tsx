@@ -7,9 +7,15 @@ import MarketplaceLedger from './components/MarketplaceLedger';
 import ActivityTimeline from './components/ActivityTimeline';
 import SystemStatus from './components/SystemStatus';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://telxvphgrsvsnxvmjkce.supabase.co';
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbHh2cGhncnN2c254dm1qa2NlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MjYzMzEsImV4cCI6MjA5MDEwMjMzMX0.anon_key_placeholder';
+
+let supabase: any = null;
+try {
+  supabase = createClient(supabaseUrl, supabaseKey);
+} catch (err) {
+  console.error('[Supabase] Failed to initialize:', err);
+}
 
 function App() {
   const [metrics, setMetrics] = useState({
@@ -25,20 +31,25 @@ function App() {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
+    if (!supabase) {
+      console.warn('[Dashboard] Supabase not initialized, running in offline mode');
+      return;
+    }
+    
     fetchMetrics();
     const interval = setInterval(fetchMetrics, 5000);
     
     const channel = supabase
       .channel('gxeon-realtime')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, (payload) => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, (payload: any) => {
         fetchMetrics();
         addLog('task', payload);
       })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'rewards' }, (payload) => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'rewards' }, (payload: any) => {
         fetchMetrics();
         addLog('reward', payload);
       })
-      .subscribe((status) => {
+      .subscribe((status: string) => {
         setIsConnected(status === 'SUBSCRIBED');
       });
 
@@ -49,6 +60,11 @@ function App() {
   }, []);
 
   async function fetchMetrics() {
+    if (!supabase) {
+      console.warn('[Dashboard] Cannot fetch metrics - Supabase not initialized');
+      return;
+    }
+    
     try {
       const { count: pendingCount } = await supabase
         .from('tasks')
