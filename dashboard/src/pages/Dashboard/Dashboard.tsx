@@ -11,6 +11,11 @@ interface Stats {
   balance: number;
 }
 
+interface ApiResponse {
+  success: boolean;
+  stats: Stats;
+}
+
 export function Dashboard() {
   const [stats, setStats] = useState<Stats>({
     agents: 0,
@@ -24,7 +29,7 @@ export function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const data = await safeFetchWrapper(`${API_BASE}/api/stats`);
+        const data = await safeFetchWrapper(`${API_BASE}/api/stats`) as ApiResponse;
         console.log("[Dashboard] API DATA:", data);
         
         if (data?.success) {

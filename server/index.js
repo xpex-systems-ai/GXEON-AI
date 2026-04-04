@@ -6,6 +6,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// ROUTES
+const agentsRouter = require('./routes/agents');
+const chatRouter = require('./routes/chat');
+const configRouter = require('./routes/config');
+
+app.use('/agents', agentsRouter);
+app.use('/chat', chatRouter);
+app.use('/config', configRouter);
+
 // HEALTH CHECK (CRÍTICO)
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok' });

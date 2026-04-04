@@ -6,7 +6,7 @@ import './utils/safeFetch';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { App } from './App';
+import App from './App';
 import './index.css';
 
 // Global error handlers for debug visibility

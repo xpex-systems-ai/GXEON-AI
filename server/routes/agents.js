@@ -1,32 +1,181 @@
 // Agent Routes - GXEON V2.0
 const express = require('express');
+const axios = require('axios');
 const router = express.Router();
 const { executeAgent, getAgentStatus } = require('../services/agents');
 
-// Orquestrador Central - Main routing endpoint
-router.post('/orchestrator', async (req, res) => {
+// Task Router - Executes tasks based on type
+async function executeTaskByType(type, payload) {
+  switch (type) {
+    case 'scrape':
+      return await executeScrapeTask(payload);
+    default:
+      throw new Error(`Unknown task type: ${type}`);
+  }
+}
+
+// Scrape Task Implementation
+async function executeScrapeTask(payload) {
+  const { url } = payload;
+  
+  if (!url) {
+    throw new Error('URL is required for scrape task');
+  }
+  
   try {
-    const { message, agents: activeAgents, context } = req.body;
+    const response = await axios.get(url, {
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'GXEON-Scraper/1.0'
+      }
+    });
     
-    if (!message) {
-      return res.status(400).json({ error: 'Mensagem não fornecida' });
+    const html = response.data;
+    const summary = html.substring(0, 500) + (html.length > 500 ? '...' : '');
+    const title = extractTitle(html);
+    
+    // Decision Layer: Opportunity Detection
+    const opportunityKeywords = ['promo', 'discount', 'sale', 'offer', 'deal', 'coupon', 'save'];
+    const normalizedContent = html.toLowerCase();
+    const hasOpportunity = opportunityKeywords.some(keyword => normalizedContent.includes(keyword));
+    
+    let action = 'none';
+    let monetizationResult = null;
+    
+    // Action Layer: Trigger Monetization if opportunity detected
+    if (hasOpportunity) {
+      action = 'trigger_monetization';
+      monetizationResult = await triggerMonetization({
+        url: url,
+        title: title,
+        timestamp: new Date().toISOString(),
+        keywords: opportunityKeywords.filter(k => normalizedContent.includes(k)),
+        opportunity_type: 'promotional'
+      });
     }
     
-    // Execute orchestrator
-    const result = await executeAgent('orchestrator', {
-      message,
-      agents: activeAgents || ['orquestrador'],
-      context: context || []
+    return {
+      status: 'success',
+      data: {
+        url: url,
+        title: title,
+        contentLength: html.length,
+        preview: summary,
+        opportunity_detected: hasOpportunity,
+        keywords_matched: hasOpportunity ? opportunityKeywords.filter(k => normalizedContent.includes(k)) : []
+      },
+      action: action,
+      monetization_status: monetizationResult?.status || 'none',
+      monetization: monetizationResult || { status: 'none' }
+    };
+  } catch (error) {
+    return {
+      status: 'error',
+      data: { error: error.message, url },
+      action: 'none',
+      opportunity_detected: false
+    };
+  }
+}
+
+// Helper to extract title from HTML
+function extractTitle(html) {
+  const match = html.match(/<title[^>]*>([^<]*)<\/title>/i);
+  return match ? match[1].trim() : 'No title found';
+}
+
+// Monetization Layer - Lead Capture
+async function triggerMonetization(data) {
+  const endpoint = process.env.MONETIZATION_ENDPOINT;
+  
+  if (!endpoint) {
+    console.warn('[Monetization] MONETIZATION_ENDPOINT not configured');
+    return {
+      status: 'skipped',
+      reason: 'endpoint_not_configured'
+    };
+  }
+  
+  try {
+    const response = await axios.post(endpoint, {
+      ...data,
+      source: 'gxeon_agent',
+      mode: 'lead_capture'
+    }, {
+      timeout: 5000,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Source': 'gxeon-agent'
+      }
     });
     
-    res.json({
-      success: true,
-      replies: result.replies,
-      orchestrated_agents: activeAgents || ['orquestrador']
-    });
+    return {
+      status: 'success',
+      endpoint: endpoint,
+      response_status: response.status
+    };
   } catch (error) {
-    console.error('Orquestrador error:', error);
-    res.status(500).json({ error: error.message });
+    console.error('[Monetization] Failed:', error.message);
+    return {
+      status: 'failed',
+      reason: error.message
+    };
+  }
+}
+
+// Orquestrador Central - Intelligent Task Executor
+router.post('/orchestrator', async (req, res) => {
+  try {
+    const { type, payload, message, agents: activeAgents, context } = req.body;
+    
+    // Legacy support: if message provided, use old orchestrator logic
+    if (message && !type) {
+      const result = await executeAgent('orchestrator', {
+        message,
+        agents: activeAgents || ['orquestrador'],
+        context: context || []
+      });
+      
+      return res.json({
+        success: true,
+        replies: result.replies,
+        orchestrated_agents: activeAgents || ['orquestrador']
+      });
+    }
+    
+    // New task-based execution
+    if (!type) {
+      return res.status(400).json({ 
+        error: 'Task type or message is required' 
+      });
+    }
+    
+    if (!payload || typeof payload !== 'object') {
+      return res.status(400).json({ 
+        error: 'Payload is required and must be an object' 
+      });
+    }
+    
+    // Execute task by type
+    const result = await executeTaskByType(type, payload);
+    
+    res.json({
+      success: result.status === 'success',
+      task: {
+        type,
+        status: result.status,
+        executedAt: new Date().toISOString()
+      },
+      result: result.data,
+      action: result.action
+    });
+    
+  } catch (error) {
+    console.error('Orchestrator error:', error);
+    res.status(500).json({ 
+      success: false,
+      error: error.message 
+    });
   }
 });
 
@@ -188,35 +337,6 @@ router.get('/agents/status', (req, res) => {
   });
 });
 
-// Wallet Web3 API
-router.post('/wallet', async (req, res) => {
-  try {
-    const result = await executeAgent('wallet', req.body);
-    res.json({ success: true, ...result });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-router.get('/wallet/balance', async (req, res) => {
-  try {
-    const result = await executeAgent('wallet', { action: 'balance' });
-    res.json({ success: true, balance: result.balance });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-router.get('/wallet/transactions', async (req, res) => {
-  try {
-    const result = await executeAgent('wallet', { action: 'history' });
-    res.json({ success: true, transactions: result.transaction_history || [] });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Logs & Dashboard API
 router.get('/logs', async (req, res) => {
   try {
     res.json({
