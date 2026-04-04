@@ -8,36 +8,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      body { background: #0a0a0f; color: #e0e0e0; font-family: Inter, sans-serif; }
+      #loading { text-align: center; padding: 50px; }
+      #error { display: none; color: #ff4444; padding: 20px; background: #1a1a25; border-radius: 8px; margin: 20px; }
+    </style>
+  </head>
+  <body>
+    <div id="loading">Loading GXEON Dashboard...</div>
+    <div id="error"></div>
+    <div id="root"></div>
+    <noscript>
+      <div style="color: #ff4444; padding: 20px;">JavaScript is required for GXEON Dashboard</div>
+    </noscript>
     <script>
-      // CRITICAL: Ensure fetch is available before React loads
-      if (typeof window !== 'undefined' && typeof window.fetch !== 'function') {
-        console.warn('[HTML] Fetch not available, creating polyfill');
-        window.fetch = function(url, opts) {
-          console.error('[Fetch Polyfill] Fetch not available, returning empty response');
-          return Promise.resolve({
-            ok: false,
-            status: 503,
-            statusText: 'Fetch API not available',
-            json: function() { return Promise.resolve({ error: 'Fetch API not available', url: url }); },
-            text: function() { return Promise.resolve(''); },
-            headers: new Headers(),
-            url: url || '',
-            type: 'error',
-            redirected: false,
-            body: null,
-            bodyUsed: false,
-            clone: function() { return this; },
-            arrayBuffer: function() { return Promise.resolve(new ArrayBuffer(0)); },
-            blob: function() { return Promise.resolve(new Blob()); },
-            formData: function() { return Promise.resolve(new FormData()); }
-          });
-        };
-      }
+      window.onerror = function(msg, url, line) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('error').innerHTML = '<h3>Error loading dashboard</h3><p>' + msg + '</p><p>Line: ' + line + '</p>';
+        console.error('[DASHBOARD ERROR]', msg, url, line);
+        return false;
+      };
     </script>
     <script type="module" crossorigin src="/assets/index-Cr0jQUvL.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-Ce74lyiN.css">
-  </head>
-  <body>
-    <div id="root"></div>
   </body>
 </html>
