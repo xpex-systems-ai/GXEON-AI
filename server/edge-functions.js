@@ -3,16 +3,38 @@
 
 const { createClient } = require('@supabase/supabase-js');
 
-// Initialize Supabase client
-const supabaseUrl = process.env.SUPABASE_PROJECT_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Lazy Supabase client — created on first use so the module can be safely
+// required even before environment variables are fully propagated (e.g. on
+// Railway where env vars may not be available at module-load time).
+let _supabaseClient = null;
+
+function getSupabaseClient() {
+  if (_supabaseClient) return _supabaseClient;
+
+  const supabaseUrl = process.env.SUPABASE_PROJECT_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    return null;
+  }
+
+  _supabaseClient = createClient(supabaseUrl, supabaseKey);
+  return _supabaseClient;
+}
 
 // ==========================================
 // Edge Function: execute_task
 // ==========================================
 async function executeTaskEdgeFunction(req, res) {
   try {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return res.status(503).json({
+        error: 'Supabase credentials are not configured. Set SUPABASE_PROJECT_URL and SUPABASE_SERVICE_ROLE_KEY.',
+        status: 'unavailable'
+      });
+    }
+
     const { agent, task_name, payload, user_id } = req.body;
     
     if (!agent || !task_name) {
@@ -105,6 +127,14 @@ async function executeTaskEdgeFunction(req, res) {
 // ==========================================
 async function registerPaymentEdgeFunction(req, res) {
   try {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return res.status(503).json({
+        error: 'Supabase credentials are not configured. Set SUPABASE_PROJECT_URL and SUPABASE_SERVICE_ROLE_KEY.',
+        status: 'unavailable'
+      });
+    }
+
     const { user_id, amount, currency, tx_hash } = req.body;
     
     if (!user_id || !amount) {
@@ -168,6 +198,14 @@ async function registerPaymentEdgeFunction(req, res) {
 // ==========================================
 async function logEventEdgeFunction(req, res) {
   try {
+    const supabase = getSupabaseClient();
+    if (!supabase) {
+      return res.status(503).json({
+        error: 'Supabase credentials are not configured. Set SUPABASE_PROJECT_URL and SUPABASE_SERVICE_ROLE_KEY.',
+        status: 'unavailable'
+      });
+    }
+
     const { module, action, message, metadata } = req.body;
     
     if (!module || !action || !message) {
