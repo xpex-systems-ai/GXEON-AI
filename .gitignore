@@ -1,0 +1,8 @@
+config/secure/.env
+node_modules/
+.env
+*.log
+.DS_Store
+server/routes/sepolia-executor.js
+
+.env*.local
