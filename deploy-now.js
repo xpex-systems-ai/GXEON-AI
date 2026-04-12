@@ -10,12 +10,16 @@ try {
   execSync('cd dashboard && npm run build', { stdio: 'inherit' });
   console.log('✅ Dashboard build completed\n');
 
-  // Step 2: Git push
+  // Step 2: Git push (skip if nothing to commit)
   console.log('📤 Step 2: Pushing to git...');
-  execSync('git add .', { stdio: 'inherit' });
-  execSync('git commit -m "GXEON Autonomous Ignition: Keeper module activated with 1inch/0x rebate callbacks and Live Log Terminal"', { stdio: 'inherit' });
-  execSync('git push --set-upstream origin main', { stdio: 'inherit' });
-  console.log('✅ Git push completed\n');
+  try {
+    execSync('git add .', { stdio: 'inherit' });
+    execSync('git commit -m "GXEON Autonomous Ignition: Keeper module activated with 1inch/0x rebate callbacks and Live Log Terminal"', { stdio: 'inherit' });
+    execSync('git push', { stdio: 'inherit' });
+    console.log('✅ Git push completed\n');
+  } catch (gitError) {
+    console.log('ℹ️  No changes to commit, skipping git push\n');
+  }
 
   // Step 3: Vercel production deployment
   console.log('🌐 Step 3: Deploying to Vercel production...');
