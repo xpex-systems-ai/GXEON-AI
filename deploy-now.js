@@ -23,7 +23,7 @@ try {
 
   // Step 3: Netlify production deployment
   console.log('🌐 Step 3: Deploying to Netlify production...');
-  execSync('cd dashboard && npx netlify deploy --prod --dir=dist', { stdio: 'inherit' });
+  execSync('cd dashboard && npx -y netlify deploy --prod --dir=dist', { stdio: 'inherit' });
   console.log('✅ Netlify deployment completed\n');
 
   console.log('=============================================');
