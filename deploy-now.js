@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 const path = require('path');
 
-console.log('🚀 GXEON AUTONOMOUS IGNITION - Deployment Script');
+console.log('🚀 GXEON NETLIFY TAKEOVER - Deployment Script');
 console.log('=============================================\n');
 
 try {
@@ -14,20 +14,20 @@ try {
   console.log('📤 Step 2: Pushing to git...');
   try {
     execSync('git add .', { stdio: 'inherit' });
-    execSync('git commit -m "GXEON Autonomous Ignition: Keeper module activated with 1inch/0x rebate callbacks and Live Log Terminal"', { stdio: 'inherit' });
+    execSync('git commit -m "GXEON Netlify Takeover: Keeper module with Live Log Terminal"', { stdio: 'inherit' });
     execSync('git push', { stdio: 'inherit' });
     console.log('✅ Git push completed\n');
   } catch (gitError) {
     console.log('ℹ️  No changes to commit, skipping git push\n');
   }
 
-  // Step 3: Vercel production deployment
-  console.log('🌐 Step 3: Deploying to Vercel production...');
-  execSync('npx vercel --prod --force --yes', { stdio: 'inherit' });
-  console.log('✅ Vercel deployment completed\n');
+  // Step 3: Netlify production deployment
+  console.log('🌐 Step 3: Deploying to Netlify production...');
+  execSync('cd dashboard && npx netlify deploy --prod --dir=dist', { stdio: 'inherit' });
+  console.log('✅ Netlify deployment completed\n');
 
   console.log('=============================================');
-  console.log('🎉 GXEON AUTONOMOUS IGNITION COMPLETE');
+  console.log('🎉 GXEON NETLIFY TAKEOVER COMPLETE');
   console.log('=============================================');
 } catch (error) {
   console.error('❌ Deployment failed:', error.message);
