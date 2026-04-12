@@ -14,7 +14,7 @@ try {
   console.log('📤 Step 2: Pushing to git...');
   execSync('git add .', { stdio: 'inherit' });
   execSync('git commit -m "GXEON Autonomous Ignition: Keeper module activated with 1inch/0x rebate callbacks and Live Log Terminal"', { stdio: 'inherit' });
-  execSync('git push', { stdio: 'inherit' });
+  execSync('git push --set-upstream origin main', { stdio: 'inherit' });
   console.log('✅ Git push completed\n');
 
   // Step 3: Vercel production deployment
