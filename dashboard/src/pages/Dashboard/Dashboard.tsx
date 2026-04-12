@@ -188,9 +188,9 @@ export function Dashboard() {
   }, [isConnected, calculateGasOptimization]);
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #050505 0%, #0a0a0a 100%)', fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #1a0a2e 0%, #0f0518 50%, #1a0a2e 100%)', fontFamily: 'Inter, system-ui, sans-serif' }}>
       {/* Sidebar Minimalista - Ícones Dourados */}
-      <aside className="w-20 lg:w-64 flex-shrink-0 border-r border-[#FFD700]/20 bg-[#050505]/80 backdrop-blur-xl flex flex-col">
+      <aside className="w-20 lg:w-64 flex-shrink-0 border-r border-[#FFD700]/20 bg-[#1a0a2e]/80 backdrop-blur-xl flex flex-col">
         {/* Logo */}
         <div className="h-20 flex items-center justify-center lg:justify-start lg:px-6 border-b border-[#FFD700]/10">
           <div className="relative">
@@ -235,7 +235,7 @@ export function Dashboard() {
       {/* Main Content Area */}
       <main className="flex-1 overflow-auto">
         {/* Enterprise Header */}
-        <header className="h-20 px-8 flex items-center justify-between border-b border-[#FFD700]/10 bg-[#0a0a0a]/50 backdrop-blur-xl sticky top-0 z-50">
+        <header className="h-20 px-8 flex items-center justify-between border-b border-[#FFD700]/10 bg-[#1a0a2e]/50 backdrop-blur-xl sticky top-0 z-50">
           <div>
             <h1 className="text-2xl font-bold text-white tracking-tight">
               Arbitrage <span className="text-[#FFD700]">Radar</span>
