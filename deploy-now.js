@@ -23,7 +23,7 @@ try {
 
   // Step 3: Vercel production deployment
   console.log('🌐 Step 3: Deploying to Vercel production...');
-  execSync('npx vercel --prod --force', { stdio: 'inherit' });
+  execSync('npx vercel --prod --force --yes', { stdio: 'inherit' });
   console.log('✅ Vercel deployment completed\n');
 
   console.log('=============================================');
