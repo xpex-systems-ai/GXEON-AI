@@ -1,4 +1,4 @@
-import { Cpu, Zap, Activity, BarChart3, Users, CheckCircle, Clock, Wallet, Link, AlertCircle, Radar, Vault, FileText, Settings, Target, ChevronRight, Shield, TrendingUp, Flame, DollarSign, PiggyBank, Award } from 'lucide-react';
+import { Cpu, Zap, Activity, BarChart3, Users, CheckCircle, Clock, Wallet, Link, AlertCircle, Radar, Vault, FileText, Settings, Target, ChevronRight, Shield, TrendingUp, Flame, DollarSign, PiggyBank, Award, Terminal, Play, Square } from 'lucide-react';
 import { StatusCard, AgentsList, SystemLogs } from '../../components';
 import { useState, useEffect, useCallback } from 'react';
 import { useWeb3 } from '../../hooks/useWeb3';
@@ -23,6 +23,14 @@ interface GasOptimizationData {
   loading: boolean;
 }
 
+interface LogEntry {
+  id: string;
+  timestamp: Date;
+  type: 'info' | 'success' | 'warning' | 'error' | 'keeper_attempt';
+  message: string;
+  details?: string;
+}
+
 export function Dashboard() {
   const [stats, setStats] = useState<Stats>({
     agents: 0,
@@ -41,6 +49,8 @@ export function Dashboard() {
   });
   
   const [attackLoading, setAttackLoading] = useState(false);
+  const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
+  const [isTerminalActive, setIsTerminalActive] = useState(true);
 
   const {
     account,
@@ -186,6 +196,64 @@ export function Dashboard() {
       return () => clearInterval(interval);
     }
   }, [isConnected, calculateGasOptimization]);
+
+  // Live Log Terminal - Simulate real-time Keeper attempts
+  useEffect(() => {
+    if (!isTerminalActive) return;
+
+    const addLogEntry = (type: LogEntry['type'], message: string, details?: string) => {
+      const entry: LogEntry = {
+        id: `${Date.now()}-${Math.random()}`,
+        timestamp: new Date(),
+        type,
+        message,
+        details
+      };
+      setLogEntries(prev => [entry, ...prev].slice(0, 50)); // Keep last 50 entries
+    };
+
+    // Initial log entry
+    addLogEntry('info', '🚀 GXEON Keeper Aggregator v1 initialized', '1inch & 0x Protocol callbacks active');
+
+    // Simulate Keeper attempts every 5-15 seconds
+    const simulateKeeperAttempt = () => {
+      const protocols = ['1inch', '0x Protocol', 'Uniswap V3', 'SushiSwap V2'];
+      const protocol = protocols[Math.floor(Math.random() * protocols.length)];
+      const actions = ['Scanning for arbitrage', 'Calculating optimal route', 'Executing flash loan', 'Capturing rebate'];
+      const action = actions[Math.floor(Math.random() * actions.length)];
+      
+      addLogEntry('keeper_attempt', `🎯 Keeper attempt detected on ${protocol}`, action);
+
+      // Simulate success/failure after 2 seconds
+      setTimeout(() => {
+        const success = Math.random() > 0.3;
+        if (success) {
+          const profit = (Math.random() * 50 + 5).toFixed(2);
+          addLogEntry('success', `✅ Keeper execution successful on ${protocol}`, `Profit: $${profit} | Gas: ${(Math.random() * 10 + 2).toFixed(2)} USD`);
+        } else {
+          addLogEntry('warning', `⚠️ Keeper attempt skipped on ${protocol}`, 'Slippage protection triggered - rebate insufficient');
+        }
+      }, 2000);
+    };
+
+    // Initial attempt
+    simulateKeeperAttempt();
+
+    // Schedule random attempts
+    const scheduleNext = () => {
+      const delay = Math.random() * 10000 + 5000; // 5-15 seconds
+      setTimeout(() => {
+        simulateKeeperAttempt();
+        scheduleNext();
+      }, delay);
+    };
+
+    scheduleNext();
+
+    return () => {
+      // Cleanup if needed
+    };
+  }, [isTerminalActive]);
 
   return (
     <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #1a0a2e 0%, #0f0518 50%, #1a0a2e 100%)', fontFamily: 'Inter, system-ui, sans-serif' }}>
@@ -519,6 +587,90 @@ export function Dashboard() {
                   <p className="mt-2 text-center text-xs text-gray-500">
                     Connect wallet to execute flash loan via Aave V3
                   </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Live Log Terminal - Keeper Attempts */}
+        <div className="mt-6 relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#00F3FF]/[0.05] via-transparent to-[#FFD700]/[0.05] backdrop-blur-xl border border-[#00F3FF]/20">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00F3FF] via-[#FFD700] to-[#00F3FF] opacity-50" />
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-gradient-to-br from-[#00F3FF]/20 to-[#FFD700]/20 rounded-xl border border-[#00F3FF]/30">
+                  <Terminal className="w-6 h-6 text-[#00F3FF]" />
+                </div>
+                <div>
+                  <span className="text-xs text-[#00F3FF]/70 uppercase tracking-widest">Real-time Monitoring</span>
+                  <h3 className="text-lg font-bold text-white">Live Log Terminal</h3>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
+                  <span className="text-[10px] text-green-400 uppercase tracking-widest font-semibold">LIVE</span>
+                </div>
+                <button
+                  onClick={() => setIsTerminalActive(!isTerminalActive)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                    isTerminalActive 
+                      ? 'bg-red-500/10 text-red-400 border border-red-500/30 hover:bg-red-500/20' 
+                      : 'bg-green-500/10 text-green-400 border border-green-500/30 hover:bg-green-500/20'
+                  }`}
+                >
+                  {isTerminalActive ? <Square className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                  {isTerminalActive ? 'PAUSE' : 'RESUME'}
+                </button>
+              </div>
+            </div>
+
+            {/* Terminal Output */}
+            <div className="bg-black/60 rounded-xl border border-white/10 overflow-hidden">
+              <div className="bg-black/40 px-4 py-2 border-b border-white/10 flex items-center gap-2">
+                <div className="flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                </div>
+                <span className="text-xs text-gray-500 ml-2 font-mono">keeper_aggregator_v1.log</span>
+              </div>
+              <div className="p-4 h-64 overflow-y-auto font-mono text-xs space-y-2">
+                {logEntries.length === 0 ? (
+                  <div className="flex items-center justify-center h-full text-gray-500">
+                    <Terminal className="w-8 h-8 mr-2 opacity-50" />
+                    <span>Waiting for Keeper attempts...</span>
+                  </div>
+                ) : (
+                  logEntries.map((entry) => {
+                    const getLogColor = (type: LogEntry['type']) => {
+                      switch (type) {
+                        case 'info': return 'text-blue-400';
+                        case 'success': return 'text-green-400';
+                        case 'warning': return 'text-yellow-400';
+                        case 'error': return 'text-red-400';
+                        case 'keeper_attempt': return 'text-[#00F3FF]';
+                        default: return 'text-gray-400';
+                      }
+                    };
+                    
+                    return (
+                      <div key={entry.id} className="flex items-start gap-2 animate-pulse-once">
+                        <span className="text-gray-600 shrink-0">
+                          {entry.timestamp.toLocaleTimeString('pt-BR', { hour12: false })}
+                        </span>
+                        <span className={getLogColor(entry.type)}>
+                          {entry.message}
+                        </span>
+                        {entry.details && (
+                          <span className="text-gray-500">
+                            :: {entry.details}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </div>

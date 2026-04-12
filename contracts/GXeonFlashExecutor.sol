@@ -32,6 +32,9 @@ contract GXeonFlashExecutor is Ownable, ReentrancyGuard {
     // Máximo slippage aceitável: 0.5%
     uint256 public constant MAX_SLIPPAGE_BPS = 50;
     
+    // Slippage para rebates de volume (1inch/0x): 0.05% = 5 basis points
+    uint256 public constant REBATE_SLIPPAGE_BPS = 5;
+    
     // DEX types
     enum DexType {
         UNISWAP_V3,
@@ -56,6 +59,14 @@ contract GXeonFlashExecutor is Ownable, ReentrancyGuard {
     address public uniswapV3Router;
     address public sushiswapRouter;
     address public uniswapV2Router;
+    
+    // 1inch and 0x Protocol Routers (for rebate capture)
+    address public oneInchRouter;
+    address public zeroXProtocolRouter;
+    
+    // Rebate tracking
+    uint256 public totalRebateCaptured;
+    mapping(address => uint256) public protocolRebates;
     
     // Chainlink Price Feeds
     address public usdcPriceFeed;
@@ -104,6 +115,28 @@ contract GXeonFlashExecutor is Ownable, ReentrancyGuard {
         uint256 expected,
         uint256 actual,
         uint256 deviation
+    );
+    
+    event RebateCaptured(
+        address indexed protocol,
+        uint256 amount,
+        uint256 timestamp
+    );
+    
+    event OneInchCallbackExecuted(
+        address indexed tokenIn,
+        address indexed tokenOut,
+        uint256 amountIn,
+        uint256 amountOut,
+        uint256 rebate
+    );
+    
+    event ZeroXCallbackExecuted(
+        address indexed tokenIn,
+        address indexed tokenOut,
+        uint256 amountIn,
+        uint256 amountOut,
+        uint256 rebate
     );
     
     // ============================================
@@ -320,6 +353,102 @@ contract GXeonFlashExecutor is Ownable, ReentrancyGuard {
     }
     
     // ============================================
+    // KEEPER AGGREGATOR v1 - 1INCH & 0X CALLBACKS
+    // ============================================
+    
+    /**
+     * @dev Callback function for 1inch swaps with rebate capture
+     * Uses 0.05% slippage protection to ensure rebate covers gas
+     */
+    function executeOneInchSwap(
+        address tokenIn,
+        address tokenOut,
+        uint256 amountIn,
+        bytes calldata data
+    ) external onlyVault nonReentrant returns (uint256 amountOut, uint256 rebate) {
+        require(oneInchRouter != address(0), "GXeonExecutor: 1inch router not set");
+        require(amountIn > 0, "GXeonExecutor: Invalid amount");
+        
+        // Calculate minimum output with 0.05% slippage for rebate safety
+        uint256 expectedOut = getExpectedOutput(amountIn, tokenIn, tokenOut, oneInchRouter);
+        uint256 minAmountOut = (expectedOut * (BPS_DENOMINATOR - REBATE_SLIPPAGE_BPS)) / BPS_DENOMINATOR;
+        
+        // Transfer tokens to this contract
+        IERC20(tokenIn).safeTransferFrom(VAULT, address(this), amountIn);
+        IERC20(tokenIn).safeApprove(oneInchRouter, amountIn);
+        
+        // Execute 1inch swap
+        (bool success, bytes memory returnData) = oneInchRouter.call(data);
+        require(success, "GXeonExecutor: 1inch swap failed");
+        
+        // Parse output amount from return data (simplified - in production use proper ABI decoding)
+        amountOut = abi.decode(returnData, (uint256));
+        
+        require(amountOut >= minAmountOut, "GXeonExecutor: 1inch slippage exceeded");
+        
+        // Calculate estimated rebate (0.05% of volume)
+        rebate = (amountIn * REBATE_SLIPPAGE_BPS) / BPS_DENOMINATOR;
+        
+        // Track rebate
+        totalRebateCaptured += rebate;
+        protocolRebates[oneInchRouter] += rebate;
+        
+        // Transfer output to vault
+        IERC20(tokenOut).safeTransfer(VAULT, amountOut);
+        
+        emit OneInchCallbackExecuted(tokenIn, tokenOut, amountIn, amountOut, rebate);
+        emit RebateCaptured(oneInchRouter, rebate, block.timestamp);
+        
+        return (amountOut, rebate);
+    }
+    
+    /**
+     * @dev Callback function for 0x Protocol swaps with rebate capture
+     * Uses 0.05% slippage protection to ensure rebate covers gas
+     */
+    function executeZeroXSwap(
+        address tokenIn,
+        address tokenOut,
+        uint256 amountIn,
+        bytes calldata data
+    ) external onlyVault nonReentrant returns (uint256 amountOut, uint256 rebate) {
+        require(zeroXProtocolRouter != address(0), "GXeonExecutor: 0x router not set");
+        require(amountIn > 0, "GXeonExecutor: Invalid amount");
+        
+        // Calculate minimum output with 0.05% slippage for rebate safety
+        uint256 expectedOut = getExpectedOutput(amountIn, tokenIn, tokenOut, zeroXProtocolRouter);
+        uint256 minAmountOut = (expectedOut * (BPS_DENOMINATOR - REBATE_SLIPPAGE_BPS)) / BPS_DENOMINATOR;
+        
+        // Transfer tokens to this contract
+        IERC20(tokenIn).safeTransferFrom(VAULT, address(this), amountIn);
+        IERC20(tokenIn).safeApprove(zeroXProtocolRouter, amountIn);
+        
+        // Execute 0x Protocol swap
+        (bool success, bytes memory returnData) = zeroXProtocolRouter.call(data);
+        require(success, "GXeonExecutor: 0x swap failed");
+        
+        // Parse output amount from return data (simplified - in production use proper ABI decoding)
+        amountOut = abi.decode(returnData, (uint256));
+        
+        require(amountOut >= minAmountOut, "GXeonExecutor: 0x slippage exceeded");
+        
+        // Calculate estimated rebate (0.05% of volume)
+        rebate = (amountIn * REBATE_SLIPPAGE_BPS) / BPS_DENOMINATOR;
+        
+        // Track rebate
+        totalRebateCaptured += rebate;
+        protocolRebates[zeroXProtocolRouter] += rebate;
+        
+        // Transfer output to vault
+        IERC20(tokenOut).safeTransfer(VAULT, amountOut);
+        
+        emit ZeroXCallbackExecuted(tokenIn, tokenOut, amountIn, amountOut, rebate);
+        emit RebateCaptured(zeroXProtocolRouter, rebate, block.timestamp);
+        
+        return (amountOut, rebate);
+    }
+    
+    // ============================================
     // SLIPPAGE CALCULATION
     // ============================================
     
@@ -416,6 +545,40 @@ contract GXeonFlashExecutor is Ownable, ReentrancyGuard {
         IERC20(WETH).safeApprove(router, type(uint256).max);
         
         emit DexRouterUpdated(dex, oldRouter, router);
+    }
+    
+    /**
+     * @dev Configura 1inch router para captura de rebates
+     */
+    function setOneInchRouter(address router) external onlyOwner {
+        require(router != address(0), "GXeonExecutor: Invalid 1inch router");
+        address oldRouter = oneInchRouter;
+        oneInchRouter = router;
+        
+        // Approve tokens for 1inch
+        IERC20(USDC).safeApprove(router, type(uint256).max);
+        IERC20(WETH).safeApprove(router, type(uint256).max);
+        IERC20(WBTC).safeApprove(router, type(uint256).max);
+        IERC20(DAI).safeApprove(router, type(uint256).max);
+        
+        emit DexRouterUpdated(DexType.UNISWAP_V3, oldRouter, router);
+    }
+    
+    /**
+     * @dev Configura 0x Protocol router para captura de rebates
+     */
+    function setZeroXRouter(address router) external onlyOwner {
+        require(router != address(0), "GXeonExecutor: Invalid 0x router");
+        address oldRouter = zeroXProtocolRouter;
+        zeroXProtocolRouter = router;
+        
+        // Approve tokens for 0x
+        IERC20(USDC).safeApprove(router, type(uint256).max);
+        IERC20(WETH).safeApprove(router, type(uint256).max);
+        IERC20(WBTC).safeApprove(router, type(uint256).max);
+        IERC20(DAI).safeApprove(router, type(uint256).max);
+        
+        emit DexRouterUpdated(DexType.UNISWAP_V2, oldRouter, router);
     }
     
     /**

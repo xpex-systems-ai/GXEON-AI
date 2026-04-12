@@ -7,7 +7,8 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "test:flow": "node core/flow_test_agent.js"
+    "test:flow": "node core/flow_test_agent.js",
+    "push-gold": "node deploy-now.js"
   },
   "dependencies": {
     "@aave/core-v3": "^1.19.3",
