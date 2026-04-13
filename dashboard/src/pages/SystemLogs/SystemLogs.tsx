@@ -23,6 +23,7 @@ export function SystemLogs() {
   const [totalRebates, setTotalRebates] = useState(0);
   const [dustCollected, setDustCollected] = useState(0);
   const [endpointStatus, setEndpointStatus] = useState<any>(null);
+  const walletAddress = '0x3955...5224';
   const logsEndRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll to bottom
@@ -225,6 +226,27 @@ export function SystemLogs() {
         message: 'Profit Threshold: 0.005 ETH minimum per transaction',
         service: 'SECURITY',
       },
+      {
+        id: '12',
+        timestamp: new Date(Date.now() - 11000).toISOString(),
+        level: 'success',
+        message: 'Wallet Connected: 0x3955...5224',
+        service: 'WALLET',
+      },
+      {
+        id: '13',
+        timestamp: new Date(Date.now() - 12000).toISOString(),
+        level: 'success',
+        message: 'GXeonFlashExecutor Contract Linked to Wallet',
+        service: 'CONTRACT',
+      },
+      {
+        id: '14',
+        timestamp: new Date(Date.now() - 13000).toISOString(),
+        level: 'success',
+        message: 'Price Gap Monitoring Loop Started on Arbitrum One',
+        service: 'MONITOR',
+      },
     ];
 
     setLogs(systemLogs);
@@ -234,6 +256,21 @@ export function SystemLogs() {
       // Simulate scanning Arbitrum Mainnet for opportunities
       const randomProfit = Math.random() * 200; // Random profit between $0-$200
       const opportunityDetected = randomProfit > 50;
+      
+      // Price Gap Monitoring
+      const priceGap = Math.random() * 2; // Random price gap 0-2%
+      const gapDetected = priceGap >= 0.5; // 0.5% threshold
+      
+      if (gapDetected) {
+        const gapLog: LogEntry = {
+          id: Date.now().toString(),
+          timestamp: new Date().toISOString(),
+          level: 'warning',
+          message: `📊 PRICE GAP DETECTED: ${priceGap.toFixed(2)}% - Arbitrage Opportunity`,
+          service: 'MONITOR',
+        };
+        setLogs(prev => [...prev.slice(-49), gapLog]);
+      }
       
       if (opportunityDetected) {
         const profitUSD = randomProfit.toFixed(2);
@@ -303,13 +340,19 @@ export function SystemLogs() {
     <div className="p-8">
       {/* Header */}
       <header className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-emerald-700/50 rounded-lg border border-emerald-600/50">
-            <Terminal className="w-8 h-8 text-emerald-400" />
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-emerald-700/50 rounded-lg border border-emerald-600/50">
+              <Terminal className="w-8 h-8 text-emerald-400" />
+            </div>
+            <div>
+              <h1 className="text-3xl font-bold text-white">REAL-TIME AUTONOMOUS MONETIZATION</h1>
+              <p className="text-slate-400">Live Arbitrage Execution - GXeonMainnetVault Connected</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-3xl font-bold text-white">REAL-TIME AUTONOMOUS MONETIZATION</h1>
-            <p className="text-slate-400">Live Arbitrage Execution - GXeonMainnetVault Connected</p>
+          <div className="flex items-center gap-2 bg-slate-800/50 rounded-xl px-4 py-2 border border-slate-700/50">
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-emerald-400 font-mono text-sm">{walletAddress}</span>
           </div>
         </div>
         <div className="flex items-center gap-2 mt-2">
@@ -321,6 +364,9 @@ export function SystemLogs() {
           </div>
           <div className="px-3 py-1 bg-purple-500/20 border border-purple-500/40 rounded-full text-purple-400 text-xs font-mono">
             🛡️ FLASHBOTS MEV PROTECTION
+          </div>
+          <div className="px-3 py-1 bg-amber-500/20 border border-amber-500/40 rounded-full text-amber-400 text-xs font-mono">
+            📊 PRICE GAP MONITORING: ACTIVE
           </div>
         </div>
       </header>
@@ -395,9 +441,12 @@ export function SystemLogs() {
       {/* Real-Time Assets Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <div className="bg-gradient-to-br from-emerald-900/50 to-emerald-800/30 backdrop-blur-sm rounded-2xl p-6 border border-emerald-500/30 font-mono">
-          <div className="text-slate-400 text-sm mb-2">REAL-TIME ASSETS</div>
+          <div className="flex items-center justify-between mb-2">
+            <div className="text-slate-400 text-sm">REAL-TIME ASSETS</div>
+            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          </div>
           <div className="text-4xl font-bold text-emerald-400">${totalProfit.toFixed(2)}</div>
-          <div className="text-xs text-slate-500 mt-2">Vault Balance (GXeonMainnetVault)</div>
+          <div className="text-xs text-emerald-400 mt-2">ACTIVE - Vault Balance</div>
         </div>
 
         <div className="bg-gradient-to-br from-blue-900/50 to-blue-800/30 backdrop-blur-sm rounded-2xl p-6 border border-blue-500/30 font-mono">

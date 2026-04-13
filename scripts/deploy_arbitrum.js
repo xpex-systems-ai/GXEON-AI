@@ -44,7 +44,7 @@ async function main() {
   console.log('===========================================');
   console.log('Deployer:', deployer.address);
   console.log('Network:', network.name, '(Chain ID:', network.chainId, ')');
-  console.log('Balance:', ethers.formatEther(await deployer.provider.getBalance(deployer.address)), 'ETH');
+  console.log('Balance:', ethers.utils.formatEther(await deployer.provider.getBalance(deployer.address)), 'ETH');
   console.log('');
   
   if (network.chainId !== 42161n && network.chainId !== 421613n) {

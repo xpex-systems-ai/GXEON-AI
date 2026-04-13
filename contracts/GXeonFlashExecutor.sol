@@ -39,7 +39,7 @@ contract GXeonFlashExecutor is Ownable, ReentrancyGuard {
     
     // Intent-based solver configurations
     uint256 public constant GASLESS_MIN_PROFIT = 0.001 ether; // Minimum profit for gasless execution
-    uint256 public constant REBATE_THRESHOLD = 0.5; // 0.5% price gap for rebate capture
+    uint256 public constant REBATE_THRESHOLD = 50; // 0.5% price gap for rebate capture (50 basis points)
     uint256 public constant MIN_PROFIT_THRESHOLD = 0.005 ether; // 0.005 ETH minimum profit for real-time execution
     
     // Flashbots RPC for MEV protection
@@ -69,7 +69,7 @@ contract GXeonFlashExecutor is Ownable, ReentrancyGuard {
     
     // Intent solver events
     event IntentSubmitted(address indexed solver, bytes32 intentHash, uint256 expectedProfit);
-    event GaslessExecution(address indexed intent, uint256 profit, uint256 gasCost);
+    event GaslessExecution(bytes32 indexed intentHash, uint256 profit, uint256 gasCost);
     event PriceGapCaptured(string pair, uint256 gapPercentage, uint256 rebate);
     event AutonomousProfitUpdated(uint256 totalProfit, uint256 rebates);
     event DustCollected(address indexed token, uint256 amount);

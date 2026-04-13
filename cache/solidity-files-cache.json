@@ -12,6 +12,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "outputSelection": {
             "*": {
               "*": [
@@ -37,8 +38,8 @@
       ]
     },
     "C:\\Users\\P-c\\Documents\\xzeon-xpex-1\\contracts\\GXeonFlashExecutor.sol": {
-      "lastModificationDate": 1776016530058,
-      "contentHash": "884b384774a6c5a9448b397723ee440c",
+      "lastModificationDate": 1776097782490,
+      "contentHash": "57d06b7ad12c86acc6e22e7b65489734",
       "sourceName": "contracts/GXeonFlashExecutor.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -47,6 +48,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "outputSelection": {
             "*": {
               "*": [
@@ -89,6 +91,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "outputSelection": {
             "*": {
               "*": [
@@ -125,6 +128,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "outputSelection": {
             "*": {
               "*": [
@@ -162,6 +166,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "outputSelection": {
             "*": {
               "*": [
@@ -197,6 +202,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "outputSelection": {
             "*": {
               "*": [
@@ -232,6 +238,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "outputSelection": {
             "*": {
               "*": [
@@ -269,6 +276,7 @@
             "enabled": true,
             "runs": 200
           },
+          "viaIR": true,
           "outputSelection": {
             "*": {
               "*": [
@@ -291,6 +299,50 @@
       ],
       "artifacts": [
         "Pausable"
+      ]
+    },
+    "C:\\Users\\P-c\\Documents\\xzeon-xpex-1\\contracts\\GXeonMainnetVault.sol": {
+      "lastModificationDate": 1776088183667,
+      "contentHash": "94588a14852f85af51cfdffde345d76c",
+      "sourceName": "contracts/GXeonMainnetVault.sol",
+      "solcConfig": {
+        "version": "0.8.19",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "viaIR": true,
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./interfaces/IPool.sol",
+        "./interfaces/IERC20.sol",
+        "./interfaces/SafeERC20.sol",
+        "./interfaces/Ownable.sol",
+        "./interfaces/ReentrancyGuard.sol",
+        "./interfaces/Pausable.sol"
+      ],
+      "versionPragmas": [
+        "^0.8.19"
+      ],
+      "artifacts": [
+        "GXeonMainnetVault",
+        "IFlashExecutor"
       ]
     }
   }
