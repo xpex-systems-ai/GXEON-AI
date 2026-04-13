@@ -70,6 +70,16 @@ contract GXeonMainnetVault is Ownable, ReentrancyGuard, Pausable, IFlashLoanSimp
         string operationId;
     }
     
+    // Flash loan event parameters (to reduce stack depth)
+    struct FlashLoanParams {
+        string operationId;
+        address asset;
+        uint256 amount;
+        uint256 premium;
+        uint256 grossProfit;
+        address commander;
+    }
+    
     RevenueRecord[] public revenueHistory;
     
     // Global stats
@@ -185,59 +195,56 @@ contract GXeonMainnetVault is Ownable, ReentrancyGuard, Pausable, IFlashLoanSimp
         require(initiator == address(this), "GXeon: Invalid initiator");
         require(asset == USDC, "GXeon: Only USDC supported");
         
-        // Decodifica parâmetros
-        (
-            address commander,
-            address dexFrom,
-            address dexTo,
-            uint256 minAmountOut,
-            string memory operationId
-        ) = abi.decode(params, (address, address, address, uint256, string));
+        // Decode parameters directly into storage where possible
+        (address commander, address dexFrom, address dexTo, uint256 minAmountOut, string memory operationId) = 
+            abi.decode(params, (address, address, address, uint256, string));
         
-        // Executa arbitragem via executor
-        uint256 finalBalance = IERC20(USDC).balanceOf(address(this));
-        
-        // Chama executor para fazer as trocas
-        (bool success, uint256 profit) = executeArbitrage(
-            amount,
-            dexFrom,
-            dexTo,
-            minAmountOut
-        );
-        
+        // Execute arbitrage
+        (bool success, uint256 profit) = executeArbitrage(amount, dexFrom, dexTo, minAmountOut);
         require(success, "GXeon: Arbitrage failed");
         
-        // Calcula lucro líquido
+        // Calculate profit and distribute
         uint256 amountToReturn = amount + premium;
         uint256 grossProfit = profit > amountToReturn ? profit - amountToReturn : 0;
-        
         require(grossProfit >= minProfitThreshold, "GXeon: Profit below threshold");
         
-        // Distribui lucro 70/30
         distributeProfit(grossProfit, commander, operationId);
         
-        // Aprova e retorna para Aave
-        uint256 currentBalance = IERC20(USDC).balanceOf(address(this));
-        require(currentBalance >= amountToReturn, "GXeon: Insufficient to repay");
-        
+        // Repay flash loan
+        require(IERC20(USDC).balanceOf(address(this)) >= amountToReturn, "GXeon: Insufficient to repay");
         IERC20(USDC).safeApprove(address(POOL), amountToReturn);
         
-        // Atualiza estatísticas
-        totalFlashLoans++;
-        totalVolume += amount;
+        // Update stats
+        unchecked {
+            totalFlashLoans++;
+            totalVolume += amount;
+        }
         
-        emit FlashLoanExecuted(
-            operationId,
-            asset,
-            amount,
-            premium,
-            grossProfit,
-            (grossProfit * REINVESTMENT_PERCENT) / BASIS_POINTS,
-            (grossProfit * COMMANDER_PERCENT) / BASIS_POINTS,
-            commander
-        );
+        FlashLoanParams memory params = FlashLoanParams({
+            operationId: operationId,
+            asset: asset,
+            amount: amount,
+            premium: premium,
+            grossProfit: grossProfit,
+            commander: commander
+        });
+        
+        _emitFlashLoanExecuted(params);
         
         return true;
+    }
+    
+    function _emitFlashLoanExecuted(FlashLoanParams memory params) internal {
+        emit FlashLoanExecuted(
+            params.operationId,
+            params.asset,
+            params.amount,
+            params.premium,
+            params.grossProfit,
+            params.grossProfit * REINVESTMENT_PERCENT / BASIS_POINTS,
+            params.grossProfit * COMMANDER_PERCENT / BASIS_POINTS,
+            params.commander
+        );
     }
     
     // ============================================

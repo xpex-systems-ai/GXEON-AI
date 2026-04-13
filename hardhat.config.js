@@ -27,10 +27,10 @@ module.exports = {
       gasPrice: "auto"
     },
     arbitrum: {
-      url: process.env.ARBITRUM_RPC_URL || "https://arb1.arbitrum.io/rpc",
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      url: process.env.ARBITRUM_RPC_URL || '',
       chainId: 42161,
-      gasPrice: "auto"
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      flashbots: true, // Enable Flashbots for MEV protection
     },
     arbitrumGoerli: {
       url: process.env.ARBITRUM_GOERLI_RPC_URL || "https://goerli-rollup.arbitrum.io/rpc",
