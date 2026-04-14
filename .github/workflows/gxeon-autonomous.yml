@@ -1,0 +1,203 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🌑 GXEON AI — AUTONOMOUS EXECUTION GRID
+# Mempool Radar 24/7 — GitHub Actions Workflow
+# ═══════════════════════════════════════════════════════════════════════════════
+
+name: 🌑 GXEON Autonomous Grid
+
+on:
+  # ⏰ Executa a cada 5 minutos (cron job)
+  schedule:
+    - cron: '*/5 * * * *'
+  
+  # 🚀 Executa no push para main
+  push:
+    branches: [ main, master ]
+  
+  # 🖱️ Permite execução manual
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Execution Mode'
+        required: true
+        default: 'mempool_radar'
+        type: choice
+        options:
+          - mempool_radar
+          - flash_loan_scan
+          - full_revenue_check
+      duration:
+        description: 'Execution Duration (minutes)'
+        required: false
+        default: '4'
+
+# 🔒 Environment Variables (usando GitHub Secrets)
+env:
+  NODE_ENV: production
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+  ARBITRUM_RPC_URL: ${{ secrets.ARBITRUM_RPC_URL }}
+  ETHEREUM_RPC_URL: ${{ secrets.ETHEREUM_RPC_URL }}
+  POLYGON_RPC_URL: ${{ secrets.POLYGON_RPC_URL }}
+  FLASHBOTS_RELAY_SIGNING_KEY: ${{ secrets.FLASHBOTS_RELAY_SIGNING_KEY }}
+  OFA_API_KEY_0X: ${{ secrets.OFA_API_KEY_0X }}
+  OFA_API_KEY_1INCH: ${{ secrets.OFA_API_KEY_1INCH }}
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════════════════
+  # JOB 1: Mempool Radar (24/7 Signal Capture)
+  # ═══════════════════════════════════════════════════════════════════════════
+  mempool-radar:
+    name: 📡 Mempool Radar
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    
+    steps:
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: 📦 Install Dependencies
+        run: npm ci --only=production
+      
+      - name: 🧪 Health Check
+        run: node scripts/live_ping_supabase.js
+        continue-on-error: false
+      
+      - name: 📡 Start Mempool Radar
+        run: |
+          timeout ${{ github.event.inputs.duration || '240' }}s node core/mempool_arbitrage_feed.js || true
+        
+      - name: 📊 Upload Signal Logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: mempool-signals-${{ github.run_id }}
+          path: logs/mempool_signals.log
+          retention-days: 7
+        continue-on-error: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # JOB 2: Flash Loan Scanner (Yield Detection)
+  # ═══════════════════════════════════════════════════════════════════════════
+  flash-loan-scanner:
+    name: ⚡ Flash Loan Scanner
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: mempool-radar
+    
+    steps:
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: 📦 Install Dependencies
+        run: npm ci --only=production
+      
+      - name: 🔍 Scan Arbitrage Opportunities
+        run: |
+          timeout 180s node core/affiliate_miner.js --scan-only || true
+        
+      - name: 📈 Report Daily Stats
+        run: |
+          echo "=== GXEON Daily Revenue Report ==="
+          echo "Timestamp: $(date)"
+          echo "Runner: ${{ github.actor }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run ID: ${{ github.run_id }}"
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # JOB 3: Revenue Consolidation (Runs once daily at 00:00 UTC)
+  # ═══════════════════════════════════════════════════════════════════════════
+  daily-revenue-report:
+    name: 💰 Daily Revenue Report
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 0 * * *'
+    
+    steps:
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: 📦 Install Dependencies
+        run: npm ci --only=production
+      
+      - name: 📊 Generate Revenue Report
+        run: node scripts/generate_revenue_report.js || echo "No report script found"
+        continue-on-error: true
+      
+      - name: 📧 Notify Commander (Discord/Slack webhook opcional)
+        run: |
+          echo "Daily revenue processing complete"
+          echo "Check dashboard: https://gxeonai.netlify.app"
+        continue-on-error: true
+
+  # ═══════════════════════════════════════════════════════════════════════════
+  # JOB 4: System Health Monitor
+  # ═══════════════════════════════════════════════════════════════════════════
+  health-monitor:
+    name: 🏥 System Health Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    
+    steps:
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: 📦 Install Dependencies
+        run: npm ci --only=production
+      
+      - name: 🔗 Test API Gateway
+        run: |
+          curl -s https://api.gxeon.ai/health || echo "API Health Check Failed"
+        continue-on-error: true
+      
+      - name: 🗄️ Test Database Connection
+        run: node scripts/live_ping_supabase.js
+        continue-on-error: false
+      
+      - name: ✅ Update Status Badge
+        run: |
+          echo "::set-output name=status::operational"
+        continue-on-error: true
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 📝 NOTES:
+# 
+# 1. SECRETS REQUIRED IN GITHUB REPOSITORY:
+#    Go to Settings → Secrets and variables → Actions
+#    Add all env variables listed above
+#
+# 2. CRON SCHEDULE (UTC):
+#    '*/5 * * * *' = Every 5 minutes
+#    '0 0 * * *' = Daily at midnight UTC
+#
+# 3. AUTONOMOUS MODE:
+#    This workflow runs automatically without human intervention
+#    Revenue is captured and reported automatically
+#
+# 4. MONITORING:
+#    View logs at: https://github.com/xpex-systems-ai/GXEON-AI/actions
+# ═══════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,71 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🌑 GXEON AI — REPLIT CONFIGURATION
+# 1-Click Deploy Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Entry point when "Run" button is clicked
+run = "npm start"
+
+# Entry point when "Deploy" button is clicked
+deploy = "npm run deploy"
+
+# Language and environment
+language = "nodejs"
+
+# Ports to expose
+[ports]
+3000 = "Backend API Server"
+3002 = "Dashboard Frontend"
+5173 = "Vite Dev Server"
+
+# Environment variables (will be auto-injected from Replit Secrets)
+[env]
+NODE_ENV = "production"
+PORT = "3000"
+
+# Nix packages to install
+[nix]
+# Node.js 20 LTS
+packages = [
+  "nodejs-20_x",
+  "nodePackages.npm",
+  "nodePackages.pnpm",
+  "git"
+]
+
+# Lifecycle hooks
+[lifecycle]
+# Runs on every code change
+onBoot = "npm install"
+
+# Runs on workspace start
+onStart = "echo '🌑 GXEON AI Ready for Autonomous Execution'"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 📋 REPLIT SETUP INSTRUCTIONS:
+#
+# 1. Import from GitHub:
+#    - Click '+' → 'Import from GitHub'
+#    - Paste: https://github.com/xpex-systems-ai/GXEON-AI
+#
+# 2. Configure Secrets (CRITICAL):
+#    - Click 'Secrets' (lock icon) in left sidebar
+#    - Add ALL secrets from config/secrets-mapping.json:
+#      • SUPABASE_URL
+#      • SUPABASE_SERVICE_ROLE_KEY
+#      • DATABASE_URL
+#      • PRIVATE_KEY
+#      • ARBITRUM_RPC_URL
+#      • ETHEREUM_RPC_URL
+#      • POLYGON_RPC_URL
+#      • FLASHBOTS_RELAY_SIGNING_KEY
+#      • OFA_API_KEY_0X
+#      • OFA_API_KEY_1INCH
+#
+# 3. Click "Run" button — GXEON will start automatically
+#
+# 4. Open in browser:
+#    - Webview will show automatically
+#    - Or visit the generated URL
+#
+# ═══════════════════════════════════════════════════════════════════════════════

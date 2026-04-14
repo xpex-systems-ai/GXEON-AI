@@ -1,8 +1,10 @@
 const supabase = require('../services/supabase');
+const { deductCreditsAtomicDirect, refundCreditsDirect, queryUserByApiKey } = require('./gxeonEnforcerPg');
 
 /**
  * GXEON ENFORCER - Billing & Auth Middleware
  * Validates API Key and deducts credits atomically before execution
+ * Fallback para PostgreSQL direto quando PostgREST schema cache falha
  */
 const gxeonEnforcer = (costConfig = {}) => async (req, res, next) => {
     const apiKey = req.headers['x-gxeon-key'];
@@ -14,6 +16,7 @@ const gxeonEnforcer = (costConfig = {}) => async (req, res, next) => {
         onchain_operation: 0.01,
         task_pipeline: 0.002,
         edge_function: 0.001,
+        radar_call: 0.05,
         ...costConfig
     };
 
@@ -26,6 +29,7 @@ const gxeonEnforcer = (costConfig = {}) => async (req, res, next) => {
     else if (route.includes('/orchestrator')) operationCost = costs.agent_execution * 2;
     else if (route.includes('/edge')) operationCost = costs.edge_function;
     else if (route.match(/\/api\/(huggingface|deepseek|grok|chatgpt)/)) operationCost = costs.llm_call;
+    else if (route.includes('/api/v1/radar')) operationCost = costs.radar_call;
     else if (route.includes('/api/')) operationCost = costs.agent_execution;
 
     // 1. Validate API Key presence
@@ -37,23 +41,31 @@ const gxeonEnforcer = (costConfig = {}) => async (req, res, next) => {
     }
 
     try {
-        // 2. Atomic credit check AND deduction using Supabase RPC
-        // This prevents race conditions where parallel requests pass validation
-        const { data: deductionResult, error: rpcError } = await supabase
-            .rpc('deduct_credits_atomic', {
-                p_api_key: apiKey,
-                p_amount: operationCost,
-                p_operation: route,
-                p_request_id: req.id || `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-            });
+        let deductionResult;
+        
+        try {
+            // 2. Tentar via Supabase RPC primeiro
+            const { data, error: rpcError } = await supabase
+                .rpc('deduct_credits_atomic', {
+                    p_api_key: apiKey,
+                    p_amount: operationCost,
+                    p_operation: route,
+                    p_request_id: req.id || `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                });
 
-        if (rpcError) {
-            console.error('[GXEON Enforcer] RPC Error:', rpcError);
-            return res.status(500).json({ 
-                error: "GXEON_BILLING_ERROR", 
-                message: "Erro no sistema de cobrança." 
-            });
-        }
+            if (rpcError && rpcError.message && rpcError.message.includes('schema cache')) {
+                // Fallback para PostgreSQL direto quando PostgREST cache falha
+                console.warn('[GXEON Enforcer] PostgREST schema cache desatualizado, usando PostgreSQL direto...');
+                deductionResult = await deductCreditsAtomicDirect(apiKey, operationCost, route, req.id);
+            } else if (rpcError) {
+                console.error('[GXEON Enforcer] RPC Error:', rpcError);
+                return res.status(500).json({ 
+                    error: "GXEON_BILLING_ERROR", 
+                    message: "Erro no sistema de cobrança."
+                });
+            } else {
+                deductionResult = data;
+            }
 
         if (!deductionResult || !deductionResult.success) {
             return res.status(402).json({ 
@@ -115,14 +127,30 @@ const gxeonAuthOnly = async (req, res, next) => {
     }
 
     try {
-        const { data: user, error } = await supabase
-            .from('users')
+        let user;
+        
+        // Tentar via Supabase primeiro
+        const { data, error } = await supabase
+            .from('gxeon_users')
             .select('id, balance_credits, status')
             .eq('api_key', apiKey)
             .eq('status', 'active')
             .single();
+        
+        if (error && error.message && error.message.includes('schema cache')) {
+            // Fallback para PostgreSQL direto
+            console.warn('[GXEON Auth] PostgREST schema cache desatualizado, usando PostgreSQL direto...');
+            user = await queryUserByApiKey(apiKey);
+        } else if (error) {
+            return res.status(401).json({ 
+                error: "GXEON_INVALID_KEY", 
+                message: "API Key inválida ou usuário inativo." 
+            });
+        } else {
+            user = data;
+        }
 
-        if (error || !user) {
+        if (!user) {
             return res.status(401).json({ 
                 error: "GXEON_INVALID_KEY", 
                 message: "API Key inválida ou usuário inativo." 

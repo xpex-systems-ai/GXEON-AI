@@ -1,0 +1,42 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🌑 GXEON AI — NIXPACKS CONFIGURATION
+# For Railway, Render, and other Nix-based deployments
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[phases.build]
+cmds = [
+  "npm ci --only=production",
+  "cd dashboard && npm ci && npm run build"
+]
+
+[phases.setup]
+nixPkgs = [
+  "nodejs-20_x",
+  "nodePackages.npm",
+  "git"
+]
+
+[start]
+cmd = "npm start"
+
+[variables]
+NODE_ENV = 'production'
+PORT = '3000'
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 📋 DEPLOYMENT TARGETS:
+#
+# 1. Railway:
+#    - Connect GitHub repo to Railway
+#    - This file auto-detects and configures deployment
+#    - Railway will run: npm start
+#
+# 2. Render:
+#    - Create Web Service
+#    - Root Directory: (leave blank for root)
+#    - Build Command: npm ci && cd dashboard && npm ci && npm run build
+#    - Start Command: npm start
+#
+# 3. Any Nix-based platform:
+#    - This file provides standardized build instructions
+# ═══════════════════════════════════════════════════════════════════════════════

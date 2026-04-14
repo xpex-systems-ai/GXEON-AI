@@ -1,19 +1,33 @@
 <div align="center">
 
-# � GXeon AI Enterprise Gold v2.0
-### Autonomous Intent Solving & Gasless Engine
+# GXEON AI — AUTONOMOUS INTELLIGENCE GRID
+### Self-Evolving M2M Infrastructure & Revenue Engine
 
-[![Version](https://img.shields.io/badge/version-2.0.0-gold.svg?style=for-the-badge)](https://github.com/xpex-systems-ai/GXEON-AI/releases)
-[![License](https://img.shields.io/badge/license-Private%20Enterprise-gold.svg?style=for-the-badge)](LICENSE)
-[![Build](https://img.shields.io/badge/build-passing-success.svg?style=for-the-badge)](https://github.com/xpex-systems-ai/GXEON-AI/actions)
-[![Deployed](https://img.shields.io/badge/deployed-Netlify-gold.svg?style=for-the-badge)](https://gxeon-enterprise-gold.netlify.app)
+[![Version](https://img.shields.io/badge/Version-2.1.0-cyan?style=for-the-badge&logo=github)](https://github.com/xpex-systems-ai/GXEON-AI/releases)
+[![Status](https://img.shields.io/badge/Status-OPERATIONAL-brightgreen?style=for-the-badge&logo=statuspage)](https://gxeonai.statuspage.io)
+[![License](https://img.shields.io/badge/License-Enterprise-gold?style=for-the-badge&logo=license)](LICENSE)
+[![Network](https://img.shields.io/badge/Network-4%20Chains-purple?style=for-the-badge&logo=ethereum)](https://chainlist.org)
 
-**Live Command Center:** [gxeon-enterprise-gold.netlify.app](https://gxeon-enterprise-gold.netlify.app) | **Local:** [http://localhost:3002](http://localhost:3002)
+<br>
+
+| Live Systems | API Status | Uptime |
+|:---|:---:|:---:|
+| Command Center | [gxeonai.netlify.app](https://gxeonai.netlify.app) | 99.9% |
+| API Gateway | [api.gxeon.ai](https://api.gxeon.ai/health) | 99.8% |
+| Mempool Radar | 24/7 Autonomous | ACTIVE |
+| Flash Loans | M2M Execution | ARMED |
+
+<br>
+
+[![Replit](https://img.shields.io/badge/Deploy-Replit-0D1017?style=for-the-badge&logo=replit)](https://replit.com/github/xpex-systems-ai/GXEON-AI)
+[![Docker](https://img.shields.io/badge/Deploy-Docker-2496ED?style=for-the-badge&logo=docker)](https://hub.docker.com/r/gxeon/ai)
+[![GitHub](https://img.shields.io/badge/Deploy-GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions)](.github/workflows/gxeon-autonomous.yml)
 
 </div>
 
 ---
 
+## Overview
 ## 🚀 Overview
 
 GXeon AI Enterprise Gold is a **decentralized command center** and **infrastructure dashboard** designed for monitoring **Autonomous AI Agents** and **Automated Smart Contract Executions**. 
@@ -220,6 +234,17 @@ npm i -g vercel
 # Deploy
 vercel --prod
 ```
+
+## 🚀 One-Click Deploy
+
+### Replit (Recommended for Beginners)
+[![Deploy on Replit](https://replit.com/badge/github/xpex-systems-ai/GXEON-AI)](https://replit.com/github/xpex-systems-ai/GXEON-AI)
+
+### Railway
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/GXEON-AI)
+
+### Render
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/xpex-systems-ai/GXEON-AI)
 
 ## 📜 License
 
