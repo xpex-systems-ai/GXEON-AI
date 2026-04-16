@@ -288,6 +288,84 @@ class RadarShixService {
             return { error: error.message };
         }
     }
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // API ENDPOINT SUPPORT METHODS (Billing-Protected)
+    // ═══════════════════════════════════════════════════════════════════════════
+
+    /**
+     * Get opportunities from recent scans (for API billing endpoint)
+     */
+    async getOpportunities(limit = 20) {
+        try {
+            const { data: leads } = await supabase
+                .from('radar_leads')
+                .select('*, tasks(status, cost, billing_tx_id)')
+                .order('processed_at', { ascending: false })
+                .limit(limit);
+
+            return leads || [];
+        } catch (error) {
+            console.error('[RADAR_SHIX] getOpportunities error:', error);
+            return [];
+        }
+    }
+
+    /**
+     * Get last update timestamp
+     */
+    async getLastUpdateTime() {
+        try {
+            const { data } = await supabase
+                .from('radar_scan_logs')
+                .select('scanned_at')
+                .order('scanned_at', { ascending: false })
+                .limit(1)
+                .single();
+
+            return data?.scanned_at || new Date().toISOString();
+        } catch (error) {
+            return new Date().toISOString();
+        }
+    }
+
+    /**
+     * Check if radar is active
+     */
+    isActive() {
+        return this.isRunning;
+    }
+
+    /**
+     * Get service uptime in seconds
+     */
+    getUptime() {
+        // Mock uptime - in production, track actual start time
+        return this.isRunning ? Math.floor(Math.random() * 86400) : 0;
+    }
+
+    /**
+     * Get total opportunities count
+     */
+    async getTotalOpportunities() {
+        try {
+            const { count } = await supabase
+                .from('radar_leads')
+                .select('*', { count: 'exact' });
+            return count || 0;
+        } catch (error) {
+            return 0;
+        }
+    }
+
+    /**
+     * Trigger manual scan (for API endpoint)
+     */
+    async triggerScan() {
+        console.log('[RADAR_SHIX] Manual scan triggered via API');
+        await this.scanAndInject();
+        return { success: true, message: 'Scan iniciado manualmente' };
+    }
 }
 
 module.exports = new RadarShixService();

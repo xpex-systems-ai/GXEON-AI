@@ -79,8 +79,8 @@ router.get('/status', async (req, res) => {
  */
 router.post('/scan', async (req, res) => {
     try {
-        // Trigger immediate scan
-        radarShix.triggerScan();
+        // Trigger immediate scan (now async)
+        await radarShix.triggerScan();
         
         res.json({
             success: true,
