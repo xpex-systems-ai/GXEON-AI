@@ -1,0 +1,76 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    🌑 GXEON PUSH SUCCESSFUL                                 ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+📦 Commits pushed to GitHub:
+   • 🔒 feat(billing): Add /api/v1/radar endpoint with 0.05 credit charge
+   • 🔧 fix(radar): Add async API methods to radarShix service
+
+🔗 Repository: https://github.com/xpex-systems-ai/GXEON-AI
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    💰 BILLING CONFIGURATION                                   ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+📡 Endpoint:     GET /api/v1/radar/opportunities
+💳 Cost:         0.05 credits per call
+🚫 No Balance:   HTTP 402 Payment Required
+✅ Success:      Returns opportunities + billing info
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    🧪 TEST COMMAND                                            ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+1. Start server:
+   npm start
+
+2. Run billing test:
+   node scripts/test_radar_billing.js
+
+3. Manual curl test:
+   curl -X GET http://localhost:3000/api/v1/radar/opportunities ^
+        -H "x-gxeon-key: api_teste_faturamento" ^
+        -H "Content-Type: application/json"
+
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    🔄 REPLIT AUTO-RELOAD                                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+✅ GitHub Actions workflow: .github/workflows/gxeon-autonomous.yml
+✅ Replit config: .replit
+✅ Secrets mapping: config/secrets-mapping.json
+
+⚡ Replit will auto-reload on next push detection
+⚡ GitHub Actions runs every 5 minutes (cron schedule)
+
+🌑 Comandante, o GXEON está cobrando 0.05 créditos por chamada!
+
+═══════════════════════════════════════════════════════════════════════════════
+BILLING LOG EXAMPLE:
+═══════════════════════════════════════════════════════════════════════════════
+
+POST /rpc/deduct_credits_atomic
+{
+  "p_api_key": "api_teste_faturamento",
+  "p_amount": 0.05,
+  "p_operation": "/api/v1/radar/opportunities",
+  "p_request_id": "12345-abc"
+}
+
+SUCCESS RESPONSE:
+{
+  "success": true,
+  "user_id": "uuid",
+  "new_balance": 9.95,
+  "transaction_id": "tx_abc123"
+}
+
+402 PAYMENT REQUIRED (No Balance):
+{
+  "error": "GXEON_PAYMENT_REQUIRED",
+  "message": "Saldo insuficiente para execucao.",
+  "required": 0.05,
+  "current_balance": 0
+}
+
+═══════════════════════════════════════════════════════════════════════════════
