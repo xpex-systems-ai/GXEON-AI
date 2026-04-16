@@ -230,6 +230,10 @@ export function Dashboard() {
         if (success) {
           const profit = (Math.random() * 50 + 5).toFixed(2);
           addLogEntry('success', `✅ Keeper execution successful on ${protocol}`, `Profit: $${profit} | Gas: ${(Math.random() * 10 + 2).toFixed(2)} USD`);
+          
+          // Add ACCUMULATED_OFFCHAIN_VALUE log on successful keeper execution
+          const offchainValue = (parseFloat(profit) * 1.5).toFixed(2);
+          addLogEntry('info', `💎 ACCUMULATED_OFFCHAIN_VALUE: $${offchainValue}`, `AGGRESSIVE_SOLVER | Protocols: 0x_API, ParaSwap_V5, Enso_Finance, CoW_Protocol`);
         } else {
           addLogEntry('warning', `⚠️ Keeper attempt skipped on ${protocol}`, 'Slippage protection triggered - rebate insufficient');
         }

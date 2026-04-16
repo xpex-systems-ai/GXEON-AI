@@ -21,13 +21,14 @@
     "express-rate-limit": "^8.3.2",
     "ioredis": "^5.10.1",
     "node-fetch": "^2.7.0",
+    "pg": "^8.11.0",
     "playwright": "^1.59.1",
     "rate-limit-redis": "^4.3.1"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^7.0.0",
-    "@nomiclabs/hardhat-ethers": "^2.2.3",
-    "ethers": "^5.7.2",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "ethers": "^6.16.0",
     "hardhat": "^2.22.0"
   }
 }

@@ -17,12 +17,22 @@ export default {
           light: '#66ffdd',
         },
         dark: {
-          900: '#0a0a0f',
-          800: '#12121a',
-          700: '#1a1a25',
-          600: '#252535',
-          500: '#333344',
-        }
+          900: '#050505',
+          800: '#0a0a0a',
+          700: '#12121a',
+          600: '#1a1a25',
+          500: '#252535',
+        },
+        gold: {
+          DEFAULT: '#FFD700',
+          dark: '#CCAA00',
+          light: '#FFE44D',
+        },
+        cyan: {
+          DEFAULT: '#00E5FF',
+          dark: '#00B8CC',
+          light: '#4DEAFF',
+        },
       },
       animation: {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',

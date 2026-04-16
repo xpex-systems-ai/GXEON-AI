@@ -2,9 +2,11 @@
  * Withdrawal Script: GXeonMainnetVault Total Profit Extraction
  * Target Network: Arbitrum One (Chain ID: 42161)
  * Recipient: 0x3955d559055DadB7067054cB6E6f974710345224
+ * 
+ * Uses ethers v6 directly (not hardhat wrapper) for consistent API
  */
 
-const { ethers } = require('hardhat');
+const { ethers } = require('ethers');
 require('dotenv').config();
 
 async function main() {
@@ -32,7 +34,7 @@ async function main() {
   console.log('   RPC:', ARBITRUM_RPC_URL);
   console.log('');
   
-  // Connect to Arbitrum
+  // Connect to Arbitrum — ethers v6 API
   const provider = new ethers.JsonRpcProvider(ARBITRUM_RPC_URL);
   const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
   
@@ -68,25 +70,25 @@ async function main() {
     console.log('');
   }
   
-  // Get USDC balance
-  const usdcABI = ['function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'];
-  const usdc = new ethers.Contract(USDC, usdcABI, provider);
+  // ERC20 ABI for balance checks
+  const erc20ABI = ['function balanceOf(address) view returns (uint256)', 'function decimals() view returns (uint8)'];
   
   console.log('💰 Checking Vault Balances...');
   try {
+    const usdc = new ethers.Contract(USDC, erc20ABI, provider);
     const usdcBalance = await usdc.balanceOf(VAULT_ADDRESS);
     const usdcDecimals = await usdc.decimals();
     const usdcFormatted = ethers.formatUnits(usdcBalance, usdcDecimals);
     
     console.log('   USDC:', usdcFormatted);
     
-    const weth = new ethers.Contract(WETH, usdcABI, provider);
+    const weth = new ethers.Contract(WETH, erc20ABI, provider);
     const wethBalance = await weth.balanceOf(VAULT_ADDRESS);
     const wethFormatted = ethers.formatEther(wethBalance);
     
     console.log('   WETH:', wethFormatted);
     
-    const aave = new ethers.Contract(AAVE, usdcABI, provider);
+    const aave = new ethers.Contract(AAVE, erc20ABI, provider);
     const aaveBalance = await aave.balanceOf(VAULT_ADDRESS);
     const aaveDecimals = await aave.decimals();
     const aaveFormatted = ethers.formatUnits(aaveBalance, aaveDecimals);

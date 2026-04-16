@@ -2,16 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 
 console.log('🔧 [Supabase] Module loading...');
 
-// EMERGENCY FALLBACK - Hardcoded for production reliability
-const EMERGENCY_SUPABASE_URL = 'https://telxvphgrsvsnxvmjkce.supabase.co';
-const EMERGENCY_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbHh2cGhncnN2c254dm1qa2NlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyNjA2NTYsImV4cCI6MjA1OTgzNjY1Nn0.your_actual_key_here';
-
-// Try env vars first, fallback to emergency
-const supabaseUrl = (import.meta as any).env?.VITE_SUPABASE_URL 
-  || EMERGENCY_SUPABASE_URL;
-  
-const supabaseAnonKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY 
-  || '';
+const supabaseUrl = (import.meta as any).env?.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || '';
 
 console.log('🔧 [Supabase] ENV check:', {
   VITE_SUPABASE_URL: !!(import.meta as any).env?.VITE_SUPABASE_URL,
@@ -24,12 +16,15 @@ console.log('🔧 [Supabase] ENV check:', {
 const isSupabaseEnabled = supabaseUrl && supabaseAnonKey && supabaseAnonKey.length > 20;
 
 if (!isSupabaseEnabled) {
+  if (import.meta.env.PROD) {
+    throw new Error(
+      '[Supabase] FATAL: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are required in production. ' +
+      'Add them to your .env file or deployment environment variables.'
+    );
+  }
   console.warn('⚠️ [Supabase] Missing or invalid credentials. Realtime features DISABLED.');
   console.warn('⚠️ [Supabase] To enable: Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to env vars.');
 }
-
-console.warn('⚠️ [Supabase] URL ATIVO:', supabaseUrl);
-console.warn('⚠️ [Supabase] KEY ATIVA:', supabaseAnonKey ? '***' + supabaseAnonKey.slice(-10) : 'NOT SET');
 
 // Create real client if enabled, otherwise create mock
 export const supabase = isSupabaseEnabled 
