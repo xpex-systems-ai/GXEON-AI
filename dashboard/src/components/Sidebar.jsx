@@ -1,12 +1,63 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Radar, Cpu, Terminal, Activity, Menu, X } from 'lucide-react';
+import { 
+  Radar, Cpu, Terminal, Activity, Menu, X, 
+  Radio, Zap, DollarSign, ShieldCheck, Crown
+} from 'lucide-react';
 
+/**
+ * 🌑 GXEON SOVEREIGN NAVIGATION
+ * Professional-grade navigation with live status indicators
+ */
 const navItems = [
-  { id: 'nav_mempool', label: 'Mempool Radar', icon: Radar },
-  { id: 'nav_atomic', label: 'Atomic Engine', icon: Cpu },
-  { id: 'nav_logs', label: 'MEV Bribe Logs', icon: Terminal },
-  { id: 'nav_network', label: 'Node Status', icon: Activity },
+  { 
+    id: 'nav_mempool', 
+    label: 'Mempool Radar', 
+    icon: Radio,
+    status: 'LIVE',
+    statusColor: 'bg-green-500',
+    description: '24/7 Signal Capture'
+  },
+  { 
+    id: 'nav_atomic', 
+    label: 'Flashloan Engine', 
+    icon: Zap,
+    status: 'ARMED',
+    statusColor: 'bg-amber-500',
+    description: 'M2M Execution Ready'
+  },
+  { 
+    id: 'nav_billing', 
+    label: 'API Billing', 
+    icon: DollarSign,
+    status: 'COLLECTING',
+    statusColor: 'bg-cyan-500',
+    description: '0.05 créditos/call'
+  },
+  { 
+    id: 'nav_vault', 
+    label: 'Sovereign Vault', 
+    icon: ShieldCheck,
+    status: 'SECURE',
+    statusColor: 'bg-purple-500',
+    description: 'On-chain Treasury'
+  },
+  { 
+    id: 'nav_logs', 
+    label: 'MEV Bribe Logs', 
+    icon: Terminal,
+    status: 'LOGGING',
+    statusColor: 'bg-blue-500',
+    description: 'Flashbots Relay'
+  },
+  { 
+    id: 'nav_network', 
+    label: 'Node Status', 
+    icon: Activity,
+    status: 'ONLINE',
+    statusColor: 'bg-emerald-500',
+    description: 'Multi-chain Active'
+  },
 ];
 
 export function Sidebar({ activeView, onViewChange, isCollapsed, setIsCollapsed }) {
@@ -88,6 +139,7 @@ export function Sidebar({ activeView, onViewChange, isCollapsed, setIsCollapsed 
                   }`}
                 />
                 {!isCollapsed && (
+                <div className="flex flex-col items-start">
                   <motion.span
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -97,7 +149,14 @@ export function Sidebar({ activeView, onViewChange, isCollapsed, setIsCollapsed 
                   >
                     {item.label}
                   </motion.span>
-                )}
+                  {!isCollapsed && item.status && (
+                    <span className="text-[10px] text-gray-500 flex items-center gap-1 mt-0.5">
+                      <span className={`w-1.5 h-1.5 rounded-full ${item.statusColor} animate-pulse`} />
+                      {item.status}
+                    </span>
+                  )}
+                </div>
+              )}
               </div>
 
               {isActive && (
@@ -111,20 +170,45 @@ export function Sidebar({ activeView, onViewChange, isCollapsed, setIsCollapsed 
         })}
       </nav>
 
-      {/* Footer */}
+      {/* 🌑 SOVEREIGN FOOTER — SYSTEM_ADMIN_ID Display */}
       <div className="relative z-10 p-4 border-t border-gold/10">
         {!isCollapsed && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center"
+            className="space-y-3"
           >
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-xs text-gray-500">System Online</span>
+            {/* System Status */}
+            <div className="flex items-center justify-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_#22c55e]" />
+              <span className="text-xs text-gray-400">System Online</span>
             </div>
-            <p className="text-[10px] text-gray-600 tracking-wider">v2.0.6 CYBERPUNK</p>
+            
+            {/* SYSTEM_ADMIN_ID Badge */}
+            <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-gold/20 rounded-lg p-2 border border-gold/30">
+              <div className="flex items-center gap-2 justify-center">
+                <Crown className="w-3 h-3 text-gold" />
+                <span className="text-[10px] text-gold/80 font-semibold tracking-wider">SOVEREIGN</span>
+              </div>
+              <div className="text-center mt-1">
+                <span className="text-[9px] text-gray-500 font-mono">
+                  {(import.meta as any).env?.VITE_SYSTEM_ADMIN_ID?.slice(0, 12) || 'GXEON-ADMIN'}
+                </span>
+              </div>
+            </div>
+            
+            {/* Version */}
+            <p className="text-[10px] text-gray-600 tracking-wider text-center">
+              v2.1.0 SOVEREIGN GRID
+            </p>
           </motion.div>
+        )}
+        
+        {/* Collapsed mode — just show crown icon */}
+        {isCollapsed && (
+          <div className="flex justify-center">
+            <Crown className="w-4 h-4 text-gold/60" />
+          </div>
         )}
       </div>
     </motion.aside>
