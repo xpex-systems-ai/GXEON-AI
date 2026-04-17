@@ -170,6 +170,13 @@ class SmartMoneyMonitor {
         try {
             this.provider = new ethers.WebSocketProvider(this.wsUrl);
 
+            // Handle WebSocket errors on underlying socket
+            if (this.provider._websocket) {
+                this.provider._websocket.on('error', (err) => {
+                    console.error('[SmartMoneyMonitor] WebSocket error:', err.message);
+                });
+            }
+
             // Escuta por grandes transfers de ETH
             this.provider.on('block', async (blockNumber) => {
                 try {
@@ -330,6 +337,13 @@ class MempoolSniper {
         try {
             // Usa provider separado para mempool
             this.provider = new ethers.WebSocketProvider(this.wsUrl);
+
+            // Handle WebSocket errors on underlying socket
+            if (this.provider._websocket) {
+                this.provider._websocket.on('error', (err) => {
+                    console.error('[MempoolSniper] WebSocket error:', err.message);
+                });
+            }
 
             // Escuta pending transactions
             this.provider.on('pending', async (txHash) => {
