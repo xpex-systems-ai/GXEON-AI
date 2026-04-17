@@ -102,6 +102,8 @@ app.use('/api/executor', gxeonEnforcer({ agent_execution: 0.003 }), executorRout
 app.use('/api/edge', gxeonEnforcer({ edge_function: 0.001 }), require('./edge-functions'));
 app.use('/api/v1/radar', gxeonEnforcer({ radar_call: 0.05 }), require('./routes/radar'));
 app.use('/api/v1/sovereign-data', require('./routes/sovereign-data')); // 🌑 PANDORA PROTOCOL — M2M Only
+app.use('/api/v1/ocean', require('./routes/ocean')); // 🌊 OCEAN PROTOCOL — Compute-to-Data
+app.use('/api/v1/chainlink', require('./routes/chainlink')); // 🔗 CHAINLINK FUNCTIONS — Oracle Gateway
 app.use('/v1/memory', gxeonRateLimiter, require('./routes/memory'));
 app.use('/v1/plugins/execute', gxeonRateLimiter, gxeonEnforcer({ agent_execution: 0.005 }), require('./routes/agents_protected'));
 app.use('/billing', gxeonAuthOnly, require('./routes/billing'));
