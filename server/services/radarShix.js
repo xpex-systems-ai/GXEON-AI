@@ -604,6 +604,7 @@ class RadarShixService {
      * Processa um novo pool detectado
      */
     async processNewPool(pool) {
+        if (!supabase) return;
         try {
             // Insere no Supabase
             const { data, error } = await supabase
@@ -652,6 +653,7 @@ class RadarShixService {
      * Log de transferência smart money
      */
     async logSmartMoneyTransfer(transfer) {
+        if (!supabase) return;
         try {
             const isWhale = transfer.amountUsd >= 100000;
             const isNewWallet = false; // TODO: implementar verificação
@@ -689,6 +691,7 @@ class RadarShixService {
      * Log de liquidez pendente (mempool sniper)
      */
     async logPendingLiquidity(pending) {
+        if (!supabase) return;
         try {
             // Log em tabela separada ou mesma de smart money com flag
             const { error } = await supabase
@@ -723,6 +726,7 @@ class RadarShixService {
      * Log de telemetria do scan
      */
     async logScanTelemetry({ blockNumber, newPools, highLiquidityAlerts, durationMs, error = null }) {
+        if (!supabase) return;
         try {
             await supabase.from('radar_liquidity_telemetry').insert({
                 block_number: blockNumber,
@@ -759,6 +763,7 @@ class RadarShixService {
             console.log(`[RADAR_HEARTBEAT] ⏱️ ${hours}h ${mins}m | ⚡ ${this.telemetry.scansPerSecond} scans/s | 🔍 ${this.blockCount} total | 🎯 ${this.opportunitiesFound} pools | 📊 ${this.dexFetcher.knownPools.size} tracked | 🔫 ${this.telemetry.pendingTxSeen} pending | 🐋 ${this.telemetry.smartMoneyEvents} smart`);
             
             // Ping no Supabase com telemetry completa
+            if (!supabase) return;
             try {
                 await supabase.from('radar_liquidity_heartbeat').upsert({
                     id: 'liquidity_radar_v1',
@@ -784,6 +789,7 @@ class RadarShixService {
      * Get opportunities (high liquidity pools)
      */
     async getOpportunities(limit = 20) {
+        if (!supabase) return [];
         try {
             const { data } = await supabase
                 .from('radar_liquidity_pools')
@@ -803,6 +809,7 @@ class RadarShixService {
      * Get last update timestamp
      */
     async getLastUpdateTime() {
+        if (!supabase) return new Date().toISOString();
         try {
             const { data } = await supabase
                 .from('radar_liquidity_heartbeat')
@@ -836,6 +843,7 @@ class RadarShixService {
      * Get total opportunities count
      */
     async getTotalOpportunities() {
+        if (!supabase) return 0;
         try {
             const { count } = await supabase
                 .from('radar_liquidity_pools')
