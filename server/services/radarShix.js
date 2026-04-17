@@ -170,23 +170,13 @@ class SmartMoneyMonitor {
         try {
             this.provider = new ethers.WebSocketProvider(this.wsUrl);
 
-            // Error handling to prevent crashes
-            this.provider.on('error', (error) => {
-                console.error('[SmartMoneyMonitor] WebSocket error:', error.message);
-                this.isConnected = false;
-                // Auto-reconnect after 10s
-                setTimeout(() => this.start(), 10000);
-            });
-
-            this.provider.on('close', () => {
-                console.warn('[SmartMoneyMonitor] WebSocket closed, reconnecting...');
-                this.isConnected = false;
-                setTimeout(() => this.start(), 10000);
-            });
-            
             // Escuta por grandes transfers de ETH
             this.provider.on('block', async (blockNumber) => {
-                await this.processBlock(blockNumber);
+                try {
+                    await this.processBlock(blockNumber);
+                } catch (err) {
+                    console.error('[SmartMoneyMonitor] Block processing error:', err.message);
+                }
             });
 
             this.isConnected = true;
@@ -341,22 +331,13 @@ class MempoolSniper {
             // Usa provider separado para mempool
             this.provider = new ethers.WebSocketProvider(this.wsUrl);
 
-            // Error handling to prevent crashes
-            this.provider.on('error', (error) => {
-                console.error('[MempoolSniper] WebSocket error:', error.message);
-                this.isConnected = false;
-                setTimeout(() => this.start(), 10000);
-            });
-
-            this.provider.on('close', () => {
-                console.warn('[MempoolSniper] WebSocket closed, reconnecting...');
-                this.isConnected = false;
-                setTimeout(() => this.start(), 10000);
-            });
-            
             // Escuta pending transactions
             this.provider.on('pending', async (txHash) => {
-                await this.processPendingTransaction(txHash);
+                try {
+                    await this.processPendingTransaction(txHash);
+                } catch (err) {
+                    // Silencioso
+                }
             });
 
             this.isConnected = true;
