@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS radar_smart_money_flows (
     related_pool_id UUID REFERENCES radar_liquidity_pools(id),
     is_whale BOOLEAN DEFAULT FALSE, -- > $100k
     is_new_wallet BOOLEAN DEFAULT FALSE, -- Primeira transação em 30 dias
+    is_pending BOOLEAN DEFAULT FALSE, -- Mempool sniper: pre-confirmação
     
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
