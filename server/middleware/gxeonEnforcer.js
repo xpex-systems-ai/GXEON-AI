@@ -43,7 +43,14 @@ const gxeonEnforcer = (costConfig = {}) => async (req, res, next) => {
     try {
         let deductionResult;
         
-        // 2. Tentar via Supabase RPC primeiro
+        // 2. Tentar via Supabase RPC primeiro (se supabase estiver configurado)
+        if (!supabase) {
+            // Supabase not configured - skip billing, allow request
+            req.user_id = 'anonymous';
+            req.tier = 'free';
+            return next();
+        }
+        
         const { data, error: rpcError } = await supabase
             .rpc('deduct_credits_atomic', {
                 p_api_key: apiKey,
