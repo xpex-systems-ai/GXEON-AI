@@ -1,0 +1,25 @@
+{
+  "name": "gxeon-m2m-tests",
+  "version": "2.2.0",
+  "description": "M2M Validation Test Suite for GXEON API",
+  "main": "m2m_validation.js",
+  "scripts": {
+    "test": "node m2m_validation.js",
+    "test:m2m": "node m2m_validation.js",
+    "validate": "node m2m_validation.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "gxeon",
+    "m2m",
+    "testing",
+    "validation",
+    "api"
+  ],
+  "author": "GXEON Systems",
+  "license": "Enterprise"
+}
