@@ -13,17 +13,26 @@ class DexLiquidityFetcher {
         this.chainId = 'arbitrum';
         this.minLiquidityThreshold = 10000; // $10k USD
         this.knownPools = new Set(); // Cache de pools já detectados
+        this.lastScanTime = 0;
+        this.minScanInterval = 30000; // Min 30s between scans (DexScreener rate limit)
     }
 
     /**
      * Busca novos pares na Arbitrum com liquidez > $10k
      */
     async scanNewPools() {
+        // Rate limiting protection
+        const now = Date.now();
+        if (now - this.lastScanTime < this.minScanInterval) {
+            return []; // Skip scan if too soon
+        }
+        this.lastScanTime = now;
+
         try {
-            // API gratuita do DexScreener - v1/search
+            // DexScreener API v1 — chain-specific pairs endpoint
             const response = await axios.get(
-                `${this.baseUrl}/search?q=arbitrum`,
-                { timeout: 5000 }
+                `https://api.dexscreener.com/latest/dex/pairs/arbitrum`,
+                { timeout: 10000 }
             );
 
             const pairs = response.data?.pairs || [];
@@ -160,6 +169,20 @@ class SmartMoneyMonitor {
 
         try {
             this.provider = new ethers.WebSocketProvider(this.wsUrl);
+
+            // Error handling to prevent crashes
+            this.provider.on('error', (error) => {
+                console.error('[SmartMoneyMonitor] WebSocket error:', error.message);
+                this.isConnected = false;
+                // Auto-reconnect after 10s
+                setTimeout(() => this.start(), 10000);
+            });
+
+            this.provider.on('close', () => {
+                console.warn('[SmartMoneyMonitor] WebSocket closed, reconnecting...');
+                this.isConnected = false;
+                setTimeout(() => this.start(), 10000);
+            });
             
             // Escuta por grandes transfers de ETH
             this.provider.on('block', async (blockNumber) => {
@@ -173,6 +196,8 @@ class SmartMoneyMonitor {
         } catch (error) {
             console.error('[SmartMoneyMonitor] Connection failed:', error.message);
             this.isConnected = false;
+            // Retry connection after 30s
+            setTimeout(() => this.start(), 30000);
             return false;
         }
     }
@@ -315,6 +340,19 @@ class MempoolSniper {
         try {
             // Usa provider separado para mempool
             this.provider = new ethers.WebSocketProvider(this.wsUrl);
+
+            // Error handling to prevent crashes
+            this.provider.on('error', (error) => {
+                console.error('[MempoolSniper] WebSocket error:', error.message);
+                this.isConnected = false;
+                setTimeout(() => this.start(), 10000);
+            });
+
+            this.provider.on('close', () => {
+                console.warn('[MempoolSniper] WebSocket closed, reconnecting...');
+                this.isConnected = false;
+                setTimeout(() => this.start(), 10000);
+            });
             
             // Escuta pending transactions
             this.provider.on('pending', async (txHash) => {
@@ -327,6 +365,8 @@ class MempoolSniper {
 
         } catch (error) {
             console.error('[MempoolSniper] Failed:', error.message);
+            this.isConnected = false;
+            setTimeout(() => this.start(), 30000);
             return false;
         }
     }
@@ -421,7 +461,7 @@ class RadarShixService {
         this.mempoolSniper = new MempoolSniper();
         this.isRunning = false;
         this.intervalId = null;
-        this.scanInterval = 1000; // 1 segundo = 1 bloco Arbitrum
+        this.scanInterval = 15000; // 15 segundos — respeita rate limit DexScreener
         this.blockCount = 0;
         this.opportunitiesFound = 0;
         this.startTime = null;
