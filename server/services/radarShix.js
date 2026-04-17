@@ -29,9 +29,9 @@ class DexLiquidityFetcher {
         this.lastScanTime = now;
 
         try {
-            // DexScreener API v1 — chain-specific pairs endpoint
+            // DexScreener API v1 — search endpoint for Arbitrum pairs
             const response = await axios.get(
-                `https://api.dexscreener.com/latest/dex/pairs/arbitrum`,
+                `https://api.dexscreener.com/latest/dex/search?q=arbitrum`,
                 { timeout: 10000 }
             );
 
@@ -170,10 +170,17 @@ class SmartMoneyMonitor {
         try {
             this.provider = new ethers.WebSocketProvider(this.wsUrl);
 
-            // Handle WebSocket errors on underlying socket
+            // Handle WebSocket errors on underlying socket - CRITICAL: prevent crash
             if (this.provider._websocket) {
                 this.provider._websocket.on('error', (err) => {
                     console.error('[SmartMoneyMonitor] WebSocket error:', err.message);
+                    // Não throw - apenas loga o erro
+                });
+                this.provider._websocket.on('close', () => {
+                    console.warn('[SmartMoneyMonitor] WebSocket closed');
+                    this.isConnected = false;
+                    // Reconnect in 30s
+                    setTimeout(() => this.start(), 30000);
                 });
             }
 
@@ -338,10 +345,17 @@ class MempoolSniper {
             // Usa provider separado para mempool
             this.provider = new ethers.WebSocketProvider(this.wsUrl);
 
-            // Handle WebSocket errors on underlying socket
+            // Handle WebSocket errors on underlying socket - CRITICAL: prevent crash
             if (this.provider._websocket) {
                 this.provider._websocket.on('error', (err) => {
                     console.error('[MempoolSniper] WebSocket error:', err.message);
+                    // Não throw - apenas loga o erro
+                });
+                this.provider._websocket.on('close', () => {
+                    console.warn('[MempoolSniper] WebSocket closed');
+                    this.isConnected = false;
+                    // Reconnect in 30s
+                    setTimeout(() => this.start(), 30000);
                 });
             }
 
@@ -493,25 +507,39 @@ class RadarShixService {
         console.log('║  Mempool: 🔫 Sniper active for pending liquidity               ║');
         console.log('╚═══════════════════════════════════════════════════════════════╝');
 
-        // Inicia monitor de smart money
-        await this.smartMoney.start();
+        // Inicia monitor de smart money (com graceful fail)
+        try {
+            await this.smartMoney.start();
+        } catch (err) {
+            console.error('[RADAR_SHIX] SmartMoneyMonitor failed to start:', err.message);
+            // Continua mesmo se falhar
+        }
         
-        // Inicia mempool sniper para pending transactions
-        await this.mempoolSniper.start();
+        // Inicia mempool sniper para pending transactions (com graceful fail)
+        try {
+            await this.mempoolSniper.start();
+        } catch (err) {
+            console.error('[RADAR_SHIX] MempoolSniper failed to start:', err.message);
+            // Continua mesmo se falhar
+        }
         
         // Registra callback para transfers grandes
-        this.smartMoney.onLargeTransfer(async (transfer) => {
-            this.telemetry.smartMoneyEvents++;
-            await this.logSmartMoneyTransfer(transfer);
-        });
+        if (this.smartMoney) {
+            this.smartMoney.onLargeTransfer(async (transfer) => {
+                this.telemetry.smartMoneyEvents++;
+                await this.logSmartMoneyTransfer(transfer);
+            });
+        }
         
         // Registra callback para pending transactions
-        this.mempoolSniper.onPendingLiquidity(async (pending) => {
-            this.telemetry.pendingTxSeen++;
-            if (pending.isHighValue) {
-                await this.logPendingLiquidity(pending);
-            }
-        });
+        if (this.mempoolSniper) {
+            this.mempoolSniper.onPendingLiquidity(async (pending) => {
+                this.telemetry.pendingTxSeen++;
+                if (pending.isHighValue) {
+                    await this.logPendingLiquidity(pending);
+                }
+            });
+        }
 
         // Primeiro scan imediato
         await this.executeScan();
