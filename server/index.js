@@ -113,10 +113,11 @@ setTimeout(async () => {
       console.log('[GXEON_GUARDIAN] Active');
     }
 
-    if (process.env.TWITTER_BEARER_TOKEN && process.env.DISABLE_RADAR !== 'true') {
+    // Radar v2.0 - Liquidity-first monitoring (Twitter API 402 bypassed)
+    if ((process.env.ALCHEMY_API_KEY || process.env.ARBITRUM_RPC_URL) && process.env.DISABLE_RADAR !== 'true') {
       const radarShix = require('./services/radarShix');
       radarShix.start();
-      console.log('[RADAR_SHIX] Active');
+      console.log('[RADAR_SHIX v2.0] Active - DexLiquidity + SmartMoney monitoring');
     }
 
     if (process.env.SWARM_AUTOSTART === 'true') {

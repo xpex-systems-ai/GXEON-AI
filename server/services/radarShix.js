@@ -1,142 +1,352 @@
 const supabase = require('./supabase');
 const axios = require('axios');
+const { ethers } = require('ethers');
 
 /**
- * 🐦 RealTwitterFetcher - Twitter API v2 Integration
- * Uses Bearer Token for real-time social monitoring
+ * 🦄 DexLiquidityFetcher — Monitoramento de Pools DEX na Arbitrum
+ * Substitui o RealTwitterFetcher (erro 402)
+ * Usa DexScreener API (gratuita) para detectar novos pares
  */
-class RealTwitterFetcher {
+class DexLiquidityFetcher {
     constructor() {
-        this.bearerToken = process.env.TWITTER_BEARER_TOKEN;
-        this.baseUrl = 'https://api.twitter.com/2';
-        this.isConfigured = !!this.bearerToken;
+        this.baseUrl = 'https://api.dexscreener.com/latest';
+        this.chainId = 'arbitrum';
+        this.minLiquidityThreshold = 10000; // $10k USD
+        this.knownPools = new Set(); // Cache de pools já detectados
     }
 
-    async search(keywords) {
-        if (!this.isConfigured) {
-            console.warn('[RealTwitterFetcher] TWITTER_BEARER_TOKEN not configured');
-            return [];
-        }
-
+    /**
+     * Busca novos pares na Arbitrum com liquidez > $10k
+     */
+    async scanNewPools() {
         try {
-            const query = keywords.join(' OR ');
+            // API gratuita do DexScreener - v1/search
             const response = await axios.get(
-                `${this.baseUrl}/tweets/search/recent`,
-                {
-                    params: {
-                        query: `${query} -is:retweet lang:en`,
-                        'tweet.fields': 'created_at,author_id,public_metrics,context_annotations',
-                        'user.fields': 'username,public_metrics,verified',
-                        'expansions': 'author_id',
-                        max_results: 100
-                    },
-                    headers: {
-                        'Authorization': `Bearer ${this.bearerToken}`
-                    }
-                }
+                `${this.baseUrl}/search?q=arbitrum`,
+                { timeout: 5000 }
             );
 
-            const tweets = response.data.data || [];
-            const users = response.data.includes?.users || [];
-            const userMap = new Map(users.map(u => [u.id, u]));
+            const pairs = response.data?.pairs || [];
+            const newPools = [];
 
-            const leads = tweets.map(tweet => {
-                const author = userMap.get(tweet.author_id);
-                return {
-                    id: tweet.id,
-                    text: tweet.text,
-                    created_at: tweet.created_at,
-                    author: {
-                        id: tweet.author_id,
-                        username: author?.username,
-                        followers: author?.public_metrics?.followers_count || 0,
-                        verified: author?.verified || false
-                    },
-                    metrics: tweet.public_metrics,
-                    relevance_score: this.calculateRelevance(tweet, author, keywords)
-                };
-            }).filter(lead => lead.relevance_score > 0.5);
+            for (const pair of pairs) {
+                // Filtro: apenas Arbitrum, liquidez > $10k, não visto antes
+                if (pair.chainId !== 'arbitrum') continue;
+                if (parseFloat(pair.liquidity?.usd || 0) < this.minLiquidityThreshold) continue;
+                if (this.knownPools.has(pair.pairAddress)) continue;
 
-            console.log(`[RealTwitterFetcher] Found ${leads.length} leads from ${tweets.length} tweets`);
-            return leads;
+                // Marca como conhecido
+                this.knownPools.add(pair.pairAddress);
+
+                // Calcula métricas avançadas
+                const poolData = this.analyzePool(pair);
+                newPools.push(poolData);
+            }
+
+            console.log(`[DexLiquidityFetcher] Found ${newPools.length} new high-liquidity pools (${pairs.length} scanned)`);
+            return newPools;
 
         } catch (error) {
-            console.error('[RealTwitterFetcher] Error:', error.response?.data?.message || error.message);
+            console.error('[DexLiquidityFetcher] Error:', error.message);
             return [];
         }
     }
 
-    calculateRelevance(tweet, author, keywords) {
+    /**
+     * Analisa um pool e calcula métricas de qualidade
+     */
+    analyzePool(pair) {
+        const liquidityUsd = parseFloat(pair.liquidity?.usd || 0);
+        const volume24h = parseFloat(pair.volume?.h24 || 0);
+        const priceChange24h = parseFloat(pair.priceChange?.h24 || 0);
+
+        // Calcula price impact estimado (simplificado)
+        const priceImpact1k = this.estimatePriceImpact(liquidityUsd, 1000);
+        const priceImpact10k = this.estimatePriceImpact(liquidityUsd, 10000);
+
+        // Score de liquidez (0-1 baseado em profundidade)
+        const liquidityDepth = this.calculateLiquidityDepth(liquidityUsd, volume24h);
+
+        return {
+            pairAddress: pair.pairAddress,
+            chainId: 42161, // Arbitrum
+            dexName: pair.dexId,
+            token0: {
+                address: pair.baseToken?.address,
+                symbol: pair.baseToken?.symbol
+            },
+            token1: {
+                address: pair.quoteToken?.address,
+                symbol: pair.quoteToken?.symbol
+            },
+            liquidityUsd,
+            volume24h,
+            priceChange24h,
+            priceImpact1k,
+            priceImpact10k,
+            liquidityDepth,
+            detectedAt: new Date().toISOString(),
+            priceUsd: pair.priceUsd,
+            fdv: pair.fdv
+        };
+    }
+
+    /**
+     * Estima impacto de preço para um trade de tamanho específico
+     */
+    estimatePriceImpact(liquidityUsd, tradeSize) {
+        if (liquidityUsd <= 0) return 1.0;
+        // Fórmula simplificada: impacto ~ tradeSize / (2 * liquidity)
+        const impact = tradeSize / (2 * liquidityUsd);
+        return Math.min(impact, 1.0); // Max 100%
+    }
+
+    /**
+     * Calcula profundidade da liquidez (0-1)
+     */
+    calculateLiquidityDepth(liquidityUsd, volume24h) {
         let score = 0;
-        const text = tweet.text.toLowerCase();
         
-        // Keyword match
-        keywords.forEach(kw => {
-            if (text.includes(kw.toLowerCase())) score += 0.3;
-        });
+        // Baseado em liquidez absoluta
+        if (liquidityUsd > 1000000) score += 0.4; // > $1M
+        else if (liquidityUsd > 100000) score += 0.3; // > $100k
+        else if (liquidityUsd > 50000) score += 0.2; // > $50k
+        else if (liquidityUsd > 10000) score += 0.1; // > $10k
 
-        // Follower count weight
-        const followers = author?.public_metrics?.followers_count || 0;
-        if (followers > 10000) score += 0.3;
-        else if (followers > 1000) score += 0.2;
-        
-        // Engagement
-        const likes = tweet.public_metrics?.like_count || 0;
-        const retweets = tweet.public_metrics?.retweet_count || 0;
-        if (likes > 50 || retweets > 10) score += 0.2;
-
-        // Verified bonus
-        if (author?.verified) score += 0.2;
+        // Volume indica liquidez ativa
+        const volumeRatio = volume24h / liquidityUsd;
+        if (volumeRatio > 1.0) score += 0.3; // Volume > liquidez (muito ativo)
+        else if (volumeRatio > 0.5) score += 0.2;
+        else if (volumeRatio > 0.1) score += 0.1;
 
         return Math.min(score, 1.0);
+    }
+
+    /**
+     * Limpa cache antigo (chamar periodicamente)
+     */
+    clearCache() {
+        // Mantém apenas os últimos 5000 pools no cache
+        if (this.knownPools.size > 5000) {
+            const toKeep = Array.from(this.knownPools).slice(-4000);
+            this.knownPools = new Set(toKeep);
+        }
     }
 }
 
 /**
- * RADAR SHIX - Market Saturation & Lead Generation
- * 
- * Monitors social media for opportunities and injects them
- * into the billing-protected task ledger.
+ * 🐋 SmartMoneyMonitor — Alchemy WebSocket para movimentações > 5 ETH
  */
-
-class RadarShixService {
+class SmartMoneyMonitor {
     constructor() {
-        this.twitterFetcher = new RealTwitterFetcher();
-        this.keywords = [
-            'automação IA',
-            'GXEon AI', 
-            'agentes autônomos',
-            'AI agents',
-            'automation tools'
-        ];
-        this.isRunning = false;
-        this.intervalId = null;
-        this.scanInterval = 5 * 60 * 1000; // 5 minutes
+        this.provider = null;
+        this.alchemyKey = process.env.ALCHEMY_API_KEY;
+        this.wsUrl = this.alchemyKey 
+            ? `wss://arb-mainnet.g.alchemy.com/v2/${this.alchemyKey}`
+            : null;
+        this.isConnected = false;
+        this.transferCallbacks = [];
+        this.minEthThreshold = 5; // 5 ETH
     }
 
     /**
-     * Start continuous market monitoring
+     * Inicia conexão WebSocket com Alchemy
      */
-    start() {
+    async start() {
+        if (!this.wsUrl) {
+            console.warn('[SmartMoneyMonitor] ALCHEMY_API_KEY not configured, skipping WebSocket');
+            return false;
+        }
+
+        try {
+            this.provider = new ethers.WebSocketProvider(this.wsUrl);
+            
+            // Escuta por grandes transfers de ETH
+            this.provider.on('block', async (blockNumber) => {
+                await this.processBlock(blockNumber);
+            });
+
+            this.isConnected = true;
+            console.log(`[SmartMoneyMonitor] WebSocket connected to Arbitrum`);
+            return true;
+
+        } catch (error) {
+            console.error('[SmartMoneyMonitor] Connection failed:', error.message);
+            this.isConnected = false;
+            return false;
+        }
+    }
+
+    /**
+     * Processa um bloco em busca de grandes transfers
+     */
+    async processBlock(blockNumber) {
+        if (!this.provider) return;
+
+        try {
+            // Busca transfers de ETH nativo com valor > 5 ETH
+            const block = await this.provider.getBlock(blockNumber, true);
+            if (!block || !block.transactions) return;
+
+            const largeTransfers = [];
+
+            for (const tx of block.transactions) {
+                const valueEth = parseFloat(ethers.formatEther(tx.value || 0));
+                
+                if (valueEth >= this.minEthThreshold) {
+                    const transfer = {
+                        chainId: 42161,
+                        from: tx.from,
+                        to: tx.to,
+                        amount: valueEth,
+                        amountUsd: await this.estimateUsdValue(valueEth),
+                        tokenSymbol: 'ETH',
+                        blockNumber,
+                        txHash: tx.hash,
+                        flowType: this.classifyTransfer(tx),
+                        detectedAt: new Date().toISOString()
+                    };
+
+                    largeTransfers.push(transfer);
+                    
+                    // Notifica callbacks
+                    this.transferCallbacks.forEach(cb => cb(transfer));
+                }
+            }
+
+            if (largeTransfers.length > 0) {
+                console.log(`[SmartMoneyMonitor] Block ${blockNumber}: ${largeTransfers.length} large transfers detected`);
+            }
+
+            return largeTransfers;
+
+        } catch (error) {
+            console.error(`[SmartMoneyMonitor] Block ${blockNumber} processing failed:`, error.message);
+            return [];
+        }
+    }
+
+    /**
+     * Estima valor em USD baseado em ETH
+     */
+    async estimateUsdValue(ethAmount) {
+        // Cache local ou valor fixo estimado para não sobrecarregar APIs
+        const ethPriceUsd = 3500; // Atualizar conforme mercado ou cache externo
+        return ethAmount * ethPriceUsd;
+    }
+
+    /**
+     * Classifica o tipo de transferência
+     */
+    classifyTransfer(tx) {
+        // Heurísticas simples para classificação
+        if (!tx.to) return 'contract_creation';
+        
+        // Detectar se é contrato conhecido (DEX, Bridge, etc)
+        const toLower = tx.to.toLowerCase();
+        
+        // Endereços comuns de DEX/Bridges na Arbitrum (exemplos)
+        const knownContracts = {
+            '0xe592427a0aece92de3edee1f18e0157c05861564': 'uniswap_v3',
+            '0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45': 'uniswap_router',
+            '0x0000000000000000000000000000000000000000': 'burn'
+        };
+
+        if (knownContracts[toLower]) {
+            return knownContracts[toLower];
+        }
+
+        // Se valor é muito alto (> 50 ETH), classifica como whale
+        const valueEth = parseFloat(ethers.formatEther(tx.value || 0));
+        if (valueEth > 50) return 'whale_movement';
+
+        return 'regular_transfer';
+    }
+
+    /**
+     * Registra callback para novos transfers
+     */
+    onLargeTransfer(callback) {
+        this.transferCallbacks.push(callback);
+    }
+
+    /**
+     * Para o monitor
+     */
+    stop() {
+        if (this.provider) {
+            this.provider.removeAllListeners('block');
+            this.provider.destroy();
+            this.provider = null;
+        }
+        this.isConnected = false;
+        console.log('[SmartMoneyMonitor] Stopped');
+    }
+}
+
+/**
+ * 🎯 RADAR SHIX v2.0 — Liquidity-First DEX Monitoring
+ * 
+ * Abandona Twitter API (erro 402) em favor de:
+ * - DexScreener API para novos pools
+ * - Alchemy WebSocket para smart money
+ * - Scan a cada 1s (sync com blocos Arbitrum)
+ */
+class RadarShixService {
+    constructor() {
+        this.dexFetcher = new DexLiquidityFetcher();
+        this.smartMoney = new SmartMoneyMonitor();
+        this.isRunning = false;
+        this.intervalId = null;
+        this.scanInterval = 1000; // 1 segundo = 1 bloco Arbitrum
+        this.blockCount = 0;
+        this.opportunitiesFound = 0;
+        this.startTime = null;
+        this.heartbeatInterval = null;
+    }
+
+    /**
+     * Inicia o radar de liquidez
+     */
+    async start() {
         if (this.isRunning) {
             console.log('[RADAR_SHIX] Already running');
             return;
         }
 
         this.isRunning = true;
-        console.log('[RADAR_SHIX] Starting market saturation scan...');
+        this.startTime = Date.now();
+        
+        console.log('╔═══════════════════════════════════════════════════════════════╗');
+        console.log('║  🎯 RADAR SHIX v2.0 — Liquidity First                          ║');
+        console.log('╠═══════════════════════════════════════════════════════════════╣');
+        console.log('║  Source: DexScreener API (FREE) + Alchemy WebSocket            ║');
+        console.log('║  Chain: Arbitrum Mainnet (~1s/block)                           ║');
+        console.log('║  Alert: New pools > $10k USD | Smart money > 5 ETH             ║');
+        console.log('╚═══════════════════════════════════════════════════════════════╝');
 
-        // Immediate first scan
-        this.scanAndInject();
+        // Inicia monitor de smart money
+        await this.smartMoney.start();
+        
+        // Registra callback para transfers grandes
+        this.smartMoney.onLargeTransfer(async (transfer) => {
+            await this.logSmartMoneyTransfer(transfer);
+        });
 
-        // Scheduled scans
+        // Primeiro scan imediato
+        await this.executeScan();
+
+        // Scan perpétuo a cada 1s
         this.intervalId = setInterval(() => {
-            this.scanAndInject();
+            this.executeScan();
         }, this.scanInterval);
+
+        // Heartbeat para Railway Dashboard
+        this.startHeartbeat();
     }
 
     /**
-     * Stop monitoring
+     * Para o radar
      */
     stop() {
         this.isRunning = false;
@@ -144,231 +354,193 @@ class RadarShixService {
             clearInterval(this.intervalId);
             this.intervalId = null;
         }
+        if (this.heartbeatInterval) {
+            clearInterval(this.heartbeatInterval);
+        }
+        this.smartMoney.stop();
         console.log('[RADAR_SHIX] Stopped');
     }
 
     /**
-     * Main scan cycle: Find leads → Inject tasks
+     * Ciclo de scan: DexScreener + Telemetria
      */
-    async scanAndInject() {
-        console.log(`[RADAR_SHIX] Scanning for keywords: ${this.keywords.join(', ')}`);
+    async executeScan() {
+        const scanStart = Date.now();
+        this.blockCount++;
 
         try {
-            // Fetch leads from Twitter
-            const leads = await this.twitterFetcher.search(this.keywords);
-            console.log(`[RADAR_SHIX] Found ${leads.length} potential leads`);
+            // 1. Busca novos pools no DexScreener
+            const newPools = await this.dexFetcher.scanNewPools();
+            
+            let highLiquidityAlerts = 0;
 
-            // Process each lead
-            for (const lead of leads) {
-                await this.processLead(lead);
+            // 2. Processa cada novo pool
+            for (const pool of newPools) {
+                await this.processNewPool(pool);
+                
+                if (pool.liquidityUsd >= 10000) {
+                    highLiquidityAlerts++;
+                }
             }
 
-            // Log scan completion
-            await this.logScan(leads.length);
+            if (newPools.length > 0) {
+                this.opportunitiesFound += newPools.length;
+                console.log(`[RADAR_SCAN] 🎯 ${newPools.length} NEW POOLS | 🚨 ${highLiquidityAlerts} HIGH LIQUIDITY`);
+            }
+
+            // 3. Log de telemetria
+            await this.logScanTelemetry({
+                blockNumber: this.blockCount,
+                newPools: newPools.length,
+                highLiquidityAlerts,
+                durationMs: Date.now() - scanStart
+            });
+
+            // 4. Limpa cache periodicamente
+            if (this.blockCount % 1000 === 0) {
+                this.dexFetcher.clearCache();
+            }
 
         } catch (error) {
-            console.error('[RADAR_SHIX] Scan failed:', error.message);
+            console.error('[RADAR_SCAN] Error:', error.message);
+            await this.logScanTelemetry({
+                blockNumber: this.blockCount,
+                newPools: 0,
+                highLiquidityAlerts: 0,
+                durationMs: Date.now() - scanStart,
+                error: error.message
+            });
         }
     }
 
     /**
-     * Process a single lead: Score → Create task
+     * Processa um novo pool detectado
      */
-    async processLead(lead) {
-        // Score the lead
-        const score = this.scoreLead(lead);
-        
-        if (score < 0.3) {
-            console.log(`[RADAR_SHIX] Lead ${lead.user_handle} scored too low (${score}), skipping`);
-            return;
-        }
-
-        // Check for duplicates
-        const isDuplicate = await this.checkDuplicate(lead.user_handle);
-        if (isDuplicate) {
-            console.log(`[RADAR_SHIX] Duplicate lead: ${lead.user_handle}`);
-            return;
-        }
-
-        // Create billing-protected task
+    async processNewPool(pool) {
         try {
-            const task = await this.createBillingTask(lead, score);
-            console.log(`[RADAR_SHIX] Injected opportunity: ${lead.user_handle} (Score: ${score.toFixed(2)}, Cost: $${task.cost})`);
-        } catch (error) {
-            console.error(`[RADAR_SHIX] Failed to inject lead ${lead.user_handle}:`, error.message);
-        }
-    }
-
-    /**
-     * Score lead based on engagement and relevance
-     */
-    scoreLead(lead) {
-        let score = 0;
-
-        // Follower count weight (0-0.4)
-        const followers = lead.followers_count || 0;
-        if (followers > 10000) score += 0.4;
-        else if (followers > 1000) score += 0.3;
-        else if (followers > 100) score += 0.2;
-        else score += 0.1;
-
-        // Engagement weight (0-0.3)
-        const engagement = (lead.retweet_count || 0) + (lead.like_count || 0);
-        if (engagement > 100) score += 0.3;
-        else if (engagement > 10) score += 0.2;
-        else score += 0.1;
-
-        // Keyword match weight (0-0.3)
-        const tweetText = (lead.tweet_text || '').toLowerCase();
-        const keywordMatches = this.keywords.filter(k => 
-            tweetText.includes(k.toLowerCase())
-        ).length;
-        score += Math.min(keywordMatches * 0.1, 0.3);
-
-        return Math.min(score, 1.0);
-    }
-
-    /**
-     * Check if we've already processed this user
-     */
-    async checkDuplicate(handle) {
-        try {
+            // Insere no Supabase
             const { data, error } = await supabase
-                .from('radar_leads')
-                .select('id')
-                .eq('user_handle', handle)
-                .limit(1);
+                .from('radar_liquidity_pools')
+                .insert({
+                    chain_id: pool.chainId,
+                    pair_address: pool.pairAddress,
+                    token0_address: pool.token0.address,
+                    token1_address: pool.token1.address,
+                    token0_symbol: pool.token0.symbol,
+                    token1_symbol: pool.token1.symbol,
+                    dex_name: pool.dexName,
+                    liquidity_usd: pool.liquidityUsd,
+                    liquidity_depth: pool.liquidityDepth,
+                    volume_24h_usd: pool.volume24h,
+                    price_impact_1k: pool.priceImpact1k,
+                    price_impact_10k: pool.priceImpact10k,
+                    detected_at: pool.detectedAt,
+                    status: pool.liquidityUsd >= 10000 ? 'high_alert' : 'new',
+                    alert_triggered: pool.liquidityUsd >= 10000
+                })
+                .select()
+                .single();
+
+            if (error) {
+                // Pool já existe (duplicate)
+                if (error.code === '23505') return;
+                throw error;
+            }
+
+            // Log de alerta se alta liquidez
+            if (pool.liquidityUsd >= 10000) {
+                console.log(`[POOL_ALERT] 🚨 High liquidity detected:`);
+                console.log(`  DEX: ${pool.dexName}`);
+                console.log(`  Pair: ${pool.token0.symbol}/${pool.token1.symbol}`);
+                console.log(`  Liquidity: $${pool.liquidityUsd.toLocaleString()}`);
+                console.log(`  Price Impact (10k): ${(pool.priceImpact10k * 100).toFixed(2)}%`);
+            }
+
+        } catch (error) {
+            console.error('[processNewPool] Error:', error.message);
+        }
+    }
+
+    /**
+     * Log de transferência smart money
+     */
+    async logSmartMoneyTransfer(transfer) {
+        try {
+            const isWhale = transfer.amountUsd >= 100000;
+            const isNewWallet = false; // TODO: implementar verificação
+
+            const { error } = await supabase
+                .from('radar_smart_money_flows')
+                .insert({
+                    chain_id: transfer.chainId,
+                    from_address: transfer.from,
+                    to_address: transfer.to,
+                    token_symbol: transfer.tokenSymbol,
+                    amount: transfer.amount,
+                    amount_usd: transfer.amountUsd,
+                    flow_type: transfer.flowType,
+                    block_number: transfer.blockNumber,
+                    transaction_hash: transfer.txHash,
+                    detected_at: transfer.detectedAt,
+                    is_whale: isWhale,
+                    is_new_wallet: isNewWallet,
+                    smart_score: isWhale ? 0.9 : 0.5
+                });
 
             if (error) throw error;
-            return data && data.length > 0;
+
+            if (isWhale) {
+                console.log(`[SMART_MONEY] 🐋 WHALE ALERT: ${transfer.amount.toFixed(2)} ETH ($${transfer.amountUsd.toLocaleString()})`);
+            }
 
         } catch (error) {
-            console.error('[RADAR_SHIX] Duplicate check failed:', error);
-            return false; // Allow on error (fail open)
+            console.error('[logSmartMoneyTransfer] Error:', error.message);
         }
     }
 
     /**
-     * Create billing-protected task
-     * 
-     * IMPORTANT: This uses the SYSTEM_ADMIN_ID for billing.
-     * The system account must have sufficient credits.
+     * Log de telemetria do scan
      */
-    async createBillingTask(lead, score) {
-        const systemUserId = process.env.SYSTEM_ADMIN_ID;
-        const cost = 0.0150; // Marketing processing cost
-
-        if (!systemUserId) {
-            throw new Error('SYSTEM_ADMIN_ID not configured');
-        }
-
-        // Step 1: Reserve credits from system account
-        const { data: billingResult, error: billingError } = await supabase
-            .rpc('deduct_credits_atomic', {
-                p_api_key: process.env.SYSTEM_API_KEY, // System API key
-                p_amount: cost,
-                p_operation: 'RADAR_INJECTION',
-                p_request_id: `radar-${Date.now()}-${lead.user_handle}`
-            });
-
-        if (billingError || !billingResult?.success) {
-            throw new Error(`Billing failed: ${billingResult?.message || billingError?.message}`);
-        }
-
-        // Step 2: Create the task (now paid for)
-        const { data: task, error: taskError } = await supabase
-            .from('tasks')
-            .insert({
-                user_id: systemUserId,
-                agent_type: 'ALETIX_MARKETING',
-                payload: {
-                    target: lead.user_handle,
-                    context: lead.tweet_text,
-                    tweet_id: lead.tweet_id,
-                    score: score,
-                    followers: lead.followers_count,
-                    engagement: (lead.retweet_count || 0) + (lead.like_count || 0)
-                },
-                status: 'pending',
-                billing_tx_id: billingResult.transaction_id,
-                cost: cost,
-                created_at: new Date().toISOString()
-            })
-            .select()
-            .single();
-
-        if (taskError) {
-            // Rollback billing on task creation failure
-            await supabase.rpc('refund_credits', {
-                tx_id_input: billingResult.transaction_id
-            });
-            throw new Error(`Task creation failed: ${taskError.message}`);
-        }
-
-        // Step 3: Store lead record for deduplication
-        await supabase.from('radar_leads').insert({
-            user_handle: lead.user_handle,
-            tweet_id: lead.tweet_id,
-            task_id: task.id,
-            score: score,
-            processed_at: new Date().toISOString()
-        });
-
-        // Step 4: Confirm billing transaction
-        await supabase
-            .from('billing_transactions')
-            .update({ status: 'completed' })
-            .eq('id', billingResult.transaction_id);
-
-        return {
-            task_id: task.id,
-            tx_id: billingResult.transaction_id,
-            cost: cost,
-            target: lead.user_handle
-        };
-    }
-
-    /**
-     * Log scan metrics
-     */
-    async logScan(leadCount) {
+    async logScanTelemetry({ blockNumber, newPools, highLiquidityAlerts, durationMs, error = null }) {
         try {
-            await supabase.from('radar_scan_logs').insert({
-                keywords: this.keywords,
-                leads_found: leadCount,
+            await supabase.from('radar_liquidity_telemetry').insert({
+                block_number: blockNumber,
+                new_pools_detected: newPools,
+                high_liquidity_alerts: highLiquidityAlerts,
+                total_pools_tracked: this.dexFetcher.knownPools.size,
+                scan_duration_ms: durationMs,
+                error: error,
                 scanned_at: new Date().toISOString()
             });
-        } catch (error) {
-            console.error('[RADAR_SHIX] Log failed:', error);
+        } catch (e) {
+            // Silencioso
         }
     }
 
     /**
-     * Get recent scan statistics
+     * Heartbeat para Railway Dashboard
      */
-    async getStats() {
-        try {
-            const { data: stats } = await supabase
-                .from('radar_scan_logs')
-                .select('*')
-                .order('scanned_at', { ascending: false })
-                .limit(10);
-
-            const { count: totalLeads } = await supabase
-                .from('radar_leads')
-                .select('*', { count: 'exact' });
-
-            return {
-                recent_scans: stats,
-                total_leads_processed: totalLeads,
-                is_running: this.isRunning,
-                scan_interval_minutes: this.scanInterval / 60000
-            };
-
-        } catch (error) {
-            console.error('[RADAR_SHIX] Stats error:', error);
-            return { error: error.message };
-        }
+    startHeartbeat() {
+        this.heartbeatInterval = setInterval(async () => {
+            const uptime = Math.floor((Date.now() - this.startTime) / 1000);
+            const hours = Math.floor(uptime / 3600);
+            const mins = Math.floor((uptime % 3600) / 60);
+            
+            console.log(`[RADAR_HEARTBEAT] ⏱️ ${hours}h ${mins}m | 🔍 Scans: ${this.blockCount} | 🎯 Pools: ${this.opportunitiesFound} | 📊 Tracked: ${this.dexFetcher.knownPools.size}`);
+            
+            // Ping no Supabase
+            try {
+                await supabase.from('radar_liquidity_heartbeat').upsert({
+                    id: 'liquidity_radar_v1',
+                    last_ping: new Date().toISOString(),
+                    uptime_seconds: uptime,
+                    block_count: this.blockCount,
+                    total_pools_detected: this.opportunitiesFound,
+                    status: 'scanning'
+                });
+            } catch (e) {}
+            
+        }, 30000); // 30 segundos
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
@@ -376,17 +548,18 @@ class RadarShixService {
     // ═══════════════════════════════════════════════════════════════════════════
 
     /**
-     * Get opportunities from recent scans (for API billing endpoint)
+     * Get opportunities (high liquidity pools)
      */
     async getOpportunities(limit = 20) {
         try {
-            const { data: leads } = await supabase
-                .from('radar_leads')
-                .select('*, tasks(status, cost, billing_tx_id)')
-                .order('processed_at', { ascending: false })
+            const { data } = await supabase
+                .from('radar_liquidity_pools')
+                .select('*')
+                .eq('alert_triggered', true)
+                .order('detected_at', { ascending: false })
                 .limit(limit);
 
-            return leads || [];
+            return data || [];
         } catch (error) {
             console.error('[RADAR_SHIX] getOpportunities error:', error);
             return [];
@@ -399,13 +572,12 @@ class RadarShixService {
     async getLastUpdateTime() {
         try {
             const { data } = await supabase
-                .from('radar_scan_logs')
-                .select('scanned_at')
-                .order('scanned_at', { ascending: false })
-                .limit(1)
+                .from('radar_liquidity_heartbeat')
+                .select('last_ping')
+                .eq('id', 'liquidity_radar_v1')
                 .single();
 
-            return data?.scanned_at || new Date().toISOString();
+            return data?.last_ping || new Date().toISOString();
         } catch (error) {
             return new Date().toISOString();
         }
@@ -422,8 +594,9 @@ class RadarShixService {
      * Get service uptime in seconds
      */
     getUptime() {
-        // Mock uptime - in production, track actual start time
-        return this.isRunning ? Math.floor(Math.random() * 86400) : 0;
+        return this.isRunning && this.startTime 
+            ? Math.floor((Date.now() - this.startTime) / 1000) 
+            : 0;
     }
 
     /**
@@ -432,7 +605,7 @@ class RadarShixService {
     async getTotalOpportunities() {
         try {
             const { count } = await supabase
-                .from('radar_leads')
+                .from('radar_liquidity_pools')
                 .select('*', { count: 'exact' });
             return count || 0;
         } catch (error) {
@@ -441,248 +614,35 @@ class RadarShixService {
     }
 
     /**
-     * Trigger manual scan (for API endpoint)
-     */
-    async triggerScan() {
-        console.log('[RADAR_SHIX] Manual scan triggered via API');
-        await this.scanAndInject();
-        return { success: true, message: 'Scan iniciado manualmente' };
-    }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// 🔄 RADAR PERPÉTUO — SINCRONIZADO COM BLOCOS ARBITRUM
-// ═══════════════════════════════════════════════════════════════════════════
-
-const { ethers } = require('ethers');
-
-class PerpetualRadar {
-    constructor() {
-        this.radarService = new RadarShixService();
-        this.provider = null;
-        this.isRunning = false;
-        this.blockCount = 0;
-        this.opportunitiesFound = 0;
-        this.startTime = null;
-        this.heartbeatInterval = null;
-    }
-
-    /**
-     * Inicia o motor de caça perpétua
-     */
-    async start() {
-        if (this.isRunning) {
-            console.log('[PERPETUAL_RADAR] Already hunting');
-            return;
-        }
-
-        this.isRunning = true;
-        this.startTime = Date.now();
-        
-        console.log('╔═══════════════════════════════════════════════════════════════╗');
-        console.log('║  🎯 RADAR PERPÉTUO ATIVADO — Colmeia Predadora em Caça       ║');
-        console.log('╠═══════════════════════════════════════════════════════════════╣');
-        console.log('║  Sync: Arbitrum Mainnet (~1s/block)                          ║');
-        console.log('║  Target: Social Leads → Billing Tasks                         ║');
-        console.log('╚═══════════════════════════════════════════════════════════════╝');
-
-        // Conecta à Arbitrum para sincronização de blocos
-        await this.connectArbitrum();
-        
-        // Inicia heartbeat para Railway Dashboard
-        this.startHeartbeat();
-        
-        // Primeiro scan imediato
-        await this.executeScan();
-    }
-
-    /**
-     * Conecta ao provider da Arbitrum para sincronização
-     */
-    async connectArbitrum() {
-        const rpcUrl = process.env.ARBITRUM_RPC_URL;
-        
-        if (!rpcUrl) {
-            console.warn('[PERPETUAL_RADAR] ARBITRUM_RPC_URL not set, using interval mode');
-            // Fallback: scan a cada 5 segundos
-            setInterval(() => this.executeScan(), 5000);
-            return;
-        }
-
-        try {
-            this.provider = new ethers.JsonRpcProvider(rpcUrl);
-            
-            // Verifica conexão
-            const blockNumber = await this.provider.getBlockNumber();
-            console.log(`[PERPETUAL_RADAR] Connected to Arbitrum | Block: ${blockNumber}`);
-            
-            // Escuta novos blocos (~1s na Arbitrum)
-            this.provider.on('block', async (blockNumber) => {
-                this.blockCount++;
-                console.log(`[PERPETUAL_RADAR] New block ${blockNumber} — Scanning for opportunities`);
-                await this.executeScan();
-            });
-            
-        } catch (error) {
-            console.error('[PERPETUAL_RADAR] Arbitrum connection failed:', error.message);
-            console.log('[PERPETUAL_RADAR] Falling back to interval mode (5s)');
-            setInterval(() => this.executeScan(), 5000);
-        }
-    }
-
-    /**
-     * Executa um ciclo de scan e envia para Supabase
-     */
-    async executeScan() {
-        const scanStart = Date.now();
-        
-        try {
-            // Scan via Twitter
-            const keywords = this.radarService.keywords;
-            console.log(`[RADAR_SCAN] Keywords: ${keywords.join(', ')}`);
-            
-            const leads = await this.radarService.twitterFetcher.search(keywords);
-            
-            if (leads.length > 0) {
-                this.opportunitiesFound += leads.length;
-                console.log(`[RADAR_SCAN] 🎯 ${leads.length} OPPORTUNITIES DETECTED`);
-                
-                // Processa e loga cada oportunidade
-                for (const lead of leads) {
-                    await this.processAndLogOpportunity(lead);
-                }
-            } else {
-                console.log('[RADAR_SCAN] No opportunities this cycle');
-            }
-            
-            // Log do scan no Supabase
-            await this.logScanCycle(leads.length, Date.now() - scanStart);
-            
-        } catch (error) {
-            console.error('[RADAR_SCAN] Scan failed:', error.message);
-            await this.logScanCycle(0, Date.now() - scanStart, error.message);
-        }
-    }
-
-    /**
-     * Processa lead e envia telemetria para Supabase
-     */
-    async processAndLogOpportunity(lead) {
-        try {
-            // Telemetria: Log da oportunidade
-            await supabase.from('radar_opportunities').insert({
-                source: 'twitter',
-                handle: lead.author?.username || 'unknown',
-                tweet_id: lead.id,
-                text: lead.text?.substring(0, 500),
-                followers: lead.author?.followers || 0,
-                verified: lead.author?.verified || false,
-                relevance_score: lead.relevance_score,
-                detected_at: new Date().toISOString(),
-                status: 'pending'
-            });
-            
-            console.log(`[OPPORTUNITY_LOGGED] @${lead.author?.username} | Score: ${lead.relevance_score?.toFixed(2)}`);
-            
-        } catch (error) {
-            console.error('[OPPORTUNITY_LOG] Failed:', error.message);
-        }
-    }
-
-    /**
-     * Log de cada ciclo de scan no Supabase
-     */
-    async logScanCycle(leadsFound, durationMs, error = null) {
-        try {
-            await supabase.from('radar_scan_telemetry').insert({
-                block_count: this.blockCount,
-                opportunities_found: leadsFound,
-                total_opportunities: this.opportunitiesFound,
-                scan_duration_ms: durationMs,
-                error: error,
-                uptime_seconds: Math.floor((Date.now() - this.startTime) / 1000),
-                scanned_at: new Date().toISOString()
-            });
-        } catch (e) {
-            // Silencioso — não quebra o scan
-        }
-    }
-
-    /**
-     * Heartbeat visível no Railway Dashboard (a cada 30s)
-     */
-    startHeartbeat() {
-        this.heartbeatInterval = setInterval(() => {
-            const uptime = Math.floor((Date.now() - this.startTime) / 1000);
-            const hours = Math.floor(uptime / 3600);
-            const mins = Math.floor((uptime % 3600) / 60);
-            
-            console.log(`[RADAR_HEARTBEAT] ⏱️ ${hours}h ${mins}m | 🔍 Scans: ${this.blockCount} | 🎯 Opportunities: ${this.opportunitiesFound}`);
-            
-            // Ping no Supabase para manter telemetria viva
-            this.pingTelemetry().catch(() => {});
-            
-        }, 30000); // A cada 30 segundos
-    }
-
-    /**
-     * Ping de telemetria para manter o gráfico ativo
-     */
-    async pingTelemetry() {
-        try {
-            await supabase.from('radar_heartbeat').upsert({
-                id: 'perpetual_radar',
-                last_ping: new Date().toISOString(),
-                uptime_seconds: Math.floor((Date.now() - this.startTime) / 1000),
-                block_count: this.blockCount,
-                opportunities_total: this.opportunitiesFound,
-                status: 'hunting'
-            });
-        } catch (e) {}
-    }
-
-    /**
-     * Para o radar perpétuo
-     */
-    stop() {
-        this.isRunning = false;
-        if (this.heartbeatInterval) {
-            clearInterval(this.heartbeatInterval);
-        }
-        if (this.provider) {
-            this.provider.removeAllListeners('block');
-        }
-        console.log('[PERPETUAL_RADAR] Stopped');
-    }
-
-    /**
-     * Status atual
+     * Get current status
      */
     getStatus() {
         return {
             isRunning: this.isRunning,
             blockCount: this.blockCount,
             opportunitiesFound: this.opportunitiesFound,
-            uptimeSeconds: this.startTime ? Math.floor((Date.now() - this.startTime) / 1000) : 0
+            uptimeSeconds: this.getUptime(),
+            trackedPools: this.dexFetcher.knownPools.size,
+            smartMoneyConnected: this.smartMoney.isConnected,
+            scanIntervalMs: this.scanInterval
+        };
+    }
+
+    /**
+     * Trigger manual scan
+     */
+    async triggerScan() {
+        console.log('[RADAR_SHIX] Manual scan triggered via API');
+        await this.executeScan();
+        return { 
+            success: true, 
+            message: 'Scan iniciado manualmente',
+            status: this.getStatus()
         };
     }
 }
 
-// Exporta ambos: RadarShixService legacy + PerpetualRadar novo
+// Export singleton
 const radarShixService = new RadarShixService();
-const perpetualRadar = new PerpetualRadar();
-
-// Override do start() para usar o perpétuo
-radarShixService.start = function() {
-    return perpetualRadar.start();
-};
-
-radarShixService.stop = function() {
-    return perpetualRadar.stop();
-};
-
-radarShixService.getStatus = function() {
-    return perpetualRadar.getStatus();
-};
 
 module.exports = radarShixService;
