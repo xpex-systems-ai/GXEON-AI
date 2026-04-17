@@ -1,12 +1,94 @@
 const supabase = require('./supabase');
-// TODO: Restore when external_fetchers is implemented
-// const { TwitterFetcher } = require('../core/external_fetchers');
+const axios = require('axios');
 
-// Mock TwitterFetcher for now to prevent boot crash
-class MockTwitterFetcher {
+/**
+ * 🐦 RealTwitterFetcher - Twitter API v2 Integration
+ * Uses Bearer Token for real-time social monitoring
+ */
+class RealTwitterFetcher {
+    constructor() {
+        this.bearerToken = process.env.TWITTER_BEARER_TOKEN;
+        this.baseUrl = 'https://api.twitter.com/2';
+        this.isConfigured = !!this.bearerToken;
+    }
+
     async search(keywords) {
-        console.log('[MockTwitterFetcher] Search called with:', keywords);
-        return []; // Return empty leads until real fetcher is implemented
+        if (!this.isConfigured) {
+            console.warn('[RealTwitterFetcher] TWITTER_BEARER_TOKEN not configured');
+            return [];
+        }
+
+        try {
+            const query = keywords.join(' OR ');
+            const response = await axios.get(
+                `${this.baseUrl}/tweets/search/recent`,
+                {
+                    params: {
+                        query: `${query} -is:retweet lang:en`,
+                        'tweet.fields': 'created_at,author_id,public_metrics,context_annotations',
+                        'user.fields': 'username,public_metrics,verified',
+                        'expansions': 'author_id',
+                        max_results: 100
+                    },
+                    headers: {
+                        'Authorization': `Bearer ${this.bearerToken}`
+                    }
+                }
+            );
+
+            const tweets = response.data.data || [];
+            const users = response.data.includes?.users || [];
+            const userMap = new Map(users.map(u => [u.id, u]));
+
+            const leads = tweets.map(tweet => {
+                const author = userMap.get(tweet.author_id);
+                return {
+                    id: tweet.id,
+                    text: tweet.text,
+                    created_at: tweet.created_at,
+                    author: {
+                        id: tweet.author_id,
+                        username: author?.username,
+                        followers: author?.public_metrics?.followers_count || 0,
+                        verified: author?.verified || false
+                    },
+                    metrics: tweet.public_metrics,
+                    relevance_score: this.calculateRelevance(tweet, author, keywords)
+                };
+            }).filter(lead => lead.relevance_score > 0.5);
+
+            console.log(`[RealTwitterFetcher] Found ${leads.length} leads from ${tweets.length} tweets`);
+            return leads;
+
+        } catch (error) {
+            console.error('[RealTwitterFetcher] Error:', error.response?.data?.message || error.message);
+            return [];
+        }
+    }
+
+    calculateRelevance(tweet, author, keywords) {
+        let score = 0;
+        const text = tweet.text.toLowerCase();
+        
+        // Keyword match
+        keywords.forEach(kw => {
+            if (text.includes(kw.toLowerCase())) score += 0.3;
+        });
+
+        // Follower count weight
+        const followers = author?.public_metrics?.followers_count || 0;
+        if (followers > 10000) score += 0.3;
+        else if (followers > 1000) score += 0.2;
+        
+        // Engagement
+        const likes = tweet.public_metrics?.like_count || 0;
+        const retweets = tweet.public_metrics?.retweet_count || 0;
+        if (likes > 50 || retweets > 10) score += 0.2;
+
+        // Verified bonus
+        if (author?.verified) score += 0.2;
+
+        return Math.min(score, 1.0);
     }
 }
 
@@ -19,7 +101,7 @@ class MockTwitterFetcher {
 
 class RadarShixService {
     constructor() {
-        this.twitterFetcher = new MockTwitterFetcher();
+        this.twitterFetcher = new RealTwitterFetcher();
         this.keywords = [
             'automação IA',
             'GXEon AI', 

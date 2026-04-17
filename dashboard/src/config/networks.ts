@@ -55,7 +55,7 @@ export const ARBITRUM_ONE: NetworkConfig = {
   rpcUrls: {
     public: 'https://arb1.arbitrum.io/rpc',
     flashbots: 'https://rpc.flashbots.net?hints=calldata', // MEV Protection
-    quicknode: 'https://alpha-thrilling-needle.arbitrum-mainnet.quiknode.pro/', // Replace with your QuickNode
+    quicknode: process.env.VITE_QUICKNODE_ARBITRUM_URL || 'https://arb1.arbitrum.io/rpc', // Env or fallback to public
   },
   nativeCurrency: {
     name: 'Ethereum',

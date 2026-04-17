@@ -83,3 +83,7 @@ cache/
 # 🚫 Never commit compiled contracts with embedded keys
 artifacts/*/.env
 artifacts/*/debug/
+
+# 🚫 Railway/Nixpacks build cache
+.nixpacks/
+nixpacks.toml

@@ -103,13 +103,8 @@ export function CommandCenter() {
     } catch (error) {
       console.error('[CommandCenter] Fetch error:', error);
       setSystemStatus('DEGRADED');
-      
-      // Fallback to demo data for visual
-      if (totalProfit === 0) {
-        setTotalProfit(12.45);
-        setTodayProfit(3.73);
-        setApiCalls(249);
-      }
+      // 🌑 REAL DATA ONLY - No demo fallback
+      // Keep current values or show zeros, never fake data
     }
   }, [apiCalls]);
 

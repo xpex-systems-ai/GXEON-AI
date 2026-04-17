@@ -6,6 +6,7 @@ import { MempoolScanner } from './components/MempoolScanner';
 import { FlashloanController } from './components/FlashloanController';
 import { TransactionLog } from './components/TransactionLog';
 import { RPCHealth } from './components/RPCHealth';
+import { SwarmPanel } from './components/SwarmPanel';
 
 // 🌑 SOVEREIGN GRID — Placeholder components for new nav items
 const ApiBillingPanel = () => (
@@ -46,6 +47,8 @@ function App() {
         return <TransactionLog />;
       case 'nav_network':
         return <RPCHealth />;
+      case 'nav_swarm':
+        return <SwarmPanel />;
       default:
         return <CommandCenter />; // Default to Production Dashboard
     }

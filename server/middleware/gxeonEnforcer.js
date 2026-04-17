@@ -43,29 +43,28 @@ const gxeonEnforcer = (costConfig = {}) => async (req, res, next) => {
     try {
         let deductionResult;
         
-        try {
-            // 2. Tentar via Supabase RPC primeiro
-            const { data, error: rpcError } = await supabase
-                .rpc('deduct_credits_atomic', {
-                    p_api_key: apiKey,
-                    p_amount: operationCost,
-                    p_operation: route,
-                    p_request_id: req.id || `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-                });
+        // 2. Tentar via Supabase RPC primeiro
+        const { data, error: rpcError } = await supabase
+            .rpc('deduct_credits_atomic', {
+                p_api_key: apiKey,
+                p_amount: operationCost,
+                p_operation: route,
+                p_request_id: req.id || `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+            });
 
-            if (rpcError && rpcError.message && rpcError.message.includes('schema cache')) {
-                // Fallback para PostgreSQL direto quando PostgREST cache falha
-                console.warn('[GXEON Enforcer] PostgREST schema cache desatualizado, usando PostgreSQL direto...');
-                deductionResult = await deductCreditsAtomicDirect(apiKey, operationCost, route, req.id);
-            } else if (rpcError) {
-                console.error('[GXEON Enforcer] RPC Error:', rpcError);
-                return res.status(500).json({ 
-                    error: "GXEON_BILLING_ERROR", 
-                    message: "Erro no sistema de cobrança."
-                });
-            } else {
-                deductionResult = data;
-            }
+        if (rpcError && rpcError.message && rpcError.message.includes('schema cache')) {
+            // Fallback para PostgreSQL direto quando PostgREST cache falha
+            console.warn('[GXEON Enforcer] PostgREST schema cache desatualizado, usando PostgreSQL direto...');
+            deductionResult = await deductCreditsAtomicDirect(apiKey, operationCost, route, req.id);
+        } else if (rpcError) {
+            console.error('[GXEON Enforcer] RPC Error:', rpcError);
+            return res.status(500).json({ 
+                error: "GXEON_BILLING_ERROR", 
+                message: "Erro no sistema de cobrança."
+            });
+        } else {
+            deductionResult = data;
+        }
 
         if (!deductionResult || !deductionResult.success) {
             return res.status(402).json({ 
@@ -170,4 +169,65 @@ const gxeonAuthOnly = async (req, res, next) => {
     }
 };
 
-module.exports = { gxeonEnforcer, gxeonAuthOnly };
+/**
+ * Dynamic credit deduction middleware (for memory.js and custom billing)
+ * @param {Object} config - Configuration object
+ * @param {string} config.operation - Operation name
+ * @param {Function} config.getCost - Function to calculate cost: (req) => cost
+ */
+const deductCredits = (config = {}) => async (req, res, next) => {
+    const apiKey = req.headers['x-gxeon-key'];
+    
+    if (!apiKey) {
+        return res.status(401).json({ 
+            error: "GXEON_AUTH_REQUIRED", 
+            message: "API Key ausente." 
+        });
+    }
+
+    try {
+        const operationCost = config.getCost ? config.getCost(req) : 0.001;
+        
+        const { data, error: rpcError } = await supabase
+            .rpc('deduct_credits_atomic', {
+                p_api_key: apiKey,
+                p_amount: operationCost,
+                p_operation: config.operation || 'CUSTOM',
+                p_request_id: req.id || `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+            });
+
+        if (rpcError) {
+            console.error('[deductCredits] RPC Error:', rpcError);
+            return res.status(500).json({ 
+                error: "GXEON_BILLING_ERROR", 
+                message: "Erro no sistema de cobrança."
+            });
+        }
+
+        if (!data || !data.success) {
+            return res.status(402).json({ 
+                error: "GXEON_PAYMENT_REQUIRED", 
+                message: data?.message || "Saldo insuficiente.",
+                required: operationCost
+            });
+        }
+
+        req.user_id = data.user_id;
+        req.billing = {
+            operation: config.operation,
+            cost: operationCost,
+            remaining_balance: data.new_balance,
+            transaction_id: data.transaction_id
+        };
+
+        next();
+    } catch (error) {
+        console.error('[deductCredits] Error:', error);
+        return res.status(500).json({ 
+            error: "GXEON_BILLING_ERROR", 
+            message: "Erro interno no billing."
+        });
+    }
+};
+
+module.exports = { gxeonEnforcer, gxeonAuthOnly, deductCredits };

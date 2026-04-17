@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { executeAgent, getAgentStatus } = require('../services/agents');
+const { executeTaskEdgeFunction, registerPaymentEdgeFunction, logEventEdgeFunction } = require('../edge-functions');
 
 // Orquestrador Central - Main routing endpoint
 router.post('/orchestrator', async (req, res) => {
@@ -246,8 +247,6 @@ router.get('/logs/export', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
-const { executeTaskEdgeFunction, registerPaymentEdgeFunction, logEventEdgeFunction } = require('../edge-functions');
 
 // ===== REAL AGENT SYSTEM ENDPOINTS =====
 

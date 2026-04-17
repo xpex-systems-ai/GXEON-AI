@@ -46,16 +46,17 @@ const { apiLimiter, gxeonRateLimiter, operationLimiter } = require('./middleware
 
 const GuardianService = require('./services/guardianService');
 const radarShix = require('./services/radarShix');
+const { initializeSwarm } = require('./agents');
 
 // ==================== APP SETUP ====================
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: '*',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-gxeon-key']
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-gxeon-key', 'X-Requested-With', 'Accept']
 };
 
 app.use(cors(corsOptions));
@@ -69,15 +70,19 @@ app.use((req, res, next) => {
 app.use('/api', apiLimiter);
 
 // ==================== PUBLIC ROUTES ====================
-app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'ok', 
+// Health check para Railway (também em /api/health)
+const healthCheck = (req, res) => {
+  res.status(200).json({
+    status: 'ok',
     timestamp: new Date().toISOString(),
     version: '2.0.0-sovereign',
     billing: 'active',
     guardian: 'active'
   });
-});
+};
+
+app.get('/health', healthCheck);
+app.get('/api/health', healthCheck);
 
 app.get('/status', (req, res) => {
   res.json({ 
@@ -101,6 +106,7 @@ app.use('/api/task-engine', gxeonEnforcer({ task_pipeline: 0.002 }), taskEngineR
 app.use('/api/executor', gxeonEnforcer({ agent_execution: 0.003 }), executorRoutes);
 app.use('/api/edge', gxeonEnforcer({ edge_function: 0.001 }), require('./edge-functions'));
 app.use('/api/v1/radar', gxeonEnforcer({ radar_call: 0.05 }), require('./routes/radar'));
+app.use('/api/v1/swarm', gxeonEnforcer({ swarm_operation: 0.01 }), require('./routes/swarm')); // 🐝 SWARM M2M - Colmeia Predadora
 app.use('/api/v1/sovereign-data', require('./routes/sovereign-data')); // 🌑 PANDORA PROTOCOL — M2M Only
 app.use('/api/v1/ocean', require('./routes/ocean')); // 🌊 OCEAN PROTOCOL — Compute-to-Data
 app.use('/api/v1/chainlink', require('./routes/chainlink')); // 🔗 CHAINLINK FUNCTIONS — Oracle Gateway
@@ -142,7 +148,7 @@ app.use((req, res) => {
 
 // ==================== SERVER START ====================
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`\n╔═══════════════════════════════════════════════════════════════╗\n║                    🔥 GXEON SOVEREIGN v2.0.0 🔥                ║\n╠═══════════════════════════════════════════════════════════════╣\n║  Port: ${PORT.toString().padEnd(52)} ║\n║  Billing: ACTIVE - Choke-Point Operacional                     ║\n║  Guardian: ACTIVE - Sistema Imunológico Online                 ║\n║  RadarShix: ACTIVE - Caça-Oportunidades Iniciado              ║\n╚═══════════════════════════════════════════════════════════════╝`);
+  console.log(`\n╔═══════════════════════════════════════════════════════════════╗\n║                    🔥 GXEON SOVEREIGN v2.0.0 🔥                ║\n╠═══════════════════════════════════════════════════════════════╣\n║  Port: ${PORT.toString().padEnd(52)} ║\n║  Billing: ACTIVE - Choke-Point Operacional                     ║\n║  Guardian: ACTIVE - Sistema Imunológico Online                 ║\n║  RadarShix: ACTIVE - Caça-Oportunidades Iniciado              ║\n║  Swarm M2M: READY - Colmeia Predadora de Mercado              ║\n╚═══════════════════════════════════════════════════════════════╝`);
   console.log('[GXEON_ENFORCER] Choke-Point Operacional Ativo');
   console.log('[GXEON_PRICING] LLM: $0.001-$0.004 | Agent: $0.005 | Onchain: $0.015 | Memory: $0.001/KB');
   if (process.env.DISABLE_GUARDIAN !== 'true') {
@@ -155,5 +161,27 @@ app.listen(PORT, '0.0.0.0', () => {
   } else {
     console.log('[RADAR_SHIX] Desativado - TWITTER_API_KEY não configurada');
   }
+  
+  // 🐝 SWARM M2M Auto-Start
+  if (process.env.SWARM_AUTOSTART === 'true') {
+    setTimeout(async () => {
+      try {
+        await initializeSwarm({
+          executionInterval: parseInt(process.env.SWARM_INTERVAL) || 3600000,
+          maxConcurrentAgents: parseInt(process.env.SWARM_MAX_AGENTS) || 50,
+          encryptionEnabled: process.env.SWARM_ENCRYPT !== 'false',
+          autoOptimize: process.env.SWARM_OPTIMIZE !== 'false',
+          profitThreshold: parseFloat(process.env.SWARM_PROFIT_THRESHOLD) || 1.0,
+          autoStart: true
+        });
+      } catch (err) {
+        console.error('[SWARM_M2M] Erro ao iniciar:', err.message);
+      }
+    }, 5000); // Delay para garantir que Supabase está conectado
+    console.log('[SWARM_M2M] Auto-start agendado (5s delay)');
+  } else {
+    console.log('[SWARM_M2M] Auto-start desativado (SWARM_AUTOSTART != true)');
+  }
+  
   console.log('\n✅ GXEON SOVEREIGN pronto para dominação de mercado\n');
 });

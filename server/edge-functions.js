@@ -310,6 +310,9 @@ router.post('/register-payment', registerPaymentEdgeFunction);
 router.post('/log-event', logEventEdgeFunction);
 
 // ==========================================
-// Export Router
+// Export Router & Functions
 // ==========================================
 module.exports = router;
+module.exports.executeTaskEdgeFunction = executeTaskEdgeFunction;
+module.exports.registerPaymentEdgeFunction = registerPaymentEdgeFunction;
+module.exports.logEventEdgeFunction = logEventEdgeFunction;

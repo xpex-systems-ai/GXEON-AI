@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Radar, Cpu, Terminal, Activity, Menu, X, 
-  Radio, Zap, DollarSign, ShieldCheck, Crown
+  Radio, Zap, DollarSign, ShieldCheck, Crown,
+  Bug
 } from 'lucide-react';
 
 /**
@@ -57,6 +58,14 @@ const navItems = [
     status: 'ONLINE',
     statusColor: 'bg-emerald-500',
     description: 'Multi-chain Active'
+  },
+  { 
+    id: 'nav_swarm', 
+    label: 'Swarm M2M', 
+    icon: Bug,
+    status: 'HUNTING',
+    statusColor: 'bg-amber-500',
+    description: 'Colmeia Predadora'
   },
 ];
 
@@ -192,7 +201,7 @@ export function Sidebar({ activeView, onViewChange, isCollapsed, setIsCollapsed 
               </div>
               <div className="text-center mt-1">
                 <span className="text-[9px] text-gray-500 font-mono">
-                  {(import.meta as any).env?.VITE_SYSTEM_ADMIN_ID?.slice(0, 12) || 'GXEON-ADMIN'}
+                  {import.meta.env?.VITE_SYSTEM_ADMIN_ID?.slice(0, 12) || 'GXEON-ADMIN'}
                 </span>
               </div>
             </div>

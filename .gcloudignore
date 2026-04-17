@@ -1,0 +1,60 @@
+# 🌑 GXEON AI — GCloud Ignore v10.0
+# Accelerates gcloud builds uploads
+
+# Dependencies (will be installed in container)
+node_modules/
+dashboard/node_modules/
+
+# Git
+.git/
+.gitignore
+
+# Environment (SECURITY - use Google Secrets instead)
+.env
+.env.local
+.env.*
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+tests/
+test/
+*.test.js
+*.spec.js
+coverage/
+
+# Documentation
+*.md
+!README.md
+
+# CI/CD configs
+.github/
+.github/workflows/
+
+# Local development
+.vscode/
+*.local
+
+# Hardhat build artifacts (not needed at runtime)
+cache/
+typechain-types/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Large files
+*.tar.gz
+*.zip

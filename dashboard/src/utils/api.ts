@@ -156,6 +156,57 @@ class ApiClient {
       }>;
     }>('/logs');
   }
+
+  async getSwarmStats() {
+    return this.fetch<{
+      success: boolean;
+      stats: {
+        roi: {
+          totalOutreachCost: number;
+          totalRevenue: number;
+          conversions: number;
+          cac: number;
+          ltv: number;
+          roi: number;
+        };
+        scouter: {
+          totalScanned: number;
+          botsIdentified: number;
+          lastScan: string;
+          targetsInQueue: number;
+        };
+        infiltrator: {
+          totalSent: number;
+          successful: number;
+          failed: number;
+          queueSize: number;
+        };
+        executionCount: number;
+        isRunning: boolean;
+      };
+    }>('/api/v1/swarm/stats');
+  }
+
+  async startSwarm() {
+    return this.fetch<{
+      success: boolean;
+      message: string;
+    }>('/api/v1/swarm/start', { method: 'POST' });
+  }
+
+  async stopSwarm() {
+    return this.fetch<{
+      success: boolean;
+      message: string;
+    }>('/api/v1/swarm/stop', { method: 'POST' });
+  }
+
+  async executeSwarmCycle() {
+    return this.fetch<{
+      success: boolean;
+      executed: boolean;
+    }>('/api/v1/swarm/execute', { method: 'POST' });
+  }
 }
 
 export const apiClient = new ApiClient();

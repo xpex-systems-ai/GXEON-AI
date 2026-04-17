@@ -21,7 +21,7 @@ cmd = "npm start"
 
 [variables]
 NODE_ENV = 'production'
-PORT = '3000'
+PORT = '8080'
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # 📋 DEPLOYMENT TARGETS:

@@ -55,7 +55,7 @@ const initialStats: SovereignStats = {
   systemStatus: 'ONLINE',
   lastUpdate: new Date(),
   flashbotsStatus: 'CONNECTED',
-  vaultBalance: 12.45, // 🌑 SIMULATION MODE: Demo treasury balance
+  vaultBalance: 0, // Real data only - no simulation
   vaultAddress: '0x3955...5224',
 };
 
@@ -118,23 +118,22 @@ export function useSupabaseStats(refreshInterval = 5000) {
       const pendingTasks = tasksData?.filter((t: any) => t.status === 'pending').length || 0;
       const completedTasks = tasksData?.filter((t: any) => t.status === 'completed').length || 0;
       
-      // 🌑 SIMULATION MODE: Override with demo values if no real data
-      const demoBalance = 12.45; // Demo treasury para teste visual
-      const effectiveVaultBalance = totalRevenue > 0 ? totalRevenue : demoBalance;
+      // 🌑 REAL DATA ONLY - No simulation mode
+      const effectiveVaultBalance = totalRevenue;
       
-      // Update stats
+      // Update stats with REAL data only
       setStats(prev => ({
         ...prev,
         totalRevenue,
         todayRevenue,
         billingTransactions: billingData?.length || 0,
-        // 💰 TREASURY METRICS
+        // 💰 TREASURY METRICS - Real only
         apiSalesCount,
-        commanderShare30: totalRevenue > 0 ? commanderShare30 : demoBalance * 0.3,
-        vaultShare70: totalRevenue > 0 ? vaultShare70 : demoBalance * 0.7,
+        commanderShare30,
+        vaultShare70,
         estimatedGasCost,
-        profitToGasRatio: totalRevenue > 0 ? profitToGasRatio : 1865, // Demo: 1865x
-        canClaim: totalRevenue > 0 ? canClaim : true, // Demo: sempre pode sacar
+        profitToGasRatio,
+        canClaim,
         activeAgents: agentsData.agents?.length || 0,
         totalTasks,
         pendingTasks,

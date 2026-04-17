@@ -19,10 +19,39 @@ const SOVEREIGN_CONFIG = {
   commanderSharePercent: 30
 };
 
-// Mock provider for now - will use real provider in production
+// Provider real para Arbitrum Mainnet
 const getProvider = () => {
-  return new ethers.JsonRpcProvider(process.env.ARBITRUM_RPC_URL || 'https://arb1.arbitrum.io/rpc');
+  const rpcUrl = process.env.ARBITRUM_RPC_URL;
+  if (!rpcUrl) {
+    throw new Error('ARBITRUM_RPC_URL não configurada. Configure no Railway Dashboard.');
+  }
+  return new ethers.JsonRpcProvider(rpcUrl);
 };
+
+// Wallet com permissão de execução
+const getExecutorWallet = () => {
+  const privateKey = process.env.PRIVATE_KEY;
+  if (!privateKey) {
+    throw new Error('PRIVATE_KEY não configurada. Configure no Railway Dashboard.');
+  }
+  const provider = getProvider();
+  return new ethers.Wallet(privateKey, provider);
+};
+
+// ABI mínimo para interações ERC20 e Vault
+const ERC20_ABI = [
+  'function balanceOf(address owner) view returns (uint256)',
+  'function transfer(address to, uint256 amount) returns (bool)',
+  'function decimals() view returns (uint8)',
+  'function symbol() view returns (string)'
+];
+
+const VAULT_ABI = [
+  'function getBalance() view returns (uint256)',
+  'function getAvailableProfit() view returns (uint256)',
+  'function claimProfit(uint256 amount)',
+  'function getClaimHistory() view returns (tuple(uint256 amount, uint256 timestamp, bytes32 txHash)[])'
+];
 
 /**
  * 📊 GET /api/v1/profit/status
@@ -30,28 +59,58 @@ const getProvider = () => {
  */
 router.get('/status', async (req, res) => {
   try {
-    // Mock data - in production would query contract
-    const mockStatus = {
-      vaultBalance: 12.45,
-      availableProfit: 3.73, // 30% of 12.45
-      totalRevenue: 45.20,
-      gasEstimate: 0.002, // ETH
-      canClaim: true,
-      gasOptimized: true,
-      profitToGasRatio: 1865, // 3.73 / 0.002 = 1865x (well above 5x threshold)
-      lastClaim: null,
+    const provider = getProvider();
+    const vaultAddress = process.env.VAULT_ADDRESS || process.env.GXEON_TREASURY_ADDRESS;
+
+    if (!vaultAddress) {
+      return res.status(400).json({
+        success: false,
+        error: 'VAULT_ADDRESS não configurada',
+        message: 'Configure VAULT_ADDRESS ou GXEON_TREASURY_ADDRESS no Railway Dashboard'
+      });
+    }
+
+    // Verificar saldo USDC do vault
+    const usdcContract = new ethers.Contract(SOVEREIGN_CONFIG.usdcAddress, ERC20_ABI, provider);
+    const vaultBalanceRaw = await usdcContract.balanceOf(vaultAddress);
+    const decimals = await usdcContract.decimals();
+    const vaultBalance = Number(ethers.formatUnits(vaultBalanceRaw, decimals));
+
+    // Calcular profit disponível (30% para commander)
+    const availableProfit = vaultBalance * (SOVEREIGN_CONFIG.commanderSharePercent / 100);
+
+    // Estimar gas para claim
+    const gasPrice = await provider.getFeeData();
+    const gasEstimate = gasPrice.maxFeePerGas
+      ? Number(ethers.formatEther(gasPrice.maxFeePerGas * 100000n)) // ~100k gas
+      : 0.0001;
+
+    const profitToGasRatio = gasEstimate > 0 ? availableProfit / gasEstimate : 0;
+    const canClaim = availableProfit > gasEstimate * SOVEREIGN_CONFIG.minProfitMultiplier;
+
+    const status = {
+      vaultBalance,
+      availableProfit,
+      totalRevenue: vaultBalance, // Simplificado - pode ser expandido com histórico
+      gasEstimate,
+      canClaim,
+      gasOptimized: canClaim,
+      profitToGasRatio: Math.floor(profitToGasRatio),
+      lastClaim: null, // TODO: Implementar histórico no Supabase
       ownerAddress: SOVEREIGN_CONFIG.ownerAddress,
       network: SOVEREIGN_CONFIG.network,
-      token: SOVEREIGN_CONFIG.preferredToken
+      token: SOVEREIGN_CONFIG.preferredToken,
+      vaultAddress
     };
 
-    res.json({
-      success: true,
-      status: mockStatus
-    });
+    res.json({ success: true, status });
   } catch (error) {
     console.error('[Profit] Status error:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      code: error.code || 'UNKNOWN_ERROR'
+    });
   }
 });
 
@@ -63,37 +122,79 @@ router.post('/claim', async (req, res) => {
   try {
     const { amount = 0 } = req.body; // 0 = claim all
 
-    // In production: Check gas optimization
-    // const gasCost = await estimateGas();
-    // const profit = await getAvailableProfit();
-    // if (profit < gasCost * SOVEREIGN_CONFIG.minProfitMultiplier) {
-    //   return res.status(400).json({ error: 'Profit below gas threshold' });
-    // }
+    const vaultAddress = process.env.VAULT_ADDRESS || process.env.GXEON_TREASURY_ADDRESS;
+    if (!vaultAddress) {
+      return res.status(400).json({
+        success: false,
+        error: 'VAULT_ADDRESS não configurada'
+      });
+    }
 
-    // Mock claim execution
+    // Verificar se há profit suficiente
+    const provider = getProvider();
+    const usdcContract = new ethers.Contract(SOVEREIGN_CONFIG.usdcAddress, ERC20_ABI, provider);
+    const vaultBalanceRaw = await usdcContract.balanceOf(vaultAddress);
+    const decimals = await usdcContract.decimals();
+    const vaultBalance = Number(ethers.formatUnits(vaultBalanceRaw, decimals));
+    const availableProfit = vaultBalance * (SOVEREIGN_CONFIG.commanderSharePercent / 100);
+
+    const gasPrice = await provider.getFeeData();
+    const gasEstimate = gasPrice.maxFeePerGas
+      ? Number(ethers.formatEther(gasPrice.maxFeePerGas * 100000n))
+      : 0.0001;
+
+    if (availableProfit < gasEstimate * SOVEREIGN_CONFIG.minProfitMultiplier) {
+      return res.status(400).json({
+        success: false,
+        error: 'Profit below gas threshold',
+        availableProfit,
+        gasEstimate,
+        minRequired: gasEstimate * SOVEREIGN_CONFIG.minProfitMultiplier
+      });
+    }
+
+    // Executar claim real
+    const wallet = getExecutorWallet();
+    const vaultContract = new ethers.Contract(vaultAddress, VAULT_ABI, wallet);
+
+    const claimAmount = amount > 0
+      ? ethers.parseUnits(amount.toString(), decimals)
+      : ethers.parseUnits(availableProfit.toFixed(6), decimals);
+
+    console.log('[💰 SOVEREIGN] Executando claim:', {
+      amount: ethers.formatUnits(claimAmount, decimals),
+      vault: vaultAddress
+    });
+
+    const tx = await vaultContract.claimProfit(claimAmount);
+    const receipt = await tx.wait();
+
     const claimResult = {
       success: true,
-      txHash: '0x' + Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join(''),
-      amount: amount || 3.73,
+      txHash: receipt.hash,
+      blockNumber: receipt.blockNumber,
+      gasUsed: ethers.formatEther(receipt.gasUsed * receipt.gasPrice),
+      amount: Number(ethers.formatUnits(claimAmount, decimals)),
       token: SOVEREIGN_CONFIG.preferredToken,
       to: SOVEREIGN_CONFIG.ownerAddress,
       network: SOVEREIGN_CONFIG.network,
-      timestamp: new Date().toISOString(),
-      gasUsed: 0.002,
-      netProfit: 3.73 - 0.002
+      timestamp: new Date().toISOString()
     };
 
-    // Log claim
     console.log('[💰 SOVEREIGN] Profit claimed:', claimResult);
 
     res.json({
       success: true,
-      message: '🌑 Profit claimed successfully!',
+      message: '🌑 Profit claimed successfully on Arbitrum!',
       claim: claimResult
     });
   } catch (error) {
     console.error('[Profit] Claim error:', error);
-    res.status(500).json({ success: false, error: error.message });
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      code: error.code || 'CLAIM_FAILED'
+    });
   }
 });
 
@@ -103,24 +204,32 @@ router.post('/claim', async (req, res) => {
  */
 router.get('/history', async (req, res) => {
   try {
-    // Mock history - in production would query from Supabase
-    const mockHistory = [
-      {
-        id: 'claim_001',
-        amount: 2.5,
-        token: 'USDC',
-        txHash: '0xabc...',
-        timestamp: new Date(Date.now() - 86400000).toISOString(),
-        status: 'completed'
-      }
-    ];
+    const { createClient } = require('@supabase/supabase-js');
+    const supabase = createClient(
+      process.env.SUPABASE_PROJECT_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+
+    const { data: history, error } = await supabase
+      .from('profit_claims')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (error) throw error;
 
     res.json({
       success: true,
-      history: mockHistory
+      history: history || [],
+      count: history?.length || 0
     });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error('[Profit] History error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      history: [] // Retorna array vazio em caso de erro
+    });
   }
 });
 
@@ -130,26 +239,56 @@ router.get('/history', async (req, res) => {
  */
 router.post('/estimate', async (req, res) => {
   try {
-    const { amount = 0 } = req.body;
+    const provider = getProvider();
+    const vaultAddress = process.env.VAULT_ADDRESS || process.env.GXEON_TREASURY_ADDRESS;
 
-    // Mock estimation
+    if (!vaultAddress) {
+      return res.status(400).json({
+        success: false,
+        error: 'VAULT_ADDRESS não configurada'
+      });
+    }
+
+    const usdcContract = new ethers.Contract(SOVEREIGN_CONFIG.usdcAddress, ERC20_ABI, provider);
+    const vaultBalanceRaw = await usdcContract.balanceOf(vaultAddress);
+    const decimals = await usdcContract.decimals();
+    const vaultBalance = Number(ethers.formatUnits(vaultBalanceRaw, decimals));
+    const availableProfit = vaultBalance * (SOVEREIGN_CONFIG.commanderSharePercent / 100);
+
+    const feeData = await provider.getFeeData();
+    const gasUnits = 100000n;
+    const gasCostWei = (feeData.maxFeePerGas || feeData.gasPrice || 0n) * gasUnits;
+    const gasEstimate = Number(ethers.formatEther(gasCostWei));
+
+    // Preço ETH aproximado para calcular gas em USD (simplificado)
+    const ethPrice = 2500; // TODO: Implementar feed de preço real
+    const gasInUsd = gasEstimate * ethPrice;
+    const minRequiredProfit = gasEstimate * SOVEREIGN_CONFIG.minProfitMultiplier;
+    const canExecute = availableProfit > minRequiredProfit;
+    const netProfit = availableProfit - gasInUsd;
+    const profitToGasRatio = gasEstimate > 0 ? availableProfit / gasEstimate : 0;
+
     const estimate = {
-      availableProfit: 3.73,
-      gasEstimate: 0.002,
-      gasInUsd: 4.50,
-      minRequiredProfit: 0.01, // 5x gas
-      canExecute: true,
-      netProfit: 3.73 - 0.002,
-      profitToGasRatio: 1865,
-      recommendation: '✅ Safe to claim - Profit is 1865x gas cost'
+      availableProfit,
+      gasEstimate,
+      gasInUsd,
+      minRequiredProfit,
+      canExecute,
+      netProfit,
+      profitToGasRatio: Math.floor(profitToGasRatio),
+      recommendation: canExecute
+        ? `✅ Safe to claim - Profit is ${Math.floor(profitToGasRatio)}x gas cost`
+        : `❌ Wait - Profit only ${Math.floor(profitToGasRatio)}x gas cost (need ${SOVEREIGN_CONFIG.minProfitMultiplier}x)`
     };
 
-    res.json({
-      success: true,
-      estimate
-    });
+    res.json({ success: true, estimate });
   } catch (error) {
-    res.status(500).json({ success: false, error: error.message });
+    console.error('[Profit] Estimate error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      code: error.code || 'ESTIMATE_FAILED'
+    });
   }
 });
 
