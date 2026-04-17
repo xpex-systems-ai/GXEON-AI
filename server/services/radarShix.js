@@ -285,6 +285,128 @@ class SmartMoneyMonitor {
 }
 
 /**
+ * 🔫 MempoolSniper — Detecção de liquidez em pending transactions
+ * Escuta mempool antes da confirmação do bloco
+ */
+class MempoolSniper {
+    constructor() {
+        this.provider = null;
+        this.alchemyKey = process.env.ALCHEMY_API_KEY;
+        this.wsUrl = this.alchemyKey 
+            ? `wss://arb-mainnet.g.alchemy.com/v2/${this.alchemyKey}`
+            : null;
+        this.isConnected = false;
+        this.pendingTxCallbacks = [];
+        this.stats = {
+            totalPendingSeen: 0,
+            largeLiquidityDetected: 0
+        };
+    }
+
+    /**
+     * Inicia escuta do mempool
+     */
+    async start() {
+        if (!this.wsUrl) {
+            console.warn('[MempoolSniper] ALCHEMY_API_KEY not configured');
+            return false;
+        }
+
+        try {
+            // Usa provider separado para mempool
+            this.provider = new ethers.WebSocketProvider(this.wsUrl);
+            
+            // Escuta pending transactions
+            this.provider.on('pending', async (txHash) => {
+                await this.processPendingTransaction(txHash);
+            });
+
+            this.isConnected = true;
+            console.log(`[MempoolSniper] 🔫 Mempool sniper activated — listening for large liquidity adds`);
+            return true;
+
+        } catch (error) {
+            console.error('[MempoolSniper] Failed:', error.message);
+            return false;
+        }
+    }
+
+    /**
+     * Processa transação pendente
+     */
+    async processPendingTransaction(txHash) {
+        try {
+            const tx = await this.provider.getTransaction(txHash);
+            if (!tx) return;
+
+            this.stats.totalPendingSeen++;
+
+            // Verifica se é transação de alto valor (> 2 ETH no mempool)
+            const valueEth = parseFloat(ethers.formatEther(tx.value || 0));
+            if (valueEth >= 2) {
+                const pendingData = {
+                    txHash: tx.hash,
+                    from: tx.from,
+                    to: tx.to,
+                    valueEth,
+                    valueUsd: valueEth * 3500, // Estimativa
+                    gasPrice: tx.gasPrice ? ethers.formatUnits(tx.gasPrice, 'gwei') : null,
+                    detectedAt: new Date().toISOString(),
+                    isHighValue: valueEth >= 5,
+                    type: this.classifyPendingTx(tx)
+                };
+
+                if (valueEth >= 5) {
+                    this.stats.largeLiquidityDetected++;
+                    console.log(`[MempoolSniper] 🎯 LARGE PENDING: ${valueEth.toFixed(2)} ETH from ${tx.from?.slice(0, 8)}...`);
+                }
+
+                // Notifica callbacks
+                this.pendingTxCallbacks.forEach(cb => cb(pendingData));
+            }
+
+        } catch (error) {
+            // Ignora erros de transações não encontradas
+        }
+    }
+
+    /**
+     * Classifica tipo de transação pendente
+     */
+    classifyPendingTx(tx) {
+        if (!tx.to) return 'contract_deployment';
+        
+        const toLower = tx.to.toLowerCase();
+        const valueEth = parseFloat(ethers.formatEther(tx.value || 0));
+        
+        // Heurísticas para detectar adição de liquidez
+        if (valueEth >= 5) {
+            return 'potential_liquidity_add';
+        }
+        
+        return 'high_value_transfer';
+    }
+
+    onPendingLiquidity(callback) {
+        this.pendingTxCallbacks.push(callback);
+    }
+
+    getStats() {
+        return { ...this.stats };
+    }
+
+    stop() {
+        if (this.provider) {
+            this.provider.removeAllListeners('pending');
+            this.provider.destroy();
+            this.provider = null;
+        }
+        this.isConnected = false;
+        console.log('[MempoolSniper] Stopped');
+    }
+}
+
+/**
  * 🎯 RADAR SHIX v2.0 — Liquidity-First DEX Monitoring
  * 
  * Abandona Twitter API (erro 402) em favor de:
@@ -296,6 +418,7 @@ class RadarShixService {
     constructor() {
         this.dexFetcher = new DexLiquidityFetcher();
         this.smartMoney = new SmartMoneyMonitor();
+        this.mempoolSniper = new MempoolSniper();
         this.isRunning = false;
         this.intervalId = null;
         this.scanInterval = 1000; // 1 segundo = 1 bloco Arbitrum
@@ -303,6 +426,15 @@ class RadarShixService {
         this.opportunitiesFound = 0;
         this.startTime = null;
         this.heartbeatInterval = null;
+        
+        // 🎯 Visual telemetry for Railway Dashboard
+        this.telemetry = {
+            scansPerSecond: 0,
+            lastScansCount: 0,
+            pendingTxSeen: 0,
+            smartMoneyEvents: 0,
+            highLiquidityAlerts: 0
+        };
     }
 
     /**
@@ -323,14 +455,27 @@ class RadarShixService {
         console.log('║  Source: DexScreener API (FREE) + Alchemy WebSocket            ║');
         console.log('║  Chain: Arbitrum Mainnet (~1s/block)                           ║');
         console.log('║  Alert: New pools > $10k USD | Smart money > 5 ETH             ║');
+        console.log('║  Mempool: 🔫 Sniper active for pending liquidity               ║');
         console.log('╚═══════════════════════════════════════════════════════════════╝');
 
         // Inicia monitor de smart money
         await this.smartMoney.start();
         
+        // Inicia mempool sniper para pending transactions
+        await this.mempoolSniper.start();
+        
         // Registra callback para transfers grandes
         this.smartMoney.onLargeTransfer(async (transfer) => {
+            this.telemetry.smartMoneyEvents++;
             await this.logSmartMoneyTransfer(transfer);
+        });
+        
+        // Registra callback para pending transactions
+        this.mempoolSniper.onPendingLiquidity(async (pending) => {
+            this.telemetry.pendingTxSeen++;
+            if (pending.isHighValue) {
+                await this.logPendingLiquidity(pending);
+            }
         });
 
         // Primeiro scan imediato
@@ -358,6 +503,7 @@ class RadarShixService {
             clearInterval(this.heartbeatInterval);
         }
         this.smartMoney.stop();
+        this.mempoolSniper.stop();
         console.log('[RADAR_SHIX] Stopped');
     }
 
@@ -385,6 +531,7 @@ class RadarShixService {
 
             if (newPools.length > 0) {
                 this.opportunitiesFound += newPools.length;
+                this.telemetry.highLiquidityAlerts += highLiquidityAlerts;
                 console.log(`[RADAR_SCAN] 🎯 ${newPools.length} NEW POOLS | 🚨 ${highLiquidityAlerts} HIGH LIQUIDITY`);
             }
 
@@ -499,6 +646,40 @@ class RadarShixService {
     }
 
     /**
+     * Log de liquidez pendente (mempool sniper)
+     */
+    async logPendingLiquidity(pending) {
+        try {
+            // Log em tabela separada ou mesma de smart money com flag
+            const { error } = await supabase
+                .from('radar_smart_money_flows')
+                .insert({
+                    chain_id: 42161,
+                    from_address: pending.from,
+                    to_address: pending.to,
+                    token_symbol: 'ETH',
+                    amount: pending.valueEth,
+                    amount_usd: pending.valueUsd,
+                    flow_type: pending.type,
+                    block_number: 0, // Pending = ainda sem bloco
+                    transaction_hash: pending.txHash,
+                    detected_at: pending.detectedAt,
+                    is_whale: pending.valueUsd >= 100000,
+                    is_new_wallet: false,
+                    smart_score: 0.7, // Alto score por ser pre-confirmação
+                    is_pending: true // Flag para identificar mempool
+                });
+
+            if (error) throw error;
+
+            console.log(`[PENDING_LIQUIDITY] 🔫 Pre-confirmed: ${pending.valueEth.toFixed(2)} ETH → ${pending.to?.slice(0, 12)}...`);
+
+        } catch (error) {
+            console.error('[logPendingLiquidity] Error:', error.message);
+        }
+    }
+
+    /**
      * Log de telemetria do scan
      */
     async logScanTelemetry({ blockNumber, newPools, highLiquidityAlerts, durationMs, error = null }) {
@@ -518,17 +699,26 @@ class RadarShixService {
     }
 
     /**
-     * Heartbeat para Railway Dashboard
+     * Heartbeat para Railway Dashboard — Visual Telemetry
      */
     startHeartbeat() {
+        // Calcula scans por segundo a cada intervalo
+        this.telemetry.lastScansCount = this.blockCount;
+        
         this.heartbeatInterval = setInterval(async () => {
             const uptime = Math.floor((Date.now() - this.startTime) / 1000);
             const hours = Math.floor(uptime / 3600);
             const mins = Math.floor((uptime % 3600) / 60);
             
-            console.log(`[RADAR_HEARTBEAT] ⏱️ ${hours}h ${mins}m | 🔍 Scans: ${this.blockCount} | 🎯 Pools: ${this.opportunitiesFound} | 📊 Tracked: ${this.dexFetcher.knownPools.size}`);
+            // Calcula scans por segundo
+            const scansSinceLast = this.blockCount - this.telemetry.lastScansCount;
+            this.telemetry.scansPerSecond = (scansSinceLast / 30).toFixed(2); // 30s interval
+            this.telemetry.lastScansCount = this.blockCount;
             
-            // Ping no Supabase
+            // 🎯 Visual output for Railway Dashboard
+            console.log(`[RADAR_HEARTBEAT] ⏱️ ${hours}h ${mins}m | ⚡ ${this.telemetry.scansPerSecond} scans/s | 🔍 ${this.blockCount} total | 🎯 ${this.opportunitiesFound} pools | 📊 ${this.dexFetcher.knownPools.size} tracked | 🔫 ${this.telemetry.pendingTxSeen} pending | 🐋 ${this.telemetry.smartMoneyEvents} smart`);
+            
+            // Ping no Supabase com telemetry completa
             try {
                 await supabase.from('radar_liquidity_heartbeat').upsert({
                     id: 'liquidity_radar_v1',
@@ -536,7 +726,10 @@ class RadarShixService {
                     uptime_seconds: uptime,
                     block_count: this.blockCount,
                     total_pools_detected: this.opportunitiesFound,
-                    status: 'scanning'
+                    status: 'scanning',
+                    scan_interval_ms: this.scanInterval,
+                    total_smart_money_events: this.telemetry.smartMoneyEvents,
+                    high_liquidity_alerts: this.telemetry.highLiquidityAlerts
                 });
             } catch (e) {}
             
