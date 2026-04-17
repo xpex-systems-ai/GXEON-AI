@@ -450,4 +450,239 @@ class RadarShixService {
     }
 }
 
-module.exports = new RadarShixService();
+// ═══════════════════════════════════════════════════════════════════════════
+// 🔄 RADAR PERPÉTUO — SINCRONIZADO COM BLOCOS ARBITRUM
+// ═══════════════════════════════════════════════════════════════════════════
+
+const { ethers } = require('ethers');
+
+class PerpetualRadar {
+    constructor() {
+        this.radarService = new RadarShixService();
+        this.provider = null;
+        this.isRunning = false;
+        this.blockCount = 0;
+        this.opportunitiesFound = 0;
+        this.startTime = null;
+        this.heartbeatInterval = null;
+    }
+
+    /**
+     * Inicia o motor de caça perpétua
+     */
+    async start() {
+        if (this.isRunning) {
+            console.log('[PERPETUAL_RADAR] Already hunting');
+            return;
+        }
+
+        this.isRunning = true;
+        this.startTime = Date.now();
+        
+        console.log('╔═══════════════════════════════════════════════════════════════╗');
+        console.log('║  🎯 RADAR PERPÉTUO ATIVADO — Colmeia Predadora em Caça       ║');
+        console.log('╠═══════════════════════════════════════════════════════════════╣');
+        console.log('║  Sync: Arbitrum Mainnet (~1s/block)                          ║');
+        console.log('║  Target: Social Leads → Billing Tasks                         ║');
+        console.log('╚═══════════════════════════════════════════════════════════════╝');
+
+        // Conecta à Arbitrum para sincronização de blocos
+        await this.connectArbitrum();
+        
+        // Inicia heartbeat para Railway Dashboard
+        this.startHeartbeat();
+        
+        // Primeiro scan imediato
+        await this.executeScan();
+    }
+
+    /**
+     * Conecta ao provider da Arbitrum para sincronização
+     */
+    async connectArbitrum() {
+        const rpcUrl = process.env.ARBITRUM_RPC_URL;
+        
+        if (!rpcUrl) {
+            console.warn('[PERPETUAL_RADAR] ARBITRUM_RPC_URL not set, using interval mode');
+            // Fallback: scan a cada 5 segundos
+            setInterval(() => this.executeScan(), 5000);
+            return;
+        }
+
+        try {
+            this.provider = new ethers.JsonRpcProvider(rpcUrl);
+            
+            // Verifica conexão
+            const blockNumber = await this.provider.getBlockNumber();
+            console.log(`[PERPETUAL_RADAR] Connected to Arbitrum | Block: ${blockNumber}`);
+            
+            // Escuta novos blocos (~1s na Arbitrum)
+            this.provider.on('block', async (blockNumber) => {
+                this.blockCount++;
+                console.log(`[PERPETUAL_RADAR] New block ${blockNumber} — Scanning for opportunities`);
+                await this.executeScan();
+            });
+            
+        } catch (error) {
+            console.error('[PERPETUAL_RADAR] Arbitrum connection failed:', error.message);
+            console.log('[PERPETUAL_RADAR] Falling back to interval mode (5s)');
+            setInterval(() => this.executeScan(), 5000);
+        }
+    }
+
+    /**
+     * Executa um ciclo de scan e envia para Supabase
+     */
+    async executeScan() {
+        const scanStart = Date.now();
+        
+        try {
+            // Scan via Twitter
+            const keywords = this.radarService.keywords;
+            console.log(`[RADAR_SCAN] Keywords: ${keywords.join(', ')}`);
+            
+            const leads = await this.radarService.twitterFetcher.search(keywords);
+            
+            if (leads.length > 0) {
+                this.opportunitiesFound += leads.length;
+                console.log(`[RADAR_SCAN] 🎯 ${leads.length} OPPORTUNITIES DETECTED`);
+                
+                // Processa e loga cada oportunidade
+                for (const lead of leads) {
+                    await this.processAndLogOpportunity(lead);
+                }
+            } else {
+                console.log('[RADAR_SCAN] No opportunities this cycle');
+            }
+            
+            // Log do scan no Supabase
+            await this.logScanCycle(leads.length, Date.now() - scanStart);
+            
+        } catch (error) {
+            console.error('[RADAR_SCAN] Scan failed:', error.message);
+            await this.logScanCycle(0, Date.now() - scanStart, error.message);
+        }
+    }
+
+    /**
+     * Processa lead e envia telemetria para Supabase
+     */
+    async processAndLogOpportunity(lead) {
+        try {
+            // Telemetria: Log da oportunidade
+            await supabase.from('radar_opportunities').insert({
+                source: 'twitter',
+                handle: lead.author?.username || 'unknown',
+                tweet_id: lead.id,
+                text: lead.text?.substring(0, 500),
+                followers: lead.author?.followers || 0,
+                verified: lead.author?.verified || false,
+                relevance_score: lead.relevance_score,
+                detected_at: new Date().toISOString(),
+                status: 'pending'
+            });
+            
+            console.log(`[OPPORTUNITY_LOGGED] @${lead.author?.username} | Score: ${lead.relevance_score?.toFixed(2)}`);
+            
+        } catch (error) {
+            console.error('[OPPORTUNITY_LOG] Failed:', error.message);
+        }
+    }
+
+    /**
+     * Log de cada ciclo de scan no Supabase
+     */
+    async logScanCycle(leadsFound, durationMs, error = null) {
+        try {
+            await supabase.from('radar_scan_telemetry').insert({
+                block_count: this.blockCount,
+                opportunities_found: leadsFound,
+                total_opportunities: this.opportunitiesFound,
+                scan_duration_ms: durationMs,
+                error: error,
+                uptime_seconds: Math.floor((Date.now() - this.startTime) / 1000),
+                scanned_at: new Date().toISOString()
+            });
+        } catch (e) {
+            // Silencioso — não quebra o scan
+        }
+    }
+
+    /**
+     * Heartbeat visível no Railway Dashboard (a cada 30s)
+     */
+    startHeartbeat() {
+        this.heartbeatInterval = setInterval(() => {
+            const uptime = Math.floor((Date.now() - this.startTime) / 1000);
+            const hours = Math.floor(uptime / 3600);
+            const mins = Math.floor((uptime % 3600) / 60);
+            
+            console.log(`[RADAR_HEARTBEAT] ⏱️ ${hours}h ${mins}m | 🔍 Scans: ${this.blockCount} | 🎯 Opportunities: ${this.opportunitiesFound}`);
+            
+            // Ping no Supabase para manter telemetria viva
+            this.pingTelemetry().catch(() => {});
+            
+        }, 30000); // A cada 30 segundos
+    }
+
+    /**
+     * Ping de telemetria para manter o gráfico ativo
+     */
+    async pingTelemetry() {
+        try {
+            await supabase.from('radar_heartbeat').upsert({
+                id: 'perpetual_radar',
+                last_ping: new Date().toISOString(),
+                uptime_seconds: Math.floor((Date.now() - this.startTime) / 1000),
+                block_count: this.blockCount,
+                opportunities_total: this.opportunitiesFound,
+                status: 'hunting'
+            });
+        } catch (e) {}
+    }
+
+    /**
+     * Para o radar perpétuo
+     */
+    stop() {
+        this.isRunning = false;
+        if (this.heartbeatInterval) {
+            clearInterval(this.heartbeatInterval);
+        }
+        if (this.provider) {
+            this.provider.removeAllListeners('block');
+        }
+        console.log('[PERPETUAL_RADAR] Stopped');
+    }
+
+    /**
+     * Status atual
+     */
+    getStatus() {
+        return {
+            isRunning: this.isRunning,
+            blockCount: this.blockCount,
+            opportunitiesFound: this.opportunitiesFound,
+            uptimeSeconds: this.startTime ? Math.floor((Date.now() - this.startTime) / 1000) : 0
+        };
+    }
+}
+
+// Exporta ambos: RadarShixService legacy + PerpetualRadar novo
+const radarShixService = new RadarShixService();
+const perpetualRadar = new PerpetualRadar();
+
+// Override do start() para usar o perpétuo
+radarShixService.start = function() {
+    return perpetualRadar.start();
+};
+
+radarShixService.stop = function() {
+    return perpetualRadar.stop();
+};
+
+radarShixService.getStatus = function() {
+    return perpetualRadar.getStatus();
+};
+
+module.exports = radarShixService;
