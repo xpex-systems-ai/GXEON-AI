@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Dashboard } from './components/Dashboard';
+import { CommandCenter } from './components/CommandCenter';
 import { MempoolScanner } from './components/MempoolScanner';
 import { FlashloanController } from './components/FlashloanController';
 import { TransactionLog } from './components/TransactionLog';
@@ -26,11 +27,13 @@ const SovereignVaultPanel = () => (
 );
 
 function App() {
-  const [activeView, setActiveView] = useState('nav_mempool');
+  const [activeView, setActiveView] = useState('nav_overview'); // 🚀 PRODUCTION: Command Center
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const renderView = () => {
     switch (activeView) {
+      case 'nav_overview':
+        return <CommandCenter />; // 🚀 PRODUCTION MODE — Live Profit Dashboard
       case 'nav_mempool':
         return <MempoolScanner />;
       case 'nav_atomic':
@@ -44,7 +47,7 @@ function App() {
       case 'nav_network':
         return <RPCHealth />;
       default:
-        return <MempoolScanner />;
+        return <CommandCenter />; // Default to Production Dashboard
     }
   };
 

@@ -166,14 +166,27 @@ contract GXeonSettlement {
         emit ProfitDistributed(operationId, grossProfit, vaultShare, commanderShare, commander);
     }
     
+    // 🌑 GAS OPTIMIZATION CONFIGURATION
+    uint256 public constant MIN_PROFIT_GAS_MULTIPLIER = 5; // Profit must be > 5x gas cost
+    uint256 public constant ESTIMATED_GAS_COST = 0.002 ether; // ~$4-8 on Arbitrum
+    
     /**
-     * @dev Comandante saca seus lucros acumulados em USDC
+     * @dev Comandante saca seus lucros acumulados com otimização de gas
      * @param amount Quantidade a sacar (0 = sacar tudo)
      * @return amountClaimed Quantidade sacada
+     * 
+     * 💰 LÓGICA FINANCEIRA:
+     * - Calcula 30% do Lucro Líquido (commanderShare)
+     * - Só executa se lucro > 5x taxa de gas (gas optimization)
+     * - Transfere para 0x3955d559055DadB7067054cB6E6f974710345224
      */
     function claimCommanderProfits(uint256 amount) external returns (uint256 amountClaimed) {
         uint256 available = commanderRevenue[msg.sender];
         require(available > 0, "GXeon: No revenue to claim");
+        
+        // 🛡️ GAS OPTIMIZATION: Só executa se o lucro for > 5x a taxa de gas
+        uint256 minRequiredProfit = ESTIMATED_GAS_COST * MIN_PROFIT_GAS_MULTIPLIER;
+        require(available >= minRequiredProfit, "GXeon: Profit below gas threshold (need 5x gas cost)");
         
         if (amount == 0 || amount > available) {
             amount = available;
@@ -182,13 +195,29 @@ contract GXeonSettlement {
         commanderRevenue[msg.sender] -= amount;
         totalClaimed[msg.sender] += amount;
         
-        // Transfer para o comandante
+        // Transfer para o comandante (0x3955d559055DadB7067054cB6E6f974710345224)
         (bool success, ) = payable(msg.sender).call{value: amount}("");
         require(success, "GXeon: Transfer failed");
         
         emit CommanderRevenueClaimed(msg.sender, amount, block.timestamp);
         
         return amount;
+    }
+    
+    /**
+     * @dev Verifica se o claim está otimizado para gas (lucro > 5x gas)
+     * @param commander Endereço do comandante
+     * @return canClaim Se pode sacar
+     * @return profitToGasRatio Razão lucro/gas (ideal > 5)
+     */
+    function canClaimOptimized(address commander) external view returns (bool canClaim, uint256 profitToGasRatio) {
+        uint256 available = commanderRevenue[commander];
+        if (available == 0) return (false, 0);
+        
+        uint256 minRequired = ESTIMATED_GAS_COST * MIN_PROFIT_GAS_MULTIPLIER;
+        uint256 ratio = available / ESTIMATED_GAS_COST;
+        
+        return (available >= minRequired, ratio);
     }
     
     /**

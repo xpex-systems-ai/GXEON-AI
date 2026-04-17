@@ -1,9 +1,11 @@
 import { getAuthToken as getSupabaseAuthToken } from '../lib/supabase';
 
+// 🌑 GXEON SOVEREIGN API — Production URL: https://gxeon-ai.xmentex2.replit.app
 const API_URL = (import.meta as any).env?.VITE_API_BASE_URL || 
                 (import.meta as any).env?.VITE_API_URL || 
-                'http://localhost:3000';
+                'https://gxeon-ai.xmentex2.replit.app';
 
+// 🔑 System API Key — Configurado via env var no Replit
 const SYSTEM_API_KEY = (import.meta as any).env?.VITE_SYSTEM_API_KEY || '';
 
 // Supabase Auth helper - gets current session token if available

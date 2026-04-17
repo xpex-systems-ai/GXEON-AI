@@ -22,7 +22,8 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         '/api': {
-          target: env.VITE_API_URL || env.VITE_API_BASE_URL || 'http://localhost:3000',
+          // 🌑 GXEON SOVEREIGN — Production API: https://gxeon-ai.xmentex2.replit.app
+          target: env.VITE_API_URL || env.VITE_API_BASE_URL || 'https://gxeon-ai.xmentex2.replit.app',
           changeOrigin: true,
         },
         '/rpc': {

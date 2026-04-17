@@ -1,6 +1,10 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# 🌑 GXEON AI — REPLIT CONFIGURATION
-# 1-Click Deploy Configuration
+# 🌑 GXEON AI — SUPREMO AUTO-DEPLOY CONFIGURATION v2.1.0
+# 1-Click → Import → Auto-Config → Monetize → Profit
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🚀 RUNTIME CONFIGURATION
 # ═══════════════════════════════════════════════════════════════════════════════
 
 # Entry point when "Run" button is clicked
@@ -12,60 +16,116 @@ deploy = "npm run deploy"
 # Language and environment
 language = "nodejs"
 
-# Ports to expose
-[ports]
-3000 = "Backend API Server"
-3002 = "Dashboard Frontend"
-5173 = "Vite Dev Server"
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🌐 PORTS (Auto-exposed)
+# ═══════════════════════════════════════════════════════════════════════════════
 
-# Environment variables (will be auto-injected from Replit Secrets)
+[ports]
+3000 = "🌑 GXEON API Server — Billing Active"
+3002 = "📊 Cyber-Gold Dashboard"
+5173 = "⚡ Vite Dev Server"
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🔐 AUTO-POPULATED SECRETS (Don't edit here — use Replit Secrets tab)
+# ═══════════════════════════════════════════════════════════════════════════════
+
 [env]
 NODE_ENV = "production"
 PORT = "3000"
+GXEON_MODE = "sovereign"
+BILLING_ENABLED = "true"
+RADAR_ENABLED = "true"
+GUARDIAN_ENABLED = "true"
 
-# Nix packages to install
+# ═══════════════════════════════════════════════════════════════════════════════
+# 📦 NIX PACKAGES
+# ═══════════════════════════════════════════════════════════════════════════════
+
 [nix]
-# Node.js 20 LTS
 packages = [
   "nodejs-20_x",
   "nodePackages.npm",
   "nodePackages.pnpm",
-  "git"
+  "git",
+  "postgresql"
 ]
 
-# Lifecycle hooks
-[lifecycle]
-# Runs on every code change
-onBoot = "npm install"
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🔄 LIFECYCLE HOOKS
+# ═══════════════════════════════════════════════════════════════════════════════
 
-# Runs on workspace start
-onStart = "echo '🌑 GXEON AI Ready for Autonomous Execution'"
+[lifecycle]
+# Auto-install on boot
+onBoot = """
+echo '🌑 GXEON SOVEREIGN v2.1.0 Initializing...'
+npm install
+cd dashboard && npm install && npm run build
+cd ..
+echo '✅ Build Complete — Ready for Autonomous Execution'
+"""
+
+# Startup message
+onStart = """
+echo ''
+echo '╔═══════════════════════════════════════════════════════════════╗'
+echo '║              🌑 GXEON AI — SUPREMO GRID v2.1.0                ║'
+echo '╠═══════════════════════════════════════════════════════════════╣'
+echo '║  Status: READY FOR MONETIZATION                               ║'
+echo '║  Billing: 0.05 credits/radar call — ACTIVE                    ║'
+echo '║  Dashboard: Cyber-Gold UI — Real-time Stats                   ║'
+echo '║  Flashloans: M2M Atomic Execution — ARMED                     ║'
+echo '╚═══════════════════════════════════════════════════════════════╝'
+echo ''
+echo '💰 MONETIZATION ACTIVE — Sistema pronto para faturar!'
+echo '🚀 Click ▶ RUN to start the Sovereign Grid'
+"""
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# 📋 REPLIT SETUP INSTRUCTIONS:
+# 💰 MONETIZATION CONFIGURATION (AUTO-CONFIGURED)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[monetization]
+enabled = true
+currency = "credits"
+
+[monetization.rates]
+radar_call = 0.05
+llm_call = 0.001
+agent_execution = 0.005
+onchain_operation = 0.015
+
+[monetization.tiers]
+free = { credits = 100, price = 0 }
+pro = { credits = 1000, price = 29.99 }
+enterprise = { credits = 10000, price = 199.99 }
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ⚡ FEATURE FLAGS
+# ═══════════════════════════════════════════════════════════════════════════════
+
+[features]
+flashloans = { enabled = true, networks = ["arbitrum", "ethereum", "polygon"] }
+radar = { enabled = true, interval = 300000 }
+guardian = { enabled = true, autoHeal = true }
+dashboard = { enabled = true, port = 3002 }
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# 📋 QUICK SETUP (3 STEPS)
+# ═══════════════════════════════════════════════════════════════════════════════
+# 
+# STEP 1: Import
+#    → This page! Already have the URL? Just click [Import]
+# 
+# STEP 2: Secrets (Auto-configured from replit-supremo.json)
+#    → Click 'Secrets' tab → All values are pre-filled
+#    → Just click [Add] for each secret
+# 
+# STEP 3: RUN & PROFIT
+#    → Click ▶ RUN
+#    → Dashboard opens automatically
+#    → Billing is LIVE — every API call = $$$
 #
-# 1. Import from GitHub:
-#    - Click '+' → 'Import from GitHub'
-#    - Paste: https://github.com/xpex-systems-ai/GXEON-AI
-#
-# 2. Configure Secrets (CRITICAL):
-#    - Click 'Secrets' (lock icon) in left sidebar
-#    - Add ALL secrets from config/secrets-mapping.json:
-#      • SUPABASE_URL
-#      • SUPABASE_SERVICE_ROLE_KEY
-#      • DATABASE_URL
-#      • PRIVATE_KEY
-#      • ARBITRUM_RPC_URL
-#      • ETHEREUM_RPC_URL
-#      • POLYGON_RPC_URL
-#      • FLASHBOTS_RELAY_SIGNING_KEY
-#      • OFA_API_KEY_0X
-#      • OFA_API_KEY_1INCH
-#
-# 3. Click "Run" button — GXEON will start automatically
-#
-# 4. Open in browser:
-#    - Webview will show automatically
-#    - Or visit the generated URL
-#
+# ═══════════════════════════════════════════════════════════════════════════════
+# 🌐 PRODUCTION URL: https://gxeon-ai.xmentex2.replit.app
+# 🔗 GITHUB: https://github.com/xpex-systems-ai/GXEON-AI
 # ═══════════════════════════════════════════════════════════════════════════════

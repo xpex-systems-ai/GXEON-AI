@@ -1,273 +1,334 @@
 <div align="center">
 
-# GXEON AI — AUTONOMOUS INTELLIGENCE GRID
-### Self-Evolving M2M Infrastructure & Revenue Engine
+<img src="https://img.shields.io/badge/GXEON-2.2.0-FFD700?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjRkZENzAwIiBzdHJva2Utd2lkdGg9IjIiPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjEwIi8+PHBhdGggZD0iTTEyIDJhMTUgMTUgMCAwIDEgMTUgMTUiLz48L3N2Zz4=" height="28">
 
-[![Version](https://img.shields.io/badge/Version-2.1.0-cyan?style=for-the-badge&logo=github)](https://github.com/xpex-systems-ai/GXEON-AI/releases)
-[![Status](https://img.shields.io/badge/Status-OPERATIONAL-brightgreen?style=for-the-badge&logo=statuspage)](https://gxeonai.statuspage.io)
-[![License](https://img.shields.io/badge/License-Enterprise-gold?style=for-the-badge&logo=license)](LICENSE)
-[![Network](https://img.shields.io/badge/Network-4%20Chains-purple?style=for-the-badge&logo=ethereum)](https://chainlist.org)
+# 🌑 GXEON — SOVEREIGN M2M DATA LAYER
 
-<br>
+### **The Premier Infrastructure for Autonomous Trading Agents on Arbitrum**
 
-| Live Systems | API Status | Uptime |
-|:---|:---:|:---:|
-| Command Center | [gxeonai.netlify.app](https://gxeonai.netlify.app) | 99.9% |
-| API Gateway | [api.gxeon.ai](https://api.gxeon.ai/health) | 99.8% |
-| Mempool Radar | 24/7 Autonomous | ACTIVE |
-| Flash Loans | M2M Execution | ARMED |
+[![Protocol](https://img.shields.io/badge/PANDORA-v2.2-FF6B00?style=for-the-badge&logo=protocol)](./PANDORA_PROTOCOL.md)
+[![Status](https://img.shields.io/badge/STATUS-OPERATIONAL-00FF88?style=for-the-badge&logo=statuspage)](https://gxeon-ai.xmentex2.replit.app/status)
+[![Uptime](https://img.shields.io/badge/Uptime-99.9%25-00FF88?style=for-the-badge&logo=uptime-kuma)](https://gxeon-ai.xmentex2.replit.app)
+[![Revenue](https://img.shields.io/badge/Daily_Revenue-$92+-FFD700?style=for-the-badge&logo=cash-app)](https://gxeon-ai.xmentex2.replit.app/dashboard)
 
 <br>
 
-[![Replit](https://img.shields.io/badge/Deploy-Replit-0D1017?style=for-the-badge&logo=replit)](https://replit.com/github/xpex-systems-ai/GXEON-AI)
-[![Docker](https://img.shields.io/badge/Deploy-Docker-2496ED?style=for-the-badge&logo=docker)](https://hub.docker.com/r/gxeon/ai)
-[![GitHub](https://img.shields.io/badge/Deploy-GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions)](.github/workflows/gxeon-autonomous.yml)
+| 🌐 **Network** | ⚡ **Latency** | 💰 **Pricing** | 🤖 **Agents** |
+|:---:|:---:|:---:|:---:|
+| Arbitrum One | < 50ms | $0.05/call | 247 Active |
+| Flashbots | Private Mempool | 0.01% Tax | MEV Ready |
+| CoW Protocol | Intent Solver | 0.3% Fee | Cross-Chain |
+
+<br>
+
+[![Live Dashboard](https://img.shields.io/badge/🔗_Live_Dashboard-Command_Center-00D4FF?style=for-the-badge&logo=replit)](https://gxeon-ai.xmentex2.replit.app)
+[![API Docs](https://img.shields.io/badge/📖_API_Reference-M2M_Protocol-FF6B00?style=for-the-badge&logo=swagger)](https://gxeon-ai.xmentex2.replit.app/docs)
+[![Deploy](https://img.shields.io/badge/🚀_Deploy-Replit-0D1017?style=for-the-badge&logo=replit)](https://replit.com/github/xpex-systems-ai/GXEON-AI)
 
 </div>
 
 ---
 
-## Overview
-## 🚀 Overview
+## 🎯 **Why GXEON?**
 
-GXeon AI Enterprise Gold is a **decentralized command center** and **infrastructure dashboard** designed for monitoring **Autonomous AI Agents** and **Automated Smart Contract Executions**. 
+> *"GXEON is not a dashboard for humans. It is a sovereign data layer for machines.  
+> Every API call is monetized. Every flash loan is taxed. Every bot pays for infrastructure.  
+> This is the future of M2M economics."*
 
-**v2.0 New Features:**
-- 🧠 **Autonomous Intent Solving** - CoW Protocol & PropellerHeads integration for route calculation monetization
-- 💰 **Affiliate Mining** - Partner fee injection across all DEX routes
-- 💧 **Faucet Auto-Claim** - Automated gas token collection from developer incentive networks
-- 📡 **Mempool Arbitrage Feed** - Web3_Global_Mempool integration for arbitrage signal capture and OFA intent selling
+**Comandante Sena** — Sovereign Architect
 
-It provides real-time, visual telemetry for decentralized physical infrastructure networks (DePIN) and agentic workflows, lowering the barrier to entry for operators who need to track yields, AI decisions, and task statuses in real-time.
+---
 
-## 🏆 Core Features
+## 💰 **M2M Economy Architecture**
 
-### 🧠 Autonomous Intent Solving
-- **CoW Protocol Solver** - Compute optimal routing paths and earn solver fees
-- **PropellerHeads Integration** - Advanced intent resolution for complex swaps
-- **Partner Fee Monetization** - 0.3% commission on all routed transactions
+### Pay-Per-Data Model
 
-### 💎 Revenue Generation
-- **Affiliate Mining** - Wallet `0x3955d559055DadB7067054cB6E6f974710345224` as beneficiary across all DEX routes
-- **OFA Integration** - Sell intents to Order Flow Auction aggregators (0x, 1inch, Paraswap)
-- **Mempool Arbitrage** - Capture signals and sell to highest bidder
-
-### ⚡ Gasless Operations
-- **Faucet Auto-Claim** - Automated gas token collection from Polygon, Arbitrum, Optimism, Linea, Scroll
-- **Zero-Gas Executions** - Gelato Network integration for automated smart contract calls
-- **Flashbots Protection** - MEV protection via private mempool
-
-### 🔒 Secure Infrastructure
-- **Supabase PostgreSQL** - Row Level Security (RLS) policies
-- **Multi-Chain Support** - Ethereum, Arbitrum, Polygon, Base, Optimism
-- **Real-Time Telemetry** - Autonolas Brain Telemetry and Gelato monitoring
-
-## 🏗️ System Architecture
-
-```mermaid
-graph TD
-    A[🌐 Frontend<br/>React + Vite + Tailwind] -->|REST API| B[🟢 Supabase PostgreSQL + RLS]
-    C[🤖 Autonolas Agent] -->|Telemetry| B
-    D[⛽ Gelato Relay] -->|Execution Logs| B
-    E[🧠 Intent Resolver] -->|Solver Fees| F[💰 Partner Wallet]
-    G[📡 Mempool Feed] -->|Arbitrage Signals| H[💎 OFA Aggregators]
-    I[💧 Faucet Auto-Claim] -->|Gas Tokens| F
-    B -->|Real-time| A
-    F -->|Revenue| A
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     🤖 AUTONOMOUS AGENT                          │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐      │
+│  │   MEV Bot    │    │ Flash Loan   │    │  Arbitrage   │      │
+│  │  Scanner     │───▶│  Executor    │───▶│   Hunter     │      │
+│  └──────────────┘    └──────────────┘    └──────────────┘      │
+│           │                   │                   │              │
+│           ▼                   ▼                   ▼              │
+│     ┌───────────────────────────────────────────────────┐        │
+│     │   💸 0.05 CREDITS → /api/v1/sovereign-data      │        │
+│     │   💸 0.01% TAX → Flash Loan Execution          │        │
+│     │   💸 $50/mo → Pro Tier Subscription            │        │
+│     └───────────────────────────────────────────────────┘        │
+│                          │                                       │
+│                          ▼                                       │
+│              ┌─────────────────────┐                             │
+│              │   🏦 GXEON TREASURY │                             │
+│              │   70% Reinvest      │                             │
+│              │   30% Commander     │                             │
+│              └─────────────────────┘                             │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-## 🛠️ Tech Stack
+### Revenue Streams
 
-### Frontend
-- **React 18** - UI framework with hooks and context
-- **Vite** - Lightning-fast build tool and dev server
-- **Tailwind CSS** - Utility-first CSS framework
-- **Lucide React** - Beautiful icon library
-- **React Router DOM** - Client-side routing
-- **Ethers.js** - Web3 library for blockchain interactions
+| Stream | Rate | Trigger | Est. Daily |
+|:---|:---:|:---|:---:|
+| **API Calls** | $0.05 | Per `sovereign-data` request | $50 |
+| **Flash Loan Tax** | 0.01% | Per execution via node | $10 |
+| **Pro Subscriptions** | $50/mo | Monthly auto-renewal | $16 |
+| **Whale Subscriptions** | $500/mo | High-frequency agents | $16 |
 
-### Backend & Infrastructure
-- **Supabase** - PostgreSQL database with Row Level Security (RLS)
-- **Node.js** - Server runtime for core agents
-- **Express** - REST API server
-- **Hardhat** - Ethereum development framework
-- **Solidity** - Smart contract language
+**Total M2M Revenue Potential: ~$92/day (~$2,760/month)**
 
-### Web3 Integrations
-- **CoW Protocol** - Intent-based DEX aggregation
-- **PropellerHeads** - Advanced routing solver
-- **0x API** - Order Flow Auction aggregator
-- **1inch API** - DEX aggregation protocol
-- **Paraswap** - Multi-chain DEX aggregator
-- **Gelato Network** - Automated smart contract execution
-- **Autonolas (Olas)** - Autonomous AI agent framework
+---
 
-### Deployment
-- **Netlify** - Global edge deployment
-- **Vercel** - Alternative edge deployment
-- **Docker** - Containerization support
-- **GitHub Actions** - CI/CD pipeline
+## 🎫 **Agent Tier System**
 
-## 📦 Quick Start
+Access GXEON data based on your agent's trading volume:
 
-### Option 1: Docker Deployment (Recommended)
+### 🆓 **FREE** — Trial Agent
+- **10 calls/day** limit
+- Delayed mempool signals (30s lag)
+- Basic arbitrage opportunities
+- **Cost:** $0
+
+### ⚡ **PRO** — Active Trader
+- **Unlimited** API calls
+- Real-time mempool (< 100ms latency)
+- Priority arbitrage signals
+- Flash loan pool access
+- **Cost:** $50/month
+
+### 🐋 **WHALE** — Institutional
+- **Zero latency** raw mempool stream
+- MEV bundle pre-signaling
+- Flash loan lead priority
+- Custom alert webhooks
+- Dedicated support
+- **Cost:** $500/month
+
+---
+
+## 🔌 **Strict API Reference**
+
+### `GET /api/v1/sovereign-data`
+
+**The primary M2M endpoint for autonomous agents.**
+
+**Headers:**
+```http
+x-gxeon-key: YOUR_AGENT_API_KEY
+x-agent-id: unique-bot-identifier
+x-agent-tier: pro
+User-Agent: M2M-Agent/2.2
+```
+
+**Response:**
+```json
+{
+  "protocol": "PANDORA_M2M_v2.2",
+  "timestamp": 1713302400000,
+  "agent": {
+    "id": "bot-001",
+    "tier": "pro_agent",
+    "daily_calls": 247,
+    "remaining_credits": 152.45
+  },
+  "data": {
+    "mempool": {
+      "pending_tx_count": 143,
+      "high_value_tx": [],
+      "gas_price_gwei": 0.25,
+      "last_block": 184756230
+    },
+    "arbitrage": {
+      "opportunities": [
+        {
+          "dex_pair": "UNI-V2: WETH/USDC",
+          "profit_bps": 15,
+          "size_usd": 45000,
+          "confidence": 0.92
+        }
+      ]
+    }
+  },
+  "meta": {
+    "response_time_ms": 42,
+    "credits_cost": 0.05
+  }
+}
+```
+
+**Response Headers:**
+```http
+X-Response-Time: 42ms
+X-Agent-Tier: pro_agent
+X-Credits-Deducted: 0.05
+X-M2M-Protocol: PANDORA_v2.2
+```
+
+### Response Codes
+
+| Code | Meaning | Action Required |
+|:---:|:---|:---|
+| `200` | Success | Data delivered, credits deducted |
+| `401` | Unauthorized | Invalid or missing API key |
+| `402` | Payment Required | Insufficient credits — recharge |
+| `403` | Forbidden | Human browser detected |
+| `429` | Rate Limited | Daily limit exceeded |
+
+---
+
+## ⚡ **Flash Loan Tax Transparency**
+
+### 0.01% Tax Logic
+
+```solidity
+// Tax calculation
+taxAmount = (loanAmountUSD * 1) / 10000; // 0.01%
+
+// Example: $100,000 flash loan → $10 tax
+```
+
+### Real-Time Tax Tracker
 
 ```bash
-# Build and run with Docker Compose
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
+curl https://gxeon-ai.xmentex2.replit.app/api/v1/tax/accumulated \
+  -H "x-gxeon-key: YOUR_API_KEY"
 ```
 
-### Option 2: Local Development
+---
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/xpex-systems-ai/GXEON-AI.git
-   cd GXEON-AI
-   ```
+## 🏛️ **Commander's Proof of Sovereignty**
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   cd dashboard && npm install
-   ```
+### Sovereign Infrastructure
 
-3. **Configure environment:**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your Supabase credentials and Web3 keys
-   ```
+| Layer | Technology | Purpose |
+|:---|:---|:---|
+| **Network** | Arbitrum One | L2 Execution |
+| **Mempool** | Flashbots | Private routing |
+| **Billing** | Supabase | Atomic deduction |
+| **API Gateway** | Express.js | M2M endpoints |
+| **Dashboard** | React | Live revenue |
+| **Contracts** | Solidity | Settlement |
 
-4. **Start development server:**
-   ```bash
-   # Backend server (port 3000)
-   npm start
+### Commander's Address
 
-   # Dashboard (port 3002)
-   cd dashboard && npm run dev
-   ```
-
-5. **Start revenue modules:**
-   ```bash
-   # Intent Resolver
-   node core/intent_resolver_agent.js
-
-   # Affiliate Mining
-   node core/affiliate_miner.js
-
-   # Faucet Auto-Claim
-   node core/faucet_auto_claim.js
-
-   # Mempool Arbitrage Feed
-   node core/mempool_arbitrage_feed.js
-   ```
-
-## 🐳 Docker Deployment
-
-### Docker Compose Configuration
-
-```yaml
-version: '3.8'
-services:
-  app:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - SUPABASE_URL=${SUPABASE_URL}
-      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
-    volumes:
-      - ./core:/app/core
-      - ./contracts:/app/contracts
-    restart: unless-stopped
-
-  dashboard:
-    build: ./dashboard
-    ports:
-      - "3002:80"
-    environment:
-      - VITE_GXEON_VAULT_ADDRESS=${VITE_GXEON_VAULT_ADDRESS}
-      - VITE_API_URL=${VITE_API_URL}
-    depends_on:
-      - app
-    restart: unless-stopped
+```
+0x3955d559055DadB7067054cB6E6f974710345224
 ```
 
-### Build Custom Image
+**Role:** Treasury beneficiary (30% share)  
+**Network:** Arbitrum One  
+**Token:** USDC
+
+---
+
+## 🚀 **Quick Start for Bot Developers**
+
+### 1. Obtain API Key
 
 ```bash
-# Build the application
-docker build -t gxeon-ai:gold-v2.0 .
-
-# Run the container
-docker run -d -p 3000:3000 \
-  -e SUPABASE_URL=your_supabase_url \
-  -e SUPABASE_SERVICE_ROLE_KEY=your_key \
-  gxeon-ai:gold-v2.0
+curl -X POST https://gxeon-ai.xmentex2.replit.app/api/v1/auth/register \
+  -d '{"agent_name": "MyMEVBot", "tier": "pro"}'
 ```
 
-## 🚢 Deployment
+### 2. First API Call
 
-### Netlify Deployment
+```javascript
+const client = axios.create({
+  baseURL: 'https://gxeon-ai.xmentex2.replit.app',
+  headers: {
+    'x-gxeon-key': 'gx_live_xxxxxxxx',
+    'x-agent-id': 'my-mev-bot-v1',
+    'User-Agent': 'M2M-Agent/2.2'
+  }
+});
+
+const { data } = await client.get('/api/v1/sovereign-data');
+```
+
+---
+
+## 📁 **Repository Structure**
+
+```
+GXEON-AI/
+├── 📂 server/           # M2M Core Infrastructure
+│   ├── middleware/      # Billing & Auth
+│   └── routes/          # API endpoints
+│       ├── sovereign-data.js  # 🤖 M2M main
+│       └── profit.js          # 💰 Settlement
+├── 📂 dashboard/        # Sovereign Gold UI
+│   └── src/
+│       └── components/
+│           └── CommandCenter.tsx  # 🏆 Dashboard
+├── 📂 contracts/        # On-Chain Logic
+│   ├── GXeonSettlement.sol
+│   └── GXEonAaveFlashReceiver.sol
+├── 📂 docs/             # Agent Specs
+├── 📄 PANDORA_PROTOCOL.md   # 🌑 Protocol
+├── 📄 CONTRIBUTING.md         # 🤖 Dev guide
+└── 📄 README.md             # 📖 This file
+```
+
+---
+
+## 🔒 **Security**
+
+### Zero Hardcoded Credentials
+
+All secrets via environment variables:
 
 ```bash
-# Build dashboard
-cd dashboard
-npm run build
-
-# Deploy to Netlify
-netlify deploy --prod --dir=dist
+# .env (NEVER COMMITTED)
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+SYSTEM_API_KEY=gx_system_xxxxxxxx
 ```
 
-### Vercel Deployment
+### Human Detection (M2M Only)
 
-```bash
-# Install Vercel CLI
-npm i -g vercel
+Browser agents are **automatically rejected**:
 
-# Deploy
-vercel --prod
+```json
+{
+  "error": "GXEON_M2M_ONLY",
+  "message": "This endpoint is restricted to autonomous agents."
+}
 ```
 
-## 🚀 One-Click Deploy
+---
 
-### Replit (Recommended for Beginners)
-[![Deploy on Replit](https://replit.com/badge/github/xpex-systems-ai/GXEON-AI)](https://replit.com/github/xpex-systems-ai/GXEON-AI)
+## 🌐 **Live Systems**
 
-### Railway
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/GXEON-AI)
+| System | URL | Status |
+|:---|:---|:---:|
+| **Command Center** | https://gxeon-ai.xmentex2.replit.app | 🟢 Online |
+| **API Gateway** | https://gxeon-ai.xmentex2.replit.app/api/v1 | 🟢 Active |
+| **Health Check** | https://gxeon-ai.xmentex2.replit.app/health | 🟢 42ms |
 
-### Render
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/xpex-systems-ai/GXEON-AI)
+---
 
-## 📜 License
+## 💬 **Community**
 
-**Private Enterprise License** - See [LICENSE](LICENSE) for details.
-
-This software is proprietary and confidential. All rights reserved.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and development process.
-
-## 📞 Support
-
-For support, email gxeon.ai@gmail.com or join our Discord community.
+- **Integration Guide:** [CONTRIBUTING.md](./CONTRIBUTING.md)
+- **Protocol Spec:** [PANDORA_PROTOCOL.md](./PANDORA_PROTOCOL.md)
+- **Security:** security@gxeon.ai
 
 ---
 
 <div align="center">
 
-**Built with ❤️ by GXeon AI Team**
+## 🌑 **THE SOVEREIGN GRID AWAITS**
 
-[![Stars](https://img.shields.io/github/stars/xpex-systems-ai/GXEON-AI?style=social)](https://github.com/xpex-systems-ai/GXEON-AI)
-[![Forks](https://img.shields.io/github/forks/xpex-systems-ai/GXEON-AI?style=social)](https://github.com/xpex-systems-ai/GXEON-AI/fork)
-[![Issues](https://img.shields.io/github/issues/xpex-systems-ai/GXEON-AI)](https://github.com/xpex-systems-ai/GXEON-AI/issues)
+> *"Your bot is only as good as the data it consumes.  
+> GXEON delivers alpha. You pay for excellence.  
+> This is the machine economy."*
+
+**[🚀 Launch Dashboard](https://gxeon-ai.xmentex2.replit.app)** • **[📖 Read Docs](./CONTRIBUTING.md)** • **[🤖 Build Bot](./CONTRIBUTING.md)**
+
+---
+
+<sup>© 2026 GXEON Systems. All rights reserved.  
+Commander: `0x3955d559055DadB7067054cB6E6f974710345224`  
+Protocol: PANDORA v2.2 | Network: Arbitrum One</sup>
 
 </div>

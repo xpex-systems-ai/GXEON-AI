@@ -101,9 +101,11 @@ app.use('/api/task-engine', gxeonEnforcer({ task_pipeline: 0.002 }), taskEngineR
 app.use('/api/executor', gxeonEnforcer({ agent_execution: 0.003 }), executorRoutes);
 app.use('/api/edge', gxeonEnforcer({ edge_function: 0.001 }), require('./edge-functions'));
 app.use('/api/v1/radar', gxeonEnforcer({ radar_call: 0.05 }), require('./routes/radar'));
+app.use('/api/v1/sovereign-data', require('./routes/sovereign-data')); // 🌑 PANDORA PROTOCOL — M2M Only
 app.use('/v1/memory', gxeonRateLimiter, require('./routes/memory'));
 app.use('/v1/plugins/execute', gxeonRateLimiter, gxeonEnforcer({ agent_execution: 0.005 }), require('./routes/agents_protected'));
 app.use('/billing', gxeonAuthOnly, require('./routes/billing'));
+app.use('/api/v1/profit', gxeonAuthOnly, require('./routes/profit'));
 
 // ==================== AUTH-ONLY ROUTES ====================
 app.use('/api/config', gxeonAuthOnly, configRoute);

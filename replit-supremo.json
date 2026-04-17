@@ -1,0 +1,161 @@
+{
+  "_comment": "🌑 GXEON AI — SUPREMO CONFIGURATION FOR REPLIT AUTO-DEPLOY",
+  "version": "2.1.0-sovereign",
+  "name": "GXEON-AI",
+  "description": "Autonomous M2M Trading Intelligence with Atomic Flashloans",
+  
+  "import": {
+    "source": "github",
+    "url": "https://github.com/xpex-systems-ai/GXEON-AI",
+    "branch": "main",
+    "autoDeploy": true
+  },
+
+  "runtime": {
+    "language": "nodejs",
+    "version": "20",
+    "entrypoint": "server/index.js",
+    "buildCommand": "npm install && cd dashboard && npm install && npm run build",
+    "startCommand": "npm start",
+    "deployCommand": "npm run deploy"
+  },
+
+  "ports": [
+    { "port": 3000, "description": "GXEON API Server", "external": true },
+    { "port": 3002, "description": "Dashboard Frontend", "external": true },
+    { "port": 5173, "description": "Vite Dev Server", "external": false }
+  ],
+
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "3000",
+    "GXEON_MODE": "sovereign",
+    "BILLING_ENABLED": "true",
+    "RADAR_ENABLED": "true",
+    "GUARDIAN_ENABLED": "true"
+  },
+
+  "secrets": {
+    "required": [
+      {
+        "key": "SUPABASE_PROJECT_URL",
+        "description": "Supabase Project URL",
+        "value": "https://telxvphgrsvsnxvmjkce.supabase.co",
+        "autoFill": true
+      },
+      {
+        "key": "SUPABASE_SERVICE_ROLE_KEY",
+        "description": "Supabase Service Role JWT",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbHh2cGhncnN2c254dm1qa2NlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDUyNjMzMSwiZXhwIjoyMDkwMTAyMzMxfQ.297P1WLrSDqiRWtyUk5OuLoLvAU99zy53_HodleZQkA",
+        "autoFill": true
+      },
+      {
+        "key": "SYSTEM_ADMIN_ID",
+        "description": "System Administrator ID",
+        "value": "gxeon-admin",
+        "autoFill": true
+      },
+      {
+        "key": "SYSTEM_API_KEY",
+        "description": "API Key for billing validation",
+        "value": "api_teste_faturamento",
+        "autoFill": true
+      },
+      {
+        "key": "OPENROUTER_API_KEY",
+        "description": "OpenRouter API for AI models",
+        "value": "sk-or-v1-...",
+        "autoFill": false
+      }
+    ],
+    "optional": [
+      "PRIVATE_KEY",
+      "CONTRACT_ADDRESS",
+      "RPC_URL",
+      "FLASHBOTS_RELAY_SIGNING_KEY"
+    ]
+  },
+
+  "billing": {
+    "enabled": true,
+    "model": "per-call",
+    "rates": {
+      "radar_call": 0.05,
+      "llm_call": 0.001,
+      "agent_execution": 0.005,
+      "onchain_operation": 0.015
+    },
+    "currency": "credits",
+    "table": "gxeon_billing_transactions"
+  },
+
+  "features": {
+    "flashloans": {
+      "enabled": true,
+      "networks": ["arbitrum", "ethereum", "polygon"],
+      "minProfit": 0.001
+    },
+    "radar": {
+      "enabled": true,
+      "interval": 300000,
+      "sources": ["mempool", "twitter", "discord"]
+    },
+    "guardian": {
+      "enabled": true,
+      "monitoringInterval": 60000,
+      "autoHeal": true
+    }
+  },
+
+  "deploy": {
+    "autoDeploy": true,
+    "domain": "gxeon-ai",
+    "healthCheck": "/health",
+    "envVars": true,
+    "secrets": true
+  },
+
+  "dashboard": {
+    "enabled": true,
+    "build": "cd dashboard && npm run build",
+    "serve": "cd dashboard && npm run preview",
+    "port": 3002
+  },
+
+  "monetization": {
+    "enabled": true,
+    "strategy": "usage-based",
+    "tiers": [
+      { "name": "Free", "credits": 100, "price": 0 },
+      { "name": "Pro", "credits": 1000, "price": 29.99 },
+      { "name": "Enterprise", "credits": 10000, "price": 199.99 }
+    ]
+  },
+
+  "logs": {
+    "level": "info",
+    "destinations": ["console", "supabase"]
+  },
+
+  "startup": {
+    "message": "🌑 GXEON SOVEREIGN v2.1.0 — Autonomous Trading Intelligence Online",
+    "banner": true,
+    "asciiArt": true
+  },
+
+  "_instructions": {
+    "setup": [
+      "1. Import this project in Replit from GitHub",
+      "2. Secrets will auto-populate from this JSON",
+      "3. Click ▶ RUN to start GXEON",
+      "4. Dashboard opens automatically",
+      "5. Billing is ACTIVE — 0.05 credits per radar call"
+    ],
+    "verification": [
+      "Check /health endpoint",
+      "Verify Supabase connection in logs",
+      "Test billing with /api/v1/radar/opportunities",
+      "Dashboard shows real-time revenue"
+    ]
+  }
+}

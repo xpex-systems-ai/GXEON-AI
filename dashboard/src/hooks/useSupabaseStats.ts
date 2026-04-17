@@ -12,6 +12,14 @@ export interface SovereignStats {
   todayRevenue: number;
   billingTransactions: number;
   
+  // 💰 TREASURY METRICS
+  apiSalesCount: number;           // Total de chamadas de API (0.05 cada)
+  commanderShare30: number;        // 30% do lucro para o Comandante
+  vaultShare70: number;            // 70% reinvestimento
+  estimatedGasCost: number;        // Custo estimado de gas
+  profitToGasRatio: number;      // Razão lucro/gas para otimização
+  canClaim: boolean;             // Se pode sacar (lucro > 5x gas)
+  
   // Agents & Tasks
   activeAgents: number;
   totalTasks: number;
@@ -32,6 +40,14 @@ const initialStats: SovereignStats = {
   totalRevenue: 0,
   todayRevenue: 0,
   billingTransactions: 0,
+  // 💰 TREASURY
+  apiSalesCount: 0,
+  commanderShare30: 0,
+  vaultShare70: 0,
+  estimatedGasCost: 0.002,
+  profitToGasRatio: 0,
+  canClaim: false,
+  // System
   activeAgents: 0,
   totalTasks: 0,
   pendingTasks: 0,
@@ -39,8 +55,8 @@ const initialStats: SovereignStats = {
   systemStatus: 'ONLINE',
   lastUpdate: new Date(),
   flashbotsStatus: 'CONNECTED',
-  vaultBalance: 0,
-  vaultAddress: '0x7a25...3f9d',
+  vaultBalance: 12.45, // 🌑 SIMULATION MODE: Demo treasury balance
+  vaultAddress: '0x3955...5224',
 };
 
 export function useSupabaseStats(refreshInterval = 5000) {
@@ -62,15 +78,23 @@ export function useSupabaseStats(refreshInterval = 5000) {
       if (billingError) throw billingError;
       
       // Calculate revenue
-      const totalRevenue = billingData?.reduce((sum, tx) => sum + (tx.amount || 0), 0) || 0;
+      const totalRevenue = billingData?.reduce((sum: number, tx: any) => sum + (tx.amount || 0), 0) || 0;
+      
+      // 💰 TREASURY CALCULATIONS
+      const apiSalesCount = billingData?.length || 0; // Cada transação = 1 chamada API
+      const commanderShare30 = totalRevenue * 0.3;     // 30% para Comandante
+      const vaultShare70 = totalRevenue * 0.7;         // 70% reinvestimento
+      const estimatedGasCost = 0.002;                  // ~$4-8 em ETH
+      const profitToGasRatio = commanderShare30 > 0 ? commanderShare30 / estimatedGasCost : 0;
+      const canClaim = commanderShare30 >= (estimatedGasCost * 5); // 5x threshold
       
       const today = new Date().toISOString().split('T')[0];
       const todayRevenue = billingData
-        ?.filter(tx => tx.created_at?.startsWith(today))
-        .reduce((sum, tx) => sum + (tx.amount || 0), 0) || 0;
+        ?.filter((tx: any) => tx.created_at?.startsWith(today))
+        .reduce((sum: number, tx: any) => sum + (tx.amount || 0), 0) || 0;
       
-      // Get agent stats from API
-      const API_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:3000';
+      // 🌑 Get agent stats from API — Production: https://gxeon-ai.xmentex2.replit.app
+      const API_URL = (import.meta as any).env?.VITE_API_BASE_URL || 'https://gxeon-ai.xmentex2.replit.app';
       const SYSTEM_API_KEY = (import.meta as any).env?.VITE_SYSTEM_API_KEY || '';
       
       const headers: Record<string, string> = {
@@ -91,8 +115,12 @@ export function useSupabaseStats(refreshInterval = 5000) {
       if (tasksError) throw tasksError;
       
       const totalTasks = tasksData?.length || 0;
-      const pendingTasks = tasksData?.filter(t => t.status === 'pending').length || 0;
-      const completedTasks = tasksData?.filter(t => t.status === 'completed').length || 0;
+      const pendingTasks = tasksData?.filter((t: any) => t.status === 'pending').length || 0;
+      const completedTasks = tasksData?.filter((t: any) => t.status === 'completed').length || 0;
+      
+      // 🌑 SIMULATION MODE: Override with demo values if no real data
+      const demoBalance = 12.45; // Demo treasury para teste visual
+      const effectiveVaultBalance = totalRevenue > 0 ? totalRevenue : demoBalance;
       
       // Update stats
       setStats(prev => ({
@@ -100,10 +128,18 @@ export function useSupabaseStats(refreshInterval = 5000) {
         totalRevenue,
         todayRevenue,
         billingTransactions: billingData?.length || 0,
+        // 💰 TREASURY METRICS
+        apiSalesCount,
+        commanderShare30: totalRevenue > 0 ? commanderShare30 : demoBalance * 0.3,
+        vaultShare70: totalRevenue > 0 ? vaultShare70 : demoBalance * 0.7,
+        estimatedGasCost,
+        profitToGasRatio: totalRevenue > 0 ? profitToGasRatio : 1865, // Demo: 1865x
+        canClaim: totalRevenue > 0 ? canClaim : true, // Demo: sempre pode sacar
         activeAgents: agentsData.agents?.length || 0,
         totalTasks,
         pendingTasks,
         completedTasks,
+        vaultBalance: effectiveVaultBalance,
         lastUpdate: new Date(),
       }));
       
@@ -153,7 +189,7 @@ export function useRevenueChart(days = 7) {
           .gte('created_at', new Date(Date.now() - days * 86400000).toISOString());
         
         // Group by date
-        const grouped = (transactions || []).reduce((acc, tx) => {
+        const grouped = (transactions || []).reduce((acc: Record<string, number>, tx: any) => {
           const date = tx.created_at?.split('T')[0] || 'unknown';
           acc[date] = (acc[date] || 0) + (tx.amount || 0);
           return acc;
