@@ -5,6 +5,46 @@ const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '../.env') });
 require('dotenv').config({ path: path.join(__dirname, '../config/secure/.env') });
 
+// ==================== APP SETUP (IMMEDIATE) ====================
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-gxeon-key', 'X-Requested-With', 'Accept']
+};
+
+app.use(cors(corsOptions));
+app.use(express.json({ limit: '10mb' }));
+
+// ==================== HEALTH CHECK (PRIORITY #1) ====================
+// Railway healthcheck precisa responder IMEDIATAMENTE
+const healthCheck = (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    version: '2.0.0-sovereign',
+    billing: 'initializing',
+    guardian: 'initializing'
+  });
+};
+
+app.get('/health', healthCheck);
+app.get('/api/health', healthCheck);
+
+// Status lightweight - não requer Supabase
+app.get('/status', (req, res) => {
+  res.json({
+    brain: 'active',
+    billing_enabled: true,
+    rate_limiting: true,
+    guardian_active: process.env.DISABLE_GUARDIAN !== 'true',
+    version: '2.0.0-sovereign'
+  });
+});
+
 // ==================== ENV VALIDATION ====================
 const requiredEnv = [
   'SUPABASE_PROJECT_URL',
@@ -22,19 +62,7 @@ if (missingEnv.length > 0) {
   console.log('[GXEON_STARTUP] ENV OK - All required variables present');
 }
 
-const OPTIONAL_ENV = [
-  'PRIVATE_KEY',
-  'CONTRACT_ADDRESS', 
-  'RPC_URL',
-  'RAILWAY_REDEPLOY_WEBHOOK'
-];
-
-console.log('[GXEON_STARTUP] Optional ENV check:');
-OPTIONAL_ENV.forEach(v => {
-  console.log(`  - ${v}: ${process.env[v] ? 'OK' : 'NOT SET'}`);
-});
-
-// ==================== IMPORTS ====================
+// ==================== IMPORTS (AFTER HEALTHCHECK) ====================
 const chatRoute = require('./routes/chat');
 const configRoute = require('./routes/config');
 const agentRoutes = require('./routes/agents');
@@ -44,55 +72,12 @@ const executorRoutes = require('./routes/executor');
 const { gxeonEnforcer, gxeonAuthOnly } = require('./middleware/gxeonEnforcer');
 const { apiLimiter, gxeonRateLimiter, operationLimiter } = require('./middleware/rateLimiter');
 
-const GuardianService = require('./services/guardianService');
-const radarShix = require('./services/radarShix');
-const { initializeSwarm } = require('./agents');
-
-// ==================== APP SETUP ====================
-const app = express();
-const PORT = process.env.PORT || 8080;
-
-const corsOptions = {
-  origin: '*',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-gxeon-key', 'X-Requested-With', 'Accept']
-};
-
-app.use(cors(corsOptions));
-app.use(express.json({ limit: '10mb' }));
-
 app.use((req, res, next) => {
   req.id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   next();
 });
 
 app.use('/api', apiLimiter);
-
-// ==================== PUBLIC ROUTES ====================
-// Health check para Railway (também em /api/health)
-const healthCheck = (req, res) => {
-  res.status(200).json({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    version: '2.0.0-sovereign',
-    billing: 'active',
-    guardian: 'active'
-  });
-};
-
-app.get('/health', healthCheck);
-app.get('/api/health', healthCheck);
-
-app.get('/status', (req, res) => {
-  res.json({ 
-    brain: process.env.BRAIN_STATUS || 'active',
-    billing_enabled: true,
-    rate_limiting: true,
-    guardian_active: true,
-    version: '2.0.0-sovereign'
-  });
-});
 
 // ==================== BILLED ROUTES ====================
 app.use('/chat', gxeonEnforcer({ llm_call: 0.001 }), chatRoute);
@@ -146,26 +131,45 @@ app.use((req, res) => {
   res.status(404).json({ error: "NOT_FOUND", message: `Route ${req.method} ${req.path} not found` });
 });
 
-// ==================== SERVER START ====================
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`\n╔═══════════════════════════════════════════════════════════════╗\n║                    🔥 GXEON SOVEREIGN v2.0.0 🔥                ║\n╠═══════════════════════════════════════════════════════════════╣\n║  Port: ${PORT.toString().padEnd(52)} ║\n║  Billing: ACTIVE - Choke-Point Operacional                     ║\n║  Guardian: ACTIVE - Sistema Imunológico Online                 ║\n║  RadarShix: ACTIVE - Caça-Oportunidades Iniciado              ║\n║  Swarm M2M: READY - Colmeia Predadora de Mercado              ║\n╚═══════════════════════════════════════════════════════════════╝`);
+// ==================== SERVER START (IMMEDIATE) ====================
+// Inicia servidor IMEDIATAMENTE - healthcheck já está rodando
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`[GXEON] Server listening on port ${PORT}`);
+});
+
+// ==================== BACKGROUND SERVICES (AFTER START) ====================
+// Carrega serviços pesados em background sem bloquear healthcheck
+setTimeout(async () => {
+  console.log('\n╔═══════════════════════════════════════════════════════════════╗\n║                    🔥 GXEON SOVEREIGN v2.0.0 🔥                ║\n╠═══════════════════════════════════════════════════════════════╣');
   console.log('[GXEON_ENFORCER] Choke-Point Operacional Ativo');
   console.log('[GXEON_PRICING] LLM: $0.001-$0.004 | Agent: $0.005 | Onchain: $0.015 | Memory: $0.001/KB');
-  if (process.env.DISABLE_GUARDIAN !== 'true') {
-    GuardianService.startMonitoring();
-    console.log('[GXEON_GUARDIAN] Sistema Imunológico Ativo - Monitoring every 60s');
-  }
-  if (process.env.DISABLE_RADAR !== 'true' && process.env.TWITTER_API_KEY) {
-    radarShix.start();
-    console.log('[RADAR_SHIX] Caça-Oportunidades Iniciado - Scanning every 5min');
-  } else {
-    console.log('[RADAR_SHIX] Desativado - TWITTER_API_KEY não configurada');
+  
+  // Lazy load de serviços pesados
+  try {
+    const GuardianService = require('./services/guardianService');
+    if (process.env.DISABLE_GUARDIAN !== 'true') {
+      GuardianService.startMonitoring();
+      console.log('[GXEON_GUARDIAN] Sistema Imunológico Ativo');
+    }
+  } catch (err) {
+    console.warn('[GUARDIAN] Failed to start:', err.message);
   }
   
-  // 🐝 SWARM M2M Auto-Start
+  try {
+    const radarShix = require('./services/radarShix');
+    if (process.env.DISABLE_RADAR !== 'true' && process.env.TWITTER_BEARER_TOKEN) {
+      radarShix.start();
+      console.log('[RADAR_SHIX] Caça-Oportunidades Iniciado');
+    }
+  } catch (err) {
+    console.warn('[RADAR] Failed to start:', err.message);
+  }
+  
+  // 🐝 SWARM M2M Auto-Start (delayed)
   if (process.env.SWARM_AUTOSTART === 'true') {
     setTimeout(async () => {
       try {
+        const { initializeSwarm } = require('./agents');
         await initializeSwarm({
           executionInterval: parseInt(process.env.SWARM_INTERVAL) || 3600000,
           maxConcurrentAgents: parseInt(process.env.SWARM_MAX_AGENTS) || 50,
@@ -174,14 +178,13 @@ app.listen(PORT, '0.0.0.0', () => {
           profitThreshold: parseFloat(process.env.SWARM_PROFIT_THRESHOLD) || 1.0,
           autoStart: true
         });
+        console.log('[SWARM_M2M] Colmeia Predadora Ativa');
       } catch (err) {
-        console.error('[SWARM_M2M] Erro ao iniciar:', err.message);
+        console.error('[SWARM_M2M] Erro:', err.message);
       }
-    }, 5000); // Delay para garantir que Supabase está conectado
-    console.log('[SWARM_M2M] Auto-start agendado (5s delay)');
-  } else {
-    console.log('[SWARM_M2M] Auto-start desativado (SWARM_AUTOSTART != true)');
+    }, 10000);
   }
   
-  console.log('\n✅ GXEON SOVEREIGN pronto para dominação de mercado\n');
-});
+  console.log('╚═══════════════════════════════════════════════════════════════╝');
+  console.log('✅ GXEON SOVEREIGN pronto\n');
+}, 100); // 100ms delay - servidor já está respondendo healthcheck
