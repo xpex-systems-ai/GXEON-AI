@@ -72,24 +72,30 @@ ALTER TABLE radar_opportunities ENABLE ROW LEVEL SECURITY;
 ALTER TABLE radar_scan_telemetry ENABLE ROW LEVEL SECURITY;
 ALTER TABLE radar_heartbeat ENABLE ROW LEVEL SECURITY;
 
--- Política: Serviço pode inserir
-CREATE POLICY IF NOT EXISTS "Service can insert opportunities" 
+-- Política: Serviço pode inserir (DROP IF EXISTS primeiro para evitar erro)
+DROP POLICY IF EXISTS "Service can insert opportunities" ON radar_opportunities;
+CREATE POLICY "Service can insert opportunities" 
     ON radar_opportunities FOR INSERT TO anon WITH CHECK (true);
 
-CREATE POLICY IF NOT EXISTS "Service can insert telemetry" 
+DROP POLICY IF EXISTS "Service can insert telemetry" ON radar_scan_telemetry;
+CREATE POLICY "Service can insert telemetry" 
     ON radar_scan_telemetry FOR INSERT TO anon WITH CHECK (true);
 
-CREATE POLICY IF NOT EXISTS "Service can upsert heartbeat" 
+DROP POLICY IF EXISTS "Service can upsert heartbeat" ON radar_heartbeat;
+CREATE POLICY "Service can upsert heartbeat" 
     ON radar_heartbeat FOR ALL TO anon USING (true) WITH CHECK (true);
 
 -- Política: Leitura pública para dashboard
-CREATE POLICY IF NOT EXISTS "Public can read opportunities" 
+DROP POLICY IF EXISTS "Public can read opportunities" ON radar_opportunities;
+CREATE POLICY "Public can read opportunities" 
     ON radar_opportunities FOR SELECT TO anon USING (true);
 
-CREATE POLICY IF NOT EXISTS "Public can read telemetry" 
+DROP POLICY IF EXISTS "Public can read telemetry" ON radar_scan_telemetry;
+CREATE POLICY "Public can read telemetry" 
     ON radar_scan_telemetry FOR SELECT TO anon USING (true);
 
-CREATE POLICY IF NOT EXISTS "Public can read heartbeat" 
+DROP POLICY IF EXISTS "Public can read heartbeat" ON radar_heartbeat;
+CREATE POLICY "Public can read heartbeat" 
     ON radar_heartbeat FOR SELECT TO anon USING (true);
 
 -- ═══════════════════════════════════════════════════════════════════════════
