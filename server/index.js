@@ -23,6 +23,24 @@ process.on('uncaughtException', (err) => {
     setTimeout(() => process.exit(1), 10000);
 });
 
+// 🛡️ GXEON_SHIELD - Global Error Handlers (PRIMEIROS - antes de qualquer código)
+process.on('uncaughtException', (err) => {
+    const errorMsg = err?.message || err?.toString() || 'Unknown error';
+    console.error('[GXEON_SHIELD] Uncaught Exception:', errorMsg);
+    
+    // NUNCA crasha em erros de rede/WebSocket
+    if (errorMsg.includes('429') || 
+        errorMsg.includes('Unexpected server response') ||
+        errorMsg.includes('WebSocket') ||
+        errorMsg.includes('ECONNRESET')) {
+        console.log('[GXEON_SHIELD] 🛡️ Network error captured - SERVER CONTINUES ALIVE');
+        return; // CRÍTICO: Não deixa o processo morrer!
+    }
+    
+    // Outros erros - loga mas mantém vivo
+    console.error('[GXEON_SHIELD] ⚠️ Non-network error - server continues');
+});
+
 process.on('unhandledRejection', (reason, promise) => {
     const errorMsg = reason?.message || reason?.toString() || 'Unknown rejection';
     console.error('[GXEON_SHIELD] Unhandled Rejection:', errorMsg);
@@ -34,7 +52,7 @@ process.on('unhandledRejection', (reason, promise) => {
     // NÃO crasha - apenas loga
 });
 
-// 🚨 Handler para erro em Workers/Threads (se houver)
+// 🚨 Handler para erro em Workers/Threads
 process.on('workerThreadsUncaughtException', (err) => {
     console.error('[GXEON_SHIELD] Worker error:', err.message);
     // Não propaga
@@ -157,20 +175,24 @@ setTimeout(async () => {
     if ((process.env.ALCHEMY_API_KEY || process.env.ARBITRUM_RPC_URL) && process.env.DISABLE_RADAR !== 'true') {
       const radarShix = require('./services/radarShix');
       
-      // Delay de 20s antes de tentar conectar (evita crash loop no Railway)
+      // 🛡️ Protocolo: Delay inicial de 20s + stagger de 10s entre conexões
       setTimeout(async () => {
         try {
-          console.log('[GXEON_SHIELD] Radar soft-start: iniciando após 20s de estabilização...');
-          await radarShix.start();
-          console.log('[RADAR_SHIX v2.0] ✅ Active - DexLiquidity + SmartMoney monitoring');
-        } catch (radarError) {
-          console.error('[GXEON_SHIELD] ⚠️ Radar start failed:', radarError.message);
-          if (radarError.message?.includes('429')) {
-            console.log('[GXEON_SHIELD] Rate limit detectado - servidor continua em modo DEGRADED (apenas DexScreener)');
+          console.log('[GXEON_SHIELD] 🛡️ Radar soft-start: iniciando após 20s de estabilização...');
+          const result = await radarShix.start();
+          if (result) {
+            console.log('[RADAR_SHIX v2.0] ✅ Active - DexLiquidity + SmartMoney monitoring');
+          } else {
+            console.log('[GXEON_SHIELD] ⚠️ Radar iniciado em modo DEGRADED (WebSocket offline)');
           }
-          // NÃO relança erro - servidor continua vivo!
+        } catch (radarError) {
+          console.error('[GXEON_SHIELD] ⚠️ Radar start error:', radarError.message);
+          if (radarError.message?.includes('429')) {
+            console.log('[GXEON_SHIELD] 🛡️ Rate limit 429 detectado - servidor continua em modo DEGRADED (apenas DexScreener)');
+          }
+          // 🛡️ CRÍTICO: NÃO relança erro - servidor continua vivo!
         }
-      }, 20000); // 20 segundos de delay
+      }, 20000); // 20 segundos de delay inicial
     }
 
     if (process.env.SWARM_AUTOSTART === 'true') {

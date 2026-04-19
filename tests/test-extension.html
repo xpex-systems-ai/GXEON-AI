@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧬 GXEON DNA Test — Extension Bridge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', 'Monaco', monospace;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f4a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #D4AF37;
+        }
+        
+        .container {
+            background: rgba(10, 14, 39, 0.95);
+            border: 3px solid #D4AF37;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px #D4AF37;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #00FFFF;
+            font-size: 14px;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+        
+        .status-box {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid #00FFFF;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .status-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        
+        .status-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .status-value.connected {
+            color: #00FF00;
+            text-shadow: 0 0 10px #00FF00;
+        }
+        
+        .status-value.disconnected {
+            color: #FF4444;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            color: #00FFFF;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #D4AF37;
+            border-radius: 6px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #00FFFF;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #D4AF37 0%, #ffd700 100%);
+            color: #000;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(212, 175, 55, 0.6);
+        }
+        
+        .btn-primary:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .log-section {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .log-entry {
+            font-size: 12px;
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .log-entry.success {
+            background: rgba(0, 255, 0, 0.1);
+            border-left: 3px solid #00FF00;
+            color: #00FF00;
+        }
+        
+        .log-entry.error {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #FF4444;
+            color: #FF4444;
+        }
+        
+        .log-entry.info {
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 3px solid #00FFFF;
+            color: #00FFFF;
+        }
+        
+        .instructions {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid #D4AF37;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .instructions ol {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .highlight {
+            color: #00FFFF;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🦁 GXEON PREDATOR</h1>
+        <div class="subtitle">DNA_CONVERSAO_v21.2 — Test Bridge</div>
+        
+        <div class="instructions">
+            <strong>📋 INSTRUÇÕES:</strong>
+            <ol>
+                <li>Instale a extensão GXEON no Brave (modo desenvolvedor)</li>
+                <li>Clique no botão <span class="highlight">"VERIFICAR CONEXÃO"</span> abaixo</li>
+                <li>Se conectado, configure o valor do teste</li>
+                <li>Clique em <span class="highlight">"ENVIAR SINAL GARI"</span></li>
+                <li>Observe o badge 🦁 mudar e o contador aumentar!</li>
+            </ol>
+        </div>
+        
+        <div class="status-box">
+            <div class="status-label">Status da Extensão</div>
+            <div id="ext-status" class="status-value disconnected">NÃO CONECTADO</div>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">⚙️ Configuração do Teste</div>
+            
+            <div class="input-group">
+                <label>Lucro Simulado (USD)</label>
+                <input type="number" id="profit" value="10.50" step="0.50" min="1">
+            </div>
+            
+            <div class="input-group">
+                <label>Custo de Gás (USD)</label>
+                <input type="number" id="gas" value="2.00" step="0.50" min="0.50">
+            </div>
+            
+            <div class="input-group">
+                <label>Confiança</label>
+                <select id="confidence">
+                    <option value="0.95">95% (Auto Execute)</option>
+                    <option value="0.85" selected>85% (High Priority)</option>
+                    <option value="0.65">65% (Medium)</option>
+                    <option value="0.45">45% (Low)</option>
+                </select>
+            </div>
+            
+            <button id="btn-check" class="btn btn-primary" style="margin-bottom: 15px;">
+                🔍 VERIFICAR CONEXÃO
+            </button>
+            
+            <button id="btn-send" class="btn btn-primary" disabled>
+                🚀 ENVIAR SINAL GARI
+            </button>
+        </div>
+        
+        <div class="test-section">
+            <div class="section-title">📊 Log de Eventos</div>
+            <div id="log" class="log-section">
+                <div class="log-entry info">Aguardando início do teste...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ID da extensão (vai ser detectado automaticamente ou inserido)
+        let EXTENSION_ID = null;
+        
+        const extStatus = document.getElementById('ext-status');
+        const btnCheck = document.getElementById('btn-check');
+        const btnSend = document.getElementById('btn-send');
+        const logSection = document.getElementById('log');
+        
+        function addLog(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logSection.insertBefore(entry, logSection.firstChild);
+            console.log(`[GXEON-TEST] ${message}`);
+        }
+        
+        // Tentar detectar ID da extensão via URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        const extIdFromUrl = urlParams.get('extId');
+        if (extIdFromUrl) {
+            EXTENSION_ID = extIdFromUrl;
+            addLog(`Extension ID via URL: ${EXTENSION_ID}`, 'info');
+        }
+        
+        // Verificar conexão
+        btnCheck.addEventListener('click', async () => {
+            addLog('Verificando conexão com extensão GXEON...', 'info');
+            
+            try {
+                // Tentar enviar ping
+                const response = await sendToExtension({
+                    type: 'PING',
+                    timestamp: Date.now()
+                });
+                
+                if (response && response.acknowledged) {
+                    extStatus.textContent = 'CONECTADO ✅';
+                    extStatus.className = 'status-value connected';
+                    btnSend.disabled = false;
+                    addLog(`✅ Extensão conectada! Versão: ${response.predatorVersion || 'unknown'}`, 'success');
+                } else {
+                    throw new Error('Resposta inválida');
+                }
+            } catch (err) {
+                extStatus.textContent = 'FALHA NA CONEXÃO ❌';
+                extStatus.className = 'status-value disconnected';
+                btnSend.disabled = true;
+                addLog(`❌ Falha: ${err.message}`, 'error');
+                addLog('Dica: Verifique se a extensão está instalada e ativa', 'info');
+            }
+        });
+        
+        // Enviar sinal GARI
+        btnSend.addEventListener('click', async () => {
+            const profit = parseFloat(document.getElementById('profit').value);
+            const gas = parseFloat(document.getElementById('gas').value);
+            const confidence = parseFloat(document.getElementById('confidence').value);
+            
+            const roi = ((profit / gas) * 100).toFixed(0);
+            const actionType = confidence > 0.9 && profit > 20 ? 'auto_execute' : 'review';
+            const priority = profit > 50 ? 'urgent' : profit > 20 ? 'high' : 'normal';
+            
+            addLog(`Preparando sinal: $${profit} lucro, ${roi}% ROI...`, 'info');
+            
+            const payload = {
+                type: 'GARI_OPPORTUNITY_DETECTED',
+                protocol: 'DNA_CONVERSAO_v21.2',
+                timestamp: new Date().toISOString(),
+                origin: 'gxeon_test_bridge',
+                
+                payload: {
+                    id: `gari_test_${Date.now()}`,
+                    token: `0x${generateHex(40)}`,
+                    contract: `0x${generateHex(40)}`,
+                    
+                    raw_value: profit + gas,
+                    net_profit: profit,
+                    gas_estimate: gas,
+                    roi_percent: parseFloat(roi),
+                    
+                    execution_data: {
+                        chainId: 42161,
+                        to: `0x${generateHex(40)}`,
+                        data: `0x${generateHex(68)}`,
+                        value: '0x0',
+                        gasLimit: '0x493E0',
+                        estimatedUsd: gas
+                    },
+                    
+                    confidence: confidence,
+                    priority: priority,
+                    action_type: actionType
+                },
+                
+                handshake: {
+                    requestId: `dna_test_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+                    expectsAck: true,
+                    dnaVerified: true,
+                    testMode: true
+                }
+            };
+            
+            try {
+                const response = await sendToExtension(payload);
+                
+                if (response && response.acknowledged) {
+                    addLog(`🤝 Handshake DNA confirmado!`, 'success');
+                    addLog(`📬 Ack ID: ${response.ackId}`, 'success');
+                    addLog(`🎉 Sinal enviado com sucesso! Verifique o badge da extensão.`, 'success');
+                    
+                    // Feedback visual
+                    btnSend.textContent = '✅ SINAL ENVIADO!';
+                    btnSend.style.background = '#00FF00';
+                    setTimeout(() => {
+                        btnSend.textContent = '🚀 ENVIAR SINAL GARI';
+                        btnSend.style.background = '';
+                    }, 2000);
+                } else {
+                    throw new Error('Handshake não confirmado');
+                }
+            } catch (err) {
+                addLog(`❌ Erro ao enviar: ${err.message}`, 'error');
+            }
+        });
+        
+        // Função para enviar mensagem à extensão
+        function sendToExtension(message) {
+            return new Promise((resolve, reject) => {
+                // Chrome Extension API
+                if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+                    
+                    // Se temos o ID, enviar direto
+                    if (EXTENSION_ID) {
+                        chrome.runtime.sendMessage(EXTENSION_ID, message, (response) => {
+                            if (chrome.runtime.lastError) {
+                                reject(new Error(chrome.runtime.lastError.message));
+                            } else {
+                                resolve(response);
+                            }
+                        });
+                    } else {
+                        // Tentar broadcast (pode não funcionar sem ID em MV3)
+                        chrome.runtime.sendMessage(message, (response) => {
+                            if (chrome.runtime.lastError) {
+                                // Tentar encontrar extensão pelo nome
+                                findExtensionId().then(id => {
+                                    if (id) {
+                                        EXTENSION_ID = id;
+                                        chrome.runtime.sendMessage(id, message, (resp) => {
+                                            if (chrome.runtime.lastError) {
+                                                reject(new Error(chrome.runtime.lastError.message));
+                                            } else {
+                                                resolve(resp);
+                                            }
+                                        });
+                                    } else {
+                                        reject(new Error('Extensão não encontrada. Instale a GXEON PREDATOR primeiro.'));
+                                    }
+                                });
+                            } else {
+                                resolve(response);
+                            }
+                        });
+                    }
+                } else {
+                    reject(new Error('Chrome Extension API não disponível. Abra esta página no Brave/Chrome.'));
+                }
+            });
+        }
+        
+        // Tentar encontrar ID da extensão
+        async function findExtensionId() {
+            return new Promise((resolve) => {
+                if (typeof chrome !== 'undefined' && chrome.management && chrome.management.getAll) {
+                    chrome.management.getAll((extensions) => {
+                        const gxeon = extensions.find(ext => 
+                            ext.name.includes('GXEON') || ext.name.includes('PREDATOR')
+                        );
+                        resolve(gxeon ? gxeon.id : null);
+                    });
+                } else {
+                    resolve(null);
+                }
+            });
+        }
+        
+        // Helper
+        function generateHex(length) {
+            return Array(length).fill(0).map(() => 
+                Math.floor(Math.random() * 16).toString(16)
+            ).join('');
+        }
+        
+        // Auto-check ao carregar
+        setTimeout(() => {
+            addLog('Página de teste carregada. Clique em "VERIFICAR CONEXÃO"', 'info');
+        }, 500);
+    </script>
+</body>
+</html>

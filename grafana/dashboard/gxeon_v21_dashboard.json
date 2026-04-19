@@ -1,0 +1,376 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "#00FFFF",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "GXEON Sovereign Oracle v21.0 — Cyberpunk Analytics Dashboard",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
+      "id": 1,
+      "title": "🔥 LIQUIDITY RADAR",
+      "type": "row"
+    },
+    {
+      "datasource": "GXEON_SUPABASE",
+      "description": "Mapa de calor de pools de liquidez detectados em tempo real",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "scaleDistribution": { "type": "linear" }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "#000000", "value": null },
+              { "color": "#D4AF37", "value": 10000 },
+              { "color": "#00FFFF", "value": 50000 },
+              { "color": "#FF00FF", "value": 100000 }
+            ]
+          },
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": { "h": 8, "w": 16, "x": 0, "y": 1 },
+      "id": 2,
+      "options": {
+        "calculate": false,
+        "calculation": { "xBuckets": { "mode": "size", "value": "1min" } },
+        "cellGap": 2,
+        "color": {
+          "exponent": 0.5,
+          "fill": "#D4AF37",
+          "mode": "opacity",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "Oranges"
+        },
+        "exemplars": { "color": "#00FFFF" },
+        "filterValues": { "le": 1e-9 },
+        "legend": { "show": true },
+        "rowsFrame": { "layout": "auto" },
+        "tooltip": { "show": true, "yHistogram": false },
+        "yAxis": { "axisPlacement": "left", "reverse": false }
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  detected_at AS time,\n  dex_name AS metric,\n  liquidity_usd AS value\nFROM grafana_liquidity_heatmap\nWHERE detected_at > NOW() - INTERVAL '6 hours'\nORDER BY detected_at",
+          "refId": "A",
+          "select": [
+            [
+              { "params": ["liquidity_usd"], "type": "column" },
+              { "params": ["avg"], "type": "aggregate" },
+              { "params": ["value"], "type": "alias" }
+            ]
+          ],
+          "table": "grafana_liquidity_heatmap",
+          "timeColumn": "detected_at",
+          "timeColumnType": "timestamp",
+          "where": [{ "name": "$__timeFilter", "params": [], "type": "macro" }]
+        }
+      ],
+      "title": "LIQUIDITY RADAR HEATMAP",
+      "transparent": true,
+      "type": "heatmap"
+    },
+    {
+      "datasource": "GXEON_SUPABASE",
+      "description": "Estatísticas de alto nível do sistema",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#D4AF37", "mode": "fixed" },
+          "custom": { "displayMode": "gradient", "inspect": false },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "#000000", "value": null },
+              { "color": "#D4AF37", "value": 0 }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Alertas" },
+            "properties": [
+              { "id": "color", "value": { "fixedColor": "#FF00FF", "mode": "fixed" } }
+            ]
+          }
+        ]
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 1 },
+      "id": 3,
+      "options": { "orientation": "auto", "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "showThresholdLabels": false, "showThresholdMarkers": true, "text": {} },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT COUNT(*) AS \"Pools Ativas\" FROM radar_liquidity_pools WHERE status = 'monitoring'",
+          "refId": "A"
+        }
+      ],
+      "title": "POOLS ATIVAS",
+      "type": "stat"
+    },
+    {
+      "datasource": "GXEON_SUPABASE",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#00FFFF", "mode": "fixed" },
+          "mappings": [],
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "#00FFFF", "value": null }] },
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
+      "id": 4,
+      "options": { "orientation": "auto", "reduceOptions": { "calcs": ["sum"], "fields": "", "values": false }, "showThresholdLabels": false, "showThresholdMarkers": true },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT COALESCE(SUM(liquidity_usd), 0) AS \"Total Liquidez\" FROM radar_liquidity_pools",
+          "refId": "A"
+        }
+      ],
+      "title": "LIQUIDEZ TOTAL",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 9 },
+      "id": 5,
+      "title": "🐋 WHALE TELEMETRY",
+      "type": "row"
+    },
+    {
+      "datasource": "GXEON_SUPABASE",
+      "description": "Movimentações de smart money em tempo real",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 10 },
+      "id": 6,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "format": "logs",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  detected_at AS timestamp,\n  CASE WHEN is_whale THEN '🔥 WHALE' ELSE '🐋 LARGE' END AS level,\n  from_address AS caller,\n  token_symbol AS job,\n  amount_usd AS duration,\n  flow_type AS status,\n  transaction_hash AS id\nFROM grafana_whale_telemetry\nWHERE detected_at > NOW() - INTERVAL '1 hour'\nORDER BY detected_at DESC\nLIMIT 100",
+          "refId": "A"
+        }
+      ],
+      "title": "WHALE TELEMETRY TRACKER",
+      "transparent": true,
+      "type": "logs"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 18 },
+      "id": 7,
+      "title": "💰 ORACLE A2A REVENUE",
+      "type": "row"
+    },
+    {
+      "datasource": "GXEON_SUPABASE",
+      "description": "Volume de requisições A2A por hora",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "gradient", "seriesBy": "max", "fixedColor": "#D4AF37" },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": { "type": "linear" },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" },
+            "thresholdsStyle": { "mode": "off" }
+          },
+          "mappings": [],
+          "max": 10000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "#D4AF37", "value": null },
+              { "color": "#00FFFF", "value": 1000 },
+              { "color": "#FF00FF", "value": 5000 }
+            ]
+          },
+          "unit": "short"
+        }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 19 },
+      "id": 8,
+      "options": {
+        "legend": { "calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true },
+        "tooltip": { "mode": "single", "sort": "none" }
+      },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  hour AS time,\n  req_count AS value,\n  'A2A Requests' AS metric\nFROM grafana_oracle_revenue\nWHERE hour > NOW() - INTERVAL '24 hours'\nORDER BY hour",
+          "refId": "A"
+        }
+      ],
+      "title": "ORACLE A2A REQUESTS / HOUR",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": "GXEON_SUPABASE",
+      "description": "Receita estimada por tipo de sinal",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "hideFrom": { "legend": false, "tooltip": false, "viz": false },
+            "legend": { "displayMode": "table", "placement": "right", "values": ["value", "percent"] }
+          },
+          "mappings": [],
+          "unit": "currencyUSD"
+        }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 19 },
+      "id": 9,
+      "options": { "pieType": "donut", "reduceOptions": { "calcs": ["sum"], "fields": "", "values": true }, "tooltip": { "mode": "single", "sort": "none" } },
+      "pluginVersion": "9.5.0",
+      "targets": [
+        {
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  signal_type,\n  SUM(cost_usd) AS revenue\nFROM a2a_signals_consumed\nWHERE consumed_at > NOW() - INTERVAL '24 hours'\nGROUP BY signal_type",
+          "refId": "A"
+        }
+      ],
+      "title": "REVENUE BY SIGNAL TYPE",
+      "transparent": true,
+      "type": "piechart"
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 27 },
+      "id": 10,
+      "title": "⚡ ORACLE PERFORMANCE",
+      "type": "row"
+    },
+    {
+      "datasource": "GXEON_SUPABASE",
+      "description": "Latência de resposta da API A2A",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "fixedColor": "#00FFFF", "mode": "fixed" },
+          "custom": { "axisCenteredZero": false, "axisColorMode": "text", "axisPlacement": "auto", "drawStyle": "line", "fillOpacity": 10, "lineInterpolation": "smooth", "lineWidth": 2 },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "#00FFFF", "value": null }, { "color": "#FF00FF", "value": 500 }] },
+          "unit": "ms"
+        }
+      },
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 28 },
+      "id": 11,
+      "options": { "legend": { "showLegend": false }, "tooltip": { "mode": "single" } },
+      "targets": [
+        {
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  request_at AS time,\n  AVG(latency_ms) AS value,\n  endpoint AS metric\nFROM a2a_agent_activity\nWHERE request_at > NOW() - INTERVAL '6 hours'\nGROUP BY request_at, endpoint\nORDER BY request_at",
+          "refId": "A"
+        }
+      ],
+      "title": "API LATENCY",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": "GXEON_SUPABASE",
+      "description": "Agentes ativos por tier",
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "axisGridShow": true, "axisPlacement": "auto", "fillOpacity": 50, "gradientMode": "opacity", "hideFrom": { "legend": false, "tooltip": false, "viz": false }, "lineWidth": 1, "stacking": { "group": "A", "mode": "normal" } },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "#D4AF37", "value": null }] }
+        }
+      },
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 28 },
+      "id": 12,
+      "options": { "legend": { "calcs": ["sum"], "displayMode": "table", "placement": "bottom", "showLegend": true }, "tooltip": { "mode": "single" } },
+      "targets": [
+        {
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  DATE_TRUNC('hour', last_seen_at) AS time,\n  COUNT(*) AS value,\n  tier AS metric\nFROM a2a_agents\nWHERE last_seen_at > NOW() - INTERVAL '24 hours'\nGROUP BY DATE_TRUNC('hour', last_seen_at), tier\nORDER BY time",
+          "refId": "A"
+        }
+      ],
+      "title": "ACTIVE AGENTS BY TIER",
+      "transparent": true,
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": ["gxeon", "oracle", "a2a", "cyberpunk"],
+  "templating": {
+    "list": [
+      {
+        "current": { "selected": false, "text": "Arbitrum", "value": "42161" },
+        "hide": 0,
+        "label": "Chain",
+        "name": "chain_id",
+        "options": [{ "selected": true, "text": "Arbitrum", "value": "42161" }],
+        "query": "42161",
+        "type": "custom"
+      }
+    ]
+  },
+  "time": { "from": "now-6h", "to": "now" },
+  "timepicker": { "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"], "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"] },
+  "timezone": "UTC",
+  "title": "GXEON SOVEREIGN ORACLE v21.0",
+  "uid": "gxeon-oracle-v21",
+  "version": 1
+}

@@ -1,6 +1,123 @@
 const supabase = require('./supabase');
 const axios = require('axios');
 const { ethers } = require('ethers');
+const WebSocket = require('ws');
+
+/**
+ * 🛡️ GXEON_SOVEREIGN_HOTFIX_v2.1 - Provider Factory
+ * Cria providers com error handling preemptivo e failover
+ */
+class ProviderFactory {
+    constructor() {
+        this.providers = [
+            process.env.ALCHEMY_WSS_URL_PRIMARY,
+            process.env.ALCHEMY_WSS_URL_BACKUP,
+            process.env.ALCHEMY_API_KEY ? `wss://arb-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}` : null,
+            'wss://arb1.arbitrum.io/ws' // Public fallback
+        ].filter(Boolean);
+        this.currentIndex = 0;
+        this.retryCount = 0;
+        this.maxRetries = 10;
+        this.cooldownMs = 10000; // 10s entre tentativas
+    }
+
+    /**
+     * Cria provider com error handling robusto
+     */
+    async createProvider() {
+        const url = this.providers[this.currentIndex];
+        if (!url) {
+            throw new Error('No WebSocket providers available');
+        }
+
+        return new Promise((resolve, reject) => {
+            try {
+                const ws = new WebSocket(url, {
+                    headers: { 'User-Agent': 'GXEON-Sovereign/2.1' }
+                });
+
+                let resolved = false;
+
+                // Timeout de conexão
+                const timeout = setTimeout(() => {
+                    if (!resolved) {
+                        ws.terminate();
+                        reject(new Error('WebSocket connection timeout'));
+                    }
+                }, 30000);
+
+                // 🛡️ Handler de erro 429 - NUNCA crasha
+                ws.on('error', (err) => {
+                    const msg = err?.message || '';
+                    if (msg.includes('429') || msg.includes('Unexpected server response')) {
+                        console.warn(`[GXEON_GUARDIAN] Rate limit on provider ${this.currentIndex + 1}/${this.providers.length}`);
+                        ws.terminate();
+                        
+                        // Switch para próximo provider
+                        this.currentIndex = (this.currentIndex + 1) % this.providers.length;
+                        this.retryCount++;
+                        
+                        if (this.retryCount < this.maxRetries) {
+                            console.log(`[GXEON_GUARDIAN] Switching to provider ${this.currentIndex + 1} in ${this.cooldownMs}ms...`);
+                            setTimeout(() => {
+                                this.createProvider().then(resolve).catch(reject);
+                            }, this.cooldownMs);
+                        } else {
+                            console.error('[GXEON_GUARDIAN] Max retries reached - operating in DEGRADED mode');
+                            reject(new Error('All providers exhausted'));
+                        }
+                        return;
+                    }
+                    
+                    // Outros erros - loga mas continua
+                    console.error('[GXEON_GUARDIAN] WebSocket error:', msg);
+                });
+
+                ws.on('unexpected-response', (req, res) => {
+                    if (res.statusCode === 429) {
+                        console.warn('[GXEON_GUARDIAN] 429 on handshake');
+                        ws.terminate();
+                        this.currentIndex = (this.currentIndex + 1) % this.providers.length;
+                        setTimeout(() => {
+                            this.createProvider().then(resolve).catch(reject);
+                        }, this.cooldownMs);
+                    }
+                });
+
+                ws.on('open', () => {
+                    if (!resolved) {
+                        resolved = true;
+                        clearTimeout(timeout);
+                        this.retryCount = 0; // Reset contador em sucesso
+                        console.log(`[GXEON_GUARDIAN] ✅ Provider ${this.currentIndex + 1}/${this.providers.length} connected`);
+                        
+                        // Cria provider ethers.js a partir do WebSocket estabelecido
+                        try {
+                            const provider = new ethers.WebSocketProvider(ws);
+                            resolve(provider);
+                        } catch (e) {
+                            reject(e);
+                        }
+                    }
+                });
+
+                ws.on('close', (code) => {
+                    if (!resolved) {
+                        resolved = true;
+                        clearTimeout(timeout);
+                        reject(new Error(`WebSocket closed: ${code}`));
+                    }
+                });
+
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+}
+
+// Singleton factory
+const providerFactory = new ProviderFactory();
 
 /**
  * 🦄 DexLiquidityFetcher — Monitoramento de Pools DEX na Arbitrum
@@ -14,7 +131,9 @@ class DexLiquidityFetcher {
         this.minLiquidityThreshold = 10000; // $10k USD
         this.knownPools = new Set(); // Cache de pools já detectados
         this.lastScanTime = 0;
-        this.minScanInterval = 30000; // Min 30s between scans (DexScreener rate limit)
+        this.minScanInterval = 5000; // 5s entre scans (GXEON_SOVEREIGN v2.1)
+        this.batchSize = 5; // Processa 5 pools por vez
+        this.requestDelay = 200; // 200ms entre requisições
     }
 
     /**
@@ -30,6 +149,7 @@ class DexLiquidityFetcher {
 
         try {
             // DexScreener API v1 — search endpoint for Arbitrum pairs
+            // 🛡️ GXEON_SOVEREIGN v2.1: Rate limiting com delay entre requisições
             const response = await axios.get(
                 `https://api.dexscreener.com/latest/dex/search?q=arbitrum`,
                 { timeout: 10000 }
@@ -37,12 +157,20 @@ class DexLiquidityFetcher {
 
             const pairs = response.data?.pairs || [];
             const newPools = [];
+            let processedCount = 0;
 
             for (const pair of pairs) {
                 // Filtro: apenas Arbitrum, liquidez > $10k, não visto antes
                 if (pair.chainId !== 'arbitrum') continue;
                 if (parseFloat(pair.liquidity?.usd || 0) < this.minLiquidityThreshold) continue;
                 if (this.knownPools.has(pair.pairAddress)) continue;
+
+                // 🛡️ GXEON_SOVEREIGN v2.1: Delay de 200ms entre processamentos
+                processedCount++;
+                if (processedCount > this.batchSize) {
+                    await new Promise(resolve => setTimeout(resolve, this.requestDelay));
+                    processedCount = 0;
+                }
 
                 // Marca como conhecido
                 this.knownPools.add(pair.pairAddress);
@@ -145,11 +273,12 @@ class DexLiquidityFetcher {
 
 /**
  * 🐋 SmartMoneyMonitor — Alchemy WebSocket para movimentações > 5 ETH
- * COM TRATAMENTO ROBUSTO 429 RATE LIMIT
+ * 🛡️ GXEON_SHIELD v21.2: Rate Limit Protection
  */
 class SmartMoneyMonitor {
     constructor() {
         this.provider = null;
+        this.ws = null;
         this.alchemyKey = process.env.ALCHEMY_API_KEY;
         this.wsUrl = this.alchemyKey 
             ? `wss://arb-mainnet.g.alchemy.com/v2/${this.alchemyKey}`
@@ -161,36 +290,80 @@ class SmartMoneyMonitor {
             totalTransfers: 0,
             largeTransfers: 0
         };
-        // 🛡️ Resiliência 429
+        // 🛡️ GXEON_SHIELD Config
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 10;
-        this.baseDelay = 1000; // 1s
-        this.maxDelay = 60000; // 60s
+        this.baseDelay = 2000; // 2s inicial
+        this.maxDelay = 120000; // 2min max
         this.reconnectTimer = null;
         this.isShuttingDown = false;
+        this.lastStableConnection = 0;
+        this.connectionStableTime = 300000; // 5min para reset
     }
 
     /**
-     * Calcula delay com exponential backoff
+     * Calcula delay com exponential backoff + jitter
      */
     getReconnectDelay() {
+        // Delay exponencial: 2s, 4s, 8s, 16s... até 2min
         const delay = Math.min(
             this.baseDelay * Math.pow(2, this.reconnectAttempts),
             this.maxDelay
         );
-        // Jitter aleatório para evitar thundering herd
-        return delay + Math.random() * 1000;
+        // Jitter aleatório 0-2s para evitar thundering herd
+        const jitter = Math.random() * 2000;
+        return delay + jitter;
     }
 
     /**
-     * Inicia monitoramento WebSocket com retry robusto
+     * 🛡️ Cria WebSocket com handlers de erro PREVENTIVOS
+     */
+    createWebSocketWithProtection() {
+        const WebSocket = require('ws');
+        
+        // Cria WebSocket raw primeiro
+        const ws = new WebSocket(this.wsUrl, {
+            headers: {
+                'User-Agent': 'GXEON-SmartMoneyMonitor/21.2'
+            }
+        });
+
+        // 🚨 HANDLERS DE ERRO IMEDIATOS (antes de qualquer operação)
+        ws.on('error', (err) => {
+            const errorMsg = err?.message || err?.toString() || 'Unknown WebSocket error';
+            
+            if (errorMsg.includes('429') || errorMsg.includes('Unexpected server response')) {
+                console.warn('[GXEON_GUARDIAN] [SmartMoneyMonitor] Rate limited (429) - backing off');
+                // Destrói socket imediatamente
+                try { ws.terminate(); } catch(e) {}
+                // Disconecta com backoff forçado
+                this.handleDisconnection(true);
+            } else {
+                console.error('[GXEON_GUARDIAN] [SmartMoneyMonitor] WebSocket error:', errorMsg);
+            }
+        });
+
+        ws.on('unexpected-response', (request, response) => {
+            if (response.statusCode === 429) {
+                console.warn('[GXEON_GUARDIAN] [SmartMoneyMonitor] 429 on handshake - rate limited');
+                try { ws.terminate(); } catch(e) {}
+                this.handleDisconnection(true);
+            }
+        });
+
+        ws.on('close', (code, reason) => {
+            console.warn(`[GXEON_GUARDIAN] [SmartMoneyMonitor] WebSocket closed (${code})`);
+            this.handleDisconnection();
+        });
+
+        // Retorna WebSocket protegido
+        return ws;
+    }
+
+    /**
+     * Inicia monitoramento WebSocket com proteção total
      */
     async start() {
-        if (!this.wsUrl) {
-            console.warn('[SmartMoneyMonitor] ALCHEMY_API_KEY not configured');
-            return false;
-        }
-
         if (this.isShuttingDown) return false;
 
         // Limpa timer anterior
@@ -200,61 +373,39 @@ class SmartMoneyMonitor {
         }
 
         try {
-            console.log(`[SmartMoneyMonitor] Connecting... (attempt ${this.reconnectAttempts + 1})`);
+            console.log(`[SmartMoneyMonitor] Connecting via ProviderFactory... (attempt ${this.reconnectAttempts + 1})`);
             
-            // Cria provider
-            this.provider = new ethers.WebSocketProvider(this.wsUrl);
-
-            // 🛡️ Listener de erro IMEDIATO (antes de qualquer operação)
-            if (this.provider._websocket) {
-                const ws = this.provider._websocket;
-                
-                ws.on('error', (err) => {
-                    // Trata 429 especificamente
-                    if (err.message && err.message.includes('429')) {
-                        console.warn('[SmartMoneyMonitor] Rate limited (429) - backing off');
-                        this.handleDisconnection(true); // Força backoff
-                    } else {
-                        console.error('[SmartMoneyMonitor] WebSocket error:', err.message);
-                    }
-                });
-
-                ws.on('close', (code, reason) => {
-                    console.warn(`[SmartMoneyMonitor] WebSocket closed (${code})`);
-                    this.handleDisconnection();
-                });
-
-                // Listener de 'unexpected-response' para capturar 429 no handshake
-                ws.on('unexpected-response', (request, response) => {
-                    if (response.statusCode === 429) {
-                        console.warn('[SmartMoneyMonitor] 429 on handshake - rate limited');
-                        this.handleDisconnection(true);
-                    }
-                });
-            }
+            // 🛡️ Usa ProviderFactory com failover automático
+            this.provider = await providerFactory.createProvider();
 
             // Escuta novos blocos
             this.provider.on('block', async (blockNumber) => {
                 try {
                     await this.analyzeBlock(blockNumber);
                 } catch (err) {
-                    // Silencioso para não poluir logs
+                    // Silencioso
                 }
             });
 
-            // Listener de erro do provider
-            this.provider.on('error', (err) => {
-                console.error('[SmartMoneyMonitor] Provider error:', err.message);
-            });
-
+            // Marca como estável
             this.isConnected = true;
-            this.reconnectAttempts = 0; // Reset contador
+            this.reconnectAttempts = 0;
+            this.lastStableConnection = Date.now();
+            
             console.log('[SmartMoneyMonitor] ✅ WebSocket connected to Arbitrum');
             return true;
 
         } catch (error) {
-            console.error('[SmartMoneyMonitor] Connection failed:', error.message);
-            this.handleDisconnection();
+            const errorMsg = error?.message || error?.toString() || 'Connection failed';
+            console.error('[GXEON_GUARDIAN] [SmartMoneyMonitor] Connection failed:', errorMsg);
+            
+            // Cleanup em caso de falha
+            if (this.provider) {
+                try { this.provider.destroy(); } catch(e) {}
+                this.provider = null;
+            }
+            
+            this.handleDisconnection(true);
             return false;
         }
     }
@@ -266,19 +417,19 @@ class SmartMoneyMonitor {
         if (this.isShuttingDown) return;
         
         this.isConnected = false;
-        this.cleanup();
 
         // Incrementa tentativas
         this.reconnectAttempts++;
 
         if (this.reconnectAttempts > this.maxReconnectAttempts) {
-            console.error('[SmartMoneyMonitor] Max reconnection attempts reached - giving up');
-            console.log('[SmartMoneyMonitor] Radar continua funcionando via REST API');
+            console.error('[GXEON_GUARDIAN] [SmartMoneyMonitor] Max reconnection attempts reached');
+            console.log('[GXEON_GUARDIAN] [SmartMoneyMonitor] Switching to DEGRADED mode (REST API only)');
+            // Continua operando sem WebSocket
             return;
         }
 
-        const delay = forceBackoff ? this.getReconnectDelay() : this.getReconnectDelay();
-        console.log(`[SmartMoneyMonitor] Reconnecting in ${(delay/1000).toFixed(1)}s (attempt ${this.reconnectAttempts})`);
+        const delay = this.getReconnectDelay();
+        console.log(`[GXEON_GUARDIAN] [SmartMoneyMonitor] Reconnecting in ${(delay/1000).toFixed(1)}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
         
         this.reconnectTimer = setTimeout(() => this.start(), delay);
     }
@@ -287,19 +438,25 @@ class SmartMoneyMonitor {
      * Limpa recursos
      */
     cleanup() {
+        if (this.ws) {
+            try {
+                this.ws.removeAllListeners();
+                this.ws.terminate();
+            } catch (e) {
+                // Ignore
+            }
+            this.ws = null;
+        }
         if (this.provider) {
             try {
                 this.provider.removeAllListeners();
-                if (this.provider._websocket) {
-                    this.provider._websocket.removeAllListeners();
-                    this.provider._websocket.terminate();
-                }
                 this.provider.destroy();
             } catch (e) {
-                // Ignore cleanup errors
+                // Ignore
             }
             this.provider = null;
         }
+        this.isConnected = false;
     }
 
     /**
@@ -411,12 +568,12 @@ class SmartMoneyMonitor {
 
 /**
  * 🔫 MempoolSniper — Detecção de liquidez em pending transactions
- * Escuta mempool antes da confirmação do bloco
- * COM TRATAMENTO ROBUSTO 429 RATE LIMIT
+ * 🛡️ GXEON_SHIELD v21.2: Rate Limit Protection
  */
 class MempoolSniper {
     constructor() {
         this.provider = null;
+        this.ws = null;
         this.alchemyKey = process.env.ALCHEMY_API_KEY;
         this.wsUrl = this.alchemyKey 
             ? `wss://arb-mainnet.g.alchemy.com/v2/${this.alchemyKey}`
@@ -427,82 +584,86 @@ class MempoolSniper {
             totalPendingSeen: 0,
             largeLiquidityDetected: 0
         };
-        // 🛡️ Resiliência 429
+        // 🛡️ GXEON_SHIELD Config
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 10;
-        this.baseDelay = 1000; // 1s
-        this.maxDelay = 60000; // 60s
+        this.baseDelay = 2000; // 2s inicial
+        this.maxDelay = 120000; // 2min max
         this.reconnectTimer = null;
         this.isShuttingDown = false;
+        this.lastStableConnection = 0;
+        this.connectionStableTime = 300000; // 5min para reset
     }
 
     /**
-     * Calcula delay com exponential backoff
+     * Calcula delay com exponential backoff + jitter
      */
     getReconnectDelay() {
         const delay = Math.min(
             this.baseDelay * Math.pow(2, this.reconnectAttempts),
             this.maxDelay
         );
-        // Jitter aleatório para evitar thundering herd
-        return delay + Math.random() * 1000;
+        const jitter = Math.random() * 2000;
+        return delay + jitter;
     }
 
     /**
-     * Inicia escuta do mempool com retry robusto
+     * 🛡️ Cria WebSocket com handlers de erro PREVENTIVOS
+     */
+    createWebSocketWithProtection() {
+        const WebSocket = require('ws');
+        
+        const ws = new WebSocket(this.wsUrl, {
+            headers: {
+                'User-Agent': 'GXEON-MempoolSniper/21.2'
+            }
+        });
+
+        // 🚨 HANDLERS DE ERRO IMEDIATOS
+        ws.on('error', (err) => {
+            const errorMsg = err?.message || err?.toString() || 'Unknown WebSocket error';
+            
+            if (errorMsg.includes('429') || errorMsg.includes('Unexpected server response')) {
+                console.warn('[GXEON_GUARDIAN] [MempoolSniper] Rate limited (429) - backing off');
+                try { ws.terminate(); } catch(e) {}
+                this.handleDisconnection(true);
+            } else {
+                console.error('[GXEON_GUARDIAN] [MempoolSniper] WebSocket error:', errorMsg);
+            }
+        });
+
+        ws.on('unexpected-response', (request, response) => {
+            if (response.statusCode === 429) {
+                console.warn('[GXEON_GUARDIAN] [MempoolSniper] 429 on handshake - rate limited');
+                try { ws.terminate(); } catch(e) {}
+                this.handleDisconnection(true);
+            }
+        });
+
+        ws.on('close', (code, reason) => {
+            console.warn(`[GXEON_GUARDIAN] [MempoolSniper] WebSocket closed (${code})`);
+            this.handleDisconnection();
+        });
+
+        return ws;
+    }
+
+    /**
+     * Inicia escuta do mempool com proteção total
      */
     async start() {
-        if (!this.wsUrl) {
-            console.warn('[MempoolSniper] ALCHEMY_API_KEY not configured');
-            return false;
-        }
-
         if (this.isShuttingDown) return false;
 
-        // Limpa timer anterior
         if (this.reconnectTimer) {
             clearTimeout(this.reconnectTimer);
             this.reconnectTimer = null;
         }
 
         try {
-            console.log(`[MempoolSniper] Connecting... (attempt ${this.reconnectAttempts + 1})`);
+            console.log(`[MempoolSniper] Connecting via ProviderFactory... (attempt ${this.reconnectAttempts + 1})`);
             
-            // Usa provider separado para mempool
-            this.provider = new ethers.WebSocketProvider(this.wsUrl);
-
-            // 🛡️ Listener de erro IMEDIATO (antes de qualquer operação)
-            if (this.provider._websocket) {
-                const ws = this.provider._websocket;
-                
-                ws.on('error', (err) => {
-                    // Trata 429 especificamente
-                    if (err.message && err.message.includes('429')) {
-                        console.warn('[MempoolSniper] Rate limited (429) - backing off');
-                        this.handleDisconnection(true);
-                    } else {
-                        console.error('[MempoolSniper] WebSocket error:', err.message);
-                    }
-                });
-
-                ws.on('close', (code, reason) => {
-                    console.warn(`[MempoolSniper] WebSocket closed (${code})`);
-                    this.handleDisconnection();
-                });
-
-                // Listener de 'unexpected-response' para capturar 429 no handshake
-                ws.on('unexpected-response', (request, response) => {
-                    if (response.statusCode === 429) {
-                        console.warn('[MempoolSniper] 429 on handshake - rate limited');
-                        this.handleDisconnection(true);
-                    }
-                });
-            }
-
-            // Listener de erro do provider
-            this.provider.on('error', (err) => {
-                console.error('[MempoolSniper] Provider error:', err.message);
-            });
+            // 🛡️ Usa ProviderFactory com failover automático
+            this.provider = await providerFactory.createProvider();
 
             // Escuta pending transactions
             this.provider.on('pending', async (txHash) => {
@@ -514,13 +675,22 @@ class MempoolSniper {
             });
 
             this.isConnected = true;
-            this.reconnectAttempts = 0; // Reset contador
-            console.log(`[MempoolSniper] 🔫 Mempool sniper activated — listening for large liquidity adds`);
+            this.reconnectAttempts = 0;
+            this.lastStableConnection = Date.now();
+            
+            console.log(`[MempoolSniper] 🔫 Mempool sniper activated`);
             return true;
 
         } catch (error) {
-            console.error('[MempoolSniper] Connection failed:', error.message);
-            this.handleDisconnection();
+            const errorMsg = error?.message || error?.toString() || 'Connection failed';
+            console.error('[GXEON_GUARDIAN] [MempoolSniper] Connection failed:', errorMsg);
+            
+            if (this.provider) {
+                try { this.provider.destroy(); } catch(e) {}
+                this.provider = null;
+            }
+            
+            this.handleDisconnection(true);
             return false;
         }
     }
@@ -534,17 +704,16 @@ class MempoolSniper {
         this.isConnected = false;
         this.cleanup();
 
-        // Incrementa tentativas
         this.reconnectAttempts++;
 
         if (this.reconnectAttempts > this.maxReconnectAttempts) {
-            console.error('[MempoolSniper] Max reconnection attempts reached - giving up');
-            console.log('[MempoolSniper] Sniper desativado - usando apenas DexLiquidityFetcher');
+            console.error('[GXEON_GUARDIAN] [MempoolSniper] Max reconnection attempts reached');
+            console.log('[GXEON_GUARDIAN] [MempoolSniper] Switching to DEGRADED mode');
             return;
         }
 
-        const delay = forceBackoff ? this.getReconnectDelay() : this.getReconnectDelay();
-        console.log(`[MempoolSniper] Reconnecting in ${(delay/1000).toFixed(1)}s (attempt ${this.reconnectAttempts})`);
+        const delay = this.getReconnectDelay();
+        console.log(`[GXEON_GUARDIAN] [MempoolSniper] Reconnecting in ${(delay/1000).toFixed(1)}s (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
         
         this.reconnectTimer = setTimeout(() => this.start(), delay);
     }
@@ -553,19 +722,21 @@ class MempoolSniper {
      * Limpa recursos
      */
     cleanup() {
+        if (this.ws) {
+            try {
+                this.ws.removeAllListeners();
+                this.ws.terminate();
+            } catch (e) {}
+            this.ws = null;
+        }
         if (this.provider) {
             try {
                 this.provider.removeAllListeners();
-                if (this.provider._websocket) {
-                    this.provider._websocket.removeAllListeners();
-                    this.provider._websocket.terminate();
-                }
                 this.provider.destroy();
-            } catch (e) {
-                // Ignore cleanup errors
-            }
+            } catch (e) {}
             this.provider = null;
         }
+        this.isConnected = false;
     }
 
     /**
@@ -696,11 +867,18 @@ class RadarShixService {
         console.log('╚═══════════════════════════════════════════════════════════════╝');
 
         // Inicia monitor de smart money (com graceful fail)
+        let smartMoneySuccess = false;
         try {
-            await this.smartMoney.start();
+            smartMoneySuccess = await this.smartMoney.start();
         } catch (err) {
             console.error('[RADAR_SHIX] SmartMoneyMonitor failed to start:', err.message);
             // Continua mesmo se falhar
+        }
+        
+        // 🛡️ GXEON_SHIELD: Delay de 10s entre conexões para evitar rate limit 429
+        if (smartMoneySuccess) {
+            console.log('[GXEON_SHIELD] ⏱️ Aguardando 10s antes de iniciar MempoolSniper...');
+            await new Promise(resolve => setTimeout(resolve, 10000));
         }
         
         // Inicia mempool sniper para pending transactions (com graceful fail)

@@ -1,0 +1,318 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 🚨 GRAFANA ALERT RULES — High Value Pool Detection
+# GXEON Sovereign Oracle v21.0 | Alerta quando pool >$100k detectada
+# ═══════════════════════════════════════════════════════════════════════════
+
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: GXEON_SOVEREIGN_ALERTS
+    folder: GXEON v21.0
+    interval: 30s
+    rules:
+      # ═══════════════════════════════════════════════════════════════════
+      # ALERT 1: High Value Pool Detected (>$100k)
+      # ═══════════════════════════════════════════════════════════════════
+      - uid: gxeon-high-pool-001
+        title: 🚨 HIGH VALUE POOL DETECTED (>$100k)
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: gxeon-supabase-datasource
+            model:
+              rawSql: |
+                SELECT
+                  COUNT(*) as high_pool_count,
+                  MAX(liquidity_usd) as max_liquidity,
+                  STRING_AGG(DISTINCT dex_name, ', ') as dexes,
+                  STRING_AGG(DISTINCT CONCAT(token0_symbol, '-', token1_symbol), ', ') as pairs
+                FROM grafana_high_value_pools
+                WHERE value_tier = 'high_value'
+                  AND detected_at > NOW() - INTERVAL '2 minutes'
+              format: table
+              refId: A
+        noDataState: NoData
+        execErrState: Error
+        for: 0s
+        annotations:
+          __alertImageToken__: ''
+          description: |
+            🔥 Pool de alta liquidez detectada!
+            
+            Valor Máximo: ${{ $values.max_liquidity }}
+            DEXs: ${{ $values.dexes }}
+            Pares: ${{ $values.pairs }}
+            
+            Verifique imediatamente no dashboard.
+          runbook_url: 'https://wiki.gxeon.ai/runbooks/high-pool-alert'
+          summary: 'High value liquidity pool detected on Arbitrum'
+        labels:
+          severity: critical
+          team: trading
+          environment: production
+          service: gxeon-oracle
+        isPaused: false
+        notification_settings:
+          receiver: gxeon-trading-team
+          group_by: ['alertname', 'severity']
+          group_wait: 0s
+          group_interval: 1m
+          repeat_interval: 10m
+
+      # ═══════════════════════════════════════════════════════════════════
+      # ALERT 2: Whale Movement Alert (>$50k)
+      # ═══════════════════════════════════════════════════════════════════
+      - uid: gxeon-whale-movement-002
+        title: 🐋 WHALE MOVEMENT DETECTED (>$50k)
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 60
+              to: 0
+            datasourceUid: gxeon-supabase-datasource
+            model:
+              rawSql: |
+                SELECT
+                  COUNT(*) as whale_count,
+                  SUM(amount_usd) as total_volume,
+                  STRING_AGG(DISTINCT token_symbol, ', ') as tokens,
+                  STRING_AGG(DISTINCT flow_type, ', ') as flow_types
+                FROM grafana_whale_telemetry
+                WHERE severity = 'CRITICAL'
+                  AND detected_at > NOW() - INTERVAL '1 minute'
+              format: table
+              refId: A
+        noDataState: NoData
+        execErrState: Error
+        for: 0s
+        annotations:
+          description: |
+            🐋 Whale movement detected!
+            
+            Total Volume: $${{ $values.total_volume }}
+            Tokens: ${{ $values.tokens }}
+            Flow Types: ${{ $values.flow_types }}
+            
+            Potential alpha signal.
+          summary: 'Whale movement detected on-chain'
+        labels:
+          severity: warning
+          team: intelligence
+          environment: production
+          service: gxeon-oracle
+        isPaused: false
+        notification_settings:
+          receiver: gxeon-intel-team
+          group_by: ['alertname', 'severity']
+          group_wait: 0s
+          group_interval: 30s
+          repeat_interval: 5m
+
+      # ═══════════════════════════════════════════════════════════════════
+      # ALERT 3: A2A API Latency Spike
+      # ═══════════════════════════════════════════════════════════════════
+      - uid: gxeon-latency-spike-003
+        title: ⚡ A2A API LATENCY SPIKE
+        condition: B
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: gxeon-supabase-datasource
+            model:
+              rawSql: |
+                SELECT
+                  AVG(latency_ms) as avg_latency,
+                  MAX(latency_ms) as max_latency,
+                  COUNT(*) as request_count,
+                  endpoint
+                FROM a2a_agent_activity
+                WHERE request_at > NOW() - INTERVAL '5 minutes'
+                GROUP BY endpoint
+              format: table
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: gt
+                    params: [500]
+        noDataState: NoData
+        execErrState: Error
+        for: 2m
+        annotations:
+          description: |
+            ⚡ A2A API latency is above 500ms!
+            
+            Average: ${{ $values.avg_latency }}ms
+            Maximum: ${{ $values.max_latency }}ms
+            
+            Check Supabase connection and query performance.
+          summary: 'A2A API experiencing high latency'
+        labels:
+          severity: warning
+          team: sre
+          environment: production
+          service: gxeon-oracle
+        isPaused: false
+        notification_settings:
+          receiver: gxeon-sre-team
+          group_by: ['alertname', 'severity']
+          group_wait: 30s
+          group_interval: 5m
+          repeat_interval: 30m
+
+      # ═══════════════════════════════════════════════════════════════════
+      # ALERT 4: Oracle Disconnected (No Data)
+      # ═══════════════════════════════════════════════════════════════════
+      - uid: gxeon-oracle-down-004
+        title: 🔴 ORACLE DATA STREAM DOWN
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: gxeon-supabase-datasource
+            model:
+              rawSql: |
+                SELECT COUNT(*) as pool_count
+                FROM radar_liquidity_pools
+                WHERE detected_at > NOW() - INTERVAL '5 minutes'
+              format: table
+              refId: A
+        noDataState: Alerting
+        execErrState: Error
+        for: 2m
+        annotations:
+          description: |
+            🔴 GXEON Oracle has not detected any pools in the last 5 minutes.
+            
+            Possible causes:
+            - Alchemy WebSocket disconnected
+            - DexScreener API down
+            - Database connection lost
+            
+            Check server logs immediately!
+          summary: 'Oracle data stream appears to be down'
+        labels:
+          severity: critical
+          team: sre
+          environment: production
+          service: gxeon-oracle
+        isPaused: false
+        notification_settings:
+          receiver: gxeon-oncall
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 1m
+          repeat_interval: 5m
+
+      # ═══════════════════════════════════════════════════════════════════
+      # ALERT 5: Revenue Drop Detection
+      # ═══════════════════════════════════════════════════════════════════
+      - uid: gxeon-revenue-drop-005
+        title: 💰 REVENUE DROP DETECTED
+        condition: B
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            datasourceUid: gxeon-supabase-datasource
+            model:
+              rawSql: |
+                SELECT
+                  SUM(signals_sold) as total_signals,
+                  SUM(revenue_usd) as total_revenue
+                FROM grafana_signal_revenue_realtime
+                WHERE hour > NOW() - INTERVAL '1 hour'
+              format: table
+              refId: A
+          - refId: B
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: lt
+                    params: [10]
+        noDataState: NoData
+        execErrState: Error
+        for: 15m
+        annotations:
+          description: |
+            💰 Revenue signal drop detected.
+            
+            Signals in last hour: ${{ $values.total_signals }}
+            Revenue: ${{ $values.total_revenue }} USD
+            
+            Check agent subscription rates.
+          summary: 'A2A revenue below expected threshold'
+        labels:
+          severity: info
+          team: business
+          environment: production
+          service: gxeon-oracle
+        isPaused: false
+        notification_settings:
+          receiver: gxeon-business-team
+          group_by: ['alertname']
+          group_wait: 5m
+          group_interval: 30m
+          repeat_interval: 2h
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CONTACT POINTS (Definir no Grafana UI ou via API)
+# ═══════════════════════════════════════════════════════════════════════════
+
+contactPoints:
+  - orgId: 1
+    name: gxeon-trading-team
+    receivers:
+      - uid: telegram-trading
+        type: telegram
+        settings:
+          bottoken: '${TELEGRAM_BOT_TOKEN}'
+          chatid: '${TELEGRAM_TRADING_CHAT_ID}'
+          message: |
+            🚨 *{{ .CommonLabels.severity | title }}*: {{ .CommonAnnotations.summary }}
+            
+            {{ range .Alerts }}
+            • {{ .Annotations.description }}
+            {{ end }}
+          parse_mode: Markdown
+
+  - orgId: 1
+    name: gxeon-sre-team
+    receivers:
+      - uid: slack-sre
+        type: slack
+        settings:
+          url: '${SLACK_SRE_WEBHOOK_URL}'
+          title: '{{ .CommonAnnotations.summary }}'
+          text: '{{ .CommonAnnotations.description }}'
+
+  - orgId: 1
+    name: gxeon-oncall
+    receivers:
+      - uid: pagerduty-oncall
+        type: pagerduty
+        settings:
+          integrationKey: '${PAGERDUTY_INTEGRATION_KEY}'
+          severity: '{{ .CommonLabels.severity }}'
+
+# ═══════════════════════════════════════════════════════════════════════════
+# 🎨 GRAFANA ALERTS v21.0 CONFIGURADOS
+# Cores: Critical #FF00FF | Warning #D4AF37 | Info #00FFFF
+# ═══════════════════════════════════════════════════════════════════════════

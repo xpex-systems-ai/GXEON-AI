@@ -1,0 +1,156 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 🐳 GRAFANA LOCAL STACK — GXEON Visual Command v21.0
+# Docker Compose para testes locais do dashboard
+# ═══════════════════════════════════════════════════════════════════════════
+
+version: '3.8'
+
+services:
+  # ═══════════════════════════════════════════════════════════════════════
+  # GRAFANA OSS
+  # ═══════════════════════════════════════════════════════════════════════
+  grafana:
+    image: grafana/grafana-oss:10.2.3
+    container_name: gxeon-grafana
+    restart: unless-stopped
+    
+    ports:
+      - "3000:3000"
+    
+    environment:
+      # Admin credentials
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      
+      # Tema cyberpunk (dark)
+      - GF_USERS_DEFAULT_THEME=dark
+      - GF_USERS_ALLOW_ORG_CREATE=false
+      
+      # Anonymous access (desabilitar em prod)
+      - GF_AUTH_ANONYMOUS_ENABLED=${GF_AUTH_ANONYMOUS_ENABLED:-false}
+      - GF_AUTH_ANONYMOUS_ORG_NAME=GXEON
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      
+      # Security headers
+      - GF_SECURITY_CSRF_ADDITIONAL_HEADERS=X-Forwarded-Host
+      - GF_SECURITY_CSRF_TRUSTED_ORIGINS=localhost
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+      
+      # Performance
+      - GF_DATABASE_WAL=true
+      - GF_UNIFIED_ALERTING_ENABLED=true
+      
+      # Logging
+      - GF_LOG_MODE=console
+      - GF_LOG_LEVEL=${GRAFANA_LOG_LEVEL:-info}
+    
+    volumes:
+      # Dashboard provisioning
+      - ../dashboard:/etc/grafana/provisioning/dashboards:ro
+      
+      # Datasource provisioning
+      - ../datasource:/etc/grafana/provisioning/datasources:ro
+      
+      # Alerting provisioning
+      - ../alerts:/etc/grafana/provisioning/alerting:ro
+      
+      # Dashboard JSON
+      - ../dashboard/gxeon_v21_dashboard.json:/var/lib/grafana/dashboards/gxeon_v21_dashboard.json:ro
+      
+      # Persistent storage
+      - grafana-storage:/var/lib/grafana
+    
+    networks:
+      - gxeon-monitoring
+    
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # (Opcional) PostgreSQL local para testes
+  # ═══════════════════════════════════════════════════════════════════════
+  postgres:
+    image: postgres:15-alpine
+    container_name: gxeon-postgres-local
+    restart: unless-stopped
+    
+    ports:
+      - "5432:5432"
+    
+    environment:
+      - POSTGRES_USER=gxeon
+      - POSTGRES_PASSWORD=gxeon_local_123
+      - POSTGRES_DB=gxeon_analytics
+    
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ../../supabase/grafana_views_schema.sql:/docker-entrypoint-initdb.d/01-views.sql:ro
+    
+    networks:
+      - gxeon-monitoring
+    
+    profiles:
+      - local-db  # Só inicia com: docker-compose --profile local-db up
+
+  # ═══════════════════════════════════════════════════════════════════════
+  # (Opcional) pgAdmin para gerenciamento local
+  # ═══════════════════════════════════════════════════════════════════════
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: gxeon-pgadmin
+    restart: unless-stopped
+    
+    ports:
+      - "5050:80"
+    
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@gxeon.ai
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    
+    networks:
+      - gxeon-monitoring
+    
+    profiles:
+      - local-db
+
+volumes:
+  grafana-storage:
+  postgres-data:
+  pgadmin-data:
+
+networks:
+  gxeon-monitoring:
+    driver: bridge
+
+# ═══════════════════════════════════════════════════════════════════════════
+# INSTRUÇÕES DE USO
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 1. Iniciar Grafana (conectando ao Supabase real):
+#    docker-compose up -d
+#
+# 2. Iniciar Grafana + PostgreSQL local:
+#    docker-compose --profile local-db up -d
+#
+# 3. Ver logs:
+#    docker-compose logs -f grafana
+#
+# 4. Acessar:
+#    - Grafana: http://localhost:3000 (admin/admin)
+#    - pgAdmin: http://localhost:5050 (admin@gxeon.ai/admin)
+#
+# 5. Parar:
+#    docker-compose down
+#
+# 6. Limpar volumes:
+#    docker-compose down -v
+#
+# ═══════════════════════════════════════════════════════════════════════════

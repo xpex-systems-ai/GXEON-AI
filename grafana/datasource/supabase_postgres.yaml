@@ -1,0 +1,100 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# 📊 GRAFANA DATASOURCE — Supabase PostgreSQL Connection
+# GXEON Visual Command v21.0 | Cyberpunk Analytics
+# ═══════════════════════════════════════════════════════════════════════════
+
+apiVersion: 1
+
+datasources:
+  # ═════════════════════════════════════════════════════════════════════════
+  # PRIMARY: Supabase PostgreSQL (Connection Pooler)
+  # ═════════════════════════════════════════════════════════════════════════
+  - name: GXEON_SUPABASE
+    type: postgres
+    access: proxy
+    uid: gxeon-supabase-datasource
+    url: ${SUPABASE_HOST}:${SUPABASE_PORT}
+    database: postgres
+    user: ${SUPABASE_USER}
+    secureJsonData:
+      password: ${SUPABASE_PASSWORD}
+    jsonData:
+      sslmode: require
+      maxOpenConns: 10
+      maxIdleConns: 5
+      connMaxLifetime: 14400
+      # Time series support
+      timescaledb: false
+      # Query timeout
+      queryTimeout: 60
+      # Exemplar tracing
+      manageAlerts: true
+      # Log queries (dev only)
+      logLevel: 'error'
+    isDefault: true
+    editable: false
+    version: 1
+    readOnly: false
+
+  # ═════════════════════════════════════════════════════════════════════════
+  # SECONDARY: Supabase Realtime (Event-based queries)
+  # ═════════════════════════════════════════════════════════════════════════
+  - name: GXEON_REALTIME
+    type: postgres
+    access: proxy
+    uid: gxeon-supabase-realtime
+    url: ${SUPABASE_HOST}:${SUPABASE_PORT}
+    database: postgres
+    user: ${SUPABASE_USER}
+    secureJsonData:
+      password: ${SUPABASE_PASSWORD}
+    jsonData:
+      sslmode: require
+      maxOpenConns: 5
+      maxIdleConns: 2
+      connMaxLifetime: 3600
+      # Para queries de alta frequência
+      queryTimeout: 10
+    isDefault: false
+    editable: false
+
+  # ═════════════════════════════════════════════════════════════════════════
+  # AUXILIARY: JSON API (para métricas do Oracle A2A Gateway)
+  # ═════════════════════════════════════════════════════════════════════════
+  - name: GXEON_ORACLE_API
+    type: marcusolsson-json-datasource
+    access: proxy
+    uid: gxeon-oracle-api
+    url: ${GXEON_ORACLE_URL}/oracle
+    jsonData:
+      queryParams: ''
+      headerName1: X-API-Key
+      secureHeaderValue1: ${GXEON_API_KEY}
+    isDefault: false
+    editable: false
+
+# ═══════════════════════════════════════════════════════════════════════════
+# INSTRUÇÕES DE CONFIGURAÇÃO
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# 1. Obter credenciais do Supabase:
+#    - Host: <project>.supabase.co
+#    - Port: 5432 (ou 6543 para connection pooler)
+#    - User: postgres
+#    - Password: [Database Password from Settings > Database]
+#
+# 2. Configurar no Grafana:
+#    - Provisioning: copiar este arquivo para /etc/grafana/provisioning/datasources/
+#    - Ou UI: Configuration > Data Sources > Add PostgreSQL
+#
+# 3. Variáveis de ambiente (secrets):
+#    export SUPABASE_HOST="your-project.supabase.co"
+#    export SUPABASE_PORT="5432"
+#    export SUPABASE_USER="postgres"
+#    export SUPABASE_PASSWORD="your-password"
+#
+# 4. Testar conexão:
+#    - Abrir dashboard GXEON
+#    - Verificar se painéis populam com dados
+#
+# ═══════════════════════════════════════════════════════════════════════════
