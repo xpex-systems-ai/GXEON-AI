@@ -1,6 +1,45 @@
 // 🚀 GXEON RAILWAY v13 - Ultra-Fast Boot for Healthcheck
 // Inicia servidor em < 100ms, carrega resto em background
 
+// ==================== GXEON_SHIELD - GLOBAL ERROR HANDLERS ====================
+// Captura TODOS os erros antes que causem crash no Railway
+
+process.on('uncaughtException', (err) => {
+    const errorMsg = err?.message || err?.toString() || 'Unknown error';
+    console.error('[GXEON_SHIELD] Uncaught Exception:', errorMsg);
+    
+    // 🛡️ Protocolo 429: NUNCA crasha em rate limit ou WebSocket
+    if (errorMsg.includes('429') || 
+        errorMsg.includes('Unexpected server response') ||
+        errorMsg.includes('WebSocket') ||
+        errorMsg.includes('ECONNRESET') ||
+        errorMsg.includes('ETIMEDOUT')) {
+        console.log('[GXEON_SHIELD] 🛡️ Network error captured - SERVER CONTINUES ALIVE');
+        return; // CRÍTICO: Não deixa o processo morrer!
+    }
+    
+    // Outros erros graves - loga mas dá tempo de diagnostico
+    console.error('[GXEON_SHIELD] ⚠️ Critical error - graceful shutdown in 10s');
+    setTimeout(() => process.exit(1), 10000);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    const errorMsg = reason?.message || reason?.toString() || 'Unknown rejection';
+    console.error('[GXEON_SHIELD] Unhandled Rejection:', errorMsg);
+    
+    // Silencia erros de rede
+    if (errorMsg.includes('429') || errorMsg.includes('WebSocket')) {
+        console.log('[GXEON_SHIELD] 🛡️ Network rejection silenced - server stable');
+    }
+    // NÃO crasha - apenas loga
+});
+
+// 🚨 Handler para erro em Workers/Threads (se houver)
+process.on('workerThreadsUncaughtException', (err) => {
+    console.error('[GXEON_SHIELD] Worker error:', err.message);
+    // Não propaga
+});
+
 const express = require('express');
 const cors = require('cors');
 
@@ -114,10 +153,24 @@ setTimeout(async () => {
     }
 
     // Radar v2.0 - Liquidity-first monitoring (Twitter API 402 bypassed)
+    // 🛡️ GXEON_SHIELD: Soft start com delay para evitar rate limit 429
     if ((process.env.ALCHEMY_API_KEY || process.env.ARBITRUM_RPC_URL) && process.env.DISABLE_RADAR !== 'true') {
       const radarShix = require('./services/radarShix');
-      radarShix.start();
-      console.log('[RADAR_SHIX v2.0] Active - DexLiquidity + SmartMoney monitoring');
+      
+      // Delay de 20s antes de tentar conectar (evita crash loop no Railway)
+      setTimeout(async () => {
+        try {
+          console.log('[GXEON_SHIELD] Radar soft-start: iniciando após 20s de estabilização...');
+          await radarShix.start();
+          console.log('[RADAR_SHIX v2.0] ✅ Active - DexLiquidity + SmartMoney monitoring');
+        } catch (radarError) {
+          console.error('[GXEON_SHIELD] ⚠️ Radar start failed:', radarError.message);
+          if (radarError.message?.includes('429')) {
+            console.log('[GXEON_SHIELD] Rate limit detectado - servidor continua em modo DEGRADED (apenas DexScreener)');
+          }
+          // NÃO relança erro - servidor continua vivo!
+        }
+      }, 20000); // 20 segundos de delay
     }
 
     if (process.env.SWARM_AUTOSTART === 'true') {
