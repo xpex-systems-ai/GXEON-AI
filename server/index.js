@@ -3,6 +3,7 @@
 
 // ==================== GXEON_SHIELD - GLOBAL ERROR HANDLERS ====================
 // Captura TODOS os erros antes que causem crash no Railway
+// 🛡️ CRITICAL: NUNCA deixar o processo morrer - sempre manter ALIVE
 
 process.on('uncaughtException', (err) => {
     const errorMsg = err?.message || err?.toString() || 'Unknown error';
@@ -13,32 +14,15 @@ process.on('uncaughtException', (err) => {
         errorMsg.includes('Unexpected server response') ||
         errorMsg.includes('WebSocket') ||
         errorMsg.includes('ECONNRESET') ||
-        errorMsg.includes('ETIMEDOUT')) {
+        errorMsg.includes('ETIMEDOUT') ||
+        errorMsg.includes('socket hang up')) {
         console.log('[GXEON_SHIELD] 🛡️ Network error captured - SERVER CONTINUES ALIVE');
         return; // CRÍTICO: Não deixa o processo morrer!
     }
     
-    // Outros erros graves - loga mas dá tempo de diagnostico
-    console.error('[GXEON_SHIELD] ⚠️ Critical error - graceful shutdown in 10s');
-    setTimeout(() => process.exit(1), 10000);
-});
-
-// 🛡️ GXEON_SHIELD - Global Error Handlers (PRIMEIROS - antes de qualquer código)
-process.on('uncaughtException', (err) => {
-    const errorMsg = err?.message || err?.toString() || 'Unknown error';
-    console.error('[GXEON_SHIELD] Uncaught Exception:', errorMsg);
-    
-    // NUNCA crasha em erros de rede/WebSocket
-    if (errorMsg.includes('429') || 
-        errorMsg.includes('Unexpected server response') ||
-        errorMsg.includes('WebSocket') ||
-        errorMsg.includes('ECONNRESET')) {
-        console.log('[GXEON_SHIELD] 🛡️ Network error captured - SERVER CONTINUES ALIVE');
-        return; // CRÍTICO: Não deixa o processo morrer!
-    }
-    
-    // Outros erros - loga mas mantém vivo
-    console.error('[GXEON_SHIELD] ⚠️ Non-network error - server continues');
+    // 🛡️ TODOS outros erros - loga mas MANTÉM processo vivo
+    console.error('[GXEON_SHIELD] ⚠️ Error logged - server continues ALIVE');
+    // NUNCA chamar process.exit() - Railway precisa do processo sempre rodando
 });
 
 process.on('unhandledRejection', (reason, promise) => {
@@ -57,6 +41,78 @@ process.on('workerThreadsUncaughtException', (err) => {
     console.error('[GXEON_SHIELD] Worker error:', err.message);
     // Não propaga
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🛡️ GXEON WEBSOCKET MONKEY-PATCH - Prevents ALL unhandled 'error' events
+// ═══════════════════════════════════════════════════════════════════════════
+// Este patch é aplicado ANTES de qualquer outro código carregar
+// para garantir que TODOS os WebSockets tenham error handlers
+
+// Patch para o módulo 'ws' (WebSocket library usado por ethers.js)
+const Module = require('module');
+const originalRequire = Module.prototype.require;
+
+Module.prototype.require = function(id) {
+    const mod = originalRequire.apply(this, arguments);
+    
+    // Patch para o módulo 'ws'
+    if (id === 'ws' || id.endsWith('/ws')) {
+        return createGuardedWebSocket(mod);
+    }
+    
+    return mod;
+};
+
+function createGuardedWebSocket(WebSocketClass) {
+    // Guard para evitar double-patch
+    if (WebSocketClass.__GXEON_GUARDED) return WebSocketClass;
+    
+    class GuardedWebSocket extends WebSocketClass {
+        constructor(...args) {
+            super(...args);
+            
+            // 🛡️ CRITICAL: Attach error handler IMMEDIATELY in constructor
+            // This runs BEFORE any user code can attach handlers
+            this._gxeonGuarded = true;
+            
+            // Attach emergency error handler
+            this.on('error', (err) => {
+                const msg = err?.message || err?.toString() || '';
+                
+                // Handle 429 specifically
+                if (msg.includes('429') || msg.includes('Unexpected server response')) {
+                    console.warn('[GXEON_WEBSOCKET_GUARD] 429 captured and neutralized');
+                    try {
+                        this.terminate();
+                    } catch (e) {}
+                    return; // Stop error propagation
+                }
+                
+                // Log other errors but don't crash
+                // console.debug('[GXEON_WEBSOCKET_GUARD] Error:', msg);
+            });
+            
+            // Also handle unexpected-response
+            this.on('unexpected-response', (req, res) => {
+                if (res.statusCode === 429) {
+                    console.warn('[GXEON_WEBSOCKET_GUARD] 429 on handshake captured');
+                    try {
+                        this.terminate();
+                    } catch (e) {}
+                }
+            });
+        }
+    }
+    
+    // Copy static properties
+    Object.setPrototypeOf(GuardedWebSocket, WebSocketClass);
+    GuardedWebSocket.prototype = WebSocketClass.prototype;
+    GuardedWebSocket.__GXEON_GUARDED = true;
+    
+    return GuardedWebSocket;
+}
+
+console.log('🛡️ [GXEON_SHIELD] WebSocket monkey-patch active - ALL WebSockets will have error handlers');
 
 const express = require('express');
 const cors = require('cors');
@@ -87,6 +143,177 @@ app.get('/api/health', (req, res) => {
 
 app.get('/status', (req, res) => {
   res.json({ status: 'active', version: '2.0.0-sovereign' });
+});
+
+// 🔴 ALCHEMY RATE LIMIT HEALTH ENDPOINT (para dashboard)
+app.get('/api/v1/health/alchemy', (req, res) => {
+  // Lazy load do sovereignOracle para obter status
+  try {
+    const { getAlchemyRateLimitStatus } = require('./services/sovereignOracle');
+    const status = getAlchemyRateLimitStatus();
+    res.json(status);
+  } catch (err) {
+    // Se sovereignOracle não carregou ainda, retorna OK
+    res.json({
+      rateLimited: false,
+      retryAfter: 0,
+      message: 'Oracle initializing',
+      timestamp: Date.now()
+    });
+  }
+});
+
+// 🤖 MAMMOUTH HQ INTEGRATION - Endpoint para sincronização com IA Mammouth
+// POST /api/v1/mammouth/sync - Envia oportunidades de dust para análise de confiança
+app.post('/api/v1/mammouth/sync', async (req, res) => {
+  const requestStart = Date.now();
+  
+  try {
+    // Lazy load do Supabase
+    const { createClient } = require('@supabase/supabase-js');
+    const supabase = createClient(
+      process.env.SUPABASE_PROJECT_URL || process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+    
+    // Buscar oportunidades ativas da tabela gari_dust_opportunities
+    const { data: opportunities, error } = await supabase
+      .from('gari_dust_opportunities')
+      .select('*')
+      .eq('status', 'discovered')
+      .gt('expires_at', new Date().toISOString())
+      .order('profit_usd', { ascending: false })
+      .limit(100);
+    
+    if (error) throw error;
+    
+    if (!opportunities || opportunities.length === 0) {
+      return res.json({
+        success: true,
+        message: 'No active opportunities found',
+        data: [],
+        mammouth_analysis: null,
+        timestamp: Date.now()
+      });
+    }
+    
+    // Preparar dados para análise da Mammouth AI
+    const analysisPayload = {
+      source: 'gxeon_gari_dust_sweeper',
+      chain: 'arbitrum_mainnet',
+      opportunities_count: opportunities.length,
+      opportunities: opportunities.map(opp => ({
+        id: opp.id,
+        pair_address: opp.pair_address,
+        token0: opp.token0_address,
+        token1: opp.token1_address,
+        dex: opp.dex_name,
+        profit_usd: opp.profit_usd,
+        gas_cost_usd: opp.gas_cost_usd,
+        estimated_fees_usd: opp.estimated_fees_usd,
+        confidence: opp.confidence,
+        detected_at: opp.detected_at,
+        expires_at: opp.expires_at
+      })),
+      monetization_params: {
+        min_liquidity_usd: 10000,
+        max_gas_price_gwei: 0.1,
+        min_confidence_score: 0.85,
+        archeology_mode: 'ACTIVE'
+      }
+    };
+    
+    // Enviar para Mammouth AI Oracle (se configurado)
+    let mammouthAnalysis = null;
+    const mammouthUrl = process.env.MAMMOUTH_HQ_URL || process.env.MAMMOUTH_AI_API_URL;
+    
+    if (mammouthUrl) {
+      try {
+        const axios = require('axios');
+        const mammouthResponse = await axios.post(
+          `${mammouthUrl}/analyze/dust-opportunities`,
+          analysisPayload,
+          {
+            timeout: 10000,
+            headers: {
+              'Authorization': `Bearer ${process.env.MAMMOUTH_API_KEY}`,
+              'X-GXEON-Source': 'predator_monetizer',
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+        
+        mammouthAnalysis = {
+          status: 'completed',
+          confidence_analysis: mammouthResponse.data?.confidence_scores || [],
+          recommendations: mammouthResponse.data?.recommendations || [],
+          high_priority_count: mammouthResponse.data?.high_priority?.length || 0
+        };
+        
+        // Atualizar confiança das oportunidades com dados da Mammouth
+        if (mammouthResponse.data?.confidence_scores) {
+          for (const score of mammouthResponse.data.confidence_scores) {
+            await supabase
+              .from('gari_dust_opportunities')
+              .update({
+                confidence: score.enhanced_confidence,
+                metadata: {
+                  mammouth_analysis: score,
+                  analyzed_at: new Date().toISOString()
+                },
+                updated_at: new Date().toISOString()
+              })
+              .eq('id', score.opportunity_id);
+          }
+        }
+        
+      } catch (mammouthErr) {
+        console.warn('[MAMMOUTH_SYNC] AI analysis failed:', mammouthErr.message);
+        mammouthAnalysis = {
+          status: 'failed',
+          error: mammouthErr.message,
+          fallback: 'using_local_confidence_scores'
+        };
+      }
+    } else {
+      mammouthAnalysis = {
+        status: 'skipped',
+        reason: 'MAMMOUTH_HQ_URL not configured',
+        note: 'Using local confidence calculations'
+      };
+    }
+    
+    // Calcular estatísticas
+    const totalProfit = opportunities.reduce((sum, opp) => sum + (opp.profit_usd || 0), 0);
+    const avgConfidence = opportunities.reduce((sum, opp) => sum + (opp.confidence || 0), 0) / opportunities.length;
+    const highConfidenceOpps = opportunities.filter(opp => (opp.confidence || 0) >= 0.85).length;
+    
+    const latency = Date.now() - requestStart;
+    
+    res.json({
+      success: true,
+      message: `Synced ${opportunities.length} opportunities with Mammouth AI`,
+      data: {
+        opportunities_count: opportunities.length,
+        total_profit_usd: totalProfit,
+        average_confidence: avgConfidence,
+        high_confidence_count: highConfidenceOpps,
+        chain: 'arbitrum_mainnet'
+      },
+      mammouth_analysis: mammouthAnalysis,
+      latency_ms: latency,
+      timestamp: Date.now()
+    });
+    
+  } catch (err) {
+    console.error('[MAMMOUTH_SYNC] Error:', err.message);
+    res.status(500).json({
+      success: false,
+      error: 'MAMMOUTH_SYNC_FAILED',
+      message: err.message,
+      timestamp: Date.now()
+    });
+  }
 });
 
 // ==================== SERVER START (UNDER 50ms) ====================

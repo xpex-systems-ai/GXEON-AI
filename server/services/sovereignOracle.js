@@ -133,10 +133,36 @@ class AsyncBatchStream {
 // ═══════════════════════════════════════════════════════════════════════════
 // ALCHEMY HIGH-SPEED WEBSOCKET ENGINE
 // ═══════════════════════════════════════════════════════════════════════════
+
+// 🔴 GLOBAL RATE LIMIT STATE (Shared across instances)
+const GLOBAL_RATE_LIMIT = {
+    isRateLimited: false,
+    retryAfter: 0,
+    lastError: null,
+    rateLimitedAt: null
+};
+
+// 🔴 CIRCUIT BREAKER 429 - FAILOVER CONFIGURATION
+const CIRCUIT_BREAKER_CONFIG = {
+    primaryUrl: process.env.ALCHEMY_WSS_URL_PRIMARY || (process.env.ALCHEMY_API_KEY ? `wss://arb-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}` : null),
+    backupUrl: process.env.ALCHEMY_WSS_URL_BACKUP,
+    maxRetriesOnPrimary: 3,
+    cooldownMs: 30000, // 30s cooldown após 429
+    autoPauseDuration: 30000 // 30s como especificado no JSON SUPREMO
+};
+
 class AlchemyHighSpeedEngine {
     constructor(apiKey, eventEmitter) {
         this.apiKey = apiKey;
-        this.wsUrl = `wss://arb-mainnet.g.alchemy.com/v2/${apiKey}`;
+        // 🛡️ CIRCUIT BREAKER: Configurar URLs primária e backup
+        this.wsUrls = [
+            CIRCUIT_BREAKER_CONFIG.primaryUrl,
+            CIRCUIT_BREAKER_CONFIG.backupUrl,
+            apiKey ? `wss://arb-mainnet.g.alchemy.com/v2/${apiKey}` : null,
+            'wss://arb1.arbitrum.io/ws' // Public fallback
+        ].filter(Boolean);
+        this.currentUrlIndex = 0;
+        this.wsUrl = this.wsUrls[0]; // URL atual
         this.emitter = eventEmitter;
         this.provider = null;
         this.isConnected = false;
@@ -147,7 +173,15 @@ class AlchemyHighSpeedEngine {
             blocksProcessed: 0,
             pendingTxSeen: 0,
             reconnects: 0,
-            latencyMs: 0
+            latencyMs: 0,
+            currentProvider: 'primary' // primary | backup | fallback
+        };
+        this.rateLimitState = GLOBAL_RATE_LIMIT; // Shared reference
+        this.circuitBreaker = {
+            isOpen: false,
+            openedAt: null,
+            failCount: 0,
+            lastFailoverAt: null
         };
     }
     
@@ -157,9 +191,29 @@ class AlchemyHighSpeedEngine {
             return false;
         }
         
+        // 🛡️ GUARDIAN: Pre-connection rate limit check
+        if (this.rateLimitState.isRateLimited) {
+            console.log(`[ALCHEMY_ENGINE] Rate limited - waiting ${this.rateLimitState.retryAfter}ms before reconnect`);
+            setTimeout(() => this.connect(), this.rateLimitState.retryAfter);
+            return false;
+        }
+        
         try {
             const startTime = Date.now();
+            
+            // 🛡️ GUARDIAN: Create provider with immediate error handler setup
             this.provider = new ethers.WebSocketProvider(this.wsUrl);
+            
+            // 🛡️ CRITICAL: Attach error handler IMMEDIATELY before any async operations
+            // This prevents unhandled 'error' events from crashing the process
+            if (this.provider._websocket) {
+                // Remove any existing error handlers first to prevent duplicates
+                this.provider._websocket.removeAllListeners('error');
+                this.provider._websocket.removeAllListeners('unexpected-response');
+                
+                // Attach error handler immediately
+                this._attachWebSocketErrorHandler();
+            }
             
             // WebSocket handlers
             this.provider._websocket.on('open', () => {
@@ -170,50 +224,26 @@ class AlchemyHighSpeedEngine {
             });
             
             // ═══════════════════════════════════════════════════════════
-            // 🛡️ GXEON ESCUDO CONTRA BLOQUEIO DE REDE (429) - v21.1
+            // 🛡️ GXEON ESCUDO CONTRA BLOQUEIO DE REDE (429) - v21.2 + CIRCUIT BREAKER
             // ═══════════════════════════════════════════════════════════
-            this.provider._websocket.on('error', (err) => {
-                // Rate limit detection (429)
-                if (err.message && (err.message.includes('429') || err.message.includes('rate limit') || err.message.includes('Rate limit'))) {
-                    console.error('⚠️ [GXEON] Alchemy Rate Limit! Iniciando Protocolo de Recuo (30s)...');
-                    this.isConnected = false;
-                    
-                    // Corta a conexão infectada
-                    try {
-                        this.provider._websocket.terminate();
-                        this.provider.removeAllListeners();
-                        this.provider.destroy();
-                    } catch (e) {
-                        // Ignore cleanup errors
-                    }
-                    
-                    // Protocolo de recuo com backoff exponencial
-                    const backoffMs = Math.min(30000 * Math.pow(2, Math.min(this.connectionStats.reconnects, 3)), 300000);
-                    console.log(`🚀 [GXEON] Tentando decolagem segura em ${backoffMs/1000}s...`);
-                    
-                    setTimeout(() => {
-                        this.connectionStats.reconnects++;
-                        this.connect();
-                    }, backoffMs);
-                    
-                    return;
+            this.provider._websocket.on('error', (err) => this._handleWebSocketError(err));
+            
+            // Also handle unexpected-response for 429 during handshake
+            this.provider._websocket.on('unexpected-response', (req, res) => {
+                if (res.statusCode === 429) {
+                    console.error(`⚠️ [GXEON] Alchemy Rate Limit (429) during handshake! Status: ${res.statusCode}`);
+                    this._handleRateLimitError(new Error(`Unexpected server response: 429`));
                 }
-                
-                // Frame error protection
-                if (err.message && err.message.includes('Invalid WebSocket frame')) {
-                    console.warn('🛡️ [GXEON] Frame corrompido detectado e neutralizado.');
-                    return;
-                }
-                
-                console.error(`[ALCHEMY_ENGINE] WS Error: ${err.message}`);
-                this.isConnected = false;
             });
             
+            // Handle close event
             this.provider._websocket.on('close', () => {
                 console.warn('[ALCHEMY_ENGINE] WS Closed - reconnecting...');
                 this.isConnected = false;
-                this.connectionStats.reconnects++;
-                setTimeout(() => this.connect(), ORACLE_CONFIG.wsReconnectMs);
+                if (!this.rateLimitState.isRateLimited) {
+                    this.connectionStats.reconnects++;
+                    setTimeout(() => this.connect(), ORACLE_CONFIG.wsReconnectMs || 5000);
+                }
             });
             
             // Block subscription
@@ -229,12 +259,154 @@ class AlchemyHighSpeedEngine {
                 await this.processPendingTx(txHash);
             });
             
-            return true;
-            
         } catch (err) {
-            console.error(`[ALCHEMY_ENGINE] Connection failed: ${err.message}`);
-            setTimeout(() => this.connect(), ORACLE_CONFIG.wsReconnectMs);
+            console.error('[ALCHEMY_ENGINE] Connection error:', err.message);
+            this.isConnected = false;
+            
+            // Check if this is a 429 error
+            if (err.message && err.message.includes('429')) {
+                this._handleRateLimitError(err);
+            } else {
+                // Reconnect after delay for other errors
+                setTimeout(() => this.connect(), 5000);
+            }
             return false;
+        }
+        
+        return true;
+    }
+    
+    // 🛡️ CRITICAL: Attach error handler to prevent unhandled error crashes
+    _attachWebSocketErrorHandler() {
+        if (!this.provider || !this.provider._websocket) return;
+        
+        const ws = this.provider._websocket;
+        
+        // Main error handler
+        ws.on('error', (err) => this._handleWebSocketError(err));
+    }
+    
+    // 🛡️ Handle WebSocket errors including 429
+    _handleWebSocketError(err) {
+        // Rate limit detection (429) - this is the CRITICAL error that crashes the process
+        if (err.message && (err.message.includes('429') || err.message.includes('Unexpected server response: 429'))) {
+            this._handleRateLimitError(err);
+            return;
+        }
+        
+        // Frame error protection
+        if (err.message && err.message.includes('Invalid WebSocket frame')) {
+            console.warn('🛡️ [GXEON] Frame corrompido detectado e neutralizado.');
+            return;
+        }
+        
+        // Socket hang up - common network error
+        if (err.message && (err.message.includes('socket hang up') || err.message.includes('ECONNRESET'))) {
+            console.warn('[ALCHEMY_ENGINE] Network error:', err.message);
+            this.isConnected = false;
+            return;
+        }
+        
+        console.error(`[ALCHEMY_ENGINE] WS Error: ${err.message}`);
+        this.isConnected = false;
+    }
+    
+    // 🛡️ Handle rate limit (429) with circuit breaker and failover
+    _handleRateLimitError(err) {
+        console.error('⚠️ [GXEON] Alchemy Rate Limit (429)! Circuit Breaker + Failover...');
+        this.isConnected = false;
+        this.circuitBreaker.failCount++;
+        
+        // 🔴 CIRCUIT BREAKER: Abrir circuito
+        this.circuitBreaker.isOpen = true;
+        this.circuitBreaker.openedAt = Date.now();
+        
+        // 🚀 CIRCUIT BREAKER: Failover para próximo provider
+        const previousProvider = this.connectionStats.currentProvider;
+        this.currentUrlIndex = (this.currentUrlIndex + 1) % this.wsUrls.length;
+        this.wsUrl = this.wsUrls[this.currentUrlIndex];
+        
+        if (this.currentUrlIndex === 0) {
+            this.connectionStats.currentProvider = 'primary';
+        } else if (this.currentUrlIndex === 1 && CIRCUIT_BREAKER_CONFIG.backupUrl) {
+            this.connectionStats.currentProvider = 'backup';
+            this.circuitBreaker.lastFailoverAt = Date.now();
+        } else {
+            this.connectionStats.currentProvider = 'fallback';
+        }
+        
+        console.log(`🔄 [CIRCUIT_BREAKER] Failover: ${previousProvider} → ${this.connectionStats.currentProvider} (URL ${this.currentUrlIndex + 1}/${this.wsUrls.length})`);
+        
+        // 🔴 SET GLOBAL RATE LIMIT STATE
+        const backoffMs = CIRCUIT_BREAKER_CONFIG.autoPauseDuration;
+        this.rateLimitState.isRateLimited = true;
+        this.rateLimitState.retryAfter = backoffMs;
+        this.rateLimitState.lastError = err.message;
+        this.rateLimitState.rateLimitedAt = Date.now();
+        
+        // 📡 EMIT EVENT TO DASHBOARD
+        if (this.emitter) {
+            this.emitter.emit('alchemy:rate_limit', {
+                type: 'RATE_LIMIT_429',
+                message: err.message,
+                retryAfter: backoffMs,
+                timestamp: Date.now(),
+                circuitBreaker: {
+                    isOpen: true,
+                    failCount: this.circuitBreaker.failCount,
+                    failOverTo: this.connectionStats.currentProvider,
+                    previousProvider: previousProvider
+                },
+                guardianShield: {
+                    autoPause: true,
+                    duration: '30s',
+                    processPersistence: 'ALIVE'
+                }
+            });
+        }
+        
+        // Cleanup connection
+        this._cleanupConnection();
+        
+        console.log(`🚀 [GXEON] Circuit Breaker: ${backoffMs/1000}s auto-pause | Failover to ${this.connectionStats.currentProvider}`);
+        
+        // Clear rate limit after cooldown
+        setTimeout(() => {
+            this.rateLimitState.isRateLimited = false;
+            this.rateLimitState.retryAfter = 0;
+            this.circuitBreaker.isOpen = false;
+            console.log(`✅ [GXEON] Rate Limit Cleared. Circuit closed. Resuming with ${this.connectionStats.currentProvider}...`);
+            
+            if (this.emitter) {
+                this.emitter.emit('alchemy:rate_limit_cleared', {
+                    type: 'RATE_LIMIT_CLEARED',
+                    timestamp: Date.now(),
+                    currentProvider: this.connectionStats.currentProvider,
+                    circuitBreaker: 'closed'
+                });
+            }
+        }, backoffMs);
+        
+        // Reconnect after backoff
+        setTimeout(() => {
+            this.connectionStats.reconnects++;
+            this.connect();
+        }, backoffMs);
+    }
+    
+    // Cleanup WebSocket connection safely
+    _cleanupConnection() {
+        try {
+            if (this.provider) {
+                if (this.provider._websocket) {
+                    this.provider._websocket.removeAllListeners();
+                    this.provider._websocket.terminate();
+                }
+                this.provider.removeAllListeners();
+                this.provider.destroy();
+            }
+        } catch (e) {
+            // Ignore cleanup errors
         }
     }
     
@@ -371,7 +543,32 @@ class AlchemyHighSpeedEngine {
         return {
             ...this.connectionStats,
             isConnected: this.isConnected,
-            uptimeMs: this.isConnected ? Date.now() - this.connectionStats.connectedAt : 0
+            uptimeMs: this.isConnected ? Date.now() - this.connectionStats.connectedAt : 0,
+            rateLimit: {
+                isRateLimited: this.rateLimitState.isRateLimited,
+                retryAfter: this.rateLimitState.retryAfter,
+                rateLimitedAt: this.rateLimitState.rateLimitedAt,
+                lastError: this.rateLimitState.lastError,
+                remainingMs: this.rateLimitState.rateLimitedAt 
+                    ? Math.max(0, this.rateLimitState.retryAfter - (Date.now() - this.rateLimitState.rateLimitedAt))
+                    : 0
+            }
+        };
+    }
+    
+    // 🔴 Static method to check global rate limit (for health endpoints)
+    static getGlobalRateLimitStatus() {
+        const remainingMs = GLOBAL_RATE_LIMIT.rateLimitedAt 
+            ? Math.max(0, GLOBAL_RATE_LIMIT.retryAfter - (Date.now() - GLOBAL_RATE_LIMIT.rateLimitedAt))
+            : 0;
+            
+        return {
+            rateLimited: GLOBAL_RATE_LIMIT.isRateLimited,
+            retryAfter: remainingMs,
+            message: GLOBAL_RATE_LIMIT.isRateLimited 
+                ? `Rate limit ativo. Aguarde ${Math.ceil(remainingMs/1000)}s` 
+                : 'Operação normal',
+            timestamp: Date.now()
         };
     }
 }
@@ -789,6 +986,46 @@ class SovereignOracle extends EventEmitter {
 // Export
 module.exports = {
     SovereignOracle,
+    AlchemyHighSpeedEngine,
     JSONRPCFramework,
-    ORACLE_CONFIG
+    ORACLE_CONFIG,
+    getAlchemyRateLimitStatus: () => AlchemyHighSpeedEngine.getGlobalRateLimitStatus()
 };
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🛡️ GXEON GLOBAL SAFETY NET — Prevent crashes from unhandled errors
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Catch unhandled error events that could crash the process
+process.on('uncaughtException', (err) => {
+    // Check if this is a WebSocket 429 error
+    if (err.message && (
+        err.message.includes('429') || 
+        err.message.includes('Unexpected server response') ||
+        err.message.includes('WebSocket')
+    )) {
+        console.error('🛡️ [GXEON_GUARDIAN] Caught unhandled WebSocket/429 error:', err.message);
+        console.error('   Process remains ALIVE. Circuit breaker will handle failover.');
+        // Process continues running - don't exit
+        return;
+    }
+    
+    console.error('🛡️ [GXEON_GUARDIAN] Uncaught Exception:', err);
+    // For other errors, we might still want to exit, but log it properly
+    // process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('🛡️ [GXEON_GUARDIAN] Unhandled Rejection at:', promise, 'reason:', reason);
+    // Don't crash on unhandled rejections either
+});
+
+// WebSocket specific error handling
+process.on('error', (err) => {
+    if (err.message && err.message.includes('429')) {
+        console.error('🛡️ [GXEON_GUARDIAN] Caught process-level 429 error:', err.message);
+        return;
+    }
+});
+
+console.log('🛡️ [GXEON_GUARDIAN] Global error handlers installed — Process will remain ALIVE on 429 errors');

@@ -15,6 +15,13 @@ const CONFIG = {
     serverUrl: 'https://gxeon-ia-production.up.railway.app',
     localUrl: 'http://localhost:8080',
     
+    // 🌑 GXEON_COMMAND_CENTER v1.0.0 - Supabase Config
+    supabase: {
+        url: 'https://yrlakveoasdjmrvhoyqy.supabase.co',
+        anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlybGt2ZW9hc2RqbXJ2aG95cXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0NTAyNjE1NywiZXhwIjoyMDYwNjAyMTU3fQ.4M_S-ImIQAhFSf3VDyTGHQhvsNF3zKoxE8N9v2uVW-M',
+        realtimeEnabled: true
+    },
+    
     // Polling interval (ms)
     heartbeatInterval: 30000, // 30s
     
@@ -37,6 +44,21 @@ let gariState = {
     totalProfit: 0,
     lastPing: null,
     version: '21.2'
+};
+
+// 🌑 GXEON_COMMAND_CENTER - Supabase State
+let supabaseClient = null;
+let commandCenter = {
+    isConnected: false,
+    realtimeChannels: [],
+    lastSync: null,
+    pendingLogs: [], // Queue for offline persistence
+    config: {
+        mempoolSniperEnabled: true,
+        smartMoneyMonitorEnabled: true,
+        notificationsEnabled: true,
+        minLiquidityThreshold: 10000
+    }
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -350,6 +372,164 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     
     return false;
 });
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🌑 GXEON_COMMAND_CENTER - Supabase Persistence Layer
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * 🔄 Persiste pool detectado no Supabase
+ */
+async function persistPoolToSupabase(poolData) {
+    if (!CONFIG.supabase.url) return;
+    
+    try {
+        const response = await fetch(`${CONFIG.supabase.url}/rest/v1/radar_pools`, {
+            method: 'POST',
+            headers: {
+                'apikey': CONFIG.supabase.anonKey,
+                'Authorization': `Bearer ${CONFIG.supabase.anonKey}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'resolution=merge-duplicates'
+            },
+            body: JSON.stringify({
+                dex_name: poolData.dex || 'Unknown',
+                pair_address: poolData.pairAddress,
+                token0_address: poolData.token0?.address || '0x0000',
+                token1_address: poolData.token1?.address || '0x0000',
+                token0_symbol: poolData.token0?.symbol || '???',
+                token1_symbol: poolData.token1?.symbol || '???',
+                liquidity_usd: poolData.liquidityUsd,
+                volume_24h: poolData.volume24h,
+                price_usd: poolData.priceUsd,
+                price_change_24h: poolData.priceChange24h,
+                is_new: true,
+                confidence_score: poolData.score || 50,
+                metadata: {
+                    timestamp: Date.now(),
+                    source: 'extension',
+                    gxeon_version: gariState.version
+                }
+            })
+        });
+        
+        if (response.ok) {
+            console.log('🌑 [GXEON-CC] Pool persisted:', poolData.token0?.symbol, '/', poolData.token1?.symbol);
+        }
+    } catch (err) {
+        console.error('[GXEON-CC] Failed to persist pool:', err.message);
+        // Queue for later retry
+        commandCenter.pendingLogs.push({ type: 'pool', data: poolData, timestamp: Date.now() });
+    }
+}
+
+/**
+ * 📝 Log agent activity to Supabase
+ */
+async function logAgentActivity(agentName, level, message, context = {}) {
+    if (!CONFIG.supabase.url) return;
+    
+    const logEntry = {
+        agent_name: agentName,
+        agent_type: agentName.split('_')[0] || 'System',
+        log_level: level,
+        category: context.category || 'SYSTEM',
+        message: message,
+        context: context,
+        created_at: new Date().toISOString()
+    };
+    
+    try {
+        await fetch(`${CONFIG.supabase.url}/rest/v1/agent_logs`, {
+            method: 'POST',
+            headers: {
+                'apikey': CONFIG.supabase.anonKey,
+                'Authorization': `Bearer ${CONFIG.supabase.anonKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(logEntry)
+        });
+    } catch (err) {
+        console.error('[GXEON-CC] Failed to log activity:', err.message);
+        commandCenter.pendingLogs.push({ type: 'log', data: logEntry });
+    }
+}
+
+/**
+ * ⚙️ Fetch remote configuration from Supabase
+ */
+async function fetchRemoteConfig() {
+    if (!CONFIG.supabase.url) return null;
+    
+    try {
+        const response = await fetch(`${CONFIG.supabase.url}/rest/v1/user_config?limit=1`, {
+            headers: {
+                'apikey': CONFIG.supabase.anonKey,
+                'Authorization': `Bearer ${CONFIG.supabase.anonKey}`
+            }
+        });
+        
+        if (response.ok) {
+            const configs = await response.json();
+            if (configs.length > 0) {
+                commandCenter.config = { ...commandCenter.config, ...configs[0].config };
+                commandCenter.lastSync = Date.now();
+                console.log('🌑 [GXEON-CC] Remote config synced:', commandCenter.config);
+                return configs[0];
+            }
+        }
+    } catch (err) {
+        console.error('[GXEON-CC] Failed to fetch remote config:', err.message);
+    }
+    return null;
+}
+
+/**
+ * 🔄 Sync pending logs (retry mechanism)
+ */
+async function syncPendingLogs() {
+    if (commandCenter.pendingLogs.length === 0) return;
+    
+    const logs = [...commandCenter.pendingLogs];
+    commandCenter.pendingLogs = [];
+    
+    for (const entry of logs) {
+        if (entry.type === 'pool') {
+            await persistPoolToSupabase(entry.data);
+        } else if (entry.type === 'log') {
+            await logAgentActivity(entry.data.agent_name, entry.data.log_level, entry.data.message, entry.data.context);
+        }
+    }
+    
+    if (commandCenter.pendingLogs.length < logs.length) {
+        console.log(`🌑 [GXEON-CC] Synced ${logs.length - commandCenter.pendingLogs.length} pending logs`);
+    }
+}
+
+/**
+ * 🔌 Test Supabase connection
+ */
+async function testSupabaseConnection() {
+    try {
+        const response = await fetch(`${CONFIG.supabase.url}/rest/v1/radar_pools?limit=1`, {
+            headers: {
+                'apikey': CONFIG.supabase.anonKey,
+                'Authorization': `Bearer ${CONFIG.supabase.anonKey}`
+            }
+        });
+        
+        commandCenter.isConnected = response.ok;
+        if (response.ok) {
+            console.log('🌑 [GXEON-CC] ✅ Supabase connected');
+            await fetchRemoteConfig();
+        }
+        return response.ok;
+    } catch (err) {
+        commandCenter.isConnected = false;
+        console.error('[GXEON-CC] ❌ Supabase connection failed:', err.message);
+        return false;
+    }
+}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // 🧹 LIMPEZA PERIÓDICA — via setInterval no startup

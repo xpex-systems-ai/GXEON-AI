@@ -7,6 +7,8 @@ import { FlashloanController } from './components/FlashloanController';
 import { TransactionLog } from './components/TransactionLog';
 import { RPCHealth } from './components/RPCHealth';
 import { SwarmPanel } from './components/SwarmPanel';
+import { RateLimitAlert } from './components/RateLimitAlert';
+import { useAlchemyHealth } from './hooks/useAlchemyHealth';
 
 // 🌑 SOVEREIGN GRID — Placeholder components for new nav items
 const ApiBillingPanel = () => (
@@ -30,6 +32,9 @@ const SovereignVaultPanel = () => (
 function App() {
   const [activeView, setActiveView] = useState('nav_overview'); // 🚀 PRODUCTION: Command Center
   const [isCollapsed, setIsCollapsed] = useState(false);
+  
+  // 🔴 Alchemy Rate Limit Monitor
+  const { isRateLimited, countdown, lastError, clearRateLimit } = useAlchemyHealth();
 
   const renderView = () => {
     switch (activeView) {
@@ -56,6 +61,14 @@ function App() {
 
   return (
     <div className="flex h-screen bg-dark-900 overflow-hidden">
+      {/* 🔴 Alchemy Rate Limit Alert (Global) */}
+      <RateLimitAlert
+        isActive={isRateLimited}
+        countdown={countdown}
+        message={lastError}
+        onClear={clearRateLimit}
+      />
+      
       <Sidebar
         activeView={activeView}
         onViewChange={setActiveView}
