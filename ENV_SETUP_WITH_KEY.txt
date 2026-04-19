@@ -1,0 +1,81 @@
+# 🌑 GXEON SOVEREIGN PROSPERITY v4.0.0 - ENVIRONMENT CONFIGURATION
+# Data: 19 de Abril de 2026
+# Status: EXECUÇÃO MÁXIMA
+# =============================================================================
+
+# ==========================================
+# 🗄️ SUPABASE - REALTIME SYNC
+# ==========================================
+SUPABASE_PROJECT_URL=https://telxvphgrsvsnxvmjkce.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbHh2cGhncnN2c254dm1qa2NlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDUyNjMzMSwiZXhwIjoyMDkwMTAyMzMxfQ.297P1WLrSDqiRWtyUk5OuLoLvAU99zy53_HodleZQkA
+
+# ==========================================
+# ⚡ ALCHEMY - WEBSOCKET FAILOVER
+# ==========================================
+ALCHEMY_WSS_URL_PRIMARY=wss://arb-mainnet.g.alchemy.com/v2/E3msU5dEn_5jYSdYzwnAx
+ALCHEMY_WSS_URL_BACKUP=wss://arb-mainnet.g.alchemy.com/v2/BACKUP_KEY_PLACEHOLDER
+ALCHEMY_API_KEY=E3msU5dEn_5jYSdYzwnAx
+
+# ==========================================
+# 💰 FAMILY SUSTENANCE - REVENUE STREAM
+# ==========================================
+COMMANDER_WALLET_ADDRESS=0x3955d559055DadB7067054cB6E6f974710345224
+
+# ==========================================
+# 🧠 MAMMOUTH AI ORACLE
+# ==========================================
+MAMMOUTH_HQ_URL=https://mammouth-ai.example.com/webhook
+MAMMOUTH_API_KEY=your_mammouth_api_key
+MIN_AI_CONFIDENCE=0.85
+
+# ==========================================
+# ⛽ GAS OPTIMIZATION - LOW GWEI STRATEGY
+# ==========================================
+MAX_GAS_PRICE_GWEI=0.1
+MIN_PROFIT_THRESHOLD=0.005
+FEE_PROTECTION_BUFFER=0.15
+
+# ==========================================
+# 🛡️ GUARDIAN SHIELD
+# ==========================================
+EMERGENCY_KILL_SWITCH=INACTIVE
+AUDIT_MODE=STRICT
+ANTI_429_SHIELD=ENABLED
+PROCESS_PERSISTENCE=INFINITE_RETRY
+
+# ==========================================
+# 🔗 BLOCKCHAIN - ARBITRUM MAINNET
+# ==========================================
+ARBITRUM_RPC_URL=https://arb-mainnet.g.alchemy.com/v2/E3msU5dEn_5jYSdYzwnAx
+CHAIN_ID=42161
+
+# ==========================================
+# 🔐 SECURITY (PREENCHER MANUALMENTE)
+# ==========================================
+PRIVATE_KEY=your_private_key_here
+VAULT_ADDRESS=0x...
+GXEON_TREASURY_ADDRESS=0x...
+
+# ==========================================
+# 🚀 SERVER CONFIG
+# ==========================================
+PORT=3000
+NODE_ENV=production
+LOG_LEVEL=info
+
+# =============================================================================
+# ⚠️  INSTRUÇÕES DE INSTALAÇÃO:
+# 
+# OPÇÃO 1 - PowerShell:
+#   1. Abra PowerShell na pasta do projeto
+#   2. Cole cada linha acima com: $env:NOME="valor"
+#   3. Execute: npm run deploy:final
+#
+# OPÇÃO 2 - Arquivo .env:
+#   1. Crie arquivo .env na raiz do projeto
+#   2. Copie TODO o conteúdo acima para dentro
+#   3. Salve e execute: npm run deploy:final
+#
+# OPÇÃO 3 - Node.js (interativo):
+#   npm run setup:env
+# =============================================================================

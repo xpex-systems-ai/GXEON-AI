@@ -3,10 +3,15 @@
  * 🧹 GARI BLOCKCHAIN v1.0 — Arqueologia Digital
  * Dust Sweeper: Identificador de taxas esquecidas e liquidez abandonada
  * Sincronização: Brave Extension (Leo) Manifest V3
+ * INTEGRAÇÃO: Supreme Monetization Audit v4.0.0
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
 const { ethers } = require('ethers');
+const { getArcheologyAuditService } = require('./archeologyAudit');
+
+// Carteira de recebimento do Comandante (revenue destination)
+const COMMANDER_WALLET = process.env.COMMANDER_WALLET_ADDRESS || '0x3955d559055DadB7067054cB6E6f974710345224';
 
 // ABI mínima para coletar taxas da Uniswap V3
 const V3_POOL_ABI = [
@@ -23,14 +28,23 @@ const POSITION_MANAGER_ABI = [
 const UNISWAP_V3_FACTORY = '0x1F98431c8aD98523631AE4a59f267346ea31F984';
 const UNISWAP_V3_POSITION_MANAGER = '0xC36442b4a4522E871399CD717aBDD847Ab11FE88';
 
-// Thresholds de calibragem
+// Thresholds de calibragem - LOW GWEI STRATEGY
 const SWEEPER_CONFIG = {
     minFeeValueUsd: 5,           // Taxa mínima para considerar ($5)
     gasCostEstimateUsd: 2,       // Custo estimado de gás ($2 Arbitrum)
     profitMarginPercent: 50,     // Margem de lucro mínima (%)
     scanIntervalMs: 300000,      // 5 minutos entre scans
     maxPositionsPerScan: 50,     // Limite de posições por varredura
-    braveExtensionEndpoint: null // Será configurado via env
+    braveExtensionEndpoint: null, // Será configurado via env
+    maxGasPriceGwei: parseFloat(process.env.MAX_GAS_PRICE_GWEI) || 0.1, // STOP-LOSS
+    
+    // Filtros de segurança para FAMILY_SUSTENANCE_ENGINE
+    filters: {
+        requireLockedLiquidity: true,  // Apenas LP bloqueada
+        requireRenounced: true,        // Contratos renunciados
+        blockHoneypots: true,          // Anti-honeypot
+        minConfidence: 0.85            // Mammouth AI threshold
+    }
 };
 
 class GariDustSweeper {
@@ -331,10 +345,13 @@ class GariDustSweeper {
     }
 
     /**
-     * 💾 Log de oportunidades no Supabase
+     * 💾 Log de oportunidades no Supabase + Auditoria Suprema
      */
     async logOpportunitiesToSupabase(opportunities) {
         if (!this.supabase) return;
+        
+        // Inicializar serviço de auditoria
+        const auditService = getArcheologyAuditService();
         
         try {
             const records = opportunities.map(opp => ({
@@ -347,6 +364,7 @@ class GariDustSweeper {
                 profit_usd: opp.profitUsd,
                 confidence: opp.confidence,
                 status: 'discovered',
+                destination_address: COMMANDER_WALLET, // ✅ Wallet de recebimento alinhada
                 detected_at: new Date().toISOString(),
                 expires_at: new Date(Date.now() + 3600000).toISOString() // 1 hora
             }));
@@ -356,6 +374,17 @@ class GariDustSweeper {
                 .insert(records);
             
             if (error) throw error;
+            
+            console.log(`[GARI] ✅ ${records.length} oportunidades logadas no Supabase`);
+            console.log(`[GARI] 💰 Revenue destination: ${COMMANDER_WALLET.slice(0, 20)}...`);
+            
+            // Auditoria para cada oportunidade
+            for (const opp of opportunities) {
+                if (opp.confidence >= 0.85 && opp.profitUsd >= 12.5) { // 0.005 ETH ~ $12.5
+                    console.log(`[GARI] 🔍 Enviando para auditoria: ${opp.pairAddress.slice(0, 12)}...`);
+                    // Audit será feita pelo monetizer quando processar
+                }
+            }
             
         } catch (err) {
             console.error(`[GARI] Log error: ${err.message}`);

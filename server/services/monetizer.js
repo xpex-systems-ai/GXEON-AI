@@ -2,12 +2,13 @@
  * ═══════════════════════════════════════════════════════════════════════════
  * 💰 GXEON PREDATOR MONETIZER v3.0
  * Motor de Monetização: Calcula lucro líquido e emite sinais EXECUTE_SWAP
- * Integrações: Supabase Realtime + Brave Extension
+ * Integrações: Supabase Realtime + Brave Extension + Archeology Audit
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
 const { createClient } = require('@supabase/supabase-js');
 const EventEmitter = require('events');
+const { getArcheologyAuditService } = require('./archeologyAudit');
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CONFIGURAÇÃO DE MONETIZAÇÃO (do JSON SUPREMO v3.0)
@@ -189,8 +190,28 @@ class PredatorMonetizer extends EventEmitter {
     
     /**
      * 🧮 Avalia se uma oportunidade é lucrativa o suficiente
+     * INTEGRAÇÃO: Validação Suprema via ArcheologyAudit
      */
-    evaluateOpportunity(opportunity) {
+    async evaluateOpportunity(opportunity) {
+        // Primeiro: Auditoria completa do fluxo de caixa
+        const auditService = getArcheologyAuditService();
+        const auditResult = await auditService.auditOpportunity({
+            ...opportunity,
+            profit_eth: opportunity.profit_usd / 2500, // Aproximação ETH/USD
+            gas_eth: opportunity.gas_cost_usd / 2500
+        });
+        
+        // Se audit falhou, abortar imediatamente
+        if (!auditResult.approved) {
+            console.log(`[MONETIZER] ❌ Oportunidade ${opportunity.id?.slice(0,8)} rejeitada pela auditoria: ${auditResult.rejection_reason}`);
+            return {
+                status: 'REJECTED_BY_AUDIT',
+                reason: auditResult.rejection_reason,
+                audit_id: auditResult.audit_id
+            };
+        }
+        
+        console.log(`[MONETIZER] ✅ Auditoria aprovada: ${auditResult.audit_id}`);
         const {
             id,
             pair_address,
@@ -222,8 +243,11 @@ class PredatorMonetizer extends EventEmitter {
         // Verificar threshold mínimo
         const isProfitable = netProfit > profitThreshold;
         
-        // Verificar confiança mínima
+        // Verificar confiança mínima (já validada pela auditoria, mas double-check)
         const meetsConfidence = (confidence || 0) >= MONETIZATION_CONFIG.min_confidence_score;
+        
+        // Log de aprovação auditada
+        console.log(`[MONETIZER] ✓ Confidence: ${(confidence || 0).toFixed(2)} | Profit: $${netProfit.toFixed(2)} | Wallet: ${auditResult.checks?.wallet_alignment?.destination?.slice(0,20)}...`);
         
         console.log(`[MONETIZER] Evaluating ${pair_address?.slice(0, 12)}...: net=$${netProfit.toFixed(2)}, confidence=${(confidence || 0).toFixed(2)}`);
         
