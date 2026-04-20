@@ -1,10 +1,10 @@
-require('dotenv').config();
+require('dotenv/config');
 require('@nomicfoundation/hardhat-ethers');
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: {
-    version: "0.8.19",
+    version: "0.8.20",
     settings: {
       optimizer: {
         enabled: true,
@@ -15,6 +15,7 @@ module.exports = {
   },
   networks: {
     hardhat: {
+      type: "edr-simulated",
       chainId: 31337,
       forking: {
         url: process.env.ARBITRUM_RPC_URL || "https://arb1.arbitrum.io/rpc",
@@ -22,28 +23,28 @@ module.exports = {
       }
     },
     sepolia: {
+      type: "http",
       url: process.env.SEPOLIA_RPC_URL || process.env.RPC_URL,
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 11155111,
-      gasPrice: "auto"
+      chainId: 11155111
     },
     arbitrum: {
+      type: "http",
       url: process.env.ARBITRUM_RPC_URL || '',
       chainId: 42161,
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      flashbots: true, // Enable Flashbots for MEV protection
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
     },
     arbitrumGoerli: {
+      type: "http",
       url: process.env.ARBITRUM_GOERLI_RPC_URL || "https://goerli-rollup.arbitrum.io/rpc",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 421613,
-      gasPrice: "auto"
+      chainId: 421613
     },
     polygon: {
+      type: "http",
       url: process.env.POLYGON_RPC_URL || "https://polygon-rpc.com",
       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
-      chainId: 137,
-      gasPrice: "auto"
+      chainId: 137
     }
   },
   etherscan: {

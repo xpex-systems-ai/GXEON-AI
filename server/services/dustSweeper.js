@@ -1,13 +1,16 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * 🧹 GARI BLOCKCHAIN v1.0 — Arqueologia Digital
+ * GARI BLOCKCHAIN v1.0 — Arqueologia Digital
  * Dust Sweeper: Identificador de taxas esquecidas e liquidez abandonada
  * Sincronização: Brave Extension (Leo) Manifest V3
  * INTEGRAÇÃO: Supreme Monetization Audit v4.0.0
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
+require('dotenv').config();
+
 const { ethers } = require('ethers');
+const { createClient } = require('@supabase/supabase-js');
 const { getArcheologyAuditService } = require('./archeologyAudit');
 
 // Carteira de recebimento do Comandante (revenue destination)
@@ -401,7 +404,16 @@ let sweeperInstance = null;
 
 function getDustSweeper(provider, supabase) {
     if (!sweeperInstance) {
-        sweeperInstance = new GariDustSweeper(provider, supabase);
+        // Auto-create Supabase client if not provided but env vars exist
+        let supabaseClient = supabase;
+        if (!supabaseClient && process.env.SUPABASE_PROJECT_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) {
+            supabaseClient = createClient(
+                process.env.SUPABASE_PROJECT_URL,
+                process.env.SUPABASE_SERVICE_ROLE_KEY
+            );
+            console.log('[GARI] Supabase client auto-initialized from environment');
+        }
+        sweeperInstance = new GariDustSweeper(provider, supabaseClient);
     }
     return sweeperInstance;
 }

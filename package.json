@@ -1,26 +1,42 @@
 {
-  "name": "gxeon-predator-sovereign",
-  "version": "4.0.0",
-  "description": "Autonomous Monetization & Digital Archeology Engine - Senna Family Legacy",
+  "name": "gxeon-nexus-v4",
+  "version": "4.0.0-sovereign",
+  "description": "🌑 GXEON NEXUS v4.0 — Sovereign M2M Infrastructure for Autonomous Trading Agents | Júnior Sena — Sovereign AI Architect",
   "main": "server/index.js",
+  "type": "module",
   "engines": {
     "node": ">=20.0.0"
   },
   "scripts": {
     "start": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "compile": "npx hardhat compile --config hardhat.config.cjs",
+    "deploy:executor": "node scripts/deploy_executor_contract.js deploy",
     "deploy:master": "node scripts/MASTER_DEPLOY_v4.js",
     "validate:sniper": "node scripts/validate_sniper_active.js",
+    "verify:protocol": "node scripts/verify_protocol_ready.js",
+    "flash:start": "node server/services/flashSweeper.js start",
+    "flash:simulation": "node server/services/flashSweeper.js --simulation",
     "status": "node scripts/check_status.js",
     "profits": "node scripts/check_profits.js",
     "guardian:shield": "node scripts/guardian_shield.js",
-    "emergency:kill": "node scripts/emergency_stop.js"
+    "setup:tables": "node scripts/setup_tables.js",
+    "emergency:kill": "node scripts/emergency_stop.js",
+    "grafana:setup": "docker-compose -f grafana/setup/docker-compose.yml up -d",
+    "grafana:import": "node grafana/setup/import-dashboards.js",
+    "grafana:stop": "docker-compose -f grafana/setup/docker-compose.yml down",
+    "radar:start": "node -e \"require('./server/services/radarShix').start()\"",
+    "test:flash": "node tests/test_flash_sweeper.js",
+    "test:api": "node tests/test_api_endpoints.js",
+    "audit:full": "node scripts/audit_system.js",
+    "metrics:export": "node scripts/export_metrics.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.7",
     "alchemy-sdk": "^3.1.2",
     "axios": "^1.6.7",
     "dotenv": "^16.4.5",
-    "ethers": "^5.7.2",
+    "ethers": "^6.16.0",
     "express": "^4.18.2",
     "helmet": "^7.1.0",
     "moment-timezone": "^0.5.45",
@@ -28,5 +44,12 @@
     "ws": "^8.16.0"
   },
   "author": "Commander Senna - GXeon AI",
-  "license": "Proprietary"
+  "license": "Proprietary",
+  "devDependencies": {
+    "@chainlink/contracts": "^1.5.0",
+    "@nomicfoundation/hardhat-ethers": "^4.0.8",
+    "@openzeppelin/contracts": "^5.6.1",
+    "hardhat": "^3.4.0"
+  },
+  "type": "module"
 }

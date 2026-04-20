@@ -1,8 +1,8 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * 📜 DIGITAL ARCHEOLOGY AUDIT SERVICE v1.0
+ * DIGITAL ARCHEOLOGY AUDIT SERVICE v1.0
  * Sistema: GXEON PREDATOR v4.0.0 - SUPREME MONETIZATION AUDIT
- * 
+ *
  * Responsabilidades:
  * 1. Validar fluxo de caixa para carteira do Comandante
  * 2. Logar lucros/taxas no digital_archeology_ledger
@@ -10,6 +10,8 @@
  * 4. Enviar métricas para Grafana (Black_Gold_Neon theme)
  * ═══════════════════════════════════════════════════════════════════════════
  */
+
+require('dotenv').config();
 
 const { createClient } = require('@supabase/supabase-js');
 const axios = require('axios');

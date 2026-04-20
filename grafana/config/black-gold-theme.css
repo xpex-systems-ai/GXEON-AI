@@ -1,0 +1,349 @@
+/**
+ * 🌑 GXEON GRAFANA THEME — Black & Gold Sovereign
+ * 
+ * Arquitetura: Júnior Sena — Sovereign AI Architect
+ * Valuation: $5M-$10M
+ * 
+ * Colors:
+ * - Primary: #FFD700 (Gold)
+ * - Secondary: #0D1117 (Black)
+ * - Accent: #00D4FF (Cyan)
+ * - Success: #00FF88 (Green)
+ * - Warning: #FF6B00 (Orange)
+ * - Danger: #FF2D2D (Red)
+ */
+
+/* ===== ROOT VARIABLES ===== */
+:root {
+  /* Sovereign Palette */
+  --gxeon-gold: #FFD700;
+  --gxeon-black: #0D1117;
+  --gxeon-cyan: #00D4FF;
+  --gxeon-green: #00FF88;
+  --gxeon-orange: #FF6B00;
+  --gxeon-red: #FF2D2D;
+  --gxeon-gray: #8B949E;
+  --gxeon-dark-gray: #161B22;
+  
+  /* Grafana Overrides */
+  --panel-bg: var(--gxeon-black);
+  --dashboard-bg: var(--gxeon-black);
+  --page-header-bg: var(--gxeon-dark-gray);
+  --text-primary: var(--gxeon-gold);
+  --text-secondary: var(--gxeon-gray);
+  --border-color: var(--gxeon-gold);
+}
+
+/* ===== DASHBOARD BACKGROUND ===== */
+.dashboard-container {
+  background-color: var(--gxeon-black) !important;
+}
+
+.dashboard-page {
+  background: linear-gradient(180deg, #0D1117 0%, #161B22 100%) !important;
+}
+
+/* ===== PANELS ===== */
+.panel-container {
+  background-color: var(--gxeon-dark-gray) !important;
+  border: 1px solid rgba(255, 215, 0, 0.3) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.panel-container:hover {
+  border-color: var(--gxeon-gold) !important;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.2) !important;
+}
+
+.panel-title {
+  color: var(--gxeon-gold) !important;
+  font-family: 'Inter', 'SF Pro Display', sans-serif !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+}
+
+/* ===== STATS PANELS (Sovereign Command) ===== */
+.stat-value {
+  color: var(--gxeon-gold) !important;
+  font-family: 'SF Mono', 'Monaco', monospace !important;
+  font-weight: 700 !important;
+}
+
+.stat-value.success {
+  color: var(--gxeon-green) !important;
+}
+
+.stat-value.warning {
+  color: var(--gxeon-orange) !important;
+}
+
+.stat-value.danger {
+  color: var(--gxeon-red) !important;
+}
+
+.stat-label {
+  color: var(--gxeon-gray) !important;
+  text-transform: uppercase !important;
+  font-size: 11px !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* ===== GRAPHS ===== */
+.graph-tooltip {
+  background-color: var(--gxeon-dark-gray) !important;
+  border: 1px solid var(--gxeon-gold) !important;
+  border-radius: 4px !important;
+}
+
+.graph-legend {
+  color: var(--gxeon-gray) !important;
+}
+
+.graph-legend .active {
+  color: var(--gxeon-gold) !important;
+}
+
+/* Series Colors */
+.series-color-0 { stroke: var(--gxeon-gold) !important; }
+.series-color-1 { stroke: var(--gxeon-cyan) !important; }
+.series-color-2 { stroke: var(--gxeon-green) !important; }
+.series-color-3 { stroke: var(--gxeon-orange) !important; }
+.series-color-4 { stroke: var(--gxeon-red) !important; }
+
+/* ===== GAUGES ===== */
+.gauge-value {
+  color: var(--gxeon-gold) !important;
+  font-weight: 700 !important;
+}
+
+.gauge-bg {
+  fill: var(--gxeon-dark-gray) !important;
+}
+
+.gauge-value-success { fill: var(--gxeon-green) !important; }
+.gauge-value-warning { fill: var(--gxeon-orange) !important; }
+.gauge-value-danger { fill: var(--gxeon-red) !important; }
+
+/* ===== PIE CHARTS (Treasury) ===== */
+.pie-chart-container {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.pie-chart-slice-0 { fill: var(--gxeon-green) !important; }  /* Reinvestment 70% */
+.pie-chart-slice-1 { fill: var(--gxeon-gold) !important; }  /* Commander 30% */
+
+/* ===== LOGS PANEL ===== */
+.logs-panel {
+  background-color: var(--gxeon-black) !important;
+  font-family: 'SF Mono', 'Monaco', monospace !important;
+}
+
+.logs-row {
+  color: var(--gxeon-gray) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.logs-row:hover {
+  background-color: rgba(255, 215, 0, 0.1) !important;
+}
+
+.logs-row.info { border-left: 3px solid var(--gxeon-cyan) !important; }
+.logs-row.success { border-left: 3px solid var(--gxeon-green) !important; }
+.logs-row.warning { border-left: 3px solid var(--gxeon-orange) !important; }
+.logs-row.error { border-left: 3px solid var(--gxeon-red) !important; }
+
+/* Flash-Sweeper Highlight */
+.logs-row:contains("FLASH-SWEEPER") {
+  color: var(--gxeon-gold) !important;
+  font-weight: 500 !important;
+}
+
+/* Radar SHIX Highlight */
+.logs-row:contains("RADAR") {
+  color: var(--gxeon-cyan) !important;
+}
+
+/* Guardian Shield Highlight */
+.logs-row:contains("SHIELD") {
+  color: var(--gxeon-green) !important;
+}
+
+/* ===== PAGE HEADER ===== */
+.page-header {
+  background-color: var(--gxeon-dark-gray) !important;
+  border-bottom: 2px solid var(--gxeon-gold) !important;
+}
+
+.page-header h1 {
+  color: var(--gxeon-gold) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2px !important;
+}
+
+/* ===== SIDEBAR ===== */
+.sidemenu {
+  background-color: var(--gxeon-black) !important;
+  border-right: 1px solid rgba(255, 215, 0, 0.2) !important;
+}
+
+.sidemenu-item.active {
+  background-color: rgba(255, 215, 0, 0.1) !important;
+  border-left: 3px solid var(--gxeon-gold) !important;
+}
+
+.sidemenu-item a {
+  color: var(--gxeon-gray) !important;
+}
+
+.sidemenu-item.active a,
+.sidemenu-item:hover a {
+  color: var(--gxeon-gold) !important;
+}
+
+/* ===== FORMS & INPUTS ===== */
+input, select, textarea {
+  background-color: var(--gxeon-dark-gray) !important;
+  border: 1px solid rgba(255, 215, 0, 0.3) !important;
+  color: var(--gxeon-gold) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--gxeon-gold) !important;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.3) !important;
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  background-color: var(--gxeon-gold) !important;
+  color: var(--gxeon-black) !important;
+  border: none !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.btn-primary:hover {
+  background-color: #FFC700 !important;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.4) !important;
+}
+
+.btn-secondary {
+  background-color: transparent !important;
+  color: var(--gxeon-gold) !important;
+  border: 1px solid var(--gxeon-gold) !important;
+}
+
+/* ===== TABLES ===== */
+.table-panel {
+  background-color: var(--gxeon-dark-gray) !important;
+}
+
+.table-panel th {
+  background-color: rgba(255, 215, 0, 0.1) !important;
+  color: var(--gxeon-gold) !important;
+  text-transform: uppercase !important;
+  font-size: 11px !important;
+  letter-spacing: 0.5px !important;
+}
+
+.table-panel td {
+  color: var(--gxeon-gray) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+.table-panel tr:hover td {
+  color: var(--gxeon-gold) !important;
+  background-color: rgba(255, 215, 0, 0.05) !important;
+}
+
+/* ===== ALERTS ===== */
+.alert-info {
+  background-color: rgba(0, 212, 255, 0.1) !important;
+  border-left: 4px solid var(--gxeon-cyan) !important;
+  color: var(--gxeon-cyan) !important;
+}
+
+.alert-success {
+  background-color: rgba(0, 255, 136, 0.1) !important;
+  border-left: 4px solid var(--gxeon-green) !important;
+  color: var(--gxeon-green) !important;
+}
+
+.alert-warning {
+  background-color: rgba(255, 107, 0, 0.1) !important;
+  border-left: 4px solid var(--gxeon-orange) !important;
+  color: var(--gxeon-orange) !important;
+}
+
+.alert-danger {
+  background-color: rgba(255, 45, 45, 0.1) !important;
+  border-left: 4px solid var(--gxeon-red) !important;
+  color: var(--gxeon-red) !important;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gxeon-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gxeon-gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FFC700;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes sovereign-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); }
+}
+
+.panel-container.alerting {
+  animation: sovereign-pulse 2s infinite;
+  border-color: var(--gxeon-red) !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .panel-title {
+    font-size: 12px !important;
+  }
+  
+  .stat-value {
+    font-size: 18px !important;
+  }
+  
+  .sidemenu {
+    display: none;
+  }
+}
+
+/* ===== SOVEREIGN SIGNATURE ===== */
+.dashboard-footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--gxeon-gray);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(255, 215, 0, 0.2);
+  margin-top: 40px;
+}
+
+.dashboard-footer::before {
+  content: "👑 Júnior Sena — Sovereign AI Architect | GXEON Nexus v4.0 | Valuation: $5M-$10M";
+  display: block;
+  margin-bottom: 10px;
+}

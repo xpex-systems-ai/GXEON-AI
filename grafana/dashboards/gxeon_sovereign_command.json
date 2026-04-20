@@ -1,0 +1,326 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "gxeon-command",
+    "title": "🌑 SOVEREIGN COMMAND CENTER",
+    "tags": ["gxeon", "nexus", "v4.0", "sovereign"],
+    "timezone": "utc",
+    "schemaVersion": 36,
+    "refresh": "5s",
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "templating": {
+      "list": []
+    },
+    "annotations": {
+      "list": [
+        {
+          "name": "Flash Sweeper Events",
+          "datasource": "InfluxDB",
+          "expr": "events{source=\"flash_sweeper\"}",
+          "tagKeys": "event_type",
+          "iconColor": "#FFD700",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "👑 SOVEREIGN STATUS",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "gxeon_status{metric=\"uptime\"}",
+            "legendFormat": "Uptime",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "fixed", "fixedColor": "#00FF88"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "#FF2D2D", "value": null},
+                {"color": "#FF6B00", "value": 95},
+                {"color": "#00FF88", "value": 99}
+              ]
+            }
+          }
+        },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "horizontal",
+          "reduceOptions": {"values": false, "calcs": ["lastNotNull"], "fields": ""}
+        }
+      },
+      {
+        "id": 2,
+        "title": "💰 DAILY REVENUE",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 0},
+        "targets": [
+          {
+            "expr": "sum(rate(gxeon_revenue_total[24h]))",
+            "legendFormat": "Revenue (USD)",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD",
+            "color": {"mode": "fixed", "fixedColor": "#FFD700"}
+          }
+        },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "auto"
+        }
+      },
+      {
+        "id": 3,
+        "title": "🤖 ACTIVE AGENTS",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 0},
+        "targets": [
+          {
+            "expr": "gxeon_agents_active",
+            "legendFormat": "Agents",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "fixed", "fixedColor": "#00D4FF"}
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "⚡ FLASH-SWEEPER EXECUTIONS",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 0},
+        "targets": [
+          {
+            "expr": "flash_sweeper_executions_total",
+            "legendFormat": "Executions",
+            "refId": "D"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "fixed", "fixedColor": "#FF6B00"}
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "🌑 REVENUE STREAMS (24h)",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 4},
+        "targets": [
+          {
+            "expr": "gxeon_revenue{source=\"api_calls\"}",
+            "legendFormat": "API Calls ($0.05/call)",
+            "refId": "E"
+          },
+          {
+            "expr": "gxeon_revenue{source=\"flash_loan_tax\"}",
+            "legendFormat": "Flash Loan Tax (0.01%)",
+            "refId": "F"
+          },
+          {
+            "expr": "gxeon_revenue{source=\"subscriptions\"}",
+            "legendFormat": "Subscriptions",
+            "refId": "G"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 20,
+              "gradientMode": "scheme",
+              "scaleDistribution": {"type": "linear"}
+            },
+            "color": {"mode": "palette-classic-by-name"},
+            "unit": "currencyUSD"
+          }
+        },
+        "options": {
+          "tooltip": {"mode": "multi", "sort": "desc"},
+          "legend": {"displayMode": "list", "placement": "bottom"}
+        }
+      },
+      {
+        "id": 6,
+        "title": "🎯 RADAR SHIX INTELLIGENCE",
+        "type": "timeseries",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 4},
+        "targets": [
+          {
+            "expr": "radar_shix_pools_tracked",
+            "legendFormat": "Pools Tracked",
+            "refId": "H"
+          },
+          {
+            "expr": "radar_shix_smart_money_events",
+            "legendFormat": "Smart Money Events",
+            "refId": "I"
+          },
+          {
+            "expr": "radar_shix_high_liquidity_alerts",
+            "legendFormat": "High Liquidity Alerts",
+            "refId": "J"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "lineWidth": 2,
+              "fillOpacity": 15,
+              "gradientMode": "opacity"
+            },
+            "color": {"mode": "continuous-BlYlRd"}
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "🏦 TREASURY 70/30 SPLIT",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 12},
+        "targets": [
+          {
+            "expr": "treasury_distribution",
+            "legendFormat": "{{type}}",
+            "refId": "K"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "fixed", "fixedColor": "#FFD700"},
+            "mappings": [
+              {"options": {"match": "reinvestment", "result": {"color": "#00FF88", "text": "Reinvestment (70%)"}}, "type": "value"},
+              {"options": {"match": "commander", "result": {"color": "#FFD700", "text": "Commander (30%)"}}, "type": "value"}
+            ]
+          }
+        },
+        "options": {
+          "pieType": "donut",
+          "legend": {"displayMode": "list", "placement": "right"},
+          "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": true}
+        }
+      },
+      {
+        "id": 8,
+        "title": "🛡️ GUARDIAN SHIELD HEALTH",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 12},
+        "targets": [
+          {
+            "expr": "guardian_shield_health_score",
+            "legendFormat": "Health Score",
+            "refId": "L"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "#FF2D2D", "value": null},
+                {"color": "#FF6B00", "value": 70},
+                {"color": "#FFD700", "value": 85},
+                {"color": "#00FF88", "value": 95}
+              ]
+            },
+            "unit": "percent"
+          }
+        },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true,
+          "reduceOptions": {"calcs": ["lastNotNull"]}
+        }
+      },
+      {
+        "id": 9,
+        "title": "🎫 TIER DISTRIBUTION",
+        "type": "bargauge",
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 12},
+        "targets": [
+          {
+            "expr": "gxeon_agents_by_tier",
+            "legendFormat": "{{tier}}",
+            "refId": "M"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"}
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient",
+          "showUnfilled": true
+        }
+      },
+      {
+        "id": 10,
+        "title": "⚡ FLASH-SWEEPER PROFIT",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 12},
+        "targets": [
+          {
+            "expr": "flash_sweeper_profit_usd",
+            "legendFormat": "Profit (USD)",
+            "refId": "N"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "currencyUSD",
+            "color": {"mode": "fixed", "fixedColor": "#FFD700"},
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "#FF6B00", "value": null},
+                {"color": "#FFD700", "value": 100},
+                {"color": "#00FF88", "value": 500}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 11,
+        "title": "📊 SYSTEM LOGS",
+        "type": "logs",
+        "gridPos": {"h": 6, "w": 24, "x": 0, "y": 20},
+        "targets": [
+          {
+            "expr": "{job=\"gxeon\"} |= \"EXECUTION\" or \"FLASH\" or \"RADAR\" or \"SHIELD\"",
+            "refId": "O"
+          }
+        ],
+        "options": {
+          "showTime": true,
+          "wrapLogMessage": true,
+          "sortOrder": "Descending"
+        }
+      }
+    ]
+  },
+  "overwrite": true
+}

@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 /**
  * ═══════════════════════════════════════════════════════════════════════════
- * 🎯 DIGITAL ARCHEOLOGY SNIPER VALIDATION - GXEON v4.0.0
+ * DIGITAL ARCHEOLOGY SNIPER VALIDATION - GXEON v4.0.0
  * Valida que o sniper saiu do modo de espera e está em varredura ativa
  * ═══════════════════════════════════════════════════════════════════════════
  */
+
+require('dotenv').config();
 
 const { getDustSweeper } = require('../server/services/dustSweeper');
 

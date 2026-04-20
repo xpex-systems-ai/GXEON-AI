@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
@@ -39,7 +39,7 @@ contract GXeonTreasury is Ownable, ReentrancyGuard {
     // Token addresses
     address public constant WETH = 0x82aF49447D8a07e3bd95BD0d56f35241523fBab1;  // Arbitrum WETH
     address public constant USDC = 0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8;  // Arbitrum USDC
-    address public constant OCEAN = 0xF26c6C93D73fFdeE0cA4B88c5FfE6f1b85AC72f8; // Arbitrum OCEAN
+    address public constant OCEAN = 0xf26C6C93D73FFdEe0CA4b88C5ffE6F1B85Ac72F8; // Arbitrum OCEAN
     address public constant LINK = 0xf97f4df75117a78c1A5a0DBb814Af92458539FB4;  // Arbitrum LINK
     
     // Statistics
