@@ -1,0 +1,50 @@
+{
+  "project": "GXeon AI - Arbitrum MEV-Nexus",
+  "version": "2.0.0",
+  "description": "Transforma logs de scan em bundles lucrativos para MEV-Share Matchmaker",
+  
+  "connection": {
+    "relay_endpoint": "https://relay-arbitrum.flashbots.net",
+    "rpc_url": "${ALCHEMY_ARBITRUM_HTTP_URL}",
+    "ws_url": "${ALCHEMY_ARBITRUM_WS_URL}",
+    "stream_type": "MEV-Share-Matchmaker",
+    "chain_id": 42161
+  },
+  
+  "searcher_settings": {
+    "min_profit_threshold_usd": 0.10,
+    "kickback_percentage": 40,
+    "target_networks": ["arbitrum-one"],
+    "priority_pools": ["Uniswap_V3", "SushiSwap", "Camelot", "Balancer"],
+    "max_bundle_size": 3,
+    "hint_preferences": {
+      "calldata": true,
+      "logs": true,
+      "function_calls": true,
+      "contract_address": true
+    }
+  },
+  
+  "identity": {
+    "beneficiary_address": "0x3955d559055DadB7067054cB6E6f974710345224",
+    "signing_mode": "EIP-712_Secure_Signature",
+    "name": "GXEON-MEV-Nexus",
+    "version": "2.0.0"
+  },
+  
+  "integration": {
+    "radar_shix_pipe": true,
+    "flash_sweeper_sync": true,
+    "supabase_logging": true,
+    "auto_bundle": true,
+    "simulation_first": true
+  },
+  
+  "logging": {
+    "level": "info",
+    "format": "json",
+    "output_to_stdout": true,
+    "log_opportunities": true,
+    "log_bundle_results": true
+  }
+}

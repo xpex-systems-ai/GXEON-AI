@@ -1,0 +1,30 @@
+{
+  "bounty_scanner": {
+    "enabled": true,
+    "interval": "*/5 * * * *",
+    "networks": [
+      "ethereum",
+      "arbitrum",
+      "polygon",
+      "base"
+    ],
+    "minProfitUsd": 0.01,
+    "exportToSignalHub": true
+  },
+  "gelato_scanner": {
+    "enabled": true,
+    "interval": "*/5 * * * *",
+    "networks": [
+      "polygon",
+      "ethereum",
+      "arbitrum",
+      "base"
+    ],
+    "minProfitUsd": 0.01,
+    "exportToSignalHub": true
+  },
+  "signalHub": {
+    "url": "http://localhost:3000/v1/signals/inject",
+    "internalKey": "dev-key"
+  }
+}

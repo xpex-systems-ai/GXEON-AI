@@ -1,0 +1,683 @@
+#!/usr/bin/env node
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * GXEON PRODUCTION SERVER v4.0 - Premium Edition
+ * 
+ * Otimizado para Railway Deploy com:
+ * - Zero WebSocket dependencies on startup
+ * - Lazy loading de serviços pesados
+ * - SignalHub API prioritizado
+ * - Error handling premium para 429/rate limits
+ * 
+ * Comandante: Júnior Sena
+ * Treasury: 0x3955d559055DadB7067054cB6E6f974710345224
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { createClient } from '@supabase/supabase-js';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🛡️ PRE-LOAD ERROR SHIELD - Must be first
+// ═══════════════════════════════════════════════════════════════════════════
+process.on('uncaughtException', (err) => {
+  const msg = err?.message || '';
+  
+  // Silent kill for network errors
+  if (msg.includes('429') || msg.includes('WebSocket') || msg.includes('ECONNRESET') || 
+      msg.includes('ETIMEDOUT') || msg.includes('socket hang up') || 
+      msg.includes('Unexpected server response')) {
+    console.log('[🛡️ SHIELD] Network error neutralized:', msg.substring(0, 50));
+    return;
+  }
+  
+  console.error('[🛡️ SHIELD] Exception:', msg.substring(0, 100));
+});
+
+process.on('unhandledRejection', (reason) => {
+  const msg = reason?.message || '';
+  if (msg.includes('429') || msg.includes('WebSocket')) {
+    console.log('[🛡️ SHIELD] Rejection silenced');
+    return;
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🚀 ENV & CONFIG
+// ═══════════════════════════════════════════════════════════════════════════
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+dotenv.config({ path: path.join(__dirname, '../.env') });
+dotenv.config({ path: path.join(__dirname, '../.env.local') });
+
+const PORT = process.env.PORT || 3000;
+const TREASURY = '0x3955d559055DadB7067054cB6E6f974710345224';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 📊 STATE MANAGEMENT
+// ═══════════════════════════════════════════════════════════════════════════
+const serverState = {
+  startTime: Date.now(),
+  version: '4.0.0-premium',
+  treasury: TREASURY,
+  services: {
+    signalHub: false,
+    telegram: false,
+    supabase: false,
+    scanners: false
+  },
+  stats: {
+    signalsGenerated: 0,
+    apiCalls: 0,
+    revenue: 0
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🔌 SUPABASE CONNECTION (Lazy)
+// ═══════════════════════════════════════════════════════════════════════════
+let supabase = null;
+
+function getSupabase() {
+  if (supabase) return supabase;
+  
+  const url = process.env.SUPABASE_PROJECT_URL || process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  
+  if (!url || !key) {
+    console.warn('[⚠️] Supabase not configured');
+    return null;
+  }
+  
+  try {
+    supabase = createClient(url, key);
+    serverState.services.supabase = true;
+    console.log('[✅] Supabase connected');
+    return supabase;
+  } catch (err) {
+    console.error('[❌] Supabase error:', err.message);
+    return null;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🎯 SIGNAL HUB - Core Revenue Engine
+// ═══════════════════════════════════════════════════════════════════════════
+class PremiumSignalHub {
+  constructor() {
+    this.signals = new Map();
+    this.apiKeys = new Map();
+    this.subscribers = new Map();
+    this.pricePerSignal = 0.01;
+    this.tiers = {
+      BASIC: { daily: 10, monthly: 100 },
+      PRO: { daily: 100, monthly: 1000 },
+      ENTERPRISE: { daily: 1000, monthly: 10000 }
+    };
+    
+    // Cleanup interval
+    setInterval(() => this.cleanup(), 60000);
+  }
+  
+  generateId() {
+    return `sig_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  }
+  
+  calculateRisk(signal) {
+    let risk = 5;
+    if (signal.estimatedProfitUsd > 100) risk -= 2;
+    if (signal.estimatedProfitUsd > 50) risk -= 1;
+    if (signal.gasCostUsd > signal.estimatedProfitUsd * 0.5) risk += 2;
+    if (signal.confidence > 0.8) risk -= 1;
+    return Math.max(1, Math.min(10, Math.round(risk)));
+  }
+  
+  async registerSignal(data) {
+    const signal = {
+      id: this.generateId(),
+      timestamp: Date.now(),
+      expiresAt: Date.now() + 300000, // 5 min TTL
+      source: data.source || 'unknown',
+      network: data.network || 'arbitrum',
+      type: data.type || 'arbitrage',
+      tokenPair: `${data.tokenIn}/${data.tokenOut}`,
+      dex: data.dex,
+      poolAddress: data.poolAddress,
+      estimatedProfitUsd: data.estimatedProfitUsd || 0,
+      estimatedProfitPercent: data.estimatedProfitPercent || 0,
+      riskScore: this.calculateRisk(data),
+      confidence: data.confidence || 0.5,
+      gasCostUsd: data.gasCostUsd || 0,
+      minCapitalRequired: data.minCapitalRequired || 100,
+      rawData: data.rawData || {},
+      consumed: false,
+      consumers: []
+    };
+    
+    this.signals.set(signal.id, signal);
+    serverState.stats.signalsGenerated++;
+    
+    // Persist to Supabase
+    const db = getSupabase();
+    if (db) {
+      try {
+        await db.from('signals').insert({
+          signal_id: signal.id,
+          source: signal.source,
+          network: signal.network,
+          type: signal.type,
+          estimated_profit_usd: signal.estimatedProfitUsd,
+          risk_score: signal.riskScore,
+          confidence: signal.confidence,
+          expires_at: new Date(signal.expiresAt).toISOString(),
+          created_at: new Date().toISOString(),
+          data: signal
+        });
+      } catch (e) {
+        // Silent fail - memory cache still works
+      }
+    }
+    
+    console.log(`[📡] Signal registered: ${signal.id.substring(0, 20)}... Profit: $${signal.estimatedProfitUsd.toFixed(2)}`);
+    return signal;
+  }
+  
+  sanitizeSignal(signal) {
+    return {
+      id: signal.id,
+      timestamp: signal.timestamp,
+      network: signal.network,
+      type: signal.type,
+      tokenPair: signal.tokenPair,
+      dex: signal.dex,
+      estimatedProfitUsd: signal.estimatedProfitUsd,
+      estimatedProfitPercent: signal.estimatedProfitPercent,
+      riskScore: signal.riskScore,
+      confidence: signal.confidence,
+      gasCostUsd: signal.gasCostUsd,
+      minCapitalRequired: signal.minCapitalRequired,
+      expiresIn: signal.expiresAt - Date.now()
+    };
+  }
+  
+  getSignals(filters = {}) {
+    let results = Array.from(this.signals.values())
+      .filter(s => s.expiresAt > Date.now());
+    
+    if (filters.network) results = results.filter(s => s.network === filters.network);
+    if (filters.minProfit) results = results.filter(s => s.estimatedProfitUsd >= filters.minProfit);
+    if (filters.maxRisk) results = results.filter(s => s.riskScore <= filters.maxRisk);
+    if (filters.minConfidence) results = results.filter(s => s.confidence >= filters.minConfidence);
+    
+    results.sort((a, b) => b.estimatedProfitUsd - a.estimatedProfitUsd);
+    return results.slice(0, filters.limit || 50).map(s => this.sanitizeSignal(s));
+  }
+  
+  async consumeSignal(apiKey, signalId) {
+    const keyData = this.apiKeys.get(apiKey);
+    if (!keyData) return { error: 'Invalid API key', code: 401 };
+    
+    const signal = this.signals.get(signalId);
+    if (!signal || signal.expiresAt < Date.now()) {
+      return { error: 'Signal not found or expired', code: 404 };
+    }
+    
+    // Check limits
+    const limits = this.tiers[keyData.tier];
+    if (keyData.usage.daily >= limits.daily) {
+      return { error: `Daily limit exceeded (${limits.daily})`, code: 429 };
+    }
+    
+    // Update usage
+    keyData.usage.daily++;
+    keyData.usage.monthly++;
+    keyData.usage.total++;
+    
+    if (!signal.consumers.includes(apiKey)) {
+      signal.consumers.push(apiKey);
+    }
+    
+    // Log billing
+    const revenue = this.pricePerSignal;
+    serverState.stats.revenue += revenue;
+    
+    const db = getSupabase();
+    if (db) {
+      try {
+        await db.from('GX_Billing_Ledger').insert({
+          execution_id: `signal_${signalId}`,
+          timestamp: new Date().toISOString(),
+          cost_usd: revenue,
+          revenue_type: 'SIGNAL_CONSUMPTION',
+          customer_email: keyData.email,
+          tier: keyData.tier,
+          signal_id: signalId,
+          metadata: { apiKey: apiKey.substring(0, 10) + '...' }
+        });
+      } catch (e) {
+        // Silent fail
+      }
+    }
+    
+    return {
+      signal: this.sanitizeSignal(signal),
+      charged: revenue,
+      remainingQuota: {
+        daily: limits.daily - keyData.usage.daily,
+        monthly: limits.monthly - keyData.usage.monthly
+      }
+    };
+  }
+  
+  createApiKey(email, tier = 'BASIC') {
+    const apiKey = `gx_${Buffer.from(email + Date.now()).toString('base64').replace(/[^a-zA-Z0-9]/g, '').substr(0, 32)}`;
+    
+    const keyData = {
+      apiKey,
+      email,
+      tier: tier.toUpperCase(),
+      createdAt: Date.now(),
+      usage: { daily: 0, monthly: 0, total: 0 },
+      active: true
+    };
+    
+    this.apiKeys.set(apiKey, keyData);
+    
+    // Persist
+    const db = getSupabase();
+    if (db) {
+      db.from('api_keys').insert({
+        api_key: apiKey,
+        email,
+        tier: keyData.tier,
+        usage: keyData.usage,
+        active: true,
+        created_at: new Date().toISOString()
+      }).catch(() => {});
+    }
+    
+    return { apiKey, tier: keyData.tier, limits: this.tiers[keyData.tier] };
+  }
+  
+  cleanup() {
+    const now = Date.now();
+    let removed = 0;
+    for (const [id, signal] of this.signals) {
+      if (signal.expiresAt < now) {
+        this.signals.delete(id);
+        removed++;
+      }
+    }
+    if (removed > 0) {
+      console.log(`[🧹] Cleaned up ${removed} expired signals`);
+    }
+  }
+  
+  getStats() {
+    return {
+      activeSignals: this.signals.size,
+      totalApiKeys: this.apiKeys.size,
+      totalSignals: serverState.stats.signalsGenerated,
+      totalRevenue: serverState.stats.revenue,
+      pricePerSignal: this.pricePerSignal,
+      tiers: this.tiers
+    };
+  }
+}
+
+const signalHub = new PremiumSignalHub();
+serverState.services.signalHub = true;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🤖 TELEGRAM DISPATCHER (Optional)
+// ═══════════════════════════════════════════════════════════════════════════
+let telegramBot = null;
+
+async function initTelegram() {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  
+  if (!token || token.includes('SEU_') || token.includes('NOVO_')) {
+    console.log('[ℹ️] Telegram: Not configured');
+    return false;
+  }
+  
+  try {
+    const { Telegraf } = await import('telegraf');
+    telegramBot = new Telegraf(token);
+    
+    telegramBot.command('start', (ctx) => {
+      ctx.reply('🌑 GXEON Signal Hub - Premium\n\nUse /register <email> <tier> to get API access');
+    });
+    
+    telegramBot.command('register', async (ctx) => {
+      const args = ctx.message.text.split(' ').slice(1);
+      const email = args[0];
+      const tier = args[1] || 'BASIC';
+      
+      if (!email?.includes('@')) {
+        return ctx.reply('❌ Invalid email. Use: /register email@example.com PRO');
+      }
+      
+      const result = signalHub.createApiKey(email, tier);
+      ctx.reply(`✅ API Key created!\n\nKey: \`${result.apiKey}\`\nTier: ${result.tier}\nDaily limit: ${result.limits.daily}`, { parse_mode: 'Markdown' });
+    });
+    
+    telegramBot.command('stats', (ctx) => {
+      const stats = signalHub.getStats();
+      ctx.reply(`📊 GXEON Stats\n\nSignals: ${stats.activeSignals}\nUsers: ${stats.totalApiKeys}\nRevenue: $${stats.totalRevenue.toFixed(2)}`);
+    });
+    
+    await telegramBot.launch();
+    serverState.services.telegram = true;
+    console.log('[✅] Telegram bot active');
+    return true;
+    
+  } catch (err) {
+    console.warn('[⚠️] Telegram init failed:', err.message);
+    return false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🚀 EXPRESS APP
+// ═══════════════════════════════════════════════════════════════════════════
+const app = express();
+
+app.use(cors({
+  origin: '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: '*'
+}));
+
+app.use(express.json({ limit: '10mb' }));
+
+// Request ID
+app.use((req, res, next) => {
+  req.id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  serverState.stats.apiCalls++;
+  next();
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🏥 HEALTH CHECKS (Priority for Railway)
+// ═══════════════════════════════════════════════════════════════════════════
+app.get('/health', (req, res) => res.status(200).send('OK'));
+app.get('/api/health', (req, res) => res.json({ status: 'ok', version: serverState.version }));
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 📡 SIGNAL API v1 (Core Revenue Endpoints)
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Get signals (requires API key)
+app.get('/v1/signals', async (req, res) => {
+  const apiKey = req.headers['x-api-key'] || req.query.api_key;
+  
+  if (!apiKey) {
+    return res.status(401).json({ error: 'API key required', header: 'X-API-Key' });
+  }
+  
+  if (!signalHub.apiKeys.has(apiKey)) {
+    return res.status(401).json({ error: 'Invalid API key' });
+  }
+  
+  const filters = {
+    network: req.query.network,
+    minProfit: req.query.min_profit ? parseFloat(req.query.min_profit) : undefined,
+    maxRisk: req.query.max_risk ? parseInt(req.query.max_risk) : undefined,
+    minConfidence: req.query.min_confidence ? parseFloat(req.query.min_confidence) : undefined,
+    limit: req.query.limit ? parseInt(req.query.limit) : 10
+  };
+  
+  const signals = signalHub.getSignals(filters);
+  const keyData = signalHub.apiKeys.get(apiKey);
+  const limits = signalHub.tiers[keyData.tier];
+  
+  res.json({
+    success: true,
+    signals,
+    count: signals.length,
+    quota: {
+      tier: keyData.tier,
+      used: keyData.usage,
+      remaining: {
+        daily: limits.daily - keyData.usage.daily,
+        monthly: limits.monthly - keyData.usage.monthly
+      }
+    },
+    price_per_signal: signalHub.pricePerSignal
+  });
+});
+
+// Consume specific signal
+app.get('/v1/signals/:id', async (req, res) => {
+  const apiKey = req.headers['x-api-key'] || req.query.api_key;
+  
+  if (!apiKey) {
+    return res.status(401).json({ error: 'API key required' });
+  }
+  
+  const result = await signalHub.consumeSignal(apiKey, req.params.id);
+  
+  if (result.error) {
+    return res.status(result.code || 500).json({ error: result.error });
+  }
+  
+  res.json({
+    success: true,
+    signal: result.signal,
+    charged: result.charged,
+    remaining_quota: result.remainingQuota
+  });
+});
+
+// Stats (public)
+app.get('/v1/signals/stats', (req, res) => {
+  const stats = signalHub.getStats();
+  res.json({
+    success: true,
+    stats: {
+      active_signals: stats.activeSignals,
+      total_api_keys: stats.totalApiKeys,
+      total_signals_generated: stats.totalSignals,
+      total_revenue_usd: stats.totalRevenue.toFixed(2),
+      price_per_signal_usd: stats.pricePerSignal,
+      tiers: stats.tiers
+    },
+    server: {
+      version: serverState.version,
+      uptime_ms: Date.now() - serverState.startTime,
+      services: serverState.services
+    }
+  });
+});
+
+// Pricing (public)
+app.get('/v1/signals/pricing', (req, res) => {
+  res.json({
+    success: true,
+    pricing: {
+      per_signal_usd: signalHub.pricePerSignal,
+      tiers: signalHub.tiers,
+      features_by_tier: {
+        BASIC: ['Real-time signals', 'Basic filtering'],
+        PRO: ['Real-time signals', 'Advanced filtering', 'Telegram alerts'],
+        ENTERPRISE: ['Unlimited signals', 'Custom filters', 'Webhook delivery', 'Priority support']
+      }
+    }
+  });
+});
+
+// Register new user
+app.post('/v1/register', async (req, res) => {
+  const { email, tier = 'BASIC', referral_code } = req.body;
+  
+  if (!email || !email.includes('@')) {
+    return res.status(400).json({ error: 'Valid email required' });
+  }
+  
+  // Check if email exists
+  for (const [key, data] of signalHub.apiKeys) {
+    if (data.email === email) {
+      return res.status(409).json({ 
+        error: 'Email already registered',
+        api_key: key.substring(0, 20) + '...'
+      });
+    }
+  }
+  
+  const result = signalHub.createApiKey(email, tier);
+  
+  res.status(201).json({
+    success: true,
+    api_key: result.apiKey,
+    tier: result.tier,
+    limits: result.limits,
+    price_per_signal: signalHub.pricePerSignal,
+    documentation: 'https://docs.gxeon.ai/signals',
+    quick_start: {
+      list_signals: 'GET /v1/signals',
+      auth_header: `X-API-Key: ${result.apiKey.substring(0, 15)}...`
+    }
+  });
+});
+
+// Internal: Inject signal (for scanners)
+app.post('/v1/signals/inject', async (req, res) => {
+  const internalKey = req.headers['x-internal-key'];
+  
+  if (internalKey !== process.env.INTERNAL_API_KEY) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  
+  try {
+    const signal = await signalHub.registerSignal(req.body);
+    
+    // Notify Telegram subscribers (PRO/Enterprise)
+    if (telegramBot && signal.confidence >= 0.7) {
+      const msg = `🚨 *SIGNAL*\n\n💰 Profit: $${signal.estimatedProfitUsd.toFixed(2)}\n🎯 Risk: ${signal.riskScore}/10\n🔗 ${signal.network} | ${signal.dex}`;
+      
+      // Send to all PRO/Enterprise subscribers (simplified)
+      for (const [chatId, sub] of signalHub.subscribers) {
+        if (sub.tier !== 'BASIC') {
+          telegramBot.telegram.sendMessage(chatId, msg, { parse_mode: 'Markdown' }).catch(() => {});
+        }
+      }
+    }
+    
+    res.status(201).json({
+      success: true,
+      signal_id: signal.id,
+      estimated_delivery: signalHub.apiKeys.size
+    });
+    
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🔥 PREMIUM FEATURES
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Revenue dashboard
+app.get('/v1/admin/revenue', async (req, res) => {
+  const apiKey = req.headers['x-api-key'];
+  
+  // Simple admin check - in production, use proper auth
+  if (!apiKey || !apiKey.startsWith('gx_admin_')) {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
+  
+  const stats = signalHub.getStats();
+  
+  res.json({
+    revenue: {
+      total: stats.totalRevenue,
+      today: serverState.stats.revenue,
+      signals_sold: stats.totalSignals
+    },
+    users: {
+      total: stats.totalApiKeys,
+      by_tier: {}
+    },
+    treasury: TREASURY
+  });
+});
+
+// System status
+app.get('/v1/status', (req, res) => {
+  res.json({
+    status: 'operational',
+    version: serverState.version,
+    timestamp: new Date().toISOString(),
+    treasury: TREASURY,
+    uptime_ms: Date.now() - serverState.startTime,
+    services: serverState.services,
+    stats: {
+      signals: signalHub.getStats(),
+      api_calls: serverState.stats.apiCalls
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ❌ ERROR HANDLING
+// ═══════════════════════════════════════════════════════════════════════════
+app.use((err, req, res, next) => {
+  console.error(`[❌ ERROR ${req.id}]:`, err.message);
+  res.status(500).json({ error: 'INTERNAL_ERROR', message: err.message });
+});
+
+app.use((req, res) => {
+  res.status(404).json({ error: 'NOT_FOUND', path: req.path });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🚀 SERVER START
+// ═══════════════════════════════════════════════════════════════════════════
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log('\n╔══════════════════════════════════════════════════════════════════╗');
+  console.log('║     🌑 GXEON PRODUCTION SERVER v4.0 - PREMIUM                   ║');
+  console.log('║                                                                  ║');
+  console.log(`║     Port: ${PORT.toString().padEnd(54)}║`);
+  console.log(`║     Treasury: ${TREASURY.substring(0, 20)}...${' '.repeat(24)}║`);
+  console.log('║                                                                  ║');
+  console.log('║     Endpoints:                                                   ║');
+  console.log('║       • GET  /health                                             ║');
+  console.log('║       • GET  /v1/signals/stats                                  ║');
+  console.log('║       • GET  /v1/signals/pricing                                ║');
+  console.log('║       • POST /v1/register                                        ║');
+  console.log('║       • GET  /v1/signals (Auth: X-API-Key)                      ║');
+  console.log('╚══════════════════════════════════════════════════════════════════╝\n');
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🔧 BACKGROUND INITIALIZATION (Lazy Load)
+// ═══════════════════════════════════════════════════════════════════════════
+setTimeout(async () => {
+  // Connect Supabase
+  getSupabase();
+  
+  // Initialize Telegram (optional)
+  await initTelegram();
+  
+  console.log('[✅] Background services initialized');
+}, 100);
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('[🛑] SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    if (telegramBot) telegramBot.stop();
+    process.exit(0);
+  });
+});
+
+export { app, signalHub, serverState };

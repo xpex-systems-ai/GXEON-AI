@@ -1,0 +1,54 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# NGROK CONFIGURATION — GXEON Lighthouse Signal Provider
+# ═══════════════════════════════════════════════════════════════════════════════
+# Exposes Signal Server to public internet for M2M consumption
+# Command: ngrok start --all --config config/ngrok.yml
+# ═══════════════════════════════════════════════════════════════════════════════
+
+version: 2
+authtoken: ${NGROK_AUTHTOKEN}
+
+# WebSocket Signal Stream (principal)
+tunnels:
+  gxeon-signals:
+    proto: http
+    addr: 8765
+    subdomain: gxeon-signals-${GXEON_SUBDOMAIN_SUFFIX}
+    host_header: localhost
+    
+    # Custom response headers
+    response_headers:
+      X-GXEON-Version: "3.0.0"
+      X-GXEON-Protocol: "M2M_ALPHA_BROADCAST"
+      X-GXEON-Beneficiary: "0x3955d559055DadB7067054cB6E6f974710345224"
+    
+    # WebSocket support
+    websocket_tcp_converter: true
+    
+    # Inspect traffic (disable in production)
+    inspect: true
+    
+    # Basic auth (optional)
+    # basic_auth:
+    #   - username: gxeon
+    #     password: ${NGROK_BASIC_AUTH_PASSWORD}
+
+  # API/Metrics endpoint (REST)
+  gxeon-api:
+    proto: http
+    addr: 8765
+    subdomain: gxeon-api-${GXEON_SUBDOMAIN_SUFFIX}
+    host_header: localhost
+    
+    # Only expose specific paths
+    # (use reverse proxy rules for path filtering)
+
+# Region (us, eu, ap, au, sa, jp, in)
+region: us
+
+# Logging
+log: stdout
+log_level: info
+
+# Web interface (inspect traffic)
+web_addr: 4040

@@ -39,7 +39,7 @@ if (!hasEnv) {
 // Verificar se .env tem a chave do Supabase
 const envContent = fs.readFileSync(envPath, 'utf8');
 const hasSupabaseKey = envContent.includes('SUPABASE_SERVICE_ROLE_KEY=') && 
-                      !envContent.includes('SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...') &&
+                      !envContent.includes('SUPABASE_SERVICE_ROLE_KEY=YOUR_SUPABASE_KEY') &&
                       !envContent.includes('SUPABASE_SERVICE_ROLE_KEY=your_service_role_key') &&
                       !envContent.includes('SUPABASE_SERVICE_ROLE_KEY=...');
 

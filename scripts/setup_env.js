@@ -21,8 +21,8 @@ const TEMPLATE_PATH = path.join(__dirname, '..', 'DEPLOY_ENV_CONFIG.env');
 // Credenciais do usuário (já fornecidas)
 const DEFAULT_CONFIG = {
     SUPABASE_PROJECT_URL: 'https://telxvphgrsvsnxvmjkce.supabase.co',
-    ALCHEMY_WSS_URL_PRIMARY: 'wss://arb-mainnet.g.alchemy.com/v2/E3msU5dEn_5jYSdYzwnAx',
-    ALCHEMY_API_KEY: 'E3msU5dEn_5jYSdYzwnAx',
+    ALCHEMY_WSS_URL_PRIMARY: 'wss://arb-mainnet.g.alchemy.com/v2/YOUR_ALCHEMY_KEY',
+    ALCHEMY_API_KEY: 'YOUR_ALCHEMY_KEY',
     COMMANDER_WALLET_ADDRESS: '0x3955d559055DadB7067054cB6E6f974710345224',
     MIN_AI_CONFIDENCE: '0.85',
     MAX_GAS_PRICE_GWEI: '0.1',
@@ -78,7 +78,7 @@ async function setupEnvironment() {
         if (!supabaseKey || supabaseKey.length < 20) {
             console.log('\n❌ Chave inválida! Usando placeholder temporário...');
             console.log('   ⚠️  Você precisa editar manualmente o .env depois!');
-            supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+            supabaseKey = 'YOUR_SUPABASE_SERVICE_ROLE_KEY';
         }
     } else {
         console.log('   ✅ SUPABASE_SERVICE_ROLE_KEY já configurada');
@@ -181,7 +181,7 @@ LOG_LEVEL=info
     console.log(`   • AI Confidence: ${DEFAULT_CONFIG.MIN_AI_CONFIDENCE}`);
     console.log(`   • Max Gas: ${DEFAULT_CONFIG.MAX_GAS_PRICE_GWEI} Gwei`);
     
-    if (supabaseKey === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...') {
+    if (supabaseKey === 'YOUR_SUPABASE_SERVICE_ROLE_KEY') {
         console.log('\n⚠️  ATENÇÃO: Você precisa obter a chave real do Supabase!');
         console.log('   1. Acesse: https://supabase.com/dashboard/project/telxvphgrsvsnxvmjkce/settings/api');
         console.log('   2. Copie a "service_role key"');

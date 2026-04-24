@@ -15,10 +15,10 @@ const CONFIG = {
     serverUrl: 'https://gxeon-ia-production.up.railway.app',
     localUrl: 'http://localhost:8080',
     
-    // 🌑 GXEON_COMMAND_CENTER v1.0.0 - Supabase Config
+    // 🌑 GXEON_COMMAND_CENTER v1.0.0 - Supabase Config (USE ENV VARS)
     supabase: {
-        url: 'https://yrlakveoasdjmrvhoyqy.supabase.co',
-        anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlybGt2ZW9hc2RqbXJ2aG95cXkiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc0NTAyNjE1NywiZXhwIjoyMDYwNjAyMTU3fQ.4M_S-ImIQAhFSf3VDyTGHQhvsNF3zKoxE8N9v2uVW-M',
+        url: process.env.SUPABASE_URL || 'YOUR_SUPABASE_URL',
+        anonKey: process.env.SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY',
         realtimeEnabled: true
     },
     

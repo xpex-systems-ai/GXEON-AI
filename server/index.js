@@ -372,6 +372,16 @@ setTimeout(async () => {
     app.use('/api/config', gxeonAuthOnly, configRoute);
     app.use('/api', gxeonEnforcer({ agent_execution: 0.005 }), agentRoutes);
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // GXZ1 MARKET ECONOMY LAYER — External Data Marketplace API
+    // ═══════════════════════════════════════════════════════════════════════════
+    // Public endpoints for third-party agent consumption
+    // All endpoints enforce billing via gxeonBillingGateMiddleware
+    // ═══════════════════════════════════════════════════════════════════════════
+    const marketplaceRoutes = require('./routes/marketplace');
+    app.use('/v1', marketplaceRoutes);
+    console.log('[GXEON_MARKETPLACE] External API layer active: /v1/signals/*, /v1/agents/*');
+
     // Error handling
     app.use((err, req, res, next) => {
       console.error(`[GXEON_ERROR] ${req.id || 'unknown'}:`, err);

@@ -1,7 +1,91 @@
-const supabase = require('./supabase');
-const axios = require('axios');
-const { ethers } = require('ethers');
-const WebSocket = require('ws');
+import supabase from './supabase.js';
+import axios from 'axios';
+import { ethers } from 'ethers';
+import WebSocket from 'ws';
+import dotenv from 'dotenv';
+import { billingGate, SIGNAL_PRICING } from '../middleware/gxeonBillingGate.js';
+
+dotenv.config();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SIGNAL PROVIDER INTEGRATION (M2M Alpha Broadcast)
+// ═══════════════════════════════════════════════════════════════════════════
+class SignalProviderClient {
+    constructor() {
+        this.ws = null;
+        this.signalServerUrl = process.env.SIGNAL_SERVER_URL || 'ws://localhost:8765/ws/radar';
+        this.isConnected = false;
+        this.reconnectInterval = 5000;
+        this.signalsQueued = [];
+        this.totalSignalsSent = 0;
+    }
+    
+    connect() {
+        if (this.isConnected) return;
+        
+        try {
+            this.ws = new WebSocket(this.signalServerUrl);
+            
+            this.ws.on('open', () => {
+                this.isConnected = true;
+                console.log(`📡 [SIGNAL_PROVIDER] Conectado ao Signal Server`);
+                
+                // Flush signals queued
+                while (this.signalsQueued.length > 0) {
+                    const signal = this.signalsQueued.shift();
+                    this.sendSignal(signal);
+                }
+            });
+            
+            this.ws.on('close', () => {
+                this.isConnected = false;
+                console.log('📡 [SIGNAL_PROVIDER] Desconectado — retry em 5s...');
+                setTimeout(() => this.connect(), this.reconnectInterval);
+            });
+            
+            this.ws.on('error', (err) => {
+                console.error(`📡 [SIGNAL_PROVIDER] Erro: ${err.message}`);
+                this.isConnected = false;
+            });
+            
+        } catch (err) {
+            console.error(`📡 [SIGNAL_PROVIDER] Falha conexão: ${err.message}`);
+        }
+    }
+    
+    sendSignal(signalPacket) {
+        if (!this.isConnected || !this.ws || this.ws.readyState !== WebSocket.OPEN) {
+            // Queue for later
+            this.signalsQueued.push(signalPacket);
+            if (this.signalsQueued.length > 100) {
+                this.signalsQueued.shift(); // Evita overflow
+            }
+            return false;
+        }
+        
+        try {
+            this.ws.send(JSON.stringify(signalPacket));
+            this.totalSignalsSent++;
+            return true;
+        } catch (err) {
+            console.error(`📡 [SIGNAL_PROVIDER] Erro envio: ${err.message}`);
+            this.signalsQueued.push(signalPacket);
+            return false;
+        }
+    }
+    
+    getStatus() {
+        return {
+            connected: this.isConnected,
+            url: this.signalServerUrl,
+            signalsQueued: this.signalsQueued.length,
+            totalSignalsSent: this.totalSignalsSent
+        };
+    }
+}
+
+// Singleton
+const signalProvider = new SignalProviderClient();
 
 /**
  * 🛡️ GXEON_SOVEREIGN_HOTFIX_v2.1 - Provider Factory
@@ -128,7 +212,7 @@ class DexLiquidityFetcher {
     constructor() {
         this.baseUrl = 'https://api.dexscreener.com/latest';
         this.chainId = 'arbitrum';
-        this.minLiquidityThreshold = 10000; // $10k USD
+        this.minLiquidityThreshold = 1000; // $1k USD — SENSITIVITY MAXIMUM
         this.knownPools = new Set(); // Cache de pools já detectados
         this.lastScanTime = 0;
         this.minScanInterval = 5000; // 5s entre scans (GXEON_SOVEREIGN v2.1)
@@ -841,7 +925,8 @@ class RadarShixService {
             lastScansCount: 0,
             pendingTxSeen: 0,
             smartMoneyEvents: 0,
-            highLiquidityAlerts: 0
+            highLiquidityAlerts: 0,
+            mevSignalsEmitted: 0
         };
     }
 
@@ -857,14 +942,26 @@ class RadarShixService {
         this.isRunning = true;
         this.startTime = Date.now();
         
+        const isLiveMode = process.env.MEV_LIVE_MODE === 'true';
+        const signalMode = process.env.SIGNAL_MODE || 'broadcast';
+        
         console.log('╔═══════════════════════════════════════════════════════════════╗');
-        console.log('║  🎯 RADAR SHIX v2.0 — Liquidity First                          ║');
+        console.log('║  🎯 RADAR SHIX v3.0 — LIGHTHOUSE SIGNAL PROVIDER               ║');
         console.log('╠═══════════════════════════════════════════════════════════════╣');
+        console.log('║  Architecture: M2M Alpha Broadcast — Zero Gas                   ║');
         console.log('║  Source: DexScreener API (FREE) + Alchemy WebSocket            ║');
         console.log('║  Chain: Arbitrum Mainnet (~1s/block)                           ║');
         console.log('║  Alert: New pools > $10k USD | Smart money > 5 ETH             ║');
         console.log('║  Mempool: 🔫 Sniper active for pending liquidity               ║');
+        console.log(`║  Signal Mode: 📡 ${signalMode.toUpperCase().padEnd(15)} (WebSocket Stream)          ║`);
+        console.log(`║  Server: ${(process.env.SIGNAL_SERVER_URL || 'ws://localhost:8765/ws/radar').slice(0, 40)}...     ║`);
         console.log('╚═══════════════════════════════════════════════════════════════╝');
+        
+        // Conecta ao Signal Server (M2M Alpha Broadcast)
+        if (signalMode === 'broadcast') {
+            signalProvider.connect();
+            console.log('📡 [RADAR_SHIX] Signal Provider WebSocket conectando...');
+        }
 
         // Inicia monitor de smart money (com graceful fail)
         let smartMoneySuccess = false;
@@ -990,9 +1087,147 @@ class RadarShixService {
     }
 
     /**
+     * Emite oportunidade para MEV-Nexus (Signal Provider Mode)
+     * Matrix V3: Lighthouse Signal Provider — Zero Gas Architecture
+     * 
+     * ENF-001: BILLING_ENFORCEMENT — MANDATORY_GATE
+     * Signal is only emitted if billing system is operational
+     */
+    emitMevOpportunity(pool) {
+        // ENF-001: STRICT — Sem Supabase = Sem Sinal
+        if (!supabase) {
+            console.log(`🚫 [BILLING_GATE] Signal BLOCKED: Supabase offline`);
+            return;
+        }
+
+        // 🚨 SENSITIVITY MAXIMUM: Threshold mínimo de $500 para disparar sinal
+        const minLiquidity = process.env.SIGNAL_MIN_LIQUIDITY || 500;
+        if (pool.liquidityUsd < minLiquidity) return;
+
+        const signalId = `sig-${pool.pairAddress.slice(2, 10)}-${Date.now().toString(36)}`;
+        const estimatedProfit = this.estimateMevProfit(pool);
+        
+        // Signal Packet estruturado (M2M Alpha Broadcast)
+        const signalPacket = {
+            signal_id: signalId,
+            timestamp: new Date().toISOString(),
+            source: 'RADAR_SHIX',
+            
+            opportunity_type: 'NEW_HIGH_LIQUIDITY_POOL',
+            chain: pool.chainId === 42161 ? 'arbitrum' : 'unknown',
+            dex: pool.dexName || 'unknown',
+            pool_address: pool.pairAddress,
+            token_a: {
+                address: pool.token0.address,
+                symbol: pool.token0.symbol
+            },
+            token_b: {
+                address: pool.token1.address,
+                symbol: pool.token1.symbol
+            },
+            
+            // Métricas financeiras
+            liquidity_usd: pool.liquidityUsd,
+            volume_24h: pool.volume24h,
+            estimated_profit_usd: estimatedProfit,
+            confidence_score: this.calculateConfidence(pool),
+            
+            // Técnico
+            block_number: this.blockCount,
+            gas_estimate: 150000,
+            
+            // 🚨 SENSITIVITY MAXIMUM: Prioridade ajustada para lucros de $0.10+
+            priority: estimatedProfit > 1 ? 'critical' : estimatedProfit > 0.5 ? 'high' : estimatedProfit > 0.10 ? 'normal' : 'low',
+            ttl_seconds: 300,
+            
+            // ═════════════════════════════════════════════════════════════════
+            // GXZ1_SIGNAL_GATE: SG-004 REAL_TIME_MONETIZATION_BINDING
+            // Billing metadata attached immediately at signal generation
+            // ═════════════════════════════════════════════════════════════════
+            billing_gate: {
+                billing_required: true,
+                signal_id: signalId,
+                signal_type: 'new_pool',
+                tier: 'premium', // Signals require paid tier access
+                price: SIGNAL_PRICING.new_pool,
+                latency_cost: 0.001, // Infrastructure cost per signal
+                consumer_fee: SIGNAL_PRICING.new_pool + 0.001, // Total charged
+                currency: 'USD',
+                billing_timestamp: new Date().toISOString()
+            },
+            signal_price_usd: SIGNAL_PRICING.new_pool,
+            
+            // Metadados para billing
+            beneficiary: '0x3955d559055DadB7067054cB6E6f974710345224',
+            
+            // Legacy format (para compatibilidade)
+            event: 'OPPORTUNITY_DETECTED',
+            id: signalId,
+            type: 'NEW_HIGH_LIQUIDITY_POOL',
+            poolAddress: pool.pairAddress,
+            dexName: pool.dexName,
+            liquidityUsd: pool.liquidityUsd,
+            profitUsd: estimatedProfit,
+            contractAddress: pool.pairAddress
+        };
+
+        // Broadcast via WebSocket para Signal Server
+        const sent = signalProvider.sendSignal(signalPacket);
+        
+        // Output JSON para pipe (backward compatibility)
+        console.log(JSON.stringify(signalPacket));
+        
+        // Telemetry
+        this.telemetry.mevSignalsEmitted = (this.telemetry.mevSignalsEmitted || 0) + 1;
+        
+        // 🚨 SENSITIVITY MAXIMUM: Log em QUALQUER sinal > $0.10
+        if (estimatedProfit > 0.10) {
+            const emoji = estimatedProfit > 1 ? '🚨' : estimatedProfit > 0.5 ? '🔥' : '💰';
+            console.log(`${emoji} [RADAR_SHIX] SIGNAL EMITTED: ${signalId} | $${estimatedProfit.toFixed(2)} profit | ` +
+                `Pool: ${pool.pairAddress.slice(0, 12)}... | Broadcast: ${sent ? 'OK' : 'QUEUED'}`);
+        }
+    }
+    
+    /**
+     * Calcula score de confiança para o sinal
+     */
+    calculateConfidence(pool) {
+        let score = 0.5; // Base
+        
+        // Liquidez alta = mais confiança
+        if (pool.liquidityUsd > 100000) score += 0.2;
+        if (pool.liquidityUsd > 500000) score += 0.15;
+        
+        // Volume significativo
+        if (pool.volume24h > pool.liquidityUsd * 0.1) score += 0.1;
+        
+        // Profundidade de liquidez
+        if (pool.liquidityDepth && pool.liquidityDepth > 0.7) score += 0.05;
+        
+        return Math.min(score, 1.0);
+    }
+
+    /**
+     * Estima lucro potencial para MEV
+     */
+    estimateMevProfit(pool) {
+        // Heurística: pools com alta liquidez e volume têm maior potencial
+        const liquidityScore = Math.min(pool.liquidityUsd / 100000, 10); // 0-10
+        const volumeScore = Math.min(pool.volume24h / pool.liquidityUsd, 2); // 0-2
+        const depthScore = pool.liquidityDepth || 0.5;
+        
+        // Lucro estimado baseado em scores
+        const estimatedProfit = (liquidityScore * volumeScore * depthScore * 0.5).toFixed(2);
+        return parseFloat(estimatedProfit);
+    }
+
+    /**
      * Processa um novo pool detectado
      */
     async processNewPool(pool) {
+        // Emite sinal para MEV-Nexus (pipe) — ANTES do Supabase para menor latência
+        this.emitMevOpportunity(pool);
+        
         if (!supabase) return;
         try {
             // Insere no Supabase
@@ -1148,8 +1383,9 @@ class RadarShixService {
             this.telemetry.scansPerSecond = (scansSinceLast / 30).toFixed(2); // 30s interval
             this.telemetry.lastScansCount = this.blockCount;
             
-            // 🎯 Visual output for Railway Dashboard
-            console.log(`[RADAR_HEARTBEAT] ⏱️ ${hours}h ${mins}m | ⚡ ${this.telemetry.scansPerSecond} scans/s | 🔍 ${this.blockCount} total | 🎯 ${this.opportunitiesFound} pools | 📊 ${this.dexFetcher.knownPools.size} tracked | 🔫 ${this.telemetry.pendingTxSeen} pending | 🐋 ${this.telemetry.smartMoneyEvents} smart`);
+            // 🎯 Visual output for Railway Dashboard (inclui MEV signals)
+            const mevSignals = this.telemetry.mevSignalsEmitted || 0;
+            console.log(`[RADAR_HEARTBEAT] ⏱️ ${hours}h ${mins}m | ⚡ ${this.telemetry.scansPerSecond} scans/s | 🔍 ${this.blockCount} total | 🎯 ${this.opportunitiesFound} pools | 📊 ${this.dexFetcher.knownPools.size} tracked | 🔫 ${this.telemetry.pendingTxSeen} pending | 🐋 ${this.telemetry.smartMoneyEvents} smart | 🌑 ${mevSignals} MEV signals`);
             
             // Ping no Supabase com telemetry completa
             if (!supabase) return;
@@ -1275,4 +1511,23 @@ class RadarShixService {
 // Export singleton
 const radarShixService = new RadarShixService();
 
-module.exports = radarShixService;
+export { radarShixService, RadarShixService, DexLiquidityFetcher, SmartMoneyMonitor, MempoolSniper };
+export default radarShixService;
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CLI ENTRY POINT — Permite execução direta via node radarShix.js
+// ═══════════════════════════════════════════════════════════════════════════
+const command = process.argv[2];
+
+if (command === 'start' || command === undefined) {
+    radarShixService.start().catch(err => {
+        console.error('[RADAR_SHIX] Failed to start:', err.message);
+        process.exit(1);
+    });
+} else if (command === 'stop') {
+    radarShixService.stop();
+    process.exit(0);
+} else if (command === 'status') {
+    console.log(JSON.stringify(radarShixService.getStatus(), null, 2));
+    process.exit(0);
+}

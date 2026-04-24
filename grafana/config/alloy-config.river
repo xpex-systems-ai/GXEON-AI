@@ -1,0 +1,214 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// GRAFANA ALLOY CONFIGURATION - SUPABASE POSTGRESQL CONNECTION
+// Complete connection for Dashboard Frontier
+// 
+// Autorizado por: Comandante Júnior Sena
+// Data: 2026-04-20
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 1. REMOTE WRITE - ONDE OS DADOS SERÃO ENVIADOS (Grafana Cloud)
+// ═══════════════════════════════════════════════════════════════════════════
+remote_write {
+  url = env("GRAFANA_REMOTE_WRITE_URL") // https://prometheus-prod-...grafana.net/api/prom/push
+  
+  basic_auth {
+    username = env("GRAFANA_REMOTE_WRITE_USERNAME") // Seu User ID
+    password = env("GRAFANA_API_KEY") // Grafana API Key
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 2. SUPABASE POSTGRESQL CONNECTION - FONTE DE DADOS PRINCIPAL
+// ═══════════════════════════════════════════════════════════════════════════
+// Substitua estes valores com suas credenciais do Supabase
+local.file "supabase_creds" {
+  path = env("SUPABASE_CONNECTION_FILE") // Arquivo com connection string
+  is_secret = true
+}
+
+// Configuração PostgreSQL para Supabase
+prometheus.exporter.postgres "supabase_gxeon" {
+  data_source_names = [
+    "postgresql://postgres:PASSWORD@db.telxvphgrsvsnxvmjkce.supabase.co:5432/postgres?sslmode=require"
+  ]
+  
+  // Queries customizadas para nossas views Grafana
+  query {
+    name = "grafana_financial_master"
+    help = "Financial master dashboard data"
+    query = <<EOT
+      SELECT 
+        total_revenue_24h as revenue,
+        net_profit_24h as profit,
+        roi_24h_pct as roi,
+        portfolio_value_estimated as portfolio
+      FROM grafana_financial_master
+    EOT
+    
+    metric {
+      metric_name = "gxeon_financial_metrics"
+      value = "revenue"
+      labels = ["metric_type"]
+      label_values = ["total_revenue_24h"]
+    }
+  }
+  
+  query {
+    name = "grafana_swarm_matrix"
+    help = "Agent swarm status matrix"
+    query = <<EOT
+      SELECT 
+        agent_name,
+        status,
+        active_items,
+        daily_value
+      FROM grafana_swarm_matrix
+    EOT
+    
+    metric {
+      metric_name = "gxeon_agent_status"
+      value = "active_items"
+      labels = ["agent_name", "status"]
+      label_values = ["agent_name", "status"]
+    }
+  }
+  
+  query {
+    name = "grafana_profit_realtime"
+    help = "Real-time profit data"
+    query = <<EOT
+      SELECT 
+        hour,
+        net_profit_realized,
+        success_rate_pct
+      FROM grafana_profit_realtime
+      WHERE hour > NOW() - INTERVAL '6 hours'
+    EOT
+    
+    metric {
+      metric_name = "gxeon_profit_realtime"
+      value = "net_profit_realized"
+      labels = ["hour"]
+      label_values = ["hour"]
+    }
+  }
+}
+
+// Scrape do exporter PostgreSQL
+prometheus.scrape "supabase_scraper" {
+  targets = prometheus.exporter.postgres.supabase_gxeon.targets
+  forward_to = [prometheus.remote_write.default.receiver]
+  scrape_interval = "30s"
+  job_name = "supabase_gxeon_metrics"
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 3. SUPABASE REALTIME - WEBSOCKET PARA DADOS EM TEMPO REAL
+// ═══════════════════════════════════════════════════════════════════════════
+// Configuração para capturar eventos realtime do Supabase
+
+local.file "supabase_realtime_token" {
+  path = env("SUPABASE_SERVICE_ROLE_KEY_FILE")
+  is_secret = true
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 4. HEALTH CHECK - MONITORAMENTO DO PRÓPRIO ALLOY
+// ═══════════════════════════════════════════════════════════════════════════
+prometheus.scrape "alloy_health" {
+  targets = [{"__address__" = "127.0.0.1:12345"}]
+  forward_to = [prometheus.remote_write.default.receiver]
+  scrape_interval = "15s"
+  job_name = "alloy_internal"
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 5. LOGS - CAPTURAR LOGS DO SISTEMA GXEON
+// ═══════════════════════════════════════════════════════════════════════════
+local.file_match "gxeon_logs" {
+  path_targets = [
+    {"__path__" = "/var/log/gxeon/*.log"},
+    {"__path__" = "${HOME}/.gxeon/logs/*.log"},
+  ]
+}
+
+loki.source.file "gxeon_logs" {
+  targets = local.file_match.gxeon_logs.targets
+  forward_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
+  endpoint {
+    url = env("GRAFANA_LOKI_URL") // https://logs-prod-...grafana.net/loki/api/v1/push
+    
+    basic_auth {
+      username = env("GRAFANA_REMOTE_WRITE_USERNAME")
+      password = env("GRAFANA_API_KEY")
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 6. TRACES - RASTREAMENTO DE REQUISIÇÕES (Opcional)
+// ═══════════════════════════════════════════════════════════════════════════
+otelcol.receiver.otlp "default" {
+  grpc {
+    endpoint = "0.0.0.0:4317"
+  }
+  http {
+    endpoint = "0.0.0.0:4318"
+  }
+  
+  output {
+    traces = [otelcol.exporter.otlp.grafana_cloud.input]
+  }
+}
+
+otelcol.exporter.otlp "grafana_cloud" {
+  client {
+    endpoint = env("GRAFANA_TEMPO_ENDPOINT") // tempo-...grafana.net:443
+    
+    auth = otelcol.auth.basic.grafana_cloud.handler
+  }
+}
+
+otelcol.auth.basic "grafana_cloud" {
+  username = env("GRAFANA_REMOTE_WRITE_USERNAME")
+  password = env("GRAFANA_API_KEY")
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 7. ALERTS - CONFIGURAÇÃO DE ALERTAS
+// ═══════════════════════════════════════════════════════════════════════════
+// Alerta se lucro cair abaixo de threshold
+
+prometheus.exporter.self "alloy_metrics" {}
+
+prometheus.scrape "alloy_self" {
+  targets = prometheus.exporter.self.alloy_metrics.targets
+  forward_to = [prometheus.remote_write.default.receiver]
+  scrape_interval = "30s"
+  job_name = "alloy"
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// VARIÁVEIS DE AMBIENTE NECESSÁRIAS:
+// 
+// GRAFANA_REMOTE_WRITE_URL=https://prometheus-prod-...grafana.net/api/prom/push
+// GRAFANA_REMOTE_WRITE_USERNAME=Seu_User_ID
+// GRAFANA_API_KEY=glsa_... (Grafana Cloud API Key)
+// GRAFANA_LOKI_URL=https://logs-prod-...grafana.net/loki/api/v1/push
+// GRAFANA_TEMPO_ENDPOINT=tempo-...grafana.net:443
+// 
+// SUPABASE_CONNECTION_FILE=/path/to/supabase_connection_string.txt
+// SUPABASE_SERVICE_ROLE_KEY_FILE=/path/to/supabase_key.txt
+// 
+// CONEXÃO SUPABASE (Direct Connection):
+// Host: db.telxvphgrsvsnxvmjkce.supabase.co
+// Port: 5432
+// Database: postgres
+// User: postgres
+// Password: [Sua senha do Supabase]
+// SSL: require
+// ═══════════════════════════════════════════════════════════════════════════

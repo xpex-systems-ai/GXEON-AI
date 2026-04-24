@@ -1,0 +1,11 @@
+{
+  "scanner": "bounty_scanner_agent",
+  "executor": "keeper_executor_agent_PROD",
+  "onchain": "onchain_executor",
+  "activation_timestamp": "2026-04-23T23:08:08.750Z",
+  "wallet_address": "0x3955d559055DadB7067054cB6E6f974710345224",
+  "rpc_connected": true,
+  "auto_execution": true,
+  "max_per_cycle": 1,
+  "slippage_bps": 50
+}

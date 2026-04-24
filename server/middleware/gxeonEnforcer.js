@@ -43,12 +43,14 @@ const gxeonEnforcer = (costConfig = {}) => async (req, res, next) => {
     try {
         let deductionResult;
         
-        // 2. Tentar via Supabase RPC primeiro (se supabase estiver configurado)
+        // 2. STRICT: Supabase é autoridade única de billing (ENF-004)
         if (!supabase) {
-            // Supabase not configured - skip billing, allow request
-            req.user_id = 'anonymous';
-            req.tier = 'free';
-            return next();
+            // BILLING_SOURCE_OF_TRUTH: Sem Supabase = sistema offline
+            return res.status(503).json({
+                error: "GXEON_BILLING_OFFLINE",
+                message: "Sistema de billing indisponível. Serviço temporariamente offline.",
+                enforcement: "STRICT_NO_FAIL_OPEN"
+            });
         }
         
         const { data, error: rpcError } = await supabase
@@ -135,6 +137,15 @@ const gxeonAuthOnly = async (req, res, next) => {
     try {
         let user;
         
+        // STRICT: Supabase é autoridade única (ENF-004)
+        if (!supabase) {
+            return res.status(503).json({
+                error: "GXEON_AUTH_OFFLINE",
+                message: "Sistema de autenticação indisponível.",
+                enforcement: "STRICT_NO_FAIL_OPEN"
+            });
+        }
+        
         // Tentar via Supabase primeiro
         const { data, error } = await supabase
             .from('gxeon_users')
@@ -144,7 +155,7 @@ const gxeonAuthOnly = async (req, res, next) => {
             .single();
         
         if (error && error.message && error.message.includes('schema cache')) {
-            // Fallback para PostgreSQL direto
+            // Fallback autorizado: PostgreSQL direto (mesma database)
             console.warn('[GXEON Auth] PostgREST schema cache desatualizado, usando PostgreSQL direto...');
             user = await queryUserByApiKey(apiKey);
         } else if (error) {
@@ -192,6 +203,15 @@ const deductCredits = (config = {}) => async (req, res, next) => {
         });
     }
 
+    // STRICT: Supabase é autoridade única (ENF-004)
+    if (!supabase) {
+        return res.status(503).json({
+            error: "GXEON_BILLING_OFFLINE",
+            message: "Sistema de billing indisponível.",
+            enforcement: "STRICT_NO_FAIL_OPEN"
+        });
+    }
+
     try {
         const operationCost = config.getCost ? config.getCost(req) : 0.001;
         
@@ -205,9 +225,11 @@ const deductCredits = (config = {}) => async (req, res, next) => {
 
         if (rpcError) {
             console.error('[deductCredits] RPC Error:', rpcError);
-            return res.status(500).json({ 
+            // STRICT MODE: On billing error, DENY (no fail-open)
+            return res.status(503).json({ 
                 error: "GXEON_BILLING_ERROR", 
-                message: "Erro no sistema de cobrança."
+                message: "Erro no sistema de cobrança. Serviço temporariamente indisponível.",
+                enforcement: "STRICT_NO_FAIL_OPEN"
             });
         }
 

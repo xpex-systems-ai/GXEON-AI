@@ -40,13 +40,13 @@
       {
         "key": "SUPABASE_PROJECT_URL",
         "description": "Supabase Project URL",
-        "value": "https://telxvphgrsvsnxvmjkce.supabase.co",
+        "value": "YOUR_SUPABASE_URL",
         "autoFill": true
       },
       {
         "key": "SUPABASE_SERVICE_ROLE_KEY",
         "description": "Supabase Service Role JWT",
-        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbHh2cGhncnN2c254dm1qa2NlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDUyNjMzMSwiZXhwIjoyMDkwMTAyMzMxfQ.297P1WLrSDqiRWtyUk5OuLoLvAU99zy53_HodleZQkA",
+        "value": "YOUR_SUPABASE_SERVICE_ROLE_KEY",
         "autoFill": true
       },
       {
@@ -58,7 +58,7 @@
       {
         "key": "SYSTEM_API_KEY",
         "description": "API Key for billing validation",
-        "value": "api_teste_faturamento",
+        "value": "YOUR_SYSTEM_API_KEY",
         "autoFill": true
       },
       {

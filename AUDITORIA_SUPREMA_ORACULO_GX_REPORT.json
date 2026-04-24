@@ -1,0 +1,295 @@
+{
+  "protocolo": "AUDITORIA_SUPREMA_ORACULO_GX",
+  "versao": "1.0.22",
+  "timestamp_auditoria": "2026-04-21T02:17:00-03:00",
+  "auditor": "Cascade AI",
+  "comandante": "Júnior Sena",
+  "treasury": "0x3955d559055DadB7067054cB6E6f974710345224",
+  
+  "database_schema": {
+    "status": "MAPEADO",
+    "engine": "Supabase / PostgreSQL",
+    "tabelas_criticas": {
+      "lucros": {
+        "nome": "keeper_rewards",
+        "colunas": ["id", "task_id", "protocol", "network", "reward_amount", "reward_token", "gas_spent_usd", "net_profit_usd", "tx_hash", "status", "created_at"],
+        "chaves": ["PRIMARY KEY (id)", "INDEX (task_id)", "INDEX (status)", "INDEX (created_at DESC)", "INDEX (net_profit_usd DESC)"],
+        "rls": "ENABLED - service_role ALL, anon/authenticated SELECT",
+        "realtime": "ATIVO na publicação supabase_realtime"
+      },
+      "logs_sentinel": {
+        "nome": "audit_logs",
+        "colunas": ["id", "created_at", "level", "module", "message", "metadata", "notification_type", "priority", "requires_action"],
+        "chaves": ["PRIMARY KEY (id)", "INDEX (created_at DESC)", "INDEX (level)", "INDEX (module)", "INDEX (notification_type)"],
+        "rls": "ENABLED - service_role ALL, anon/authenticated SELECT",
+        "realtime": "ATIVO na publicação supabase_realtime"
+      },
+      "status_agentes": {
+        "nome": "fleet_heartbeat",
+        "colunas": ["id", "status", "last_ping", "uptime_seconds", "airdrop_hunter_status", "task_miner_status", "liquidity_sniper_status", "governance_status", "total_opportunities_found", "total_tasks_completed", "total_votes_executed", "total_profit_usd", "simulation_mode", "emergency_stop", "updated_at"],
+        "chaves": ["PRIMARY KEY (id)"],
+        "rls": "ENABLED - anon ALL"
+      },
+      "historico_transacoes": {
+        "nome": "liquidity_opportunities",
+        "colunas": ["id", "pair", "tier", "divergence_percent", "price_pool_a", "price_pool_b", "estimated_profit_usd", "flash_loan_amount", "gas_cost_estimate", "net_profit_usd", "status", "executed_at", "tx_hash", "actual_profit_usd", "gas_used", "created_at", "expires_at"],
+        "chaves": ["PRIMARY KEY (id)", "INDEX (status)", "INDEX (estimated_profit_usd DESC)", "INDEX (created_at DESC)"],
+        "rls": "ENABLED"
+      }
+    },
+    "tabelas_agentes": {
+      "airdrop_wallets": "Wallets gerenciadas pelo Airdrop Hunter Elite",
+      "airdrop_eligibility": "Relatórios de elegibilidade de airdrops",
+      "task_opportunities": "Oportunidades de tasks (Galxe, Zealy, Layer3)",
+      "task_executions": "Execuções concluídas de tasks",
+      "smart_money_flows": "Fluxos de smart money (whale tracking)",
+      "governance_proposals": "Propostas de governança DAO",
+      "governance_votes": "Votos executados em governança"
+    },
+    "tabelas_mev": {
+      "mev_transmissions": "Bundles MEV transmitidos para Flashbots Matchmaker",
+      "status_enum": ["pending", "simulated", "transmitted", "included", "reverted", "expired"]
+    },
+    "views_grafana": {
+      "grafana_profit_realtime": "Lucro bruto vs líquido por hora (últimas 24h)",
+      "grafana_profit_accumulated": "Acumulado diário (últimos 30 dias)",
+      "grafana_agent_status": "Status ONLINE/STANDBY dos 4 agentes principais",
+      "grafana_swarm_matrix": "Matriz de status com emojis",
+      "grafana_liquidity_divergence": "Divergências ativas com níveis de alerta",
+      "grafana_financial_master": "Dashboard financeiro consolidado",
+      "grafana_alerts": "Alertas HIGH_DIVERGENCE, AGENT_OFFLINE, HIGH_BRIBE",
+      "grafana_system_health": "Métricas de saúde Supabase/Agentes/Profit"
+    },
+    "permissoes": {
+      "service_role": "ALL privileges em todas as tabelas",
+      "anon": "SELECT em views Grafana, ALL em tabelas Fleet",
+      "authenticated": "SELECT em audit_logs e keeper_rewards"
+    }
+  },
+  
+  "api_endpoints": {
+    "status": "MAPEADO",
+    "framework": "Express.js / Node.js",
+    "health_endpoints": {
+      "GET /health": "Retorna 'OK' - Railway healthcheck",
+      "GET /api/health": "Status JSON com versão",
+      "GET /status": "Status active",
+      "GET /api/v1/health/alchemy": "Status de rate limit Alchemy"
+    },
+    "routes_ativas": {
+      "agents": {
+        "POST /orchestrator": "Orquestrador central multi-agente",
+        "POST /vector_db": "Memória VectorDB",
+        "POST /task_agent": "Automação de tasks",
+        "POST /huggingface": "AI HuggingFace",
+        "POST /deepseek": "AI DeepSeek",
+        "POST /grok": "AI Grok",
+        "POST /chatgpt": "AI ChatGPT/OpenRouter",
+        "POST /bitensor": "Analytics Bitensor",
+        "POST /web3": "Web3/Metamask Tasks",
+        "POST /marketplace": "Marketplace de Agents",
+        "POST /liquidation": "Liquidação Automática",
+        "POST /wallet": "Wallet Web3",
+        "POST /microtasks": "Microtasks Automáticas",
+        "POST /contracts": "Smart Contracts",
+        "GET /agents": "Lista agents ativos",
+        "GET /tasks": "Lista todas tasks",
+        "POST /tasks": "Cria nova task",
+        "GET /tasks/next": "Próxima task pendente",
+        "POST /tasks/result": "Submit task result",
+        "GET /stats": "System statistics",
+        "POST /agents/register": "Registra novo agent",
+        "POST /agents/:id/heartbeat": "Agent heartbeat"
+      },
+      "profit": {
+        "GET /api/v1/profit/status": "Status atual do lucro e claim",
+        "POST /api/v1/profit/claim": "Executa claim de profit",
+        "GET /api/v1/profit/history": "Histórico de claims",
+        "POST /api/v1/profit/estimate": "Estimativa de gas e profit"
+      },
+      "billing": {
+        "GET /billing/stats": "Estatísticas de billing agregadas",
+        "GET /billing/user-stats": "Stats por usuário",
+        "GET /billing/hourly": "Revenue por hora",
+        "GET /billing/failed-refunds": "Transações stuck em reserved",
+        "POST /billing/manual-refund": "Refund manual admin"
+      },
+      "task_engine": {
+        "POST /api/task-engine": "Task pipeline execution",
+        "POST /api/onchain": "Onchain operations com billing"
+      },
+      "executor": {
+        "POST /api/executor": "Executor de agentes"
+      },
+      "radar": {
+        "GET /api/v1/radar": "Radar v2.0 liquidity monitoring"
+      },
+      "swarm": {
+        "POST /api/v1/swarm": "Swarm M2M operations"
+      }
+    },
+    "monitoring_para_grafana": {
+      "billing_stats": "/billing/stats - Revenue, transactions, refund_rate, system_health",
+      "profit_status": "/api/v1/profit/status - vaultBalance, availableProfit, gasEstimate, canClaim",
+      "agent_stats": "/stats - agents count, tasks completed/pending",
+      "health": "/api/health - status geral do sistema"
+    }
+  },
+  
+  "agent_logic": {
+    "status": "AUDITADO",
+    "heartbeat_intervals": {
+      "keeper_executor": "30s (setInterval)",
+      "sentinel_guardian": "5s health check, 30s grafana sync, 15s whale monitor",
+      "fleet_heartbeat": "Trigger automático via INSERT em task_opportunities",
+      "agent_service": "Log em agent_execution_logs a cada execução"
+    },
+    "escrita_banco": {
+      "agent_execution_logs": "Cada execução de agente loga billing_tx_id, agent_type, status, result_summary",
+      "audit_logs": "Sentinel Guardian loga eventos críticos",
+      "keeper_rewards": "Keeper Executor atualiza status 'detected' -> 'executed' com tx_hash"
+    },
+    "campos_criticos_verificados": {
+      "gas_price": "Presente em keeper_rewards.gas_spent_usd e liquidity_opportunities.gas_cost_estimate",
+      "profit_net": "Presente em keeper_rewards.net_profit_usd e liquidity_opportunities.net_profit_usd",
+      "tempo_real": "Sim - via Supabase Realtime em keeper_rewards e audit_logs"
+    },
+    "agentes_implementados": {
+      "orchestrator": "Roteamento multi-agente",
+      "huggingface": "API HuggingFace",
+      "deepseek": "API DeepSeek",
+      "grok": "API Grok/xAI",
+      "chatgpt": "OpenRouter GPT-4",
+      "wallet": "Web3 wallet operations",
+      "microtasks": "Criação de microtasks",
+      "contracts": "Smart contract interactions"
+    }
+  },
+  
+  "security_sync": {
+    "status": "VERIFICADO",
+    "sentinel_guardian": {
+      "arquivo": "server/agents/sentinel_guardian.js",
+      "monitoramento": {
+        "health_check": "5s - Memória, Nexus, Database Pool, Grafana",
+        "grafana_sync": "30s - Batch sync de métricas",
+        "whale_monitor": "15s - Detecção de transações > 10 ETH"
+      },
+      "thresholds": {
+        "latencia": "100ms",
+        "buffer_overflow": "1000 itens",
+        "error_rate": "10%",
+        "max_db_connections": "20",
+        "auto_restart_max": "3 tentativas",
+        "restart_cooldown": "60s"
+      },
+      "alertas_configurados": [
+        "WHALE_DETECTED",
+        "LATENCY_PEAK",
+        "BUFFER_OVERFLOW",
+        "MAX_RESTARTS_EXCEEDED",
+        "PRIORITY_SYNC_REQUIRED"
+      ]
+    },
+    "env_vars_criticas": {
+      "SUPABASE_URL": "Obrigatório - Connection string",
+      "SUPABASE_SERVICE_ROLE_KEY": "Obrigatório - Service role para backend",
+      "PRIVATE_KEY": "Obrigatório - Wallet executor (0x prefixo)",
+      "ALCHEMY_API_KEY": "Obrigatório para Radar/Web3",
+      "ARBITRUM_RPC_URL": "Obrigatório - Arbitrum Mainnet",
+      "VAULT_ADDRESS": "Endereço do vault de lucros",
+      "COMMANDER_ADDRESS": "0x3955d559055DadB7067054cB6E6f974710345224 - Recebe 30%"
+    },
+    "logs_24h": {
+      "tabela": "audit_logs",
+      "query": "SELECT * FROM audit_logs WHERE created_at > NOW() - INTERVAL '24 hours' ORDER BY created_at DESC",
+      "indexes": "idx_audit_logs_created_at DESC"
+    }
+  },
+  
+  "grafana_integration": {
+    "status": "PRONTO",
+    "theme": "Black & Gold High-Tech (Primary #D4AF37, Background #000000, Accent #00FFFF)",
+    "sql_queries_optimizadas": {
+      "painel_pnl_realtime": {
+        "nome": "Lucro em Tempo Real",
+        "query": "SELECT * FROM grafana_profit_realtime ORDER BY hour DESC LIMIT 24",
+        "campos": ["hour", "gross_profit_potential", "net_profit_realized", "total_gas_costs", "profit_minus_gas", "success_rate_pct"]
+      },
+      "painel_pnl_acumulado": {
+        "nome": "PNL Acumulado 30 Dias",
+        "query": "SELECT * FROM grafana_profit_accumulated ORDER BY date DESC LIMIT 30",
+        "campos": ["date", "daily_gross_potential", "daily_net_realized", "daily_gas_costs", "daily_profit_after_gas", "successful_executions", "failed_executions"]
+      },
+      "painel_agentes_status": {
+        "nome": "Status do Swarm de Agentes",
+        "query": "SELECT * FROM grafana_swarm_matrix",
+        "campos": ["agent_name", "status_emoji", "status", "active_items", "daily_value", "last_activity", "minutes_since_activity"]
+      },
+      "painel_liquidez_divergencia": {
+        "nome": "Divergências de Liquidez Ativas",
+        "query": "SELECT * FROM grafana_liquidity_divergence ORDER BY divergence_percent DESC",
+        "campos": ["pair", "divergence_percent", "estimated_profit_usd", "net_profit_usd", "alert_level", "seconds_ago"]
+      },
+      "painel_alertas": {
+        "nome": "Alertas do Sistema",
+        "query": "SELECT * FROM grafana_alerts ORDER BY created_at DESC LIMIT 50",
+        "campos": ["alert_type", "target", "value", "message", "created_at"]
+      },
+      "painel_financeiro_master": {
+        "nome": "Dashboard Financeiro Master",
+        "query": "SELECT * FROM grafana_financial_master",
+        "campos": ["timestamp", "total_revenue_24h", "total_gas_24h", "net_profit_24h", "portfolio_value_estimated", "roi_24h_pct", "treasury_address"]
+      },
+      "painel_health_system": {
+        "nome": "Saúde do Sistema",
+        "query": "SELECT * FROM grafana_system_health",
+        "campos": ["metric", "status", "ops_last_hour"]
+      },
+      "painel_airdrop_scores": {
+        "nome": "Scores de Airdrop",
+        "query": "SELECT * FROM grafana_airdrop_scores LIMIT 100",
+        "campos": ["address", "eligibility_score", "eligibility_level", "estimated_value_usd", "level_emoji"]
+      },
+      "painel_tax_provision": {
+        "nome": "Provisão de Imposto",
+        "query": "SELECT * FROM grafana_tax_provision ORDER BY date DESC",
+        "campos": ["date", "gross_income", "tax_rate_pct", "tax_provision_usd", "net_after_tax", "accumulated_tax_provision"]
+      }
+    },
+    "datasources": {
+      "supabase": {
+        "host": "db.[PROJECT_REF].supabase.co",
+        "port": 5432,
+        "database": "postgres",
+        "ssl": "require"
+      }
+    },
+    "permissoes_grafana": "Usar anon key para conexão read-only"
+  },
+  
+  "diagnostico_geral": {
+    "status_sistema": "OPERACIONAL",
+    "componentes_prontos": [
+      "✅ Database Schema - 11 tabelas principais mapeadas",
+      "✅ API Endpoints - 30+ rotas ativas documentadas",
+      "✅ Agent Logic - Heartbeat e logging implementados",
+      "✅ Sentinel Guardian - Monitoramento ativo configurado",
+      "✅ Grafana Views - 9 views SQL prontas para dashboards"
+    ],
+    "warnings": [
+      "⚠️ Algumas rotas em agents.js estão mockadas (simulated results)",
+      "⚠️ Keeper Executor em modo TESTE (nenhum gas real gasto)",
+      "⚠️ Whale monitoring em sentinel_guardian.js é simulado (5% chance random)"
+    ],
+    "proximos_passos": [
+      "1. Executar EXECUTAR_NO_SUPABASE.sql para criar tabelas audit_logs e keeper_rewards",
+      "2. Executar fleet_schema_v9.sql para criar tabelas de agentes",
+      "3. Executar grafana_views_v10.sql para criar views do dashboard",
+      "4. Configurar Grafana Data Source com credenciais Supabase (anon)",
+      "5. Importar queries SQL para painéis Grafana",
+      "6. Verificar se todas env vars críticas estão setadas no Railway",
+      "7. Ativar Sentinel Guardian em produção"
+    ]
+  }
+}

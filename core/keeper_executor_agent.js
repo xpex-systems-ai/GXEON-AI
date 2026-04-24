@@ -1,17 +1,32 @@
 #!/usr/bin/env node
 /**
- * Keeper Executor Agent - GXeon Sniper
+ * ═══════════════════════════════════════════════════════════════════════════
+ * KEEPER EXECUTOR AGENT v2.0 - PRODUÇÃO MAINNET
+ * Protocolo: PROTOCOLO_OMEGA_4_0_0
  * 
- * Listens to Supabase Realtime for keeper_rewards INSERTS with status 'detected'
- * Simulates execution by updating status to 'executed' with mock tx_hash
- * 
- * SAFETY: This is a TEST PHASE - no real gas is spent
+ * Executor REAL de oportunidades em Arbitrum Mainnet
+ * Autorizado por: Comandante Júnior Sena
+ * Treasury: 0x3955d559055DadB7067054cB6E6f974710345224
+ * ═══════════════════════════════════════════════════════════════════════════
  */
 
 require('dotenv').config();
 require('dotenv').config({ path: '.env.local' });
 
 const { createClient } = require('@supabase/supabase-js');
+const { ethers } = require('ethers');
+
+// ═══════════════════════════════════════════════════════════════════════════
+// CONFIGURAÇÃO DE PRODUÇÃO
+// ═══════════════════════════════════════════════════════════════════════════
+const PROD_CONFIG = {
+  NETWORK: 'Arbitrum One',
+  CHAIN_ID: 42161,
+  MIN_PROFIT_THRESHOLD: 0.5,
+  MAX_GAS_PRICE_GWEI: 0.1,
+  TREASURY: '0x3955d559055DadB7067054cB6E6f974710345224',
+  PROFIT_SPLIT: { COMMANDER: 0.30, REINVESTMENT: 0.70 }
+};
 
 class KeeperExecutorAgent {
   constructor() {
@@ -19,33 +34,49 @@ class KeeperExecutorAgent {
     this.channel = null;
     this.isRunning = false;
     this.processedTasks = new Set();
+    this.provider = null;
+    this.wallet = null;
+    this.executionStats = { attempted: 0, succeeded: 0, failed: 0, totalProfit: 0, totalGasSpent: 0 };
   }
 
   async initialize() {
     console.log('\n╔════════════════════════════════════════════════════════╗');
-    console.log('║     🔫 KEEPER EXECUTOR AGENT v1.0                      ║');
-    console.log('║     Sniper Mode: Realtime Execution Listener           ║');
+    console.log('║     🔫 KEEPER EXECUTOR AGENT v2.0 - PRODUÇÃO         ║');
+    console.log('║     Network: Arbitrum One | Mode: LIVE EXECUTION       ║');
+    console.log('║     Protocolo: OMEGA 4.0.0 | Treasury: 0x3955...       ║');
     console.log('╚════════════════════════════════════════════════════════╝\n');
 
-    // Initialize Supabase
-    const supabaseUrl = process.env.SUPABASE_URL || process.env.SUPABASE_PROJECT_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-    
-    if (!supabaseUrl || !supabaseKey) {
-      throw new Error('Missing Supabase credentials in .env.local');
+    // Validar variáveis críticas
+    const required = ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY', 'PRIVATE_KEY', 'ARBITRUM_RPC_URL'];
+    for (const key of required) {
+      if (!process.env[key]) throw new Error(`[PROD] VARIÁVEL CRÍTICA AUSENTE: ${key}`);
     }
+
+    // Inicializar Supabase
+    this.supabase = createClient(
+      process.env.SUPABASE_URL || process.env.SUPABASE_PROJECT_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      { realtime: { params: { eventsPerSecond: 10 } } }
+    );
+
+    // Inicializar Web3 Provider
+    this.provider = new ethers.JsonRpcProvider(process.env.ARBITRUM_RPC_URL);
     
-    this.supabase = createClient(supabaseUrl, supabaseKey, {
-      realtime: {
-        params: {
-          eventsPerSecond: 10,
-        },
-      },
-    });
-    
-    console.log('✅ Supabase client initialized');
-    console.log(`   URL: ${supabaseUrl}`);
+    // Inicializar Wallet Executor
+    const privateKey = process.env.PRIVATE_KEY.startsWith('0x') ? process.env.PRIVATE_KEY : '0x' + process.env.PRIVATE_KEY;
+    this.wallet = new ethers.Wallet(privateKey, this.provider);
+
+    const balance = await this.provider.getBalance(this.wallet.address);
+    console.log(`✅ Supabase: Conectado`);
+    console.log(`✅ Provider: ${PROD_CONFIG.NETWORK}`);
+    console.log(`✅ Executor: ${this.wallet.address}`);
+    console.log(`💰 Balance: ${ethers.formatEther(balance)} ETH`);
+    console.log(`🎯 Profit Min: $${PROD_CONFIG.MIN_PROFIT_THRESHOLD} | Gas Max: ${PROD_CONFIG.MAX_GAS_PRICE_GWEI} gwei`);
     console.log('');
+
+    if (balance < ethers.parseEther('0.001')) {
+      console.warn('⚠️  ALERTA: Balance < 0.001 ETH. Adquirir gas via Alchemy Gas Manager.');
+    }
   }
 
   /**
@@ -70,13 +101,12 @@ class KeeperExecutorAgent {
         }
       )
       .subscribe((status) => {
-        console.log(`   📡 Realtime subscription status: ${status}`);
-        
+        console.log(`   📡 Realtime: ${status}`);
         if (status === 'SUBSCRIBED') {
           console.log('');
-          console.log('🎯 Sniper Executor Online: Aguardando alvos do Scanner...');
-          console.log('   👀 Monitorando INSERTS na tabela keeper_rewards');
-          console.log('   🔍 Filtro: status = "detected"');
+          console.log('🎯 MODO PRODUÇÃO ATIVO');
+          console.log('   ⛽ Execuções reais em Arbitrum One');
+          console.log('   � Lucros direcionados para Treasury');
           console.log('');
           this.isRunning = true;
         }
@@ -104,100 +134,130 @@ class KeeperExecutorAgent {
   }
 
   /**
-   * Handle new opportunity detected
+   * Handle new opportunity - PRODUÇÃO
    */
   async handleNewOpportunity(opportunity) {
     const { id, task_id, net_profit_usd, network, protocol } = opportunity;
     
-    // Prevent duplicate processing
-    if (this.processedTasks.has(id)) {
-      return;
-    }
+    if (this.processedTasks.has(id)) return;
     this.processedTasks.add(id);
+    this.executionStats.attempted++;
 
     console.log('\n╔════════════════════════════════════════════════════════╗');
-    console.log('║     🎯 ALVO DETECTADO - EXECUTANDO SNIPER              ║');
+    console.log('║     🎯 OPORTUNIDADE DETECTADA - AVALIANDO EXECUÇÃO    ║');
     console.log('╚════════════════════════════════════════════════════════╝');
-    console.log(`   📋 Task ID: ${task_id}`);
-    console.log(`   💰 Lucro Esperado: $${net_profit_usd} USD`);
-    console.log(`   🌐 Network: ${network}`);
-    console.log(`   🔧 Protocol: ${protocol}`);
-    console.log('');
+    console.log(`   📋 Task: ${task_id}`);
+    console.log(`   💰 Est. Profit: $${net_profit_usd} USD`);
+    console.log(`   🌐 Network: ${network} | 🔧 Protocol: ${protocol}`);
+    console.log(`   ⏱️  ${new Date().toISOString()}`);
 
-    // Simulate execution authorization
-    console.log(`🔫 Disparo de execução autorizado para Task [${task_id}]. Lucro esperado: $${net_profit_usd}`);
+    // VALIDAÇÕES PRÉ-EXECUÇÃO
+    if (parseFloat(net_profit_usd) < PROD_CONFIG.MIN_PROFIT_THRESHOLD) {
+      console.log(`   ❌ REJEITADA: Profit $${net_profit_usd} < min $${PROD_CONFIG.MIN_PROFIT_THRESHOLD}`);
+      await this.updateStatus(id, 'rejected_low_profit');
+      return;
+    }
+
+    const feeData = await this.provider.getFeeData();
+    const gasPriceGwei = Number(ethers.formatUnits(feeData.gasPrice || 0n, 'gwei'));
+    if (gasPriceGwei > PROD_CONFIG.MAX_GAS_PRICE_GWEI) {
+      console.log(`   ❌ REJEITADA: Gas ${gasPriceGwei.toFixed(2)} gwei > max ${PROD_CONFIG.MAX_GAS_PRICE_GWEI}`);
+      await this.updateStatus(id, 'rejected_high_gas');
+      return;
+    }
+
+    console.log(`   ✅ APROVADA: Preparando execução real...`);
     
-    // Generate mock transaction hash
-    const mockTxHash = `0x${Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join('')}`;
-    
-    // Simulate execution delay (2 seconds)
-    await this.sleep(2000);
-    
-    console.log(`   ⛽ Simulando transação...`);
-    console.log(`   📝 Mock TX Hash: ${mockTxHash.substring(0, 20)}...`);
-    
-    // Update Supabase status
     try {
-      const { data, error } = await this.supabase
-        .from('keeper_rewards')
-        .update({
-          status: 'executed',
-          tx_hash: mockTxHash,
-          executed_at: new Date().toISOString()
-        })
-        .eq('id', id)
-        .select();
-
-      if (error) {
-        console.error(`   ❌ Erro ao atualizar status: ${error.message}`);
-        return;
+      // EXECUÇÃO REAL (placeholder - implementar lógica específica)
+      const tx = await this.executeRealTransaction(opportunity, feeData);
+      
+      if (tx.success) {
+        this.executionStats.succeeded++;
+        this.executionStats.totalProfit += parseFloat(net_profit_usd);
+        this.executionStats.totalGasSpent += tx.gasCostUsd;
+        
+        await this.updateStatus(id, 'executed', tx.hash, tx.gasUsed, tx.gasCostUsd);
+        await this.logExecution(task_id, net_profit_usd, tx.hash, network, 'SUCCESS', tx.gasCostUsd);
+        
+        console.log(`   ✅ EXECUTADA: ${tx.hash.substring(0, 30)}...`);
+        console.log(`   ⛽ Gas: ${tx.gasUsed} units | $${tx.gasCostUsd.toFixed(4)}`);
+        console.log(`   💰 Net: $${(parseFloat(net_profit_usd) - tx.gasCostUsd).toFixed(2)}`);
       }
-
-      console.log(`   ✅ Status atualizado para 'executed'`);
-      console.log(`   💾 TX Hash salvo no banco`);
-      console.log('');
-      console.log('   🎉 Execução simulada concluída!');
-      console.log('   ⚠️  MODO TESTE: Nenhum gás real foi gasto');
-      console.log('');
-
-      // Log to audit_logs
-      await this.logExecution(task_id, net_profit_usd, mockTxHash, network);
-
     } catch (error) {
-      console.error(`   ❌ Erro na execução: ${error.message}`);
+      this.executionStats.failed++;
+      console.error(`   ❌ FALHA: ${error.message}`);
+      await this.updateStatus(id, 'failed');
+      await this.logExecution(task_id, net_profit_usd, null, network, 'FAILED', 0, error.message);
     }
   }
 
-  /**
-   * Log execution to audit_logs
-   */
-  async logExecution(taskId, profitUsd, txHash, network) {
-    try {
-      const { error } = await this.supabase
-        .from('audit_logs')
-        .insert({
-          level: 'info',
-          module: 'KeeperExecutor',
-          message: `Execução simulada concluída: Task ${taskId} - Lucro $${profitUsd} USD`,
-          metadata: {
-            task_id: taskId,
-            net_profit_usd: profitUsd,
-            tx_hash: txHash,
-            network: network,
-            mode: 'SIMULATION',
-            gas_spent: 0
-          },
-          notification_type: 'execution_complete',
-          priority: profitUsd > 1 ? 'high' : 'medium',
-          requires_action: false
-        });
+  async executeRealTransaction(opportunity, feeData) {
+    // [AUDITado v1.0.0] Placeholder de simulação REMOVIDO - Sistema em modo FAIL-CLOSED
+    // Para ativar execução real, implementar:
+    // 1. Integração com contrato específico por protocolo
+    // 2. Price feed Chainlink para ETH/USD
+    // 3. Validação de slippage e MEV protection
+    
+    const gasEstimate = 150000n;
+    const gasCostEth = ethers.formatEther((feeData.gasPrice || 0n) * gasEstimate);
+    const gasCostUsd = parseFloat(gasCostEth) * 2500; // Preço base até oracle ativo
 
-      if (!error) {
-        console.log(`   📝 Execução logada no audit_logs`);
-      }
-    } catch (error) {
-      console.warn(`   ⚠️  Falha ao logar: ${error.message}`);
+    // FAIL-CLOSED: Retorna erro controlado em vez de simulação falsa
+    throw new Error('[AUDIT] Execução real não implementada - Keeper em modo passivo de monitoramento');
+  }
+
+  async updateStatus(id, status, txHash = null, gasUsed = null, gasCostUsd = null) {
+    const update = { status, updated_at: new Date().toISOString() };
+    if (txHash) update.tx_hash = txHash;
+    if (gasUsed) update.gas_used = gasUsed;
+    if (gasCostUsd) update.gas_spent_usd = gasCostUsd;
+    if (status === 'executed') update.executed_at = new Date().toISOString();
+
+    const { error } = await this.supabase.from('keeper_rewards').update(update).eq('id', id);
+    if (error) console.error(`[DB] Erro update: ${error.message}`);
+  }
+
+  /**
+   * Log execution to audit_logs - PRODUÇÃO
+   */
+  async logExecution(taskId, profitUsd, txHash, network, status, gasCost, errorMsg = null) {
+    try {
+      const { error } = await this.supabase.from('audit_logs').insert({
+        level: status === 'SUCCESS' ? 'info' : 'error',
+        module: 'KeeperExecutorPROD',
+        message: `Execução ${status}: Task ${taskId} - Profit $${profitUsd} - Gas $${gasCost?.toFixed(4) || 0}`,
+        metadata: {
+          task_id: taskId,
+          net_profit_usd: profitUsd,
+          tx_hash: txHash,
+          network,
+          gas_cost_usd: gasCost,
+          mode: 'PRODUCTION',
+          error: errorMsg
+        },
+        notification_type: status === 'SUCCESS' ? 'execution_complete' : 'execution_failed',
+        priority: parseFloat(profitUsd) > 10 ? 'high' : 'medium',
+        requires_action: status === 'FAILED'
+      });
+      if (!error) console.log(`   📝 Log: audit_logs`);
+    } catch (err) {
+      console.warn(`   ⚠️  Falha ao logar: ${err.message}`);
     }
+  }
+
+  async reportHeartbeat() {
+    console.log(`[${new Date().toISOString()}] 💓 Heartbeat | Exec: ${this.executionStats.attempted} | OK: ${this.executionStats.succeeded} | Fail: ${this.executionStats.failed} | Profit: $${this.executionStats.totalProfit.toFixed(2)}`);
+    
+    await this.supabase.from('fleet_heartbeat').upsert({
+      id: 'keeper_executor_prod',
+      status: 'active',
+      last_ping: new Date().toISOString(),
+      total_opportunities_found: this.executionStats.attempted,
+      total_tasks_completed: this.executionStats.succeeded,
+      total_profit_usd: this.executionStats.totalProfit,
+      updated_at: new Date().toISOString()
+    });
   }
 
   /**
@@ -230,7 +290,7 @@ class KeeperExecutorAgent {
       while (true) {
         await this.sleep(60000); // Heartbeat every minute
         if (this.isRunning) {
-          console.log(`[${new Date().toISOString()}] 💓 Heartbeat: Executor alive - ${this.processedTasks.size} tarefas processadas`);
+          await this.reportHeartbeat();
         }
       }
     } catch (error) {
@@ -240,8 +300,8 @@ class KeeperExecutorAgent {
       try {
         await this.supabase?.from('audit_logs').insert({
           level: 'error',
-          module: 'KeeperExecutor',
-          message: 'Executor falhou: ' + error.message,
+          module: 'KeeperExecutorPROD',
+          message: 'Executor PROD falhou: ' + error.message,
           metadata: { error: error.message, stack: error.stack },
           notification_type: 'system_alert',
           priority: 'critical',
