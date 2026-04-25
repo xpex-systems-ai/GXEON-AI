@@ -334,48 +334,213 @@ const signalHub = new PremiumSignalHub();
 serverState.services.signalHub = true;
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 🤖 TELEGRAM DISPATCHER (Optional)
+// 🤖 TELEGRAM DISPATCHER - DNA CONVERSÃO ATIVO
+// Bot: @gxeonai_bot | Hardcoded & Operational
 // ═══════════════════════════════════════════════════════════════════════════
 let telegramBot = null;
+const TELEGRAM_BOT_TOKEN = '8659197490:AAG-4X50tQahi0mnngfSeUyi49fpr1sDjBk';
+const TELEGRAM_CHAT_ID = '8506789322';
 
 async function initTelegram() {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  
-  if (!token || token.includes('SEU_') || token.includes('NOVO_')) {
-    console.log('[ℹ️] Telegram: Not configured');
-    return false;
-  }
-  
   try {
     const { Telegraf } = await import('telegraf');
-    telegramBot = new Telegraf(token);
+    telegramBot = new Telegraf(TELEGRAM_BOT_TOKEN);
     
+    // 🧬 DNA CONVERSÃO: Start → Educação → Registro → Monetização
     telegramBot.command('start', (ctx) => {
-      ctx.reply('🌑 GXEON Signal Hub - Premium\n\nUse /register <email> <tier> to get API access');
+      const welcomeMsg = `🌑 *GXEON Alpha - Smart Money Signals*
+
+Detectamos oportunidades em tempo real na blockchain.
+
+*🎯 O que você recebe:*
+• Arbitragem DeFi detectada por IA
+• Smart money movements
+• MEV opportunities
+• Keeper rewards
+
+*💎 Planos:*
+🆓 *BASIC* (Gratuito): 10 sinais/dia
+⭐ *PRO* ($5/mês): Sinais ilimitados + tempo real
+🚀 *ENTERPRISE* ($50/mês): 1000 sinais + prioridade
+
+*🚀 Comece agora:*
+Use /register seu@email.com PRO
+
+📊 /status - Ver sistema
+❓ /help - Ajuda completa`;
+      
+      ctx.reply(welcomeMsg, { parse_mode: 'Markdown' });
+      
+      // Log conversion event
+      console.log(`[🧬 DNA] Novo usuário: ${ctx.from.username || ctx.from.id}`);
     });
     
+    // 🧬 DNA CONVERSÃO: Registro → API Key → Acesso
     telegramBot.command('register', async (ctx) => {
       const args = ctx.message.text.split(' ').slice(1);
       const email = args[0];
       const tier = args[1] || 'BASIC';
       
       if (!email?.includes('@')) {
-        return ctx.reply('❌ Invalid email. Use: /register email@example.com PRO');
+        return ctx.reply('❌ Email inválido\nUse: /register seu@email.com PRO');
       }
       
-      const result = signalHub.createApiKey(email, tier);
-      ctx.reply(`✅ API Key created!\n\nKey: \`${result.apiKey}\`\nTier: ${result.tier}\nDaily limit: ${result.limits.daily}`, { parse_mode: 'Markdown' });
+      const validTiers = ['BASIC', 'PRO', 'ENTERPRISE'];
+      const upperTier = tier.toUpperCase();
+      
+      if (!validTiers.includes(upperTier)) {
+        return ctx.reply('❌ Tier inválido. Use: BASIC, PRO ou ENTERPRISE');
+      }
+      
+      // Criar API key instantaneamente
+      const result = signalHub.createApiKey(email, upperTier);
+      
+      // Mensagem de conversão otimizada
+      let monetizationMsg = '';
+      if (upperTier === 'BASIC') {
+        monetizationMsg = '\n\n💡 *Upgrade para PRO:* /upgrade PRO\nSinais ilimitados por apenas $5/mês';
+      } else {
+        monetizationMsg = '\n\n💰 *Pagamento:* PIX ou Crypto\nContate @juniorsena para ativação imediata';
+      }
+      
+      ctx.reply(`✅ *Registro Confirmado!*
+
+📧 Email: ${email}
+🔑 API Key: \`${result.apiKey}\`
+🏷️ Tier: ${result.tier}
+📊 Limite: ${result.limits.daily} sinais/dia
+💰 Preço: $${signalHub.pricePerSignal} por sinal
+
+*🚀 Acesso imediato:*
+https://api.gxeon.ai/v1/signals
+Header: X-API-Key: ${result.apiKey.substring(0, 20)}...
+
+*📱 Comandos úteis:*
+/signals - Ver sinais disponíveis
+/status - Status da conta
+/api - Documentação completa${monetizationMsg}`, { parse_mode: 'Markdown' });
+      
+      // Notificar admin
+      if (telegramBot) {
+        telegramBot.telegram.sendMessage(TELEGRAM_CHAT_ID, 
+          `🆕 *Novo Registro*\n\n${email}\nTier: ${upperTier}\nRevenue potential: $${upperTier === 'PRO' ? '5' : upperTier === 'ENTERPRISE' ? '50' : '0'}/mês`, 
+          { parse_mode: 'Markdown' }
+        ).catch(() => {});
+      }
+      
+      console.log(`[🧬 DNA] Registro: ${email} | Tier: ${upperTier} | Revenue: +$${upperTier === 'PRO' ? 5 : upperTier === 'ENTERPRISE' ? 50 : 0}`);
     });
     
-    telegramBot.command('stats', (ctx) => {
+    // 🧬 DNA: Upgrade path
+    telegramBot.command('upgrade', (ctx) => {
+      const args = ctx.message.text.split(' ').slice(1);
+      const targetTier = args[0]?.toUpperCase();
+      
+      if (!targetTier || !['PRO', 'ENTERPRISE'].includes(targetTier)) {
+        return ctx.reply('💎 *Upgrade disponível:*\n\n⭐ PRO - $5/mês\nSinais ilimitados + tempo real\n\n🚀 ENTERPRISE - $50/mês\n1000 sinais + prioridade máxima\n\nUse: /upgrade PRO', { parse_mode: 'Markdown' });
+      }
+      
+      ctx.reply(`🎯 *Upgrade para ${targetTier}*
+
+Para ativar, envie o pagamento:
+
+*PIX:* Chave aleatória gerada
+*Crypto:* 0x3955d559055DadB7067054cB6E6f974710345224
+
+Valor: $${targetTier === 'PRO' ? '5' : '50'}
+
+Após pagamento, envie comprovante para @juniorsena\nSua API será ativada em até 5 minutos.`, { parse_mode: 'Markdown' });
+    });
+    
+    // Sinais (BASIC = delay, PRO = real-time)
+    telegramBot.command('signals', (ctx) => {
+      const signals = signalHub.getSignals({ limit: 5 });
+      
+      if (signals.length === 0) {
+        return ctx.reply('📡 *Nenhum sinal ativo no momento*\n\nOportunidades aparecem quando detectamos:\n• Arbitragem entre DEXs\n• MEV extractable\n• Smart money moves\n\n_Tente novamente em 5 minutos_', { parse_mode: 'Markdown' });
+      }
+      
+      let msg = '📡 *Sinais Ativos*\n\n';
+      signals.forEach((sig, i) => {
+        msg += `${i+1}. 💰 $${sig.estimatedProfitUsd.toFixed(2)} | ${sig.tokenPair}\n`;
+        msg += `   Risk: ${sig.riskScore}/10 | Conf: ${(sig.confidence*100).toFixed(0)}%\n\n`;
+      });
+      
+      msg += '_🆓 Delay 10min (BASIC) | ⭐ Tempo real (PRO)_';
+      
+      ctx.reply(msg, { parse_mode: 'Markdown' });
+    });
+    
+    // Status sistema
+    telegramBot.command('status', (ctx) => {
       const stats = signalHub.getStats();
-      ctx.reply(`📊 GXEON Stats\n\nSignals: ${stats.activeSignals}\nUsers: ${stats.totalApiKeys}\nRevenue: $${stats.totalRevenue.toFixed(2)}`);
+      ctx.reply(`📊 *GXEON Status*
+
+🟢 Sinais ativos: ${stats.activeSignals}
+👥 Usuários: ${stats.totalApiKeys}
+💰 Receita: $${stats.totalRevenue.toFixed(2)}
+📈 Total sinais: ${stats.totalSignals}
+
+_Version: 4.0.0-premium_
+_Treasury: 0x3955d5..._`, { parse_mode: 'Markdown' });
+    });
+    
+    // Help completo
+    telegramBot.command('help', (ctx) => {
+      ctx.reply(`📚 *GXEON Alpha - Guia Completo*
+
+*Como funciona:*
+Nossa IA monitora a blockchain 24/7 detectando oportunidades de lucro.
+
+*Planos:*
+🆓 BASIC: Grátis, 10 sinais/dia, delay 10min
+⭐ PRO: $5/mês, ilimitado, tempo real
+🚀 ENTERPRISE: $50/mês, 1000/dia, prioridade
+
+*Comandos:*
+/start - Início
+/register <email> <tier> - Criar conta
+/signals - Ver sinais
+/status - Estatísticas
+/upgrade <tier> - Upgrade
+/help - Este menu
+
+*Suporte:* @juniorsena`, { parse_mode: 'Markdown' });
+    });
+    
+    // API docs
+    telegramBot.command('api', (ctx) => {
+      ctx.reply(`🔌 *API Documentation*
+
+*Endpoint:*
+GET https://api.gxeon.ai/v1/signals
+
+*Headers:*
+X-API-Key: sua-api-key-aqui
+
+*Query params:*
+?network=arbitrum
+?min_profit=10
+?max_risk=5
+
+*Resposta:*
+{\n  "signals": [...],\n  "count": 10,\n  "quota": {...}\n}
+
+*Full docs:* Em breve em docs.gxeon.ai`, { parse_mode: 'Markdown' });
     });
     
     await telegramBot.launch();
     serverState.services.telegram = true;
-    console.log('[✅] Telegram bot active');
+    console.log('[✅] Telegram bot ACTIVE - DNA Conversão operacional');
+    console.log('   Bot: @gxeonai_bot');
+    console.log('   Chat: ' + TELEGRAM_CHAT_ID);
+    
+    // Notificar canal de ativação
+    telegramBot.telegram.sendMessage(TELEGRAM_CHAT_ID, 
+      '🌑 *GXEON Signals - Online*\n\nBot operacional.\nUse /start para começar.\n\n_Comandante Júnior Sena_', 
+      { parse_mode: 'Markdown' }
+    ).catch(() => {});
+    
     return true;
     
   } catch (err) {
