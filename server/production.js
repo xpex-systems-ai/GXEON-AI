@@ -336,10 +336,21 @@ serverState.services.signalHub = true;
 // ═══════════════════════════════════════════════════════════════════════════
 // 🤖 TELEGRAM DISPATCHER - DNA CONVERSÃO ATIVO
 // Bot: @gxeonai_bot | Hardcoded & Operational
+// PIX: Integrado Mercado Pago
 // ═══════════════════════════════════════════════════════════════════════════
 let telegramBot = null;
 const TELEGRAM_BOT_TOKEN = '8659197490:AAG-4X50tQahi0mnngfSeUyi49fpr1sDjBk';
 const TELEGRAM_CHAT_ID = '8506789322';
+
+// Importar sistema PIX (lazy load para evitar circular deps)
+let pixSystem = null;
+async function getPixSystem() {
+  if (!pixSystem) {
+    const { pixSystem: pix } = await import('./services/mercadoPagoIntegration.js');
+    pixSystem = pix;
+  }
+  return pixSystem;
+}
 
 async function initTelegram() {
   try {
@@ -431,25 +442,158 @@ Header: X-API-Key: ${result.apiKey.substring(0, 20)}...
       console.log(`[🧬 DNA] Registro: ${email} | Tier: ${upperTier} | Revenue: +$${upperTier === 'PRO' ? 5 : upperTier === 'ENTERPRISE' ? 50 : 0}`);
     });
     
-    // 🧬 DNA: Upgrade path
-    telegramBot.command('upgrade', (ctx) => {
+    // 🧬 DNA: Upgrade path com PIX automático
+    telegramBot.command('upgrade', async (ctx) => {
       const args = ctx.message.text.split(' ').slice(1);
       const targetTier = args[0]?.toUpperCase();
+      const email = args[1]; // Opcional: email para associar pagamento
       
       if (!targetTier || !['PRO', 'ENTERPRISE'].includes(targetTier)) {
-        return ctx.reply('💎 *Upgrade disponível:*\n\n⭐ PRO - $5/mês\nSinais ilimitados + tempo real\n\n🚀 ENTERPRISE - $50/mês\n1000 sinais + prioridade máxima\n\nUse: /upgrade PRO', { parse_mode: 'Markdown' });
+        return ctx.reply('💎 *Upgrade disponível:*\n\n⭐ PRO - R$25 (~$5/mês)\n✅ Sinais ilimitados + tempo real\n✅ API Key dedicada\n✅ Suporte prioritário\n\n🚀 ENTERPRISE - R$250 (~$50/mês)\n✅ 1000 sinais/dia\n✅ Prioridade máxima\n✅ Webhooks B2B\n✅ Dashboard privado\n\nUse: /upgrade PRO seu@email.com', { parse_mode: 'Markdown' });
       }
       
-      ctx.reply(`🎯 *Upgrade para ${targetTier}*
+      // Gerar PIX automaticamente
+      try {
+        const pix = await getPixSystem();
+        const userEmail = email || `${ctx.from.id}@gxeon.telegram`;
+        
+        const payment = pix.gerarPagamento(userEmail, targetTier);
+        
+        if (payment.error) {
+          return ctx.reply(`❌ Erro: ${payment.error}`);
+        }
+        
+        // Mensagem com PIX Copia e Cola
+        const pixMessage = `🎯 *UPGRADE ${targetTier}*
 
-Para ativar, envie o pagamento:
+📧 Email: ${payment.email}
+💰 Valor: R$${payment.valor_brl.toFixed(2)}
+🔑 TXID: \`${payment.txid}\`
 
-*PIX:* Chave aleatória gerada
-*Crypto:* 0x3955d559055DadB7067054cB6E6f974710345224
+*📋 PIX COPIA E COLA:*
+\`\`\`
+${payment.pix_copia_cola}
+\`\`\`
 
-Valor: $${targetTier === 'PRO' ? '5' : '50'}
+*💳 Chave PIX direta:*
+\`${pix.pixSystem?.PIX_CONFIG?.chaves?.aleatoria || '6a7601d8-c20d-4057-99de-b84c8e55aa30'}\`
 
-Após pagamento, envie comprovante para @juniorsena\nSua API será ativada em até 5 minutos.`, { parse_mode: 'Markdown' });
+*✅ Como pagar:*
+1️⃣ Copie o código acima
+2️⃣ Abra seu banco/app
+3️⃣ Cole no PIX Copia e Cola
+4️⃣ Confirme o valor
+
+*🚀 Após pagamento:*
+Sua API será ativada em até 2 minutos.
+
+⏳ *Expira em:* 24 horas
+
+❓ Dúvidas? @juniorsena`;
+        
+        ctx.reply(pixMessage, { parse_mode: 'Markdown' });
+        
+        // Notificar admin
+        telegramBot.telegram.sendMessage(TELEGRAM_CHAT_ID, 
+          `🆕 *UPGRADE PENDENTE*\n\n${targetTier}\n${payment.email}\nR$${payment.valor_brl}\nTXID: ${payment.txid}`, 
+          { parse_mode: 'Markdown' }
+        ).catch(() => {});
+        
+        console.log(`[🧬 DNA PIX] Upgrade gerado: ${payment.txid} | ${targetTier} | ${payment.email}`);
+        
+      } catch (err) {
+        console.error('[❌ PIX] Erro ao gerar:', err);
+        ctx.reply('❌ Erro ao gerar PIX. Tente novamente ou contate @juniorsena');
+      }
+    });
+    
+    // 🧬 DNA: Confirmar pagamento (admin only)
+    telegramBot.command('confirmar', async (ctx) => {
+      // Verificar se é admin (simplificado)
+      const isAdmin = ctx.from.username === 'juniorsena' || ctx.chat.id.toString() === TELEGRAM_CHAT_ID;
+      
+      if (!isAdmin) {
+        return ctx.reply('⛔ Apenas administradores podem confirmar pagamentos.');
+      }
+      
+      const args = ctx.message.text.split(' ').slice(1);
+      const txid = args[0];
+      
+      if (!txid) {
+        return ctx.reply('Use: /confirmar <TXID>');
+      }
+      
+      try {
+        const pix = await getPixSystem();
+        const result = pix.confirmarPagamento(txid, 'Confirmado via Telegram');
+        
+        if (result.error) {
+          return ctx.reply(`❌ ${result.error}`);
+        }
+        
+        ctx.reply(`✅ *Pagamento Confirmado!*\n\nTXID: ${result.txid}\nEmail: ${result.email}\nTier: ${result.tier}\nValor: R$${result.valor_brl}\n\nAPI Key ativada!`);
+        
+      } catch (err) {
+        ctx.reply('❌ Erro ao confirmar.');
+      }
+    });
+    
+    // 🧬 DNA: Verificar pagamento
+    telegramBot.command('verificar', async (ctx) => {
+      const args = ctx.message.text.split(' ').slice(1);
+      const txid = args[0];
+      
+      if (!txid) {
+        return ctx.reply('Use: /verificar <TXID>');
+      }
+      
+      try {
+        const pix = await getPixSystem();
+        const status = pix.verificarPagamento(txid);
+        
+        if (status.status === 'NOT_FOUND') {
+          return ctx.reply('❌ Pagamento não encontrado.');
+        }
+        
+        const emoji = status.status === 'COMPLETED' ? '✅' : '⏳';
+        ctx.reply(`${emoji} *Status do Pagamento*\n\nTXID: ${txid}\nStatus: ${status.status}\nTier: ${status.data.tier}\nValor: R$${status.data.valor_brl}`);
+        
+      } catch (err) {
+        ctx.reply('❌ Erro ao verificar.');
+      }
+    });
+    
+    // 🧬 DNA: Estatísticas de PIX (admin)
+    telegramBot.command('pixstats', async (ctx) => {
+      const isAdmin = ctx.from.username === 'juniorsena' || ctx.chat.id.toString() === TELEGRAM_CHAT_ID;
+      
+      if (!isAdmin) {
+        return ctx.reply('⛔ Comando restrito.');
+      }
+      
+      try {
+        const pix = await getPixSystem();
+        const stats = pix.getStats();
+        const pendentes = pix.listarPendentes();
+        
+        let msg = `💰 *Estatísticas PIX*\n\n`;
+        msg += `✅ Recebido: R$${stats.total_recebido_brl.toFixed(2)}\n`;
+        msg += `⏳ Pendente: R$${stats.receita_potencial_brl.toFixed(2)}\n`;
+        msg += `📊 Completados: ${stats.completados}\n`;
+        msg += `🕐 Pendentes: ${stats.pendentes}\n\n`;
+        
+        if (pendentes.length > 0) {
+          msg += `*Pagamentos Pendentes:*\n`;
+          pendentes.slice(0, 5).forEach(p => {
+            msg += `• ${p.txid.substring(0, 15)}... ${p.tier} R$${p.valor_brl}\n`;
+          });
+        }
+        
+        ctx.reply(msg, { parse_mode: 'Markdown' });
+        
+      } catch (err) {
+        ctx.reply('❌ Erro ao carregar estatísticas.');
+      }
     });
     
     // Sinais (BASIC = delay, PRO = real-time)
