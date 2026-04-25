@@ -334,7 +334,34 @@ const signalHub = new PremiumSignalHub();
 serverState.services.signalHub = true;
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 🤖 TELEGRAM DISPATCHER - DNA CONVERSÃO ATIVO
+// � SIGNAL ORCHESTRATOR - DNA SUPREMO
+// Geração automática + Dispatch Telegram + Monetização Hook
+// ═══════════════════════════════════════════════════════════════════════════
+let signalOrchestrator = null;
+
+async function initSignalOrchestrator(telegramBotInstance) {
+  try {
+    const { GxeonSignalOrchestrator } = await import('./services/gxeonSignalEngine.js');
+    signalOrchestrator = new GxeonSignalOrchestrator(telegramBotInstance, signalHub);
+    
+    // Iniciar geração automática (60 segundos para teste)
+    signalOrchestrator.startAutoGeneration(60000);
+    
+    serverState.services.signalOrchestrator = true;
+    console.log('[🧬 DNA SUPREMO] SignalOrchestrator ativo - Auto-generation: 60s');
+    
+    // Rodar validação E2E inicial
+    await signalOrchestrator.runValidation();
+    
+    return signalOrchestrator;
+  } catch (err) {
+    console.error('[❌ DNA] Erro ao iniciar SignalOrchestrator:', err.message);
+    return null;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// � TELEGRAM DISPATCHER - DNA CONVERSÃO ATIVO
 // Bot: @gxeonai_bot | Hardcoded & Operational
 // PIX: Integrado Mercado Pago
 // ═══════════════════════════════════════════════════════════════════════════
@@ -596,29 +623,35 @@ Sua API será ativada em até 2 minutos.
       }
     });
     
-    // Sinais (BASIC = delay, PRO = real-time)
+    // 🧬 Sinais - DNA Supremo (usando SignalOrchestrator)
     telegramBot.command('signals', (ctx) => {
-      const signals = signalHub.getSignals({ limit: 5 });
-      
-      if (signals.length === 0) {
-        return ctx.reply('📡 *Nenhum sinal ativo no momento*\n\nOportunidades aparecem quando detectamos:\n• Arbitragem entre DEXs\n• MEV extractable\n• Smart money moves\n\n_Tente novamente em 5 minutos_', { parse_mode: 'Markdown' });
-      }
-      
-      let msg = '📡 *Sinais Ativos*\n\n';
-      signals.forEach((sig, i) => {
-        msg += `${i+1}. 💰 $${sig.estimatedProfitUsd.toFixed(2)} | ${sig.tokenPair}\n`;
-        msg += `   Risk: ${sig.riskScore}/10 | Conf: ${(sig.confidence*100).toFixed(0)}%\n\n`;
-      });
-      
-      msg += '_🆓 Delay 10min (BASIC) | ⭐ Tempo real (PRO)_';
-      
-      ctx.reply(msg, { parse_mode: 'Markdown' });
-    });
-    
-    // Status sistema
-    telegramBot.command('status', (ctx) => {
-      const stats = signalHub.getStats();
-      ctx.reply(`📊 *GXEON Status*
+      try {
+        // Usar signalOrchestrator se disponível, senão fallback para signalHub
+        if (signalOrchestrator) {
+          const formatted = signalOrchestrator.formatSignalListForTelegram({ 
+            limit: 5, 
+            tier: 'BASIC' // Default, usuário real teria tier da API
+          });
+          return ctx.reply(formatted, { parse_mode: 'Markdown' });
+        }
+        
+        // Fallback para signalHub legacy
+        const signals = signalHub.getSignals({ limit: 5 });
+        
+        if (signals.length === 0) {
+          return ctx.reply('📡 *Nenhum sinal ativo no momento*\n\n_Geração automática em andamento..._', { parse_mode: 'Markdown' });
+        }
+        
+        let msg = '📡 *Sinais Ativos*\n\n';
+        signals.forEach((sig, i) => {
+          msg += `${i+1}. 💰 $${sig.estimatedProfitUsd?.toFixed(2) || '0.00'} | ${sig.tokenPair || 'N/A'}\n`;
+          msg += `   Risk: ${sig.riskScore || 0}/10 | Conf: ${((sig.confidence || 0)*100).toFixed(0)}%\n\n`;
+        });
+        
+        msg += '\n⚡ *Acesso TEMPO REAL* → /upgrade PRO\n💎 Sinais ilimitados • Sem delay • Prioridade máxima';
+        
+        ctx.reply(msg, { parse_mode: 'Markdown' });
+      } catch (err) {
 
 🟢 Sinais ativos: ${stats.activeSignals}
 👥 Usuários: ${stats.totalApiKeys}
@@ -626,9 +659,7 @@ Sua API será ativada em até 2 minutos.
 📈 Total sinais: ${stats.totalSignals}
 
 _Version: 4.0.0-premium_
-_Treasury: 0x3955d5..._`, { parse_mode: 'Markdown' });
-    });
-    
+_Treasury: 0x3955d5..._`;
     // Help completo
     telegramBot.command('help', (ctx) => {
       ctx.reply(`📚 *GXEON Alpha - Guia Completo*
@@ -678,6 +709,9 @@ X-API-Key: sua-api-key-aqui
     console.log('[✅] Telegram bot ACTIVE - DNA Conversão operacional');
     console.log('   Bot: @gxeonai_bot');
     console.log('   Chat: ' + TELEGRAM_CHAT_ID);
+    
+    // 🧬 Iniciar SignalOrchestrator para geração automática
+    await initSignalOrchestrator(telegramBot);
     
     // Notificar canal de ativação
     telegramBot.telegram.sendMessage(TELEGRAM_CHAT_ID, 
