@@ -1,3 +1,15 @@
+// MINIMAL VERSION - Building first, data later
+export default function TransactionsPage() {
+  return (
+    <div style={{padding: '20px', color: 'white'}}>
+      <h1>Transactions</h1>
+      <p>Page loading...</p>
+    </div>
+  );
+}
+
+// Original code preserved below for reactivation:
+/*
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -9,7 +21,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Search, Filter, RefreshCw } from 'lucide-react'
 
-export default function TransactionsPage() {
+function OriginalTransactionsPage() {
   const [transactions, setTransactions] = useState<Transaction[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')

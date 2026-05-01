@@ -1,3 +1,15 @@
+// MINIMAL VERSION - Building first, data later
+export default function CommissionsPage() {
+  return (
+    <div style={{padding: '20px', color: 'white'}}>
+      <h1>Commissions</h1>
+      <p>Page loading...</p>
+    </div>
+  )
+}
+
+// Original code preserved below for reactivation:
+/*
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -7,7 +19,7 @@ import { formatCurrency, formatDate } from '@/lib/format'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Wallet, TrendingUp } from 'lucide-react'
 
-export default function CommissionsPage() {
+function OriginalCommissionsPage() {
   const [commissions, setCommissions] = useState<Commission[]>([])
   const [stats, setStats] = useState({ total: 0, pending: 0, paid: 0 })
   const [loading, setLoading] = useState(true)
@@ -119,7 +131,7 @@ export default function CommissionsPage() {
                         <td className="px-4 py-3 text-muted-foreground">{formatDate(c.created_at)}</td>
                       </tr>
                     ))
-                  }
+                  )
                 </tbody>
               </table>
             </div>

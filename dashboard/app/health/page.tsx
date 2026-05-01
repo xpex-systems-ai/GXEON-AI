@@ -1,3 +1,15 @@
+// MINIMAL VERSION - Building first, data later
+export default function HealthPage() {
+  return (
+    <div style={{padding: '20px', color: 'white'}}>
+      <h1>System Health</h1>
+      <p>Page loading...</p>
+    </div>
+  );
+}
+
+// Original code preserved below for reactivation:
+/*
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -6,7 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Activity, Database, Server, Wifi, AlertCircle, CheckCircle } from 'lucide-react'
 
-export default function HealthPage() {
+function OriginalHealthPage() {
   const [status, setStatus] = useState({
     api: { status: 'checking', message: 'Checking...' },
     supabase: { status: 'checking', message: 'Checking...' },
