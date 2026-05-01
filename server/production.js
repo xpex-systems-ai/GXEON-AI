@@ -652,14 +652,25 @@ Sua API será ativada em até 2 minutos.
         
         ctx.reply(msg, { parse_mode: 'Markdown' });
       } catch (err) {
+        console.error('[❌] Error fetching signals:', err.message);
+        ctx.reply('❌ Erro ao buscar sinais. Tente novamente.');
+      }
+    });
+
+    // Status command
+    telegramBot.command('status', (ctx) => {
+      const stats = signalHub.getStats();
+      ctx.reply(`📊 *GXEON Status*
 
 🟢 Sinais ativos: ${stats.activeSignals}
 👥 Usuários: ${stats.totalApiKeys}
-💰 Receita: $${stats.totalRevenue.toFixed(2)}
+💰 Receita: ${stats.totalRevenue.toFixed(2)}
 📈 Total sinais: ${stats.totalSignals}
 
 _Version: 4.0.0-premium_
-_Treasury: 0x3955d5..._`;
+_Treasury: 0x3955d5..._`, { parse_mode: 'Markdown' });
+    });
+
     // Help completo
     telegramBot.command('help', (ctx) => {
       ctx.reply(`📚 *GXEON Alpha - Guia Completo*
