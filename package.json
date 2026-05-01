@@ -50,7 +50,12 @@
     "deploy:dashboard": "node scripts/deploy_dashboard.js",
     "nexus:multichain": "node core/multichain_parallel_processor.js",
     "humanity:sovereign": "node core/gxeon_humanity_sovereign_v21.js",
-    "grafana:start": "alloy run grafana/config/alloy-config.river"
+    "grafana:start": "alloy run grafana/config/alloy-config.river",
+    "marketplace:start": "node server/index-marketplace.js",
+    "marketplace:audit": "node scripts/marketplace_audit_validator.js",
+    "marketplace:dev": "nodemon server/index-marketplace.js",
+    "marketplace:schema": "echo 'Execute supabase/marketplace_supreme_schema.sql e supabase/observability_schema.sql no Supabase SQL Editor'",
+    "marketplace:signals": "node scripts/start_marketplace_supreme.js"
   },
   "dependencies": {
     "@flashbots/mev-share-client": "^0.7.13",

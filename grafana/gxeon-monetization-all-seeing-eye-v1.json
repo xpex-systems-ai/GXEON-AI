@@ -1,0 +1,789 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "gxeon-monetization-v1",
+    "title": "GXEON All-Seeing Eye - Monetization Command Center",
+    "tags": ["gxeon", "monetization", "all-seeing-eye", "production", "v1.0"],
+    "timezone": "America/Sao_Paulo",
+    "schemaVersion": 39,
+    "refresh": "5s",
+    "time": {
+      "from": "now-24h",
+      "to": "now"
+    },
+    "templating": {
+      "list": [
+        {
+          "name": "timerange",
+          "type": "interval",
+          "query": "1m,5m,10m,30m,1h,6h,12h,24h",
+          "current": {
+            "text": "1h",
+            "value": "1h"
+          },
+          "hide": 0
+        }
+      ]
+    },
+    "annotations": {
+      "list": [
+        {
+          "name": "Profit Alerts",
+          "datasource": {
+            "type": "postgres",
+            "uid": "gxeon-pooler"
+          },
+          "expr": "SELECT timestamp AS time, 'PROFIT TARGET' AS text FROM grafana_financial_master WHERE net_profit_24h > 1000",
+          "iconColor": "gold",
+          "enable": true
+        }
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "💰 REAL-TIME BALANCE",
+        "type": "stat",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, real_time_balance AS value FROM grafana_financial_master ORDER BY timestamp DESC LIMIT 1",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#FF4444", "value": null },
+                { "color": "#FFD700", "value": 1000 },
+                { "color": "#00C853", "value": 5000 }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 2,
+        "title": "📈 ACCUMULATED PNL (24H)",
+        "type": "stat",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, accumulated_pnl_24h AS value FROM grafana_financial_master ORDER BY timestamp DESC LIMIT 1",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#FF4444", "value": null },
+                { "color": "#FFD700", "value": 100 },
+                { "color": "#00C853", "value": 1000 }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 3,
+        "title": "⛽ GAS FEES (24H)",
+        "type": "stat",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, total_gas_24h AS value FROM grafana_financial_master ORDER BY timestamp DESC LIMIT 1",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#00C853", "value": null },
+                { "color": "#FFD700", "value": 50 },
+                { "color": "#FF4444", "value": 200 }
+              ]
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 4,
+        "title": "📊 TRANSACTION VOLUME",
+        "type": "stat",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, transaction_volume_24h AS value FROM grafana_financial_master ORDER BY timestamp DESC LIMIT 1",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#FF4444", "value": null },
+                { "color": "#FFD700", "value": 10 },
+                { "color": "#00C853", "value": 50 }
+              ]
+            },
+            "unit": "tx"
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 5,
+        "title": "🖥️ RAILWAY UPTIME",
+        "type": "stat",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, railway_uptime_pct AS value FROM grafana_health_metrics ORDER BY timestamp DESC LIMIT 1",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 4 },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#FF4444", "value": null },
+                { "color": "#FFD700", "value": 95 },
+                { "color": "#00C853", "value": 99 }
+              ]
+            },
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 6,
+        "title": "💻 CPU USAGE",
+        "type": "gauge",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT cpu_usage_pct AS value FROM grafana_health_metrics ORDER BY timestamp DESC LIMIT 1",
+            "format": "table"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 4 },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true,
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#00C853", "value": null },
+                { "color": "#FFD700", "value": 70 },
+                { "color": "#FF4444", "value": 90 }
+              ]
+            },
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 7,
+        "title": "🧠 RAM USAGE",
+        "type": "gauge",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT ram_usage_pct AS value FROM grafana_health_metrics ORDER BY timestamp DESC LIMIT 1",
+            "format": "table"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 4 },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true,
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "orientation": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#00C853", "value": null },
+                { "color": "#FFD700", "value": 70 },
+                { "color": "#FF4444", "value": 90 }
+              ]
+            },
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 8,
+        "title": "⚡ API LATENCY",
+        "type": "stat",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, api_latency_ms AS value FROM grafana_health_metrics ORDER BY timestamp DESC LIMIT 1",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 4 },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#00C853", "value": null },
+                { "color": "#FFD700", "value": 200 },
+                { "color": "#FF4444", "value": 500 }
+              ]
+            },
+            "unit": "dtdurationms"
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 9,
+        "title": "🎯 OPERATION SUCCESS RATE",
+        "type": "stat",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, operation_success_rate_pct AS value FROM grafana_agent_efficiency ORDER BY timestamp DESC LIMIT 1",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 8 },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#FF4444", "value": null },
+                { "color": "#FFD700", "value": 80 },
+                { "color": "#00C853", "value": 95 }
+              ]
+            },
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 10,
+        "title": "📨 MESSAGE THROUGHPUT",
+        "type": "stat",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, message_throughput_per_sec AS value FROM grafana_agent_efficiency ORDER BY timestamp DESC LIMIT 1",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 8 },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#FF4444", "value": null },
+                { "color": "#FFD700", "value": 100 },
+                { "color": "#00C853", "value": 500 }
+              ]
+            },
+            "unit": "cps"
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 11,
+        "title": "🤖 AI PROCESSING LOGS",
+        "type": "logs",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, agent_name, log_level, message FROM grafana_ai_logs ORDER BY timestamp DESC LIMIT 100",
+            "format": "table"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+        "options": {
+          "showTime": true,
+          "wrapLogMessage": true,
+          "sortOrder": "Descending",
+          "enableLogDetails": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "hidden": false
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "log_level"
+              },
+              "properties": [
+                {
+                  "id": "custom.hidden",
+                  "value": false
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "ERROR": {
+                          "color": "red",
+                          "index": 0,
+                          "text": "🔴 ERROR"
+                        },
+                        "INFO": {
+                          "color": "blue",
+                          "index": 1,
+                          "text": "ℹ️ INFO"
+                        },
+                        "SUCCESS": {
+                          "color": "green",
+                          "index": 2,
+                          "text": "✅ SUCCESS"
+                        },
+                        "WARN": {
+                          "color": "yellow",
+                          "index": 3,
+                          "text": "⚠️ WARN"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "transparent": false
+      },
+      {
+        "id": 12,
+        "title": "🛡️ BLOCKED INTRUSIONS",
+        "type": "stat",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, blocked_intrusions_count AS value FROM grafana_security_metrics ORDER BY timestamp DESC LIMIT 1",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 12 },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#00C853", "value": null },
+                { "color": "#FFD700", "value": 5 },
+                { "color": "#FF4444", "value": 20 }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 13,
+        "title": "🔐 SMART CONTRACT INTEGRITY",
+        "type": "stat",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, CASE WHEN contract_integrity_check = true THEN 100 ELSE 0 END AS value FROM grafana_security_metrics ORDER BY timestamp DESC LIMIT 1",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 12 },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "textMode": "value_and_name"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "index": 0,
+                    "text": "❌ COMPROMISED"
+                  },
+                  "100": {
+                    "index": 1,
+                    "text": "✅ SECURE"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "#FF4444", "value": null },
+                { "color": "#00C853", "value": 100 }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 14,
+        "title": "📈 PROFIT TREND (30-DAY FORECAST)",
+        "type": "timeseries",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT timestamp AS time, net_profit_24h AS \"Actual\", predicted_profit_30d AS \"Predicted\" FROM grafana_financial_master ORDER BY timestamp DESC LIMIT 100",
+            "format": "time_series"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+        "options": {
+          "legend": {
+            "calcs": ["mean", "max"],
+            "displayMode": "table",
+            "placement": "bottom",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 2,
+              "fillOpacity": 10,
+              "gradientMode": "scheme",
+              "spanNulls": false,
+              "showPoints": "auto",
+              "pointSize": 5
+            },
+            "unit": "currencyUSD"
+          },
+          "overrides": []
+        },
+        "transparent": false
+      },
+      {
+        "id": 15,
+        "title": "🎭 CORNIX MONETIZATION — SINAIS VENDIDOS",
+        "type": "table",
+        "targets": [
+          {
+            "refId": "A",
+            "datasource": {
+              "type": "postgres",
+              "uid": "gxeon-pooler"
+            },
+            "rawSql": "SELECT signal_id, symbol, side, unlock_price_brl, payment_status, sold_at, buyer_region FROM grafana_cornix_sales ORDER BY sold_at DESC LIMIT 20",
+            "format": "table"
+          }
+        ],
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+        "options": {
+          "showHeader": true,
+          "sortBy": [
+            {
+              "displayName": "sold_at",
+              "desc": true
+            }
+          ]
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto"
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "payment_status"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background"
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "PAID": { "color": "green", "index": 0 },
+                        "PENDING": { "color": "yellow", "index": 1 },
+                        "FAILED": { "color": "red", "index": 2 }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "transparent": false
+      }
+    ]
+  },
+  "overwrite": true,
+  "message": "GXEON All-Seeing Eye v1.0 - Monetization Command Center deployed",
+  "folderId": 0
+}

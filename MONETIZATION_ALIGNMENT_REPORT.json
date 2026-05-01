@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-04-29T20:32:43.794Z",
+  "status": "COMPLETE",
+  "system_status": "FAIL",
+  "monetization_ready": false,
+  "critical_issues": [
+    {
+      "step": "DATABASE_ALIGNMENT",
+      "issue": "Missing table: actors"
+    },
+    {
+      "step": "DATABASE_ALIGNMENT",
+      "issue": "Missing table: actor_wallets"
+    },
+    {
+      "step": "DATABASE_ALIGNMENT",
+      "issue": "Missing table: global_transactions"
+    },
+    {
+      "step": "DATABASE_ALIGNMENT",
+      "issue": "Missing table: pix_payments"
+    }
+  ],
+  "warnings": [
+    {
+      "step": "SECURITY",
+      "warning": "Payment variable not configured: PIX_CHAVE"
+    },
+    {
+      "step": "SECURITY",
+      "warning": "Payment variable not configured: PIX_EMAIL"
+    },
+    {
+      "step": "SECURITY",
+      "warning": "Payment variable not configured: PIX_CPF"
+    }
+  ],
+  "steps_completed": [
+    "REMOVE_TEST_DATA",
+    "REAL_PAYMENT_FLOW",
+    "ACTOR_TRACKING",
+    "COMMISSION_ENGINE",
+    "SECURITY_ENV",
+    "PAYMENT_INTEGRATION",
+    "API_READINESS"
+  ],
+  "next_actions": [
+    "Resolve critical issues",
+    "Fix database alignment",
+    "Configure environment variables",
+    "Re-run validation"
+  ]
+}

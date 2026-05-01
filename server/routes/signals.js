@@ -327,4 +327,453 @@ router.get('/v1/signals/pricing', (req, res) => {
   });
 });
 
+// ═══════════════════════════════════════════════════════════════════════════
+// CORNIX INTEGRATION ENDPOINTS - Trading Signal Monetization
+// ═══════════════════════════════════════════════════════════════════════════
+
+import { cornixService } from '../services/cornixService.js';
+
+// GET /v1/signals/cornix-ready - Get signals in Cornix format (free preview)
+router.get('/v1/signals/cornix-ready', async (req, res) => {
+  try {
+    const { symbol, side, limit = 10 } = req.query;
+    
+    const supabase = (await import('../services/supabase.js')).default;
+    
+    let query = supabase
+      .from('cornix_signals')
+      .select('id, signal_id, symbol, side, entry_price, entry_range_low, entry_range_high, leverage, margin_type, is_premium, unlock_price_brl, status, expires_at, strategy, timeframe, confidence_score, created_at')
+      .eq('status', 'ACTIVE')
+      .order('created_at', { ascending: false })
+      .limit(parseInt(limit));
+    
+    if (symbol) {
+      query = query.ilike('symbol', `%${symbol.toUpperCase()}%`);
+    }
+    if (side) {
+      query = query.eq('side', side.toUpperCase());
+    }
+    
+    const { data: signals, error } = await query;
+    
+    if (error) throw error;
+    
+    // Format as free preview (targets and stop hidden)
+    const freeSignals = (signals || []).map(signal => ({
+      ...signal,
+      targets: 'LOCKED',
+      stop_loss: 'LOCKED',
+      unlock_status: signal.is_premium ? 'PREMIUM' : 'FREE',
+      cornix_url: signal.is_premium 
+        ? `/v1/signals/${signal.id}/pay`
+        : null
+    }));
+    
+    res.json({
+      success: true,
+      signals: freeSignals,
+      count: freeSignals.length,
+      timestamp: new Date().toISOString(),
+      message: 'Use /v1/signals/:id/pay para desbloquear sinais premium via PIX'
+    });
+    
+  } catch (error) {
+    console.error('[CORNIX] Error fetching signals:', error);
+    res.status(500).json({
+      error: 'Failed to fetch signals',
+      message: error.message
+    });
+  }
+});
+
+// GET /v1/signals/live - Public live signals (attracts bots)
+router.get('/v1/signals/live', async (req, res) => {
+  try {
+    const supabase = (await import('../services/supabase.js')).default;
+    
+    // Return only recent active signals with minimal data
+    const { data: signals, error } = await supabase
+      .from('cornix_signals')
+      .select('signal_id, symbol, side, entry_price, status, created_at, is_premium')
+      .eq('status', 'ACTIVE')
+      .gt('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+      .order('created_at', { ascending: false })
+      .limit(20);
+    
+    if (error) throw error;
+    
+    res.json({
+      success: true,
+      stream: 'live',
+      signals: signals || [],
+      count: signals?.length || 0,
+      webhook_endpoint: '/v1/signals/webhook/subscribe',
+      cornix_endpoint: '/v1/signals/cornix-ready',
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('[CORNIX] Live stream error:', error);
+    res.status(500).json({
+      error: 'Live stream unavailable',
+      message: error.message
+    });
+  }
+});
+
+// GET /v1/signals/:id/pay - Generate PIX payment for premium unlock
+router.get('/v1/signals/:id/pay', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.headers['x-user-id'] || 'anonymous';
+    
+    const { cornixService } = await import('../services/cornixService.js');
+    
+    const pixData = await cornixService.createPixPayment(id, userId);
+    
+    if (pixData.already_paid) {
+      return res.json({
+        success: true,
+        already_paid: true,
+        full_signal_url: `/v1/signals/${id}/full`,
+        message: pixData.message
+      });
+    }
+    
+    res.json({
+      success: true,
+      payment: {
+        method: 'PIX',
+        amount_brl: pixData.amount,
+        qr_code: pixData.qr_code,
+        copy_paste: pixData.copy_paste,
+        expires_at: pixData.expires_at,
+        tx_id: pixData.tx_id
+      },
+      check_status_url: pixData.check_url,
+      signal_preview: pixData.signal_preview,
+      instructions: [
+        '1. Abra seu aplicativo bancário',
+        '2. Escaneie o QR Code ou cole o código PIX',
+        `3. Confirme o pagamento de R$ ${pixData.amount}`,
+        '4. O sinal será desbloqueado automaticamente'
+      ]
+    });
+    
+  } catch (error) {
+    console.error('[CORNIX] PIX generation error:', error);
+    res.status(500).json({
+      error: 'Failed to generate PIX',
+      message: error.message
+    });
+  }
+});
+
+// GET /v1/signals/pix-status/:txId - Check PIX payment status
+router.get('/v1/signals/pix-status/:txId', async (req, res) => {
+  try {
+    const { txId } = req.params;
+    const userId = req.headers['x-user-id'] || 'anonymous';
+    
+    const { cornixService } = await import('../services/cornixService.js');
+    
+    const status = await cornixService.checkPixStatus(txId, userId);
+    
+    res.json({
+      success: true,
+      status: status.status,
+      ...(status.access_granted && {
+        access_granted: true,
+        full_signal_url: status.full_signal_url
+      }),
+      message: status.message,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('[CORNIX] PIX status error:', error);
+    res.status(500).json({
+      error: 'Failed to check PIX status',
+      message: error.message
+    });
+  }
+});
+
+// GET /v1/signals/:id/full - Get full signal after payment
+router.get('/v1/signals/:id/full', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.headers['x-user-id'] || 'anonymous';
+    
+    const { cornixService } = await import('../services/cornixService.js');
+    
+    const signal = await cornixService.getFullSignal(id, userId);
+    
+    if (signal.access_status === 'LOCKED') {
+      return res.status(402).json({
+        error: 'PAYMENT_REQUIRED',
+        message: signal.message,
+        payment_url: signal.pix_payment_url,
+        amount_brl: signal.unlock_price_brl
+      });
+    }
+    
+    res.json({
+      success: true,
+      access_status: signal.access_status,
+      signal: signal,
+      cornix_format: {
+        symbol: signal.symbol,
+        side: signal.side,
+        entry: signal.entry_range_low && signal.entry_range_high
+          ? [signal.entry_range_low, signal.entry_range_high]
+          : signal.entry_price,
+        targets: signal.targets || [
+          signal.target_1,
+          signal.target_2,
+          signal.target_3,
+          signal.target_4,
+          signal.target_5
+        ].filter(Boolean),
+        stop: signal.stop_loss,
+        leverage: signal.leverage
+      }
+    });
+    
+  } catch (error) {
+    console.error('[CORNIX] Full signal error:', error);
+    res.status(500).json({
+      error: 'Failed to fetch signal',
+      message: error.message
+    });
+  }
+});
+
+// POST /v1/signals - Create new signal (internal/scanner use)
+router.post('/v1/signals', async (req, res) => {
+  try {
+    // Check internal auth
+    const internalKey = req.headers['x-internal-key'];
+    if (internalKey !== process.env.INTERNAL_API_KEY) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    
+    const { cornixService } = await import('../services/cornixService.js');
+    
+    const signal = await cornixService.createSignal(req.body);
+    
+    res.status(201).json({
+      success: true,
+      signal_id: signal.signal_id,
+      symbol: signal.symbol,
+      side: signal.side,
+      is_premium: signal.is_premium,
+      public_url: `/v1/signals/${signal.id}`,
+      cornix_ready: `/v1/signals/cornix-ready`,
+      webhook_triggered: true,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('[CORNIX] Create signal error:', error);
+    res.status(500).json({
+      error: 'Failed to create signal',
+      message: error.message
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// LEADERBOARD ENDPOINTS
+// ═══════════════════════════════════════════════════════════════════════════
+
+// GET /v1/leaderboard - Public leaderboard
+router.get('/v1/leaderboard', async (req, res) => {
+  try {
+    const { period = 'MONTHLY', limit = 50 } = req.query;
+    
+    const { cornixService } = await import('../services/cornixService.js');
+    
+    const leaderboard = await cornixService.getLeaderboard(period.toUpperCase(), parseInt(limit));
+    
+    res.json({
+      success: true,
+      period: period.toUpperCase(),
+      count: leaderboard.length,
+      leaderboard: leaderboard.map((entry, index) => ({
+        rank: entry.rank_position || index + 1,
+        entity: {
+          type: entry.entity_type,
+          id: entry.entity_id,
+          name: entry.entity_name
+        },
+        stats: {
+          total_signals: entry.total_signals,
+          win_rate: `${entry.win_rate}%`,
+          profit_percent: entry.total_profit_percent,
+          profit_factor: entry.profit_factor,
+          wins: entry.win_count,
+          losses: entry.loss_count
+        },
+        verified: entry.verified_trades > 0
+      })),
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('[CORNIX] Leaderboard error:', error);
+    res.status(500).json({
+      error: 'Failed to fetch leaderboard',
+      message: error.message
+    });
+  }
+});
+
+// POST /v1/signals/:id/performance - Record signal performance
+router.post('/v1/signals/:id/performance', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Check internal auth
+    const internalKey = req.headers['x-internal-key'];
+    if (internalKey !== process.env.INTERNAL_API_KEY) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    
+    const { cornixService } = await import('../services/cornixService.js');
+    
+    await cornixService.recordPerformance(id, req.body);
+    
+    res.json({
+      success: true,
+      signal_id: id,
+      result: req.body.result,
+      recorded: true,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('[CORNIX] Performance record error:', error);
+    res.status(500).json({
+      error: 'Failed to record performance',
+      message: error.message
+    });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// WEBHOOK MANAGEMENT
+// ═══════════════════════════════════════════════════════════════════════════
+
+// POST /v1/signals/webhook/subscribe - Subscribe to signal webhooks
+router.post('/v1/signals/webhook/subscribe', async (req, res) => {
+  try {
+    const { webhook_url, webhook_secret, symbols, signal_types, min_confidence } = req.body;
+    const userId = req.headers['x-user-id'] || req.headers['x-api-key'] || 'anonymous';
+    
+    if (!webhook_url) {
+      return res.status(400).json({
+        error: 'WEBHOOK_URL_REQUIRED',
+        message: 'webhook_url is required'
+      });
+    }
+    
+    const supabase = (await import('../services/supabase.js')).default;
+    
+    const { data: webhook, error } = await supabase
+      .from('cornix_user_webhooks')
+      .upsert({
+        user_id: userId,
+        webhook_url,
+        webhook_secret,
+        symbols: symbols || [],
+        signal_types: signal_types || ['LONG', 'SHORT'],
+        min_confidence: min_confidence || 0,
+        is_active: true,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,webhook_url' })
+      .select()
+      .single();
+    
+    if (error) throw error;
+    
+    res.json({
+      success: true,
+      webhook: {
+        id: webhook.id,
+        url: webhook.webhook_url,
+        symbols: webhook.symbols,
+        is_active: webhook.is_active
+      },
+      message: 'Webhook subscribed successfully',
+      test_url: '/v1/signals/webhook/test'
+    });
+    
+  } catch (error) {
+    console.error('[CORNIX] Webhook subscribe error:', error);
+    res.status(500).json({
+      error: 'Failed to subscribe webhook',
+      message: error.message
+    });
+  }
+});
+
+// POST /v1/signals/webhook/test - Test webhook delivery
+router.post('/v1/signals/webhook/test', async (req, res) => {
+  try {
+    const { webhook_url, webhook_secret } = req.body;
+    
+    if (!webhook_url) {
+      return res.status(400).json({
+        error: 'WEBHOOK_URL_REQUIRED',
+        message: 'webhook_url is required'
+      });
+    }
+    
+    // Send test payload
+    const testPayload = {
+      test: true,
+      message: 'Test signal from GXEON',
+      timestamp: new Date().toISOString(),
+      cornix_format: {
+        symbol: 'BTCUSDT',
+        side: 'LONG',
+        entry: 65000,
+        targets: [66000, 67000],
+        stop: 64000,
+        leverage: 10
+      }
+    };
+    
+    const response = await fetch(webhook_url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Cornix-Test': 'true',
+        'X-Signature': webhook_secret 
+          ? require('crypto').createHmac('sha256', webhook_secret).update(JSON.stringify(testPayload)).digest('hex')
+          : undefined
+      },
+      body: JSON.stringify(testPayload),
+      timeout: 10000
+    });
+    
+    const responseBody = await response.text();
+    
+    res.json({
+      success: response.ok,
+      status: response.status,
+      response: responseBody,
+      message: response.ok ? 'Webhook test successful' : 'Webhook test failed'
+    });
+    
+  } catch (error) {
+    console.error('[CORNIX] Webhook test error:', error);
+    res.status(500).json({
+      error: 'Webhook test failed',
+      message: error.message
+    });
+  }
+});
+
 export default router;

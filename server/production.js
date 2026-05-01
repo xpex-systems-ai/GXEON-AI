@@ -652,14 +652,11 @@ Sua API será ativada em até 2 minutos.
         
         ctx.reply(msg, { parse_mode: 'Markdown' });
       } catch (err) {
+        console.error('Error in signals command:', err);
+        ctx.reply('❌ Erro ao buscar sinais. Tente novamente.');
+      }
+    });
 
-🟢 Sinais ativos: ${stats.activeSignals}
-👥 Usuários: ${stats.totalApiKeys}
-💰 Receita: $${stats.totalRevenue.toFixed(2)}
-📈 Total sinais: ${stats.totalSignals}
-
-_Version: 4.0.0-premium_
-_Treasury: 0x3955d5..._`;
     // Help completo
     telegramBot.command('help', (ctx) => {
       ctx.reply(`📚 *GXEON Alpha - Guia Completo*
@@ -983,7 +980,18 @@ app.use((req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 🚀 SERVER START
+// 🏥 HEALTHCHECK ENDPOINT (Required for Railway)
+// ═══════════════════════════════════════════════════════════════════════════
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    version: '4.0.0-premium'
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 🚀 SERVER STARTUP
 // ═══════════════════════════════════════════════════════════════════════════
 const server = app.listen(PORT, '0.0.0.0', () => {
   console.log('\n╔══════════════════════════════════════════════════════════════════╗');

@@ -382,6 +382,17 @@ setTimeout(async () => {
     app.use('/v1', marketplaceRoutes);
     console.log('[GXEON_MARKETPLACE] External API layer active: /v1/signals/*, /v1/agents/*');
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // CORNIX MONETIZATION LAYER — Trading Signal Revenue System
+    // ═══════════════════════════════════════════════════════════════════════════
+    // /v1/signals/cornix-ready — Cornix-compatible signals with PIX unlock
+    // /v1/signals/live — Public live stream (attracts bots)
+    // /v1/leaderboard — Performance rankings
+    // ═══════════════════════════════════════════════════════════════════════════
+    const signalsRouter = require('./routes/signals').default;
+    app.use('/', signalsRouter);
+    console.log('[CORNIX] Signal monetization active: /v1/signals/*, /v1/leaderboard');
+
     // Error handling
     app.use((err, req, res, next) => {
       console.error(`[GXEON_ERROR] ${req.id || 'unknown'}:`, err);
