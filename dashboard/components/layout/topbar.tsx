@@ -1,17 +1,39 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 import { formatCurrency } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Activity, Wifi, WifiOff } from "lucide-react";
 
 export function Topbar() {
   const [totalRevenue, setTotalRevenue] = useState(0);
-  const [isConnected, setIsConnected] = useState(true);
+  const [isConnected, setIsConnected] = useState(false);
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
   useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!url || !key) {
+      console.warn("[Topbar] Supabase not configured");
+      return;
+    }
+
+    const supabase = createClient(url, key);
+
+    async function fetchTotalRevenue() {
+      const { data } = await supabase
+        .from('transactions')
+        .select('amount')
+        .eq('status', 'PAID');
+
+      if (data) {
+        const total = data.reduce((sum, tx) => sum + (tx.amount || 0), 0);
+        setTotalRevenue(total);
+      }
+    }
+
     // Initial fetch
     fetchTotalRevenue();
 
@@ -30,7 +52,7 @@ export function Topbar() {
           setLastUpdate(new Date());
         }
       )
-      .subscribe((status) => {
+      .subscribe((status: string) => {
         setIsConnected(status === 'SUBSCRIBED');
       });
 
@@ -38,18 +60,6 @@ export function Topbar() {
       supabase.removeChannel(channel);
     };
   }, []);
-
-  async function fetchTotalRevenue() {
-    const { data } = await supabase
-      .from('transactions')
-      .select('amount')
-      .eq('status', 'PAID');
-
-    if (data) {
-      const total = data.reduce((sum, tx) => sum + (tx.amount || 0), 0);
-      setTotalRevenue(total);
-    }
-  }
 
   return (
     <header className="h-16 border-b bg-card flex items-center justify-between px-6">
