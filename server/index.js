@@ -379,9 +379,13 @@ setTimeout(async () => {
     // /v1/signals — Protected signal access with API Key
     // /v1/agent/status — Check quota and access
     // ═══════════════════════════════════════════════════════════════════════════
-    const a2aMonetizationRoutes = require('./routes/a2aMonetization');
-    app.use('/', a2aMonetizationRoutes);
-    console.log('[A2A_MONETIZATION] Agent API active: /v1/register-agent, /v1/signals, /v1/agent/*');
+    try {
+      const { default: a2aMonetizationRoutes } = await import('./routes/a2aMonetization.js');
+      app.use('/', a2aMonetizationRoutes);
+      console.log('[A2A_MONETIZATION] Agent API active: /v1/register-agent, /v1/signals, /v1/agent/*');
+    } catch (err) {
+      console.error('[A2A_MONETIZATION] Failed to load routes:', err.message);
+    }
 
     // ═══════════════════════════════════════════════════════════════════════════
     // GXZ1 MARKET ECONOMY LAYER — External Data Marketplace API

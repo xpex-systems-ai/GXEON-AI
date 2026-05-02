@@ -2,13 +2,13 @@
   "name": "gxeon-nexus-v4",
   "version": "4.0.0-sovereign",
   "description": "🌑 GXEON NEXUS v4.0 — Sovereign M2M Infrastructure for Autonomous Trading Agents | Júnior Sena — Sovereign AI Architect",
-  "main": "server/production.js",
+  "main": "server/index.js",
   "type": "module",
   "engines": {
     "node": ">=18.0.0"
   },
   "scripts": {
-    "start": "node server/production.js",
+    "start": "node server/index.js",
     "start:legacy": "node server/index.js",
     "start:oracle": "node server/index.js",
     "production": "node server/production.js",
