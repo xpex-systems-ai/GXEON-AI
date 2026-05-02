@@ -594,41 +594,134 @@ router.get('/v1/agent/status', validateApiKey, async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════════════════════
+// RATE LIMITER + FINGERPRINT STORE
+// ═══════════════════════════════════════════════════════════════════════════
+const ipRequestStore = new Map(); // Simple in-memory store
+
+function getClientFingerprint(req) {
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+  const ua = req.headers['user-agent'] || 'unknown';
+  const hash = crypto.createHash('sha256').update(`${ip}:${ua}`).digest('hex').substring(0, 16);
+  return { ip, ua_hash: hash, fingerprint: hash };
+}
+
+async function checkRateLimit(ip, maxRequests = 30) {
+  const now = Date.now();
+  const dayKey = new Date().toISOString().split('T')[0];
+  const storeKey = `${ip}:${dayKey}`;
+  
+  const current = ipRequestStore.get(storeKey) || { count: 0, resetAt: now + 86400000 };
+  
+  if (now > current.resetAt) {
+    current.count = 0;
+    current.resetAt = now + 86400000;
+  }
+  
+  current.count++;
+  ipRequestStore.set(storeKey, current);
+  
+  return {
+    allowed: current.count <= maxRequests,
+    remaining: Math.max(0, maxRequests - current.count),
+    total: current.count
+  };
+}
+
+async function logApiUsage(req, endpoint, status, actorCode = null) {
+  const { fingerprint, ip } = getClientFingerprint(req);
+  
+  try {
+    // In-memory log if Supabase not available
+    console.log(`[API_USAGE] ${new Date().toISOString()} | ${endpoint} | ${status} | ${fingerprint} | ${actorCode || 'anonymous'}`);
+    
+    if (supabase) {
+      await supabase.from('api_usage_logs').insert({
+        timestamp: new Date().toISOString(),
+        endpoint: endpoint,
+        method: req.method,
+        status_code: status,
+        actor_code: actorCode,
+        fingerprint: fingerprint,
+        ip_hash: crypto.createHash('sha256').update(ip).digest('hex').substring(0, 16),
+        user_agent: req.headers['user-agent']?.substring(0, 100),
+        query_params: JSON.stringify(req.query)
+      });
+    }
+  } catch (err) {
+    console.error('[API_USAGE_LOG_ERROR]', err.message);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // GET /v1/signals/free - Free limited signals (Hook for conversion)
 // ═══════════════════════════════════════════════════════════════════════════
 router.get('/v1/signals/free', async (req, res) => {
+  const requestStart = Date.now();
+  const { fingerprint, ip } = getClientFingerprint(req);
+  
   try {
+    // Rate limiting check
+    const rateLimit = await checkRateLimit(ip, 30); // 30/day for free tier
+    
+    if (!rateLimit.allowed) {
+      await logApiUsage(req, '/v1/signals/free', 429);
+      return res.status(429).json({
+        error: 'RATE_LIMIT_EXCEEDED',
+        message: 'Free tier limit reached (30/day). Upgrade to continue.',
+        upgrade_url: '/v1/register-agent',
+        paywall: {
+          amount: 29.90,
+          currency: 'BRL',
+          method: 'PIX'
+        }
+      });
+    }
+    
     const { limit = 1 } = req.query;
     
-    // Generate limited free signals (locked)
+    // Generate limited free signals (locked/delayed)
     const signals = generateMockSignals(Math.min(parseInt(limit), 3)).map(s => ({
       ...s,
       locked: true,
+      delayed: true, // Data is delayed
       targets: 'LOCKED',
       stop_loss: 'LOCKED',
       entry: s.entry, // Show entry to create interest
       take_profit: ['LOCKED - Upgrade to view'],
-      message: '🔒 Complete upgrade to unlock full signal details',
+      confidence: (s.confidence * 0.8).toFixed(2), // Reduced confidence for free
+      message: '🔒 Delayed data. Upgrade for real-time signals with full details.',
       upgrade_url: '/v1/register-agent',
-      upgrade_cta: 'Unlock with PIX - R$ 29.90'
+      upgrade_cta: 'Unlock Real-Time Signals - R$ 29.90 via PIX',
+      fingerprint: fingerprint // Track this lead
     }));
+    
+    await logApiUsage(req, '/v1/signals/free', 200);
     
     res.json({
       success: true,
       signals: signals,
       count: signals.length,
       locked: true,
-      message: 'Free preview - upgrade for full access',
+      delayed: true,
+      rate_limit: {
+        remaining: rateLimit.remaining,
+        total: rateLimit.total,
+        reset: 'daily'
+      },
+      message: 'Free preview (delayed data) - upgrade for real-time access',
       upgrade: {
         url: '/v1/register-agent',
         tiers: A2A_CONFIG.TIER_LIMITS,
-        recommended: 'BASIC'
+        recommended: 'BASIC',
+        benefits: ['Real-time signals', 'Full target details', 'Stop loss values', 'API access']
       },
+      lead_id: fingerprint, // For tracking conversion
       timestamp: new Date().toISOString()
     });
     
   } catch (error) {
     console.error('[A2A] Free signals error:', error);
+    await logApiUsage(req, '/v1/signals/free', 500);
     res.status(500).json({
       error: 'SIGNALS_ERROR',
       message: error.message
@@ -666,18 +759,34 @@ router.get('/v1/admin/metrics', async (req, res) => {
     const pendingActors = actors?.filter(a => a.status === 'pending_payment').length || 0;
     const totalCalls = usage?.length || 0;
     
+    // Calculate today's metrics
+    const today = new Date().toISOString().split('T')[0];
+    const todayUsage = usage?.filter(u => u.timestamp?.startsWith(today)) || [];
+    const todayPayments = payments?.filter(p => p.paid_at?.startsWith(today)) || [];
+    const todayRevenue = todayPayments.reduce((sum, t) => sum + (t.amount || 0), 0);
+    
+    // Paywall hits (402 responses)
+    const paywallHits = usage?.filter(u => u.status_code === 402).length || 0;
+    
+    // Conversion rate
+    const conversionRate = actors?.length ? (activeActors / actors.length) : 0;
+    
     res.json({
       success: true,
+      timestamp: new Date().toISOString(),
       metrics: {
         revenue: {
           total_brl: totalRevenue,
+          today_brl: todayRevenue,
           transactions_count: payments?.length || 0,
-          pending_payments: actors?.filter(a => a.status === 'pending_payment').length || 0
+          today_count: todayPayments.length,
+          pending_payments: pendingActors
         },
         actors: {
           total: actors?.length || 0,
           active: activeActors,
           pending: pendingActors,
+          conversion_rate: (conversionRate * 100).toFixed(2) + '%',
           by_tier: {
             BASIC: actors?.filter(a => a.tier === 'BASIC').length || 0,
             PRO: actors?.filter(a => a.tier === 'PRO').length || 0,
@@ -686,10 +795,17 @@ router.get('/v1/admin/metrics', async (req, res) => {
         },
         usage: {
           total_api_calls: totalCalls,
-          avg_calls_per_actor: totalCalls / (activeActors || 1)
+          today_calls: todayUsage.length,
+          paywall_hits: paywallHits,
+          avg_calls_per_actor: totalCalls / (activeActors || 1),
+          by_endpoint: {
+            free_signals: usage?.filter(u => u.endpoint?.includes('/free')).length || 0,
+            paid_signals: usage?.filter(u => u.endpoint === '/v1/signals').length || 0,
+            registrations: usage?.filter(u => u.endpoint === '/v1/register-agent').length || 0
+          }
         },
         conversion: {
-          rate: activeActors / (actors?.length || 1),
+          rate: (conversionRate * 100).toFixed(2) + '%',
           pending_value: pendingActors * 29.90 // Estimated
         }
       },
