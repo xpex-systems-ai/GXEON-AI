@@ -11,15 +11,18 @@ import axios from 'axios';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://gxeon-core.up.railway.app';
 
-// Configuration
+// Configuration - MODO EXECUÇÃO REAL
 const CONFIG = {
-  AGENT_COUNT: 10, // REDUCED: Test with fewer first
-  CONCURRENT_BATCHES: 2, // REDUCED: Less parallel
-  DELAY_BETWEEN_BATCHES: 3000, // INCREASED: Wait for cold start
-  REQUEST_TIMEOUT: 30000, // 30s timeout for Railway cold starts
-  RETRIES: 3, // Retry failed requests
+  AGENT_COUNT: 100, // REAL MODE: 100 agents
+  CONCURRENT_BATCHES: 5, // Parallel processing
+  DELAY_BETWEEN_BATCHES: 5000, // 5s between batches
+  REQUEST_TIMEOUT: 60000, // 60s timeout (Railway cold start)
+  RETRIES: 2, // 2 retries max
   TIERS: ['BASIC', 'PRO', 'ENTERPRISE'],
-  TIER_WEIGHTS: [0.7, 0.25, 0.05]
+  TIER_WEIGHTS: [0.7, 0.25, 0.05],
+  MODE: 'REAL_MONETIZATION', // Ativa modo real
+  PIX_AUTO_PAY: false, // Se true, simula pagamentos automaticamente
+  TREASURY: '0x3955d559055DadB7067054cB6E6f974710345224'
 };
 
 const AGENT_NAMES = [
@@ -63,7 +66,7 @@ async function registerAgent(name, tier, retries = CONFIG.RETRIES) {
         console.log(`   � ${name} retry ${attempt}/${retries}...`);
         await new Promise(r => setTimeout(r, 2000));
       } else {
-        console.log(`   �📝 Registering ${name} (${email})...`);
+        console.log(`   � Registering ${name} (${email})...`);
       }
       
       const response = await axios.post(`${API_BASE}/v1/register`, {
@@ -77,7 +80,7 @@ async function registerAgent(name, tier, retries = CONFIG.RETRIES) {
       });
       
       if (response.status >= 200 && response.status < 300) {
-        console.log(`   ✅ ${name} created: ${response.data.actor?.code}`);
+        console.log(`   ✅ ${name} CREATED: ${response.data.actor?.code} | PIX: R$ ${response.data.payment?.amount}`);
         return {
           success: true,
           name: name,
@@ -88,6 +91,21 @@ async function registerAgent(name, tier, retries = CONFIG.RETRIES) {
           pixCode: response.data.payment?.pix_copy_paste,
           amount: response.data.payment?.amount,
           transactionId: response.data.payment?.transaction_id
+        };
+      } else if (response.status === 409) {
+        // AGENTE JÁ EXISTE = SUCESSO! ( Monetização Real )
+        console.log(`   ✅ ${name} EXISTS (409): Agent already registered with PIX pending`);
+        return {
+          success: true,
+          name: name,
+          email: email,
+          tier: tier,
+          actorCode: response.data.actor?.code || 'EXISTING',
+          apiKey: response.data.api_key,
+          pixCode: 'EXISTING',
+          amount: tier === 'BASIC' ? 29.90 : tier === 'PRO' ? 99.90 : 299.90,
+          transactionId: 'EXISTING',
+          existing: true
         };
       } else if (response.status === 404) {
         console.log(`   ❌ ${name}: Endpoint not found (404)`);
@@ -190,22 +208,31 @@ async function seedAgents() {
   }
   
   // Final Report
+  const newAgents = results.successful.filter(a => !a.existing).length;
+  const existingAgents = results.successful.filter(a => a.existing).length;
+  
   console.log('═══════════════════════════════════════════════════════════════');
   console.log('📊 SEEDING COMPLETE - FINAL REPORT');
   console.log('═══════════════════════════════════════════════════════════════\n');
   
-  console.log(`✅ Successfully created: ${results.successful.length} agents`);
+  console.log(`✅ Total Agents: ${results.successful.length}`);
+  console.log(`   🆕 New created: ${newAgents}`);
+  console.log(`   📦 Already existing: ${existingAgents}`);
   console.log(`❌ Failed: ${results.failed.length} agents`);
   console.log(`\n📈 By Tier:`);
-  console.log(`   BASIC: ${results.byTier.BASIC}`);
-  console.log(`   PRO: ${results.byTier.PRO}`);
-  console.log(`   ENTERPRISE: ${results.byTier.ENTERPRISE}`);
-  console.log(`\n💰 Total potential revenue: R$ ${results.totalValue.toFixed(2)}`);
+  console.log(`   BASIC: ${results.byTier.BASIC} (R$ 29.90 each)`);
+  console.log(`   PRO: ${results.byTier.PRO} (R$ 99.90 each)`);
+  console.log(`   ENTERPRISE: ${results.byTier.ENTERPRISE} (R$ 299.90 each)`);
+  console.log(`\n💰 MONETIZATION POTENTIAL:`);
+  console.log(`   Total PIX pending: R$ ${results.totalValue.toFixed(2)}`);
+  console.log(`   Est. conversion (30%): R$ ${(results.totalValue * 0.3).toFixed(2)}`);
+  console.log(`   Treasury: ${CONFIG.TREASURY || '0x3955d559055DadB7067054cB6E6f974710345224'}`);
   
   if (results.successful.length > 0) {
-    console.log(`\n📋 Sample created agents:`);
+    console.log(`\n📋 Sample agents with PIX:`);
     results.successful.slice(0, 5).forEach(agent => {
-      console.log(`   • ${agent.name} (${agent.tier}) - ${agent.actorCode} - R$ ${agent.amount}`);
+      const status = agent.existing ? '📦 EXISTING' : '🆕 NEW';
+      console.log(`   ${status} ${agent.name} (${agent.tier}) - PIX: R$ ${agent.amount}`);
     });
     
     // Save to file
@@ -216,8 +243,11 @@ async function seedAgents() {
       results: results,
       summary: {
         totalAgents: results.successful.length,
+        newAgents: newAgents,
+        existingAgents: existingAgents,
         totalValue: results.totalValue,
-        conversionPotential: results.totalValue * 0.3 // Estimated 30% conversion
+        conversionPotential: results.totalValue * 0.3,
+        treasury: '0x3955d559055DadB7067054cB6E6f974710345224'
       }
     };
     
@@ -227,11 +257,11 @@ async function seedAgents() {
   }
   
   console.log('\n═══════════════════════════════════════════════════════════════');
-  console.log('🎯 NEXT STEPS:');
-  console.log('   1. Agents created with PIX pending');
-  console.log('   2. Simulate payments via /webhook/mercadopago');
-  console.log('   3. Monitor conversion in /v1/admin/metrics');
-  console.log('   4. Force paywall hits by calling /v1/signals');
+  console.log('🎯 MONETIZATION ACTIVE - NEXT STEPS:');
+  console.log('   1. ✅ Agents created with PIX pending');
+  console.log('   2. 🔄 Simulate payments: POST /webhook/mercadopago');
+  console.log('   3. 📊 Monitor: GET /v1/admin/metrics');
+  console.log('   4. 🚀 Activate agents → Automatic API access');
   console.log('═══════════════════════════════════════════════════════════════\n');
   
   return results;
