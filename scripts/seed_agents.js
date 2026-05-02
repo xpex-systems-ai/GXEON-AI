@@ -11,18 +11,25 @@ import axios from 'axios';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://gxeon-core.up.railway.app';
 
-// Configuration - MODO EXECUÇÃO REAL
+// Configuration - TOTAL MONETIZATION SWARM v2.0
 const CONFIG = {
-  AGENT_COUNT: 100, // REAL MODE: 100 agents
-  CONCURRENT_BATCHES: 5, // Parallel processing
-  DELAY_BETWEEN_BATCHES: 5000, // 5s between batches
+  AGENT_COUNT: 300, // SWARM MODE: 300 agents
+  CONCURRENT_BATCHES: 10, // Increased parallel processing
+  DELAY_BETWEEN_BATCHES: 3000, // 3s between batches
   REQUEST_TIMEOUT: 60000, // 60s timeout (Railway cold start)
-  RETRIES: 2, // 2 retries max
+  RETRIES: 3, // 3 retries max
   TIERS: ['BASIC', 'PRO', 'ENTERPRISE'],
   TIER_WEIGHTS: [0.7, 0.25, 0.05],
-  MODE: 'REAL_MONETIZATION', // Ativa modo real
-  PIX_AUTO_PAY: false, // Se true, simula pagamentos automaticamente
-  TREASURY: '0x3955d559055DadB7067054cB6E6f974710345224'
+  MODE: 'TOTAL_MONETIZATION_SWARM', // SWARM LIVE MODE
+  PIX_AUTO_PAY: false,
+  TREASURY: '0x3955d559055DadB7067054cB6E6f974710345224',
+  // BEHAVIOR LOOP CONFIG
+  BEHAVIOR: {
+    HIT_FREE_ENDPOINT: true,      // Agents test /v1/signals/free
+    EXCEED_LIMIT: true,           // Agents exceed rate limit to trigger 429
+    TRIGGER_PAYWALL: true,        // Agents try /v1/signals to trigger 402
+    PAYWALL_HITS_PER_AGENT: 5     // Each agent triggers paywall 5 times
+  }
 };
 
 const AGENT_NAMES = [
@@ -35,7 +42,52 @@ const AGENT_NAMES = [
   'MarketPulse', 'TrendAI', 'PriceBot', 'VolumeX', 'MomentumAI',
   'ArbitrageBot', 'HedgeAI', 'RiskBot', 'ProfitX', 'YieldAI',
   'DeFiBot', 'SwapAI', 'PoolX', 'StakeBot', 'FarmAI',
-  'LendBot', 'BorrowAI', 'VaultX', 'TreasuryAI', 'SovereignBot'
+  'LendBot', 'BorrowAI', 'VaultX', 'TreasuryAI', 'SovereignBot',
+  // Extended for 300 agents
+  'FluxBot', 'NexusAI', 'CryptoPulse', 'TradeStream', 'SignalX',
+  'AlphaFlow', 'BetaMind', 'GammaTrade', 'DeltaCore', 'EpsilonAI',
+  'ZetaPulse', 'EtaFlow', 'ThetaTrade', 'IotaAI', 'KappaCore',
+  'LambdaBot', 'MuAI', 'NuTrade', 'XiFlow', 'OmicronCore',
+  'PiMind', 'RhoAI', 'SigmaPulse', 'TauBot', 'UpsilonTrade',
+  'PhiFlow', 'ChiMind', 'PsiAI', 'OmegaFlow', 'NexusPulse',
+  'QuantumBot', 'NeuralAI', 'CryptoFlow', 'TradeMind', 'SignalCore',
+  'MarketFlow', 'TrendPulse', 'PriceAI', 'VolumeMind', 'MomentumCore',
+  'ArbitrageAI', 'HedgeFlow', 'RiskMind', 'ProfitAI', 'YieldFlow',
+  'DeFiAI', 'SwapFlow', 'PoolMind', 'StakeAI', 'FarmFlow',
+  'LendAI', 'BorrowFlow', 'VaultMind', 'TreasuryFlow', 'SovereignAI',
+  'PulseBot', 'FlowAI', 'CoreTrade', 'MindSignal', 'StreamAI',
+  'BotX', 'AIStream', 'TradePulse', 'SignalFlow', 'PulseAI',
+  'MindBot', 'FlowTrade', 'CoreAI', 'StreamSignal', 'BotFlow',
+  'AIPulse', 'TradeCore', 'SignalMind', 'PulseStream', 'FlowBot',
+  'AICore', 'TradeMind', 'SignalAI', 'PulseFlow', 'StreamBot',
+  'BotAI', 'CorePulse', 'MindTrade', 'FlowSignal', 'AIBot',
+  'PulseCore', 'TradeStream', 'MindFlow', 'SignalCore', 'StreamAI',
+  'BotPulse', 'AIMind', 'CoreFlow', 'TradeAI', 'SignalBot',
+  'FlowCore', 'PulseTrade', 'StreamMind', 'BotSignal', 'AIFlow',
+  'MindCore', 'TradePulse', 'SignalStream', 'FlowAI', 'BotMind',
+  'CoreSignal', 'PulseBot', 'StreamTrade', 'AIMind', 'FlowBot',
+  'TradeSignal', 'MindAI', 'PulseStream', 'CoreTrade', 'BotFlow',
+  'SignalMind', 'StreamCore', 'AIPulse', 'TradeBot', 'FlowSignal',
+  'MindTrade', 'PulseAI', 'CoreBot', 'StreamFlow', 'SignalAI',
+  'BotCore', 'TradeMind', 'AIFlow', 'PulseSignal', 'MindBot',
+  'FlowTrade', 'CoreAI', 'StreamPulse', 'BotMind', 'SignalFlow',
+  'TradeCore', 'AIBot', 'MindStream', 'PulseTrade', 'FlowAI',
+  'CoreSignal', 'BotPulse', 'TradeFlow', 'AIMind', 'StreamBot',
+  'SignalCore', 'PulseMind', 'FlowAI', 'TradeBot', 'CoreStream',
+  'MindPulse', 'BotTrade', 'AIFlow', 'SignalMind', 'PulseCore',
+  'StreamTrade', 'FlowBot', 'CoreAI', 'MindSignal', 'TradePulse',
+  'BotFlow', 'AICore', 'StreamMind', 'PulseBot', 'SignalTrade',
+  'FlowMind', 'CoreBot', 'TradeAI', 'MindFlow', 'StreamCore',
+  'PulseSignal', 'BotAI', 'AIPulse', 'TradeStream', 'MindBot',
+  'FlowCore', 'SignalAI', 'CoreTrade', 'PulseMind', 'StreamFlow',
+  'BotSignal', 'AIMind', 'TradeBot', 'FlowPulse', 'MindCore',
+  'StreamTrade', 'SignalFlow', 'CoreAI', 'PulseBot', 'BotMind',
+  'TradeSignal', 'AIFlow', 'MindStream', 'CorePulse', 'FlowBot',
+  'SignalCore', 'PulseTrade', 'StreamAI', 'BotFlow', 'MindSignal',
+  'TradeMind', 'AICore', 'FlowBot', 'PulseStream', 'SignalTrade',
+  'BotPulse', 'MindAI', 'CoreFlow', 'StreamSignal', 'TradeCore',
+  'FlowMind', 'BotAI', 'PulseCore', 'MindTrade', 'SignalBot',
+  'StreamFlow', 'AIPulse', 'CoreBot', 'TradeMind', 'FlowSignal'
 ];
 
 function generateEmail(name) {
@@ -267,5 +319,132 @@ async function seedAgents() {
   return results;
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// BEHAVIOR LOOP: AGENT ACTIONS AFTER REGISTRATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+async function hitFreeEndpoint(agentName, count = 5) {
+  // Simulate agent hitting free endpoint multiple times
+  const results = { hits: 0, rateLimited: 0, errors: 0 };
+  
+  for (let i = 0; i < count; i++) {
+    try {
+      const response = await axios.get(`${API_BASE}/v1/signals/free`, {
+        timeout: 10000,
+        validateStatus: () => true
+      });
+      
+      if (response.status === 200) {
+        results.hits++;
+      } else if (response.status === 429) {
+        results.rateLimited++;
+        console.log(`   🚫 ${agentName} hit rate limit (429)`);
+        break; // Stop trying once rate limited
+      }
+    } catch (err) {
+      results.errors++;
+    }
+    
+    // Small delay between hits
+    await new Promise(r => setTimeout(r, 500));
+  }
+  
+  return results;
+}
+
+async function triggerPaywall(agentName) {
+  // Simulate agent trying to access paid endpoint without API key
+  // This should trigger the 402 paywall response
+  try {
+    const response = await axios.get(`${API_BASE}/v1/signals`, {
+      timeout: 10000,
+      validateStatus: () => true
+    });
+    
+    if (response.status === 402) {
+      console.log(`   💰 ${agentName} triggered PAYWALL (402) - PIX: R$ ${response.data?.payment?.amount || '?'}`);
+      return {
+        triggered: true,
+        amount: response.data?.payment?.amount,
+        pixCode: response.data?.payment?.pix_copy_paste?.substring(0, 30) + '...'
+      };
+    } else if (response.status === 401) {
+      console.log(`   🔒 ${agentName} got 401 - API key required`);
+      return { triggered: false, reason: '401' };
+    }
+  } catch (err) {
+    return { triggered: false, error: err.message };
+  }
+  
+  return { triggered: false };
+}
+
+async function executeBehaviorLoop(agents) {
+  if (!CONFIG.BEHAVIOR.HIT_FREE_ENDPOINT && !CONFIG.BEHAVIOR.TRIGGER_PAYWALL) {
+    return;
+  }
+  
+  console.log('\n═══════════════════════════════════════════════════════════════');
+  console.log('🎬 BEHAVIOR LOOP: Simulating agent activity');
+  console.log('═══════════════════════════════════════════════════════════════\n');
+  
+  const behaviorResults = {
+    freeHits: 0,
+    rateLimits: 0,
+    paywallTriggers: 0,
+    totalPaywallAmount: 0
+  };
+  
+  // Sample 20% of agents for behavior loop to avoid overwhelming
+  const sampleSize = Math.max(10, Math.floor(agents.length * 0.2));
+  const sampleAgents = agents.slice(0, sampleSize);
+  
+  console.log(`🎯 Running behavior loop on ${sampleAgents.length} agents...\n`);
+  
+  for (const agent of sampleAgents) {
+    // Hit free endpoint
+    if (CONFIG.BEHAVIOR.HIT_FREE_ENDPOINT) {
+      const freeResults = await hitFreeEndpoint(agent.name, 10);
+      behaviorResults.freeHits += freeResults.hits;
+      behaviorResults.rateLimits += freeResults.rateLimited;
+    }
+    
+    // Trigger paywall
+    if (CONFIG.BEHAVIOR.TRIGGER_PAYWALL) {
+      for (let i = 0; i < CONFIG.BEHAVIOR.PAYWALL_HITS_PER_AGENT; i++) {
+        const paywallResult = await triggerPaywall(agent.name);
+        if (paywallResult.triggered) {
+          behaviorResults.paywallTriggers++;
+          behaviorResults.totalPaywallAmount += paywallResult.amount || 0;
+        }
+        await new Promise(r => setTimeout(r, 200));
+      }
+    }
+  }
+  
+  console.log('\n📊 BEHAVIOR LOOP RESULTS:');
+  console.log(`   Free endpoint hits: ${behaviorResults.freeHits}`);
+  console.log(`   Rate limits hit: ${behaviorResults.rateLimits}`);
+  console.log(`   Paywall triggers: ${behaviorResults.paywallTriggers}`);
+  console.log(`   Paywall amount generated: R$ ${behaviorResults.totalPaywallAmount.toFixed(2)}`);
+  console.log('═══════════════════════════════════════════════════════════════\n');
+  
+  return behaviorResults;
+}
+
 // Run
-seedAgents().catch(console.error);
+async function main() {
+  const results = await seedAgents();
+  
+  // Execute behavior loop on successful agents
+  if (results.successful.length > 0 && (CONFIG.BEHAVIOR.HIT_FREE_ENDPOINT || CONFIG.BEHAVIOR.TRIGGER_PAYWALL)) {
+    await executeBehaviorLoop(results.successful);
+  }
+  
+  console.log('\n╔═══════════════════════════════════════════════════════════════╗');
+  console.log('║     🌙 TOTAL MONETIZATION SWARM COMPLETE                        ║');
+  console.log('║     Treasury: 0x3955d559055DadB7067054cB6E6f974710345224      ║');
+  console.log('╚═══════════════════════════════════════════════════════════════╝\n');
+}
+
+main().catch(console.error);
