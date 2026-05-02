@@ -56,33 +56,51 @@ async function registerAgent(name, tier) {
   const email = generateEmail(name);
   
   try {
-    const response = await axios.post(`${API_BASE}/v1/register-agent`, {
+    console.log(`   📝 Registering ${name} (${email})...`);
+    
+    const response = await axios.post(`${API_BASE}/v1/register`, {
       email: email,
       name: name,
       tier: tier
     }, {
       headers: { 'Content-Type': 'application/json' },
-      timeout: 15000
+      timeout: 15000,
+      validateStatus: () => true // Don't throw on error status
     });
     
-    return {
-      success: true,
-      name: name,
-      email: email,
-      tier: tier,
-      actorCode: response.data.actor?.code,
-      apiKey: response.data.credentials?.api_key,
-      pixCode: response.data.payment?.pix_copy_paste,
-      amount: response.data.payment?.amount,
-      transactionId: response.data.payment?.transaction_id
-    };
+    if (response.status >= 200 && response.status < 300) {
+      console.log(`   ✅ ${name} created: ${response.data.actor?.code}`);
+      return {
+        success: true,
+        name: name,
+        email: email,
+        tier: tier,
+        actorCode: response.data.actor?.code,
+        apiKey: response.data.credentials?.api_key,
+        pixCode: response.data.payment?.pix_copy_paste,
+        amount: response.data.payment?.amount,
+        transactionId: response.data.payment?.transaction_id
+      };
+    } else {
+      console.log(`   ❌ ${name} failed: HTTP ${response.status}`);
+      console.log(`      Response:`, JSON.stringify(response.data, null, 2).substring(0, 200));
+      return {
+        success: false,
+        name: name,
+        email: email,
+        tier: tier,
+        error: `HTTP ${response.status}: ${response.data?.error || response.data?.message || 'Unknown'}`,
+        fullResponse: response.data
+      };
+    }
   } catch (err) {
+    console.log(`   ❌ ${name} error: ${err.message}`);
     return {
       success: false,
       name: name,
       email: email,
       tier: tier,
-      error: err.response?.data?.error || err.message
+      error: err.message
     };
   }
 }
