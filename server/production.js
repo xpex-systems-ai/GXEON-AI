@@ -752,6 +752,19 @@ app.get('/health', (req, res) => res.status(200).send('OK'));
 app.get('/api/health', (req, res) => res.json({ status: 'ok', version: serverState.version }));
 
 // ═══════════════════════════════════════════════════════════════════════════
+// 🌐 A2A MONETIZATION API (Agent-to-Agent Revenue)
+// ═══════════════════════════════════════════════════════════════════════════
+// Import A2A routes dynamically
+let a2aRoutes = null;
+try {
+  const { default: a2aRouter } = await import('./routes/a2aMonetization.js');
+  app.use('/', a2aRouter);
+  console.log('[✅] A2A Monetization API mounted: /v1/register-agent, /v1/agent/*');
+} catch (err) {
+  console.log('[⚠️] A2A routes not available:', err.message);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
 // 📡 SIGNAL API v1 (Core Revenue Endpoints)
 // ═══════════════════════════════════════════════════════════════════════════
 

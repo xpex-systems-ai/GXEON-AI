@@ -7,10 +7,11 @@
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
-const express = require('express');
+import express from 'express';
+import { createClient } from '@supabase/supabase-js';
+import crypto from 'crypto';
+
 const router = express.Router();
-const { createClient } = require('@supabase/supabase-js');
-const crypto = require('crypto');
 
 // ═══════════════════════════════════════════════════════════════════════════
 // CONFIGURAÇÃO
@@ -442,4 +443,4 @@ async function updateResponseTime(actorId, latency) {
   // Implementation depends on your tracking needs
 }
 
-module.exports = router;
+export default router;
