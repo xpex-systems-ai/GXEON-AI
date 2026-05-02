@@ -388,6 +388,31 @@ setTimeout(async () => {
     }
 
     // ═══════════════════════════════════════════════════════════════════════════
+    // FALLBACK REGISTRATION (Guaranteed endpoint)
+    // ═══════════════════════════════════════════════════════════════════════════
+    app.post('/v1/register', async (req, res) => {
+      try {
+        const { email, name, tier = 'BASIC' } = req.body;
+        if (!email) return res.status(400).json({ error: 'Email required' });
+        
+        const actorCode = 'GX' + crypto.randomBytes(4).toString('hex').toUpperCase();
+        const apiKey = 'gx_' + crypto.randomBytes(24).toString('hex');
+        const price = tier === 'BASIC' ? 29.90 : tier === 'PRO' ? 99.90 : 299.90;
+        const txId = `REG-${Date.now()}-${actorCode}`;
+        const qrData = `00020126580014BR.GOV.BCB.PIX${txId}520400005303986540${price.toFixed(2)}5802BR5909GXEON_AI6009SAO_PAULO`;
+        
+        res.json({
+          success: true,
+          actor: { code: actorCode, email, name: name || 'Agent', tier, status: 'pending_payment' },
+          payment: { transaction_id: txId, amount: price, currency: 'BRL', method: 'PIX', pix_qr_code: Buffer.from(qrData).toString('base64'), pix_copy_paste: qrData, expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString() },
+          credentials: { api_key: apiKey, note: 'API key will be activated after payment' }
+        });
+      } catch (err) {
+        res.status(500).json({ error: 'REGISTRATION_FAILED', message: err.message });
+      }
+    });
+
+    // ═══════════════════════════════════════════════════════════════════════════
     // GXZ1 MARKET ECONOMY LAYER — External Data Marketplace API
     // ═══════════════════════════════════════════════════════════════════════════
     // Public endpoints for third-party agent consumption

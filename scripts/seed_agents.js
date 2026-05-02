@@ -13,11 +13,13 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'https://gxeon-core.up.rail
 
 // Configuration
 const CONFIG = {
-  AGENT_COUNT: 50, // Number of agents to create
-  CONCURRENT_BATCHES: 5, // Parallel requests
-  DELAY_BETWEEN_BATCHES: 1000, // ms
-  TIERS: ['BASIC', 'PRO', 'ENTERPRISE'], // Weighted distribution
-  TIER_WEIGHTS: [0.7, 0.25, 0.05] // 70% BASIC, 25% PRO, 5% ENTERPRISE
+  AGENT_COUNT: 10, // REDUCED: Test with fewer first
+  CONCURRENT_BATCHES: 2, // REDUCED: Less parallel
+  DELAY_BETWEEN_BATCHES: 3000, // INCREASED: Wait for cold start
+  REQUEST_TIMEOUT: 30000, // 30s timeout for Railway cold starts
+  RETRIES: 3, // Retry failed requests
+  TIERS: ['BASIC', 'PRO', 'ENTERPRISE'],
+  TIER_WEIGHTS: [0.7, 0.25, 0.05]
 };
 
 const AGENT_NAMES = [
@@ -52,56 +54,79 @@ function selectTier() {
   return 'BASIC';
 }
 
-async function registerAgent(name, tier) {
+async function registerAgent(name, tier, retries = CONFIG.RETRIES) {
   const email = generateEmail(name);
   
-  try {
-    console.log(`   📝 Registering ${name} (${email})...`);
-    
-    const response = await axios.post(`${API_BASE}/v1/register`, {
-      email: email,
-      name: name,
-      tier: tier
-    }, {
-      headers: { 'Content-Type': 'application/json' },
-      timeout: 15000,
-      validateStatus: () => true // Don't throw on error status
-    });
-    
-    if (response.status >= 200 && response.status < 300) {
-      console.log(`   ✅ ${name} created: ${response.data.actor?.code}`);
-      return {
-        success: true,
-        name: name,
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      if (attempt > 1) {
+        console.log(`   � ${name} retry ${attempt}/${retries}...`);
+        await new Promise(r => setTimeout(r, 2000));
+      } else {
+        console.log(`   �📝 Registering ${name} (${email})...`);
+      }
+      
+      const response = await axios.post(`${API_BASE}/v1/register`, {
         email: email,
-        tier: tier,
-        actorCode: response.data.actor?.code,
-        apiKey: response.data.credentials?.api_key,
-        pixCode: response.data.payment?.pix_copy_paste,
-        amount: response.data.payment?.amount,
-        transactionId: response.data.payment?.transaction_id
-      };
-    } else {
-      console.log(`   ❌ ${name} failed: HTTP ${response.status}`);
-      console.log(`      Response:`, JSON.stringify(response.data, null, 2).substring(0, 200));
-      return {
-        success: false,
         name: name,
-        email: email,
-        tier: tier,
-        error: `HTTP ${response.status}: ${response.data?.error || response.data?.message || 'Unknown'}`,
-        fullResponse: response.data
-      };
+        tier: tier
+      }, {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: CONFIG.REQUEST_TIMEOUT,
+        validateStatus: () => true
+      });
+      
+      if (response.status >= 200 && response.status < 300) {
+        console.log(`   ✅ ${name} created: ${response.data.actor?.code}`);
+        return {
+          success: true,
+          name: name,
+          email: email,
+          tier: tier,
+          actorCode: response.data.actor?.code,
+          apiKey: response.data.credentials?.api_key,
+          pixCode: response.data.payment?.pix_copy_paste,
+          amount: response.data.payment?.amount,
+          transactionId: response.data.payment?.transaction_id
+        };
+      } else if (response.status === 404) {
+        console.log(`   ❌ ${name}: Endpoint not found (404)`);
+        return {
+          success: false,
+          name: name,
+          email: email,
+          tier: tier,
+          error: `HTTP 404: Endpoint /v1/register not found`
+        };
+      } else {
+        console.log(`   ❌ ${name}: HTTP ${response.status} - ${JSON.stringify(response.data).substring(0, 100)}`);
+        if (attempt === retries) {
+          return {
+            success: false,
+            name: name,
+            email: email,
+            tier: tier,
+            error: `HTTP ${response.status}: ${response.data?.error || 'Unknown'}`
+          };
+        }
+      }
+    } catch (err) {
+      const isTimeout = err.code === 'ECONNABORTED' || err.message.includes('timeout');
+      const errorMsg = isTimeout ? `TIMEOUT after ${CONFIG.REQUEST_TIMEOUT}ms` : err.message;
+      
+      if (attempt === retries) {
+        console.log(`   ❌ ${name} failed after ${retries} attempts: ${errorMsg}`);
+        return {
+          success: false,
+          name: name,
+          email: email,
+          tier: tier,
+          error: errorMsg
+        };
+      } else {
+        console.log(`   ⚠️ ${name} attempt ${attempt} failed: ${errorMsg}, retrying...`);
+      }
     }
-  } catch (err) {
-    console.log(`   ❌ ${name} error: ${err.message}`);
-    return {
-      success: false,
-      name: name,
-      email: email,
-      tier: tier,
-      error: err.message
-    };
   }
 }
 
