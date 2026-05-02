@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { DashboardLayout } from "./dashboard-layout";
 
 export const metadata: Metadata = {
   title: "GXEON Dashboard",
@@ -14,12 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-background font-sans antialiased">
-        {/* CRITICAL: Always render children, never empty */}
-        {children}
-        {/* FALLBACK: Ensure something always renders */}
-        <div id="fallback-ui" style={{ display: 'none' }}>
-          GXEON SYSTEM LOADING...
-        </div>
+        <DashboardLayout>{children}</DashboardLayout>
       </body>
     </html>
   );

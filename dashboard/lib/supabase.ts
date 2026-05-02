@@ -1,48 +1,10 @@
-import { createClient } from '@supabase/supabase-js'
+// GXEON Supabase Types and Utilities
+// Components create Supabase client inline with error handling
 
-// Safe initialization - only create client on browser or when env vars exist
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
-
-// Create a dummy client for SSR/build time to prevent crashes
-const createSafeClient = () => {
-  if (typeof window === 'undefined' && (!supabaseUrl || !supabaseKey)) {
-    // Return a mock client for server-side/build time
-    return {
-      from: () => ({
-        select: () => ({ data: null, error: null }),
-        insert: () => ({ data: null, error: null }),
-        update: () => ({ data: null, error: null }),
-        delete: () => ({ data: null, error: null }),
-      }),
-      channel: () => ({
-        on: () => ({ subscribe: () => ({}) }),
-      }),
-      removeChannel: () => {},
-    } as any
-  }
-  
-  if (!supabaseUrl || !supabaseKey) {
-    console.error('[Supabase] Missing environment variables:', {
-      url: !!supabaseUrl,
-      key: !!supabaseKey
-    })
-  }
-  
-  return createClient(supabaseUrl, supabaseKey, {
-    realtime: {
-      params: {
-        eventsPerSecond: 10,
-      },
-    },
-  })
-}
-
-export const supabase = createSafeClient()
-
-// Helper to check if supabase is properly configured
 export const isSupabaseConfigured = () => {
-  return !!supabaseUrl && !!supabaseKey && supabaseUrl.startsWith('https://')
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  return !!url && !!key && url.startsWith('https://')
 }
 
 export type Transaction = {
