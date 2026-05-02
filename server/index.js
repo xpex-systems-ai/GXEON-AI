@@ -373,6 +373,17 @@ setTimeout(async () => {
     app.use('/api', gxeonEnforcer({ agent_execution: 0.005 }), agentRoutes);
 
     // ═══════════════════════════════════════════════════════════════════════════
+    // A2A MONETIZATION LAYER — Agent-to-Agent Revenue System
+    // ═══════════════════════════════════════════════════════════════════════════
+    // /v1/register-agent — Agent registration with payment
+    // /v1/signals — Protected signal access with API Key
+    // /v1/agent/status — Check quota and access
+    // ═══════════════════════════════════════════════════════════════════════════
+    const a2aMonetizationRoutes = require('./routes/a2aMonetization');
+    app.use('/', a2aMonetizationRoutes);
+    console.log('[A2A_MONETIZATION] Agent API active: /v1/register-agent, /v1/signals, /v1/agent/*');
+
+    // ═══════════════════════════════════════════════════════════════════════════
     // GXZ1 MARKET ECONOMY LAYER — External Data Marketplace API
     // ═══════════════════════════════════════════════════════════════════════════
     // Public endpoints for third-party agent consumption

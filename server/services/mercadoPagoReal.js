@@ -342,6 +342,9 @@ export class MercadoPagoRealPayments {
     
     console.log('[✅ PAYMENT] Confirmed:', externalRef);
     
+    // ATIVAR AGENTE: Liberar acesso à API após pagamento
+    await this.activateActorAccess(updated);
+    
     // Liberar comissão
     const commission = await this.commissionEngine.processCommission(updated);
     
@@ -349,8 +352,109 @@ export class MercadoPagoRealPayments {
       success: true,
       transaction: updated,
       commission: commission,
-      message: 'Payment confirmed and commission released'
+      message: 'Payment confirmed, commission released, API access activated'
     };
+  }
+  
+  /**
+   * ATIVA AGENTE: Habilita acesso à API após pagamento confirmado
+   * Esta é a ponte entre pagamento e consumo de sinais
+   */
+  async activateActorAccess(transaction) {
+    try {
+      const db = getSupabase();
+      
+      // Buscar actor
+      const { data: actor, error: actorError } = await db
+        .from('actors')
+        .select('id, code, status, email, api_key, tier')
+        .eq('code', transaction.actor_code)
+        .single();
+      
+      if (actorError || !actor) {
+        console.error('[❌ ACTIVATION] Actor not found:', transaction.actor_code);
+        return false;
+      }
+      
+      // Só ativar se ainda não estiver active
+      if (actor.status === 'active') {
+        console.log('[⚠️ ACTIVATION] Actor already active:', actor.code);
+        return true;
+      }
+      
+      // Atualizar status para active
+      const { error: updateError } = await db
+        .from('actors')
+        .update({
+          status: 'active',
+          tier: transaction.tier || actor.tier || 'BASIC',
+          activated_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', actor.id);
+      
+      if (updateError) {
+        console.error('[❌ ACTIVATION] Failed to activate actor:', updateError);
+        return false;
+      }
+      
+      console.log('[🚀 ACTIVATION] Actor activated:', {
+        code: actor.code,
+        email: actor.email,
+        api_key: actor.api_key?.slice(0, 20) + '...',
+        tier: transaction.tier
+      });
+      
+      // Notificar via Telegram se disponível
+      await this.notifyActivation(actor, transaction);
+      
+      return true;
+      
+    } catch (error) {
+      console.error('[❌ ACTIVATION] Error:', error);
+      return false;
+    }
+  }
+  
+  /**
+   * Notifica ativação via Telegram
+   */
+  async notifyActivation(actor, transaction) {
+    try {
+      // Se tiver Telegram bot configurado, enviar mensagem
+      if (process.env.TELEGRAM_BOT_TOKEN && actor.telegram_chat_id) {
+        // Importar dinamicamente para evitar dependência circular
+        const { Telegraf } = await import('telegraf');
+        const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+        
+        const message = `
+🎉 *PAGAMENTO CONFIRMADO!*
+
+✅ Seu acesso à API GXEON foi ativado!
+
+📧 Email: ${actor.email}
+🔑 API Key: \`${actor.api_key?.slice(0, 20)}...\`
+🏷️ Plano: ${transaction.tier}
+💰 Valor: R$ ${transaction.amount.toFixed(2)}
+
+🚀 *Próximos passos:*
+1. Use sua API Key: \`X-API-Key: ${actor.api_key?.slice(0, 15)}...\`
+2. Acesse: \`GET /v1/signals\`
+3. Receba sinais em tempo real!
+
+📖 Documentação: https://docs.gxeon.ai
+        `;
+        
+        await bot.telegram.sendMessage(actor.telegram_chat_id, message, {
+          parse_mode: 'Markdown'
+        });
+        
+        console.log('[📱 ACTIVATION] Telegram notification sent to:', actor.email);
+      }
+    } catch (err) {
+      console.log('[⚠️ ACTIVATION] Telegram notification failed:', err.message);
+      // Não falhar se notificação falhar
+    }
   }
   
   /**
