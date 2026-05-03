@@ -1,0 +1,44 @@
+{
+  "modo": "CRIPTO_AUTOMATICO",
+  "networks": {
+    "ethereum": {
+      "chain_id": 1,
+      "tokens": [
+        "ETH",
+        "USDC",
+        "USDT"
+      ],
+      "treasury": "0x3955d559055DadB7067054cB6E6f974710345224"
+    },
+    "arbitrum": {
+      "chain_id": 42161,
+      "tokens": [
+        "ETH",
+        "USDC"
+      ],
+      "treasury": "0x3955d559055DadB7067054cB6E6f974710345224"
+    },
+    "polygon": {
+      "chain_id": 137,
+      "tokens": [
+        "MATIC",
+        "USDC"
+      ],
+      "treasury": "0x3955d559055DadB7067054cB6E6f974710345224"
+    }
+  },
+  "precos": {
+    "BASIC": {
+      "eth": 0.01,
+      "usdc": 5
+    },
+    "PRO": {
+      "eth": 0.03,
+      "usdc": 15
+    },
+    "ENTERPRISE": {
+      "eth": 0.1,
+      "usdc": 50
+    }
+  }
+}

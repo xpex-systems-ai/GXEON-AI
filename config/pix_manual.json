@@ -1,0 +1,14 @@
+{
+  "modo": "PIX_MANUAL",
+  "instrucoes": "Cliente registra → Recebe código → Você envia QR do seu banco → Ativa manual",
+  "precos": {
+    "BASIC": 29.9,
+    "PRO": 99.9,
+    "ENTERPRISE": 299.9
+  },
+  "conta_bancaria": {
+    "nome": "GXEON AI",
+    "pix_key": "Use sua chave PIX pessoal",
+    "instrucao": "Gere QR Code no app do seu banco quando cliente confirmar interesse"
+  }
+}

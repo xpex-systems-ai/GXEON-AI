@@ -1,0 +1,18 @@
+{
+  "openpix": {
+    "status": "RECOMENDADO",
+    "url": "https://app.openpix.com.br",
+    "vantagem": "PIX gratuito, sem taxa de setup",
+    "prioridade": 1
+  },
+  "stripe": {
+    "status": "CARTAO_INTERNACIONAL",
+    "url": "https://dashboard.stripe.com",
+    "prioridade": 2
+  },
+  "paypal": {
+    "status": "GLOBAL",
+    "url": "https://developer.paypal.com",
+    "prioridade": 3
+  }
+}
