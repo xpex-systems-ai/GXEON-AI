@@ -463,6 +463,22 @@ setTimeout(async () => {
       console.error('[🧠 SMART_ENGINE] Failed to load:', err.message);
     }
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 🏪 MÓDULO 3 — DATA MARKETPLACE ENGINE v1.0
+    // ═══════════════════════════════════════════════════════════════════════════
+    // /v1/marketplace/datasets — Catálogo de datasets
+    // /v1/marketplace/purchase — Fluxo de compra com PIX
+    // /v1/marketplace/access/:id — Acesso a dados comprados
+    // /v1/marketplace/usage — Analytics de consumo
+    // ═══════════════════════════════════════════════════════════════════════════
+    try {
+      const { default: marketplaceRoutes } = await import('./routes/marketplace_datasets.js');
+      app.use('/v1/marketplace', marketplaceRoutes);
+      console.log('[🏪 MARKETPLACE] Active: /v1/marketplace/datasets, /v1/marketplace/purchase, /v1/marketplace/access/*');
+    } catch (err) {
+      console.error('[🏪 MARKETPLACE] Failed to load:', err.message);
+    }
+
     // Error handling
     app.use((err, req, res, next) => {
       console.error(`[GXEON_ERROR] ${req.id || 'unknown'}:`, err);
