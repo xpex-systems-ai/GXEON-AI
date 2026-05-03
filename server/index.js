@@ -433,6 +433,21 @@ setTimeout(async () => {
     app.use('/', signalsRouter);
     console.log('[CORNIX] Signal monetization active: /v1/signals/*, /v1/leaderboard');
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 🚀 MÓDULO 2 — GXEON HYBRID DATA ENGINE
+    // ═══════════════════════════════════════════════════════════════════════════
+    // /v1/leads/* — Lead generation with paywall
+    // /v1/trends/* — Trend analysis with paywall
+    // /v1/tasks/* — Task execution (PRO+)
+    // ═══════════════════════════════════════════════════════════════════════════
+    try {
+      const { default: hybridDataRoutes } = await import('./routes/hybridDataApi.js');
+      app.use('/', hybridDataRoutes);
+      console.log('[🚀 MODULO_2] Hybrid Data Engine active: /v1/leads/*, /v1/trends/*, /v1/tasks/*');
+    } catch (err) {
+      console.error('[🚀 MODULO_2] Failed to load routes:', err.message);
+    }
+
     // Error handling
     app.use((err, req, res, next) => {
       console.error(`[GXEON_ERROR] ${req.id || 'unknown'}:`, err);
