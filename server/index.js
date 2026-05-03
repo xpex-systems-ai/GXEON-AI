@@ -448,6 +448,21 @@ setTimeout(async () => {
       console.error('[🚀 MODULO_2] Failed to load routes:', err.message);
     }
 
+    // ═══════════════════════════════════════════════════════════════════════════
+    // 🧠 GXEON SMART ENGINE v1.0
+    // ═══════════════════════════════════════════════════════════════════════════
+    // /v1/leads/smart — AI-powered lead scoring
+    // /v1/leads/smart-free — Preview with partial data
+    // Scoring: no_website(+30), rating>4.5(+25), low_competition(+20), etc
+    // ═══════════════════════════════════════════════════════════════════════════
+    try {
+      const { default: smartLeadsRoutes } = await import('./routes/smartLeadsApi.js');
+      app.use('/', smartLeadsRoutes);
+      console.log('[🧠 SMART_ENGINE] Active: /v1/leads/smart, /v1/leads/smart-free');
+    } catch (err) {
+      console.error('[🧠 SMART_ENGINE] Failed to load:', err.message);
+    }
+
     // Error handling
     app.use((err, req, res, next) => {
       console.error(`[GXEON_ERROR] ${req.id || 'unknown'}:`, err);
