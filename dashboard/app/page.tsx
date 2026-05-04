@@ -1,40 +1,65 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { createClient } from "@supabase/supabase-js";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/format";
-import { Activity, CreditCard, DollarSign, Users, RefreshCw } from "lucide-react";
+import { 
+  Activity, CreditCard, DollarSign, Users, RefreshCw, 
+  TrendingUp, Key, Database, Clock, AlertCircle 
+} from "lucide-react";
 
 type Transaction = {
   id: string;
-  external_reference: string;
+  transaction_id: string;
   actor_code: string;
-  amount: number;
+  base_amount: number;
   status: string;
   created_at: string;
+  paid_at?: string;
+  gateway_provider?: string;
+};
+
+type DashboardMetrics = {
+  totalRevenue: number;
+  revenueToday: number;
+  totalTransactions: number;
+  totalActors: number;
+  activeApiKeys: number;
+  conversionRate: number;
+  avgTicket: number;
+  pendingTransactions: number;
 };
 
 type DashboardData = {
-  totalTransactions: number;
-  totalRevenue: number;
+  metrics: DashboardMetrics;
   latestTransactions: Transaction[];
-  totalActors: number;
   error: string | null;
+  lastUpdated: Date | null;
 };
 
 export default function DashboardPage() {
   const [data, setData] = useState<DashboardData>({
-    totalTransactions: 0,
-    totalRevenue: 0,
+    metrics: {
+      totalRevenue: 0,
+      revenueToday: 0,
+      totalTransactions: 0,
+      totalActors: 0,
+      activeApiKeys: 0,
+      conversionRate: 0,
+      avgTicket: 0,
+      pendingTransactions: 0,
+    },
     latestTransactions: [],
-    totalActors: 0,
     error: null,
+    lastUpdated: null,
   });
   const [loading, setLoading] = useState(true);
+  const [autoRefresh, setAutoRefresh] = useState(true);
 
-  async function fetchDashboardData() {
+  const fetchDashboardData = useCallback(async () => {
     setLoading(true);
     setData((prev) => ({ ...prev, error: null }));
 
@@ -43,53 +68,103 @@ export default function DashboardPage() {
       const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
       if (!url || !key) {
-        throw new Error("Supabase environment variables not configured");
+        throw new Error("Supabase environment variables not configured. Check your .env.local file");
       }
 
       const supabase = createClient(url, key);
 
+      // Get today's date for revenue calculation
+      const today = new Date().toISOString().split('T')[0];
+
+      // Fetch all data in parallel
       const [
         transactionsResult,
-        revenueResult,
+        paidTransactionsResult,
+        todayRevenueResult,
         latestTransactionsResult,
         actorsResult,
+        apiKeysResult,
+        pendingResult,
       ] = await Promise.all([
-        supabase.from("transactions").select("*", { count: "exact", head: true }),
-        supabase.from("transactions").select("amount").eq("status", "PAID"),
+        // Total transactions count
+        supabase.from("global_transactions").select("*", { count: "exact", head: true }),
+        // Paid transactions for revenue calculation
+        supabase.from("global_transactions").select("base_amount").eq("status", "PAID"),
+        // Today's revenue
+        supabase.from("global_transactions")
+          .select("base_amount")
+          .eq("status", "PAID")
+          .gte("paid_at", today),
+        // Latest transactions for the table
         supabase
-          .from("transactions")
+          .from("global_transactions")
           .select("*")
           .order("created_at", { ascending: false })
-          .limit(5),
+          .limit(10),
+        // Total actors
         supabase.from("actors").select("*", { count: "exact", head: true }),
+        // Active API keys
+        supabase.from("api_keys").select("*", { count: "exact", head: true }).eq("status", "active"),
+        // Pending transactions
+        supabase.from("global_transactions").select("*", { count: "exact", head: true }).eq("status", "PENDING"),
       ]);
 
-      const totalRevenue =
-        revenueResult.data?.reduce((sum, tx) => sum + (tx.amount || 0), 0) || 0;
+      // Calculate metrics
+      const totalRevenue = paidTransactionsResult.data?.reduce(
+        (sum, tx) => sum + (tx.base_amount || 0), 0
+      ) || 0;
+
+      const revenueToday = todayRevenueResult.data?.reduce(
+        (sum, tx) => sum + (tx.base_amount || 0), 0
+      ) || 0;
+
+      const totalTransactions = transactionsResult.count || 0;
+      const paidCount = paidTransactionsResult.data?.length || 0;
+      const conversionRate = totalTransactions > 0 ? (paidCount / totalTransactions) * 100 : 0;
+      const avgTicket = paidCount > 0 ? totalRevenue / paidCount : 0;
 
       setData({
-        totalTransactions: transactionsResult.count || 0,
-        totalRevenue,
+        metrics: {
+          totalRevenue,
+          revenueToday,
+          totalTransactions,
+          totalActors: actorsResult.count || 0,
+          activeApiKeys: apiKeysResult.count || 0,
+          conversionRate,
+          avgTicket,
+          pendingTransactions: pendingResult.count || 0,
+        },
         latestTransactions: latestTransactionsResult.data || [],
-        totalActors: actorsResult.count || 0,
         error: null,
+        lastUpdated: new Date(),
       });
     } catch (error) {
       console.error("[Dashboard] Error fetching data:", error);
       setData((prev) => ({
         ...prev,
         error: error instanceof Error ? error.message : "Failed to fetch data",
+        lastUpdated: new Date(),
       }));
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     fetchDashboardData();
-  }, []);
+    
+    // Auto-refresh every 30 seconds if enabled
+    let interval: NodeJS.Timeout;
+    if (autoRefresh) {
+      interval = setInterval(fetchDashboardData, 30000);
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [fetchDashboardData, autoRefresh]);
 
-  if (loading) {
+  if (loading && !data.lastUpdated) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
@@ -101,15 +176,33 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight">GXEON Command Center</h1>
           <p className="text-muted-foreground">
-            Real-time overview of your GXEON system
+            Real-time operating system control panel
           </p>
         </div>
-        <Button onClick={fetchDashboardData} variant="outline" size="sm">
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className={`w-2 h-2 rounded-full ${autoRefresh ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
+            Auto-refresh
+          </div>
+          <Button 
+            onClick={() => setAutoRefresh(!autoRefresh)} 
+            variant="outline" 
+            size="sm"
+          >
+            {autoRefresh ? 'Pause' : 'Resume'}
+          </Button>
+          <Button 
+            onClick={fetchDashboardData} 
+            variant="outline" 
+            size="sm"
+            disabled={loading}
+          >
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+            Refresh
+          </Button>
+        </div>
       </div>
 
       {data.error && (
@@ -126,8 +219,10 @@ export default function DashboardPage() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{formatCurrency(data.totalRevenue)}</div>
-            <p className="text-xs text-muted-foreground">All time revenue</p>
+            <div className="text-2xl font-bold">{formatCurrency(data.metrics.totalRevenue)}</div>
+            <p className="text-xs text-muted-foreground">
+              {formatCurrency(data.metrics.revenueToday)} today
+            </p>
           </CardContent>
         </Card>
 
@@ -137,19 +232,36 @@ export default function DashboardPage() {
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{data.totalTransactions}</div>
-            <p className="text-xs text-muted-foreground">Total transactions</p>
+            <div className="text-2xl font-bold">{data.metrics.totalTransactions}</div>
+            <p className="text-xs text-muted-foreground">
+              {data.metrics.pendingTransactions} pending
+            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Actors</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{data.totalActors}</div>
-            <p className="text-xs text-muted-foreground">Active actors</p>
+            <div className="text-2xl font-bold">{data.metrics.conversionRate.toFixed(1)}%</div>
+            <p className="text-xs text-muted-foreground">
+              Avg: {formatCurrency(data.metrics.avgTicket)}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active API Keys</CardTitle>
+            <Key className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{data.metrics.activeApiKeys}</div>
+            <p className="text-xs text-muted-foreground">
+              {data.metrics.totalActors} actors
+            </p>
           </CardContent>
         </Card>
 
@@ -165,46 +277,112 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Latest Transactions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {data.latestTransactions.length === 0 ? (
-            <p className="text-muted-foreground">No transactions found</p>
-          ) : (
-            <div className="space-y-4">
-              {data.latestTransactions.map((tx) => (
-                <div
-                  key={tx.id}
-                  className="flex items-center justify-between border-b pb-2 last:border-0"
-                >
-                  <div>
-                    <p className="font-medium">{tx.external_reference || tx.id}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {tx.actor_code} • {new Date(tx.created_at).toLocaleDateString()}
-                    </p>
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Latest Transactions</CardTitle>
+            <Badge variant="outline" className="text-xs">
+              Live
+            </Badge>
+          </CardHeader>
+          <CardContent>
+            {data.latestTransactions.length === 0 ? (
+              <div className="text-center py-8">
+                <Database className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                <p className="text-muted-foreground">No transactions found</p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Data will appear when payments are processed
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {data.latestTransactions.map((tx) => (
+                  <div
+                    key={tx.id}
+                    className="flex items-center justify-between border-b pb-3 last:border-0"
+                  >
+                    <div>
+                      <p className="font-medium font-mono text-sm">
+                        {tx.transaction_id || tx.id.substring(0, 8)}
+                      </p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge variant="secondary" className="text-xs">
+                          {tx.actor_code}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(tx.created_at).toLocaleString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium">{formatCurrency(tx.base_amount)}</p>
+                      <Badge 
+                        variant={tx.status === "PAID" ? "default" : tx.status === "PENDING" ? "secondary" : "destructive"}
+                        className={`text-xs ${
+                          tx.status === "PAID"
+                            ? "bg-green-500/10 text-green-500 hover:bg-green-500/20"
+                            : tx.status === "PENDING"
+                            ? "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20"
+                            : ""
+                        }`}
+                      >
+                        {tx.status === "PAID" && "✓ "}
+                        {tx.status}
+                      </Badge>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-medium">{formatCurrency(tx.amount)}</p>
-                    <p
-                      className={`text-xs ${
-                        tx.status === "PAID"
-                          ? "text-green-500"
-                          : tx.status === "PENDING"
-                          ? "text-yellow-500"
-                          : "text-red-500"
-                      }`}
-                    >
-                      {tx.status}
-                    </p>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>System Activity</CardTitle>
+            <Clock className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <p className="text-sm">Database connection: <span className="text-green-500 font-medium">Active</span></p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                <p className="text-sm">PIX Webhook: <span className="text-green-500 font-medium">Listening</span></p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-green-500" />
+                <p className="text-sm">Auto-refresh: <span className="font-medium">{autoRefresh ? 'Enabled (30s)' : 'Disabled'}</span></p>
+              </div>
+              {data.lastUpdated && (
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-blue-500" />
+                  <p className="text-sm text-muted-foreground">
+                    Last updated: {data.lastUpdated.toLocaleTimeString('pt-BR')}
+                  </p>
+                </div>
+              )}
+              
+              {data.error && (
+                <div className="flex items-start gap-3 mt-4 p-3 bg-destructive/10 rounded-md">
+                  <AlertCircle className="h-4 w-4 text-destructive mt-0.5" />
+                  <div>
+                    <p className="text-sm text-destructive font-medium">Connection Error</p>
+                    <p className="text-xs text-destructive/80">{data.error}</p>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

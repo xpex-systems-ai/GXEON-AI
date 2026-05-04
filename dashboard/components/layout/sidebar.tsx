@@ -12,6 +12,9 @@ import {
   Wallet,
   Activity,
   Settings,
+  Database,
+  Key,
+  Terminal,
 } from "lucide-react";
 
 const routes = [
@@ -41,9 +44,24 @@ const routes = [
     href: "/actors",
   },
   {
+    label: "Datasets",
+    icon: Database,
+    href: "/datasets",
+  },
+  {
+    label: "API Keys",
+    icon: Key,
+    href: "/api-keys",
+  },
+  {
     label: "System Health",
     icon: Activity,
     href: "/health",
+  },
+  {
+    label: "System Logs",
+    icon: Terminal,
+    href: "/system-logs",
   },
   {
     label: "Settings",
