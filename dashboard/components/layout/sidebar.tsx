@@ -15,6 +15,8 @@ import {
   Database,
   Key,
   Terminal,
+  TrendingUp,
+  Bot,
 } from "lucide-react";
 
 const routes = [
@@ -27,6 +29,11 @@ const routes = [
     label: "Revenue",
     icon: DollarSign,
     href: "/revenue",
+  },
+  {
+    label: "Revenue Streams",
+    icon: TrendingUp,
+    href: "/revenue-streams",
   },
   {
     label: "Transactions",

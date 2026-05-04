@@ -1,0 +1,31 @@
+{
+  "name": "gxeon-autonomous-revenue-engine",
+  "version": "3.0.0",
+  "description": "GXEON Self-operating monetization system connected to external demand sources",
+  "main": "autonomous_revenue_engine.js",
+  "type": "module",
+  "scripts": {
+    "start": "node autonomous_revenue_engine.js",
+    "dev": "node --watch autonomous_revenue_engine.js",
+    "test": "echo \"Run integration tests\""
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "autonomous",
+    "monetization",
+    "rapidapi",
+    "apify",
+    "zapier",
+    "revenue"
+  ],
+  "author": "GXEON Systems",
+  "license": "PROPRIETARY"
+}
