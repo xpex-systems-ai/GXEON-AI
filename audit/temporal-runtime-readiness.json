@@ -1,0 +1,1 @@
+{"temporal_readiness":{"workflow_contracts_isolated":true,"state_machine_defined":true,"gaps":["external durable task queue","activity workers"]}}

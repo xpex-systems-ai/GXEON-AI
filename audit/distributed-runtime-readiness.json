@@ -1,0 +1,1 @@
+{"distributed_readiness":{"dispatch_isolation":true,"event_contracts":true,"tenant_partitioning":"planned"}}
