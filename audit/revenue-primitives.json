@@ -1,0 +1,1 @@
+{"primitives":{"credit_ledger":"authoritative","usage_events":"append-only","invoice_projection":"derived","provider_settlement":"periodic netting"}}
