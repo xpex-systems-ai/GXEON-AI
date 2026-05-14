@@ -1,0 +1,1 @@
+{"name":"dashboard_live_overview","version":"1.0.0","endpoint":"/api/dashboard/live-overview","fields":["runtime_health","active_workflows","queue_saturation","execution_velocity","alerts"]}

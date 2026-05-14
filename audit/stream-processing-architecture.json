@@ -1,0 +1,1 @@
+{"flow":"events.jsonl -> aggregation -> API snapshot/feed -> websocket fanout","append_only":true}

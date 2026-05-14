@@ -1,0 +1,1 @@
+{"multi_tenant":{"status":"foundation","required_next":["tenant auth","tenant channel partition","tenant-level rate limits"]}}

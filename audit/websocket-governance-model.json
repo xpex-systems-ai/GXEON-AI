@@ -1,0 +1,1 @@
+{"governance":{"channel_isolation":true,"subscription_filters":true,"heartbeat_eviction":true,"dedup_future_required":true}}
