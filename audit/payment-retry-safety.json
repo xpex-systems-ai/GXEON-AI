@@ -1,0 +1,1 @@
+{"retry_safety":{"required":["idempotency key uniqueness","dedupe window","bounded retry","poison queue path"],"current_gaps":["request_id uniqueness not enforced in shown schema"]}}

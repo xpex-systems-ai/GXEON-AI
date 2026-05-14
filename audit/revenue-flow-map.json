@@ -1,0 +1,1 @@
+{"flows":["credits top-up -> execution deductions","subscription renewal -> plan entitlements","marketplace purchase -> provider split","referral payout -> commission ledger"],"reconciliation":"daily + event-driven"}

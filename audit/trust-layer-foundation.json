@@ -1,0 +1,1 @@
+{"trust_controls":["execution receipts","billing lineage","immutable logs","replay references"],"policy":"every charge must map to execution evidence"}
