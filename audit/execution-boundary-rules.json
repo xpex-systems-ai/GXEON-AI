@@ -1,0 +1,1 @@
+{"rules":["persist execution_id before side effects","all external calls via adapters","all retries centralized","compensations explicit and auditable"]}

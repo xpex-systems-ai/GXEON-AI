@@ -1,0 +1,1 @@
+{"standards":{"node":"18+","package_manager":"npm lockfile enforcement","env":"typed env contracts","local_stack":"dockerized observability + db stubs"}}

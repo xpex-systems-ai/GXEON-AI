@@ -1,0 +1,1 @@
+{"telemetry_architecture":{"source":"event log","aggregation":"metrics kernel","delivery":"future streaming API"}}

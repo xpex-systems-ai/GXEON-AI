@@ -1,0 +1,1 @@
+{"queues":["billing","payments","execution","workflows","recovery","notifications","marketplace","reputation","system"],"isolation_required":true}

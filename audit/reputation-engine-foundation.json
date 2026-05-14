@@ -1,0 +1,1 @@
+{"signals":["success_rate","latency","chargeback_rate","proof_integrity","dispute_rate"],"uses":["queue_priority","discovery_rank","monetization_tier"]}

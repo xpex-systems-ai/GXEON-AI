@@ -1,0 +1,18 @@
+{
+  "fragility_vectors": [
+    "No durable workflow engine; orchestration state largely ephemeral.",
+    "Cross-agent sequence uses direct method calls and implicit contracts rather than versioned events.",
+    "Failure handling often logs and continues, increasing silent data corruption probability.",
+    "Potential duplicate execution from watchdog + manual trigger endpoints + loop restarts."
+  ],
+  "replay_safety_risks": [
+    "Lack of strict idempotency enforcement at task execution boundary.",
+    "No globally unique execution key persisted before side effects.",
+    "No canonical dedupe table for A2A cycle ids across restarts."
+  ],
+  "failure_handling_gaps": [
+    "Compensation logic exists (refund), but requires explicit downstream invocation.",
+    "Limited circuit-breaker evidence in primary runtime path.",
+    "Monolithic process makes blast radius large for subsystem failures."
+  ]
+}
