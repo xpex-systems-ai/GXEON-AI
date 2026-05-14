@@ -1,0 +1,1 @@
+{"risks":["in-memory buffering without backpressure","single-process overload from mixed workloads"],"mitigations":["domain queues","worker pool isolation","shed load policies"]}
