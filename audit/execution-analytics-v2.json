@@ -1,0 +1,1 @@
+{"kpi_domains":["workflow_completion","retries","billing_success","revenue","activation","retention","marketplace_activity","executor_performance","failure_ratio","queue_saturation","recovery_efficiency"],"source":"durable event + ledger"}

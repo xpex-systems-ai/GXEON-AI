@@ -1,0 +1,1 @@
+{"workflow_intelligence":{"signals":["success_latency","retry_pattern","failure_cause","economic_yield"],"uses":["routing","ranking","pricing"]}}
