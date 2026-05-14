@@ -1,0 +1,33 @@
+{
+  "critical_runtime_risks": [
+    {
+      "id": "RR-001",
+      "title": "Global exception suppression can mask fatal corruption",
+      "evidence": ["server/index.js"],
+      "impact": "Process remains alive after potentially unrecoverable state divergence; can continue charging/executing with inconsistent state.",
+      "severity": "critical"
+    },
+    {
+      "id": "RR-002",
+      "title": "Unbounded background loops without durable checkpoints",
+      "evidence": ["core/swarm_orchestrator.js", "core/task_engine.js"],
+      "impact": "Duplicate work, replay risk on restart, and missed work during downtime.",
+      "severity": "critical"
+    },
+    {
+      "id": "RR-003",
+      "title": "Mixed orchestration layers with no single source of truth",
+      "evidence": ["server/routes/task_engine.js", "core/task_engine.js", "core/swarm_orchestrator.js"],
+      "impact": "Orphan runs, conflicting execution semantics, race conditions.",
+      "severity": "high"
+    }
+  ],
+  "hidden_retry_loops": [
+    "signalBilling.flushBuffer requeues failed batches in-memory without bounded retry horizon.",
+    "task engine + watchdog strategy can retry same logical task through multiple code paths."
+  ],
+  "orphan_patterns": [
+    "Legacy scripts in scripts/ and core/ with production-like side effects but no central scheduler registration.",
+    "Multiple server entry scripts likely deployed independently over time."
+  ]
+}

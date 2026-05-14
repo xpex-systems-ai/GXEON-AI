@@ -1,0 +1,1 @@
+{"loops":["execution_share_loop","proof_share_loop","template_clone_loop","referral_activation_loop"],"rule":"every success emits shareable proof"}

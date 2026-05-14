@@ -1,0 +1,1 @@
+{"foundation":{"workflow_execution":"runtime runner + durable checkpoints","event_dispatch":"versioned contracts with correlation_id","queue_coordination":"explicit domains + DLQ","retry_orchestration":"bounded retries + idempotent keys","state_persistence":"journal before side effects","recovery":"deterministic compensations"}}

@@ -1,0 +1,1 @@
+{"event_naming":"domain.entity.action.vN","required_fields":["event_id","event_type","correlation_id","causation_id","occurred_at","producer","schema_version","replay_key"]}

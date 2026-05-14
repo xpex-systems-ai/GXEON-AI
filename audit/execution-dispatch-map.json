@@ -1,0 +1,1 @@
+{"dispatch":{"routing_keys":["tenant","workflow_type","priority","reputation_tier"],"fallback":"safe retry lanes"}}
