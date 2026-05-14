@@ -1,0 +1,12 @@
+{
+  "legacy_modules": [
+    {"module": "core/phantom_node/*", "reason": "Appears experimental/testnet automation not aligned with current production monetization path", "classification": "LEGACY"},
+    {"module": "server/index_v20.js", "reason": "Versioned entrypoint indicates retained superseded runtime", "classification": "LEGACY"},
+    {"module": "server/index_billing.js", "reason": "Overlapping server composition with newer billing/routing layout", "classification": "LEGACY"},
+    {"module": "extensive scripts/* deploy/test variants", "reason": "Operational sprawl and unclear active ownership", "classification": "ISOLATE"}
+  ],
+  "crypto_radar_stack": {
+    "active_candidates": ["server/services/radarShix.js", "server/services/mevMatchmaker.js", "server/services/flashSweeper.js"],
+    "risk": "Tight coupling to main API process and shared env; failures may cascade into unrelated endpoints."
+  }
+}

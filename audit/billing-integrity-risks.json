@@ -1,0 +1,28 @@
+{
+  "billing_flow_summary": "Credits are deducted through RPC (deduct_credits_atomic), then business flow must mark completion or refund. Parallel non-atomic in-memory billing exists for signal consumption telemetry.",
+  "unsafe_billing_flows": [
+    {
+      "id": "BR-001",
+      "risk": "Two-phase charging without hard transactional outbox",
+      "evidence": ["server/database/billing_schema_v2.sql", "supabase/functions/deduct-credits/index.ts"],
+      "impact": "Reserved transactions can remain stuck when downstream handler crashes/timeouts."
+    },
+    {
+      "id": "BR-002",
+      "risk": "In-memory billing counters are non-durable",
+      "evidence": ["server/services/signalBilling.js"],
+      "impact": "Revenue metrics drift and potential invoice mismatch after restarts."
+    },
+    {
+      "id": "BR-003",
+      "risk": "Idempotency key usage not globally enforced",
+      "evidence": ["deduct_credits_atomic request_id accepted but uniqueness not enforced in shown schema"],
+      "impact": "Duplicate deductions under retry/replay conditions."
+    }
+  ],
+  "recommended_integrity_controls": [
+    "Unique constraint on (user_id, request_id) where request_id is not null.",
+    "Hard timeout sweeper to auto-resolve 'reserved' status with deterministic policy.",
+    "Separate durable ledger table from operational transaction state."
+  ]
+}
