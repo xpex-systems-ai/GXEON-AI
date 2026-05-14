@@ -1,0 +1,1 @@
+{"tenancy":{"isolation":["data","compute","billing"],"controls":["tenant_id propagation","quotas","policy enforcement"]}}

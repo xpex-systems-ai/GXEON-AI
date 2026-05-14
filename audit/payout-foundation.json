@@ -1,0 +1,1 @@
+{"payouts":{"model":"batch net settlement","requirements":["idempotent payouts","reconciliation","dispute holdbacks"]}}

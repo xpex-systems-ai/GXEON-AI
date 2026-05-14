@@ -1,0 +1,1 @@
+{"topology":{"worker_mode":"single process worker module","expansion":"horizontal workers via shared queue backend"}}
