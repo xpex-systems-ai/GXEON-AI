@@ -6,6 +6,7 @@ import providerGuardian from './core/providers/providerGuardian.js';
 import runtimeWatchdog from './core/watchdog/runtimeWatchdog.js';
 import { getSupabaseHealthSnapshot, getSupabaseRuntime, supabase as supabaseClient, validateSupabaseHealth } from './lib/supabaseClient.js';
 import { writeCrashReport } from './core/shield/crashReporter.js';
+import swarmOrchestrator from './core/swarm/orchestrator.js';
 
 const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
@@ -191,7 +192,10 @@ function initializeRuntimeGuardians() {
   runtimeWatchdog.heartbeat('scanners', { boot: true });
   runtimeWatchdog.heartbeat('monetization_engine', { boot: true });
   telemetry.markModule('runtime', 'healthy', { deployment_target: detectDeploymentTarget() });
+  swarmOrchestrator.boot();
+  runtimeWatchdog.heartbeat('swarm_orchestrator', { boot: true });
 }
+
 
 function buildReadiness() {
   const supabaseHealth = getSupabaseHealthSnapshot();
@@ -216,12 +220,12 @@ function buildReadiness() {
 function buildCoreBootStatus() {
   return {
     ...getPublicCoreBootStatus(),
-    swarm_status: process.env.SWARM_AUTOSTART === 'true' ? 'enabled' : 'standby',
+    swarm_status: swarmOrchestrator.status(),
     guardian_state: runtimeWatchdog.getStatus().state,
     provider_health: providerGuardian.getStatus(),
     monetization_state: 'enabled',
     deployment_target: detectDeploymentTarget(),
-    runtime_mode: process.env.GXEON_RUNTIME_MODE || 'SAFE_AUTONOMOUS_PRODUCTION',
+    runtime_mode: process.env.GXEON_RUNTIME_MODE || 'AUTONOMOUS_SWARM_RUNTIME',
     self_healing_state: runtimeWatchdog.getStatus().state === 'ready' ? 'active' : 'degraded',
     supabase: getSupabaseRuntime()
   };
@@ -279,6 +283,50 @@ app.get('/api/v1/system/errors', (req, res) => {
 app.get('/api/v1/system/readiness', (req, res) => {
   res.status(200).json(buildReadiness());
 });
+
+app.get('/api/v1/tasks', (req, res) => {
+  res.status(200).json({ tasks: swarmOrchestrator.tasks.list() });
+});
+
+app.post('/api/v1/tasks/create', async (req, res) => {
+  const result = swarmOrchestrator.createTask({ ...req.body, source: req.body?.source || 'api' });
+  if (!result.accepted) return res.status(422).json(result);
+  const execution = req.body?.auto_execute === false ? null : await swarmOrchestrator.executeNext();
+  return res.status(201).json({ ...result, execution });
+});
+
+app.get('/api/v1/tasks/queue', (req, res) => {
+  res.status(200).json(swarmOrchestrator.tasks.getQueue());
+});
+
+app.get('/api/v1/tasks/history', (req, res) => {
+  res.status(200).json(swarmOrchestrator.tasks.getHistory());
+});
+
+app.get('/api/v1/monetization/status', (req, res) => {
+  res.status(200).json(swarmOrchestrator.monetization);
+});
+
+app.get('/api/v1/swarm/status', (req, res) => {
+  res.status(200).json(swarmOrchestrator.status());
+});
+
+app.get('/api/v1/swarm/agents', (req, res) => {
+  res.status(200).json(swarmOrchestrator.agents);
+});
+
+app.get('/api/v1/swarm/executions', (req, res) => {
+  res.status(200).json(swarmOrchestrator.executions);
+});
+
+app.get('/api/v1/swarm/events', (req, res) => {
+  res.status(200).json(swarmOrchestrator.events);
+});
+
+app.get('/api/v1/swarm/memory', (req, res) => {
+  res.status(200).json(swarmOrchestrator.memory);
+});
+
 
 // 🔴 ALCHEMY RATE LIMIT HEALTH ENDPOINT (para dashboard)
 app.get('/api/v1/health/alchemy', (req, res) => {
