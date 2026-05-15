@@ -1,3 +1,16 @@
+import { createRequire } from 'module';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import telemetry, { detectDeploymentTarget } from './core/observability/runtimeTelemetry.js';
+import providerGuardian from './core/providers/providerGuardian.js';
+import runtimeWatchdog from './core/watchdog/runtimeWatchdog.js';
+import { getSupabaseHealthSnapshot, getSupabaseRuntime, supabase as supabaseClient, validateSupabaseHealth } from './lib/supabaseClient.js';
+import { writeCrashReport } from './core/shield/crashReporter.js';
+
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 // 🚀 GXEON RAILWAY v13 - Ultra-Fast Boot for Healthcheck
 // Inicia servidor em < 100ms, carrega resto em background
 
@@ -8,6 +21,7 @@
 process.on('uncaughtException', (err) => {
     const errorMsg = err?.message || err?.toString() || 'Unknown error';
     console.error('[GXEON_SHIELD] Uncaught Exception:', errorMsg);
+    writeCrashReport(err, { source: 'uncaughtException', isolated: true });
     
     // 🛡️ Protocolo 429: NUNCA crasha em rate limit ou WebSocket
     if (errorMsg.includes('429') || 
@@ -28,6 +42,7 @@ process.on('uncaughtException', (err) => {
 process.on('unhandledRejection', (reason, promise) => {
     const errorMsg = reason?.message || reason?.toString() || 'Unknown rejection';
     console.error('[GXEON_SHIELD] Unhandled Rejection:', errorMsg);
+    writeCrashReport(reason instanceof Error ? reason : new Error(errorMsg), { source: 'unhandledRejection', isolated: true });
     
     // Silencia erros de rede
     if (errorMsg.includes('429') || errorMsg.includes('WebSocket')) {
@@ -39,6 +54,7 @@ process.on('unhandledRejection', (reason, promise) => {
 // 🚨 Handler para erro em Workers/Threads
 process.on('workerThreadsUncaughtException', (err) => {
     console.error('[GXEON_SHIELD] Worker error:', err.message);
+    writeCrashReport(err, { source: 'workerThreadsUncaughtException', isolated: true });
     // Não propaga
 });
 
@@ -115,14 +131,38 @@ function createGuardedWebSocket(WebSocketClass) {
 console.log('🛡️ [GXEON_SHIELD] WebSocket monkey-patch active - ALL WebSockets will have error handlers');
 
 const express = require('express');
-const cors = require('cors');
+const { getPublicCoreBootStatus, summarizeCoreBoot } = require('./config/coreBoot.cjs');
+
+
+function createCorsMiddleware(options = {}) {
+  const methods = (options.methods || ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']).join(',');
+  const allowedHeaders = Array.isArray(options.allowedHeaders)
+    ? options.allowedHeaders.join(',')
+    : (options.allowedHeaders || '*');
+
+  return (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', options.origin || '*');
+    res.header('Access-Control-Allow-Methods', methods);
+    res.header('Access-Control-Allow-Headers', allowedHeaders);
+
+    if (options.credentials) {
+      res.header('Access-Control-Allow-Credentials', 'true');
+    }
+
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+
+    return next();
+  };
+}
 
 // ==================== MINIMAL APP (NO DEPENDENCIES) ====================
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 // CORS ultra-permissivo para Railway
-app.use(cors({
+app.use(createCorsMiddleware({
   origin: '*',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -130,6 +170,64 @@ app.use(cors({
 }));
 
 app.use(express.json({ limit: '10mb' }));
+app.use(telemetry.requestMiddleware());
+
+function initializeRuntimeGuardians() {
+  const providers = [
+    { name: 'alchemy', endpoints: [process.env.ALCHEMY_RPC_URL, process.env.ARBITRUM_RPC_URL, process.env.ALCHEMY_WS_URL].filter(Boolean) },
+    { name: 'mammouth', endpoints: [process.env.MAMMOUTH_HQ_URL, process.env.MAMMOUTH_AI_API_URL].filter(Boolean) },
+    { name: 'signal_provider', endpoints: [process.env.SIGNAL_PROVIDER_URL, process.env.SIGNAL_PROVIDER_WS_URL].filter(Boolean) }
+  ];
+
+  for (const provider of providers) {
+    const state = provider.endpoints.length ? 'healthy' : 'degraded';
+    providerGuardian.registerProvider(provider.name, provider.endpoints, { configured: provider.endpoints.length > 0 });
+    if (state === 'healthy') providerGuardian.heartbeat(provider.name, { boot: true });
+  }
+
+  runtimeWatchdog.heartbeat('radar', { boot: true, enabled: process.env.DISABLE_RADAR !== 'true' });
+  runtimeWatchdog.heartbeat('signal_providers', { boot: true });
+  runtimeWatchdog.heartbeat('websocket_streams', { boot: true });
+  runtimeWatchdog.heartbeat('scanners', { boot: true });
+  runtimeWatchdog.heartbeat('monetization_engine', { boot: true });
+  telemetry.markModule('runtime', 'healthy', { deployment_target: detectDeploymentTarget() });
+}
+
+function buildReadiness() {
+  const supabaseHealth = getSupabaseHealthSnapshot();
+  const providerStatus = providerGuardian.getStatus();
+  const watchdogStatus = runtimeWatchdog.scan(providerGuardian, supabaseHealth);
+  const databaseReady = supabaseHealth.runtime === 'healthy' ? 'ready' : 'degraded';
+  const providersReady = providerStatus.runtime === 'healthy' ? 'ready' : 'degraded';
+  const watchdogReady = watchdogStatus.state === 'ready' ? 'ready' : 'degraded';
+  const runtimeStable = [databaseReady, providersReady, watchdogReady].every((state) => state === 'ready') ? 'stable' : 'degraded';
+
+  return {
+    boot: 'ready',
+    database: databaseReady,
+    providers: providersReady,
+    watchdog: watchdogReady,
+    runtime: runtimeStable,
+    deployment_target: detectDeploymentTarget(),
+    checked_at: new Date().toISOString()
+  };
+}
+
+function buildCoreBootStatus() {
+  return {
+    ...getPublicCoreBootStatus(),
+    swarm_status: process.env.SWARM_AUTOSTART === 'true' ? 'enabled' : 'standby',
+    guardian_state: runtimeWatchdog.getStatus().state,
+    provider_health: providerGuardian.getStatus(),
+    monetization_state: 'enabled',
+    deployment_target: detectDeploymentTarget(),
+    runtime_mode: process.env.GXEON_RUNTIME_MODE || 'SAFE_AUTONOMOUS_PRODUCTION',
+    self_healing_state: runtimeWatchdog.getStatus().state === 'ready' ? 'active' : 'degraded',
+    supabase: getSupabaseRuntime()
+  };
+}
+
+initializeRuntimeGuardians();
 
 // ==================== HEALTHCHECK (ZERO DEPENDENCIES) ====================
 // Railway verifica esta rota - deve retornar 200 IMEDIATAMENTE
@@ -138,11 +236,48 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'ok', version: '2.0.0-sovereign' });
+  res.status(200).json({
+    status: 'ok',
+    version: '2.0.0-sovereign',
+    core_boot: summarizeCoreBoot()
+  });
 });
 
 app.get('/status', (req, res) => {
-  res.json({ status: 'active', version: '2.0.0-sovereign' });
+  res.json({
+    status: 'active',
+    version: '2.0.0-sovereign',
+    core_boot: summarizeCoreBoot()
+  });
+});
+
+app.get('/api/v1/core/boot', (req, res) => {
+  res.status(200).json(buildCoreBootStatus());
+});
+
+app.get('/api/v1/system/supabase/health', async (req, res) => {
+  const health = await validateSupabaseHealth();
+  res.status(health.connected ? 200 : 503).json(health);
+});
+
+app.get('/api/v1/providers/status', (req, res) => {
+  res.status(200).json(providerGuardian.getStatus());
+});
+
+app.get('/api/v1/system/metrics', (req, res) => {
+  res.status(200).json(telemetry.getMetrics(providerGuardian, runtimeWatchdog));
+});
+
+app.get('/api/v1/system/runtime', (req, res) => {
+  res.status(200).json(telemetry.getRuntime(providerGuardian, runtimeWatchdog));
+});
+
+app.get('/api/v1/system/errors', (req, res) => {
+  res.status(200).json(telemetry.getErrors());
+});
+
+app.get('/api/v1/system/readiness', (req, res) => {
+  res.status(200).json(buildReadiness());
 });
 
 // 🔴 ALCHEMY RATE LIMIT HEALTH ENDPOINT (para dashboard)
@@ -169,12 +304,8 @@ app.post('/api/v1/mammouth/sync', async (req, res) => {
   const requestStart = Date.now();
   
   try {
-    // Lazy load do Supabase
-    const { createClient } = require('@supabase/supabase-js');
-    const supabase = createClient(
-      process.env.SUPABASE_PROJECT_URL || process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
+    // Use centralized Supabase singleton
+    const supabase = supabaseClient;
     
     // Buscar oportunidades ativas da tabela gari_dust_opportunities
     const { data: opportunities, error } = await supabase
@@ -326,6 +457,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 setTimeout(async () => {
   try {
     const path = require('path');
+    const crypto = require('crypto');
     require('dotenv').config({ path: path.join(__dirname, '../.env') });
     require('dotenv').config({ path: path.join(__dirname, '../config/secure/.env') });
 
@@ -540,5 +672,7 @@ setTimeout(async () => {
     console.log('[GXEON] Sovereign v2.0.0 ready');
   } catch (err) {
     console.error('[GXEON] Background load error:', err.message);
+    telemetry.captureError(err, { component: 'legacy_background_loader' });
+    telemetry.markModule('legacy_background_loader', 'degraded', { reason: err.message });
   }
 }, 50); // 50ms - servidor já responde healthcheck
