@@ -1,3 +1,11 @@
+import { createRequire } from 'module';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 // 🚀 GXEON RAILWAY v13 - Ultra-Fast Boot for Healthcheck
 // Inicia servidor em < 100ms, carrega resto em background
 
@@ -115,14 +123,38 @@ function createGuardedWebSocket(WebSocketClass) {
 console.log('🛡️ [GXEON_SHIELD] WebSocket monkey-patch active - ALL WebSockets will have error handlers');
 
 const express = require('express');
-const cors = require('cors');
+const { getPublicCoreBootStatus, summarizeCoreBoot } = require('./config/coreBoot.cjs');
+
+
+function createCorsMiddleware(options = {}) {
+  const methods = (options.methods || ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']).join(',');
+  const allowedHeaders = Array.isArray(options.allowedHeaders)
+    ? options.allowedHeaders.join(',')
+    : (options.allowedHeaders || '*');
+
+  return (req, res, next) => {
+    res.header('Access-Control-Allow-Origin', options.origin || '*');
+    res.header('Access-Control-Allow-Methods', methods);
+    res.header('Access-Control-Allow-Headers', allowedHeaders);
+
+    if (options.credentials) {
+      res.header('Access-Control-Allow-Credentials', 'true');
+    }
+
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+
+    return next();
+  };
+}
 
 // ==================== MINIMAL APP (NO DEPENDENCIES) ====================
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 // CORS ultra-permissivo para Railway
-app.use(cors({
+app.use(createCorsMiddleware({
   origin: '*',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -138,11 +170,23 @@ app.get('/health', (req, res) => {
 });
 
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'ok', version: '2.0.0-sovereign' });
+  res.status(200).json({
+    status: 'ok',
+    version: '2.0.0-sovereign',
+    core_boot: summarizeCoreBoot()
+  });
 });
 
 app.get('/status', (req, res) => {
-  res.json({ status: 'active', version: '2.0.0-sovereign' });
+  res.json({
+    status: 'active',
+    version: '2.0.0-sovereign',
+    core_boot: summarizeCoreBoot()
+  });
+});
+
+app.get('/api/v1/core/boot', (req, res) => {
+  res.status(200).json(getPublicCoreBootStatus());
 });
 
 // 🔴 ALCHEMY RATE LIMIT HEALTH ENDPOINT (para dashboard)
@@ -326,6 +370,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 setTimeout(async () => {
   try {
     const path = require('path');
+    const crypto = require('crypto');
     require('dotenv').config({ path: path.join(__dirname, '../.env') });
     require('dotenv').config({ path: path.join(__dirname, '../config/secure/.env') });
 
