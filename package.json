@@ -5,7 +5,7 @@
   "main": "server/index.js",
   "type": "module",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.0.0"
   },
   "scripts": {
     "start": "node server/index.js",
@@ -55,7 +55,12 @@
     "marketplace:audit": "node scripts/marketplace_audit_validator.js",
     "marketplace:dev": "nodemon server/index-marketplace.js",
     "marketplace:schema": "echo 'Execute supabase/marketplace_supreme_schema.sql e supabase/observability_schema.sql no Supabase SQL Editor'",
-    "marketplace:signals": "node scripts/start_marketplace_supreme.js"
+    "marketplace:signals": "node scripts/start_marketplace_supreme.js",
+    "validate:runtime": "node scripts/validate_runtime.cjs",
+    "validate:swarm": "node scripts/validate_swarm_runtime.cjs",
+    "validate:enterprise": "node scripts/enterprise_validate.cjs",
+    "recovery:report": "node scripts/generate_recovery_report.cjs",
+    "predeploy": "node scripts/enterprise_validate.cjs"
   },
   "dependencies": {
     "@flashbots/mev-share-client": "^0.7.13",

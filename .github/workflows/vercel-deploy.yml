@@ -17,8 +17,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22.x'
 
+      - name: Normalize GitHub git transport
+        run: git config --global url."https://github.com/".insteadOf ssh://git@github.com/
       - name: Install Dependencies
         run: |
           cd dashboard

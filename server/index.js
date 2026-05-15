@@ -7,6 +7,16 @@ import runtimeWatchdog from './core/watchdog/runtimeWatchdog.js';
 import { getSupabaseHealthSnapshot, getSupabaseRuntime, supabase as supabaseClient, validateSupabaseHealth } from './lib/supabaseClient.js';
 import { writeCrashReport } from './core/shield/crashReporter.js';
 import swarmOrchestrator from './core/swarm/orchestrator.js';
+import {
+  getBranchStatus,
+  getCiCdHealth,
+  getDependencyHealth,
+  getDeploymentStatus,
+  getEnterpriseStatus,
+  getMergeHealth,
+  getRuntimeCompatibility,
+  writeRecoveryReport
+} from './core/enterprise/enterpriseStatus.js';
 
 const require = createRequire(import.meta.url);
 const __filename = fileURLToPath(import.meta.url);
@@ -325,6 +335,38 @@ app.get('/api/v1/swarm/events', (req, res) => {
 
 app.get('/api/v1/swarm/memory', (req, res) => {
   res.status(200).json(swarmOrchestrator.memory);
+});
+
+app.get('/api/v1/enterprise/status', (req, res) => {
+  res.status(200).json(getEnterpriseStatus());
+});
+
+app.get('/api/v1/enterprise/deployment', (req, res) => {
+  res.status(200).json(getDeploymentStatus());
+});
+
+app.get('/api/v1/enterprise/branch', (req, res) => {
+  res.status(200).json(getBranchStatus());
+});
+
+app.get('/api/v1/enterprise/merge', (req, res) => {
+  res.status(200).json(getMergeHealth());
+});
+
+app.get('/api/v1/enterprise/dependencies', (req, res) => {
+  res.status(200).json(getDependencyHealth());
+});
+
+app.get('/api/v1/enterprise/ci', (req, res) => {
+  res.status(200).json(getCiCdHealth());
+});
+
+app.get('/api/v1/enterprise/compatibility', (req, res) => {
+  res.status(200).json(getRuntimeCompatibility());
+});
+
+app.post('/api/v1/enterprise/recovery-report', (req, res) => {
+  res.status(201).json(writeRecoveryReport());
 });
 
 

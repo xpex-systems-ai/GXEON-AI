@@ -1,37 +1,45 @@
-name: 🔥 PHOENIX-SENTINEL v22 Deploy
+name: GXEON Railway Production Deploy
 
 on:
   push:
-    branches: [main, phoenix-sentinel-v22]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: 📥 Checkout
+      - name: Checkout
         uses: actions/checkout@v4
-        
-      - name: 🔧 Setup Node.js 22
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: '22.x'
-          
-      - name: 📦 Install Dependencies
-        run: npm install
-        
-      - name: 🧪 Run Tests
-        run: npm test || echo "No tests configured"
-        continue-on-error: true
-        
-      - name: 🔥 Deploy to Railway
-        uses: railway/cli@v3
-        with:
-          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          cache: 'npm'
+      - name: Normalize GitHub git transport
+        run: git config --global url."https://github.com/".insteadOf ssh://git@github.com/
+      - name: Deterministic install
+        run: npm ci
+      - name: Pre-deploy enterprise validation
+        run: npm run validate:enterprise
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+      - name: Deploy to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
-          railway login --token $RAILWAY_TOKEN
+          railway login --token "$RAILWAY_TOKEN"
           railway link --project gxeon-ia-production
           railway up --detach
+      - name: Generate rollback metadata
+        if: always()
+        run: npm run recovery:report || true
+      - name: Upload deployment recovery report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: railway-recovery-${{ github.run_id }}
+          path: reports/recovery/*.json
+          if-no-files-found: ignore

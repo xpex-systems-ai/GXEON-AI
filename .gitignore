@@ -87,3 +87,6 @@ artifacts/*/debug/
 # 🚫 Railway/Nixpacks build cache
 .nixpacks/
 nixpacks.toml
+
+# Enterprise generated reports
+reports/recovery/*.json

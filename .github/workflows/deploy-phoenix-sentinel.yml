@@ -26,10 +26,13 @@ jobs:
           node-version: '22.x'
           cache: 'npm'
           
-      - name: 📦 Install Dependencies
+      - name: Normalize GitHub git transport
+        run: git config --global url."https://github.com/".insteadOf ssh://git@github.com/
+
+      - name: 📦 Deterministic Install
         run: |
           echo "🔥 Installing dependencies..."
-          npm install
+          npm ci
           echo "✅ Dependencies installed"
         
       - name: 🔒 Security Scan
@@ -42,12 +45,11 @@ jobs:
           fi
           echo "✅ Security scan passed"
         
-      - name: 🧪 Build Test
+      - name: 🧪 Enterprise Validation
         run: |
-          echo "🔨 Testing build..."
-          # Syntax check for main files
-          node --check server/index.js || echo "⚠️ Syntax check warning"
-          echo "✅ Build test completed"
+          echo "🔨 Running enterprise validation..."
+          npm run validate:enterprise
+          echo "✅ Enterprise validation completed"
         
       - name: 🚀 Install Railway CLI
         run: npm install -g @railway/cli
