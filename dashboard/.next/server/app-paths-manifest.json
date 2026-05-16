@@ -1,7 +1,0 @@
-{
-  "/system-logs/page": "app/system-logs/page.js",
-  "/revenue/page": "app/revenue/page.js",
-  "/page": "app/page.js",
-  "/health/page": "app/health/page.js",
-  "/api-keys/page": "app/api-keys/page.js"
-}
