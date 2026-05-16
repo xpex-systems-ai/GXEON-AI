@@ -14,12 +14,10 @@ import {
   Terminal,
   TrendingUp,
   GitMerge,
-  Zap,
 } from "lucide-react";
 
 const routes = [
   { label: "Overview", icon: LayoutDashboard, href: "/" },
-  { label: "Conversion Center", icon: Zap, href: "/conversion" },
   { label: "Revenue", icon: DollarSign, href: "/revenue" },
   { label: "Revenue Streams", icon: TrendingUp, href: "/revenue-streams" },
   { label: "Transactions", icon: CreditCard, href: "/transactions" },
