@@ -23,4 +23,27 @@ function getSanitizedProviderSummary() {
   return rows.sort((a, b) => b.count - a.count);
 }
 
-module.exports = { sanitizeProviderLog, getSanitizedProviderSummary };
+module.exports = { sanitizeProviderLog, getSanitizedProviderSummary, sanitizeRuntimeEvent };
+
+
+function sanitizeRuntimeEvent(event = {}) {
+  const attrs = event.attributes || {};
+  const tags = event.tags || {};
+  const signalId = attrs.signal_id || attrs.id || event.signal_id || 'unknown';
+  const source = attrs.source || event.source || 'runtime';
+  const level = attrs.level || event.severity || 'info';
+  const message = (event.message && String(event.message).trim()) || `[${source}] event=${attrs.event || 'RUNTIME_EVENT'} signal_id=${signalId}`;
+
+  return {
+    message,
+    severity: event.severity || level,
+    attributes: {
+      ...attrs,
+      signal_id: signalId,
+      source,
+      normalized: true,
+    },
+    tags,
+    timestamp: event.timestamp || new Date().toISOString(),
+  };
+}
