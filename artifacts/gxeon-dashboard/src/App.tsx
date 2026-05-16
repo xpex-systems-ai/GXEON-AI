@@ -18,6 +18,7 @@ import SystemLogsPage from "@/pages/SystemLogsPage";
 import GovernancePage from "@/pages/GovernancePage";
 import TestPage from "@/pages/TestPage";
 import ConversionPage from "@/pages/ConversionPage";
+import LiveRuntimePage from "@/pages/LiveRuntimePage";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ function Router() {
             <Route path="/system-logs" component={SystemLogsPage} />
             <Route path="/governance" component={GovernancePage} />
             <Route path="/conversion" component={ConversionPage} />
+            <Route path="/live-runtime" component={LiveRuntimePage} />
             <Route component={NotFound} />
           </Switch>
         </DashboardLayout>

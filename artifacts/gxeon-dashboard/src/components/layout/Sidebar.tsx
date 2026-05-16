@@ -19,6 +19,7 @@ import {
 
 const routes = [
   { label: "Overview", icon: LayoutDashboard, href: "/" },
+  { label: "Live Runtime", icon: Activity, href: "/live-runtime" },
   { label: "Conversion Center", icon: Zap, href: "/conversion" },
   { label: "Revenue", icon: DollarSign, href: "/revenue" },
   { label: "Revenue Streams", icon: TrendingUp, href: "/revenue-streams" },
