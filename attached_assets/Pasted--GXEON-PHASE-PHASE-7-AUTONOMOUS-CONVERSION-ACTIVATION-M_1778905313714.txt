@@ -1,0 +1,204 @@
+{
+  "GXEON_PHASE": "PHASE_7_AUTONOMOUS_CONVERSION_ACTIVATION",
+  "MISSION": "Transform GXEON AI into a self-converting autonomous revenue operating system with live monetization funnels, intelligent lead orchestration, conversion telemetry, and autonomous revenue optimization.",
+  "CORE_OBJECTIVE": "Activate real conversion infrastructure across dashboard, swarm, governance, runtime, monetization, mobile, and API layers.",
+  "DO_NOT_BREAK": [
+    "swarm",
+    "watchdog",
+    "governance",
+    "provider_guardian",
+    "runtime_telemetry",
+    "dashboard",
+    "phase5_activation",
+    "supabase_runtime",
+    "vector_memory",
+    "deployment_readiness",
+    "recovery_system",
+    "runtime_sync",
+    "conversion_engine"
+  ],
+  "EXECUTION_MODE": {
+    "autonomous": true,
+    "safe_merge": true,
+    "self_validate": true,
+    "degraded_fallback": true,
+    "runtime_preservation": true,
+    "idempotent_execution": true
+  },
+  "OBJECTIVES": [
+    {
+      "id": "CONVERSION_01",
+      "title": "LIVE REVENUE FUNNEL ENGINE",
+      "tasks": [
+        "Create server/core/conversion/funnelEngine.js",
+        "Create funnel stages: discovery, capture, qualification, conversion, retention",
+        "Track user progression through funnel",
+        "Generate funnel dropoff analytics",
+        "Calculate conversion rates automatically",
+        "Expose realtime funnel telemetry"
+      ]
+    },
+    {
+      "id": "CONVERSION_02",
+      "title": "AUTONOMOUS LEAD CAPTURE",
+      "tasks": [
+        "Create universal lead capture system",
+        "Track sessions, sources, campaigns and runtime referrals",
+        "Create API endpoint /api/v1/leads/capture",
+        "Create intelligent lead scoring",
+        "Detect high-intent users",
+        "Store lead memory in persistence layer"
+      ]
+    },
+    {
+      "id": "CONVERSION_03",
+      "title": "AI SALES INTELLIGENCE",
+      "tasks": [
+        "Create AI conversion intelligence layer",
+        "Detect highest monetization opportunities",
+        "Predict highest-value users",
+        "Rank traffic quality",
+        "Generate autonomous conversion recommendations",
+        "Create revenue opportunity engine"
+      ]
+    },
+    {
+      "id": "CONVERSION_04",
+      "title": "LANDING PAGE ORCHESTRATION",
+      "tasks": [
+        "Create dynamic landing orchestration",
+        "Generate runtime-driven landing sections",
+        "Support multiple offers and funnels",
+        "Create CTA telemetry",
+        "Track click-through rates",
+        "Add conversion heatmap payload generation"
+      ]
+    },
+    {
+      "id": "CONVERSION_05",
+      "title": "MONETIZATION ACTIVATION",
+      "tasks": [
+        "Create monetization activation routes",
+        "Create subscription simulation engine",
+        "Create API monetization telemetry",
+        "Create autonomous upsell suggestions",
+        "Track recurring revenue metrics",
+        "Generate revenue health reports"
+      ]
+    },
+    {
+      "id": "CONVERSION_06",
+      "title": "DASHBOARD CONVERSION CENTER",
+      "tasks": [
+        "Create new dashboard section: Conversion Center",
+        "Add live conversion metrics cards",
+        "Add realtime funnel visualization",
+        "Add revenue projections",
+        "Add opportunity leaderboard",
+        "Add lead source analytics",
+        "Add CTA performance charts",
+        "Add monetization growth projections"
+      ]
+    },
+    {
+      "id": "CONVERSION_07",
+      "title": "AUTONOMOUS CTA ENGINE",
+      "tasks": [
+        "Create intelligent CTA engine",
+        "Dynamically adapt CTA priority",
+        "Generate urgency scoring",
+        "Generate behavioral conversion triggers",
+        "Support runtime A/B testing",
+        "Track CTA conversion effectiveness"
+      ]
+    },
+    {
+      "id": "CONVERSION_08",
+      "title": "PERSISTENCE + MEMORY",
+      "tasks": [
+        "Persist leads in Supabase",
+        "Persist funnels in Supabase",
+        "Persist conversion telemetry",
+        "Persist CTA analytics",
+        "Persist revenue projections",
+        "Persist monetization events",
+        "Fallback safely to memory mode when Supabase unavailable"
+      ]
+    },
+    {
+      "id": "CONVERSION_09",
+      "title": "API + RUNTIME ACTIVATION",
+      "tasks": [
+        "Expose /api/v1/conversion/funnels",
+        "Expose /api/v1/conversion/leads",
+        "Expose /api/v1/conversion/telemetry",
+        "Expose /api/v1/conversion/forecast",
+        "Expose /api/v1/conversion/opportunities",
+        "Expose /api/v1/conversion/runtime",
+        "Expose /api/v1/revenue/live"
+      ]
+    },
+    {
+      "id": "CONVERSION_10",
+      "title": "ENTERPRISE OBSERVABILITY",
+      "tasks": [
+        "Add conversion observability",
+        "Add revenue runtime metrics",
+        "Add lead health monitoring",
+        "Add conversion recovery monitoring",
+        "Add degraded conversion fallback state",
+        "Generate conversion governance reports"
+      ]
+    }
+  ],
+  "REQUIRED_OUTPUTS": [
+    "Fully operational conversion engine",
+    "Live funnel telemetry",
+    "Realtime revenue dashboard",
+    "Autonomous CTA orchestration",
+    "Lead scoring system",
+    "Revenue forecasting engine",
+    "Supabase-ready persistence",
+    "Runtime-safe monetization layer",
+    "Conversion governance reports",
+    "Production-ready conversion runtime"
+  ],
+  "REQUIRED_REPORTS": [
+    "conversion-runtime-report.json",
+    "revenue-forecast-report.json",
+    "lead-intelligence-report.json",
+    "cta-performance-report.json",
+    "funnel-telemetry-report.json"
+  ],
+  "VALIDATION_PIPELINE": [
+    "Validate all routes",
+    "Validate dashboard runtime",
+    "Validate conversion endpoints",
+    "Validate persistence integrity",
+    "Validate degraded mode",
+    "Validate runtime telemetry",
+    "Validate monetization projections",
+    "Validate swarm compatibility",
+    "Validate governance compatibility",
+    "Generate deterministic runtime reports"
+  ],
+  "DEPLOYMENT_TARGET": {
+    "runtime_ready": true,
+    "dashboard_ready": true,
+    "mobile_ready": true,
+    "api_ready": true,
+    "supabase_ready": true,
+    "replit_ready": true,
+    "vercel_safe_routes_only": true
+  },
+  "FINAL_STATE": {
+    "gxeon_mode": "AUTONOUS_REVENUE_OPERATING_SYSTEM",
+    "conversion_runtime": "ACTIVE",
+    "dashboard_runtime": "LIVE",
+    "governance_runtime": "STABLE",
+    "lead_engine": "ONLINE",
+    "revenue_engine": "ONLINE",
+    "cta_engine": "ADAPTIVE",
+    "deployment_state": "PRODUCTION_READY"
+  }
+}

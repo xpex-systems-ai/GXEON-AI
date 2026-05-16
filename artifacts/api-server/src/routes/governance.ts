@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { logger } from "../lib/logger";
+import { governanceAuth } from "../middlewares/governanceAuth";
 import {
   analyzeBranches,
   detectConflicts,
@@ -12,6 +13,9 @@ import {
 } from "../lib/governance/engine";
 
 const router = Router();
+
+// Apply auth to all governance routes
+router.use("/v1/governance", governanceAuth);
 
 // ─── GET /api/v1/governance/merge ─────────────────────────────────────────────
 router.get("/v1/governance/merge", (_req, res) => {

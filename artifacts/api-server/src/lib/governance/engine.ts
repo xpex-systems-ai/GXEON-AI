@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execFileSync, execSync } from "child_process";
 import { existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
 import { logger } from "../logger";
@@ -8,7 +8,10 @@ const REPO_ROOT = process.cwd().includes("artifacts")
   ? path.resolve(process.cwd(), "../..")
   : process.cwd();
 
-// Verify git is available
+const REPORTS_DIR = path.join(REPO_ROOT, ".local", "governance-reports");
+
+// ─── Safe git execution (no shell, argument array only) ───────────────────────
+
 function isGitAvailable(): boolean {
   try {
     execSync("git --version", { stdio: "pipe", timeout: 3000 });
@@ -19,21 +22,45 @@ function isGitAvailable(): boolean {
 }
 const GIT_AVAILABLE = isGitAvailable();
 
-const REPORTS_DIR = path.join(REPO_ROOT, ".local", "governance-reports");
+/**
+ * Validate a git ref name to prevent injection.
+ * Allows only alphanumeric, hyphens, underscores, dots, forward-slashes.
+ * Rejects anything with shell metacharacters, spaces, or path traversal.
+ */
+function isValidRef(ref: string): boolean {
+  if (!ref || ref.length > 256) return false;
+  return /^[a-zA-Z0-9._\-/]+$/.test(ref) && !ref.includes("..") && !ref.startsWith("-");
+}
 
-function git(cmd: string): string {
+/**
+ * Run a git command using execFileSync — args are passed as an array,
+ * never interpolated into a shell string. Prevents all command injection.
+ */
+function git(args: string[]): string {
+  if (!GIT_AVAILABLE) return "";
+  // Validate any args that look like refs (heuristic: not starting with --)
+  for (const arg of args) {
+    if (!arg.startsWith("--") && !arg.startsWith("-") && arg.includes("/")) {
+      if (!isValidRef(arg)) {
+        logger.warn({ arg }, "[Governance] Rejected invalid ref argument");
+        return "";
+      }
+    }
+  }
   try {
-    return execSync(`git -C "${REPO_ROOT}" ${cmd}`, {
+    return execFileSync("git", ["-C", REPO_ROOT, ...args], {
       encoding: "utf8",
       stdio: ["pipe", "pipe", "pipe"],
       timeout: 10000,
     }).trim();
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
-    logger.warn({ cmd, msg }, "[Governance] git command failed");
+    logger.warn({ args: args.join(" "), msg }, "[Governance] git command failed");
     return "";
   }
 }
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface BranchInfo {
   name: string;
@@ -88,18 +115,27 @@ export interface RepositoryHealth {
 // ─── Branch Analysis ──────────────────────────────────────────────────────────
 
 export function analyzeBranches(): BranchInfo[] {
-  const branchLines = git("branch -a --format=%(refname:short)|%(objectname:short)|%(committerdate:iso)|%(authorname)");
-  if (!branchLines) return [];
+  const branchOutput = git([
+    "branch", "-a",
+    "--format=%(refname:short)|%(objectname:short)|%(committerdate:iso)|%(authorname)",
+  ]);
+  if (!branchOutput) return [];
 
-  const mainBranch = git("rev-parse --abbrev-ref HEAD") || "main";
+  const mainBranch = git(["rev-parse", "--abbrev-ref", "HEAD"]) || "main";
+  const mergedOutput = isValidRef(mainBranch)
+    ? git(["branch", "--merged", mainBranch])
+    : "";
 
-  return branchLines
+  return branchOutput
     .split("\n")
     .filter(Boolean)
     .filter((line) => !line.includes("HEAD"))
     .map((line) => {
       const [name, hash, date, author] = line.split("|");
       const cleanName = (name || "").replace("origin/", "").trim();
+
+      // Skip branches with invalid ref names
+      if (!isValidRef(cleanName)) return null;
 
       let type: BranchInfo["type"] = "other";
       if (cleanName === "main" || cleanName === "master") type = "main";
@@ -108,26 +144,36 @@ export function analyzeBranches(): BranchInfo[] {
       else if (cleanName.startsWith("hotfix/")) type = "hotfix";
       else if (cleanName.startsWith("recovery/")) type = "recovery";
 
-      const aheadBehind = git(`rev-list --left-right --count ${mainBranch}...${cleanName} 2>/dev/null || echo "0 0"`);
-      const [behind, ahead] = (aheadBehind || "0 0").split("\t").map(Number);
+      // Safely compute ahead/behind using validated refs only
+      let ahead = 0;
+      let behind = 0;
+      if (isValidRef(mainBranch) && isValidRef(cleanName) && cleanName !== mainBranch) {
+        const aheadBehind = git([
+          "rev-list", "--left-right", "--count",
+          `${mainBranch}...${cleanName}`,
+        ]);
+        const parts = (aheadBehind || "0\t0").split("\t").map(Number);
+        behind = parts[0] || 0;
+        ahead = parts[1] || 0;
+      }
 
       const lastCommitTs = date ? new Date(date).getTime() : 0;
-      const isStale = Date.now() - lastCommitTs > 30 * 24 * 60 * 60 * 1000;
-      const mergedBranches = git(`branch --merged ${mainBranch}`);
-      const isMerged = mergedBranches.includes(cleanName);
+      const isStale = lastCommitTs > 0 && Date.now() - lastCommitTs > 30 * 24 * 60 * 60 * 1000;
+      const isMerged = mergedOutput.includes(cleanName);
 
       return {
         name: cleanName,
         type,
         lastCommit: (hash || "").trim(),
         lastCommitDate: date || new Date().toISOString(),
-        ahead: ahead || 0,
-        behind: behind || 0,
+        ahead,
+        behind,
         isStale,
         isMerged,
         author: author || "unknown",
-      };
-    });
+      } satisfies BranchInfo;
+    })
+    .filter((b): b is BranchInfo => b !== null);
 }
 
 // ─── Conflict Detection ───────────────────────────────────────────────────────
@@ -135,24 +181,23 @@ export function analyzeBranches(): BranchInfo[] {
 export function detectConflicts(): ConflictInfo[] {
   const conflicts: ConflictInfo[] = [];
 
-  const conflictedFiles = git("diff --name-only --diff-filter=U");
+  // Check for unmerged files in index (no shell, no interpolation)
+  const conflictedFiles = git(["diff", "--name-only", "--diff-filter=U"]);
   if (conflictedFiles) {
     conflictedFiles.split("\n").filter(Boolean).forEach((file) => {
-      const severity = getCriticalFileSeverity(file);
       conflicts.push({
         file,
         conflictType: "merge",
-        severity,
+        severity: getCriticalFileSeverity(file),
         affectedSystems: getAffectedSystems(file),
         resolution: getResolutionStrategy(file),
       });
     });
   }
 
-  // Check for unresolved conflict markers in key files
+  // Check for conflict markers in critical files using git grep (no shell expansion)
   const criticalFiles = [
     "package.json",
-    "server/index.js",
     "artifacts/api-server/src/app.ts",
     "artifacts/gxeon-dashboard/src/App.tsx",
   ];
@@ -160,8 +205,9 @@ export function detectConflicts(): ConflictInfo[] {
   for (const file of criticalFiles) {
     const fullPath = path.join(REPO_ROOT, file);
     if (!existsSync(fullPath)) continue;
-    const conflictCheck = git(`grep -l "<<<<<<< HEAD" ${file} 2>/dev/null`);
-    if (conflictCheck) {
+    // Use git grep with --quiet flag — exits 0 if found, 1 if not, no shell needed
+    const hasMarker = git(["grep", "--quiet", "-l", "<<<<<<< HEAD", "--", file]);
+    if (hasMarker) {
       conflicts.push({
         file,
         conflictType: "content",
@@ -213,22 +259,21 @@ function getResolutionStrategy(file: string): string {
 
 export function buildMergeQueue(): MergeQueueEntry[] {
   const branches = analyzeBranches();
-  const mainBranch = git("rev-parse --abbrev-ref HEAD") || "main";
+  const mainBranch = git(["rev-parse", "--abbrev-ref", "HEAD"]) || "main";
   const conflicts = detectConflicts();
-  const conflictFiles = new Set(conflicts.map((c) => c.file));
+  const conflictFileCount = conflicts.length;
 
   return branches
     .filter((b) => b.type !== "main" && !b.isMerged && b.name !== mainBranch)
     .slice(0, 20)
     .map((branch) => {
-      const branchConflicts = git(`merge-tree $(git merge-base ${mainBranch} ${branch.name}) ${mainBranch} ${branch.name} 2>/dev/null | grep -c "<<<<<<" || echo 0`);
-      const hasConflicts = parseInt(branchConflicts || "0") > 0 || conflictFiles.size > 0;
+      const hasConflicts = conflictFileCount > 0;
       const isStale = branch.isStale;
 
       let status: MergeQueueEntry["status"] = "ready";
       let blockReason: string | undefined;
 
-      if (hasConflicts) { status = "conflict"; blockReason = "Merge conflicts detected"; }
+      if (hasConflicts) { status = "conflict"; blockReason = "Merge conflicts detected in repository"; }
       else if (isStale) { status = "stale"; blockReason = "Branch not updated in 30+ days"; }
       else if (branch.behind > 50) { status = "blocked"; blockReason = `Branch is ${branch.behind} commits behind main`; }
       else if (branch.ahead === 0) { status = "pending"; blockReason = "No new commits to merge"; }
@@ -252,16 +297,11 @@ export function buildMergeQueue(): MergeQueueEntry[] {
 // ─── Deployment Sync ──────────────────────────────────────────────────────────
 
 export function analyzeDeployments(): DeploymentInfo[] {
-  const localHead = git("rev-parse HEAD") || "unknown";
-  const localShort = git("rev-parse --short HEAD") || "unknown";
-  const lastTagCommit = git("rev-list --tags --max-count=1") || "";
-  const lastTag = lastTagCommit ? git(`describe --tags ${lastTagCommit} 2>/dev/null`) : "";
+  const localHead = git(["rev-parse", "HEAD"]) || "unknown";
+  const localShort = localHead.substring(0, 7) || "unknown";
+  const lastTagCommit = git(["rev-list", "--tags", "--max-count=1"]) || "";
 
   const deployments: DeploymentInfo[] = [];
-
-  // Check Vercel deployment indicator file
-  const vercelCommit = git("notes show HEAD 2>/dev/null | grep VERCEL_COMMIT") || "";
-  const vercelDeployed = vercelCommit.split("=")[1]?.trim() || lastTagCommit;
 
   deployments.push({
     environment: "production (Replit)",
@@ -273,16 +313,20 @@ export function analyzeDeployments(): DeploymentInfo[] {
     status: "synced",
   });
 
-  if (lastTagCommit && lastTagCommit !== localHead) {
-    const drift = parseInt(git(`rev-list ${lastTagCommit}..HEAD --count`) || "0");
+  if (lastTagCommit && isValidRef(lastTagCommit) && lastTagCommit !== localHead) {
+    const lastTag = git(["describe", "--tags", lastTagCommit]) || "untagged";
+    const driftStr = git(["rev-list", "--count", `${lastTagCommit}..HEAD`]);
+    const drift = parseInt(driftStr || "0", 10);
+    const lastTagDate = git(["log", "-1", "--format=%ci", lastTagCommit]) || new Date().toISOString();
+
     deployments.push({
-      environment: `last-release (${lastTag || "untagged"})`,
+      environment: `last-release (${lastTag})`,
       localHead: localShort,
       deployedCommit: lastTagCommit.substring(0, 7) || "unknown",
       isSynced: drift === 0,
       driftCommits: drift,
-      lastDeployedAt: git(`log -1 --format=%ci ${lastTagCommit} 2>/dev/null`) || new Date().toISOString(),
-      status: drift === 0 ? "synced" : drift > 0 ? "behind" : "ahead",
+      lastDeployedAt: lastTagDate,
+      status: drift === 0 ? "synced" : "behind",
     });
   }
 
@@ -306,30 +350,17 @@ export function generateRecoveryReport(): RecoveryReport {
   const conflicts = detectConflicts();
   const branches = analyzeBranches();
   const staleBranches = branches.filter((b) => b.isStale && b.type !== "main");
-  const lastStableCommit = git("rev-parse --short HEAD~0") || "unknown";
-  const hasStableTag = git("describe --tags --abbrev=0 2>/dev/null") || "";
+  const lastStableCommit = git(["rev-parse", "--short", "HEAD"]) || "unknown";
+  const hasStableTag = git(["describe", "--tags", "--abbrev=0"]) || "";
 
   const actions: RecoveryReport["actions"] = [];
   const now = new Date().toISOString();
 
-  // Check for stale branches that could be cleaned
   staleBranches.slice(0, 5).forEach((b) => {
-    actions.push({
-      action: "identify-stale-branch",
-      target: b.name,
-      result: "skipped",
-      timestamp: now,
-    });
+    actions.push({ action: "identify-stale-branch", target: b.name, result: "skipped", timestamp: now });
   });
-
-  // Check for conflict resolutions needed
   conflicts.forEach((c) => {
-    actions.push({
-      action: "flag-conflict",
-      target: c.file,
-      result: "skipped",
-      timestamp: now,
-    });
+    actions.push({ action: "flag-conflict", target: c.file, result: "skipped", timestamp: now });
   });
 
   const overallStatus: RecoveryReport["status"] =
@@ -370,7 +401,7 @@ export interface RuntimeSyncStatus {
 }
 
 export function getRuntimeSyncStatus(): RuntimeSyncStatus {
-  const head = git("rev-parse --short HEAD") || "unknown";
+  const head = git(["rev-parse", "--short", "HEAD"]) || "unknown";
   const now = new Date().toISOString();
   const deployments = analyzeDeployments();
   const driftFound = deployments.some((d) => !d.isSynced);
@@ -392,7 +423,9 @@ export function getRuntimeSyncStatus(): RuntimeSyncStatus {
     components,
     overallHealth,
     syncRequired: driftFound,
-    mismatchDetails: driftFound ? deployments.filter((d) => !d.isSynced).map((d) => `${d.environment}: ${d.driftCommits} commits behind`) : [],
+    mismatchDetails: driftFound
+      ? deployments.filter((d) => !d.isSynced).map((d) => `${d.environment}: ${d.driftCommits} commits behind`)
+      : [],
   };
 }
 
@@ -435,7 +468,9 @@ export function ensureReportsDir() {
 
 export function writeReport(filename: string, data: unknown) {
   ensureReportsDir();
-  const filePath = path.join(REPORTS_DIR, filename);
+  // Sanitize filename: only allow alphanumeric, hyphens, dots
+  const safeFilename = filename.replace(/[^a-zA-Z0-9.\-]/g, "_");
+  const filePath = path.join(REPORTS_DIR, safeFilename);
   writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
   logger.info({ filePath }, "[Governance] Report written");
   return filePath;
@@ -457,23 +492,9 @@ export function generateAllReports() {
     mergeQueue,
     repoHealth,
   });
-
-  writeReport("deployment-sync-report.json", {
-    generated: now,
-    deployments,
-    syncRequired: deployments.some((d) => !d.isSynced),
-  });
-
-  writeReport("branch-health-report.json", {
-    generated: now,
-    totalBranches: branches.length,
-    staleBranches: branches.filter((b) => b.isStale).length,
-    mergedBranches: branches.filter((b) => b.isMerged).length,
-    branches,
-  });
-
+  writeReport("deployment-sync-report.json", { generated: now, deployments, syncRequired: deployments.some((d) => !d.isSynced) });
+  writeReport("branch-health-report.json", { generated: now, totalBranches: branches.length, staleBranches: branches.filter((b) => b.isStale).length, mergedBranches: branches.filter((b) => b.isMerged).length, branches });
   writeReport("autonomous-recovery-report.json", recovery);
-
   writeReport("runtime-sync-report.json", runtimeSync);
 
   return { mergeQueue, branches, conflicts, deployments, recovery, runtimeSync, repoHealth };
