@@ -145,6 +145,7 @@ export default function SystemScreen() {
       <Text style={[styles.sectionTitle, { color: colors.foreground }]}>More Screens</Text>
       <View style={styles.quickGrid}>
         {[
+          { label: "Conversion Center", icon: "zap", route: "/conversion" },
           { label: "Actors", icon: "users", route: "/actors" },
           { label: "Revenue Streams", icon: "trending-up", route: "/revenue-streams" },
           { label: "System Logs", icon: "terminal", route: "/system-logs" },

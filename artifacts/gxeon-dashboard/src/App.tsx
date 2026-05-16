@@ -17,6 +17,7 @@ import SettingsPage from "@/pages/SettingsPage";
 import SystemLogsPage from "@/pages/SystemLogsPage";
 import GovernancePage from "@/pages/GovernancePage";
 import TestPage from "@/pages/TestPage";
+import ConversionPage from "@/pages/ConversionPage";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ function Router() {
             <Route path="/settings" component={SettingsPage} />
             <Route path="/system-logs" component={SystemLogsPage} />
             <Route path="/governance" component={GovernancePage} />
+            <Route path="/conversion" component={ConversionPage} />
             <Route component={NotFound} />
           </Switch>
         </DashboardLayout>
