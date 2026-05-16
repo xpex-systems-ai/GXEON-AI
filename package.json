@@ -10,8 +10,9 @@
     "build:libs": "pnpm --filter @workspace/api-zod run build && pnpm --filter @workspace/api-client-react run build",
     "build:apps": "pnpm --filter @workspace/api-server run build && PORT=${PORT:-3000} BASE_PATH=${BASE_PATH:-/} pnpm --filter @workspace/gxeon-dashboard run build",
     "build:all": "npm run build:libs && npm run build:apps",
-    "runtime:validate": "node scripts/runtime_governance_report.cjs",
-    "predeploy:validate": "npm run runtime:validate && npm run build:all"
+    "runtime:validate": "node scripts/runtime_governance_report.cjs && npm run runtime:platform:check",
+    "predeploy:validate": "npm run runtime:validate && npm run build:all",
+    "runtime:platform:check": "node scripts/runtime_platform_cleanup_check.cjs"
   },
   "private": true,
   "devDependencies": {
