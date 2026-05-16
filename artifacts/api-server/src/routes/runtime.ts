@@ -14,6 +14,7 @@ const { getRadarStatus } = require(pathFromRoot("radarContinuity.cjs"));
 const { getProviderRuntimeStatus } = require(pathFromRoot("providerRuntime.cjs"));
 const { getRuntimeMemoryStatus } = require(pathFromRoot("runtimeMemory.cjs"));
 const { getSupabaseRuntimeStatus } = require(pathFromRoot("supabaseRuntime.cjs"));
+const { getSanitizedProviderSummary } = require(pathFromRoot("runtimeLogSanitizer.cjs"));
 
 const router = Router();
 
@@ -57,6 +58,10 @@ router.get("/v1/runtime/memory", (_req, res) => {
 
 router.get("/v1/runtime/supabase", (_req, res) => {
   res.json(getSupabaseRuntimeStatus());
+});
+
+router.get("/v1/runtime/provider-logs", (_req, res) => {
+  res.json({ provider_logs: getSanitizedProviderSummary(), generated_at: new Date().toISOString() });
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {
