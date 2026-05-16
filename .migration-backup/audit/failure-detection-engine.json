@@ -1,1 +1,0 @@
-{"failure_detection":{"patterns":["repeat failures","dispatch without completion","compensation spikes"],"actions":["alert","quarantine","retry gate"]}}

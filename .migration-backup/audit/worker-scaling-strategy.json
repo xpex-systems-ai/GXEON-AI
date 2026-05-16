@@ -1,1 +1,0 @@
-{"scaling":{"inputs":["queue_depth","latency","failure_rate"],"actions":["scale_out","scale_in","rebalance"]}}

@@ -1,1 +1,0 @@
-{"rules":["runtime starts/stops workflows","workflow modules contain business steps only","routes cannot directly mutate workflow state"]}

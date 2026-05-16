@@ -1,1 +1,0 @@
-{"capacity":{"dimensions":["workers","queue partitions","db throughput","event ingestion"],"planning":"load tiers"}}

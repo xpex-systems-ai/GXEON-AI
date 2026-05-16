@@ -1,1 +1,0 @@
-{"units":["execution_credit","signal_fee","workflow_fee","commission_unit"],"settlement":"ledger-backed","anti_abuse":["idempotency","rate limits","risk scoring"]}
