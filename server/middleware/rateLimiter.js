@@ -1,22 +1,64 @@
-const rateLimit = require('express-rate-limit');
-const RedisStore = require('rate-limit-redis');
-const Redis = require('ioredis');
+const fs = require('fs');
+const path = require('path');
+
+function packageInstalled(name) {
+    const parts = name.split('/');
+    const packagePath = name.startsWith('@')
+        ? path.join(process.cwd(), 'node_modules', parts[0], parts[1] || '', 'package.json')
+        : path.join(process.cwd(), 'node_modules', name, 'package.json');
+    return fs.existsSync(packagePath);
+}
+
+function createMemoryRateLimit(options = {}) {
+    const windowMs = options.windowMs || 15 * 60 * 1000;
+    const message = options.message || { error: 'GXEON_LIMIT_EXCEEDED' };
+    const hits = new Map();
+
+    return async (req, res, next) => {
+        if (typeof options.skip === 'function' && options.skip(req)) return next();
+
+        const key = req.headers?.['x-gxeon-key'] || req.ip || req.socket?.remoteAddress || 'anonymous';
+        const now = Date.now();
+        const current = hits.get(key) || { count: 0, resetTime: now + windowMs };
+        if (now > current.resetTime) {
+            current.count = 0;
+            current.resetTime = now + windowMs;
+        }
+
+        current.count += 1;
+        hits.set(key, current);
+
+        const max = typeof options.max === 'function' ? await options.max(req, res) : (options.max || 100);
+        if (options.standardHeaders) {
+            res.setHeader('RateLimit-Limit', max);
+            res.setHeader('RateLimit-Remaining', Math.max(0, max - current.count));
+            res.setHeader('RateLimit-Reset', Math.ceil(current.resetTime / 1000));
+        }
+
+        if (current.count > max) {
+            if (typeof options.handler === 'function') return options.handler(req, res, next);
+            return res.status(429).json(message);
+        }
+
+        return next();
+    };
+}
+
+const rateLimit = packageInstalled('express-rate-limit')
+    ? require('express-rate-limit')
+    : createMemoryRateLimit;
+const RedisStore = packageInstalled('rate-limit-redis') ? require('rate-limit-redis') : null;
+const Redis = packageInstalled('ioredis') ? require('ioredis') : null;
 
 /**
  * GXEON Rate Limiter - Tiered Protection
- * 
- * Different limits based on user tier:
- * - Free: 10 requests/15min
- * - Basic: 100 requests/15min
- * - Pro: 500 requests/15min
- * - Enterprise: 2000 requests/15min
- * - Internal/System: 5000 requests/15min
- * 
- * Plus operation-specific limits for expensive operations
+ *
+ * Falls back to a deterministic in-memory limiter when optional Redis-backed
+ * rate-limit packages are not installed, preserving health and runtime APIs.
  */
 
 // Redis client for distributed rate limiting (production)
-const redisClient = process.env.REDIS_URL 
+const redisClient = process.env.REDIS_URL && Redis
     ? new Redis(process.env.REDIS_URL)
     : null;
 
@@ -66,11 +108,13 @@ const TIER_LIMITS = {
 
 // Operation-specific limits (stricter for expensive operations)
 const OPERATION_LIMITS = {
-    onchain: { windowMs: 60 * 60 * 1000, max: 10 },      // 10/hour for blockchain
-    llm: { windowMs: 60 * 1000, max: 30 },               // 30/min for LLM
-    agent: { windowMs: 60 * 1000, max: 60 },             // 60/min for agents
-    radar: { windowMs: 5 * 60 * 1000, max: 1 }           // 1/5min for radar scans
+    onchain: { windowMs: 60 * 60 * 1000, max: 10 },
+    llm: { windowMs: 60 * 1000, max: 30 },
+    agent: { windowMs: 60 * 1000, max: 60 },
+    radar: { windowMs: 5 * 60 * 1000, max: 1 }
 };
+
+const optionalStore = redisClient && RedisStore ? { store: new RedisStore({ client: redisClient }) } : {};
 
 /**
  * Dynamic rate limiter that checks user tier
@@ -96,7 +140,7 @@ const gxeonRateLimiter = rateLimit({
         // Skip rate limiting for health checks
         return req.path === '/health';
     },
-    store: redisClient ? new RedisStore({ client: redisClient }) : undefined,
+    ...optionalStore,
     standardHeaders: true,
     legacyHeaders: false
 });
@@ -170,7 +214,7 @@ async function combinedEnforcer(req, res, next) {
  */
 const ipLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 50, // 50 requests per IP
+    max: 50,
     message: {
         error: "GXEON_IP_LIMIT",
         message: "Limite de requisições por IP excedido."
@@ -182,8 +226,8 @@ const ipLimiter = rateLimit({
  * Webhook limiter (higher limits for automated systems)
  */
 const webhookLimiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minute
-    max: 1000, // 1000/minute for webhooks
+    windowMs: 60 * 1000,
+    max: 1000,
     standardHeaders: true
 });
 
@@ -200,13 +244,13 @@ const apiLimiter = rateLimit({
 });
 
 module.exports = {
-    apiLimiter,                    // Basic 100/15min
-    gxeonRateLimiter,              // Tier-based dynamic
-    operationLimiter,              // Operation-specific
-    combinedEnforcer,              // Billing-aware
-    ipLimiter,                     // IP-based for public
-    webhookLimiter,                // For webhooks
-    getUserTier,                   // Helper
-    TIER_LIMITS,                   // Config
-    OPERATION_LIMITS               // Config
+    apiLimiter,
+    gxeonRateLimiter,
+    operationLimiter,
+    combinedEnforcer,
+    ipLimiter,
+    webhookLimiter,
+    getUserTier,
+    TIER_LIMITS,
+    OPERATION_LIMITS
 };

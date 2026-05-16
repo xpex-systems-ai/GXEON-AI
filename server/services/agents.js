@@ -1,5 +1,6 @@
 // Safe Supabase Initialization - Lazy loaded with validation
-const fetch = require('node-fetch');
+const { getNativeFetch } = require('../runtime/compatibility.cjs');
+const fetch = getNativeFetch();
 
 let _supabase = null;
 

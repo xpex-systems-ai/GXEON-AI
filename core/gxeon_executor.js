@@ -1,8 +1,12 @@
 // GXEON Executor V1 - Task Automation Engine
 // Executes tasks in a loop with configurable steps
 
-const { createClient } = require('@supabase/supabase-js');
-const fetch = require('node-fetch');
+const { createRequire } = require('module');
+const path = require('path');
+const serverRequire = createRequire(path.resolve(__dirname, '../server/index.js'));
+const { createClient } = serverRequire('@supabase/supabase-js');
+const { getNativeFetch, getSupabaseUrl } = require('../server/runtime/compatibility.cjs');
+const fetch = getNativeFetch();
 
 class GXEONExecutor {
   constructor(config) {
@@ -12,7 +16,7 @@ class GXEONExecutor {
     this.context = {}; // Stores variables like {{task.id}}, {{ai.response}}
     
     // Initialize Supabase
-    const supabaseUrl = process.env.SUPABASE_PROJECT_URL;
+    const supabaseUrl = getSupabaseUrl();
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     this.supabase = supabaseUrl && supabaseKey 
       ? createClient(supabaseUrl, supabaseKey)

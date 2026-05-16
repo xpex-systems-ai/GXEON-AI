@@ -3,6 +3,9 @@ import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const require = createRequire(import.meta.url);
+const { registerCommonJsBoundary, getSupabaseUrl } = require('./runtime/compatibility.cjs');
+registerCommonJsBoundary();
+const { buildRuntimeGovernanceSnapshot, buildDashboardSummary } = require('./runtime/governance.cjs');
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -126,6 +129,12 @@ const express = require('express');
 const { getPublicCoreBootStatus, summarizeCoreBoot } = require('./config/coreBoot.cjs');
 
 
+
+function sendRuntimeSnapshot(res, statusCode = 200) {
+  const snapshot = buildRuntimeGovernanceSnapshot();
+  res.status(statusCode).json(snapshot);
+}
+
 function createCorsMiddleware(options = {}) {
   const methods = (options.methods || ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']).join(',');
   const allowedHeaders = Array.isArray(options.allowedHeaders)
@@ -189,6 +198,34 @@ app.get('/api/v1/core/boot', (req, res) => {
   res.status(200).json(getPublicCoreBootStatus());
 });
 
+app.get('/api/v1/runtime/summary', (req, res) => {
+  res.status(200).json(buildDashboardSummary());
+});
+
+app.get('/api/v1/runtime/reports', (req, res) => {
+  sendRuntimeSnapshot(res);
+});
+
+app.get('/api/v1/runtime/readiness', (req, res) => {
+  const snapshot = buildRuntimeGovernanceSnapshot();
+  const ready = snapshot.status === 'ready' || process.env.GXEON_ALLOW_DEGRADED_READINESS === 'true';
+  res.status(ready ? 200 : 503).json({
+    ready,
+    status: snapshot.status,
+    generated_at: snapshot.generated_at,
+    degraded_reports: snapshot.degraded_reports,
+    reports: snapshot.reports
+  });
+});
+
+app.get('/api/v1/dashboard/summary', (req, res) => {
+  res.status(200).json(buildDashboardSummary());
+});
+
+app.get('/api/v1/dashboard/runtime', (req, res) => {
+  sendRuntimeSnapshot(res);
+});
+
 // 🔴 ALCHEMY RATE LIMIT HEALTH ENDPOINT (para dashboard)
 app.get('/api/v1/health/alchemy', (req, res) => {
   // Lazy load do sovereignOracle para obter status
@@ -216,7 +253,7 @@ app.post('/api/v1/mammouth/sync', async (req, res) => {
     // Lazy load do Supabase
     const { createClient } = require('@supabase/supabase-js');
     const supabase = createClient(
-      process.env.SUPABASE_PROJECT_URL || process.env.SUPABASE_URL,
+      getSupabaseUrl(),
       process.env.SUPABASE_SERVICE_ROLE_KEY
     );
     
@@ -380,6 +417,24 @@ setTimeout(async () => {
       next();
     });
 
+    function degradedRoute(specifier, error) {
+      return (req, res) => res.status(503).json({
+        error: 'GXEON_MODULE_DEGRADED',
+        module: specifier,
+        message: error.message,
+        status: 'degraded'
+      });
+    }
+
+    function loadRoute(specifier) {
+      try {
+        return require(specifier);
+      } catch (error) {
+        console.error(`[GXEON] Route ${specifier} degraded:`, error.message);
+        return degradedRoute(specifier, error);
+      }
+    }
+
     // Rate limiting
     const { apiLimiter, gxeonRateLimiter, operationLimiter } = require('./middleware/rateLimiter');
     app.use('/api', apiLimiter);
@@ -388,15 +443,15 @@ setTimeout(async () => {
     const { gxeonEnforcer, gxeonAuthOnly } = require('./middleware/gxeonEnforcer');
 
     // Routes
-    const chatRoute = require('./routes/chat');
-    const configRoute = require('./routes/config');
-    const agentRoutes = require('./routes/agents');
-    const taskEngineRoutes = require('./routes/task_engine');
-    const executorRoutes = require('./routes/executor');
+    const chatRoute = loadRoute('./routes/chat');
+    const configRoute = loadRoute('./routes/config');
+    const agentRoutes = loadRoute('./routes/agents');
+    const taskEngineRoutes = loadRoute('./routes/task_engine');
+    const executorRoutes = loadRoute('./routes/executor');
 
     // Billed routes
     app.use('/chat', gxeonEnforcer({ llm_call: 0.001 }), chatRoute);
-    app.use('/api/agents', gxeonEnforcer({ agent_execution: 0.005 }), require('./routes/agents_protected'));
+    app.use('/api/agents', gxeonEnforcer({ agent_execution: 0.005 }), loadRoute('./routes/agents_protected'));
     app.use('/api/huggingface', gxeonEnforcer({ llm_call: 0.001 }), (req, res, next) => { req.agentType = 'huggingface'; next(); }, chatRoute);
     app.use('/api/deepseek', gxeonEnforcer({ llm_call: 0.002 }), (req, res, next) => { req.agentType = 'deepseek'; next(); }, chatRoute);
     app.use('/api/grok', gxeonEnforcer({ llm_call: 0.004 }), (req, res, next) => { req.agentType = 'grok'; next(); }, chatRoute);
@@ -404,16 +459,16 @@ setTimeout(async () => {
     app.use('/api/onchain', operationLimiter('onchain'), gxeonEnforcer({ onchain_operation: 0.015 }), taskEngineRoutes);
     app.use('/api/task-engine', gxeonEnforcer({ task_pipeline: 0.002 }), taskEngineRoutes);
     app.use('/api/executor', gxeonEnforcer({ agent_execution: 0.003 }), executorRoutes);
-    app.use('/api/edge', gxeonEnforcer({ edge_function: 0.001 }), require('./edge-functions'));
-    app.use('/api/v1/radar', gxeonEnforcer({ radar_call: 0.05 }), require('./routes/radar'));
-    app.use('/api/v1/swarm', gxeonEnforcer({ swarm_operation: 0.01 }), require('./routes/swarm'));
-    app.use('/api/v1/sovereign-data', require('./routes/sovereign-data'));
-    app.use('/api/v1/ocean', require('./routes/ocean'));
-    app.use('/api/v1/chainlink', require('./routes/chainlink'));
-    app.use('/v1/memory', gxeonRateLimiter, require('./routes/memory'));
-    app.use('/v1/plugins/execute', gxeonRateLimiter, gxeonEnforcer({ agent_execution: 0.005 }), require('./routes/agents_protected'));
-    app.use('/billing', gxeonAuthOnly, require('./routes/billing'));
-    app.use('/api/v1/profit', gxeonAuthOnly, require('./routes/profit'));
+    app.use('/api/edge', gxeonEnforcer({ edge_function: 0.001 }), loadRoute('./edge-functions'));
+    app.use('/api/v1/radar', gxeonEnforcer({ radar_call: 0.05 }), loadRoute('./routes/radar'));
+    app.use('/api/v1/swarm', gxeonEnforcer({ swarm_operation: 0.01 }), loadRoute('./routes/swarm'));
+    app.use('/api/v1/sovereign-data', loadRoute('./routes/sovereign-data'));
+    app.use('/api/v1/ocean', loadRoute('./routes/ocean'));
+    app.use('/api/v1/chainlink', loadRoute('./routes/chainlink'));
+    app.use('/v1/memory', gxeonRateLimiter, loadRoute('./routes/memory'));
+    app.use('/v1/plugins/execute', gxeonRateLimiter, gxeonEnforcer({ agent_execution: 0.005 }), loadRoute('./routes/agents_protected'));
+    app.use('/billing', gxeonAuthOnly, loadRoute('./routes/billing'));
+    app.use('/api/v1/profit', gxeonAuthOnly, loadRoute('./routes/profit'));
     app.use('/api/config', gxeonAuthOnly, configRoute);
     app.use('/api', gxeonEnforcer({ agent_execution: 0.005 }), agentRoutes);
 
@@ -463,7 +518,7 @@ setTimeout(async () => {
     // Public endpoints for third-party agent consumption
     // All endpoints enforce billing via gxeonBillingGateMiddleware
     // ═══════════════════════════════════════════════════════════════════════════
-    const marketplaceRoutes = require('./routes/marketplace');
+    const marketplaceRoutes = loadRoute('./routes/marketplace');
     app.use('/v1', marketplaceRoutes);
     console.log('[GXEON_MARKETPLACE] External API layer active: /v1/signals/*, /v1/agents/*');
 
@@ -474,8 +529,8 @@ setTimeout(async () => {
     // /v1/signals/live — Public live stream (attracts bots)
     // /v1/leaderboard — Performance rankings
     // ═══════════════════════════════════════════════════════════════════════════
-    const signalsRouter = require('./routes/signals').default;
-    app.use('/', signalsRouter);
+    const signalsModule = loadRoute('./routes/signals');
+    app.use('/', signalsModule.default || signalsModule);
     console.log('[CORNIX] Signal monetization active: /v1/signals/*, /v1/leaderboard');
 
     // ═══════════════════════════════════════════════════════════════════════════

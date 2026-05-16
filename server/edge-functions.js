@@ -2,17 +2,28 @@
 // Supabase Edge Functions implementation
 
 const { createClient } = require('@supabase/supabase-js');
+const { getSupabaseUrl } = require('./runtime/compatibility.cjs');
 
-// Initialize Supabase client
-const supabaseUrl = process.env.SUPABASE_PROJECT_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Initialize Supabase client in fail-safe degraded mode.
+const supabaseUrl = getSupabaseUrl();
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
+const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null;
+
+function requireSupabase(res) {
+  if (supabase) return true;
+  res.status(503).json({
+    error: 'GXEON_PERSISTENCE_DEGRADED',
+    message: 'Supabase is not configured; edge persistence is temporarily unavailable.'
+  });
+  return false;
+}
 
 // ==========================================
 // Edge Function: execute_task
 // ==========================================
 async function executeTaskEdgeFunction(req, res) {
   try {
+    if (!requireSupabase(res)) return;
     const { agent, task_name, payload, user_id } = req.body;
     
     if (!agent || !task_name) {
@@ -105,6 +116,7 @@ async function executeTaskEdgeFunction(req, res) {
 // ==========================================
 async function registerPaymentEdgeFunction(req, res) {
   try {
+    if (!requireSupabase(res)) return;
     const { user_id, amount, currency, tx_hash } = req.body;
     
     if (!user_id || !amount) {
@@ -168,6 +180,7 @@ async function registerPaymentEdgeFunction(req, res) {
 // ==========================================
 async function logEventEdgeFunction(req, res) {
   try {
+    if (!requireSupabase(res)) return;
     const { module, action, message, metadata } = req.body;
     
     if (!module || !action || !message) {

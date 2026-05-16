@@ -1,4 +1,5 @@
-const fetch = require('node-fetch');
+const { getNativeFetch } = require('../runtime/compatibility.cjs');
+const fetch = getNativeFetch();
 
 async function generateResponse(messages) {
   try {
