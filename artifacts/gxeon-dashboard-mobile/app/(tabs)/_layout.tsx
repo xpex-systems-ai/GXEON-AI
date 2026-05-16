@@ -17,11 +17,15 @@ function NativeTabLayout() {
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="transactions">
         <Icon sf={{ default: "creditcard", selected: "creditcard.fill" }} />
-        <Label>Transactions</Label>
+        <Label>Txns</Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="revenue">
         <Icon sf={{ default: "chart.bar", selected: "chart.bar.fill" }} />
         <Label>Revenue</Label>
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="commissions">
+        <Icon sf={{ default: "dollarsign.circle", selected: "dollarsign.circle.fill" }} />
+        <Label>Commissions</Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="system">
         <Icon sf={{ default: "server.rack", selected: "server.rack" }} />
@@ -60,9 +64,7 @@ function ClassicTabLayout() {
               style={StyleSheet.absoluteFill}
             />
           ) : isWeb ? (
-            <View
-              style={[StyleSheet.absoluteFill, { backgroundColor: colors.background }]}
-            />
+            <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.background }]} />
           ) : null,
         tabBarLabelStyle: {
           fontSize: 10,
@@ -86,7 +88,7 @@ function ClassicTabLayout() {
       <Tabs.Screen
         name="transactions"
         options={{
-          title: "Transactions",
+          title: "Txns",
           tabBarIcon: ({ color, size }) =>
             isIOS ? (
               <SymbolView name="creditcard" tintColor={color} size={size} />
@@ -104,6 +106,18 @@ function ClassicTabLayout() {
               <SymbolView name="chart.bar" tintColor={color} size={size} />
             ) : (
               <Feather name="bar-chart-2" size={22} color={color} />
+            ),
+        }}
+      />
+      <Tabs.Screen
+        name="commissions"
+        options={{
+          title: "Commissions",
+          tabBarIcon: ({ color, size }) =>
+            isIOS ? (
+              <SymbolView name="dollarsign.circle" tintColor={color} size={size} />
+            ) : (
+              <Feather name="award" size={22} color={color} />
             ),
         }}
       />
