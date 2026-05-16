@@ -49,7 +49,9 @@ async function fetchGovernance(endpoint: string) {
   const res = await fetch(`${API_BASE}/v1/governance/${endpoint}`, {
     headers: governanceHeaders(),
   });
-  if (!res.ok) throw new Error(`${endpoint}: ${res.status}`);
+  if (res.status === 401) throw Object.assign(new Error("unauthorized"), { status: 401 });
+  if (res.status === 503) throw Object.assign(new Error("not_configured"), { status: 503 });
+  if (!res.ok) throw Object.assign(new Error(`${endpoint}: ${res.status}`), { status: res.status });
   return res.json();
 }
 
@@ -58,6 +60,8 @@ async function generateReports() {
     method: "POST",
     headers: governanceHeaders(),
   });
+  if (res.status === 401) throw Object.assign(new Error("unauthorized"), { status: 401 });
+  if (res.status === 503) throw Object.assign(new Error("not_configured"), { status: 503 });
   if (!res.ok) throw new Error("Failed to generate reports");
   return res.json();
 }
@@ -74,17 +78,26 @@ export default function GovernancePage() {
     setLoading(true);
     setError(null);
     try {
+      const settle = (p: Promise<unknown>) => p.catch((err: unknown) => {
+        const status = (err as { status?: number }).status;
+        if (status === 401) throw err;
+        if (status === 503) throw err;
+        return null;
+      });
       const [branches, merge, conflicts, deployments, runtimeSync, recovery] = await Promise.all([
-        fetchGovernance("branches").catch(() => null),
-        fetchGovernance("merge").catch(() => null),
-        fetchGovernance("conflicts").catch(() => null),
-        fetchGovernance("deployments").catch(() => null),
-        fetchGovernance("runtime-sync").catch(() => null),
-        fetchGovernance("recovery").catch(() => null),
+        settle(fetchGovernance("branches")),
+        settle(fetchGovernance("merge")),
+        settle(fetchGovernance("conflicts")),
+        settle(fetchGovernance("deployments")),
+        settle(fetchGovernance("runtime-sync")),
+        settle(fetchGovernance("recovery")),
       ]);
       setData({ branches, merge, conflicts, deployments, runtimeSync, recovery });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load governance data");
+      const status = (err as { status?: number }).status;
+      if (status === 401) setError("unauthorized");
+      else if (status === 503) setError("not_configured");
+      else setError("api_down");
     } finally {
       setLoading(false);
     }
@@ -161,10 +174,22 @@ export default function GovernancePage() {
         </div>
       </div>
 
-      {error && (
+      {error === "unauthorized" && (
+        <div className="bg-yellow-500/10 text-yellow-500 px-4 py-3 rounded-lg flex items-center gap-2">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <p className="font-medium">Governance API requires authentication. Set <code className="font-mono text-xs bg-yellow-500/20 px-1 rounded">VITE_GOVERNANCE_TOKEN</code> in Replit Secrets to match the server&apos;s <code className="font-mono text-xs bg-yellow-500/20 px-1 rounded">GOVERNANCE_TOKEN</code>.</p>
+        </div>
+      )}
+      {error === "not_configured" && (
+        <div className="bg-yellow-500/10 text-yellow-500 px-4 py-3 rounded-lg flex items-center gap-2">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <p className="font-medium">Governance API is not configured. Add <code className="font-mono text-xs bg-yellow-500/20 px-1 rounded">GOVERNANCE_TOKEN</code> to the API server&apos;s Replit Secrets to activate this feature.</p>
+        </div>
+      )}
+      {error === "api_down" && (
         <div className="bg-destructive/10 text-destructive px-4 py-3 rounded-lg flex items-center gap-2">
-          <AlertCircle className="h-4 w-4" />
-          <p className="font-medium">Governance API unavailable — start the API server to enable full governance.</p>
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <p className="font-medium">Governance API is unreachable — ensure the API Server workflow is running.</p>
         </div>
       )}
 

@@ -205,9 +205,9 @@ export function detectConflicts(): ConflictInfo[] {
   for (const file of criticalFiles) {
     const fullPath = path.join(REPO_ROOT, file);
     if (!existsSync(fullPath)) continue;
-    // Use git grep with --quiet flag — exits 0 if found, 1 if not, no shell needed
-    const hasMarker = git(["grep", "--quiet", "-l", "<<<<<<< HEAD", "--", file]);
-    if (hasMarker) {
+    // Use git grep -l (list filenames only) — returns filename if found, empty if not
+    const hasMarker = git(["grep", "-l", "<<<<<<< HEAD", "--", file]);
+    if (hasMarker.length > 0) {
       conflicts.push({
         file,
         conflictType: "content",

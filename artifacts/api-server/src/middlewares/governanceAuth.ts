@@ -19,19 +19,17 @@ export function governanceAuth(req: Request, res: Response, next: NextFunction) 
   const configuredToken = process.env["GOVERNANCE_TOKEN"];
   const isDev = process.env["NODE_ENV"] === "development";
 
-  // Loopback bypass for local development when no token is configured
+  // In development without a configured token, allow all requests.
+  // The token-based check below handles production protection when token is set.
   if (isDev && !configuredToken) {
-    const ip = req.ip || req.socket?.remoteAddress || "";
-    if (ip === "127.0.0.1" || ip === "::1" || ip === "::ffff:127.0.0.1" || ip === "") {
-      return next();
-    }
+    return next();
   }
 
   if (!configuredToken) {
     logger.warn("[GovernanceAuth] GOVERNANCE_TOKEN not set — blocking request");
     return res.status(503).json({
       success: false,
-      error: "Governance API is not configured. Set GOVERNANCE_TOKEN environment variable.",
+      error: "Governance API requires GOVERNANCE_TOKEN to be set. Add it in Replit Secrets.",
     });
   }
 
