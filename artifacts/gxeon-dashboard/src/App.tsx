@@ -15,6 +15,7 @@ import RevenuePage from "@/pages/RevenuePage";
 import RevenueStreamsPage from "@/pages/RevenueStreamsPage";
 import SettingsPage from "@/pages/SettingsPage";
 import SystemLogsPage from "@/pages/SystemLogsPage";
+import GovernancePage from "@/pages/GovernancePage";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ function Router() {
         <Route path="/revenue-streams" component={RevenueStreamsPage} />
         <Route path="/settings" component={SettingsPage} />
         <Route path="/system-logs" component={SystemLogsPage} />
+        <Route path="/governance" component={GovernancePage} />
         <Route component={NotFound} />
       </Switch>
     </DashboardLayout>

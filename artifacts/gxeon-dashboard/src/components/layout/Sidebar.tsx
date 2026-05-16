@@ -13,6 +13,7 @@ import {
   Key,
   Terminal,
   TrendingUp,
+  GitMerge,
 } from "lucide-react";
 
 const routes = [
@@ -26,6 +27,7 @@ const routes = [
   { label: "API Keys", icon: Key, href: "/api-keys" },
   { label: "System Health", icon: Activity, href: "/health" },
   { label: "System Logs", icon: Terminal, href: "/system-logs" },
+  { label: "Git Governance", icon: GitMerge, href: "/governance" },
   { label: "Settings", icon: Settings, href: "/settings" },
 ];
 

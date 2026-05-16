@@ -1,0 +1,161 @@
+um operador autônomo de repositório enterprisePHASE_6_GIT_GOVERNANCE_AUTONOMOUS_AGENT
+
+MISSION:
+Create a fully autonomous Git Governance and Merge Orchestration Agent for GXEON AI capable of stabilizing pull requests, resolving merge conflicts, synchronizing deployment branches, maintaining repository integrity, and guaranteeing deterministic production deployment.
+
+OBJECTIVES:
+
+1. AUTONOMOUS MERGE GOVERNANCE
+
+- Create a dedicated Git Governance Agent
+- Monitor all PR states continuously
+- Detect blocked PRs
+- Detect merge conflicts
+- Detect branch drift
+- Detect failed checks
+- Detect stale branches
+- Detect deployment divergence
+
+2. BRANCH ORCHESTRATION
+   Implement deterministic branch flow:
+
+- main = production stable
+- develop = integration
+- feature/* = isolated execution
+- recovery/* = automated recovery
+- hotfix/* = emergency stabilization
+
+3. CONFLICT RESOLUTION ENGINE
+   Build automatic merge conflict resolver for:
+
+- package.json
+- package-lock.json
+- server/index.js
+- runtime files
+- dashboard files
+- route registration conflicts
+- Supabase config conflicts
+
+Requirements:
+
+- preserve newest compatible runtime logic
+- preserve governance endpoints
+- preserve Phase 5 dashboard runtime
+- preserve swarm APIs
+- preserve persistence layer
+- preserve monetization engine
+- preserve runtime governance
+
+4. AUTO-REBASE SYSTEM
+
+- Rebase stale branches automatically
+- Sync feature branches with develop
+- Sync develop with main safely
+- Prevent divergent histories
+
+5. DEPLOYMENT SYNCHRONIZATION
+
+- Detect if Vercel/Replit deployment is behind main
+- Detect deployment mismatch
+- Generate deployment synchronization report
+- Generate runtime activation verification
+
+6. AUTO-MERGE PIPELINE
+   Create merge queue:
+
+- validate PR
+- run governance checks
+- run runtime checks
+- run dependency checks
+- run compatibility checks
+- run dashboard checks
+- run swarm checks
+- merge safely
+
+7. GITHUB ACTIONS / CI GOVERNANCE
+   Create deterministic CI pipeline:
+
+- syntax validation
+- runtime validation
+- dashboard validation
+- deployment validation
+- dependency integrity
+- compatibility integrity
+- Supabase validation
+- swarm validation
+- monetization validation
+
+8. RECOVERY ENGINE
+   Automatically:
+
+- isolate broken PRs
+- rollback failed merges
+- restore previous stable branch state
+- generate structured recovery reports
+
+9. REPOSITORY HEALTH SYSTEM
+   Expose:
+
+- merge health
+- branch health
+- deployment health
+- CI/CD health
+- PR readiness
+- runtime synchronization
+- dashboard synchronization
+
+10. DASHBOARD GOVERNANCE
+    Expose governance metrics in dashboard:
+
+- pending PRs
+- merge conflicts
+- deployment drift
+- CI failures
+- runtime mismatch
+- branch synchronization
+
+11. SAFE DEPLOYMENT RULES
+    NEVER:
+
+- break swarm runtime
+- break monetization
+- break persistence
+- break watchdog
+- break runtime APIs
+- break dashboard runtime
+- break observability
+- break conversion engine
+
+12. REQUIRED OUTPUTS
+    Generate:
+
+- merge-governance-report.json
+- deployment-sync-report.json
+- branch-health-report.json
+- autonomous-recovery-report.json
+- runtime-sync-report.json
+
+13. REQUIRED ENDPOINTS
+    Expose:
+
+- /api/v1/governance/merge
+- /api/v1/governance/branches
+- /api/v1/governance/deployments
+- /api/v1/governance/conflicts
+- /api/v1/governance/recovery
+- /api/v1/governance/runtime-sync
+
+14. REQUIRED RESULT
+    Final GXEON state must:
+
+- merge automatically
+- recover automatically
+- deploy automatically
+- self-validate
+- self-monitor
+- self-heal
+- maintain deterministic production integrity
+
+GOAL:
+Transform GXEON AI into a self-governing enterprise-grade autonomous repository runtime with deterministic merge orchestration, deployment governance, and autonomous recovery.
+
