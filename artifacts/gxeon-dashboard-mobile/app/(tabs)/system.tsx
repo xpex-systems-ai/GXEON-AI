@@ -91,7 +91,24 @@ export default function SystemScreen() {
     }
   }, []);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+    if (!isConfigured()) return;
+    const db = getSupabase();
+    const channel = db
+      .channel("system-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "api_keys" }, () => {
+        fetchData();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "actors" }, () => {
+        fetchData();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "marketplace_datasets" }, () => {
+        fetchData();
+      })
+      .subscribe();
+    return () => { db.removeChannel(channel); };
+  }, [fetchData]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

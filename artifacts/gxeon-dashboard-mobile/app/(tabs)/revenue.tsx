@@ -59,7 +59,18 @@ export default function RevenueScreen() {
     }
   }, []);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+    if (!isConfigured()) return;
+    const db = getSupabase();
+    const channel = db
+      .channel("revenue-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "revenue_events" }, () => {
+        fetchData();
+      })
+      .subscribe();
+    return () => { db.removeChannel(channel); };
+  }, [fetchData]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

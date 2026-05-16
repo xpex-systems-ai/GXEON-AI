@@ -70,7 +70,18 @@ export default function TransactionsScreen() {
     }
   }, [statusFilter]);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+    if (!isConfigured()) return;
+    const db = getSupabase();
+    const channel = db
+      .channel("transactions-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "global_transactions" }, () => {
+        fetchData();
+      })
+      .subscribe();
+    return () => { db.removeChannel(channel); };
+  }, [fetchData]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

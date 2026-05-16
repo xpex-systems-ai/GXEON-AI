@@ -92,7 +92,24 @@ export default function OverviewScreen() {
     }
   }, []);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+    if (!isConfigured()) return;
+    const db = getSupabase();
+    const channel = db
+      .channel("overview-realtime")
+      .on("postgres_changes", { event: "*", schema: "public", table: "global_transactions" }, () => {
+        fetchData();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "actors" }, () => {
+        fetchData();
+      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "api_keys" }, () => {
+        fetchData();
+      })
+      .subscribe();
+    return () => { db.removeChannel(channel); };
+  }, [fetchData]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
