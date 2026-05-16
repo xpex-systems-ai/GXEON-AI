@@ -9,11 +9,14 @@ const { getRecoveryStatus } = require(pathFromRoot("runtimeRecovery.cjs"));
 const { getProductionRuntimeStatus } = require(pathFromRoot("productionRuntime.cjs"));
 const { getDeploymentIntegrityStatus } = require(pathFromRoot("deploymentIntegrity.cjs"));
 const { getRuntimeSnapshotStatus } = require(pathFromRoot("runtimeSnapshot.cjs"));
-const { getRailwayRuntimeStatus } = require(pathFromRoot("railwayProduction.cjs"));
+const { getRailwayRuntimeStatus, getRailwayCoreStatus } = require(pathFromRoot("railwayProduction.cjs"));
 const { getRadarStatus } = require(pathFromRoot("radarContinuity.cjs"));
 const { getProviderRuntimeStatus } = require(pathFromRoot("providerRuntime.cjs"));
 const { getRuntimeMemoryStatus } = require(pathFromRoot("runtimeMemory.cjs"));
 const { getSupabaseRuntimeStatus } = require(pathFromRoot("supabaseRuntime.cjs"));
+const { getSignalIntelligence } = require(pathFromRoot("signalEnrichment.cjs"));
+const { getConversionDNA } = require(pathFromRoot("conversionDNA.cjs"));
+const { getOperatorAlerts } = require(pathFromRoot("operatorAlerts.cjs"));
 const { getSanitizedProviderSummary, sanitizeRuntimeEvent } = require(pathFromRoot("runtimeLogSanitizer.cjs"));
 
 const router = Router();
@@ -68,6 +71,23 @@ router.get("/v1/runtime/provider-logs", (_req, res) => {
 router.post("/v1/runtime/log-sanitize", (req, res) => {
   const payload = req.body ?? {};
   res.json({ sanitized: sanitizeRuntimeEvent(payload) });
+});
+
+
+router.get("/v1/runtime/railway-core", (_req, res) => {
+  res.json(getRailwayCoreStatus());
+});
+
+router.get("/v1/runtime/signals", (_req, res) => {
+  res.json(getSignalIntelligence());
+});
+
+router.get("/v1/runtime/conversion-dna", (_req, res) => {
+  res.json(getConversionDNA());
+});
+
+router.get("/v1/runtime/alerts", (_req, res) => {
+  res.json(getOperatorAlerts());
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {

@@ -18,8 +18,11 @@ function getProviderRuntimeStatus() {
   const retryCount = mem.provider_retry_count || 0;
   const nextRetry = getBackoffSeconds(retryCount);
   const state = mem.provider_state || 'CONNECTED';
+  const providerHealth = state === 'CONNECTED' ? 94 : state === 'RECOVERING' ? 72 : 55;
   return {
     provider: state,
+    provider_name: 'dexscreener',
+    provider_model_state: state === 'CONNECTED' ? 'ACTIVE' : state === 'RECOVERING' ? 'RETRYING' : 'DEGRADED',
     websocket_keepalive: state === 'CONNECTED' ? 'ACTIVE' : 'RECOVERING',
     heartbeat: mem.provider_heartbeat || 'ONLINE',
     cooldown: retryCount > 0,
@@ -31,6 +34,7 @@ function getProviderRuntimeStatus() {
     disconnect_reason: mem.disconnect_reason || null,
     jitter_protection: true,
     reconnect_loop_protection: true,
+    provider_health_score: providerHealth,
     generated_at: nowIso(),
   };
 }
@@ -70,7 +74,7 @@ function registerProviderDisconnect(reason = 'unknown') {
     last_disconnect_at: nowIso(),
     reconnect_history: [...(mem.reconnect_history || []), { at: nowIso(), reason, nextRetry }].slice(-100),
   });
-  return { updated, log: sanitizeProviderLog('disconnect', { state: 'RECOVERING', next_retry_seconds: nextRetry }) };
+  return { updated, log: sanitizeProviderLog('disconnect', { state: 'RETRYING', next_retry_seconds: nextRetry }) };
 }
 
 module.exports = { getProviderRuntimeStatus, registerProviderDisconnect, registerProviderConnected };
