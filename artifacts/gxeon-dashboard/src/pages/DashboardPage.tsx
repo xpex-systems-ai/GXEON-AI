@@ -31,6 +31,17 @@ type DashboardMetrics = {
   pendingTransactions: number;
 };
 
+type RuntimeSync = {
+  runtime: string;
+  github_sync: string;
+  replit_runtime: string;
+  last_commit: string;
+  last_sync: string;
+  branch?: string;
+  deployment_freshness_seconds?: number;
+  synchronized?: boolean;
+};
+
 type DashboardData = {
   metrics: DashboardMetrics;
   latestTransactions: Transaction[];
@@ -56,6 +67,7 @@ export default function DashboardPage() {
   });
   const [loading, setLoading] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [runtimeSync, setRuntimeSync] = useState<RuntimeSync | null>(null);
 
   const fetchDashboardData = useCallback(async () => {
     setLoading(true);
@@ -96,6 +108,12 @@ export default function DashboardPage() {
       const paidCount = paidTransactionsResult.data?.length || 0;
       const conversionRate = totalTransactions > 0 ? (paidCount / totalTransactions) * 100 : 0;
       const avgTicket = paidCount > 0 ? totalRevenue / paidCount : 0;
+
+      const syncResponse = await fetch("/api/v1/runtime/sync");
+      if (syncResponse.ok) {
+        const syncJson = (await syncResponse.json()) as RuntimeSync;
+        setRuntimeSync(syncJson);
+      }
 
       setData({
         metrics: {
@@ -214,6 +232,25 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">GITHUB SYNC STATUS</CardTitle>
+            <Database className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">Sync health</span>
+              <Badge className={(runtimeSync?.synchronized ?? false) ? "bg-green-600" : "bg-yellow-600"}>
+                {(runtimeSync?.synchronized ?? false) ? "GREEN" : "YELLOW"}
+              </Badge>
+            </div>
+            <p className="text-xs">Branch: <span className="font-semibold">{runtimeSync?.branch ?? "unknown"}</span></p>
+            <p className="text-xs">Commit: <span className="font-mono">{runtimeSync?.last_commit ?? "-"}</span></p>
+            <p className="text-xs">Runtime: <span className="font-semibold">{runtimeSync?.runtime ?? "-"}</span></p>
+            <p className="text-xs">Last sync: <span className="font-semibold">{runtimeSync?.last_sync ? new Date(runtimeSync.last_sync).toLocaleString() : "-"}</span></p>
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">System Status</CardTitle>
