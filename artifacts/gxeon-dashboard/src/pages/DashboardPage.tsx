@@ -42,6 +42,16 @@ type RuntimeSync = {
   synchronized?: boolean;
 };
 
+type ProductionRuntime = {
+  production_runtime: string;
+  deployment_sync: string;
+  heartbeat: string;
+  recovery: string;
+  telemetry: string;
+  supabase_validation: string;
+  governance: string;
+};
+
 type DashboardData = {
   metrics: DashboardMetrics;
   latestTransactions: Transaction[];
@@ -68,6 +78,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [runtimeSync, setRuntimeSync] = useState<RuntimeSync | null>(null);
+  const [productionRuntime, setProductionRuntime] = useState<ProductionRuntime | null>(null);
 
   const fetchDashboardData = useCallback(async () => {
     setLoading(true);
@@ -110,9 +121,14 @@ export default function DashboardPage() {
       const avgTicket = paidCount > 0 ? totalRevenue / paidCount : 0;
 
       const syncResponse = await fetch("/api/v1/runtime/sync");
+      const productionResponse = await fetch("/api/v1/runtime/production");
       if (syncResponse.ok) {
         const syncJson = (await syncResponse.json()) as RuntimeSync;
         setRuntimeSync(syncJson);
+      }
+      if (productionResponse.ok) {
+        const productionJson = (await productionResponse.json()) as ProductionRuntime;
+        setProductionRuntime(productionJson);
       }
 
       setData({
@@ -232,6 +248,22 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
+
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">AUTONOMOUS PRODUCTION STATUS</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-1">
+            <p className="text-xs">Runtime: <span className="font-semibold">{productionRuntime?.production_runtime ?? "-"}</span></p>
+            <p className="text-xs">Deployment: <span className="font-semibold">{productionRuntime?.deployment_sync ?? "-"}</span></p>
+            <p className="text-xs">Heartbeat: <span className="font-semibold">{productionRuntime?.heartbeat ?? "-"}</span></p>
+            <p className="text-xs">Recovery: <span className="font-semibold">{productionRuntime?.recovery ?? "-"}</span></p>
+            <p className="text-xs">Telemetry: <span className="font-semibold">{productionRuntime?.telemetry ?? "-"}</span></p>
+            <p className="text-xs">Supabase: <span className="font-semibold">{productionRuntime?.supabase_validation ?? "-"}</span></p>
+          </CardContent>
+        </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

@@ -4,6 +4,9 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const { getRuntimeSyncStatus } = require("../../../../server/runtime/runtimeHeartbeat.cjs");
 const { getRecoveryStatus } = require("../../../../server/runtime/runtimeRecovery.cjs");
+const { getProductionRuntimeStatus } = require("../../../../server/runtime/productionRuntime.cjs");
+const { getDeploymentIntegrityStatus } = require("../../../../server/runtime/deploymentIntegrity.cjs");
+const { getRuntimeSnapshotStatus } = require("../../../../server/runtime/runtimeSnapshot.cjs");
 
 const router = Router();
 
@@ -13,6 +16,19 @@ router.get("/v1/runtime/sync", (_req, res) => {
 
 router.get("/v1/runtime/recovery", (_req, res) => {
   res.json(getRecoveryStatus());
+});
+
+
+router.get("/v1/runtime/production", (_req, res) => {
+  res.json(getProductionRuntimeStatus());
+});
+
+router.get("/v1/runtime/deployment", (_req, res) => {
+  res.json(getDeploymentIntegrityStatus());
+});
+
+router.get("/v1/runtime/snapshots", (_req, res) => {
+  res.json(getRuntimeSnapshotStatus());
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {
