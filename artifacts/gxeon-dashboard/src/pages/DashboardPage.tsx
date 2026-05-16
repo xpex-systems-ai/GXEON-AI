@@ -31,6 +31,40 @@ type DashboardMetrics = {
   pendingTransactions: number;
 };
 
+type RuntimeSync = {
+  runtime: string;
+  github_sync: string;
+  replit_runtime: string;
+  last_commit: string;
+  last_sync: string;
+  branch?: string;
+  deployment_freshness_seconds?: number;
+  synchronized?: boolean;
+};
+
+type RailwayRuntime = {
+  railway_runtime: string;
+  deployment: string;
+  memory: string;
+  sync: string;
+  providers: string;
+  telemetry: string;
+  websocket_health: string;
+  radar_heartbeat?: string;
+  provider_count?: number;
+  reconnect_activity?: number;
+};
+
+type ProductionRuntime = {
+  production_runtime: string;
+  deployment_sync: string;
+  heartbeat: string;
+  recovery: string;
+  telemetry: string;
+  supabase_validation: string;
+  governance: string;
+};
+
 type DashboardData = {
   metrics: DashboardMetrics;
   latestTransactions: Transaction[];
@@ -56,6 +90,9 @@ export default function DashboardPage() {
   });
   const [loading, setLoading] = useState(true);
   const [autoRefresh, setAutoRefresh] = useState(true);
+  const [runtimeSync, setRuntimeSync] = useState<RuntimeSync | null>(null);
+  const [productionRuntime, setProductionRuntime] = useState<ProductionRuntime | null>(null);
+  const [railwayRuntime, setRailwayRuntime] = useState<RailwayRuntime | null>(null);
 
   const fetchDashboardData = useCallback(async () => {
     setLoading(true);
@@ -96,6 +133,22 @@ export default function DashboardPage() {
       const paidCount = paidTransactionsResult.data?.length || 0;
       const conversionRate = totalTransactions > 0 ? (paidCount / totalTransactions) * 100 : 0;
       const avgTicket = paidCount > 0 ? totalRevenue / paidCount : 0;
+
+      const syncResponse = await fetch("/api/v1/runtime/sync");
+      const productionResponse = await fetch("/api/v1/runtime/production");
+      const railwayResponse = await fetch("/api/v1/runtime/railway");
+      if (syncResponse.ok) {
+        const syncJson = (await syncResponse.json()) as RuntimeSync;
+        setRuntimeSync(syncJson);
+      }
+      if (productionResponse.ok) {
+        const productionJson = (await productionResponse.json()) as ProductionRuntime;
+        setProductionRuntime(productionJson);
+      }
+      if (railwayResponse.ok) {
+        const railwayJson = (await railwayResponse.json()) as RailwayRuntime;
+        setRailwayRuntime(railwayJson);
+      }
 
       setData({
         metrics: {
@@ -214,6 +267,59 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
+
+
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">RAILWAY CORE STATUS</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-1">
+            <p className="text-xs">Runtime: <span className="font-semibold">{railwayRuntime?.railway_runtime ?? "-"}</span></p>
+            <p className="text-xs">Websocket: <span className="font-semibold">{railwayRuntime?.websocket_health ?? "-"}</span></p>
+            <p className="text-xs">Providers: <span className="font-semibold">{railwayRuntime?.providers ?? "-"}</span> ({railwayRuntime?.provider_count ?? 0})</p>
+            <p className="text-xs">Radar: <span className="font-semibold">{railwayRuntime?.radar_heartbeat ?? "-"}</span></p>
+            <p className="text-xs">Reconnects: <span className="font-semibold">{railwayRuntime?.reconnect_activity ?? 0}</span></p>
+            <p className="text-xs">Deployment: <span className="font-semibold">{railwayRuntime?.deployment ?? "-"}</span></p>
+            <p className="text-xs">Sync: <span className="font-semibold">{railwayRuntime?.sync ?? "-"}</span></p>
+            <p className="text-xs">Memory: <span className="font-semibold">{railwayRuntime?.memory ?? "-"}</span></p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">AUTONOMOUS PRODUCTION STATUS</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-1">
+            <p className="text-xs">Runtime: <span className="font-semibold">{productionRuntime?.production_runtime ?? "-"}</span></p>
+            <p className="text-xs">Deployment: <span className="font-semibold">{productionRuntime?.deployment_sync ?? "-"}</span></p>
+            <p className="text-xs">Heartbeat: <span className="font-semibold">{productionRuntime?.heartbeat ?? "-"}</span></p>
+            <p className="text-xs">Recovery: <span className="font-semibold">{productionRuntime?.recovery ?? "-"}</span></p>
+            <p className="text-xs">Telemetry: <span className="font-semibold">{productionRuntime?.telemetry ?? "-"}</span></p>
+            <p className="text-xs">Supabase: <span className="font-semibold">{productionRuntime?.supabase_validation ?? "-"}</span></p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">GITHUB SYNC STATUS</CardTitle>
+            <Database className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-muted-foreground">Sync health</span>
+              <Badge className={(runtimeSync?.synchronized ?? false) ? "bg-green-600" : "bg-yellow-600"}>
+                {(runtimeSync?.synchronized ?? false) ? "GREEN" : "YELLOW"}
+              </Badge>
+            </div>
+            <p className="text-xs">Branch: <span className="font-semibold">{runtimeSync?.branch ?? "unknown"}</span></p>
+            <p className="text-xs">Commit: <span className="font-mono">{runtimeSync?.last_commit ?? "-"}</span></p>
+            <p className="text-xs">Runtime: <span className="font-semibold">{runtimeSync?.runtime ?? "-"}</span></p>
+            <p className="text-xs">Last sync: <span className="font-semibold">{runtimeSync?.last_sync ? new Date(runtimeSync.last_sync).toLocaleString() : "-"}</span></p>
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">System Status</CardTitle>
