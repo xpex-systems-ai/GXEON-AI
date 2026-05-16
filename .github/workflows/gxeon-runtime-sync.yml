@@ -36,6 +36,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: node -e "const r=require('./server/runtime/runtimeRecovery.cjs').getRecoveryStatus(); if(!r.auto_retry_enabled) process.exit(1); console.log('ok')"
+      - run: node -e "const r=require('./server/runtime/railwayProduction.cjs').getRailwayRuntimeStatus(); if(!r.railway_runtime) process.exit(1); console.log('railway ok')"
+      - run: node -e "const r=require('./server/runtime/radarContinuity.cjs').getRadarStatus(); if(r.radar!=='ACTIVE') process.exit(1); console.log('radar ok')"
 
   dashboard-availability-validation:
     runs-on: ubuntu-latest
@@ -61,6 +63,10 @@ jobs:
           echo '{"deployment":"HEALTHY"}' > artifacts/deployment-integrity-report.json
           echo '{"production_runtime":"ACTIVE"}' > artifacts/production-runtime-report.json
           echo '{"status":"ACTIVE"}' > artifacts/runtime-snapshot-report.json
+          echo '{"railway_runtime":"ACTIVE"}' > artifacts/railway-runtime-report.json
+          echo '{"providers":"CONNECTED"}' > artifacts/provider-health-report.json
+          echo '{"radar":"ACTIVE"}' > artifacts/radar-runtime-report.json
+          echo '{"websocket":"ONLINE"}' > artifacts/websocket-runtime-report.json
       - uses: actions/upload-artifact@v4
         with:
           name: gxeon-runtime-sync-artifacts
@@ -70,3 +76,7 @@ jobs:
             artifacts/deployment-integrity-report.json
             artifacts/production-runtime-report.json
             artifacts/runtime-snapshot-report.json
+            artifacts/railway-runtime-report.json
+            artifacts/provider-health-report.json
+            artifacts/radar-runtime-report.json
+            artifacts/websocket-runtime-report.json

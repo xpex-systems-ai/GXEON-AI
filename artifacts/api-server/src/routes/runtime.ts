@@ -7,6 +7,10 @@ const { getRecoveryStatus } = require("../../../../server/runtime/runtimeRecover
 const { getProductionRuntimeStatus } = require("../../../../server/runtime/productionRuntime.cjs");
 const { getDeploymentIntegrityStatus } = require("../../../../server/runtime/deploymentIntegrity.cjs");
 const { getRuntimeSnapshotStatus } = require("../../../../server/runtime/runtimeSnapshot.cjs");
+const { getRailwayRuntimeStatus } = require("../../../../server/runtime/railwayProduction.cjs");
+const { getRadarStatus } = require("../../../../server/runtime/radarContinuity.cjs");
+const { getProviderRuntimeStatus } = require("../../../../server/runtime/providerRuntime.cjs");
+const { getRuntimeMemoryStatus } = require("../../../../server/runtime/runtimeMemory.cjs");
 
 const router = Router();
 
@@ -29,6 +33,23 @@ router.get("/v1/runtime/deployment", (_req, res) => {
 
 router.get("/v1/runtime/snapshots", (_req, res) => {
   res.json(getRuntimeSnapshotStatus());
+});
+
+
+router.get("/v1/runtime/railway", (_req, res) => {
+  res.json(getRailwayRuntimeStatus());
+});
+
+router.get("/v1/runtime/radar", (_req, res) => {
+  res.json(getRadarStatus());
+});
+
+router.get("/v1/runtime/providers", (_req, res) => {
+  res.json(getProviderRuntimeStatus());
+});
+
+router.get("/v1/runtime/memory", (_req, res) => {
+  res.json(getRuntimeMemoryStatus());
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {
