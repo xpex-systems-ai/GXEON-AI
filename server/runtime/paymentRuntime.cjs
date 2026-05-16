@@ -15,7 +15,7 @@ function persistPayments(payments) {
 
 function createPixPayment({ amount = 97, conversion_class = 'HOT', cta_source = 'UNKNOWN', signal_source = 'UNKNOWN' } = {}) {
   const payments = getPaymentsState();
-  const id = `pix_${Date.now()}`;
+  const id = `pix_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
   const payment = {
     payment_id: id,
     status: 'PENDING',

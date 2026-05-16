@@ -20,6 +20,7 @@ const { getOperatorAlerts } = require(pathFromRoot("operatorAlerts.cjs"));
 const { createPixPayment, getPaymentsRuntime } = require(pathFromRoot("paymentRuntime.cjs"));
 const { processWebhook } = require(pathFromRoot("mercadoWebhookRuntime.cjs"));
 const { getRevenueTelemetry } = require(pathFromRoot("revenueTelemetry.cjs"));
+const { executeAutonomousPixRun } = require(pathFromRoot("paymentOrchestrator.cjs"));
 const { getSanitizedProviderSummary, sanitizeRuntimeEvent } = require(pathFromRoot("runtimeLogSanitizer.cjs"));
 
 const router = Router();
@@ -100,6 +101,10 @@ router.get("/v1/runtime/payments", (_req, res) => {
 
 router.post("/v1/runtime/payments/create", (req, res) => {
   res.status(201).json(createPixPayment(req.body ?? {}));
+});
+
+router.post("/v1/runtime/payments/auto", (req, res) => {
+  res.status(201).json(executeAutonomousPixRun(req.body ?? {}));
 });
 
 router.post("/v1/webhooks/mercado-pago", (req, res) => {
