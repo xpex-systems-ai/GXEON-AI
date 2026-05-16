@@ -16,28 +16,37 @@ import RevenueStreamsPage from "@/pages/RevenueStreamsPage";
 import SettingsPage from "@/pages/SettingsPage";
 import SystemLogsPage from "@/pages/SystemLogsPage";
 import GovernancePage from "@/pages/GovernancePage";
+import TestPage from "@/pages/TestPage";
 
 const queryClient = new QueryClient();
 
 function Router() {
   return (
-    <DashboardLayout>
-      <Switch>
-        <Route path="/" component={DashboardPage} />
-        <Route path="/transactions" component={TransactionsPage} />
-        <Route path="/commissions" component={CommissionsPage} />
-        <Route path="/actors" component={ActorsPage} />
-        <Route path="/api-keys" component={ApiKeysPage} />
-        <Route path="/datasets" component={DatasetsPage} />
-        <Route path="/health" component={HealthPage} />
-        <Route path="/revenue" component={RevenuePage} />
-        <Route path="/revenue-streams" component={RevenueStreamsPage} />
-        <Route path="/settings" component={SettingsPage} />
-        <Route path="/system-logs" component={SystemLogsPage} />
-        <Route path="/governance" component={GovernancePage} />
-        <Route component={NotFound} />
-      </Switch>
-    </DashboardLayout>
+    <Switch>
+      {/* Standalone diagnostic page — no layout wrapper, matches original */}
+      <Route path="/test" component={TestPage} />
+
+      {/* All other routes wrapped in dashboard layout */}
+      <Route>
+        <DashboardLayout>
+          <Switch>
+            <Route path="/" component={DashboardPage} />
+            <Route path="/transactions" component={TransactionsPage} />
+            <Route path="/commissions" component={CommissionsPage} />
+            <Route path="/actors" component={ActorsPage} />
+            <Route path="/api-keys" component={ApiKeysPage} />
+            <Route path="/datasets" component={DatasetsPage} />
+            <Route path="/health" component={HealthPage} />
+            <Route path="/revenue" component={RevenuePage} />
+            <Route path="/revenue-streams" component={RevenueStreamsPage} />
+            <Route path="/settings" component={SettingsPage} />
+            <Route path="/system-logs" component={SystemLogsPage} />
+            <Route path="/governance" component={GovernancePage} />
+            <Route component={NotFound} />
+          </Switch>
+        </DashboardLayout>
+      </Route>
+    </Switch>
   );
 }
 

@@ -40,14 +40,24 @@ type GovernanceData = {
 
 const API_BASE = "/api";
 
+function governanceHeaders(): HeadersInit {
+  const token = import.meta.env.VITE_GOVERNANCE_TOKEN as string | undefined;
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 async function fetchGovernance(endpoint: string) {
-  const res = await fetch(`${API_BASE}/v1/governance/${endpoint}`);
+  const res = await fetch(`${API_BASE}/v1/governance/${endpoint}`, {
+    headers: governanceHeaders(),
+  });
   if (!res.ok) throw new Error(`${endpoint}: ${res.status}`);
   return res.json();
 }
 
 async function generateReports() {
-  const res = await fetch(`${API_BASE}/v1/governance/reports`, { method: "POST" });
+  const res = await fetch(`${API_BASE}/v1/governance/reports`, {
+    method: "POST",
+    headers: governanceHeaders(),
+  });
   if (!res.ok) throw new Error("Failed to generate reports");
   return res.json();
 }
