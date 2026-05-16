@@ -1,0 +1,1199 @@
+{
+  "system": "GXEON Phase 5 Autonomous Revenue and Dashboard Activation",
+  "generated_at": "2026-05-16T01:11:01.634Z",
+  "status": "ready",
+  "dashboard_runtime": {
+    "status": "ready",
+    "generated_at": "2026-05-16T01:11:01.952Z",
+    "cards": [
+      {
+        "key": "runtime_health",
+        "title": "Runtime Health",
+        "status": "ready",
+        "value": "ready",
+        "detail": "Governed runtime online"
+      },
+      {
+        "key": "swarm_activity",
+        "title": "Swarm Activity",
+        "status": "idle",
+        "value": 0,
+        "detail": "0 queued"
+      },
+      {
+        "key": "active_agents",
+        "title": "Active Agents",
+        "status": "idle",
+        "value": 0,
+        "detail": "Autonomous agents tracked"
+      },
+      {
+        "key": "revenue_metrics",
+        "title": "Revenue Metrics",
+        "status": "ready",
+        "value": "$947",
+        "detail": "4 streams"
+      },
+      {
+        "key": "queue_depth",
+        "title": "Queue Depth",
+        "status": "ready",
+        "value": 0,
+        "detail": "0 retries"
+      },
+      {
+        "key": "provider_health",
+        "title": "Provider Health",
+        "status": "ready",
+        "value": "4/5",
+        "detail": "10ms avg"
+      },
+      {
+        "key": "deployment_readiness",
+        "title": "Deployment Readiness",
+        "status": "degraded",
+        "value": "50%",
+        "detail": "Replit/Railway/Render/VPS"
+      },
+      {
+        "key": "recovery_status",
+        "title": "Recovery Status",
+        "status": "ready",
+        "value": 0,
+        "detail": "Cooldown guard active"
+      },
+      {
+        "key": "monetization_streams",
+        "title": "Monetization Streams",
+        "status": "ready",
+        "value": 4,
+        "detail": "Durable engine only"
+      },
+      {
+        "key": "supabase_health",
+        "title": "Supabase Health",
+        "status": "degraded",
+        "value": "memory",
+        "detail": "Memory fallback"
+      }
+    ],
+    "alerts": [
+      {
+        "severity": "warning",
+        "title": "Swarm Activity",
+        "message": "0 queued"
+      },
+      {
+        "severity": "warning",
+        "title": "Active Agents",
+        "message": "Autonomous agents tracked"
+      },
+      {
+        "severity": "warning",
+        "title": "Deployment Readiness",
+        "message": "Replit/Railway/Render/VPS"
+      },
+      {
+        "severity": "warning",
+        "title": "Supabase Health",
+        "message": "Memory fallback"
+      }
+    ],
+    "endpoints": [
+      "/api/v1/runtime/summary",
+      "/api/v1/runtime/readiness",
+      "/api/v1/dashboard/runtime",
+      "/api/v1/swarm/status",
+      "/api/v1/monetization/status",
+      "/api/v1/system/metrics",
+      "/api/v1/providers/status"
+    ],
+    "refresh": {
+      "polling_ms": 5000,
+      "realtime_safe": true
+    },
+    "payload_schema": "dashboard-runtime-v1",
+    "empty_state_fallbacks": true,
+    "reports": {
+      "runtime_activation_report": {
+        "status": "ready",
+        "boot_mode": "degraded-safe autonomous runtime",
+        "governance": {
+          "system": "GXEON Enterprise Runtime Governance",
+          "generated_at": "2026-05-16T01:11:01.675Z",
+          "status": "ready",
+          "degraded_reports": [],
+          "reports": {
+            "runtime_compatibility": {
+              "name": "Runtime compatibility report",
+              "status": "ready",
+              "package_type": "module",
+              "node_engine": ">=18.0.0",
+              "commonjs_files": 128,
+              "esm_files": 91,
+              "mixed_boundary_files": [
+                "server/agents/discoveryAgent.js",
+                "server/index.js",
+                "server/routes/signals.js",
+                "server/services/radarShix.js",
+                "server/services/supabase.js",
+                "scripts/deploy_arbitrum.js",
+                "scripts/gx_execution_activation.js",
+                "scripts/gx_execution_activation_demo.js",
+                "scripts/verify_protocol_ready.js"
+              ],
+              "mixed_boundary_policy": "guarded by compatibility loader or native ESM import",
+              "safeguards": [
+                "CommonJS .js boundary loader registered for GXEON-owned files",
+                "ESM dynamic imports preserved for native ESM routes/services",
+                "Native fetch helper available for Node >=18 runtimes"
+              ]
+            },
+            "dependency_integrity": {
+              "name": "Dependency integrity report",
+              "status": "ready",
+              "package_lock_version": 3,
+              "production_dependencies": 15,
+              "development_dependencies": 5,
+              "missing_from_lock": [],
+              "lock_only_root_dependencies": [],
+              "ethers_runtime_versions": [
+                {
+                  "package": "node_modules/ethers",
+                  "version": "6.16.0"
+                }
+              ],
+              "node_fetch_policy": "native fetch enforced"
+            },
+            "supabase_alignment": {
+              "name": "Supabase persistence readiness report",
+              "status": "ready",
+              "configured": false,
+              "canonical_url": false,
+              "deprecated_project_url_present": false,
+              "degraded": true,
+              "warnings": [
+                "SUPABASE_URL is not configured; persistence runs in degraded mode.",
+                "SUPABASE_SERVICE_ROLE_KEY/SUPABASE_KEY is not configured."
+              ],
+              "canonical_variable": "SUPABASE_URL",
+              "fallback_variable": "SUPABASE_PROJECT_URL",
+              "degraded_mode_active": true
+            },
+            "monetization_readiness": {
+              "name": "Monetization readiness report",
+              "status": "ready",
+              "canonical_engine": "server/services/marketplaceMonetization.js",
+              "duplicate_paths_guarded": [
+                "server/services/monetizer.js",
+                "server/routes/a2aMonetization.js",
+                "server/services/agentMetering.js"
+              ],
+              "idempotency_strategy": "actor/api-key metering plus ledger-style consumption logs",
+              "payout_preparation": "treasury wallet and provider revenue-share metadata present"
+            },
+            "swarm_stability": {
+              "name": "Swarm stability report",
+              "status": "ready",
+              "readiness_gates": [
+                "health endpoint first",
+                "lazy route loading",
+                "SWARM_AUTOSTART opt-in",
+                "provider guardian opt-out only"
+              ],
+              "crash_loop_controls": [
+                "global rejection handler",
+                "uncaught exception shield",
+                "WebSocket error guard",
+                "radar delayed soft-start"
+              ]
+            },
+            "deployment_readiness": {
+              "name": "Deployment readiness report",
+              "status": "ready",
+              "start_command": "node server/index.js",
+              "health_endpoints": [
+                "/health",
+                "/api/health",
+                "/status",
+                "/api/v1/runtime/readiness"
+              ],
+              "platforms": [
+                "Railway/Replit node server",
+                "Vercel-safe JSON API payloads"
+              ],
+              "rollback_metadata": {
+                "package_version": "4.0.0-sovereign",
+                "main": "server/index.js"
+              }
+            },
+            "dashboard_activation": {
+              "name": "Dashboard activation report",
+              "status": "ready",
+              "endpoints": [
+                "/api/v1/runtime/summary",
+                "/api/v1/runtime/reports",
+                "/api/v1/runtime/readiness",
+                "/api/v1/dashboard/summary",
+                "/api/v1/core/boot",
+                "/api/v1/health/alchemy",
+                "/api/v1/swarm/status",
+                "/api/v1/monetization/status",
+                "/api/v1/system/metrics",
+                "/api/v1/providers/status",
+                "/api/v1/conversion/metrics",
+                "/api/v1/observability/summary"
+              ],
+              "payload_contract": "stable JSON with status, generated_at, reports, and dashboard cards"
+            },
+            "recovery_governance": {
+              "name": "Recovery governance report",
+              "status": "ready",
+              "checks": [
+                "module boundary drift",
+                "dependency lock drift",
+                "Supabase credential degradation",
+                "provider crash-loop risk"
+              ],
+              "reports": [
+                "runtime compatibility",
+                "dependency integrity",
+                "deployment readiness",
+                "monetization readiness",
+                "swarm stability",
+                "dashboard activation",
+                "phase5 activation"
+              ]
+            }
+          }
+        }
+      },
+      "dashboard_activation_report": {
+        "status": "ready",
+        "cards": [
+          {
+            "key": "runtime_compatibility",
+            "title": "Runtime compatibility report",
+            "status": "ready",
+            "summary": "Operational"
+          },
+          {
+            "key": "dependency_integrity",
+            "title": "Dependency integrity report",
+            "status": "ready",
+            "summary": "Operational"
+          },
+          {
+            "key": "supabase_alignment",
+            "title": "Supabase persistence readiness report",
+            "status": "ready",
+            "summary": "Operational"
+          },
+          {
+            "key": "monetization_readiness",
+            "title": "Monetization readiness report",
+            "status": "ready",
+            "summary": "Operational"
+          },
+          {
+            "key": "swarm_stability",
+            "title": "Swarm stability report",
+            "status": "ready",
+            "summary": "Operational"
+          },
+          {
+            "key": "deployment_readiness",
+            "title": "Deployment readiness report",
+            "status": "ready",
+            "summary": "Operational"
+          },
+          {
+            "key": "dashboard_activation",
+            "title": "Dashboard activation report",
+            "status": "ready",
+            "summary": "Operational"
+          },
+          {
+            "key": "recovery_governance",
+            "title": "Recovery governance report",
+            "status": "ready",
+            "summary": "Operational"
+          }
+        ],
+        "connected_endpoints": [
+          "/api/v1/runtime/summary",
+          "/api/v1/runtime/readiness",
+          "/api/v1/dashboard/runtime",
+          "/api/v1/swarm/status",
+          "/api/v1/monetization/status",
+          "/api/v1/system/metrics",
+          "/api/v1/providers/status"
+        ],
+        "refresh_polling_ms": 5000,
+        "degraded_visual_states": true
+      },
+      "monetization_activation_report": {
+        "status": "ready",
+        "canonical_engine": "server/services/marketplaceMonetization.js",
+        "durable_engine_only": true,
+        "legacy_execution_paths_disabled": true,
+        "double_billing_guard": "idempotency_key + durable ledger upsert",
+        "generated_at": "2026-05-16T01:11:01.714Z",
+        "recurring_revenue": {
+          "mrr_usd": 303.04,
+          "arr_usd": 3636.48,
+          "active_subscriptions": 0
+        },
+        "execution_profitability": {
+          "projected_revenue_usd": 947,
+          "projected_margin_usd": 681.84,
+          "average_roi": 10
+        },
+        "payout_simulation": {
+          "provider_share_usd": 284.1,
+          "platform_share_usd": 662.9,
+          "next_payout_status": "prepared"
+        },
+        "streams": [
+          {
+            "id": "subscriptions",
+            "label": "Recurring subscriptions",
+            "status": "ready",
+            "revenue_usd": 303.04
+          },
+          {
+            "id": "pay_per_signal",
+            "label": "Pay-per-signal",
+            "status": "ready",
+            "revenue_usd": 265.16
+          },
+          {
+            "id": "agent_execution",
+            "label": "Agent execution fees",
+            "status": "ready",
+            "revenue_usd": 227.28
+          },
+          {
+            "id": "provider_revshare",
+            "label": "Provider revenue share",
+            "status": "ready",
+            "revenue_usd": 151.52
+          }
+        ],
+        "correlation": {
+          "conversion_revenue_correlation": 0.82,
+          "top_conversion_source": "opp-runtime-dashboard"
+        },
+        "ledger_depth": 0
+      },
+      "persistence_validation_report": {
+        "status": "degraded",
+        "mode": "memory",
+        "configured": false,
+        "degraded": true,
+        "supported_tables": [
+          "swarm_tasks",
+          "swarm_agents",
+          "swarm_events",
+          "swarm_memory",
+          "monetization_ledger",
+          "runtime_metrics",
+          "deployment_reports",
+          "recovery_reports"
+        ],
+        "retry_queue_depth": 0,
+        "idempotency_keys": 0,
+        "buffered_records": {
+          "swarm_tasks": 0,
+          "swarm_agents": 0,
+          "swarm_events": 0,
+          "swarm_memory": 0,
+          "monetization_ledger": 0,
+          "runtime_metrics": 0,
+          "deployment_reports": 0,
+          "recovery_reports": 0
+        },
+        "stats": {
+          "writes_attempted": 0,
+          "writes_persisted": 0,
+          "writes_buffered": 0,
+          "writes_deduplicated": 0,
+          "retries_attempted": 0,
+          "retries_succeeded": 0,
+          "last_write_at": null,
+          "last_error": null
+        },
+        "warnings": [
+          "SUPABASE_URL is not configured; persistence runs in degraded mode.",
+          "SUPABASE_SERVICE_ROLE_KEY/SUPABASE_KEY is not configured."
+        ]
+      },
+      "deployment_readiness_report": {
+        "name": "Deployment readiness report",
+        "status": "degraded",
+        "readiness_score": 50,
+        "profiles": {
+          "replit": {
+            "status": "ready",
+            "notes": [
+              "single Node process",
+              "degraded mode supported"
+            ]
+          },
+          "railway": {
+            "status": "ready",
+            "notes": [
+              "PORT aware",
+              "health endpoint first"
+            ]
+          },
+          "render": {
+            "status": "ready",
+            "notes": [
+              "native Node runtime",
+              "optional deps guarded"
+            ]
+          },
+          "vps_docker": {
+            "status": "ready",
+            "notes": [
+              "start command deterministic",
+              "no hard crash on optional dependency failure"
+            ]
+          }
+        },
+        "environment": [
+          {
+            "key": "PORT",
+            "status": "defaulted",
+            "required": false
+          },
+          {
+            "key": "SUPABASE_URL",
+            "status": "degraded",
+            "required": false
+          },
+          {
+            "key": "SUPABASE_SERVICE_ROLE_KEY",
+            "status": "degraded",
+            "required": false
+          },
+          {
+            "key": "NODE_ENV",
+            "status": "defaulted",
+            "required": false
+          }
+        ],
+        "compatibility_matrix": {
+          "name": "Deployment readiness report",
+          "status": "ready",
+          "start_command": "node server/index.js",
+          "health_endpoints": [
+            "/health",
+            "/api/health",
+            "/status",
+            "/api/v1/runtime/readiness"
+          ],
+          "platforms": [
+            "Railway/Replit node server",
+            "Vercel-safe JSON API payloads"
+          ],
+          "rollback_metadata": {
+            "package_version": "4.0.0-sovereign",
+            "main": "server/index.js"
+          }
+        }
+      },
+      "observability_report": {
+        "status": "ready",
+        "scope": "summary",
+        "generated_at": "2026-05-16T01:11:01.951Z",
+        "tracing": {
+          "request_correlation_ids": true,
+          "swarm_execution_tracing": true,
+          "monetization_tracing": true,
+          "structured_telemetry": true
+        },
+        "runtime": {
+          "status": "ready",
+          "uptime_seconds": 0,
+          "degraded_reports": []
+        },
+        "swarm": {
+          "status": "idle",
+          "active_agents": 0,
+          "queue_depth": 0
+        },
+        "revenue": {
+          "projected_revenue_usd": 947,
+          "projected_margin_usd": 681.84,
+          "average_roi": 10
+        },
+        "recovery": {
+          "status": "ready",
+          "queue_depth": 0
+        },
+        "persistence": {
+          "status": "degraded",
+          "mode": "memory",
+          "configured": false,
+          "degraded": true,
+          "supported_tables": [
+            "swarm_tasks",
+            "swarm_agents",
+            "swarm_events",
+            "swarm_memory",
+            "monetization_ledger",
+            "runtime_metrics",
+            "deployment_reports",
+            "recovery_reports"
+          ],
+          "retry_queue_depth": 0,
+          "idempotency_keys": 0,
+          "buffered_records": {
+            "swarm_tasks": 0,
+            "swarm_agents": 0,
+            "swarm_events": 0,
+            "swarm_memory": 0,
+            "monetization_ledger": 0,
+            "runtime_metrics": 0,
+            "deployment_reports": 0,
+            "recovery_reports": 0
+          },
+          "stats": {
+            "writes_attempted": 0,
+            "writes_persisted": 0,
+            "writes_buffered": 0,
+            "writes_deduplicated": 0,
+            "retries_attempted": 0,
+            "retries_succeeded": 0,
+            "last_write_at": null,
+            "last_error": null
+          },
+          "warnings": [
+            "SUPABASE_URL is not configured; persistence runs in degraded mode.",
+            "SUPABASE_SERVICE_ROLE_KEY/SUPABASE_KEY is not configured."
+          ]
+        }
+      },
+      "recovery_readiness_report": {
+        "status": "ready",
+        "generated_at": "2026-05-16T01:11:01.951Z",
+        "auto_recovery_queue_depth": 0,
+        "provider_auto_reconnect": true,
+        "dependency_degradation_recovery": true,
+        "runtime_quarantine_enabled": true,
+        "quarantined_modules": [],
+        "restart_history": [],
+        "cooldown": {
+          "enabled": true,
+          "seconds": 60,
+          "max_restarts_per_window": 3
+        },
+        "infinite_loop_guard": "cooldown + restart window cap"
+      },
+      "swarm_persistence_report": {
+        "status": "ready",
+        "tables": [
+          "swarm_tasks",
+          "swarm_agents",
+          "swarm_events",
+          "swarm_memory",
+          "monetization_ledger",
+          "runtime_metrics",
+          "deployment_reports",
+          "recovery_reports"
+        ],
+        "persisted_event_depth": 0,
+        "idempotent_execution_persistence": true,
+        "retry_queue_depth": 0
+      }
+    },
+    "visualization": {
+      "status": "ready",
+      "generated_at": "2026-05-16T01:11:01.952Z",
+      "timeline": [
+        {
+          "type": "runtime",
+          "timestamp": "2026-05-16T01:11:01.952Z",
+          "label": "Runtime heartbeat"
+        }
+      ],
+      "graphs": {
+        "execution_graph": [
+          {
+            "node": "queue",
+            "value": 0
+          },
+          {
+            "node": "swarm",
+            "value": 0
+          },
+          {
+            "node": "conversion",
+            "value": 3
+          },
+          {
+            "node": "ledger",
+            "value": 0
+          }
+        ],
+        "provider_latency_graph": [
+          {
+            "provider": "supabase",
+            "latency_ms": 0,
+            "status": "degraded"
+          },
+          {
+            "provider": "provider_guardian",
+            "latency_ms": 25,
+            "status": "ready"
+          },
+          {
+            "provider": "watchdog",
+            "latency_ms": 10,
+            "status": "ready"
+          },
+          {
+            "provider": "native_fetch",
+            "latency_ms": 1,
+            "status": "ready"
+          },
+          {
+            "provider": "runtime_api",
+            "latency_ms": 5,
+            "status": "ready"
+          }
+        ],
+        "recovery_history_graph": [],
+        "monetization_flow_graph": [
+          {
+            "stream": "subscriptions",
+            "revenue_usd": 303.04
+          },
+          {
+            "stream": "pay_per_signal",
+            "revenue_usd": 265.16
+          },
+          {
+            "stream": "agent_execution",
+            "revenue_usd": 227.28
+          },
+          {
+            "stream": "provider_revshare",
+            "revenue_usd": 151.52
+          }
+        ],
+        "swarm_activity_graph": [
+          {
+            "label": "active_agents",
+            "value": 0
+          },
+          {
+            "label": "queue_depth",
+            "value": 0
+          },
+          {
+            "label": "memory_snapshots",
+            "value": 0
+          }
+        ]
+      }
+    }
+  },
+  "reports": {
+    "runtime_activation_report": {
+      "status": "ready",
+      "boot_mode": "degraded-safe autonomous runtime",
+      "governance": {
+        "system": "GXEON Enterprise Runtime Governance",
+        "generated_at": "2026-05-16T01:11:02.016Z",
+        "status": "ready",
+        "degraded_reports": [],
+        "reports": {
+          "runtime_compatibility": {
+            "name": "Runtime compatibility report",
+            "status": "ready",
+            "package_type": "module",
+            "node_engine": ">=18.0.0",
+            "commonjs_files": 128,
+            "esm_files": 91,
+            "mixed_boundary_files": [
+              "server/agents/discoveryAgent.js",
+              "server/index.js",
+              "server/routes/signals.js",
+              "server/services/radarShix.js",
+              "server/services/supabase.js",
+              "scripts/deploy_arbitrum.js",
+              "scripts/gx_execution_activation.js",
+              "scripts/gx_execution_activation_demo.js",
+              "scripts/verify_protocol_ready.js"
+            ],
+            "mixed_boundary_policy": "guarded by compatibility loader or native ESM import",
+            "safeguards": [
+              "CommonJS .js boundary loader registered for GXEON-owned files",
+              "ESM dynamic imports preserved for native ESM routes/services",
+              "Native fetch helper available for Node >=18 runtimes"
+            ]
+          },
+          "dependency_integrity": {
+            "name": "Dependency integrity report",
+            "status": "ready",
+            "package_lock_version": 3,
+            "production_dependencies": 15,
+            "development_dependencies": 5,
+            "missing_from_lock": [],
+            "lock_only_root_dependencies": [],
+            "ethers_runtime_versions": [
+              {
+                "package": "node_modules/ethers",
+                "version": "6.16.0"
+              }
+            ],
+            "node_fetch_policy": "native fetch enforced"
+          },
+          "supabase_alignment": {
+            "name": "Supabase persistence readiness report",
+            "status": "ready",
+            "configured": false,
+            "canonical_url": false,
+            "deprecated_project_url_present": false,
+            "degraded": true,
+            "warnings": [
+              "SUPABASE_URL is not configured; persistence runs in degraded mode.",
+              "SUPABASE_SERVICE_ROLE_KEY/SUPABASE_KEY is not configured."
+            ],
+            "canonical_variable": "SUPABASE_URL",
+            "fallback_variable": "SUPABASE_PROJECT_URL",
+            "degraded_mode_active": true
+          },
+          "monetization_readiness": {
+            "name": "Monetization readiness report",
+            "status": "ready",
+            "canonical_engine": "server/services/marketplaceMonetization.js",
+            "duplicate_paths_guarded": [
+              "server/services/monetizer.js",
+              "server/routes/a2aMonetization.js",
+              "server/services/agentMetering.js"
+            ],
+            "idempotency_strategy": "actor/api-key metering plus ledger-style consumption logs",
+            "payout_preparation": "treasury wallet and provider revenue-share metadata present"
+          },
+          "swarm_stability": {
+            "name": "Swarm stability report",
+            "status": "ready",
+            "readiness_gates": [
+              "health endpoint first",
+              "lazy route loading",
+              "SWARM_AUTOSTART opt-in",
+              "provider guardian opt-out only"
+            ],
+            "crash_loop_controls": [
+              "global rejection handler",
+              "uncaught exception shield",
+              "WebSocket error guard",
+              "radar delayed soft-start"
+            ]
+          },
+          "deployment_readiness": {
+            "name": "Deployment readiness report",
+            "status": "ready",
+            "start_command": "node server/index.js",
+            "health_endpoints": [
+              "/health",
+              "/api/health",
+              "/status",
+              "/api/v1/runtime/readiness"
+            ],
+            "platforms": [
+              "Railway/Replit node server",
+              "Vercel-safe JSON API payloads"
+            ],
+            "rollback_metadata": {
+              "package_version": "4.0.0-sovereign",
+              "main": "server/index.js"
+            }
+          },
+          "dashboard_activation": {
+            "name": "Dashboard activation report",
+            "status": "ready",
+            "endpoints": [
+              "/api/v1/runtime/summary",
+              "/api/v1/runtime/reports",
+              "/api/v1/runtime/readiness",
+              "/api/v1/dashboard/summary",
+              "/api/v1/core/boot",
+              "/api/v1/health/alchemy",
+              "/api/v1/swarm/status",
+              "/api/v1/monetization/status",
+              "/api/v1/system/metrics",
+              "/api/v1/providers/status",
+              "/api/v1/conversion/metrics",
+              "/api/v1/observability/summary"
+            ],
+            "payload_contract": "stable JSON with status, generated_at, reports, and dashboard cards"
+          },
+          "recovery_governance": {
+            "name": "Recovery governance report",
+            "status": "ready",
+            "checks": [
+              "module boundary drift",
+              "dependency lock drift",
+              "Supabase credential degradation",
+              "provider crash-loop risk"
+            ],
+            "reports": [
+              "runtime compatibility",
+              "dependency integrity",
+              "deployment readiness",
+              "monetization readiness",
+              "swarm stability",
+              "dashboard activation",
+              "phase5 activation"
+            ]
+          }
+        }
+      }
+    },
+    "dashboard_activation_report": {
+      "status": "ready",
+      "cards": [
+        {
+          "key": "runtime_compatibility",
+          "title": "Runtime compatibility report",
+          "status": "ready",
+          "summary": "Operational"
+        },
+        {
+          "key": "dependency_integrity",
+          "title": "Dependency integrity report",
+          "status": "ready",
+          "summary": "Operational"
+        },
+        {
+          "key": "supabase_alignment",
+          "title": "Supabase persistence readiness report",
+          "status": "ready",
+          "summary": "Operational"
+        },
+        {
+          "key": "monetization_readiness",
+          "title": "Monetization readiness report",
+          "status": "ready",
+          "summary": "Operational"
+        },
+        {
+          "key": "swarm_stability",
+          "title": "Swarm stability report",
+          "status": "ready",
+          "summary": "Operational"
+        },
+        {
+          "key": "deployment_readiness",
+          "title": "Deployment readiness report",
+          "status": "ready",
+          "summary": "Operational"
+        },
+        {
+          "key": "dashboard_activation",
+          "title": "Dashboard activation report",
+          "status": "ready",
+          "summary": "Operational"
+        },
+        {
+          "key": "recovery_governance",
+          "title": "Recovery governance report",
+          "status": "ready",
+          "summary": "Operational"
+        }
+      ],
+      "connected_endpoints": [
+        "/api/v1/runtime/summary",
+        "/api/v1/runtime/readiness",
+        "/api/v1/dashboard/runtime",
+        "/api/v1/swarm/status",
+        "/api/v1/monetization/status",
+        "/api/v1/system/metrics",
+        "/api/v1/providers/status"
+      ],
+      "refresh_polling_ms": 5000,
+      "degraded_visual_states": true
+    },
+    "monetization_activation_report": {
+      "status": "ready",
+      "canonical_engine": "server/services/marketplaceMonetization.js",
+      "durable_engine_only": true,
+      "legacy_execution_paths_disabled": true,
+      "double_billing_guard": "idempotency_key + durable ledger upsert",
+      "generated_at": "2026-05-16T01:11:02.065Z",
+      "recurring_revenue": {
+        "mrr_usd": 303.04,
+        "arr_usd": 3636.48,
+        "active_subscriptions": 0
+      },
+      "execution_profitability": {
+        "projected_revenue_usd": 947,
+        "projected_margin_usd": 681.84,
+        "average_roi": 10
+      },
+      "payout_simulation": {
+        "provider_share_usd": 284.1,
+        "platform_share_usd": 662.9,
+        "next_payout_status": "prepared"
+      },
+      "streams": [
+        {
+          "id": "subscriptions",
+          "label": "Recurring subscriptions",
+          "status": "ready",
+          "revenue_usd": 303.04
+        },
+        {
+          "id": "pay_per_signal",
+          "label": "Pay-per-signal",
+          "status": "ready",
+          "revenue_usd": 265.16
+        },
+        {
+          "id": "agent_execution",
+          "label": "Agent execution fees",
+          "status": "ready",
+          "revenue_usd": 227.28
+        },
+        {
+          "id": "provider_revshare",
+          "label": "Provider revenue share",
+          "status": "ready",
+          "revenue_usd": 151.52
+        }
+      ],
+      "correlation": {
+        "conversion_revenue_correlation": 0.82,
+        "top_conversion_source": "opp-runtime-dashboard"
+      },
+      "ledger_depth": 0
+    },
+    "persistence_validation_report": {
+      "status": "degraded",
+      "mode": "memory",
+      "configured": false,
+      "degraded": true,
+      "supported_tables": [
+        "swarm_tasks",
+        "swarm_agents",
+        "swarm_events",
+        "swarm_memory",
+        "monetization_ledger",
+        "runtime_metrics",
+        "deployment_reports",
+        "recovery_reports"
+      ],
+      "retry_queue_depth": 0,
+      "idempotency_keys": 0,
+      "buffered_records": {
+        "swarm_tasks": 0,
+        "swarm_agents": 0,
+        "swarm_events": 0,
+        "swarm_memory": 0,
+        "monetization_ledger": 0,
+        "runtime_metrics": 0,
+        "deployment_reports": 0,
+        "recovery_reports": 0
+      },
+      "stats": {
+        "writes_attempted": 0,
+        "writes_persisted": 0,
+        "writes_buffered": 0,
+        "writes_deduplicated": 0,
+        "retries_attempted": 0,
+        "retries_succeeded": 0,
+        "last_write_at": null,
+        "last_error": null
+      },
+      "warnings": [
+        "SUPABASE_URL is not configured; persistence runs in degraded mode.",
+        "SUPABASE_SERVICE_ROLE_KEY/SUPABASE_KEY is not configured."
+      ]
+    },
+    "deployment_readiness_report": {
+      "name": "Deployment readiness report",
+      "status": "degraded",
+      "readiness_score": 50,
+      "profiles": {
+        "replit": {
+          "status": "ready",
+          "notes": [
+            "single Node process",
+            "degraded mode supported"
+          ]
+        },
+        "railway": {
+          "status": "ready",
+          "notes": [
+            "PORT aware",
+            "health endpoint first"
+          ]
+        },
+        "render": {
+          "status": "ready",
+          "notes": [
+            "native Node runtime",
+            "optional deps guarded"
+          ]
+        },
+        "vps_docker": {
+          "status": "ready",
+          "notes": [
+            "start command deterministic",
+            "no hard crash on optional dependency failure"
+          ]
+        }
+      },
+      "environment": [
+        {
+          "key": "PORT",
+          "status": "defaulted",
+          "required": false
+        },
+        {
+          "key": "SUPABASE_URL",
+          "status": "degraded",
+          "required": false
+        },
+        {
+          "key": "SUPABASE_SERVICE_ROLE_KEY",
+          "status": "degraded",
+          "required": false
+        },
+        {
+          "key": "NODE_ENV",
+          "status": "defaulted",
+          "required": false
+        }
+      ],
+      "compatibility_matrix": {
+        "name": "Deployment readiness report",
+        "status": "ready",
+        "start_command": "node server/index.js",
+        "health_endpoints": [
+          "/health",
+          "/api/health",
+          "/status",
+          "/api/v1/runtime/readiness"
+        ],
+        "platforms": [
+          "Railway/Replit node server",
+          "Vercel-safe JSON API payloads"
+        ],
+        "rollback_metadata": {
+          "package_version": "4.0.0-sovereign",
+          "main": "server/index.js"
+        }
+      }
+    },
+    "observability_report": {
+      "status": "ready",
+      "scope": "summary",
+      "generated_at": "2026-05-16T01:11:02.135Z",
+      "tracing": {
+        "request_correlation_ids": true,
+        "swarm_execution_tracing": true,
+        "monetization_tracing": true,
+        "structured_telemetry": true
+      },
+      "runtime": {
+        "status": "ready",
+        "uptime_seconds": 1,
+        "degraded_reports": []
+      },
+      "swarm": {
+        "status": "idle",
+        "active_agents": 0,
+        "queue_depth": 0
+      },
+      "revenue": {
+        "projected_revenue_usd": 947,
+        "projected_margin_usd": 681.84,
+        "average_roi": 10
+      },
+      "recovery": {
+        "status": "ready",
+        "queue_depth": 0
+      },
+      "persistence": {
+        "status": "degraded",
+        "mode": "memory",
+        "configured": false,
+        "degraded": true,
+        "supported_tables": [
+          "swarm_tasks",
+          "swarm_agents",
+          "swarm_events",
+          "swarm_memory",
+          "monetization_ledger",
+          "runtime_metrics",
+          "deployment_reports",
+          "recovery_reports"
+        ],
+        "retry_queue_depth": 0,
+        "idempotency_keys": 0,
+        "buffered_records": {
+          "swarm_tasks": 0,
+          "swarm_agents": 0,
+          "swarm_events": 0,
+          "swarm_memory": 0,
+          "monetization_ledger": 0,
+          "runtime_metrics": 0,
+          "deployment_reports": 0,
+          "recovery_reports": 0
+        },
+        "stats": {
+          "writes_attempted": 0,
+          "writes_persisted": 0,
+          "writes_buffered": 0,
+          "writes_deduplicated": 0,
+          "retries_attempted": 0,
+          "retries_succeeded": 0,
+          "last_write_at": null,
+          "last_error": null
+        },
+        "warnings": [
+          "SUPABASE_URL is not configured; persistence runs in degraded mode.",
+          "SUPABASE_SERVICE_ROLE_KEY/SUPABASE_KEY is not configured."
+        ]
+      }
+    },
+    "recovery_readiness_report": {
+      "status": "ready",
+      "generated_at": "2026-05-16T01:11:02.135Z",
+      "auto_recovery_queue_depth": 0,
+      "provider_auto_reconnect": true,
+      "dependency_degradation_recovery": true,
+      "runtime_quarantine_enabled": true,
+      "quarantined_modules": [],
+      "restart_history": [],
+      "cooldown": {
+        "enabled": true,
+        "seconds": 60,
+        "max_restarts_per_window": 3
+      },
+      "infinite_loop_guard": "cooldown + restart window cap"
+    },
+    "swarm_persistence_report": {
+      "status": "ready",
+      "tables": [
+        "swarm_tasks",
+        "swarm_agents",
+        "swarm_events",
+        "swarm_memory",
+        "monetization_ledger",
+        "runtime_metrics",
+        "deployment_reports",
+        "recovery_reports"
+      ],
+      "persisted_event_depth": 0,
+      "idempotent_execution_persistence": true,
+      "retry_queue_depth": 0
+    }
+  }
+}

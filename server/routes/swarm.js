@@ -7,6 +7,17 @@ const express = require('express');
 const router = express.Router();
 const { getSwarmStatus, forceSwarmCycle, getSwarm, initializeSwarm, stopSwarm } = require('../agents');
 const { gxeonAuthOnly } = require('../middleware/gxeonEnforcer');
+const { persistence } = require('../runtime/persistence.cjs');
+
+function persistSwarmEvent(event, payload = {}) {
+  return persistence.persist('swarm_events', {
+    id: `swarm:${event}:${Date.now()}:${Math.random().toString(36).slice(2, 8)}`,
+    event,
+    payload,
+    source: 'swarm-api'
+  }).catch((error) => console.warn('[SWARM_PERSISTENCE] event persist failed:', error.message));
+}
+
 
 /**
  * @route   GET /api/v1/swarm/status
@@ -16,6 +27,7 @@ const { gxeonAuthOnly } = require('../middleware/gxeonEnforcer');
 router.get('/status', gxeonAuthOnly, async (req, res) => {
   try {
     const status = getSwarmStatus();
+    persistSwarmEvent('status_read', { status });
     res.json({
       success: true,
       swarm: status,
@@ -39,6 +51,7 @@ router.post('/start', gxeonAuthOnly, async (req, res) => {
       autoStart: true
     });
     
+    persistSwarmEvent('start', { config, status: swarm.getStatus() });
     res.json({
       success: true,
       message: 'Swarm M2M inicializado com sucesso',
@@ -58,6 +71,7 @@ router.post('/start', gxeonAuthOnly, async (req, res) => {
 router.post('/stop', gxeonAuthOnly, async (req, res) => {
   try {
     stopSwarm();
+    persistSwarmEvent('stop');
     res.json({
       success: true,
       message: 'Swarm interrompido',
@@ -76,6 +90,7 @@ router.post('/stop', gxeonAuthOnly, async (req, res) => {
 router.post('/execute', gxeonAuthOnly, async (req, res) => {
   try {
     const result = await forceSwarmCycle();
+    persistSwarmEvent('execute_cycle', { result });
     res.json({
       success: true,
       executed: result,
@@ -99,6 +114,7 @@ router.get('/stats', gxeonAuthOnly, async (req, res) => {
     }
     
     const status = swarm.getStatus();
+    persistSwarmEvent('stats_read', { status });
     
     res.json({
       success: true,
@@ -130,11 +146,13 @@ router.post('/config', gxeonAuthOnly, async (req, res) => {
     
     const { executionInterval, maxConcurrentAgents, profitThreshold } = req.body;
     
-    swarm.updateConfig({
+    const updatedConfig = {
       ...(executionInterval && { executionInterval }),
       ...(maxConcurrentAgents && { maxConcurrentAgents }),
       ...(profitThreshold && { profitThreshold })
-    });
+    };
+    swarm.updateConfig(updatedConfig);
+    persistSwarmEvent('config_update', { updatedConfig });
     
     res.json({
       success: true,

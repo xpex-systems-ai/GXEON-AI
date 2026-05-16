@@ -1,8 +1,12 @@
 // GXEON Task Engine - Core System
 // Captures, validates, and executes tasks from external platforms
 
-const { createClient } = require('@supabase/supabase-js');
-const fetch = require('node-fetch');
+const { createRequire } = require('module');
+const path = require('path');
+const serverRequire = createRequire(path.resolve(__dirname, '../server/index.js'));
+const { createClient } = serverRequire('@supabase/supabase-js');
+const { getNativeFetch, getSupabaseUrl } = require('../server/runtime/compatibility.cjs');
+const fetch = getNativeFetch();
 const { GalxeFetcher, ZealyFetcher, Layer3Fetcher } = require('./external_fetchers');
 const { SmartPriorityEngine } = require('./smart_priority_engine');
 const { OnchainExecutor } = require('./onchain_executor');
@@ -22,7 +26,7 @@ class GXEONTaskEngine {
     this.agents = new Map();
     
     // Initialize Supabase
-    const supabaseUrl = process.env.SUPABASE_PROJECT_URL;
+    const supabaseUrl = getSupabaseUrl();
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
     this.supabase = supabaseUrl && supabaseKey 
       ? createClient(supabaseUrl, supabaseKey)

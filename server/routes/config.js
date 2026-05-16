@@ -119,7 +119,8 @@ router.post('/test-connections', async (req, res) => {
 
   if (process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY !== 'sua_chave_aqui') {
     try {
-      const fetch = require('node-fetch');
+      const { getNativeFetch } = require('../runtime/compatibility.cjs');
+      const fetch = getNativeFetch();
       const response = await fetch('https://openrouter.ai/api/v1/auth/key', {
         headers: { 'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}` }
       });

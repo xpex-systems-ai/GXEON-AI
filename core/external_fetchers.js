@@ -1,7 +1,8 @@
 // GXEON External Fetchers - Real API Integrations
 // Galxe, Zealy, Layer3 fetchers with actual API calls
 
-const fetch = require('node-fetch');
+const { getNativeFetch } = require('../server/runtime/compatibility.cjs');
+const fetch = getNativeFetch();
 
 class GalxeFetcher {
   constructor() {

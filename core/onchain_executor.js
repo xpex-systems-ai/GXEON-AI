@@ -1,7 +1,23 @@
 // GXEON Onchain Executor
 // Executa transações reais em blockchain para completar tasks
 
-const { ethers } = require('ethers');
+const fs = require('fs');
+const path = require('path');
+const { createRequire } = require('module');
+
+function packageInstalled(name) {
+  return fs.existsSync(path.join(process.cwd(), 'node_modules', name, 'package.json')) ||
+    fs.existsSync(path.join(process.cwd(), 'server', 'node_modules', name, 'package.json'));
+}
+
+const serverRequire = createRequire(path.resolve(__dirname, '../server/index.js'));
+const ethers = packageInstalled('ethers')
+  ? (fs.existsSync(path.join(process.cwd(), 'node_modules', 'ethers', 'package.json')) ? require('ethers') : serverRequire('ethers'))
+  : null;
+
+function assertEthersReady() {
+  if (!ethers) throw new Error('ETHERS_UNAVAILABLE: install ethers to enable on-chain execution');
+}
 
 class OnchainExecutor {
   constructor(config = {}) {
@@ -47,6 +63,7 @@ class OnchainExecutor {
   // ==================== WALLET MANAGEMENT ====================
   
   async initializeWallet(networkKey) {
+    assertEthersReady();
     if (!this.privateKey) {
       throw new Error('WALLET_PRIVATE_KEY not configured');
     }

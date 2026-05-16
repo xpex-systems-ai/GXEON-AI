@@ -1,17 +1,32 @@
 /**
- * GXEON ENFORCER v2 - Com fallback para PostgreSQL direto
- * Quando o PostgREST falha (schema cache desatualizado), usa pg driver direto
+ * GXEON ENFORCER v2 - PostgreSQL direct fallback.
+ *
+ * The pg driver is optional in lightweight dashboard/runtime deployments. When
+ * absent, the strict billing middleware remains closed (no free execution) and
+ * reports a controlled degraded dependency error instead of crashing boot.
  */
 
-const { Pool } = require('pg');
+const fs = require('fs');
+const path = require('path');
 
-// Pool de conexão direta ao PostgreSQL (fallback)
-const pgPool = new Pool({
-  connectionString: process.env.DATABASE_URL || process.env.SUPABASE_DATABASE_URL
-});
+function packageInstalled(name) {
+  return fs.existsSync(path.join(process.cwd(), 'node_modules', name, 'package.json'));
+}
+
+const Pool = packageInstalled('pg') ? require('pg').Pool : null;
+const pgPool = Pool
+  ? new Pool({ connectionString: process.env.DATABASE_URL || process.env.SUPABASE_DATABASE_URL })
+  : null;
+
+function assertPgReady() {
+  if (!pgPool) {
+    throw new Error('PG_FALLBACK_UNAVAILABLE: install pg or configure Supabase RPC for billing fallback');
+  }
+}
 
 // Função RPC via SQL direto (bypass PostgREST)
 async function deductCreditsAtomicDirect(p_api_key, p_amount, p_operation, p_request_id) {
+  assertPgReady();
   const client = await pgPool.connect();
   try {
     const result = await client.query(
@@ -25,6 +40,7 @@ async function deductCreditsAtomicDirect(p_api_key, p_amount, p_operation, p_req
 }
 
 async function refundCreditsDirect(p_transaction_id, p_reason) {
+  assertPgReady();
   const client = await pgPool.connect();
   try {
     const result = await client.query(
@@ -39,6 +55,7 @@ async function refundCreditsDirect(p_transaction_id, p_reason) {
 
 // Função para consultar usuário por API key (bypass PostgREST)
 async function queryUserByApiKey(apiKey) {
+  assertPgReady();
   const client = await pgPool.connect();
   try {
     const result = await client.query(

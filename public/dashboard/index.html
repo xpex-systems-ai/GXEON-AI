@@ -1,950 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌑 GXEON SUPREME CONTROL PANEL</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        :root {
-            --primary: #00d4ff;
-            --secondary: #ff6b35;
-            --success: #00ff88;
-            --warning: #ffd700;
-            --danger: #ff4757;
-            --dark: #0a0a0f;
-            --darker: #050508;
-            --card: #12121a;
-            --border: #1e1e2e;
-            --text: #e0e0ff;
-            --text-dim: #8892b0;
-        }
-        
-        body {
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            background: var(--darker);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
-            border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .logo h1 {
-            font-size: 1.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--card);
-            border-radius: 20px;
-            border: 1px solid var(--border);
-        }
-        
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--success);
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        /* Main Grid */
-        .dashboard {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 1.5rem;
-            max-width: 1800px;
-            margin: 0 auto;
-        }
-        
-        /* Cards */
-        .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            opacity: 0.5;
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .card-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-dim);
-        }
-        
-        .card-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-        
-        /* Signal Stream */
-        .signal-stream {
-            grid-column: span 2;
-            min-height: 400px;
-        }
-        
-        .signal-list {
-            max-height: 350px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        .signal-item {
-            display: grid;
-            grid-template-columns: 60px 1fr 80px 100px 80px;
-            gap: 1rem;
-            padding: 0.75rem;
-            background: var(--darker);
-            border-radius: 8px;
-            border-left: 3px solid var(--primary);
-            font-size: 0.85rem;
-            align-items: center;
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-        
-        .signal-long {
-            border-left-color: var(--success);
-        }
-        
-        .signal-short {
-            border-left-color: var(--danger);
-        }
-        
-        .signal-pair {
-            font-weight: bold;
-            color: var(--text);
-        }
-        
-        .signal-type {
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-        }
-        
-        .type-long {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--success);
-        }
-        
-        .type-short {
-            background: rgba(255, 71, 87, 0.2);
-            color: var(--danger);
-        }
-        
-        .signal-confidence {
-            color: var(--warning);
-        }
-        
-        .signal-provider {
-            color: var(--text-dim);
-            font-size: 0.75rem;
-        }
-        
-        /* Revenue Card */
-        .revenue-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-        }
-        
-        .revenue-item {
-            text-align: center;
-            padding: 1rem;
-            background: var(--darker);
-            border-radius: 8px;
-        }
-        
-        .revenue-label {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-bottom: 0.5rem;
-        }
-        
-        .revenue-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--success);
-        }
-        
-        /* Provider List */
-        .provider-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem;
-            background: var(--darker);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-        }
-        
-        .provider-name {
-            font-weight: bold;
-        }
-        
-        .provider-score {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.8rem;
-            color: var(--text-dim);
-        }
-        
-        .score-badge {
-            padding: 0.25rem 0.5rem;
-            background: var(--primary);
-            color: var(--dark);
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        
-        /* Health Status */
-        .health-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-        
-        .health-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            background: var(--darker);
-            border-radius: 8px;
-        }
-        
-        .health-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-        
-        .health-ok {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--success);
-        }
-        
-        .health-warn {
-            background: rgba(255, 215, 0, 0.2);
-            color: var(--warning);
-        }
-        
-        .health-error {
-            background: rgba(255, 71, 87, 0.2);
-            color: var(--danger);
-        }
-        
-        .health-info h4 {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            margin-bottom: 0.25rem;
-        }
-        
-        .health-info p {
-            font-size: 1rem;
-            font-weight: bold;
-        }
-        
-        /* API Metrics */
-        .metric-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .metric-row:last-child {
-            border-bottom: none;
-        }
-        
-        .metric-label {
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
-        
-        .metric-value {
-            font-weight: bold;
-        }
-        
-        .metric-good {
-            color: var(--success);
-        }
-        
-        .metric-warn {
-            color: var(--warning);
-        }
-        
-        /* Event Log */
-        .event-log {
-            max-height: 250px;
-            overflow-y: auto;
-            font-size: 0.8rem;
-        }
-        
-        .event-item {
-            display: flex;
-            gap: 0.75rem;
-            padding: 0.5rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .event-time {
-            color: var(--text-dim);
-            white-space: nowrap;
-        }
-        
-        .event-type {
-            padding: 0.1rem 0.4rem;
-            border-radius: 3px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-        }
-        
-        .event-signal {
-            background: rgba(0, 212, 255, 0.2);
-            color: var(--primary);
-        }
-        
-        .event-payment {
-            background: rgba(0, 255, 136, 0.2);
-            color: var(--success);
-        }
-        
-        .event-error {
-            background: rgba(255, 71, 87, 0.2);
-            color: var(--danger);
-        }
-        
-        .event-message {
-            color: var(--text);
-        }
-        
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: var(--darker);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary);
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-                padding: 1rem;
-            }
-            
-            .signal-stream {
-                grid-column: span 1;
-            }
-            
-            .signal-item {
-                grid-template-columns: 50px 1fr 60px;
-                gap: 0.5rem;
-            }
-            
-            .signal-provider,
-            .signal-confidence {
-                display: none;
-            }
-        }
-        
-        /* Latency indicator */
-        .latency-bar {
-            width: 100%;
-            height: 4px;
-            background: var(--darker);
-            border-radius: 2px;
-            margin-top: 0.5rem;
-            overflow: hidden;
-        }
-        
-        .latency-fill {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-        
-        .latency-good {
-            background: var(--success);
-        }
-        
-        .latency-warn {
-            background: var(--warning);
-        }
-        
-        .latency-bad {
-            background: var(--danger);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GXEON AI Operational Dashboard</title>
+  <style>
+    :root {
+      --bg: #070912;
+      --panel: #101523;
+      --panel-2: #151c2f;
+      --line: #26314d;
+      --text: #edf4ff;
+      --muted: #90a0bc;
+      --ready: #27f29a;
+      --active: #38d6ff;
+      --degraded: #ffd166;
+      --offline: #ff5c7a;
+      --accent: #8a7dff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, rgba(56, 214, 255, 0.18), transparent 32rem), var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      padding: 1.25rem clamp(1rem, 3vw, 2rem);
+      border-bottom: 1px solid var(--line);
+      background: rgba(7, 9, 18, 0.86);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(14px);
+    }
+    h1 { margin: 0; font-size: clamp(1.3rem, 2vw, 2rem); letter-spacing: -0.03em; }
+    .subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 0.2rem; }
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 0.85rem; border: 1px solid var(--line); border-radius: 999px;
+      background: var(--panel); color: var(--muted); font-weight: 700; text-transform: uppercase;
+    }
+    .dot { width: 0.65rem; height: 0.65rem; border-radius: 50%; background: var(--degraded); box-shadow: 0 0 16px currentColor; }
+    main { padding: clamp(1rem, 3vw, 2rem); max-width: 1600px; margin: 0 auto; }
+    .grid { display: grid; grid-template-columns: repeat(5, minmax(180px, 1fr)); gap: 1rem; }
+    .card, .wide-card {
+      background: linear-gradient(180deg, rgba(21, 28, 47, 0.96), rgba(16, 21, 35, 0.96));
+      border: 1px solid var(--line); border-radius: 18px; padding: 1rem; min-height: 140px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+    }
+    .card h3, .wide-card h2 { margin: 0; color: var(--muted); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .value { margin-top: 0.85rem; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; }
+    .detail { margin-top: 0.35rem; color: var(--muted); font-size: 0.88rem; line-height: 1.35; }
+    .status-ready, .status-active { border-color: rgba(39, 242, 154, 0.35); }
+    .status-ready .value, .status-active .value { color: var(--ready); }
+    .status-degraded { border-color: rgba(255, 209, 102, 0.5); }
+    .status-degraded .value { color: var(--degraded); }
+    .status-offline, .status-error { border-color: rgba(255, 92, 122, 0.55); }
+    .status-offline .value, .status-error .value { color: var(--offline); }
+    .wide-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 1rem; margin-top: 1rem; }
+    .endpoint-list, .timeline, .alerts { display: grid; gap: 0.65rem; margin-top: 1rem; }
+    .row { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 0.75rem; background: rgba(255,255,255,0.035); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; }
+    .row code { color: var(--active); overflow-wrap: anywhere; }
+    .badge { padding: 0.25rem 0.55rem; border-radius: 999px; background: rgba(138,125,255,0.18); color: #c8c2ff; font-size: 0.75rem; text-transform: uppercase; font-weight: 800; }
+    .alert-warning { border-color: rgba(255, 209, 102, 0.35); }
+    .alert-critical { border-color: rgba(255, 92, 122, 0.45); }
+    .footer { color: var(--muted); font-size: 0.8rem; margin-top: 1rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    @media (max-width: 1100px) { .grid { grid-template-columns: repeat(2, 1fr); } .wide-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 650px) { header { align-items: flex-start; flex-direction: column; } .grid { grid-template-columns: 1fr; } }
+  </style>
 </head>
 <body>
-    <header class="header">
-        <div class="logo">
-            <span style="font-size: 2rem;">🌑</span>
-            <div>
-                <h1>GXEON SUPREME</h1>
-                <small style="color: var(--text-dim);">Signal Marketplace Control Panel v1.0</small>
-            </div>
-        </div>
-        <div class="status-indicator">
-            <span class="status-dot"></span>
-            <span id="system-status">ONLINE</span>
-            <span style="color: var(--text-dim);">|</span>
-            <span id="uptime">00:00:00</span>
-        </div>
-    </header>
+  <header>
+    <div>
+      <h1>GXEON AI Operational Dashboard</h1>
+      <div class="subtitle">Runtime governance • swarm persistence • autonomous revenue • conversion intelligence</div>
+    </div>
+    <div class="status-pill"><span class="dot" id="status-dot"></span><span id="system-status">connecting</span></div>
+  </header>
 
-    <main class="dashboard">
-        <!-- Live Signals Stream -->
-        <div class="card signal-stream">
-            <div class="card-header">
-                <span class="card-title">🔴 LIVE SIGNALS STREAM</span>
-                <span id="signal-count" style="color: var(--primary);">0 active</span>
-            </div>
-            <div class="signal-list" id="signal-list">
-                <div style="text-align: center; color: var(--text-dim); padding: 2rem;">
-                    Connecting to signal stream...
-                </div>
-            </div>
-        </div>
+  <main>
+    <section class="grid" id="cards" aria-live="polite"></section>
 
-        <!-- Revenue Counter -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">💰 REVENUE TRACKING</span>
-                <span style="color: var(--success);">R$</span>
-            </div>
-            <div class="revenue-grid">
-                <div class="revenue-item">
-                    <div class="revenue-label">TOTAL</div>
-                    <div class="revenue-value" id="revenue-total">0.00</div>
-                </div>
-                <div class="revenue-item">
-                    <div class="revenue-label">TODAY</div>
-                    <div class="revenue-value" id="revenue-today">0.00</div>
-                </div>
-                <div class="revenue-item">
-                    <div class="revenue-label">PENDING</div>
-                    <div class="revenue-value" id="revenue-pending" style="color: var(--warning);">0.00</div>
-                </div>
-            </div>
-        </div>
+    <section class="wide-grid">
+      <article class="wide-card">
+        <h2>Runtime Alerts</h2>
+        <div class="alerts" id="alerts"><div class="row">Loading alert stream…</div></div>
+      </article>
+      <article class="wide-card">
+        <h2>Connected Runtime Endpoints</h2>
+        <div class="endpoint-list" id="endpoints"></div>
+      </article>
+    </section>
 
-        <!-- Active Providers -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">🔌 ACTIVE PROVIDERS</span>
-                <span id="provider-count" style="color: var(--primary);">0</span>
-            </div>
-            <div id="provider-list">
-                <div style="text-align: center; color: var(--text-dim); padding: 1rem;">
-                    Loading providers...
-                </div>
-            </div>
-        </div>
+    <section class="wide-grid">
+      <article class="wide-card">
+        <h2>Runtime Event Timeline</h2>
+        <div class="timeline" id="timeline"></div>
+      </article>
+      <article class="wide-card">
+        <h2>Revenue & Swarm Graphs</h2>
+        <div class="timeline" id="graphs"></div>
+      </article>
+    </section>
 
-        <!-- System Health -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">❤️ SYSTEM HEALTH</span>
-                <span id="health-score" style="color: var(--success);">100%</span>
-            </div>
-            <div class="health-grid" id="health-grid">
-                <div class="health-item">
-                    <div class="health-icon health-ok">✓</div>
-                    <div class="health-info">
-                        <h4>API STATUS</h4>
-                        <p style="color: var(--success);">OPERATIONAL</p>
-                    </div>
-                </div>
-                <div class="health-item">
-                    <div class="health-icon health-ok">⚡</div>
-                    <div class="health-info">
-                        <h4>LATENCY</h4>
-                        <p id="latency-value" style="color: var(--success);">45ms</p>
-                    </div>
-                </div>
-                <div class="health-item">
-                    <div class="health-icon health-ok">🗄️</div>
-                    <div class="health-info">
-                        <h4>DATABASE</h4>
-                        <p style="color: var(--success);">CONNECTED</p>
-                    </div>
-                </div>
-                <div class="health-item">
-                    <div class="health-icon health-ok">📡</div>
-                    <div class="health-info">
-                        <h4>DISPATCHER</h4>
-                        <p style="color: var(--success);">ACTIVE</p>
-                    </div>
-                </div>
-            </div>
-            <div class="latency-bar">
-                <div class="latency-fill latency-good" id="latency-bar" style="width: 10%;"></div>
-            </div>
-        </div>
+    <div class="footer">
+      <span id="last-updated">Never updated</span>
+      <span>Polling every <strong>5s</strong>; all payloads normalized for degraded runtime states.</span>
+    </div>
+  </main>
 
-        <!-- API Metrics -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">📊 API METRICS</span>
-                <span style="color: var(--text-dim);">/v1/marketplace</span>
-            </div>
-            <div id="api-metrics">
-                <div class="metric-row">
-                    <span class="metric-label">Requests (1m)</span>
-                    <span class="metric-value metric-good" id="req-1m">0</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Avg Latency</span>
-                    <span class="metric-value metric-good" id="avg-latency">0ms</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Error Rate</span>
-                    <span class="metric-value metric-good" id="error-rate">0%</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Active Users</span>
-                    <span class="metric-value" id="active-users">0</span>
-                </div>
-            </div>
-        </div>
+  <script>
+    const endpoints = [
+      '/api/v1/runtime/summary',
+      '/api/v1/runtime/readiness',
+      '/api/v1/dashboard/runtime',
+      '/api/v1/swarm/status',
+      '/api/v1/monetization/status',
+      '/api/v1/system/metrics',
+      '/api/v1/providers/status'
+    ];
 
-        <!-- Event Log -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">📜 EVENT LOG</span>
-                <span style="color: var(--text-dim); font-size: 0.8rem;">Realtime</span>
-            </div>
-            <div class="event-log" id="event-log">
-                <div class="event-item">
-                    <span class="event-time" id="current-time">--:--:--</span>
-                    <span class="event-type event-signal">SYSTEM</span>
-                    <span class="event-message">Dashboard initialized</span>
-                </div>
-            </div>
-        </div>
+    const fallbackCards = [
+      'Runtime Health', 'Swarm Activity', 'Active Agents', 'Revenue Metrics', 'Queue Depth',
+      'Provider Health', 'Deployment Readiness', 'Recovery Status', 'Monetization Streams', 'Supabase Health'
+    ].map((title) => ({ key: title.toLowerCase().replaceAll(' ', '_'), title, status: 'degraded', value: '—', detail: 'Waiting for runtime payload' }));
 
-        <!-- Monetization Status -->
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">💳 MONETIZATION</span>
-                <span id="monetization-status" style="color: var(--success);">ACTIVE</span>
-            </div>
-            <div id="monetization-metrics">
-                <div class="metric-row">
-                    <span class="metric-label">Subscriptions</span>
-                    <span class="metric-value" id="sub-count">0</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Pay-per-Signal</span>
-                    <span class="metric-value" id="pps-count">0</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">B2B Clients</span>
-                    <span class="metric-value" id="b2b-count">0</span>
-                </div>
-                <div class="metric-row">
-                    <span class="metric-label">Revenue Share (Providers)</span>
-                    <span class="metric-value" id="revshare-amount">R$ 0.00</span>
-                </div>
-            </div>
-        </div>
-    </main>
+    const el = {
+      cards: document.getElementById('cards'),
+      alerts: document.getElementById('alerts'),
+      endpoints: document.getElementById('endpoints'),
+      timeline: document.getElementById('timeline'),
+      graphs: document.getElementById('graphs'),
+      systemStatus: document.getElementById('system-status'),
+      statusDot: document.getElementById('status-dot'),
+      lastUpdated: document.getElementById('last-updated')
+    };
 
-    <script>
-        // ═══════════════════════════════════════════════════════════════════════════
-        // GXEON SUPREME DASHBOARD - Real-time Monitoring
-        // ═══════════════════════════════════════════════════════════════════════════
-        
-        const API_BASE = window.location.origin.includes('localhost') 
-            ? 'http://localhost:3000/v1/marketplace' 
-            : '/v1/marketplace';
-        
-        const state = {
-            signals: [],
-            providers: [],
-            revenue: { total: 0, today: 0, pending: 0 },
-            health: {},
-            events: [],
-            startTime: Date.now(),
-            lastSignalTime: 0
-        };
-        
-        // DOM Elements
-        const elements = {
-            signalList: document.getElementById('signal-list'),
-            signalCount: document.getElementById('signal-count'),
-            providerList: document.getElementById('provider-list'),
-            providerCount: document.getElementById('provider-count'),
-            revenueTotal: document.getElementById('revenue-total'),
-            revenueToday: document.getElementById('revenue-today'),
-            revenuePending: document.getElementById('revenue-pending'),
-            healthScore: document.getElementById('health-score'),
-            latencyValue: document.getElementById('latency-value'),
-            latencyBar: document.getElementById('latency-bar'),
-            eventLog: document.getElementById('event-log'),
-            uptime: document.getElementById('uptime'),
-            currentTime: document.getElementById('current-time'),
-            req1m: document.getElementById('req-1m'),
-            avgLatency: document.getElementById('avg-latency'),
-            errorRate: document.getElementById('error-rate'),
-            activeUsers: document.getElementById('active-users'),
-            subCount: document.getElementById('sub-count'),
-            ppsCount: document.getElementById('pps-count'),
-            b2bCount: document.getElementById('b2b-count'),
-            revshareAmount: document.getElementById('revshare-amount')
-        };
-        
-        // ═══════════════════════════════════════════════════════════════════════════
-        // API CALLS
-        // ═══════════════════════════════════════════════════════════════════════════
-        
-        async function fetchHealth() {
-            const start = performance.now();
-            try {
-                const response = await fetch(`${API_BASE}/health`);
-                const data = await response.json();
-                const latency = Math.round(performance.now() - start);
-                
-                updateHealth(data, latency);
-                return data;
-            } catch (err) {
-                updateHealthError();
-                return null;
-            }
-        }
-        
-        async function fetchSignals() {
-            try {
-                const response = await fetch(`${API_BASE}/signals/live`);
-                const data = await response.json();
-                
-                if (data.success && data.data) {
-                    updateSignals(data.data);
-                }
-            } catch (err) {
-                console.error('Failed to fetch signals:', err);
-            }
-        }
-        
-        async function fetchProviders() {
-            try {
-                const response = await fetch(`${API_BASE}/providers`);
-                const data = await response.json();
-                
-                if (data.success && data.data) {
-                    updateProviders(data.data);
-                }
-            } catch (err) {
-                console.error('Failed to fetch providers:', err);
-            }
-        }
-        
-        async function fetchStats() {
-            try {
-                const response = await fetch(`${API_BASE}/stats`);
-                const data = await response.json();
-                
-                if (data.success && data.data) {
-                    updateStats(data.data);
-                }
-            } catch (err) {
-                console.error('Failed to fetch stats:', err);
-            }
-        }
-        
-        // ═══════════════════════════════════════════════════════════════════════════
-        // UI UPDATES
-        // ═══════════════════════════════════════════════════════════════════════════
-        
-        function updateSignals(signals) {
-            if (!signals || signals.length === 0) return;
-            
-            state.signals = signals.slice(0, 10); // Keep last 10
-            state.lastSignalTime = Date.now();
-            
-            elements.signalCount.textContent = `${signals.length} active`;
-            
-            elements.signalList.innerHTML = state.signals.map(signal => {
-                const isLong = signal.type?.toUpperCase() === 'LONG';
-                const confidence = signal.confidence || signal.ranking?.confidence || 0;
-                
-                return `
-                    <div class="signal-item signal-${isLong ? 'long' : 'short'}">
-                        <span class="signal-type ${isLong ? 'type-long' : 'type-short'}">
-                            ${isLong ? 'LONG' : 'SHORT'}
-                        </span>
-                        <span class="signal-pair">${signal.pair || signal.symbol || 'N/A'}</span>
-                        <span class="signal-confidence">${confidence}%</span>
-                        <span class="signal-provider">${signal.provider_name || 'GXEON'}</span>
-                        <span style="color: var(--text-dim); font-size: 0.75rem;">
-                            ${new Date(signal.timestamp || signal.created_at).toLocaleTimeString()}
-                        </span>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        function updateProviders(providers) {
-            state.providers = providers;
-            elements.providerCount.textContent = providers.length;
-            
-            elements.providerList.innerHTML = providers.slice(0, 5).map(p => `
-                <div class="provider-item">
-                    <span class="provider-name">${p.name}</span>
-                    <div class="provider-score">
-                        <span>Signals: ${p.signals_count || 0}</span>
-                        <span class="score-badge">${p.score || p.provider_score || 0}</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function updateStats(data) {
-            // Revenue
-            if (data.revenue) {
-                state.revenue = {
-                    total: data.revenue.total_revenue_brl || 0,
-                    today: data.revenue.today_revenue || 0,
-                    pending: data.revenue.pending_revenue || 0
-                };
-                
-                elements.revenueTotal.textContent = state.revenue.total.toFixed(2);
-                elements.revenueToday.textContent = state.revenue.today.toFixed(2);
-                elements.revenuePending.textContent = state.revenue.pending.toFixed(2);
-            }
-            
-            // API Metrics
-            if (data.engine) {
-                elements.req1m.textContent = data.engine.signals_processed || 0;
-                elements.activeUsers.textContent = data.acquisition?.total_users || 0;
-            }
-            
-            // Monetization
-            if (data.revenue) {
-                elements.subCount.textContent = data.revenue.subscriptions || 0;
-                elements.ppsCount.textContent = data.revenue.pay_per_signals || 0;
-                elements.b2bCount.textContent = data.revenue.b2b_clients || 0;
-                elements.revshareAmount.textContent = `R$ ${(data.revenue.provider_payouts || 0).toFixed(2)}`;
-            }
-            
-            // Latency
-            if (data.proof) {
-                elements.avgLatency.textContent = `${data.proof.avg_latency_ms || 45}ms`;
-            }
-        }
-        
-        function updateHealth(data, latency) {
-            // Update latency
-            elements.latencyValue.textContent = `${latency}ms`;
-            elements.latencyValue.style.color = latency < 100 ? 'var(--success)' : latency < 300 ? 'var(--warning)' : 'var(--danger)';
-            
-            elements.latencyBar.className = 'latency-fill ' + (latency < 100 ? 'latency-good' : latency < 300 ? 'latency-warn' : 'latency-bad');
-            elements.latencyBar.style.width = Math.min(latency / 5, 100) + '%';
-            
-            // Health score
-            const allUp = data.services && Object.values(data.services).every(s => s === 'up');
-            elements.healthScore.textContent = allUp ? '100%' : 'DEGRADED';
-            elements.healthScore.style.color = allUp ? 'var(--success)' : 'var(--warning)';
-            
-            // Update health grid
-            if (data.services) {
-                const grid = document.getElementById('health-grid');
-                grid.innerHTML = Object.entries(data.services).map(([name, status]) => `
-                    <div class="health-item">
-                        <div class="health-icon health-${status === 'up' ? 'ok' : status === 'degraded' ? 'warn' : 'error'}">
-                            ${status === 'up' ? '✓' : status === 'degraded' ? '!' : '✗'}
-                        </div>
-                        <div class="health-info">
-                            <h4>${name.toUpperCase()}</h4>
-                            <p style="color: var(--${status === 'up' ? 'success' : status === 'degraded' ? 'warning' : 'danger'});">
-                                ${status.toUpperCase()}
-                            </p>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-        
-        function updateHealthError() {
-            elements.healthScore.textContent = 'ERROR';
-            elements.healthScore.style.color = 'var(--danger)';
-            elements.latencyValue.textContent = 'TIMEOUT';
-            elements.latencyValue.style.color = 'var(--danger)';
-            elements.latencyBar.className = 'latency-fill latency-bad';
-            elements.latencyBar.style.width = '100%';
-        }
-        
-        // ═══════════════════════════════════════════════════════════════════════════
-        // EVENT LOGGING
-        // ═══════════════════════════════════════════════════════════════════════════
-        
-        function addEvent(type, message, eventType = 'signal') {
-            const time = new Date().toLocaleTimeString();
-            
-            const eventHtml = `
-                <div class="event-item">
-                    <span class="event-time">${time}</span>
-                    <span class="event-type event-${eventType}">${type}</span>
-                    <span class="event-message">${message}</span>
-                </div>
-            `;
-            
-            elements.eventLog.insertAdjacentHTML('afterbegin', eventHtml);
-            
-            // Keep only last 50 events
-            while (elements.eventLog.children.length > 50) {
-                elements.eventLog.removeChild(elements.eventLog.lastChild);
-            }
-        }
-        
-        // ═══════════════════════════════════════════════════════════════════════════
-        // UTILITIES
-        // ═══════════════════════════════════════════════════════════════════════════
-        
-        function updateUptime() {
-            const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
-            const hours = Math.floor(elapsed / 3600).toString().padStart(2, '0');
-            const minutes = Math.floor((elapsed % 3600) / 60).toString().padStart(2, '0');
-            const seconds = (elapsed % 60).toString().padStart(2, '0');
-            elements.uptime.textContent = `${hours}:${minutes}:${seconds}`;
-            elements.currentTime.textContent = new Date().toLocaleTimeString();
-        }
-        
-        function checkSignalFlow() {
-            const timeSinceLastSignal = Date.now() - state.lastSignalTime;
-            if (timeSinceLastSignal > 60000 && state.lastSignalTime > 0) {
-                addEvent('WARNING', 'No signals received in 60s', 'error');
-            }
-        }
-        
-        // ═══════════════════════════════════════════════════════════════════════════
-        // MAIN LOOP
-        // ═══════════════════════════════════════════════════════════════════════════
-        
-        async function mainLoop() {
-            await fetchHealth();
-            await fetchSignals();
-            await fetchProviders();
-            await fetchStats();
-            checkSignalFlow();
-        }
-        
-        // Start
-        console.log('🌑 GXEON Supreme Dashboard initializing...');
-        
-        // Initial load
-        mainLoop();
-        
-        // Update intervals
-        setInterval(mainLoop, 5000); // Every 5s
-        setInterval(updateUptime, 1000); // Every 1s
-        
-        // Event simulation for demo
-        const eventTypes = [
-            { type: 'SIGNAL', msg: 'New LONG signal generated', et: 'signal' },
-            { type: 'SIGNAL', msg: 'Signal dispatched to PRO tier', et: 'signal' },
-            { type: 'PAYMENT', msg: 'PRO subscription confirmed', et: 'payment' },
-            { type: 'SIGNAL', msg: 'Signal hit target price', et: 'signal' },
-            { type: 'SYSTEM', msg: 'Leaderboard updated', et: 'signal' }
-        ];
-        
-        setInterval(() => {
-            if (Math.random() > 0.7) {
-                const event = eventTypes[Math.floor(Math.random() * eventTypes.length)];
-                addEvent(event.type, event.msg, event.et);
-            }
-        }, 10000);
-        
-        // Success notification
-        addEvent('SYSTEM', 'Dashboard connected to API', 'signal');
-        console.log('✅ Dashboard active');
-    </script>
+    function normalizeStatus(status) {
+      return ['ready', 'active', 'degraded', 'offline', 'error'].includes(status) ? status : 'degraded';
+    }
+
+    function renderCards(cards = fallbackCards) {
+      el.cards.innerHTML = cards.map((card) => {
+        const status = normalizeStatus(card.status);
+        const value = card.value ?? card.status ?? '—';
+        return `<article class="card status-${status}">
+          <h3>${card.title || card.key || 'Runtime Card'}</h3>
+          <div class="value">${value}</div>
+          <div class="detail">${card.detail || card.summary || 'No detail available'}</div>
+          <div class="detail"><span class="badge">${status}</span></div>
+        </article>`;
+      }).join('');
+    }
+
+    function renderAlerts(alerts = []) {
+      if (!alerts.length) {
+        el.alerts.innerHTML = '<div class="row"><span>No critical alerts</span><span class="badge">clean</span></div>';
+        return;
+      }
+      el.alerts.innerHTML = alerts.map((alert) => `<div class="row alert-${alert.severity || 'warning'}">
+        <span><strong>${alert.title || 'Runtime alert'}</strong><br><small>${alert.message || 'Inspect runtime report'}</small></span>
+        <span class="badge">${alert.severity || 'warning'}</span>
+      </div>`).join('');
+    }
+
+    function renderEndpoints(list = endpoints) {
+      el.endpoints.innerHTML = list.map((endpoint) => {
+        const path = typeof endpoint === 'string' ? endpoint : endpoint.path;
+        const status = typeof endpoint === 'string' ? 'pending' : endpoint.status;
+        return `<div class="row"><code>${path}</code><span class="badge">${status}</span></div>`;
+      }).join('');
+    }
+
+    async function probeEndpoints() {
+      const results = await Promise.allSettled(endpoints.map(async (path) => {
+        await fetchJson(path);
+        return { path, status: 'connected' };
+      }));
+      return results.map((result, index) => result.status === 'fulfilled'
+        ? result.value
+        : { path: endpoints[index], status: 'degraded' });
+    }
+
+    function renderTimeline(items = []) {
+      const safe = items.length ? items : [{ type: 'runtime', timestamp: new Date().toISOString(), label: 'Dashboard waiting for events' }];
+      el.timeline.innerHTML = safe.slice(0, 12).map((item) => `<div class="row">
+        <span>${item.label || item.type || 'event'}<br><small>${item.timestamp || ''}</small></span>
+        <span class="badge">${item.type || 'runtime'}</span>
+      </div>`).join('');
+    }
+
+    function renderGraphs(graphs = {}) {
+      const rows = [
+        ...(graphs.monetization_flow_graph || []).map((item) => ({ label: item.stream, value: `$${item.revenue_usd}` })),
+        ...(graphs.swarm_activity_graph || []).map((item) => ({ label: item.label, value: item.value })),
+        ...(graphs.provider_latency_graph || []).map((item) => ({ label: item.provider, value: `${item.latency_ms}ms` }))
+      ];
+      el.graphs.innerHTML = (rows.length ? rows : [{ label: 'graph payload', value: 'empty-state' }])
+        .slice(0, 14)
+        .map((item) => `<div class="row"><span>${item.label}</span><strong>${item.value}</strong></div>`).join('');
+    }
+
+    async function fetchJson(path) {
+      const response = await fetch(path, { headers: { 'Accept': 'application/json' } });
+      if (!response.ok) throw new Error(`${path} returned ${response.status}`);
+      return response.json();
+    }
+
+    async function refresh() {
+      try {
+        const payload = await fetchJson('/api/v1/dashboard/runtime');
+        const data = payload.success ? payload : { success: true, ...payload };
+        const status = normalizeStatus(data.status);
+        el.systemStatus.textContent = status;
+        el.statusDot.style.color = status === 'ready' ? 'var(--ready)' : status === 'active' ? 'var(--active)' : status === 'offline' ? 'var(--offline)' : 'var(--degraded)';
+        el.statusDot.style.background = 'currentColor';
+        renderCards(data.cards || fallbackCards);
+        renderAlerts(data.alerts || []);
+        renderEndpoints(await probeEndpoints());
+        renderTimeline(data.visualization?.timeline || []);
+        renderGraphs(data.visualization?.graphs || {});
+        el.lastUpdated.textContent = `Updated ${new Date().toLocaleTimeString()} • schema ${data.payload_schema || 'unknown'}`;
+      } catch (error) {
+        el.systemStatus.textContent = 'degraded';
+        el.statusDot.style.color = 'var(--degraded)';
+        el.statusDot.style.background = 'currentColor';
+        renderCards(fallbackCards);
+        renderAlerts([{ severity: 'warning', title: 'Dashboard endpoint degraded', message: error.message }]);
+        renderEndpoints(endpoints);
+        renderTimeline([]);
+        renderGraphs({});
+        el.lastUpdated.textContent = `Last error ${new Date().toLocaleTimeString()}`;
+      }
+    }
+
+    renderCards();
+    renderEndpoints();
+    refresh();
+    setInterval(refresh, 5000);
+  </script>
 </body>
 </html>
