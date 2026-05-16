@@ -6,11 +6,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { Feather } from "@expo/vector-icons";
+import { router } from "expo-router";
 import { useColors } from "@/hooks/useColors";
 import { MetricCard } from "@/components/MetricCard";
 import { getSupabase, isConfigured } from "@/lib/supabase";
@@ -138,6 +140,35 @@ export default function SystemScreen() {
       showsVerticalScrollIndicator={false}
     >
       <Text style={[styles.title, { color: colors.foreground }]}>System</Text>
+
+      {/* Quick Links — sub-screens */}
+      <Text style={[styles.sectionTitle, { color: colors.foreground }]}>More Screens</Text>
+      <View style={styles.quickGrid}>
+        {[
+          { label: "Actors", icon: "users", route: "/actors" },
+          { label: "Revenue Streams", icon: "trending-up", route: "/revenue-streams" },
+          { label: "System Logs", icon: "terminal", route: "/system-logs" },
+          { label: "Governance", icon: "git-merge", route: "/governance-status" },
+          { label: "Settings", icon: "settings", route: "/settings" },
+          { label: "Diagnostics", icon: "activity", route: "/diagnostics" },
+        ].map((item) => (
+          <TouchableOpacity
+            key={item.route}
+            style={[styles.quickTile, { backgroundColor: colors.card, borderColor: colors.border }]}
+            onPress={() => {
+              if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              router.push(item.route as any);
+            }}
+            activeOpacity={0.7}
+          >
+            <View style={[styles.quickIcon, { backgroundColor: colors.primary + "20" }]}>
+              <Feather name={item.icon as any} size={18} color={colors.primary} />
+            </View>
+            <Text style={[styles.quickLabel, { color: colors.foreground }]}>{item.label}</Text>
+            <Feather name="chevron-right" size={14} color={colors.mutedForeground} />
+          </TouchableOpacity>
+        ))}
+      </View>
 
       {error ? (
         <View style={[styles.errorBox, { backgroundColor: colors.destructive + "20", borderColor: colors.destructive + "40" }]}>
@@ -348,4 +379,8 @@ const styles = StyleSheet.create({
   cfgBadgeText: { fontSize: 11, fontFamily: "Inter_700Bold" },
   empty: { padding: 24, alignItems: "center", gap: 6 },
   emptyText: { fontSize: 13, fontFamily: "Inter_400Regular" },
+  quickGrid: { gap: 8 },
+  quickTile: { flexDirection: "row", alignItems: "center", gap: 12, padding: 14, borderRadius: 12, borderWidth: 1 },
+  quickIcon: { width: 38, height: 38, borderRadius: 10, alignItems: "center", justifyContent: "center" },
+  quickLabel: { flex: 1, fontSize: 14, fontFamily: "Inter_500Medium" },
 });
