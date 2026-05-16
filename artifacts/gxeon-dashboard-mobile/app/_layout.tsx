@@ -22,8 +22,18 @@ const queryClient = new QueryClient();
 
 function RootLayoutNav() {
   return (
-    <Stack screenOptions={{ headerBackTitle: "Back" }}>
+    <Stack screenOptions={{ headerBackTitle: "Back", headerStyle: { backgroundColor: "#060d1e" }, headerTintColor: "#e2eaf4", headerTitleStyle: { fontFamily: "Inter_600SemiBold" } }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="commissions" options={{ title: "Commissions" }} />
+      <Stack.Screen name="actors" options={{ title: "Actors" }} />
+      <Stack.Screen name="api-keys" options={{ title: "API Keys" }} />
+      <Stack.Screen name="datasets" options={{ title: "Datasets" }} />
+      <Stack.Screen name="health" options={{ title: "System Health" }} />
+      <Stack.Screen name="revenue-streams" options={{ title: "Revenue Streams" }} />
+      <Stack.Screen name="system-logs" options={{ title: "System Logs" }} />
+      <Stack.Screen name="governance" options={{ title: "Governance" }} />
+      <Stack.Screen name="conversion" options={{ title: "Conversion" }} />
+      <Stack.Screen name="settings" options={{ title: "Settings" }} />
     </Stack>
   );
 }
