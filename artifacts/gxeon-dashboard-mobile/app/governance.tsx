@@ -29,12 +29,10 @@ type GovernanceData = {
 
 async function fetchGovernance(): Promise<GovernanceData> {
   const base = getApiBase();
-  const token = process.env.EXPO_PUBLIC_GOVERNANCE_TOKEN as string | undefined;
-  const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
 
   async function g<T>(path: string): Promise<T | null> {
     try {
-      const res = await fetch(`${base}/api/v1/governance/${path}`, { headers });
+      const res = await fetch(`${base}/api/v1/governance/${path}`);
       if (!res.ok) return null;
       return res.json();
     } catch { return null; }
