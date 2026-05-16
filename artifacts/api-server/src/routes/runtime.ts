@@ -1,16 +1,19 @@
 import { Router } from "express";
 import { createRequire } from "node:module";
+import path from "node:path";
 
 const require = createRequire(import.meta.url);
-const { getRuntimeSyncStatus } = require("../../../../server/runtime/runtimeHeartbeat.cjs");
-const { getRecoveryStatus } = require("../../../../server/runtime/runtimeRecovery.cjs");
-const { getProductionRuntimeStatus } = require("../../../../server/runtime/productionRuntime.cjs");
-const { getDeploymentIntegrityStatus } = require("../../../../server/runtime/deploymentIntegrity.cjs");
-const { getRuntimeSnapshotStatus } = require("../../../../server/runtime/runtimeSnapshot.cjs");
-const { getRailwayRuntimeStatus } = require("../../../../server/runtime/railwayProduction.cjs");
-const { getRadarStatus } = require("../../../../server/runtime/radarContinuity.cjs");
-const { getProviderRuntimeStatus } = require("../../../../server/runtime/providerRuntime.cjs");
-const { getRuntimeMemoryStatus } = require("../../../../server/runtime/runtimeMemory.cjs");
+const pathFromRoot = (file: string) => path.join(process.cwd(), "server/runtime", file);
+const { getRuntimeSyncStatus } = require(pathFromRoot("runtimeHeartbeat.cjs"));
+const { getRecoveryStatus } = require(pathFromRoot("runtimeRecovery.cjs"));
+const { getProductionRuntimeStatus } = require(pathFromRoot("productionRuntime.cjs"));
+const { getDeploymentIntegrityStatus } = require(pathFromRoot("deploymentIntegrity.cjs"));
+const { getRuntimeSnapshotStatus } = require(pathFromRoot("runtimeSnapshot.cjs"));
+const { getRailwayRuntimeStatus } = require(pathFromRoot("railwayProduction.cjs"));
+const { getRadarStatus } = require(pathFromRoot("radarContinuity.cjs"));
+const { getProviderRuntimeStatus } = require(pathFromRoot("providerRuntime.cjs"));
+const { getRuntimeMemoryStatus } = require(pathFromRoot("runtimeMemory.cjs"));
+const { getSupabaseRuntimeStatus } = require(pathFromRoot("supabaseRuntime.cjs"));
 
 const router = Router();
 
@@ -50,6 +53,10 @@ router.get("/v1/runtime/providers", (_req, res) => {
 
 router.get("/v1/runtime/memory", (_req, res) => {
   res.json(getRuntimeMemoryStatus());
+});
+
+router.get("/v1/runtime/supabase", (_req, res) => {
+  res.json(getSupabaseRuntimeStatus());
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {

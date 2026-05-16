@@ -50,6 +50,9 @@ type RailwayRuntime = {
   providers: string;
   telemetry: string;
   websocket_health: string;
+  radar_heartbeat?: string;
+  provider_count?: number;
+  reconnect_activity?: number;
 };
 
 type ProductionRuntime = {
@@ -275,7 +278,9 @@ export default function DashboardPage() {
           <CardContent className="space-y-1">
             <p className="text-xs">Runtime: <span className="font-semibold">{railwayRuntime?.railway_runtime ?? "-"}</span></p>
             <p className="text-xs">Websocket: <span className="font-semibold">{railwayRuntime?.websocket_health ?? "-"}</span></p>
-            <p className="text-xs">Providers: <span className="font-semibold">{railwayRuntime?.providers ?? "-"}</span></p>
+            <p className="text-xs">Providers: <span className="font-semibold">{railwayRuntime?.providers ?? "-"}</span> ({railwayRuntime?.provider_count ?? 0})</p>
+            <p className="text-xs">Radar: <span className="font-semibold">{railwayRuntime?.radar_heartbeat ?? "-"}</span></p>
+            <p className="text-xs">Reconnects: <span className="font-semibold">{railwayRuntime?.reconnect_activity ?? 0}</span></p>
             <p className="text-xs">Deployment: <span className="font-semibold">{railwayRuntime?.deployment ?? "-"}</span></p>
             <p className="text-xs">Sync: <span className="font-semibold">{railwayRuntime?.sync ?? "-"}</span></p>
             <p className="text-xs">Memory: <span className="font-semibold">{railwayRuntime?.memory ?? "-"}</span></p>
