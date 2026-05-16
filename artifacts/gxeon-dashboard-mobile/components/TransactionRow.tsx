@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useColors } from "@/hooks/useColors";
 import { formatCurrency, formatDate } from "@/lib/format";
 
@@ -15,9 +15,10 @@ type Transaction = {
 
 type TransactionRowProps = {
   tx: Transaction;
+  onPress?: () => void;
 };
 
-export function TransactionRow({ tx }: TransactionRowProps) {
+export function TransactionRow({ tx, onPress }: TransactionRowProps) {
   const colors = useColors();
 
   const statusColor =
@@ -35,7 +36,9 @@ export function TransactionRow({ tx }: TransactionRowProps) {
         : colors.destructive + "20";
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={onPress ? 0.6 : 1}
       style={[
         styles.row,
         { borderBottomColor: colors.border },
@@ -73,7 +76,7 @@ export function TransactionRow({ tx }: TransactionRowProps) {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 

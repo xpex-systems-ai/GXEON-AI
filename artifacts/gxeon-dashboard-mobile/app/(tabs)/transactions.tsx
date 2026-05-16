@@ -12,6 +12,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as Haptics from "expo-haptics";
 import { Feather } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useColors } from "@/hooks/useColors";
 import { TransactionRow } from "@/components/TransactionRow";
 import { getSupabase, isConfigured } from "@/lib/supabase";
@@ -31,6 +32,7 @@ const STATUSES = ["ALL", "PAID", "PENDING", "FAILED"] as const;
 export default function TransactionsScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -160,7 +162,12 @@ export default function TransactionsScreen() {
         <FlatList
           data={transactions}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <TransactionRow tx={item} />}
+          renderItem={({ item }) => (
+            <TransactionRow
+              tx={item}
+              onPress={() => router.push(`/transaction/${item.id}`)}
+            />
+          )}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
