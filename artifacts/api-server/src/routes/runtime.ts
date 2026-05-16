@@ -9,14 +9,17 @@ const { getRecoveryStatus } = require(pathFromRoot("runtimeRecovery.cjs"));
 const { getProductionRuntimeStatus } = require(pathFromRoot("productionRuntime.cjs"));
 const { getDeploymentIntegrityStatus } = require(pathFromRoot("deploymentIntegrity.cjs"));
 const { getRuntimeSnapshotStatus } = require(pathFromRoot("runtimeSnapshot.cjs"));
-const { getRailwayRuntimeStatus, getRailwayCoreStatus } = require(pathFromRoot("railwayProduction.cjs"));
+const { getRailwayRuntimeStatus, getRailwayCoreStatus, getFinancialCoreStatus } = require(pathFromRoot("railwayProduction.cjs"));
 const { getRadarStatus } = require(pathFromRoot("radarContinuity.cjs"));
 const { getProviderRuntimeStatus } = require(pathFromRoot("providerRuntime.cjs"));
 const { getRuntimeMemoryStatus } = require(pathFromRoot("runtimeMemory.cjs"));
 const { getSupabaseRuntimeStatus } = require(pathFromRoot("supabaseRuntime.cjs"));
 const { getSignalIntelligence } = require(pathFromRoot("signalEnrichment.cjs"));
-const { getConversionDNA } = require(pathFromRoot("conversionDNA.cjs"));
+const { getConversionDNA, getMonetizationDNA } = require(pathFromRoot("conversionDNA.cjs"));
 const { getOperatorAlerts } = require(pathFromRoot("operatorAlerts.cjs"));
+const { createPixPayment, getPaymentsRuntime } = require(pathFromRoot("paymentRuntime.cjs"));
+const { processWebhook } = require(pathFromRoot("mercadoWebhookRuntime.cjs"));
+const { getRevenueTelemetry } = require(pathFromRoot("revenueTelemetry.cjs"));
 const { getSanitizedProviderSummary, sanitizeRuntimeEvent } = require(pathFromRoot("runtimeLogSanitizer.cjs"));
 
 const router = Router();
@@ -88,6 +91,34 @@ router.get("/v1/runtime/conversion-dna", (_req, res) => {
 
 router.get("/v1/runtime/alerts", (_req, res) => {
   res.json(getOperatorAlerts());
+});
+
+
+router.get("/v1/runtime/payments", (_req, res) => {
+  res.json(getPaymentsRuntime());
+});
+
+router.post("/v1/runtime/payments/create", (req, res) => {
+  res.status(201).json(createPixPayment(req.body ?? {}));
+});
+
+router.post("/v1/webhooks/mercado-pago", (req, res) => {
+  const sig = String(req.headers["x-signature"] || req.headers["x-mercado-signature"] || "");
+  const raw = JSON.stringify(req.body ?? {});
+  const result = processWebhook(req.body ?? {}, sig, raw);
+  res.status(result.accepted ? 200 : 401).json(result);
+});
+
+router.get("/v1/runtime/monetization", (_req, res) => {
+  res.json(getMonetizationDNA());
+});
+
+router.get("/v1/runtime/revenue", (_req, res) => {
+  res.json(getRevenueTelemetry());
+});
+
+router.get("/v1/runtime/financial-core", (_req, res) => {
+  res.json(getFinancialCoreStatus());
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {

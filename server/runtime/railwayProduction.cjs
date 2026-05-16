@@ -4,6 +4,8 @@ const { getProviderRuntimeStatus } = require('./providerRuntime.cjs');
 const { getRadarStatus } = require('./radarContinuity.cjs');
 const { getSignalIntelligence } = require('./signalEnrichment.cjs');
 const { getConversionDNA } = require('./conversionDNA.cjs');
+const { getRevenueTelemetry } = require('./revenueTelemetry.cjs');
+const { getPaymentsRuntime } = require('./paymentRuntime.cjs');
 
 function getRailwayRuntimeStatus() {
   const provider = getProviderRuntimeStatus();
@@ -11,6 +13,8 @@ function getRailwayRuntimeStatus() {
   const radar = getRadarStatus();
   const signalIntel = getSignalIntelligence();
   const conversionDNA = getConversionDNA();
+  const rev = getRevenueTelemetry();
+  const pay = getPaymentsRuntime();
   return {
     railway_runtime: 'ACTIVE',
     platform: onRailway ? 'RAILWAY' : 'GENERIC_RUNTIME',
@@ -30,6 +34,14 @@ function getRailwayRuntimeStatus() {
     provider_health: provider.provider_health_score || 90,
     websocket_stability: provider.websocket_keepalive === 'ACTIVE' ? 'STABLE' : 'DEGRADED',
     event_ingestion_latency_ms: 120,
+    payment_throughput: rev.revenue_throughput_sec,
+    approved_pix_count: pay.states.APPROVED || 0,
+    pending_pix_count: pay.states.PENDING || 0,
+    monetization_efficiency: rev.approved_rate,
+    revenue_velocity: rev.revenue_today,
+    checkout_latency_ms: rev.approval_latency_ms,
+    webhook_health: 'ACTIVE',
+    financial_runtime_status: 'ACTIVE',
     generated_at: new Date().toISOString(),
   };
 }
@@ -56,4 +68,24 @@ function getRailwayCoreStatus() {
   };
 }
 
-module.exports = { getRailwayRuntimeStatus, getRailwayCoreStatus };
+module.exports = { getRailwayRuntimeStatus, getRailwayCoreStatus, getFinancialCoreStatus };
+
+
+function getFinancialCoreStatus() {
+  const r = getRailwayRuntimeStatus();
+  return {
+    runtime: 'LIVE',
+    railway: 'PRIMARY_CORE',
+    payment_runtime: 'ACTIVE',
+    pix_monetization: 'LIVE',
+    payment_throughput: r.payment_throughput,
+    approved_pix_count: r.approved_pix_count,
+    pending_pix_count: r.pending_pix_count,
+    monetization_efficiency: r.monetization_efficiency,
+    revenue_velocity: r.revenue_velocity,
+    checkout_latency_ms: r.checkout_latency_ms,
+    webhook_health: r.webhook_health,
+    financial_runtime_status: r.financial_runtime_status,
+    generated_at: new Date().toISOString(),
+  };
+}
