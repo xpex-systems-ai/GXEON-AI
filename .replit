@@ -24,6 +24,10 @@ localPort = 8080
 externalPort = 8080
 
 [[ports]]
+localPort = 8081
+externalPort = 8081
+
+[[ports]]
 localPort = 21447
 externalPort = 3001
 
@@ -38,3 +42,5 @@ VITE_SUPABASE_URL = "https://telxvphgrsvsnxvmjkce.supabase.co"
 VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbHh2cGhncnN2c254dm1qa2NlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MjYzMzEsImV4cCI6MjA5MDEwMjMzMX0._A6-Gjkm8PckG2Iud7JIJl7EaovGjznEJZFmRol9PQY"
 EXPO_PUBLIC_SUPABASE_URL = "https://telxvphgrsvsnxvmjkce.supabase.co"
 EXPO_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbHh2cGhncnN2c254dm1qa2NlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MjYzMzEsImV4cCI6MjA5MDEwMjMzMX0._A6-Gjkm8PckG2Iud7JIJl7EaovGjznEJZFmRol9PQY"
+SUPABASE_URL = "https://telxvphgrsvsnxvmjkce.supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRlbHh2cGhncnN2c254dm1qa2NlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1MjYzMzEsImV4cCI6MjA5MDEwMjMzMX0._A6-Gjkm8PckG2Iud7JIJl7EaovGjznEJZFmRol9PQY"
