@@ -5,6 +5,7 @@ import {
   Inter_700Bold,
   useFonts,
 } from "@expo-google-fonts/inter";
+import { setBaseUrl } from "@workspace/api-client-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -15,14 +16,25 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+const _domain = process.env.EXPO_PUBLIC_DOMAIN;
+if (_domain) {
+  setBaseUrl(`https://${_domain}`);
+}
+
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
 function RootLayoutNav() {
   return (
-    <Stack screenOptions={{ headerBackTitle: "Back", headerStyle: { backgroundColor: "#060d1e" }, headerTintColor: "#e2eaf4", headerTitleStyle: { fontFamily: "Inter_600SemiBold" } }}>
+    <Stack
+      screenOptions={{
+        headerBackTitle: "Back",
+        headerStyle: { backgroundColor: "#060d1e" },
+        headerTintColor: "#e2eaf4",
+        headerTitleStyle: { fontFamily: "Inter_600SemiBold" },
+      }}
+    >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="commissions" options={{ title: "Commissions" }} />
       <Stack.Screen name="actors" options={{ title: "Actors" }} />
