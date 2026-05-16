@@ -1,5 +1,6 @@
 const { Configuration, OpenAIApi } = require("openai");
-const fetch = require('node-fetch');
+const { getNativeFetch } = require('../runtime/compatibility.cjs');
+const fetch = getNativeFetch();
 
 /**
  * GXEON Internal AI Service

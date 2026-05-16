@@ -1,0 +1,142 @@
+{
+  "system": "GXEON Enterprise Runtime Governance",
+  "generated_at": "2026-05-16T00:43:14.260Z",
+  "status": "ready",
+  "degraded_reports": [],
+  "reports": {
+    "runtime_compatibility": {
+      "name": "Runtime compatibility report",
+      "status": "ready",
+      "package_type": "module",
+      "node_engine": ">=18.0.0",
+      "commonjs_files": 127,
+      "esm_files": 91,
+      "mixed_boundary_files": [
+        "server/agents/discoveryAgent.js",
+        "server/index.js",
+        "server/routes/signals.js",
+        "server/services/radarShix.js",
+        "server/services/supabase.js",
+        "scripts/deploy_arbitrum.js",
+        "scripts/gx_execution_activation.js",
+        "scripts/gx_execution_activation_demo.js",
+        "scripts/verify_protocol_ready.js"
+      ],
+      "mixed_boundary_policy": "guarded by compatibility loader or native ESM import",
+      "safeguards": [
+        "CommonJS .js boundary loader registered for GXEON-owned files",
+        "ESM dynamic imports preserved for native ESM routes/services",
+        "Native fetch helper available for Node >=18 runtimes"
+      ]
+    },
+    "dependency_integrity": {
+      "name": "Dependency integrity report",
+      "status": "ready",
+      "package_lock_version": 3,
+      "production_dependencies": 15,
+      "development_dependencies": 5,
+      "missing_from_lock": [],
+      "lock_only_root_dependencies": [],
+      "ethers_runtime_versions": [
+        {
+          "package": "node_modules/ethers",
+          "version": "6.16.0"
+        }
+      ],
+      "node_fetch_policy": "native fetch enforced"
+    },
+    "supabase_alignment": {
+      "name": "Supabase persistence readiness report",
+      "status": "ready",
+      "configured": false,
+      "canonical_url": false,
+      "deprecated_project_url_present": false,
+      "degraded": true,
+      "warnings": [
+        "SUPABASE_URL is not configured; persistence runs in degraded mode.",
+        "SUPABASE_SERVICE_ROLE_KEY/SUPABASE_KEY is not configured."
+      ],
+      "canonical_variable": "SUPABASE_URL",
+      "fallback_variable": "SUPABASE_PROJECT_URL",
+      "degraded_mode_active": true
+    },
+    "monetization_readiness": {
+      "name": "Monetization readiness report",
+      "status": "ready",
+      "canonical_engine": "server/services/marketplaceMonetization.js",
+      "duplicate_paths_guarded": [
+        "server/services/monetizer.js",
+        "server/routes/a2aMonetization.js",
+        "server/services/agentMetering.js"
+      ],
+      "idempotency_strategy": "actor/api-key metering plus ledger-style consumption logs",
+      "payout_preparation": "treasury wallet and provider revenue-share metadata present"
+    },
+    "swarm_stability": {
+      "name": "Swarm stability report",
+      "status": "ready",
+      "readiness_gates": [
+        "health endpoint first",
+        "lazy route loading",
+        "SWARM_AUTOSTART opt-in",
+        "provider guardian opt-out only"
+      ],
+      "crash_loop_controls": [
+        "global rejection handler",
+        "uncaught exception shield",
+        "WebSocket error guard",
+        "radar delayed soft-start"
+      ]
+    },
+    "deployment_readiness": {
+      "name": "Deployment readiness report",
+      "status": "ready",
+      "start_command": "node server/index.js",
+      "health_endpoints": [
+        "/health",
+        "/api/health",
+        "/status",
+        "/api/v1/runtime/readiness"
+      ],
+      "platforms": [
+        "Railway/Replit node server",
+        "Vercel-safe JSON API payloads"
+      ],
+      "rollback_metadata": {
+        "package_version": "4.0.0-sovereign",
+        "main": "server/index.js"
+      }
+    },
+    "dashboard_activation": {
+      "name": "Dashboard activation report",
+      "status": "ready",
+      "endpoints": [
+        "/api/v1/runtime/summary",
+        "/api/v1/runtime/reports",
+        "/api/v1/runtime/readiness",
+        "/api/v1/dashboard/summary",
+        "/api/v1/core/boot",
+        "/api/v1/health/alchemy"
+      ],
+      "payload_contract": "stable JSON with status, generated_at, reports, and dashboard cards"
+    },
+    "recovery_governance": {
+      "name": "Recovery governance report",
+      "status": "ready",
+      "checks": [
+        "module boundary drift",
+        "dependency lock drift",
+        "Supabase credential degradation",
+        "provider crash-loop risk"
+      ],
+      "reports": [
+        "runtime compatibility",
+        "dependency integrity",
+        "deployment readiness",
+        "monetization readiness",
+        "swarm stability",
+        "dashboard activation"
+      ]
+    }
+  }
+}

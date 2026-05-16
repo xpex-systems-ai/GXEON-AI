@@ -55,7 +55,10 @@
     "marketplace:audit": "node scripts/marketplace_audit_validator.js",
     "marketplace:dev": "nodemon server/index-marketplace.js",
     "marketplace:schema": "echo 'Execute supabase/marketplace_supreme_schema.sql e supabase/observability_schema.sql no Supabase SQL Editor'",
-    "marketplace:signals": "node scripts/start_marketplace_supreme.js"
+    "marketplace:signals": "node scripts/start_marketplace_supreme.js",
+    "runtime:report": "node scripts/runtime_governance_report.cjs",
+    "runtime:validate": "GXEON_ALLOW_DEGRADED_READINESS=true node scripts/runtime_governance_report.cjs",
+    "predeploy:validate": "npm run runtime:validate && node scripts/validate_core_boot.cjs"
   },
   "dependencies": {
     "@flashbots/mev-share-client": "^0.7.13",
