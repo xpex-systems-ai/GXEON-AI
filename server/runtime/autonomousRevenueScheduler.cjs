@@ -56,6 +56,8 @@ function runSchedulerCycle(input = {}) {
 
     if (!transfer.ok) {
       blocked.push({ task_id: task.task_id, reason: transfer.code || 'UNKNOWN' });
+      task.status = 'BLOCKED';
+      task.blocked_at = new Date().toISOString();
       continue;
     }
 
@@ -119,6 +121,18 @@ function autoTopupViaPix({ agent_id, amount = 197 }) {
     cta_source: 'AUTO_TOPUP',
     signal_source: 'CREDIT_LOW',
   });
+  const mem = readMemory();
+  const pending = mem.pending_pix_followups || [];
+  pending.unshift({
+    payment_id: payment.payment_id,
+    agent_id: agent_id || 'agent_buyer_1',
+    channels: [],
+    contact: {},
+    followup_status: 'QUEUED',
+    created_at: new Date().toISOString(),
+    source: 'AUTO_TOPUP',
+  });
+  writeMemory({ pending_pix_followups: pending.slice(0, 5000) });
   return { topup: 'PENDING_PIX', agent_id: agent_id || 'agent_buyer_1', payment };
 }
 
