@@ -101,6 +101,28 @@ curl -X POST "https://<railway-domain>/runtime/pix/followups/process" \
 curl -X GET "https://<railway-domain>/runtime/dashboard/revenue"
 ```
 
+### Signature helper (exact command)
+
+```bash
+PAYLOAD='{"id":"pix_live_001","status":"approved","action":"payment.approved","payment_type_id":"pix","amount":297,"metadata":{"agent_id":"agent_buyer_1","plan":"PRO"}}'
+SIG=$(printf '%s' "$PAYLOAD" | openssl dgst -sha256 -hmac "$MERCADO_PAGO_WEBHOOK_SECRET" -hex | sed 's/^.* //')
+curl -X POST "https://<railway-domain>/webhooks/mercado-pago" \
+  -H "Content-Type: application/json" \
+  -H "x-signature: v1=$SIG" \
+  -d "$PAYLOAD"
+```
+
+### Pending PIX follow-up test
+
+```bash
+PENDING_PAYLOAD='{"id":"pix_live_pending_001","status":"pending","action":"payment.pending","payment_type_id":"pix","amount":297,"customer":{"email":"buyer@example.com","phone":"+5511999999999"},"metadata":{"agent_id":"agent_buyer_1"}}'
+PENDING_SIG=$(printf '%s' "$PENDING_PAYLOAD" | openssl dgst -sha256 -hmac "$MERCADO_PAGO_WEBHOOK_SECRET" -hex | sed 's/^.* //')
+curl -X POST "https://<railway-domain>/webhooks/mercado-pago" \
+  -H "Content-Type: application/json" \
+  -H "x-signature: v1=$PENDING_SIG" \
+  -d "$PENDING_PAYLOAD"
+```
+
 ## 6.1) Real PIX execution (operator runbook)
 
 1. In Mercado Pago dashboard, create a real PIX charge with your production app/account.

@@ -97,6 +97,15 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
       payment_type: isPix ? 'PIX' : (paymentType || 'UNKNOWN'),
       created_at: new Date().toISOString(),
     });
+  } else if (approvedEvent && !creditActivation?.ok) {
+    notifications.unshift({
+      type: 'PIX_APPROVED_CREDIT_ACTIVATION_FAILED',
+      payment_id: id,
+      agent_id: agentId,
+      amount,
+      code: creditActivation?.code || 'ACTIVATION_FAILED',
+      created_at: new Date().toISOString(),
+    });
   }
 
   writeMemory({
