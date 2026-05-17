@@ -1,0 +1,12 @@
+{
+  "valid_trigger_required": "PASS",
+  "valid_runtime_state_required": "PASS",
+  "valid_payment_state_required": "PASS",
+  "operator_visibility": "PASS",
+  "telemetry_registration": "PASS",
+  "governance_logging": "PASS",
+  "hidden_charging": "NONE_DETECTED",
+  "infinite_automation_loops": "NONE_DETECTED",
+  "unauthorized_background_execution": "NONE_DETECTED",
+  "generated_at": "2026-05-17T02:56:21.836Z"
+}

@@ -1,0 +1,14 @@
+{
+  "supabase": "DEGRADED",
+  "all_required_keys_configured": false,
+  "checks": {
+    "SUPABASE_URL": false,
+    "SUPABASE_SERVICE_ROLE_KEY": false,
+    "VITE_SUPABASE_URL": false,
+    "VITE_SUPABASE_ANON_KEY": false,
+    "EXPO_PUBLIC_SUPABASE_URL": false,
+    "EXPO_PUBLIC_SUPABASE_ANON_KEY": false
+  },
+  "database_target": null,
+  "generated_at": "2026-05-17T02:55:59.127Z"
+}

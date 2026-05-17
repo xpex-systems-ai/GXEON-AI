@@ -3,5 +3,740 @@
   "radar_last_scan": "2026-05-16T19:25:01.156Z",
   "tracked_pools": 29,
   "smart_tracking": true,
-  "updated_at": "2026-05-16T19:26:01.102Z"
+  "updated_at": "2026-05-17T03:58:48.966Z",
+  "credit_wallets": {
+    "agent_a": {
+      "agent_id": "agent_a",
+      "balance": 398,
+      "credit_limit": 1000,
+      "total_spent": 102,
+      "total_earned": 0,
+      "updated_at": "2026-05-17T03:11:11.614Z"
+    },
+    "agent_b": {
+      "agent_id": "agent_b",
+      "balance": 202,
+      "credit_limit": 500,
+      "total_spent": 0,
+      "total_earned": 102,
+      "updated_at": "2026-05-17T03:11:11.614Z"
+    },
+    "platform_treasury": {
+      "agent_id": "platform_treasury",
+      "balance": 49800,
+      "credit_limit": 0,
+      "total_spent": 440,
+      "total_earned": 0,
+      "updated_at": "2026-05-17T03:58:48.918Z"
+    },
+    "agent_a2": {
+      "agent_id": "agent_a2",
+      "balance": 247.5,
+      "credit_limit": 100,
+      "total_spent": 42.5,
+      "total_earned": 90,
+      "updated_at": "2026-05-17T03:19:14.821Z"
+    },
+    "agent_b2": {
+      "agent_id": "agent_b2",
+      "balance": 42.5,
+      "credit_limit": 1000,
+      "total_spent": 0,
+      "total_earned": 42.5,
+      "updated_at": "2026-05-17T03:19:14.802Z"
+    },
+    "signal_buyer_1": {
+      "agent_id": "signal_buyer_1",
+      "balance": 490.16,
+      "credit_limit": 200,
+      "total_spent": 9.84,
+      "total_earned": 0,
+      "updated_at": "2026-05-17T03:30:23.583Z"
+    },
+    "signal_producer_1": {
+      "agent_id": "signal_producer_1",
+      "balance": 177.11,
+      "credit_limit": 0,
+      "total_spent": 0,
+      "total_earned": 177.11,
+      "updated_at": "2026-05-17T03:58:48.895Z"
+    },
+    "signal_buyer_v3": {
+      "agent_id": "signal_buyer_v3",
+      "balance": 253.34,
+      "credit_limit": 100,
+      "total_spent": 46.66,
+      "total_earned": 0,
+      "updated_at": "2026-05-17T03:35:39.914Z"
+    },
+    "buyer_live": {
+      "agent_id": "buyer_live",
+      "balance": 179.2,
+      "credit_limit": 200,
+      "total_spent": 70.8,
+      "total_earned": 150,
+      "updated_at": "2026-05-17T03:45:07.606Z"
+    },
+    "buyer_live_vf": {
+      "agent_id": "buyer_live_vf",
+      "balance": 270.19,
+      "credit_limit": 200,
+      "total_spent": 49.81,
+      "total_earned": 200,
+      "updated_at": "2026-05-17T03:58:48.918Z"
+    }
+  },
+  "commission_settlements": [
+    {
+      "settlement_id": "set_1778990328894_ir5aa8",
+      "task_id": "task_1778990328870_gicep",
+      "consumer_agent_id": "buyer_live_vf",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 29.4,
+      "platform_rate": 0.15,
+      "platform_fee": 4.41,
+      "producer_net": 24.99,
+      "created_at": "2026-05-17T03:58:48.894Z"
+    },
+    {
+      "settlement_id": "set_1778990328891_yx0fwx",
+      "task_id": "task_1778990328871_mh2pg",
+      "consumer_agent_id": "buyer_live_vf",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 29.2,
+      "platform_rate": 0.15,
+      "platform_fee": 4.38,
+      "producer_net": 24.82,
+      "created_at": "2026-05-17T03:58:48.891Z"
+    },
+    {
+      "settlement_id": "set_1778989507581_vy7jie",
+      "task_id": "task_1778989507555_nwulj",
+      "consumer_agent_id": "buyer_live",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 27.5,
+      "platform_rate": 0.15,
+      "platform_fee": 4.13,
+      "producer_net": 23.37,
+      "created_at": "2026-05-17T03:45:07.581Z"
+    },
+    {
+      "settlement_id": "set_1778989507579_ccaacs",
+      "task_id": "task_1778989507556_qs6oj",
+      "consumer_agent_id": "buyer_live",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 27.6,
+      "platform_rate": 0.15,
+      "platform_fee": 4.14,
+      "producer_net": 23.46,
+      "created_at": "2026-05-17T03:45:07.580Z"
+    },
+    {
+      "settlement_id": "set_1778989507578_0sm1pf",
+      "task_id": "task_1778989507557_03ocf",
+      "consumer_agent_id": "buyer_live",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 28.2,
+      "platform_rate": 0.15,
+      "platform_fee": 4.23,
+      "producer_net": 23.97,
+      "created_at": "2026-05-17T03:45:07.578Z"
+    },
+    {
+      "settlement_id": "set_1778988939913_hay5wt",
+      "task_id": "task_1778988939887_si3r4",
+      "consumer_agent_id": "signal_buyer_v3",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 27.8,
+      "platform_rate": 0.15,
+      "platform_fee": 4.17,
+      "producer_net": 23.63,
+      "created_at": "2026-05-17T03:35:39.913Z"
+    },
+    {
+      "settlement_id": "set_1778988939911_omxeca",
+      "task_id": "task_1778988939888_ufxk2",
+      "consumer_agent_id": "signal_buyer_v3",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 27.1,
+      "platform_rate": 0.15,
+      "platform_fee": 4.07,
+      "producer_net": 23.03,
+      "created_at": "2026-05-17T03:35:39.912Z"
+    },
+    {
+      "settlement_id": "set_1778988623582_52uqmi",
+      "task_id": "signal_delivery_xr_1778988623560_lxbdt",
+      "consumer_agent_id": "signal_buyer_1",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 12,
+      "platform_rate": 0.18,
+      "platform_fee": 2.16,
+      "producer_net": 9.84,
+      "created_at": "2026-05-17T03:30:23.582Z"
+    },
+    {
+      "settlement_id": "set_1778987954801_29pmfe",
+      "task_id": "task_1778987954756_l1wm7",
+      "consumer_agent_id": "agent_a2",
+      "producer_agent_id": "agent_b2",
+      "gross_amount": 50,
+      "platform_rate": 0.15,
+      "platform_fee": 7.5,
+      "producer_net": 42.5,
+      "created_at": "2026-05-17T03:19:14.801Z"
+    },
+    {
+      "settlement_id": "set_1778987471613_qw2pvb",
+      "task_id": "t1",
+      "consumer_agent_id": "agent_a",
+      "producer_agent_id": "agent_b",
+      "gross_amount": 120,
+      "platform_rate": 0.15,
+      "platform_fee": 18,
+      "producer_net": 102,
+      "created_at": "2026-05-17T03:11:11.613Z"
+    }
+  ],
+  "credit_ledger": [
+    {
+      "event_id": "cred_1778990328918_ssv42z",
+      "from_agent_id": "platform_treasury",
+      "to_agent_id": "buyer_live_vf",
+      "amount": 200,
+      "reason": "PIX_TOPUP_APPROVED",
+      "created_at": "2026-05-17T03:58:48.918Z"
+    },
+    {
+      "event_id": "cred_1778990328895_dbgato",
+      "from_agent_id": "buyer_live_vf",
+      "to_agent_id": "signal_producer_1",
+      "amount": 24.99,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:58:48.895Z"
+    },
+    {
+      "event_id": "cred_1778990328892_mz84qe",
+      "from_agent_id": "buyer_live_vf",
+      "to_agent_id": "signal_producer_1",
+      "amount": 24.82,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:58:48.892Z"
+    },
+    {
+      "event_id": "cred_1778989507606_cghgjy",
+      "from_agent_id": "platform_treasury",
+      "to_agent_id": "buyer_live",
+      "amount": 150,
+      "reason": "PIX_TOPUP_APPROVED",
+      "created_at": "2026-05-17T03:45:07.606Z"
+    },
+    {
+      "event_id": "cred_1778989507582_bldhqy",
+      "from_agent_id": "buyer_live",
+      "to_agent_id": "signal_producer_1",
+      "amount": 23.37,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:45:07.582Z"
+    },
+    {
+      "event_id": "cred_1778989507580_18ckk3",
+      "from_agent_id": "buyer_live",
+      "to_agent_id": "signal_producer_1",
+      "amount": 23.46,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:45:07.580Z"
+    },
+    {
+      "event_id": "cred_1778989507579_0witji",
+      "from_agent_id": "buyer_live",
+      "to_agent_id": "signal_producer_1",
+      "amount": 23.97,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:45:07.579Z"
+    },
+    {
+      "event_id": "cred_1778988939914_7yvxww",
+      "from_agent_id": "signal_buyer_v3",
+      "to_agent_id": "signal_producer_1",
+      "amount": 23.63,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:35:39.914Z"
+    },
+    {
+      "event_id": "cred_1778988939912_b1v00d",
+      "from_agent_id": "signal_buyer_v3",
+      "to_agent_id": "signal_producer_1",
+      "amount": 23.03,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:35:39.912Z"
+    },
+    {
+      "event_id": "cred_1778988623583_hy5qz2",
+      "from_agent_id": "signal_buyer_1",
+      "to_agent_id": "signal_producer_1",
+      "amount": 9.84,
+      "reason": "PAY_PER_SIGNAL_DELIVERY",
+      "created_at": "2026-05-17T03:30:23.583Z"
+    },
+    {
+      "event_id": "cred_1778987954821_n2857i",
+      "from_agent_id": "platform_treasury",
+      "to_agent_id": "agent_a2",
+      "amount": 90,
+      "reason": "PIX_TOPUP_APPROVED",
+      "created_at": "2026-05-17T03:19:14.821Z"
+    },
+    {
+      "event_id": "cred_1778987954802_inoa7f",
+      "from_agent_id": "agent_a2",
+      "to_agent_id": "agent_b2",
+      "amount": 42.5,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:19:14.802Z"
+    },
+    {
+      "event_id": "cred_1778987471614_7tpveu",
+      "from_agent_id": "agent_a",
+      "to_agent_id": "agent_b",
+      "amount": 102,
+      "reason": "TASK_SETTLEMENT_NET",
+      "created_at": "2026-05-17T03:11:11.614Z"
+    }
+  ],
+  "autonomous_task_queue": [
+    {
+      "task_id": "task_1778990328871_mh2pg",
+      "signal_id": "xr_1778990328870_hlaey",
+      "price_credits": 29.2,
+      "producer_agent_id": "signal_producer_1",
+      "consumer_agent_id": "buyer_live_vf",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:58:48.871Z",
+      "settled_at": "2026-05-17T03:58:48.893Z",
+      "settlement": {
+        "settlement_id": "set_1778990328891_yx0fwx",
+        "task_id": "task_1778990328871_mh2pg",
+        "consumer_agent_id": "buyer_live_vf",
+        "producer_agent_id": "signal_producer_1",
+        "gross_amount": 29.2,
+        "platform_rate": 0.15,
+        "platform_fee": 4.38,
+        "producer_net": 24.82,
+        "created_at": "2026-05-17T03:58:48.891Z"
+      }
+    },
+    {
+      "task_id": "task_1778990328870_gicep",
+      "signal_id": "xr_1778990328868_0vtg9",
+      "price_credits": 29.4,
+      "producer_agent_id": "signal_producer_1",
+      "consumer_agent_id": "buyer_live_vf",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:58:48.870Z",
+      "settled_at": "2026-05-17T03:58:48.898Z",
+      "settlement": {
+        "settlement_id": "set_1778990328894_ir5aa8",
+        "task_id": "task_1778990328870_gicep",
+        "consumer_agent_id": "buyer_live_vf",
+        "producer_agent_id": "signal_producer_1",
+        "gross_amount": 29.4,
+        "platform_rate": 0.15,
+        "platform_fee": 4.41,
+        "producer_net": 24.99,
+        "created_at": "2026-05-17T03:58:48.894Z"
+      }
+    },
+    {
+      "task_id": "task_1778989507557_03ocf",
+      "signal_id": "xr_1778989507557_8dmtz",
+      "price_credits": 28.2,
+      "producer_agent_id": "signal_producer_1",
+      "consumer_agent_id": "buyer_live",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:45:07.557Z",
+      "settled_at": "2026-05-17T03:45:07.579Z",
+      "settlement": {
+        "settlement_id": "set_1778989507578_0sm1pf",
+        "task_id": "task_1778989507557_03ocf",
+        "consumer_agent_id": "buyer_live",
+        "producer_agent_id": "signal_producer_1",
+        "gross_amount": 28.2,
+        "platform_rate": 0.15,
+        "platform_fee": 4.23,
+        "producer_net": 23.97,
+        "created_at": "2026-05-17T03:45:07.578Z"
+      }
+    },
+    {
+      "task_id": "task_1778989507556_qs6oj",
+      "signal_id": "xr_1778989507556_9dpfr",
+      "price_credits": 27.6,
+      "producer_agent_id": "signal_producer_1",
+      "consumer_agent_id": "buyer_live",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:45:07.556Z",
+      "settled_at": "2026-05-17T03:45:07.581Z",
+      "settlement": {
+        "settlement_id": "set_1778989507579_ccaacs",
+        "task_id": "task_1778989507556_qs6oj",
+        "consumer_agent_id": "buyer_live",
+        "producer_agent_id": "signal_producer_1",
+        "gross_amount": 27.6,
+        "platform_rate": 0.15,
+        "platform_fee": 4.14,
+        "producer_net": 23.46,
+        "created_at": "2026-05-17T03:45:07.580Z"
+      }
+    },
+    {
+      "task_id": "task_1778989507555_nwulj",
+      "signal_id": "xr_1778989507555_bet3l",
+      "price_credits": 27.5,
+      "producer_agent_id": "signal_producer_1",
+      "consumer_agent_id": "buyer_live",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:45:07.555Z",
+      "settled_at": "2026-05-17T03:45:07.586Z",
+      "settlement": {
+        "settlement_id": "set_1778989507581_vy7jie",
+        "task_id": "task_1778989507555_nwulj",
+        "consumer_agent_id": "buyer_live",
+        "producer_agent_id": "signal_producer_1",
+        "gross_amount": 27.5,
+        "platform_rate": 0.15,
+        "platform_fee": 4.13,
+        "producer_net": 23.37,
+        "created_at": "2026-05-17T03:45:07.581Z"
+      }
+    },
+    {
+      "task_id": "task_1778988939888_ufxk2",
+      "signal_id": "xr_1778988939888_gbr1z",
+      "price_credits": 27.1,
+      "producer_agent_id": "signal_producer_1",
+      "consumer_agent_id": "signal_buyer_v3",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:35:39.888Z",
+      "settled_at": "2026-05-17T03:35:39.913Z",
+      "settlement": {
+        "settlement_id": "set_1778988939911_omxeca",
+        "task_id": "task_1778988939888_ufxk2",
+        "consumer_agent_id": "signal_buyer_v3",
+        "producer_agent_id": "signal_producer_1",
+        "gross_amount": 27.1,
+        "platform_rate": 0.15,
+        "platform_fee": 4.07,
+        "producer_net": 23.03,
+        "created_at": "2026-05-17T03:35:39.912Z"
+      }
+    },
+    {
+      "task_id": "task_1778988939887_si3r4",
+      "signal_id": "xr_1778988939887_ya9v8",
+      "price_credits": 27.8,
+      "producer_agent_id": "signal_producer_1",
+      "consumer_agent_id": "signal_buyer_v3",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:35:39.887Z",
+      "settled_at": "2026-05-17T03:35:39.914Z",
+      "settlement": {
+        "settlement_id": "set_1778988939913_hay5wt",
+        "task_id": "task_1778988939887_si3r4",
+        "consumer_agent_id": "signal_buyer_v3",
+        "producer_agent_id": "signal_producer_1",
+        "gross_amount": 27.8,
+        "platform_rate": 0.15,
+        "platform_fee": 4.17,
+        "producer_net": 23.63,
+        "created_at": "2026-05-17T03:35:39.913Z"
+      }
+    },
+    {
+      "task_id": "task_1778987954756_l1wm7",
+      "signal_id": "sig_1778987954756",
+      "price_credits": 50,
+      "producer_agent_id": "agent_b2",
+      "consumer_agent_id": "agent_a2",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:19:14.756Z",
+      "settled_at": "2026-05-17T03:19:14.802Z",
+      "settlement": {
+        "settlement_id": "set_1778987954801_29pmfe",
+        "task_id": "task_1778987954756_l1wm7",
+        "consumer_agent_id": "agent_a2",
+        "producer_agent_id": "agent_b2",
+        "gross_amount": 50,
+        "platform_rate": 0.15,
+        "platform_fee": 7.5,
+        "producer_net": 42.5,
+        "created_at": "2026-05-17T03:19:14.801Z"
+      }
+    }
+  ],
+  "webhook_processed_ids": [
+    "wh_test_approved_1",
+    "wh_pending_1",
+    "pix_ok_1",
+    "pix_pending_1",
+    "pix_realistic_approved_1",
+    "pix_realistic_pending_1"
+  ],
+  "financial_events": [
+    {
+      "id": "wh_test_approved_1",
+      "payload": {
+        "id": "wh_test_approved_1",
+        "status": "approved",
+        "amount": 90,
+        "metadata": {
+          "agent_id": "agent_a2"
+        }
+      },
+      "at": "2026-05-17T03:19:14.821Z"
+    },
+    {
+      "id": "wh_pending_1",
+      "payload": {
+        "id": "wh_pending_1",
+        "status": "pending",
+        "customer": {
+          "email": "buyer@example.com"
+        }
+      },
+      "at": "2026-05-17T03:35:39.937Z"
+    },
+    {
+      "id": "pix_ok_1",
+      "payload": {
+        "id": "pix_ok_1",
+        "status": "approved",
+        "amount": 150,
+        "metadata": {
+          "agent_id": "buyer_live"
+        }
+      },
+      "at": "2026-05-17T03:45:07.606Z"
+    },
+    {
+      "id": "pix_pending_1",
+      "payload": {
+        "id": "pix_pending_1",
+        "status": "pending",
+        "customer": {
+          "email": "buyer@x.com"
+        }
+      },
+      "at": "2026-05-17T03:45:07.626Z"
+    },
+    {
+      "id": "pix_realistic_approved_1",
+      "payload": {
+        "id": "pix_realistic_approved_1",
+        "action": "payment.approved",
+        "transaction_amount": 200,
+        "metadata": {
+          "agent_id": "buyer_live_vf"
+        }
+      },
+      "at": "2026-05-17T03:58:48.917Z"
+    },
+    {
+      "id": "pix_realistic_pending_1",
+      "payload": {
+        "id": "pix_realistic_pending_1",
+        "status": "pending",
+        "customer": {
+          "email": "buyer@live.com",
+          "phone": "+5511999999999"
+        }
+      },
+      "at": "2026-05-17T03:58:48.940Z"
+    }
+  ],
+  "webhook_health": "ACTIVE",
+  "x_radar_signals": [
+    {
+      "signal_id": "xr_1778990328870_hlaey",
+      "chain": "base",
+      "source": "X_RADAR_MULTI_SOURCE",
+      "category": "MEV",
+      "confidence_score": 92,
+      "confidence_tier": "HIGH",
+      "expected_roi_pct": 18.95,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:58:48.870Z"
+    },
+    {
+      "signal_id": "xr_1778990328868_0vtg9",
+      "chain": "ethereum",
+      "source": "X_RADAR_MULTI_SOURCE",
+      "category": "MEV",
+      "confidence_score": 94,
+      "confidence_tier": "HIGH",
+      "expected_roi_pct": 18.06,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:58:48.868Z"
+    },
+    {
+      "signal_id": "xr_1778989507557_8dmtz",
+      "chain": "base",
+      "source": "X_RADAR_MULTI_SOURCE",
+      "category": "MEV",
+      "confidence_score": 82,
+      "confidence_tier": "MEDIUM",
+      "expected_roi_pct": 10.66,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:45:07.557Z"
+    },
+    {
+      "signal_id": "xr_1778989507556_9dpfr",
+      "chain": "arbitrum",
+      "source": "X_RADAR_MULTI_SOURCE",
+      "category": "MEV",
+      "confidence_score": 76,
+      "confidence_tier": "MEDIUM",
+      "expected_roi_pct": 6.3,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:45:07.556Z"
+    },
+    {
+      "signal_id": "xr_1778989507555_bet3l",
+      "chain": "base",
+      "source": "X_RADAR_MULTI_SOURCE",
+      "category": "MEV",
+      "confidence_score": 75,
+      "confidence_tier": "MEDIUM",
+      "expected_roi_pct": 20.06,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:45:07.555Z"
+    },
+    {
+      "signal_id": "xr_1778988939888_gbr1z",
+      "chain": "arbitrum",
+      "source": "X_RADAR_MULTI_SOURCE",
+      "category": "MEV",
+      "confidence_score": 71,
+      "confidence_tier": "MEDIUM",
+      "expected_roi_pct": 4.08,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:35:39.888Z"
+    },
+    {
+      "signal_id": "xr_1778988939887_ya9v8",
+      "chain": "ethereum",
+      "source": "X_RADAR_MULTI_SOURCE",
+      "category": "MEV",
+      "confidence_score": 78,
+      "confidence_tier": "MEDIUM",
+      "expected_roi_pct": 3.7,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:35:39.887Z"
+    },
+    {
+      "signal_id": "xr_1778988623560_lxbdt",
+      "chain": "ethereum",
+      "source": "X_RADAR_AUTONOMOUS_SCANNER",
+      "category": "BOUNTY",
+      "confidence_score": 95,
+      "confidence_tier": "HIGH",
+      "expected_roi_pct": 3.67,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:30:23.560Z"
+    },
+    {
+      "signal_id": "xr_1778988623560_tglo5",
+      "chain": "ethereum",
+      "source": "X_RADAR_AUTONOMOUS_SCANNER",
+      "category": "LIQUIDITY",
+      "confidence_score": 84,
+      "confidence_tier": "MEDIUM",
+      "expected_roi_pct": 3.18,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:30:23.560Z"
+    },
+    {
+      "signal_id": "xr_1778988623559_ascai",
+      "chain": "base",
+      "source": "X_RADAR_AUTONOMOUS_SCANNER",
+      "category": "MEV",
+      "confidence_score": 89,
+      "confidence_tier": "HIGH",
+      "expected_roi_pct": 10.14,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:30:23.559Z"
+    }
+  ],
+  "x_radar_deliveries": [
+    {
+      "delivery_id": "dlv_1778988623583_knknn",
+      "signal_id": "xr_1778988623560_lxbdt",
+      "consumer_agent_id": "signal_buyer_1",
+      "signal_price_credits": 12,
+      "status": "DELIVERED",
+      "channel": "API_PRIVATE",
+      "created_at": "2026-05-17T03:30:23.583Z"
+    }
+  ],
+  "pending_pix_followups": [
+    {
+      "payment_id": "pix_realistic_pending_1",
+      "channels": [
+        "WHATSAPP",
+        "EMAIL"
+      ],
+      "contact": {
+        "email": "buyer@live.com",
+        "phone": "+5511999999999"
+      },
+      "followup_status": "RETRY_QUEUED",
+      "created_at": "2026-05-17T03:58:48.940Z",
+      "attempts": 1,
+      "dispatch": [
+        {
+          "channel": "WHATSAPP",
+          "dispatched": true
+        },
+        {
+          "channel": "EMAIL",
+          "dispatched": true
+        }
+      ],
+      "last_attempt_at": "2026-05-17T03:58:48.965Z",
+      "next_retry_at": "2026-05-17T04:00:48.965Z"
+    },
+    {
+      "payment_id": "pix_pending_1",
+      "channel": "EMAIL",
+      "contact": "buyer@x.com",
+      "followup_status": "RETRY_QUEUED",
+      "created_at": "2026-05-17T03:45:07.626Z",
+      "attempts": 2,
+      "last_attempt_at": "2026-05-17T03:58:48.965Z",
+      "next_retry_at": "2026-05-17T04:02:48.965Z",
+      "dispatch": []
+    },
+    {
+      "payment_id": "wh_pending_1",
+      "channel": "EMAIL",
+      "contact": "buyer@example.com",
+      "followup_status": "RETRY_QUEUED",
+      "created_at": "2026-05-17T03:35:39.937Z",
+      "attempts": 2,
+      "last_attempt_at": "2026-05-17T03:58:48.965Z",
+      "next_retry_at": "2026-05-17T04:02:48.965Z",
+      "dispatch": []
+    }
+  ],
+  "subscriptions": {
+    "signal_buyer_v3": {
+      "agent_id": "signal_buyer_v3",
+      "plan": "PRO",
+      "brl_monthly": 997,
+      "included_signals": 1200,
+      "execution_fee_pct": 0.1,
+      "status": "ACTIVE",
+      "started_at": "2026-05-17T03:35:39.960Z"
+    }
+  }
 }
