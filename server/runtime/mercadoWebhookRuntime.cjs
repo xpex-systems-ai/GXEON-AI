@@ -17,6 +17,7 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
   const mem = readMemory();
   const processed = new Set(mem.webhook_processed_ids || []);
   const pending = mem.pending_pix_followups || [];
+  const notifications = mem.revenue_notifications || [];
   const id = payload.id || payload.data?.id || `wh_${Date.now()}`;
   if (processed.has(id)) return { accepted: true, idempotent: true, id };
 
@@ -40,7 +41,7 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
       reason: 'PIX_TOPUP_APPROVED',
     });
   }
-  if (pendingEvent) {
+  if (pendingEvent && !pending.find((p) => p.payment_id === id && p.followup_status !== 'RESOLVED')) {
     pending.unshift({
       payment_id: id,
       channels: [
@@ -55,11 +56,21 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
       created_at: new Date().toISOString(),
     });
   }
+  if (approvedEvent && creditActivation?.ok) {
+    notifications.unshift({
+      type: 'PIX_APPROVED_CREDIT_ACTIVATED',
+      payment_id: id,
+      agent_id: agentId,
+      amount,
+      created_at: new Date().toISOString(),
+    });
+  }
 
   writeMemory({
     webhook_processed_ids: Array.from(processed).slice(-5000),
     financial_events: events,
     pending_pix_followups: pending.slice(0, 5000),
+    revenue_notifications: notifications.slice(0, 5000),
     webhook_health: 'ACTIVE',
   });
   return { accepted: true, idempotent: false, id, credit_activation: creditActivation };

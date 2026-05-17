@@ -13,6 +13,7 @@ function getRevenueDashboardMetrics() {
   const a = getAutonomousRevenueRuntime();
   const mem = readMemory();
   const pending = (mem.pending_pix_followups || []).filter((f) => f.followup_status !== 'RESOLVED').length;
+  const notifications = (mem.revenue_notifications || []).length;
   return {
     revenue_dashboard: 'ACTIVE',
     platform_revenue_credits: c.platform_revenue,
@@ -24,6 +25,7 @@ function getRevenueDashboardMetrics() {
     autonomous_tasks_queued: a.queued,
     wallet_count: cr.wallet_count,
     pending_pix_followups: pending,
+    revenue_notifications: notifications,
     generated_at: new Date().toISOString(),
   };
 }
