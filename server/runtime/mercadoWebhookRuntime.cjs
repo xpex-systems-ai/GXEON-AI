@@ -18,7 +18,7 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
   const processed = new Set(mem.webhook_processed_ids || []);
   const pending = mem.pending_pix_followups || [];
   const notifications = mem.revenue_notifications || [];
-  const id = payload.id || payload.data?.id || `wh_${Date.now()}`;
+  const id = String(payload.id || payload.data?.id || payload.payment_id || `wh_${Date.now()}`);
   if (processed.has(id)) return { accepted: true, idempotent: true, id };
 
   processed.add(id);
@@ -26,11 +26,13 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
   const status = String(payload.status || '').toUpperCase();
   const action = String(payload.action || payload.type || '').toUpperCase();
   const agentId = payload.metadata?.agent_id || payload.agent_id || 'agent_buyer_1';
-  const amount = Number(payload.amount || payload.transaction_amount || 0);
+  const amount = Number(payload.amount || payload.transaction_amount || payload.metadata?.amount || 0);
+  const paymentType = String(payload.payment_type_id || payload.payment_type || payload.type || '').toUpperCase();
   let creditActivation = null;
 
   const approvedEvent = status === 'APPROVED' || action === 'PAYMENT.APPROVED';
   const pendingEvent = status === 'PENDING' || action.includes('PENDING');
+  const isPix = paymentType.includes('PIX') || String(payload.metadata?.payment_method || '').toUpperCase() === 'PIX';
   if (approvedEvent && amount > 0) {
     ensureWallet('platform_treasury');
     ensureWallet(agentId);
@@ -38,7 +40,7 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
       from_agent_id: 'platform_treasury',
       to_agent_id: agentId,
       amount,
-      reason: 'PIX_TOPUP_APPROVED',
+      reason: isPix ? 'PIX_TOPUP_APPROVED' : 'PAYMENT_TOPUP_APPROVED',
     });
   }
   if (pendingEvent && !pending.find((p) => p.payment_id === id && p.followup_status !== 'RESOLVED')) {
@@ -54,6 +56,7 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
       },
       followup_status: 'QUEUED',
       created_at: new Date().toISOString(),
+      payment_type: isPix ? 'PIX' : (paymentType || 'UNKNOWN'),
     });
   }
   if (approvedEvent && creditActivation?.ok) {
@@ -62,6 +65,7 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
       payment_id: id,
       agent_id: agentId,
       amount,
+      payment_type: isPix ? 'PIX' : (paymentType || 'UNKNOWN'),
       created_at: new Date().toISOString(),
     });
   }
@@ -86,8 +90,9 @@ function processPendingPixFollowups(input = {}) {
     if (processed.length >= limit) return item;
     if (item.followup_status === 'RESOLVED') return item;
     const attempts = Number(item.attempts || 0) + 1;
+    if (item.next_retry_at && Date.parse(item.next_retry_at) > now) return item;
     const retryAt = new Date(now + (attempts * 2) * 60_000).toISOString();
-    const status = attempts >= 3 ? 'ESCALATED' : 'RETRY_QUEUED';
+    const status = attempts >= 4 ? 'ESCALATED' : 'RETRY_QUEUED';
     const channels = item.channels || [];
     const dispatch = channels.map((ch) => ({ channel: ch, dispatched: true }));
     processed.push({ payment_id: item.payment_id, attempts, status, dispatch });
