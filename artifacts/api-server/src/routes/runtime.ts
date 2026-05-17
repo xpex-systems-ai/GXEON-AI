@@ -38,6 +38,7 @@ const { executeAutonomousPixRun } = require(pathFromRoot("paymentOrchestrator.cj
 const { getSanitizedProviderSummary, sanitizeRuntimeEvent } = require(pathFromRoot("runtimeLogSanitizer.cjs"));
 const { ensureWallet, upsertWallet, transferCredits, getCreditRuntime } = require(pathFromRoot("creditRuntime.cjs"));
 const { settleCommission, getCommissionRuntime } = require(pathFromRoot("commissionEngine.cjs"));
+const { enqueueTask, runSchedulerCycle, autoTopupViaPix, getAutonomousRevenueRuntime } = require(pathFromRoot("autonomousRevenueScheduler.cjs"));
 
 const router = Router();
 
@@ -187,6 +188,22 @@ router.post("/v1/runtime/commissions/settle", (req, res) => {
   } catch (error) {
     res.status(400).json({ error: String(error) });
   }
+});
+
+router.get("/v1/runtime/autonomous-revenue", (_req, res) => {
+  res.json(getAutonomousRevenueRuntime());
+});
+
+router.post("/v1/runtime/tasks/enqueue", (req, res) => {
+  res.status(201).json(enqueueTask(req.body ?? {}));
+});
+
+router.post("/v1/runtime/tasks/run-cycle", (req, res) => {
+  res.status(201).json(runSchedulerCycle(req.body ?? {}));
+});
+
+router.post("/v1/runtime/credits/auto-topup", (req, res) => {
+  res.status(201).json(autoTopupViaPix(req.body ?? {}));
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {
