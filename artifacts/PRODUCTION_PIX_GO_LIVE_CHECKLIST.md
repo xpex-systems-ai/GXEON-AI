@@ -101,6 +101,17 @@ curl -X POST "https://<railway-domain>/runtime/pix/followups/process" \
 curl -X GET "https://<railway-domain>/runtime/dashboard/revenue"
 ```
 
+## 6.1) Real PIX execution (operator runbook)
+
+1. In Mercado Pago dashboard, create a real PIX charge with your production app/account.
+2. Pay the PIX using a real banking app/account.
+3. Confirm Mercado Pago sends webhook `approved` to `POST /webhooks/mercado-pago`.
+4. Validate in GXEON:
+   - `credit_ledger` has `PIX_TOPUP_APPROVED` event.
+   - `subscriptions` is ACTIVE if `metadata.plan` was sent.
+   - Dashboard endpoint shows `pix_approved_count` increment and `pix_approved_gmv_brl` increase.
+5. If not approved within SLA, run pending follow-up processor and inspect notifications.
+
 ## 7) 14-day revenue sprint (R$10k)
 - Day 1-2: launch Basic/Pro with live PIX checkout.
 - Day 3-5: daily outbound + WhatsApp follow-up for pending PIX.
