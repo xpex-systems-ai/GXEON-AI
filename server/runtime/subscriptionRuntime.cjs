@@ -24,8 +24,24 @@ function subscribeAgent({ agent_id, plan = 'BASIC' } = {}) {
   return subs[agent_id];
 }
 
+function activateSubscriptionFromPayment({ agent_id, plan = 'BASIC', payment_id = null, amount = null } = {}) {
+  const sub = subscribeAgent({ agent_id, plan });
+  const mem = readMemory();
+  const events = mem.subscription_events || [];
+  events.unshift({
+    type: 'SUBSCRIPTION_PAYMENT_APPROVED',
+    agent_id,
+    plan: sub.plan,
+    payment_id,
+    amount,
+    at: new Date().toISOString(),
+  });
+  writeMemory({ subscription_events: events.slice(0, 5000) });
+  return { ok: true, subscription: sub };
+}
+
 function getSubscriptionCatalog() {
   return { plans: PLANS, generated_at: new Date().toISOString() };
 }
 
-module.exports = { subscribeAgent, getSubscriptionCatalog };
+module.exports = { subscribeAgent, activateSubscriptionFromPayment, getSubscriptionCatalog };

@@ -5,6 +5,7 @@ const { createPixPayment } = require('./paymentRuntime.cjs');
 const { ensureWallet, transferCredits } = require('./creditRuntime.cjs');
 const { settleCommission } = require('./commissionEngine.cjs');
 const { generateSignal } = require('./xRadarEngine.cjs');
+const { subscribeAgent } = require('./subscriptionRuntime.cjs');
 
 function getQueue() {
   const mem = readMemory();
@@ -34,6 +35,7 @@ function runSchedulerCycle(input = {}) {
   const settled = [];
   const blocked = [];
   const refunded = [];
+  const topupsTriggered = [];
 
   for (const task of queued) {
     ensureWallet(task.consumer_agent_id);
@@ -56,6 +58,11 @@ function runSchedulerCycle(input = {}) {
 
     if (!transfer.ok) {
       blocked.push({ task_id: task.task_id, reason: transfer.code || 'UNKNOWN' });
+      task.status = 'BLOCKED';
+      task.blocked_at = new Date().toISOString();
+      if (transfer.code === 'CREDIT_LIMIT_EXCEEDED' || transfer.code === 'RATE_LIMIT_EXCEEDED') {
+        topupsTriggered.push(autoTopupViaPix({ agent_id: task.consumer_agent_id, amount: input.topup_amount || 297 }));
+      }
       continue;
     }
 
@@ -79,7 +86,13 @@ function runSchedulerCycle(input = {}) {
     }
   }
 
-  const next = queue.map((item) => settled.find((s) => s.task_id === item.task_id) || item);
+  const updates = new Map([
+    ...queued
+      .filter((t) => t.status === 'SETTLED' || t.status === 'BLOCKED' || t.status === 'FAILED')
+      .map((t) => [t.task_id, t]),
+    ...settled.map((s) => [s.task_id, s]),
+  ]);
+  const next = queue.map((item) => updates.get(item.task_id) || item);
   writeMemory({ autonomous_task_queue: next });
 
   return {
@@ -87,9 +100,11 @@ function runSchedulerCycle(input = {}) {
     settled_count: settled.length,
     blocked_count: blocked.length,
     refunded_count: refunded.length,
+    topups_triggered_count: topupsTriggered.length,
     settled,
     blocked,
     refunded,
+    topups_triggered: topupsTriggered,
     generated_at: new Date().toISOString(),
   };
 }
@@ -101,14 +116,19 @@ function generateSellableTasksFromRadar(input = {}) {
   for (let i = 0; i < count; i += 1) {
     const signal = generateSignal({ category: input.category || 'MEV' });
     const price = Number((basePrice + (signal.confidence_score / 10)).toFixed(2));
+    const executionFee = Number(((price * Number(input.execution_fee_rate || 0.06))).toFixed(2));
     created.push(enqueueTask({
       signal_id: signal.signal_id,
-      price_credits: price,
+      price_credits: Number((price + executionFee).toFixed(2)),
       producer_agent_id: signal.producer_agent_id,
       consumer_agent_id: input.consumer_agent_id || 'agent_buyer_1',
     }));
   }
   return { generator: 'ACTIVE', tasks_generated: created.length, tasks: created, generated_at: new Date().toISOString() };
+}
+
+function activateSubscriptionPlan(input = {}) {
+  return subscribeAgent({ agent_id: input.agent_id, plan: input.plan || 'BASIC' });
 }
 
 function autoTopupViaPix({ agent_id, amount = 197 }) {
@@ -119,6 +139,18 @@ function autoTopupViaPix({ agent_id, amount = 197 }) {
     cta_source: 'AUTO_TOPUP',
     signal_source: 'CREDIT_LOW',
   });
+  const mem = readMemory();
+  const pending = mem.pending_pix_followups || [];
+  pending.unshift({
+    payment_id: payment.payment_id,
+    agent_id: agent_id || 'agent_buyer_1',
+    channels: [],
+    contact: {},
+    followup_status: 'QUEUED',
+    created_at: new Date().toISOString(),
+    source: 'AUTO_TOPUP',
+  });
+  writeMemory({ pending_pix_followups: pending.slice(0, 5000) });
   return { topup: 'PENDING_PIX', agent_id: agent_id || 'agent_buyer_1', payment };
 }
 
@@ -134,4 +166,4 @@ function getAutonomousRevenueRuntime() {
   };
 }
 
-module.exports = { enqueueTask, runSchedulerCycle, autoTopupViaPix, getAutonomousRevenueRuntime, generateSellableTasksFromRadar };
+module.exports = { enqueueTask, runSchedulerCycle, autoTopupViaPix, getAutonomousRevenueRuntime, generateSellableTasksFromRadar, activateSubscriptionPlan };
