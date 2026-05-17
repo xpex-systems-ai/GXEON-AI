@@ -8,7 +8,15 @@ const { activateSubscriptionFromPayment } = require('./subscriptionRuntime.cjs')
 function verifyWebhookSignature(rawBody = '', signature = '', secret = process.env.MERCADO_PAGO_WEBHOOK_SECRET || '') {
   if (!secret) return true;
   const digest = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
-  return signature === digest;
+  const normalized = String(signature || '')
+    .split(',')
+    .map((part) => part.trim())
+    .find((part) => part.startsWith('v1='))?.replace('v1=', '') || String(signature || '').trim();
+  if (!normalized) return false;
+  const a = Buffer.from(digest);
+  const b = Buffer.from(normalized);
+  if (a.length !== b.length) return false;
+  return crypto.timingSafeEqual(a, b);
 }
 
 function processWebhook(payload = {}, signature = '', rawBody = '') {

@@ -86,7 +86,11 @@ function runSchedulerCycle(input = {}) {
     }
   }
 
-  const next = queue.map((item) => settled.find((s) => s.task_id === item.task_id) || item);
+  const updates = new Map([
+    ...settled.map((s) => [s.task_id, s]),
+    ...queue.filter((t) => t.status === 'BLOCKED' || t.status === 'FAILED').map((t) => [t.task_id, t]),
+  ]);
+  const next = queue.map((item) => updates.get(item.task_id) || item);
   writeMemory({ autonomous_task_queue: next });
 
   return {

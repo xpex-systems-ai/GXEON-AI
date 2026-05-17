@@ -8,6 +8,12 @@ Set in Railway service:
 - `SUPABASE_SERVICE_ROLE_KEY=<service-role-key>`
 - `NODE_ENV=production`
 - `GXEON_RUNTIME_MODE=live`
+- `MERCADO_PAGO_ACCESS_TOKEN=<app-access-token>`
+- `MERCADO_PAGO_PUBLIC_KEY=<app-public-key>`
+- `MERCADO_PAGO_CLIENT_ID=<client-id>`
+- `MERCADO_PAGO_CLIENT_SECRET=<client-secret>`
+
+> Security: never commit keys/tokens in git. Keep only in Railway/Supabase secret stores and rotate immediately if exposed.
 
 ## 2) Supabase production tables
 Ensure these tables exist and RLS/service-role access is valid:
@@ -41,6 +47,26 @@ Cron/worker cadence:
 2. Send approved webhook payload
 3. Confirm wallet credit increase
 4. Confirm dashboard metric increments
+
+## 5.1) Deploy commands (Railway + runtime)
+
+```bash
+# login and bind project
+railway login
+railway link
+
+# set/update secrets (repeat for each variable)
+railway variables set MERCADO_PAGO_WEBHOOK_SECRET="<secret>"
+railway variables set MERCADO_PAGO_ACCESS_TOKEN="<token>"
+railway variables set SUPABASE_URL="<url>"
+railway variables set SUPABASE_SERVICE_ROLE_KEY="<service-role-key>"
+
+# deploy current branch
+railway up
+
+# check logs for webhook/scheduler health
+railway logs --tail
+```
 
 ## 6) cURL commands
 
