@@ -1,14 +1,9 @@
 import { Router } from "express";
 import { createRequire } from "node:module";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-// Compiled to artifacts/api-server/dist/index.mjs — go up 3 levels to workspace root
-const WORKSPACE_ROOT = path.resolve(__dirname, "../../..");
-const pathFromRoot = (file: string) => path.join(WORKSPACE_ROOT, "server/runtime", file);
+const pathFromRoot = (file: string) => path.join(process.cwd(), "server/runtime", file);
 const { getRuntimeSyncStatus } = require(pathFromRoot("runtimeHeartbeat.cjs"));
 const { getRecoveryStatus } = require(pathFromRoot("runtimeRecovery.cjs"));
 const { getProductionRuntimeStatus } = require(pathFromRoot("productionRuntime.cjs"));
@@ -25,6 +20,7 @@ const { getOperatorAlerts } = require(pathFromRoot("operatorAlerts.cjs"));
 const { createPixPayment, getPaymentsRuntime } = require(pathFromRoot("paymentRuntime.cjs"));
 const { processWebhook } = require(pathFromRoot("mercadoWebhookRuntime.cjs"));
 const { getRevenueTelemetry } = require(pathFromRoot("revenueTelemetry.cjs"));
+const { runMonetizationAudit } = require(pathFromRoot("monetizationAudit.cjs"));
 const { executeAutonomousPixRun } = require(pathFromRoot("paymentOrchestrator.cjs"));
 const { getSanitizedProviderSummary, sanitizeRuntimeEvent } = require(pathFromRoot("runtimeLogSanitizer.cjs"));
 
@@ -129,6 +125,10 @@ router.get("/v1/runtime/revenue", (_req, res) => {
 
 router.get("/v1/runtime/financial-core", (_req, res) => {
   res.json(getFinancialCoreStatus());
+});
+
+router.get("/v1/runtime/monetization-audit", (_req, res) => {
+  res.json(runMonetizationAudit());
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {

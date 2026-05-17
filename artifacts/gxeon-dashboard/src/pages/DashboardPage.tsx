@@ -55,6 +55,15 @@ type RailwayRuntime = {
   reconnect_activity?: number;
 };
 
+type MonetizationAudit = {
+  monetization_readiness: string;
+  runtime_state: string;
+  financial_integrity: string;
+  risk_score: number;
+  stability_score: number;
+  conversion_score: number;
+};
+
 type ProductionRuntime = {
   production_runtime: string;
   deployment_sync: string;
@@ -93,6 +102,7 @@ export default function DashboardPage() {
   const [runtimeSync, setRuntimeSync] = useState<RuntimeSync | null>(null);
   const [productionRuntime, setProductionRuntime] = useState<ProductionRuntime | null>(null);
   const [railwayRuntime, setRailwayRuntime] = useState<RailwayRuntime | null>(null);
+  const [monetizationAudit, setMonetizationAudit] = useState<MonetizationAudit | null>(null);
 
   const fetchDashboardData = useCallback(async () => {
     setLoading(true);
@@ -137,6 +147,7 @@ export default function DashboardPage() {
       const syncResponse = await fetch("/api/v1/runtime/sync");
       const productionResponse = await fetch("/api/v1/runtime/production");
       const railwayResponse = await fetch("/api/v1/runtime/railway");
+      const auditResponse = await fetch("/api/v1/runtime/monetization-audit");
       if (syncResponse.ok) {
         const syncJson = (await syncResponse.json()) as RuntimeSync;
         setRuntimeSync(syncJson);
@@ -148,6 +159,10 @@ export default function DashboardPage() {
       if (railwayResponse.ok) {
         const railwayJson = (await railwayResponse.json()) as RailwayRuntime;
         setRailwayRuntime(railwayJson);
+      }
+      if (auditResponse.ok) {
+        const auditJson = (await auditResponse.json()) as { final: MonetizationAudit };
+        setMonetizationAudit(auditJson.final);
       }
 
       setData({
@@ -269,6 +284,21 @@ export default function DashboardPage() {
 
 
 
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">MONETIZATION COMMAND CENTER</CardTitle>
+            <Activity className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-1">
+            <p className="text-xs">Readiness: <span className="font-semibold">{monetizationAudit?.monetization_readiness ?? "-"}</span></p>
+            <p className="text-xs">Runtime state: <span className="font-semibold">{monetizationAudit?.runtime_state ?? "-"}</span></p>
+            <p className="text-xs">Financial integrity: <span className="font-semibold">{monetizationAudit?.financial_integrity ?? "-"}</span></p>
+            <p className="text-xs">Risk score: <span className="font-semibold">{monetizationAudit?.risk_score ?? 0}</span></p>
+            <p className="text-xs">Stability score: <span className="font-semibold">{monetizationAudit?.stability_score ?? 0}</span></p>
+            <p className="text-xs">Conversion score: <span className="font-semibold">{monetizationAudit?.conversion_score ?? 0}</span></p>
+          </CardContent>
+        </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
