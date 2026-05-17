@@ -1,0 +1,96 @@
+{
+  "audit_request": {
+    "system_name": "FullSystemAudit",
+    "version": "1.1",
+    "scope": "full_codebase",
+    "analysis": {
+      "granularity": "line_by_line",
+      "include": [
+        "file_structure",
+        "dependencies",
+        "functions",
+        "classes",
+        "variables",
+        "comments",
+        "complexity",
+        "security_flaws",
+        "performance_bottlenecks"
+      ],
+      "metrics": [
+        "lines_of_code",
+        "cyclomatic_complexity",
+        "memory_usage",
+        "cpu_usage",
+        "api_calls",
+        "error_handling",
+        "duplication_rate",
+        "test_coverage",
+        "dead_code_ratio",
+        "dependency_risk_score"
+      ]
+    },
+    "thresholds": {
+      "function_max_lines": 200,
+      "class_max_lines": 800,
+      "file_max_lines": 1200,
+      "cyclomatic_complexity_max": 10,
+      "cognitive_complexity_max": 15,
+      "duplication_rate_max_percent": 12,
+      "dead_code_ratio_max_percent": 5,
+      "test_coverage_min_percent": 80,
+      "cpu_usage_max_percent": 70,
+      "memory_usage_max_percent_of_container": 75,
+      "api_calls_max_per_request": 20,
+      "p95_response_time_max_ms": 500,
+      "error_rate_max_percent": 1,
+      "dependency_vulnerabilities": {
+        "critical_max": 0,
+        "high_max": 0,
+        "medium_max": 5
+      },
+      "secrets_exposure_tolerance": 0,
+      "sql_injection_tolerance": 0,
+      "xss_tolerance": 0,
+      "broken_auth_tolerance": 0
+    },
+    "risk_scoring": {
+      "scale": "0-100",
+      "weights": {
+        "security": 0.35,
+        "performance": 0.25,
+        "maintainability": 0.20,
+        "reliability": 0.15,
+        "architecture": 0.05
+      },
+      "levels": {
+        "low": "0-24",
+        "medium": "25-49",
+        "high": "50-74",
+        "critical": "75-100"
+      }
+    },
+    "audit_goals": [
+      "Mapear tamanho real do sistema",
+      "Identificar redundâncias e código morto",
+      "Detectar vulnerabilidades de segurança",
+      "Avaliar performance e escalabilidade",
+      "Apontar oportunidades de monetização"
+    ],
+    "output": {
+      "report_format": "markdown",
+      "sections": [
+        "overview",
+        "code_structure",
+        "line_by_line_analysis",
+        "security_findings",
+        "performance_findings",
+        "monetization_opportunities",
+        "recommendations"
+      ],
+      "include_tables": true,
+      "include_heatmap": true,
+      "include_top_10_hotspots": true,
+      "include_pass_fail_summary": true
+    }
+  }
+}
