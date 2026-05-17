@@ -16,6 +16,7 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
 
   const mem = readMemory();
   const processed = new Set(mem.webhook_processed_ids || []);
+  const pending = mem.pending_pix_followups || [];
   const id = payload.id || payload.data?.id || `wh_${Date.now()}`;
   if (processed.has(id)) return { accepted: true, idempotent: true, id };
 
@@ -36,10 +37,20 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
       reason: 'PIX_TOPUP_APPROVED',
     });
   }
+  if (String(status).toUpperCase().includes('PENDING')) {
+    pending.unshift({
+      payment_id: id,
+      channel: payload.customer?.email ? 'EMAIL' : 'WHATSAPP',
+      contact: payload.customer?.email || payload.customer?.phone || 'UNKNOWN',
+      followup_status: 'QUEUED',
+      created_at: new Date().toISOString(),
+    });
+  }
 
   writeMemory({
     webhook_processed_ids: Array.from(processed).slice(-5000),
     financial_events: events,
+    pending_pix_followups: pending.slice(0, 5000),
     webhook_health: 'ACTIVE',
   });
   return { accepted: true, idempotent: false, id, credit_activation: creditActivation };

@@ -38,9 +38,10 @@ const { executeAutonomousPixRun } = require(pathFromRoot("paymentOrchestrator.cj
 const { getSanitizedProviderSummary, sanitizeRuntimeEvent } = require(pathFromRoot("runtimeLogSanitizer.cjs"));
 const { ensureWallet, upsertWallet, transferCredits, getCreditRuntime } = require(pathFromRoot("creditRuntime.cjs"));
 const { settleCommission, getCommissionRuntime } = require(pathFromRoot("commissionEngine.cjs"));
-const { enqueueTask, runSchedulerCycle, autoTopupViaPix, getAutonomousRevenueRuntime } = require(pathFromRoot("autonomousRevenueScheduler.cjs"));
+const { enqueueTask, runSchedulerCycle, autoTopupViaPix, getAutonomousRevenueRuntime, generateSellableTasksFromRadar } = require(pathFromRoot("autonomousRevenueScheduler.cjs"));
 const { generateSignal, consumePremiumSignal, getXRadarMetrics } = require(pathFromRoot("xRadarEngine.cjs"));
 const { runXRadarScanCycle } = require(pathFromRoot("xRadarScheduler.cjs"));
+const { subscribeAgent, getSubscriptionCatalog } = require(pathFromRoot("subscriptionRuntime.cjs"));
 
 const router = Router();
 
@@ -208,6 +209,10 @@ router.post("/v1/runtime/credits/auto-topup", (req, res) => {
   res.status(201).json(autoTopupViaPix(req.body ?? {}));
 });
 
+router.post("/v1/runtime/tasks/generate-from-radar", (req, res) => {
+  res.status(201).json(generateSellableTasksFromRadar(req.body ?? {}));
+});
+
 router.get("/v1/x-radar/metrics", (_req, res) => {
   res.json(getXRadarMetrics());
 });
@@ -223,6 +228,18 @@ router.post("/v1/x-radar/signals/consume", (req, res) => {
 
 router.post("/v1/x-radar/scan-cycle", (req, res) => {
   res.status(201).json(runXRadarScanCycle(req.body ?? {}));
+});
+
+router.get("/v1/monetization/subscriptions/catalog", (_req, res) => {
+  res.json(getSubscriptionCatalog());
+});
+
+router.post("/v1/monetization/subscriptions/subscribe", (req, res) => {
+  try {
+    res.status(201).json(subscribeAgent(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {
