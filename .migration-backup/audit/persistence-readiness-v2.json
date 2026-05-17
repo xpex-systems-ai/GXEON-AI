@@ -1,1 +1,0 @@
-{"readiness":{"workflow_durability":"low","billing_durability":"medium","observability_durability":"medium"},"next":"introduce execution journal + outbox"}

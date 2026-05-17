@@ -1,1 +1,0 @@
-{"dispatch":{"queue_event_emission":true,"isolation":"per-queue","drain_strategy":"ordered"}}

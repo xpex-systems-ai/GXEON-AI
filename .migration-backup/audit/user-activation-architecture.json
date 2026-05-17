@@ -1,1 +1,0 @@
-{"activation_model":{"time_budget_seconds":60,"steps":["identity bootstrap","sandbox execution","proof artifact","guided next action"]},"channels":["social","email","telegram","wallet"]}

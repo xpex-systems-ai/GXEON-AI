@@ -1,1 +1,0 @@
-{"verification":{"pipeline":["receipt schema check","signature/hash validation","billing reference match","replay check"],"immutability":"required"}}

@@ -6,41 +6,17 @@ type MetricCardProps = {
   label: string;
   value: string;
   sub?: string;
-  accent?: "primary" | "success" | "warning" | "destructive";
+  accentColor?: string;
 };
 
-export function MetricCard({ label, value, sub, accent }: MetricCardProps) {
+export function MetricCard({ label, value, sub, accentColor }: MetricCardProps) {
   const colors = useColors();
 
-  const accentColor =
-    accent === "success"
-      ? colors.success
-      : accent === "warning"
-        ? colors.warning
-        : accent === "destructive"
-          ? colors.destructive
-          : colors.primary;
-
   return (
-    <View
-      style={[
-        styles.card,
-        {
-          backgroundColor: colors.card,
-          borderColor: colors.border,
-          borderLeftColor: accentColor,
-        },
-      ]}
-    >
-      <Text style={[styles.label, { color: colors.mutedForeground }]}>
-        {label}
-      </Text>
-      <Text style={[styles.value, { color: colors.foreground }]}>{value}</Text>
-      {sub ? (
-        <Text style={[styles.sub, { color: colors.mutedForeground }]}>
-          {sub}
-        </Text>
-      ) : null}
+    <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <Text style={[styles.label, { color: colors.mutedForeground }]}>{label}</Text>
+      <Text style={[styles.value, { color: accentColor ?? colors.foreground }]}>{value}</Text>
+      {sub ? <Text style={[styles.sub, { color: colors.mutedForeground }]}>{sub}</Text> : null}
     </View>
   );
 }
@@ -48,26 +24,25 @@ export function MetricCard({ label, value, sub, accent }: MetricCardProps) {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minWidth: 140,
-    padding: 14,
-    borderRadius: 10,
+    borderRadius: 12,
     borderWidth: 1,
-    borderLeftWidth: 3,
+    padding: 14,
+    minWidth: 140,
     gap: 4,
   },
   label: {
-    fontSize: 11,
+    fontSize: 12,
     fontFamily: "Inter_500Medium",
-    textTransform: "uppercase",
     letterSpacing: 0.5,
+    textTransform: "uppercase",
   },
   value: {
-    fontSize: 22,
+    fontSize: 24,
     fontFamily: "Inter_700Bold",
     letterSpacing: -0.5,
   },
   sub: {
-    fontSize: 12,
+    fontSize: 11,
     fontFamily: "Inter_400Regular",
   },
 });

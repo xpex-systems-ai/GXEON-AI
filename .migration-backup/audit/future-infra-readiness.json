@@ -1,1 +1,0 @@
-{"temporal_readiness":"requires workflow idempotency + durable history","kafka_redpanda_readiness":"requires event contracts + domain topics","cockroach_readiness":"requires transaction-boundary review"}

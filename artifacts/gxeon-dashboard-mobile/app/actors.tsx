@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -9,131 +9,79 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as Haptics from "expo-haptics";
-import { Feather } from "@expo/vector-icons";
-import { Stack } from "expo-router";
+import { useQuery } from "@tanstack/react-query";
+
 import { useColors } from "@/hooks/useColors";
-import { getSupabase, isConfigured } from "@/lib/supabase";
+import { StatusBadge } from "@/components/StatusBadge";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 type Actor = {
   id: string;
-  code?: string;
+  actor_code: string;
   name?: string;
   status?: string;
-  created_at?: string;
-  type?: string;
+  tier?: string;
+  created_at: string;
 };
+
+async function fetchActors(): Promise<Actor[]> {
+  if (!supabase) return [];
+  const { data } = await supabase.from("actors").select("*").order("created_at", { ascending: false });
+  return (data ?? []) as Actor[];
+}
 
 export default function ActorsScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const [actors, setActors] = useState<Actor[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchData = useCallback(async () => {
-    if (!isConfigured()) {
-      setError("Supabase not configured.");
-      setLoading(false);
-      setRefreshing(false);
-      return;
-    }
-    try {
-      const { data, error: err } = await getSupabase()
-        .from("actors")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(100);
-      if (err) throw err;
-      setActors(data ?? []);
-      setError(null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to load actors");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, []);
+  const { data: actors = [], isLoading, isFetching, refetch } = useQuery({
+    queryKey: ["actors"],
+    queryFn: fetchActors,
+    staleTime: 60_000,
+  });
 
-  useEffect(() => { fetchData(); }, [fetchData]);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    fetchData();
-  }, [fetchData]);
-
-  const topPad = Platform.OS === "web" ? 67 : insets.top;
+  const renderItem = ({ item }: { item: Actor }) => (
+    <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <View style={styles.cardTop}>
+        <View>
+          <Text style={[styles.actorCode, { color: colors.foreground }]}>{item.actor_code}</Text>
+          {item.name ? <Text style={[styles.name, { color: colors.mutedForeground }]}>{item.name}</Text> : null}
+        </View>
+        <View style={styles.badges}>
+          {item.tier ? <StatusBadge status={item.tier} /> : null}
+          {item.status ? <StatusBadge status={item.status} /> : null}
+        </View>
+      </View>
+      <Text style={[styles.date, { color: colors.mutedForeground }]}>
+        Joined {new Date(item.created_at).toLocaleDateString("pt-BR")}
+      </Text>
+    </View>
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Stack.Screen options={{ title: "Actors", headerStyle: { backgroundColor: colors.background }, headerTintColor: colors.foreground }} />
-
-      {error ? (
-        <View style={[styles.errorBox, { backgroundColor: colors.destructive + "20", borderColor: colors.destructive + "40" }]}>
-          <Feather name="alert-circle" size={14} color={colors.destructive} />
-          <Text style={[styles.errorText, { color: colors.destructive }]}>{error}</Text>
+      {!isSupabaseConfigured && (
+        <View style={[styles.banner, { backgroundColor: `${colors.warning}22`, margin: 16 }]}>
+          <Text style={[styles.bannerText, { color: colors.warning }]}>Supabase not configured</Text>
         </View>
-      ) : null}
-
-      {loading ? (
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.primary} size="large" />
-        </View>
+      )}
+      {isLoading ? (
+        <ActivityIndicator color={colors.primary} style={{ marginTop: 40 }} />
       ) : (
         <FlatList
           data={actors}
           keyExtractor={(item) => item.id}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.primary} />}
-          renderItem={({ item, index }) => (
-            <View
-              style={[
-                styles.row,
-                {
-                  backgroundColor: colors.card,
-                  borderBottomColor: colors.border,
-                },
-              ]}
-            >
-              <View style={[styles.avatar, { backgroundColor: colors.primary + "20" }]}>
-                <Text style={[styles.avatarText, { color: colors.primary }]}>
-                  {(item.code ?? item.name ?? "?").substring(0, 2).toUpperCase()}
-                </Text>
-              </View>
-              <View style={styles.info}>
-                <Text style={[styles.code, { color: colors.foreground }]}>
-                  {item.code ?? item.name ?? item.id.substring(0, 12)}
-                </Text>
-                {item.type ? (
-                  <Text style={[styles.type, { color: colors.mutedForeground }]}>{item.type}</Text>
-                ) : null}
-              </View>
-              {item.status ? (
-                <View style={[styles.statusBadge, {
-                  backgroundColor: item.status === "active" ? colors.success + "20" : colors.secondary,
-                }]}>
-                  <Text style={[styles.statusText, {
-                    color: item.status === "active" ? colors.success : colors.mutedForeground,
-                  }]}>
-                    {item.status}
-                  </Text>
-                </View>
-              ) : null}
-            </View>
-          )}
-          contentContainerStyle={{
-            paddingBottom: Platform.OS === "web" ? 34 : insets.bottom + 20,
-            flexGrow: 1,
-          }}
-          ListEmptyComponent={() => (
+          renderItem={renderItem}
+          ListHeaderComponent={
+            <Text style={[styles.count, { color: colors.mutedForeground }]}>{actors.length} actors</Text>
+          }
+          contentContainerStyle={{ padding: 16, paddingBottom: Platform.OS === "web" ? 100 : insets.bottom + 32, gap: 10 }}
+          refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refetch} tintColor={colors.primary} />}
+          ListEmptyComponent={
             <View style={styles.empty}>
-              <Feather name="users" size={40} color={colors.mutedForeground} />
-              <Text style={[styles.emptyTitle, { color: colors.foreground }]}>No actors found</Text>
-              <Text style={[styles.emptyText, { color: colors.mutedForeground }]}>Actor records will appear here</Text>
+              <Text style={[styles.emptyText, { color: colors.mutedForeground }]}>No actors found</Text>
             </View>
-          )}
-          showsVerticalScrollIndicator={false}
+          }
         />
       )}
     </View>
@@ -142,18 +90,15 @@ export default function ActorsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  center: { flex: 1, alignItems: "center", justifyContent: "center" },
-  errorBox: { flexDirection: "row", gap: 8, padding: 12, margin: 16, borderRadius: 8, borderWidth: 1 },
-  errorText: { flex: 1, fontSize: 13, fontFamily: "Inter_400Regular" },
-  row: { flexDirection: "row", alignItems: "center", paddingHorizontal: 16, paddingVertical: 12, gap: 12, borderBottomWidth: StyleSheet.hairlineWidth },
-  avatar: { width: 40, height: 40, borderRadius: 20, alignItems: "center", justifyContent: "center" },
-  avatarText: { fontSize: 14, fontFamily: "Inter_700Bold" },
-  info: { flex: 1 },
-  code: { fontSize: 14, fontFamily: "Inter_600SemiBold" },
-  type: { fontSize: 12, fontFamily: "Inter_400Regular", marginTop: 2 },
-  statusBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 5 },
-  statusText: { fontSize: 11, fontFamily: "Inter_600SemiBold" },
-  empty: { flex: 1, alignItems: "center", justifyContent: "center", gap: 8, paddingTop: 80 },
-  emptyTitle: { fontSize: 17, fontFamily: "Inter_600SemiBold" },
-  emptyText: { fontSize: 14, fontFamily: "Inter_400Regular" },
+  count: { fontSize: 12, fontFamily: "Inter_400Regular", marginBottom: 10 },
+  card: { borderRadius: 12, borderWidth: 1, padding: 14 },
+  cardTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 },
+  actorCode: { fontSize: 15, fontFamily: "Inter_600SemiBold" },
+  name: { fontSize: 13, fontFamily: "Inter_400Regular", marginTop: 2 },
+  badges: { flexDirection: "row", gap: 6 },
+  date: { fontSize: 11, fontFamily: "Inter_400Regular" },
+  banner: { borderRadius: 10, padding: 12 },
+  bannerText: { fontSize: 13, fontFamily: "Inter_500Medium" },
+  empty: { alignItems: "center", paddingTop: 60 },
+  emptyText: { fontSize: 15, fontFamily: "Inter_400Regular" },
 });

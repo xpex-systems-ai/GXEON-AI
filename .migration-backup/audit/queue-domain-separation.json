@@ -1,1 +1,0 @@
-{"queue_domains":{"billing":"exactly-once preferred","payments":"at-least-once + idempotency","workflow":"ordered per aggregate","recovery":"priority queue","notifications":"best effort","marketplace":"throttled","ai_ops":"quota constrained"}}
