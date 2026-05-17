@@ -2,6 +2,7 @@
 
 const crypto = require('node:crypto');
 const { readMemory, writeMemory } = require('./runtimeMemory.cjs');
+const { ensureWallet, transferCredits } = require('./creditRuntime.cjs');
 
 function verifyWebhookSignature(rawBody = '', signature = '', secret = process.env.MERCADO_PAGO_WEBHOOK_SECRET || '') {
   if (!secret) return true;
@@ -20,8 +21,28 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
 
   processed.add(id);
   const events = [ ...(mem.financial_events || []), { id, payload, at: new Date().toISOString() } ].slice(-5000);
-  writeMemory({ webhook_processed_ids: Array.from(processed).slice(-5000), financial_events: events, webhook_health: 'ACTIVE' });
-  return { accepted: true, idempotent: false, id };
+  const status = payload.status || payload.action || payload.type || '';
+  const agentId = payload.metadata?.agent_id || payload.agent_id || 'agent_buyer_1';
+  const amount = Number(payload.amount || payload.transaction_amount || 0);
+  let creditActivation = null;
+
+  if (String(status).toUpperCase().includes('APPROVED') && amount > 0) {
+    ensureWallet('platform_treasury');
+    ensureWallet(agentId);
+    creditActivation = transferCredits({
+      from_agent_id: 'platform_treasury',
+      to_agent_id: agentId,
+      amount,
+      reason: 'PIX_TOPUP_APPROVED',
+    });
+  }
+
+  writeMemory({
+    webhook_processed_ids: Array.from(processed).slice(-5000),
+    financial_events: events,
+    webhook_health: 'ACTIVE',
+  });
+  return { accepted: true, idempotent: false, id, credit_activation: creditActivation };
 }
 
 module.exports = { processWebhook };

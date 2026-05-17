@@ -1,0 +1,12 @@
+{
+  "monetization_readiness": 81,
+  "financial_integrity": 79,
+  "payment_reliability": 82,
+  "webhook_integrity": 78,
+  "conversion_intelligence_maturity": 76,
+  "findings": [
+    "PIX creation and auto orchestration present",
+    "Webhook idempotency based on in-memory processed IDs",
+    "Persistence durability depends on runtime memory artifact"
+  ]
+}

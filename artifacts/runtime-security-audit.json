@@ -1,0 +1,22 @@
+{
+  "severity_summary": {
+    "LOW": 6,
+    "MEDIUM": 5,
+    "HIGH": 3,
+    "CRITICAL": 1
+  },
+  "risks": [
+    {
+      "severity": "CRITICAL",
+      "issue": "Webhook replay defense relies on volatile memory file/state"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "Payment creation endpoints appear public without auth middleware"
+    },
+    {
+      "severity": "HIGH",
+      "issue": "Potential secret exposure if runtime logs are unsanitized upstream"
+    }
+  ]
+}

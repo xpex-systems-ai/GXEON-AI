@@ -1,0 +1,11 @@
+{
+  "classification": "SUPERVISED_AUTONOMOUS",
+  "execution_loops": [
+    "paymentOrchestrator.executeAutonomousPixRun"
+  ],
+  "human_dependency_points": [
+    "provider secret management",
+    "deployment recovery actions"
+  ],
+  "autonomous_recovery_capability": "MODERATE"
+}
