@@ -3,5 +3,219 @@
   "radar_last_scan": "2026-05-16T19:25:01.156Z",
   "tracked_pools": 29,
   "smart_tracking": true,
-  "updated_at": "2026-05-16T19:26:01.102Z"
+  "updated_at": "2026-05-17T03:30:23.583Z",
+  "credit_wallets": {
+    "agent_a": {
+      "agent_id": "agent_a",
+      "balance": 398,
+      "credit_limit": 1000,
+      "total_spent": 102,
+      "total_earned": 0,
+      "updated_at": "2026-05-17T03:11:11.614Z"
+    },
+    "agent_b": {
+      "agent_id": "agent_b",
+      "balance": 202,
+      "credit_limit": 500,
+      "total_spent": 0,
+      "total_earned": 102,
+      "updated_at": "2026-05-17T03:11:11.614Z"
+    },
+    "platform_treasury": {
+      "agent_id": "platform_treasury",
+      "balance": 9910,
+      "credit_limit": 0,
+      "total_spent": 90,
+      "total_earned": 0,
+      "updated_at": "2026-05-17T03:19:14.821Z"
+    },
+    "agent_a2": {
+      "agent_id": "agent_a2",
+      "balance": 247.5,
+      "credit_limit": 100,
+      "total_spent": 42.5,
+      "total_earned": 90,
+      "updated_at": "2026-05-17T03:19:14.821Z"
+    },
+    "agent_b2": {
+      "agent_id": "agent_b2",
+      "balance": 42.5,
+      "credit_limit": 1000,
+      "total_spent": 0,
+      "total_earned": 42.5,
+      "updated_at": "2026-05-17T03:19:14.802Z"
+    },
+    "signal_buyer_1": {
+      "agent_id": "signal_buyer_1",
+      "balance": 490.16,
+      "credit_limit": 200,
+      "total_spent": 9.84,
+      "total_earned": 0,
+      "updated_at": "2026-05-17T03:30:23.583Z"
+    },
+    "signal_producer_1": {
+      "agent_id": "signal_producer_1",
+      "balance": 9.84,
+      "credit_limit": 0,
+      "total_spent": 0,
+      "total_earned": 9.84,
+      "updated_at": "2026-05-17T03:30:23.583Z"
+    }
+  },
+  "commission_settlements": [
+    {
+      "settlement_id": "set_1778988623582_52uqmi",
+      "task_id": "signal_delivery_xr_1778988623560_lxbdt",
+      "consumer_agent_id": "signal_buyer_1",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 12,
+      "platform_rate": 0.18,
+      "platform_fee": 2.16,
+      "producer_net": 9.84,
+      "created_at": "2026-05-17T03:30:23.582Z"
+    },
+    {
+      "settlement_id": "set_1778987954801_29pmfe",
+      "task_id": "task_1778987954756_l1wm7",
+      "consumer_agent_id": "agent_a2",
+      "producer_agent_id": "agent_b2",
+      "gross_amount": 50,
+      "platform_rate": 0.15,
+      "platform_fee": 7.5,
+      "producer_net": 42.5,
+      "created_at": "2026-05-17T03:19:14.801Z"
+    },
+    {
+      "settlement_id": "set_1778987471613_qw2pvb",
+      "task_id": "t1",
+      "consumer_agent_id": "agent_a",
+      "producer_agent_id": "agent_b",
+      "gross_amount": 120,
+      "platform_rate": 0.15,
+      "platform_fee": 18,
+      "producer_net": 102,
+      "created_at": "2026-05-17T03:11:11.613Z"
+    }
+  ],
+  "credit_ledger": [
+    {
+      "event_id": "cred_1778988623583_hy5qz2",
+      "from_agent_id": "signal_buyer_1",
+      "to_agent_id": "signal_producer_1",
+      "amount": 9.84,
+      "reason": "PAY_PER_SIGNAL_DELIVERY",
+      "created_at": "2026-05-17T03:30:23.583Z"
+    },
+    {
+      "event_id": "cred_1778987954821_n2857i",
+      "from_agent_id": "platform_treasury",
+      "to_agent_id": "agent_a2",
+      "amount": 90,
+      "reason": "PIX_TOPUP_APPROVED",
+      "created_at": "2026-05-17T03:19:14.821Z"
+    },
+    {
+      "event_id": "cred_1778987954802_inoa7f",
+      "from_agent_id": "agent_a2",
+      "to_agent_id": "agent_b2",
+      "amount": 42.5,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:19:14.802Z"
+    },
+    {
+      "event_id": "cred_1778987471614_7tpveu",
+      "from_agent_id": "agent_a",
+      "to_agent_id": "agent_b",
+      "amount": 102,
+      "reason": "TASK_SETTLEMENT_NET",
+      "created_at": "2026-05-17T03:11:11.614Z"
+    }
+  ],
+  "autonomous_task_queue": [
+    {
+      "task_id": "task_1778987954756_l1wm7",
+      "signal_id": "sig_1778987954756",
+      "price_credits": 50,
+      "producer_agent_id": "agent_b2",
+      "consumer_agent_id": "agent_a2",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:19:14.756Z",
+      "settled_at": "2026-05-17T03:19:14.802Z",
+      "settlement": {
+        "settlement_id": "set_1778987954801_29pmfe",
+        "task_id": "task_1778987954756_l1wm7",
+        "consumer_agent_id": "agent_a2",
+        "producer_agent_id": "agent_b2",
+        "gross_amount": 50,
+        "platform_rate": 0.15,
+        "platform_fee": 7.5,
+        "producer_net": 42.5,
+        "created_at": "2026-05-17T03:19:14.801Z"
+      }
+    }
+  ],
+  "webhook_processed_ids": [
+    "wh_test_approved_1"
+  ],
+  "financial_events": [
+    {
+      "id": "wh_test_approved_1",
+      "payload": {
+        "id": "wh_test_approved_1",
+        "status": "approved",
+        "amount": 90,
+        "metadata": {
+          "agent_id": "agent_a2"
+        }
+      },
+      "at": "2026-05-17T03:19:14.821Z"
+    }
+  ],
+  "webhook_health": "ACTIVE",
+  "x_radar_signals": [
+    {
+      "signal_id": "xr_1778988623560_lxbdt",
+      "chain": "ethereum",
+      "source": "X_RADAR_AUTONOMOUS_SCANNER",
+      "category": "BOUNTY",
+      "confidence_score": 95,
+      "confidence_tier": "HIGH",
+      "expected_roi_pct": 3.67,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:30:23.560Z"
+    },
+    {
+      "signal_id": "xr_1778988623560_tglo5",
+      "chain": "ethereum",
+      "source": "X_RADAR_AUTONOMOUS_SCANNER",
+      "category": "LIQUIDITY",
+      "confidence_score": 84,
+      "confidence_tier": "MEDIUM",
+      "expected_roi_pct": 3.18,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:30:23.560Z"
+    },
+    {
+      "signal_id": "xr_1778988623559_ascai",
+      "chain": "base",
+      "source": "X_RADAR_AUTONOMOUS_SCANNER",
+      "category": "MEV",
+      "confidence_score": 89,
+      "confidence_tier": "HIGH",
+      "expected_roi_pct": 10.14,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:30:23.559Z"
+    }
+  ],
+  "x_radar_deliveries": [
+    {
+      "delivery_id": "dlv_1778988623583_knknn",
+      "signal_id": "xr_1778988623560_lxbdt",
+      "consumer_agent_id": "signal_buyer_1",
+      "signal_price_credits": 12,
+      "status": "DELIVERED",
+      "channel": "API_PRIVATE",
+      "created_at": "2026-05-17T03:30:23.583Z"
+    }
+  ]
 }
