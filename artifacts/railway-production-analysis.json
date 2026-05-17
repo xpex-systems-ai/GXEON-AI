@@ -1,0 +1,11 @@
+{
+  "stability": 82,
+  "resilience": 80,
+  "scalability": 78,
+  "recovery_capability": 84,
+  "deployment_integrity": 86,
+  "risks": [
+    "Potential in-memory state reset on restart",
+    "No explicit backoff tuning visibility"
+  ]
+}
