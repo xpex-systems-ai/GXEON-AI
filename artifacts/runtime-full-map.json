@@ -1,0 +1,187 @@
+[
+  {
+    "module_name": "conversionDNA.cjs",
+    "type": "conversion",
+    "status": "ACTIVE",
+    "dependencies": [],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  },
+  {
+    "module_name": "deploymentIntegrity.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  },
+  {
+    "module_name": "mercadoWebhookRuntime.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [
+      "runtimeMemory.cjs"
+    ],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  },
+  {
+    "module_name": "monetizationAudit.cjs",
+    "type": "financial",
+    "status": "ACTIVE",
+    "dependencies": [
+      "paymentRuntime.cjs",
+      "conversionDNA.cjs",
+      "revenueTelemetry.cjs",
+      "railwayProduction.cjs",
+      "runtimeRecovery.cjs",
+      "supabaseRuntime.cjs",
+      "operatorAlerts.cjs"
+    ],
+    "runtime_criticality": "HIGH",
+    "health_score": 88
+  },
+  {
+    "module_name": "operatorAlerts.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  },
+  {
+    "module_name": "paymentOrchestrator.cjs",
+    "type": "financial",
+    "status": "ACTIVE",
+    "dependencies": [
+      "paymentRuntime.cjs"
+    ],
+    "runtime_criticality": "HIGH",
+    "health_score": 88
+  },
+  {
+    "module_name": "paymentRuntime.cjs",
+    "type": "financial",
+    "status": "ACTIVE",
+    "dependencies": [
+      "runtimeMemory.cjs"
+    ],
+    "runtime_criticality": "HIGH",
+    "health_score": 88
+  },
+  {
+    "module_name": "productionRuntime.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [
+      "runtimeHeartbeat.cjs",
+      "runtimeRecovery.cjs"
+    ],
+    "runtime_criticality": "HIGH",
+    "health_score": 88
+  },
+  {
+    "module_name": "providerRuntime.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [
+      "runtimeMemory.cjs",
+      "runtimeLogSanitizer.cjs"
+    ],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  },
+  {
+    "module_name": "radarContinuity.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [
+      "runtimeMemory.cjs"
+    ],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  },
+  {
+    "module_name": "railwayProduction.cjs",
+    "type": "infra",
+    "status": "ACTIVE",
+    "dependencies": [
+      "providerRuntime.cjs",
+      "radarContinuity.cjs",
+      "signalEnrichment.cjs",
+      "conversionDNA.cjs",
+      "revenueTelemetry.cjs",
+      "paymentRuntime.cjs"
+    ],
+    "runtime_criticality": "HIGH",
+    "health_score": 88
+  },
+  {
+    "module_name": "revenueTelemetry.cjs",
+    "type": "financial",
+    "status": "ACTIVE",
+    "dependencies": [
+      "paymentRuntime.cjs"
+    ],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  },
+  {
+    "module_name": "runtimeHeartbeat.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [],
+    "runtime_criticality": "HIGH",
+    "health_score": 88
+  },
+  {
+    "module_name": "runtimeLogSanitizer.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  },
+  {
+    "module_name": "runtimeMemory.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 76
+  },
+  {
+    "module_name": "runtimeRecovery.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [
+      "providerRuntime.cjs"
+    ],
+    "runtime_criticality": "HIGH",
+    "health_score": 88
+  },
+  {
+    "module_name": "runtimeSnapshot.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  },
+  {
+    "module_name": "signalEnrichment.cjs",
+    "type": "runtime_module",
+    "status": "ACTIVE",
+    "dependencies": [],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  },
+  {
+    "module_name": "supabaseRuntime.cjs",
+    "type": "data",
+    "status": "ACTIVE",
+    "dependencies": [],
+    "runtime_criticality": "MEDIUM",
+    "health_score": 80
+  }
+]
