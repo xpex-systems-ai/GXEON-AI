@@ -13,7 +13,8 @@
     "runtime:validate": "node scripts/runtime_governance_report.cjs && npm run runtime:platform:check && npm run supabase:check",
     "predeploy:validate": "npm run runtime:validate && npm run build:all",
     "runtime:platform:check": "node scripts/runtime_platform_cleanup_check.cjs",
-    "supabase:check": "node scripts/supabase_env_check.cjs"
+    "supabase:check": "node scripts/supabase_env_check.cjs",
+    "deploy:railway:auto": "bash scripts/railway_autodeploy.sh work"
   },
   "private": true,
   "devDependencies": {
