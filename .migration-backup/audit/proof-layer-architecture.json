@@ -1,1 +1,0 @@
-{"proof_sources":["workflow runtime","billing events","queue transitions","execution logs"],"proof_contract":{"required":["execution_id","correlation_id","timestamp","outcome","charge_ref"]}}

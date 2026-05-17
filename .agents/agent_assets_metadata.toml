@@ -2,7 +2,7 @@ uploads = []
 outputs = []
 
 [[generated]]
-id = "Rh0XcDyGOXe3GTbxgs8TP"
+id = "xTMzN4FZxRM3PMrjj0Knb"
 uri = "file://artifacts/gxeon-dashboard-mobile/assets/images/icon.png"
 type = "image"
-title = "gxeon mobile app icon"
+title = "gxeon icon"

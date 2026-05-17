@@ -1,1 +1,0 @@
-{"legacy_crypto_archive":"legacy/crypto_archive","isolated_modules":["core_phantom_node","backup_contracts"],"rationale":"preserve code but isolate speculative/experimental crypto surface"}

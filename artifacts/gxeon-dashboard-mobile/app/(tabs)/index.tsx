@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -7,288 +7,209 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as Haptics from "expo-haptics";
-import { Feather } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
+
 import { useColors } from "@/hooks/useColors";
 import { MetricCard } from "@/components/MetricCard";
-import { TransactionRow } from "@/components/TransactionRow";
-import { getSupabase, isConfigured } from "@/lib/supabase";
-import { formatCurrency } from "@/lib/format";
+import { StatusBadge } from "@/components/StatusBadge";
+import { supabase, isSupabaseConfigured, getApiBase } from "@/lib/supabase";
 
 type Transaction = {
   id: string;
-  transaction_id?: string;
-  actor_code?: string;
+  transaction_id: string;
+  actor_code: string;
   base_amount: number;
   status: string;
   created_at: string;
 };
 
-type Metrics = {
+type DashboardMetrics = {
   totalRevenue: number;
-  revenueToday: number;
   totalTransactions: number;
   totalActors: number;
   activeApiKeys: number;
-  conversionRate: number;
   pendingTransactions: number;
 };
 
-export default function OverviewScreen() {
+type RuntimeSync = {
+  runtime?: string;
+  github_sync?: string;
+  synchronized?: boolean;
+};
+
+async function fetchDashboardData(): Promise<{ metrics: DashboardMetrics; transactions: Transaction[]; runtime: RuntimeSync | null }> {
+  let metrics: DashboardMetrics = { totalRevenue: 0, totalTransactions: 0, totalActors: 0, activeApiKeys: 0, pendingTransactions: 0 };
+  let transactions: Transaction[] = [];
+  let runtime: RuntimeSync | null = null;
+
+  if (supabase) {
+    const [txCount, paid, recent, actors, keys, pending] = await Promise.all([
+      supabase.from("global_transactions").select("*", { count: "exact", head: true }),
+      supabase.from("global_transactions").select("base_amount").eq("status", "PAID"),
+      supabase.from("global_transactions").select("*").order("created_at", { ascending: false }).limit(8),
+      supabase.from("actors").select("*", { count: "exact", head: true }),
+      supabase.from("api_keys").select("*", { count: "exact", head: true }).eq("status", "active"),
+      supabase.from("global_transactions").select("*", { count: "exact", head: true }).eq("status", "PENDING"),
+    ]);
+    metrics = {
+      totalRevenue: (paid.data ?? []).reduce((s: number, r: { base_amount: number }) => s + (r.base_amount ?? 0), 0),
+      totalTransactions: txCount.count ?? 0,
+      totalActors: actors.count ?? 0,
+      activeApiKeys: keys.count ?? 0,
+      pendingTransactions: pending.count ?? 0,
+    };
+    transactions = (recent.data ?? []) as Transaction[];
+  }
+
+  try {
+    const base = getApiBase();
+    const res = await fetch(`${base}/api/v1/runtime/sync`);
+    if (res.ok) runtime = await res.json();
+  } catch {}
+
+  return { metrics, transactions, runtime };
+}
+
+function formatBRL(n: number) {
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
+}
+function fmtDate(iso: string) {
+  return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+}
+
+export default function DashboardScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const [metrics, setMetrics] = useState<Metrics | null>(null);
-  const [latestTx, setLatestTx] = useState<Transaction[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchData = useCallback(async () => {
-    if (!isConfigured()) {
-      setError("Set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in Replit Secrets.");
-      setLoading(false);
-      setRefreshing(false);
-      return;
-    }
-    try {
-      const today = new Date().toISOString().split("T")[0];
-      const db = getSupabase();
-      const [paid, todayPaid, allCount, latest, actors, keys, pending] =
-        await Promise.all([
-          db.from("global_transactions").select("base_amount").eq("status", "PAID"),
-          db.from("global_transactions").select("base_amount").eq("status", "PAID").gte("paid_at", today),
-          db.from("global_transactions").select("*", { count: "exact", head: true }),
-          db.from("global_transactions").select("*").order("created_at", { ascending: false }).limit(8),
-          db.from("actors").select("*", { count: "exact", head: true }),
-          db.from("api_keys").select("*", { count: "exact", head: true }).eq("status", "active"),
-          db.from("global_transactions").select("*", { count: "exact", head: true }).eq("status", "PENDING"),
-        ]);
-
-      const totalRevenue = paid.data?.reduce((s, t) => s + (t.base_amount ?? 0), 0) ?? 0;
-      const revenueToday = todayPaid.data?.reduce((s, t) => s + (t.base_amount ?? 0), 0) ?? 0;
-      const total = allCount.count ?? 0;
-      const paidCount = paid.data?.length ?? 0;
-
-      setMetrics({
-        totalRevenue,
-        revenueToday,
-        totalTransactions: total,
-        totalActors: actors.count ?? 0,
-        activeApiKeys: keys.count ?? 0,
-        conversionRate: total > 0 ? (paidCount / total) * 100 : 0,
-        pendingTransactions: pending.count ?? 0,
-      });
-      setLatestTx(latest.data ?? []);
-      setError(null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to load data");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-    if (!isConfigured()) return;
-    const db = getSupabase();
-    const channel = db
-      .channel("overview-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "global_transactions" }, () => {
-        fetchData();
-      })
-      .on("postgres_changes", { event: "*", schema: "public", table: "actors" }, () => {
-        fetchData();
-      })
-      .on("postgres_changes", { event: "*", schema: "public", table: "api_keys" }, () => {
-        fetchData();
-      })
-      .subscribe();
-    return () => { db.removeChannel(channel); };
-  }, [fetchData]);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    // @ts-ignore
-    if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    fetchData();
-  }, [fetchData]);
-
   const topPad = Platform.OS === "web" ? 67 : insets.top;
+  const botPad = Platform.OS === "web" ? 34 : 0;
 
-  if (loading) {
-    return (
-      <View style={[styles.center, { backgroundColor: colors.background, paddingTop: topPad }]}>
-        <ActivityIndicator color={colors.primary} size="large" />
+  const { data, isLoading, error, refetch, isFetching } = useQuery({
+    queryKey: ["dashboard"],
+    queryFn: fetchDashboardData,
+    staleTime: 30_000,
+  });
+
+  const renderTx = useCallback(({ item }: { item: Transaction }) => (
+    <View style={[styles.txRow, { borderBottomColor: colors.border }]}>
+      <View style={styles.txLeft}>
+        <Text style={[styles.txId, { color: colors.foreground }]} numberOfLines={1}>
+          {item.transaction_id ?? item.id}
+        </Text>
+        <Text style={[styles.txMeta, { color: colors.mutedForeground }]}>
+          {item.actor_code} · {fmtDate(item.created_at)}
+        </Text>
       </View>
-    );
-  }
+      <View style={styles.txRight}>
+        <Text style={[styles.txAmount, { color: colors.primary }]}>
+          {formatBRL(item.base_amount ?? 0)}
+        </Text>
+        <StatusBadge status={item.status} />
+      </View>
+    </View>
+  ), [colors]);
+
+  const metrics = data?.metrics;
+  const transactions = data?.transactions ?? [];
+  const runtime = data?.runtime;
+
+  const notConfigured = !isSupabaseConfigured;
 
   return (
     <ScrollView
-      style={{ backgroundColor: colors.background }}
-      contentContainerStyle={[
-        styles.container,
-        {
-          paddingTop: topPad + 8,
-          paddingBottom: Platform.OS === "web" ? 34 : insets.bottom + 90,
-        },
-      ]}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefresh}
-          tintColor={colors.primary}
-        />
-      }
-      showsVerticalScrollIndicator={false}
+      style={[styles.container, { backgroundColor: colors.background }]}
+      contentContainerStyle={{ paddingTop: topPad + 16, paddingBottom: botPad + 100, paddingHorizontal: 16 }}
+      refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refetch} tintColor={colors.primary} />}
     >
-      {/* Header */}
       <View style={styles.header}>
-        <View>
-          <Text style={[styles.title, { color: colors.foreground }]}>GXEON</Text>
-          <Text style={[styles.subtitle, { color: colors.mutedForeground }]}>
-            Command Center
-          </Text>
-        </View>
-        <TouchableOpacity
-          onPress={onRefresh}
-          style={[styles.refreshBtn, { backgroundColor: colors.secondary }]}
-          testID="refresh-btn"
-        >
-          <Feather name="refresh-cw" size={18} color={colors.primary} />
-        </TouchableOpacity>
+        <Text style={[styles.greeting, { color: colors.mutedForeground }]}>GXEON</Text>
+        <Text style={[styles.title, { color: colors.foreground }]}>Overview</Text>
       </View>
 
-      {error ? (
-        <View style={[styles.errorBox, { backgroundColor: colors.destructive + "20", borderColor: colors.destructive + "40" }]}>
-          <Feather name="alert-circle" size={14} color={colors.destructive} />
-          <Text style={[styles.errorText, { color: colors.destructive }]}>{error}</Text>
-        </View>
-      ) : null}
-
-      {metrics ? (
-        <>
-          {/* Revenue Hero */}
-          <View style={[styles.heroCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Text style={[styles.heroLabel, { color: colors.mutedForeground }]}>TOTAL REVENUE</Text>
-            <Text style={[styles.heroValue, { color: colors.foreground }]}>
-              {formatCurrency(metrics.totalRevenue)}
-            </Text>
-            <Text style={[styles.heroSub, { color: colors.primary }]}>
-              +{formatCurrency(metrics.revenueToday)} today
-            </Text>
-          </View>
-
-          {/* Metric Grid */}
-          <View style={styles.grid}>
-            <MetricCard
-              label="Transactions"
-              value={String(metrics.totalTransactions)}
-              sub={`${metrics.pendingTransactions} pending`}
-              accent="primary"
-            />
-            <MetricCard
-              label="Conversion"
-              value={`${metrics.conversionRate.toFixed(1)}%`}
-              accent="success"
-            />
-          </View>
-          <View style={styles.grid}>
-            <MetricCard
-              label="API Keys"
-              value={String(metrics.activeApiKeys)}
-              sub="active"
-              accent="primary"
-            />
-            <MetricCard
-              label="Actors"
-              value={String(metrics.totalActors)}
-              accent="primary"
-            />
-          </View>
-
-          {/* Latest Transactions */}
-          <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
-            Recent Activity
+      {notConfigured && (
+        <View style={[styles.banner, { backgroundColor: `${colors.warning}22`, borderColor: `${colors.warning}44` }]}>
+          <Text style={[styles.bannerText, { color: colors.warning }]}>
+            Supabase not configured — add EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY to show live data.
           </Text>
-          <View style={[styles.listCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            {latestTx.length === 0 ? (
-              <View style={styles.empty}>
-                <Feather name="inbox" size={32} color={colors.mutedForeground} />
-                <Text style={[styles.emptyText, { color: colors.mutedForeground }]}>
-                  No transactions yet
-                </Text>
-              </View>
-            ) : (
-              latestTx.map((tx) => <TransactionRow key={tx.id} tx={tx} />)
-            )}
+        </View>
+      )}
+
+      {isLoading ? (
+        <ActivityIndicator color={colors.primary} style={{ marginTop: 40 }} />
+      ) : error ? (
+        <Text style={[styles.errorText, { color: colors.destructive }]}>Failed to load data</Text>
+      ) : (
+        <>
+          <View style={styles.metricsRow}>
+            <MetricCard
+              label="Revenue"
+              value={metrics ? formatBRL(metrics.totalRevenue) : "—"}
+              accentColor={colors.success}
+            />
+            <MetricCard label="Transactions" value={String(metrics?.totalTransactions ?? 0)} />
           </View>
+          <View style={[styles.metricsRow, { marginTop: 10 }]}>
+            <MetricCard label="Actors" value={String(metrics?.totalActors ?? 0)} />
+            <MetricCard label="API Keys" value={String(metrics?.activeApiKeys ?? 0)} accentColor={colors.primary} />
+          </View>
+
+          {runtime && (
+            <View style={[styles.runtimeCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Runtime</Text>
+              <View style={styles.runtimeRow}>
+                <Text style={[styles.runtimeLabel, { color: colors.mutedForeground }]}>Status</Text>
+                <StatusBadge status={runtime.runtime ?? "UNKNOWN"} />
+              </View>
+              <View style={styles.runtimeRow}>
+                <Text style={[styles.runtimeLabel, { color: colors.mutedForeground }]}>GitHub Sync</Text>
+                <StatusBadge status={runtime.github_sync ?? "UNKNOWN"} />
+              </View>
+              <View style={styles.runtimeRow}>
+                <Text style={[styles.runtimeLabel, { color: colors.mutedForeground }]}>Synchronized</Text>
+                <StatusBadge status={runtime.synchronized ? "OK" : "DEGRADED"} />
+              </View>
+            </View>
+          )}
+
+          {transactions.length > 0 && (
+            <View style={styles.txSection}>
+              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>Recent Transactions</Text>
+              <View style={[styles.txCard, { backgroundColor: colors.card, borderColor: colors.border }]}>
+                {transactions.map((item) => (
+                  <React.Fragment key={item.id}>
+                    {renderTx({ item })}
+                  </React.Fragment>
+                ))}
+              </View>
+            </View>
+          )}
         </>
-      ) : null}
+      )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  center: { flex: 1, alignItems: "center", justifyContent: "center" },
-  container: { paddingHorizontal: 16, gap: 12 },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 4,
-  },
-  title: { fontSize: 28, fontFamily: "Inter_700Bold", letterSpacing: -1 },
-  subtitle: { fontSize: 13, fontFamily: "Inter_400Regular", marginTop: 2 },
-  refreshBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  errorBox: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 8,
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 1,
-  },
-  errorText: { flex: 1, fontSize: 13, fontFamily: "Inter_400Regular" },
-  heroCard: {
-    padding: 20,
-    borderRadius: 12,
-    borderWidth: 1,
-    gap: 4,
-  },
-  heroLabel: {
-    fontSize: 10,
-    fontFamily: "Inter_600SemiBold",
-    letterSpacing: 1.2,
-  },
-  heroValue: {
-    fontSize: 38,
-    fontFamily: "Inter_700Bold",
-    letterSpacing: -1.5,
-  },
-  heroSub: { fontSize: 14, fontFamily: "Inter_500Medium" },
-  grid: { flexDirection: "row", gap: 10 },
-  sectionTitle: {
-    fontSize: 16,
-    fontFamily: "Inter_600SemiBold",
-    marginTop: 4,
-  },
-  listCard: {
-    borderRadius: 12,
-    borderWidth: 1,
-    overflow: "hidden",
-  },
-  empty: { padding: 32, alignItems: "center", gap: 8 },
-  emptyText: { fontSize: 14, fontFamily: "Inter_400Regular" },
+  container: { flex: 1 },
+  header: { marginBottom: 20 },
+  greeting: { fontSize: 12, fontFamily: "Inter_600SemiBold", letterSpacing: 2, textTransform: "uppercase" },
+  title: { fontSize: 28, fontFamily: "Inter_700Bold", marginTop: 2 },
+  banner: { borderRadius: 10, borderWidth: 1, padding: 12, marginBottom: 16 },
+  bannerText: { fontSize: 12, fontFamily: "Inter_400Regular", lineHeight: 18 },
+  metricsRow: { flexDirection: "row", gap: 10 },
+  runtimeCard: { borderRadius: 12, borderWidth: 1, padding: 14, marginTop: 16 },
+  runtimeRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 8 },
+  runtimeLabel: { fontSize: 13, fontFamily: "Inter_400Regular" },
+  txSection: { marginTop: 20 },
+  sectionTitle: { fontSize: 16, fontFamily: "Inter_600SemiBold", marginBottom: 10 },
+  txCard: { borderRadius: 12, borderWidth: 1, overflow: "hidden" },
+  txRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 12, borderBottomWidth: 1 },
+  txLeft: { flex: 1, marginRight: 8 },
+  txId: { fontSize: 13, fontFamily: "Inter_500Medium" },
+  txMeta: { fontSize: 11, fontFamily: "Inter_400Regular", marginTop: 2 },
+  txRight: { alignItems: "flex-end", gap: 4 },
+  txAmount: { fontSize: 14, fontFamily: "Inter_600SemiBold" },
+  errorText: { textAlign: "center", marginTop: 40, fontSize: 14, fontFamily: "Inter_400Regular" },
 });

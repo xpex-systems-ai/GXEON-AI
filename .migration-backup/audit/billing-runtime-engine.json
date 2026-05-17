@@ -1,1 +1,0 @@
-{"billing_runtime":{"domains":["runtime","ledger","idempotency","reconciliation","recovery","subscriptions"],"principle":"no double charge"}}

@@ -1,1 +1,0 @@
-{"boundaries":{"runtime_control":"/runtime","workflow_definitions":"/workflows","transport_api":"/server/routes","integration_adapters":"/adapters"},"violations":["task engine lifecycle managed from route module","process-level exception swallowing in primary server"],"priority":"critical"}

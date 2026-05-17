@@ -1,1 +1,0 @@
-{"events":["EXECUTION_RECEIPT_CREATED","BILLING_CONFIRMED","WORKFLOW_STATE_CHANGED","DISPUTE_OPENED"],"required_ids":["correlation_id","execution_id"]}

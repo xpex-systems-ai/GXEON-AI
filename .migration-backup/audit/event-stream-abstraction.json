@@ -1,1 +1,0 @@
-{"abstraction":{"producer":"emitEvent","store":"append-only log","future_backends":["Redpanda","Kafka","Redis Streams"]}}

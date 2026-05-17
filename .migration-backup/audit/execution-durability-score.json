@@ -1,1 +1,0 @@
-{"score":62,"basis":["persistent transitions","replayable history","dead-letter path"],"gaps":["shared queue backend not yet externalized"]}

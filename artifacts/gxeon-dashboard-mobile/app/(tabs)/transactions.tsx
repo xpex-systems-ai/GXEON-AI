@@ -1,207 +1,138 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
   Platform,
+  Pressable,
   RefreshControl,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as Haptics from "expo-haptics";
-import { Feather } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useQuery } from "@tanstack/react-query";
+
 import { useColors } from "@/hooks/useColors";
-import { TransactionRow } from "@/components/TransactionRow";
-import { getSupabase, isConfigured } from "@/lib/supabase";
+import { StatusBadge } from "@/components/StatusBadge";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 type Transaction = {
   id: string;
-  transaction_id?: string;
-  actor_code?: string;
+  transaction_id: string;
+  actor_code: string;
   base_amount: number;
   status: string;
+  gateway_provider: string;
   created_at: string;
-  gateway_provider?: string;
+  paid_at?: string;
 };
 
-const STATUSES = ["ALL", "PAID", "PENDING", "FAILED"] as const;
+const STATUSES = ["all", "PAID", "PENDING", "FAILED"];
+
+function formatBRL(n: number) {
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n ?? 0);
+}
+function fmtDate(iso: string) {
+  return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+}
+
+async function fetchTransactions(statusFilter: string): Promise<Transaction[]> {
+  if (!supabase) return [];
+  // @ts-ignore
+  let query = supabase.from("global_transactions").select("*").order("created_at", { ascending: false }).limit(100);
+  if (statusFilter !== "all") query = query.eq("status", statusFilter);
+  const { data } = await query;
+  return (data ?? []) as Transaction[];
+}
 
 export default function TransactionsScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const router = useRouter();
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<"ALL" | "PAID" | "PENDING" | "FAILED">("ALL");
-
-  const fetchData = useCallback(async (status = statusFilter) => {
-    if (!isConfigured()) {
-      setError("Supabase not configured.");
-      setLoading(false);
-      setRefreshing(false);
-      return;
-    }
-    try {
-      const db = getSupabase();
-      // @ts-ignore
-      let query = db
-        .from("global_transactions")
-        .select("*")
-        .order("created_at", { ascending: false })
-        .limit(100);
-      if (status !== "ALL") {
-        // @ts-ignore
-        query = query.eq("status", status);
-      }
-      const { data, error: err } = await query;
-      if (err) throw err;
-      setTransactions(data ?? []);
-      setError(null);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to load");
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, [statusFilter]);
-
-  useEffect(() => {
-    fetchData();
-    if (!isConfigured()) return;
-    const db = getSupabase();
-    const channel = db
-      .channel("transactions-realtime")
-      .on("postgres_changes", { event: "*", schema: "public", table: "global_transactions" }, () => {
-        fetchData();
-      })
-      .subscribe();
-    return () => { db.removeChannel(channel); };
-  }, [fetchData]);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    fetchData();
-  }, [fetchData]);
-
-  const selectStatus = (s: typeof statusFilter) => {
-    setStatusFilter(s);
-    setLoading(true);
-    fetchData(s);
-  };
-
-  const statusColor = (s: string) =>
-    s === "PAID"
-      ? colors.success
-      : s === "PENDING"
-        ? colors.warning
-        : s === "FAILED"
-          ? colors.destructive
-          : colors.primary;
-
-  const counts = {
-    ALL: transactions.length,
-    PAID: transactions.filter((t) => t.status === "PAID").length,
-    PENDING: transactions.filter((t) => t.status === "PENDING").length,
-    FAILED: transactions.filter((t) => t.status === "FAILED").length,
-  };
-
   const topPad = Platform.OS === "web" ? 67 : insets.top;
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const { data: transactions = [], isLoading, isFetching, refetch } = useQuery({
+    queryKey: ["transactions", statusFilter],
+    queryFn: () => fetchTransactions(statusFilter),
+    staleTime: 30_000,
+  });
+
+  const renderItem = ({ item }: { item: Transaction }) => (
+    <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
+      <View style={styles.cardTop}>
+        <Text style={[styles.txId, { color: colors.foreground }]} numberOfLines={1}>
+          {item.transaction_id ?? item.id}
+        </Text>
+        <Text style={[styles.amount, { color: colors.primary }]}>{formatBRL(item.base_amount)}</Text>
+      </View>
+      <View style={styles.cardBottom}>
+        <View style={styles.metaRow}>
+          <Text style={[styles.meta, { color: colors.mutedForeground }]}>{item.actor_code}</Text>
+          {item.gateway_provider ? (
+            <Text style={[styles.meta, { color: colors.mutedForeground }]}>{item.gateway_provider}</Text>
+          ) : null}
+          <Text style={[styles.meta, { color: colors.mutedForeground }]}>{fmtDate(item.created_at)}</Text>
+        </View>
+        <StatusBadge status={item.status} />
+      </View>
+    </View>
+  );
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      {/* Header */}
-      <View
-        style={[
-          styles.header,
-          {
-            paddingTop: topPad + 12,
-            backgroundColor: colors.background,
-            borderBottomColor: colors.border,
-          },
-        ]}
-      >
+      <View style={[styles.header, { paddingTop: topPad + 16, borderBottomColor: colors.border }]}>
         <Text style={[styles.title, { color: colors.foreground }]}>Transactions</Text>
-      </View>
-
-      {/* Filter Chips */}
-      <View style={[styles.filterRow, { borderBottomColor: colors.border }]}>
-        {STATUSES.map((s) => {
-          const active = statusFilter === s;
-          return (
-            <TouchableOpacity
+        <Text style={[styles.count, { color: colors.mutedForeground }]}>{transactions.length} results</Text>
+        <View style={styles.filterRow}>
+          {STATUSES.map((s) => (
+            <Pressable
               key={s}
-              onPress={() => selectStatus(s)}
+              onPress={() => setStatusFilter(s)}
               style={[
-                styles.chip,
+                styles.filterBtn,
                 {
-                  backgroundColor: active ? colors.primary + "20" : colors.secondary,
-                  borderColor: active ? colors.primary : "transparent",
+                  backgroundColor: statusFilter === s ? colors.primary : colors.muted,
+                  borderColor: statusFilter === s ? colors.primary : colors.border,
                 },
               ]}
             >
               <Text
                 style={[
-                  styles.chipText,
-                  { color: active ? colors.primary : colors.mutedForeground },
+                  styles.filterText,
+                  { color: statusFilter === s ? colors.primaryForeground : colors.mutedForeground },
                 ]}
               >
-                {s === "ALL" ? `All ${counts.ALL}` : `${s} ${counts[s]}`}
+                {s === "all" ? "All" : s}
               </Text>
-            </TouchableOpacity>
-          );
-        })}
+            </Pressable>
+          ))}
+        </View>
       </View>
 
-      {error ? (
-        <View style={[styles.errorBox, { backgroundColor: colors.destructive + "20" }]}>
-          <Feather name="alert-circle" size={14} color={colors.destructive} />
-          <Text style={[styles.errorText, { color: colors.destructive }]}>{error}</Text>
+      {!isSupabaseConfigured && (
+        <View style={[styles.banner, { backgroundColor: `${colors.warning}22` }]}>
+          <Text style={[styles.bannerText, { color: colors.warning }]}>Supabase not configured</Text>
         </View>
-      ) : null}
+      )}
 
-      {loading ? (
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.primary} />
-        </View>
+      {isLoading ? (
+        <ActivityIndicator color={colors.primary} style={{ marginTop: 40 }} />
       ) : (
         <FlatList
           data={transactions}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TransactionRow
-              tx={item}
-              onPress={() => router.push(`/transaction/${item.id}`)}
-            />
-          )}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              tintColor={colors.primary}
-            />
-          }
-          contentContainerStyle={{
-            paddingBottom: Platform.OS === "web" ? 34 : insets.bottom + 90,
-            flexGrow: 1,
-          }}
-          ListEmptyComponent={() => (
+          renderItem={renderItem}
+          contentContainerStyle={[
+            styles.list,
+            { paddingBottom: Platform.OS === "web" ? 100 : 100 },
+          ]}
+          refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refetch} tintColor={colors.primary} />}
+          ListEmptyComponent={
             <View style={styles.empty}>
-              <Feather name="credit-card" size={40} color={colors.mutedForeground} />
-              <Text style={[styles.emptyTitle, { color: colors.foreground }]}>
-                No transactions
-              </Text>
-              <Text style={[styles.emptyText, { color: colors.mutedForeground }]}>
-                {statusFilter !== "ALL" ? `No ${statusFilter} transactions found` : "No transactions yet"}
-              </Text>
+              <Text style={[styles.emptyText, { color: colors.mutedForeground }]}>No transactions found</Text>
             </View>
-          )}
-          showsVerticalScrollIndicator={false}
+          }
+          scrollEnabled={transactions.length > 0}
         />
       )}
     </View>
@@ -210,36 +141,22 @@ export default function TransactionsScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  center: { flex: 1, alignItems: "center", justifyContent: "center" },
-  header: {
-    paddingHorizontal: 16,
-    paddingBottom: 12,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  title: { fontSize: 26, fontFamily: "Inter_700Bold", letterSpacing: -0.8 },
-  filterRow: {
-    flexDirection: "row",
-    gap: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  chip: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    borderWidth: 1,
-  },
-  chipText: { fontSize: 12, fontFamily: "Inter_600SemiBold" },
-  errorBox: {
-    flexDirection: "row",
-    gap: 8,
-    padding: 12,
-    margin: 16,
-    borderRadius: 8,
-  },
-  errorText: { flex: 1, fontSize: 13, fontFamily: "Inter_400Regular" },
-  empty: { flex: 1, alignItems: "center", justifyContent: "center", gap: 8, paddingTop: 80 },
-  emptyTitle: { fontSize: 17, fontFamily: "Inter_600SemiBold" },
-  emptyText: { fontSize: 14, fontFamily: "Inter_400Regular" },
+  header: { paddingHorizontal: 16, paddingBottom: 12, borderBottomWidth: 1 },
+  title: { fontSize: 28, fontFamily: "Inter_700Bold", marginBottom: 4 },
+  count: { fontSize: 12, fontFamily: "Inter_400Regular", marginBottom: 12 },
+  filterRow: { flexDirection: "row", gap: 8 },
+  filterBtn: { borderRadius: 8, borderWidth: 1, paddingHorizontal: 12, paddingVertical: 6 },
+  filterText: { fontSize: 12, fontFamily: "Inter_600SemiBold" },
+  banner: { margin: 16, borderRadius: 10, padding: 12 },
+  bannerText: { fontSize: 13, fontFamily: "Inter_500Medium" },
+  list: { padding: 16, gap: 10 },
+  card: { borderRadius: 12, borderWidth: 1, padding: 14 },
+  cardTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 8 },
+  txId: { fontSize: 13, fontFamily: "Inter_500Medium", flex: 1, marginRight: 8 },
+  amount: { fontSize: 16, fontFamily: "Inter_700Bold" },
+  cardBottom: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  metaRow: { flexDirection: "row", gap: 8, flex: 1 },
+  meta: { fontSize: 11, fontFamily: "Inter_400Regular" },
+  empty: { alignItems: "center", paddingTop: 60 },
+  emptyText: { fontSize: 15, fontFamily: "Inter_400Regular" },
 });

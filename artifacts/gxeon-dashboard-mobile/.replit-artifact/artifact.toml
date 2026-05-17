@@ -1,5 +1,5 @@
 kind = "mobile"
-previewPath = "/gxeon-dashboard-mobile/"
+previewPath = "/mobile/"
 title = "GXEON Mobile"
 version = "1.0.0"
 id = "artifacts/gxeon-dashboard-mobile"
@@ -12,7 +12,7 @@ version = "1.0.0"
 [[services]]
 ensurePreviewReachable = "/status"
 name = "expo"
-paths = [ "/gxeon-dashboard-mobile/" ]
+paths = [ "/mobile/" ]
 localPort = 21447
 
 [services.development]
@@ -24,4 +24,4 @@ run = [ "pnpm", "--filter", "@workspace/gxeon-dashboard-mobile", "run", "serve" 
 
 [services.env]
 PORT = "21447"
-BASE_PATH = "/gxeon-dashboard-mobile/"
+BASE_PATH = "/mobile/"

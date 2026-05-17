@@ -1,89 +1,49 @@
-# ═══════════════════════════════════════════════════════════════
-# 🛡️ GXEON AI — SECURITY FORTRESS — .gitignore
-# ═══════════════════════════════════════════════════════════════
-# ABSOLUTELY NEVER COMMIT THESE FILES:
+# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
-# 🔐 Environment & Secrets
-.env
-.env.local
-.env.*.local
-.env.production
-.env.staging
-.env.development
-config/secure/.env
-config/secrets.json
-config/*.key
-config/*.pem
-config/*.p12
+# compiled output
+dist
+tmp
+out-tsc
+*.tsbuildinfo
+.expo
+.expo-shared
 
-# 🔑 Private Keys & Wallets
-*.private.key
-*.wallet.json
-keystore/
-wallets/
-mnemonic.txt
-seed.txt
-private_keys/
+# dependencies
+node_modules
 
-# 🗄️ Database URLs & Credentials
-DATABASE_URL
-DATABASE_URL_LOCAL
-SUPABASE_SERVICE_ROLE_KEY
-SUPABASE_ANON_KEY
-POSTGRES_PASSWORD
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-# 🔗 Blockchain Keys
-PRIVATE_KEY
-ETHERSCAN_API_KEY
-INFURA_API_KEY
-ALCHEMY_API_KEY
-QUICKNODE_API_KEY
-FLASHBOTS_RELAY_KEY
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
-# 📊 Logs & Debug Files
-*.log
-logs/
-debug/
-*.debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
 
-# 💻 System Files
+# System Files
 .DS_Store
 Thumbs.db
-*.swp
-*.swo
-*~
-.vscode/settings.json
-.idea/
 
-# 📦 Dependencies
-node_modules/
-npm_modules/
-.pnp
-.pnp.js
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
 
-# 🏗️ Build & Deploy
-.vercel
-.netlify
-dist/
-build/
-coverage/
-*.tgz
-*.tar.gz
-
-# ⚠️ Specific Security Exclusions
-server/routes/sepolia-executor.js
-temp/
-tmp/
-cache/
-*.cache
-
-# 🚫 Never commit compiled contracts with embedded keys
-artifacts/*/.env
-artifacts/*/debug/
-
-# 🚫 Railway/Nixpacks build cache
-.nixpacks/
-nixpacks.toml
+# Replit
+.cache/
+.local/

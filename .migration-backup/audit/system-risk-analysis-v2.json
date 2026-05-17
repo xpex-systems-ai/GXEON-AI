@@ -1,1 +1,0 @@
-{"risks":["event drift","billing inconsistency","reputation poisoning","queue overload"],"mitigations":["schema governance","ledger reconciliation","fraud graph","autoscaling policies"]}

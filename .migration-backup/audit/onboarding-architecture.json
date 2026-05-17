@@ -1,1 +1,0 @@
-{"entrypoints":["web","telegram","api"],"state_machine":["NEW","VERIFIED","ACTIVATED","MONETIZED"],"proof_gate":"required before paid prompt"}

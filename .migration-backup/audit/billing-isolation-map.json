@@ -1,1 +1,0 @@
-{"billing_domain_targets":{"billing":["credit accounting","ledger transitions","reconciliation"],"payments":["PIX/provider adapters","subscription settlement"]},"violations":["in-memory billing stats treated as near-authoritative in runtime logs"]}
