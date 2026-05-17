@@ -1,0 +1,12 @@
+{
+  "deployment": "REPLIT_ONLY",
+  "github_sync": "ACTIVE",
+  "forbidden_env_present": [],
+  "workflow_scan": [
+    {
+      "file": "gxeon-runtime-sync.yml",
+      "containsPlatformRef": false
+    }
+  ],
+  "generated_at": "2026-05-17T02:26:36.988Z"
+}

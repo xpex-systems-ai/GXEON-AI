@@ -1,0 +1,134 @@
+{
+  "classes": [
+    "HOT",
+    "WARM",
+    "COLD",
+    "VIRAL",
+    "READY_TO_PAY",
+    "HIGH_INTENT",
+    "WHALE_PAYMENT",
+    "ABANDON_RISK"
+  ],
+  "scoring_logic": "PASS",
+  "telemetry_linkage": "PASS",
+  "cta_orchestration": "PASS",
+  "revenue_linkage": "PASS",
+  "signal_enrichment": "PASS",
+  "operator_alerting": "PASS",
+  "monetization_telemetry_integration": "PASS",
+  "sample_conversion": {
+    "conversion_runtime": "ACTIVE",
+    "conversion_efficiency": 88,
+    "opportunities": [
+      {
+        "id": "opp_1",
+        "runtime_class": "HOT",
+        "cta_intelligence": 72,
+        "revenue_probability": 68,
+        "operator_score": 70,
+        "monetization_pressure": "LOW",
+        "urgency_psych_score": 65,
+        "behavioral_trigger": "SMART_NUDGE"
+      },
+      {
+        "id": "opp_2",
+        "runtime_class": "WARM",
+        "cta_intelligence": 76,
+        "revenue_probability": 73,
+        "operator_score": 74,
+        "monetization_pressure": "LOW",
+        "urgency_psych_score": 70,
+        "behavioral_trigger": "SMART_NUDGE"
+      },
+      {
+        "id": "opp_3",
+        "runtime_class": "COLD",
+        "cta_intelligence": 80,
+        "revenue_probability": 78,
+        "operator_score": 78,
+        "monetization_pressure": "MEDIUM",
+        "urgency_psych_score": 75,
+        "behavioral_trigger": "SMART_NUDGE"
+      },
+      {
+        "id": "opp_4",
+        "runtime_class": "VIRAL",
+        "cta_intelligence": 84,
+        "revenue_probability": 83,
+        "operator_score": 82,
+        "monetization_pressure": "MEDIUM",
+        "urgency_psych_score": 80,
+        "behavioral_trigger": "SMART_NUDGE"
+      },
+      {
+        "id": "opp_5",
+        "runtime_class": "WHALE",
+        "cta_intelligence": 88,
+        "revenue_probability": 88,
+        "operator_score": 86,
+        "monetization_pressure": "HIGH",
+        "urgency_psych_score": 85,
+        "behavioral_trigger": "SMART_NUDGE"
+      },
+      {
+        "id": "opp_6",
+        "runtime_class": "EXPLOSIVE",
+        "cta_intelligence": 92,
+        "revenue_probability": 93,
+        "operator_score": 90,
+        "monetization_pressure": "HIGH",
+        "urgency_psych_score": 90,
+        "behavioral_trigger": "IMMEDIATE_PUSH"
+      }
+    ],
+    "generated_at": "2026-05-17T02:26:36.383Z"
+  },
+  "sample_monetization": {
+    "conversion_dna": "MONETIZING",
+    "monetization_efficiency": 86,
+    "sessions": [
+      {
+        "id": "mon_1",
+        "class": "READY_TO_PAY",
+        "payment_probability": 72,
+        "checkout_urgency": 68,
+        "cta_rank": 90,
+        "high_value_priority": true
+      },
+      {
+        "id": "mon_2",
+        "class": "HIGH_INTENT",
+        "payment_probability": 77,
+        "checkout_urgency": 74,
+        "cta_rank": 83,
+        "high_value_priority": true
+      },
+      {
+        "id": "mon_3",
+        "class": "WHALE_PAYMENT",
+        "payment_probability": 82,
+        "checkout_urgency": 80,
+        "cta_rank": 76,
+        "high_value_priority": false
+      },
+      {
+        "id": "mon_4",
+        "class": "ABANDON_RISK",
+        "payment_probability": 87,
+        "checkout_urgency": 86,
+        "cta_rank": 69,
+        "high_value_priority": false
+      },
+      {
+        "id": "mon_5",
+        "class": "VIRAL_BUYER",
+        "payment_probability": 92,
+        "checkout_urgency": 92,
+        "cta_rank": 62,
+        "high_value_priority": false
+      }
+    ],
+    "generated_at": "2026-05-17T02:26:36.383Z"
+  },
+  "generated_at": "2026-05-17T02:26:36.405Z"
+}
