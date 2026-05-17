@@ -22,12 +22,15 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
 
   processed.add(id);
   const events = [ ...(mem.financial_events || []), { id, payload, at: new Date().toISOString() } ].slice(-5000);
-  const status = payload.status || payload.action || payload.type || '';
+  const status = String(payload.status || '').toUpperCase();
+  const action = String(payload.action || payload.type || '').toUpperCase();
   const agentId = payload.metadata?.agent_id || payload.agent_id || 'agent_buyer_1';
   const amount = Number(payload.amount || payload.transaction_amount || 0);
   let creditActivation = null;
 
-  if (String(status).toUpperCase().includes('APPROVED') && amount > 0) {
+  const approvedEvent = status === 'APPROVED' || action === 'PAYMENT.APPROVED';
+  const pendingEvent = status === 'PENDING' || action.includes('PENDING');
+  if (approvedEvent && amount > 0) {
     ensureWallet('platform_treasury');
     ensureWallet(agentId);
     creditActivation = transferCredits({
@@ -37,11 +40,17 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
       reason: 'PIX_TOPUP_APPROVED',
     });
   }
-  if (String(status).toUpperCase().includes('PENDING')) {
+  if (pendingEvent) {
     pending.unshift({
       payment_id: id,
-      channel: payload.customer?.email ? 'EMAIL' : 'WHATSAPP',
-      contact: payload.customer?.email || payload.customer?.phone || 'UNKNOWN',
+      channels: [
+        payload.customer?.phone ? 'WHATSAPP' : null,
+        payload.customer?.email ? 'EMAIL' : null,
+      ].filter(Boolean),
+      contact: {
+        email: payload.customer?.email || null,
+        phone: payload.customer?.phone || null,
+      },
       followup_status: 'QUEUED',
       created_at: new Date().toISOString(),
     });
@@ -68,10 +77,13 @@ function processPendingPixFollowups(input = {}) {
     const attempts = Number(item.attempts || 0) + 1;
     const retryAt = new Date(now + (attempts * 2) * 60_000).toISOString();
     const status = attempts >= 3 ? 'ESCALATED' : 'RETRY_QUEUED';
-    processed.push({ payment_id: item.payment_id, attempts, status });
+    const channels = item.channels || [];
+    const dispatch = channels.map((ch) => ({ channel: ch, dispatched: true }));
+    processed.push({ payment_id: item.payment_id, attempts, status, dispatch });
     return {
       ...item,
       attempts,
+      dispatch,
       last_attempt_at: new Date(now).toISOString(),
       next_retry_at: retryAt,
       followup_status: status,

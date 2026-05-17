@@ -3,7 +3,7 @@
   "radar_last_scan": "2026-05-16T19:25:01.156Z",
   "tracked_pools": 29,
   "smart_tracking": true,
-  "updated_at": "2026-05-17T03:45:07.645Z",
+  "updated_at": "2026-05-17T03:58:48.966Z",
   "credit_wallets": {
     "agent_a": {
       "agent_id": "agent_a",
@@ -23,11 +23,11 @@
     },
     "platform_treasury": {
       "agent_id": "platform_treasury",
-      "balance": 19850,
+      "balance": 49800,
       "credit_limit": 0,
-      "total_spent": 240,
+      "total_spent": 440,
       "total_earned": 0,
-      "updated_at": "2026-05-17T03:45:07.606Z"
+      "updated_at": "2026-05-17T03:58:48.918Z"
     },
     "agent_a2": {
       "agent_id": "agent_a2",
@@ -55,11 +55,11 @@
     },
     "signal_producer_1": {
       "agent_id": "signal_producer_1",
-      "balance": 127.3,
+      "balance": 177.11,
       "credit_limit": 0,
       "total_spent": 0,
-      "total_earned": 127.3,
-      "updated_at": "2026-05-17T03:45:07.582Z"
+      "total_earned": 177.11,
+      "updated_at": "2026-05-17T03:58:48.895Z"
     },
     "signal_buyer_v3": {
       "agent_id": "signal_buyer_v3",
@@ -76,9 +76,39 @@
       "total_spent": 70.8,
       "total_earned": 150,
       "updated_at": "2026-05-17T03:45:07.606Z"
+    },
+    "buyer_live_vf": {
+      "agent_id": "buyer_live_vf",
+      "balance": 270.19,
+      "credit_limit": 200,
+      "total_spent": 49.81,
+      "total_earned": 200,
+      "updated_at": "2026-05-17T03:58:48.918Z"
     }
   },
   "commission_settlements": [
+    {
+      "settlement_id": "set_1778990328894_ir5aa8",
+      "task_id": "task_1778990328870_gicep",
+      "consumer_agent_id": "buyer_live_vf",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 29.4,
+      "platform_rate": 0.15,
+      "platform_fee": 4.41,
+      "producer_net": 24.99,
+      "created_at": "2026-05-17T03:58:48.894Z"
+    },
+    {
+      "settlement_id": "set_1778990328891_yx0fwx",
+      "task_id": "task_1778990328871_mh2pg",
+      "consumer_agent_id": "buyer_live_vf",
+      "producer_agent_id": "signal_producer_1",
+      "gross_amount": 29.2,
+      "platform_rate": 0.15,
+      "platform_fee": 4.38,
+      "producer_net": 24.82,
+      "created_at": "2026-05-17T03:58:48.891Z"
+    },
     {
       "settlement_id": "set_1778989507581_vy7jie",
       "task_id": "task_1778989507555_nwulj",
@@ -170,6 +200,30 @@
   ],
   "credit_ledger": [
     {
+      "event_id": "cred_1778990328918_ssv42z",
+      "from_agent_id": "platform_treasury",
+      "to_agent_id": "buyer_live_vf",
+      "amount": 200,
+      "reason": "PIX_TOPUP_APPROVED",
+      "created_at": "2026-05-17T03:58:48.918Z"
+    },
+    {
+      "event_id": "cred_1778990328895_dbgato",
+      "from_agent_id": "buyer_live_vf",
+      "to_agent_id": "signal_producer_1",
+      "amount": 24.99,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:58:48.895Z"
+    },
+    {
+      "event_id": "cred_1778990328892_mz84qe",
+      "from_agent_id": "buyer_live_vf",
+      "to_agent_id": "signal_producer_1",
+      "amount": 24.82,
+      "reason": "AUTONOMOUS_TASK_SETTLEMENT",
+      "created_at": "2026-05-17T03:58:48.892Z"
+    },
+    {
       "event_id": "cred_1778989507606_cghgjy",
       "from_agent_id": "platform_treasury",
       "to_agent_id": "buyer_live",
@@ -251,6 +305,48 @@
     }
   ],
   "autonomous_task_queue": [
+    {
+      "task_id": "task_1778990328871_mh2pg",
+      "signal_id": "xr_1778990328870_hlaey",
+      "price_credits": 29.2,
+      "producer_agent_id": "signal_producer_1",
+      "consumer_agent_id": "buyer_live_vf",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:58:48.871Z",
+      "settled_at": "2026-05-17T03:58:48.893Z",
+      "settlement": {
+        "settlement_id": "set_1778990328891_yx0fwx",
+        "task_id": "task_1778990328871_mh2pg",
+        "consumer_agent_id": "buyer_live_vf",
+        "producer_agent_id": "signal_producer_1",
+        "gross_amount": 29.2,
+        "platform_rate": 0.15,
+        "platform_fee": 4.38,
+        "producer_net": 24.82,
+        "created_at": "2026-05-17T03:58:48.891Z"
+      }
+    },
+    {
+      "task_id": "task_1778990328870_gicep",
+      "signal_id": "xr_1778990328868_0vtg9",
+      "price_credits": 29.4,
+      "producer_agent_id": "signal_producer_1",
+      "consumer_agent_id": "buyer_live_vf",
+      "status": "SETTLED",
+      "created_at": "2026-05-17T03:58:48.870Z",
+      "settled_at": "2026-05-17T03:58:48.898Z",
+      "settlement": {
+        "settlement_id": "set_1778990328894_ir5aa8",
+        "task_id": "task_1778990328870_gicep",
+        "consumer_agent_id": "buyer_live_vf",
+        "producer_agent_id": "signal_producer_1",
+        "gross_amount": 29.4,
+        "platform_rate": 0.15,
+        "platform_fee": 4.41,
+        "producer_net": 24.99,
+        "created_at": "2026-05-17T03:58:48.894Z"
+      }
+    },
     {
       "task_id": "task_1778989507557_03ocf",
       "signal_id": "xr_1778989507557_8dmtz",
@@ -382,7 +478,9 @@
     "wh_test_approved_1",
     "wh_pending_1",
     "pix_ok_1",
-    "pix_pending_1"
+    "pix_pending_1",
+    "pix_realistic_approved_1",
+    "pix_realistic_pending_1"
   ],
   "financial_events": [
     {
@@ -430,10 +528,56 @@
         }
       },
       "at": "2026-05-17T03:45:07.626Z"
+    },
+    {
+      "id": "pix_realistic_approved_1",
+      "payload": {
+        "id": "pix_realistic_approved_1",
+        "action": "payment.approved",
+        "transaction_amount": 200,
+        "metadata": {
+          "agent_id": "buyer_live_vf"
+        }
+      },
+      "at": "2026-05-17T03:58:48.917Z"
+    },
+    {
+      "id": "pix_realistic_pending_1",
+      "payload": {
+        "id": "pix_realistic_pending_1",
+        "status": "pending",
+        "customer": {
+          "email": "buyer@live.com",
+          "phone": "+5511999999999"
+        }
+      },
+      "at": "2026-05-17T03:58:48.940Z"
     }
   ],
   "webhook_health": "ACTIVE",
   "x_radar_signals": [
+    {
+      "signal_id": "xr_1778990328870_hlaey",
+      "chain": "base",
+      "source": "X_RADAR_MULTI_SOURCE",
+      "category": "MEV",
+      "confidence_score": 92,
+      "confidence_tier": "HIGH",
+      "expected_roi_pct": 18.95,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:58:48.870Z"
+    },
+    {
+      "signal_id": "xr_1778990328868_0vtg9",
+      "chain": "ethereum",
+      "source": "X_RADAR_MULTI_SOURCE",
+      "category": "MEV",
+      "confidence_score": 94,
+      "confidence_tier": "HIGH",
+      "expected_roi_pct": 18.06,
+      "producer_agent_id": "signal_producer_1",
+      "created_at": "2026-05-17T03:58:48.868Z"
+    },
     {
       "signal_id": "xr_1778989507557_8dmtz",
       "chain": "base",
@@ -536,14 +680,41 @@
   ],
   "pending_pix_followups": [
     {
+      "payment_id": "pix_realistic_pending_1",
+      "channels": [
+        "WHATSAPP",
+        "EMAIL"
+      ],
+      "contact": {
+        "email": "buyer@live.com",
+        "phone": "+5511999999999"
+      },
+      "followup_status": "RETRY_QUEUED",
+      "created_at": "2026-05-17T03:58:48.940Z",
+      "attempts": 1,
+      "dispatch": [
+        {
+          "channel": "WHATSAPP",
+          "dispatched": true
+        },
+        {
+          "channel": "EMAIL",
+          "dispatched": true
+        }
+      ],
+      "last_attempt_at": "2026-05-17T03:58:48.965Z",
+      "next_retry_at": "2026-05-17T04:00:48.965Z"
+    },
+    {
       "payment_id": "pix_pending_1",
       "channel": "EMAIL",
       "contact": "buyer@x.com",
       "followup_status": "RETRY_QUEUED",
       "created_at": "2026-05-17T03:45:07.626Z",
-      "attempts": 1,
-      "last_attempt_at": "2026-05-17T03:45:07.645Z",
-      "next_retry_at": "2026-05-17T03:47:07.645Z"
+      "attempts": 2,
+      "last_attempt_at": "2026-05-17T03:58:48.965Z",
+      "next_retry_at": "2026-05-17T04:02:48.965Z",
+      "dispatch": []
     },
     {
       "payment_id": "wh_pending_1",
@@ -551,9 +722,10 @@
       "contact": "buyer@example.com",
       "followup_status": "RETRY_QUEUED",
       "created_at": "2026-05-17T03:35:39.937Z",
-      "attempts": 1,
-      "last_attempt_at": "2026-05-17T03:45:07.645Z",
-      "next_retry_at": "2026-05-17T03:47:07.645Z"
+      "attempts": 2,
+      "last_attempt_at": "2026-05-17T03:58:48.965Z",
+      "next_retry_at": "2026-05-17T04:02:48.965Z",
+      "dispatch": []
     }
   ],
   "subscriptions": {

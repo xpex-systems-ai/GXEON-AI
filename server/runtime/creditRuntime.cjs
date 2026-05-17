@@ -48,6 +48,14 @@ function transferCredits({ from_agent_id, to_agent_id, amount, reason = 'A2A_TAS
   const wallets = getWallets();
   const from = wallets[from_agent_id] || ensureWallet(from_agent_id);
   const to = wallets[to_agent_id] || ensureWallet(to_agent_id);
+  const mem = readMemory();
+  const ledger = mem.credit_ledger || [];
+  const recentWindowMs = 60_000;
+  const now = Date.now();
+  const fromRecentOps = ledger.filter((e) => e.from_agent_id === from_agent_id && (now - new Date(e.created_at).getTime()) < recentWindowMs);
+  if (fromRecentOps.length >= 25) {
+    return { ok: false, code: 'RATE_LIMIT_EXCEEDED', from, to };
+  }
 
   if (from.balance + from.credit_limit < value) {
     return { ok: false, code: 'CREDIT_LIMIT_EXCEEDED', from, to };
@@ -64,8 +72,6 @@ function transferCredits({ from_agent_id, to_agent_id, amount, reason = 'A2A_TAS
   wallets[from_agent_id] = from;
   wallets[to_agent_id] = to;
 
-  const mem = readMemory();
-  const ledger = mem.credit_ledger || [];
   const event = {
     event_id: `cred_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     from_agent_id,
