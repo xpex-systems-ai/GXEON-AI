@@ -56,4 +56,29 @@ function processWebhook(payload = {}, signature = '', rawBody = '') {
   return { accepted: true, idempotent: false, id, credit_activation: creditActivation };
 }
 
-module.exports = { processWebhook };
+function processPendingPixFollowups(input = {}) {
+  const limit = Math.max(1, Math.min(Number(input.limit || 20), 200));
+  const mem = readMemory();
+  const rows = mem.pending_pix_followups || [];
+  const now = Date.now();
+  const processed = [];
+  const next = rows.map((item) => {
+    if (processed.length >= limit) return item;
+    if (item.followup_status === 'RESOLVED') return item;
+    const attempts = Number(item.attempts || 0) + 1;
+    const retryAt = new Date(now + (attempts * 2) * 60_000).toISOString();
+    const status = attempts >= 3 ? 'ESCALATED' : 'RETRY_QUEUED';
+    processed.push({ payment_id: item.payment_id, attempts, status });
+    return {
+      ...item,
+      attempts,
+      last_attempt_at: new Date(now).toISOString(),
+      next_retry_at: retryAt,
+      followup_status: status,
+    };
+  });
+  writeMemory({ pending_pix_followups: next.slice(0, 5000) });
+  return { followup_processor: 'ACTIVE', processed_count: processed.length, processed };
+}
+
+module.exports = { processWebhook, processPendingPixFollowups };

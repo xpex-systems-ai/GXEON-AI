@@ -31,7 +31,7 @@ const { getSignalIntelligence } = require(pathFromRoot("signalEnrichment.cjs"));
 const { getConversionDNA, getMonetizationDNA } = require(pathFromRoot("conversionDNA.cjs"));
 const { getOperatorAlerts } = require(pathFromRoot("operatorAlerts.cjs"));
 const { createPixPayment, getPaymentsRuntime } = require(pathFromRoot("paymentRuntime.cjs"));
-const { processWebhook } = require(pathFromRoot("mercadoWebhookRuntime.cjs"));
+const { processWebhook, processPendingPixFollowups } = require(pathFromRoot("mercadoWebhookRuntime.cjs"));
 const { getRevenueTelemetry } = require(pathFromRoot("revenueTelemetry.cjs"));
 const { runMonetizationAudit } = require(pathFromRoot("monetizationAudit.cjs"));
 const { executeAutonomousPixRun } = require(pathFromRoot("paymentOrchestrator.cjs"));
@@ -42,6 +42,7 @@ const { enqueueTask, runSchedulerCycle, autoTopupViaPix, getAutonomousRevenueRun
 const { generateSignal, consumePremiumSignal, getXRadarMetrics } = require(pathFromRoot("xRadarEngine.cjs"));
 const { runXRadarScanCycle } = require(pathFromRoot("xRadarScheduler.cjs"));
 const { subscribeAgent, getSubscriptionCatalog } = require(pathFromRoot("subscriptionRuntime.cjs"));
+const { getRevenueDashboardMetrics } = require(pathFromRoot("revenueDashboardRuntime.cjs"));
 
 const router = Router();
 
@@ -240,6 +241,14 @@ router.post("/v1/monetization/subscriptions/subscribe", (req, res) => {
   } catch (error) {
     res.status(400).json({ error: String(error) });
   }
+});
+
+router.post("/v1/runtime/pix/followups/process", (req, res) => {
+  res.status(201).json(processPendingPixFollowups(req.body ?? {}));
+});
+
+router.get("/v1/runtime/revenue-dashboard", (_req, res) => {
+  res.json(getRevenueDashboardMetrics());
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {
