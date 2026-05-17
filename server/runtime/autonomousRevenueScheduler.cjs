@@ -87,8 +87,10 @@ function runSchedulerCycle(input = {}) {
   }
 
   const updates = new Map([
+    ...queued
+      .filter((t) => t.status === 'SETTLED' || t.status === 'BLOCKED' || t.status === 'FAILED')
+      .map((t) => [t.task_id, t]),
     ...settled.map((s) => [s.task_id, s]),
-    ...queue.filter((t) => t.status === 'BLOCKED' || t.status === 'FAILED').map((t) => [t.task_id, t]),
   ]);
   const next = queue.map((item) => updates.get(item.task_id) || item);
   writeMemory({ autonomous_task_queue: next });
