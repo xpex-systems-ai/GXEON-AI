@@ -1,9 +1,22 @@
 import { Router } from "express";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { existsSync } from "node:fs";
 
 const require = createRequire(import.meta.url);
-const pathFromRoot = (file: string) => path.join(process.cwd(), "server/runtime", file);
+const resolveRuntimeRoot = () => {
+  const candidates = [
+    path.resolve(process.cwd(), "server/runtime"),
+    path.resolve(process.cwd(), "../server/runtime"),
+    path.resolve(process.cwd(), "../../server/runtime"),
+  ];
+
+  const match = candidates.find((dir) => existsSync(dir));
+  return match ?? candidates[0];
+};
+
+const runtimeRoot = resolveRuntimeRoot();
+const pathFromRoot = (file: string) => path.join(runtimeRoot, file);
 const { getRuntimeSyncStatus } = require(pathFromRoot("runtimeHeartbeat.cjs"));
 const { getRecoveryStatus } = require(pathFromRoot("runtimeRecovery.cjs"));
 const { getProductionRuntimeStatus } = require(pathFromRoot("productionRuntime.cjs"));
