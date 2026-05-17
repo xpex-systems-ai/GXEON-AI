@@ -1,0 +1,181 @@
+{
+  "generated_at": "2026-05-17T02:26:36.406Z",
+  "runtime_governance": "ACTIVE",
+  "dashboard_integrity": "ACTIVE",
+  "runtime_sync": {
+    "runtime": "LIVE",
+    "github_sync": "ACTIVE",
+    "replit_runtime": "ONLINE",
+    "last_commit": "81909e9",
+    "last_sync": "2026-05-16T21:57:04-03:00",
+    "branch": "work",
+    "dashboard": "ACTIVE",
+    "deployment_freshness_seconds": 5372,
+    "synchronized": true,
+    "generated_at": "2026-05-17T02:26:36.473Z"
+  },
+  "conversion_engine": "ACTIVE",
+  "heartbeat_runtime": "ACTIVE",
+  "recovery_runtime": {
+    "status": "RETRYING_SYNC",
+    "failed_sync_detected": false,
+    "branch_drift_detected": true,
+    "runtime_mismatch_detected": false,
+    "auto_retry_enabled": true,
+    "sync_retry_counter": 1,
+    "retry_queue": [
+      "git pull origin main",
+      "runtime refresh",
+      "integrity recheck"
+    ],
+    "deployment_rollback_marker": "ROLLBACK_NOT_REQUIRED_PENDING_SYNC",
+    "drift_correction": "ENABLED",
+    "runtime_mismatch_correction": "ENABLED",
+    "degraded_state_recovery": "ENABLED",
+    "websocket_recovery": "ENABLED",
+    "provider_reconnection_orchestration": "ACTIVE",
+    "provider_cooldown_state": "IDLE",
+    "degraded_provider_isolation": "ENABLED",
+    "provider_health_score": 95,
+    "non_blocking_guarantees": {
+      "runtime": "NO_TERMINATION",
+      "dashboard": "NO_BLOCK",
+      "telemetry": "NO_STOP",
+      "governance": "NO_STOP"
+    },
+    "recovery_log": "Non-main branch detected; synchronization retry suggested.",
+    "generated_at": "2026-05-17T02:26:36.503Z"
+  },
+  "supabase_connectivity": "DEGRADED",
+  "route_integrity": "ACTIVE",
+  "production_runtime": {
+    "production_runtime": "ACTIVE",
+    "runtime": "LIVE",
+    "heartbeat": "ACTIVE",
+    "recovery": "RETRYING_SYNC",
+    "governance": "ACTIVE",
+    "telemetry": "ACTIVE",
+    "conversion_runtime": "ACTIVE",
+    "swarm_monitoring": "ACTIVE",
+    "dashboard_runtime": "ACTIVE",
+    "supabase_validation": "DEGRADED",
+    "deployment_sync": "ACTIVE",
+    "last_commit": "81909e9",
+    "last_sync": "2026-05-16T21:57:04-03:00",
+    "generated_at": "2026-05-17T02:26:36.581Z"
+  },
+  "deployment_integrity": {
+    "deployment": "HEALTHY",
+    "sync": "ACTIVE",
+    "branch": "work",
+    "dashboard": "ONLINE",
+    "runtime": "LIVE",
+    "runtime_freshness": "FRESH",
+    "commit_synchronization": "ACTIVE",
+    "artifact_presence": "PRESENT",
+    "environment_integrity": "DEGRADED",
+    "generated_at": "2026-05-17T02:26:36.598Z"
+  },
+  "runtime_snapshot": {
+    "status": "ACTIVE",
+    "storage": "LOCAL_JSON_FALLBACK",
+    "runtime_health": "GREEN",
+    "sync_history": "TRACKED",
+    "recovery_history": "TRACKED",
+    "generated_at": "2026-05-17T02:26:36.599Z"
+  },
+  "monetization_audit": {
+    "monetization_readiness": "PARTIAL",
+    "runtime_state": "DEGRADED",
+    "financial_integrity": "PASS",
+    "recommended_mode": "MANUAL",
+    "risk_score": 45,
+    "stability_score": 55,
+    "conversion_score": 86,
+    "revenue": {
+      "revenue_runtime": "ACTIVE",
+      "revenue_today": 0,
+      "pending_pix": 0,
+      "approved_rate": 0,
+      "conversion_to_payment": 0,
+      "top_cta": "EXPLOSIVE_SIGNAL_CTA",
+      "revenue_throughput_sec": 0.8,
+      "approval_latency_ms": 1400,
+      "checkout_abandonment": 0,
+      "generated_at": "2026-05-17T02:26:36.383Z"
+    },
+    "railway": {
+      "runtime": "LIVE",
+      "railway": "PRIMARY_CORE",
+      "signal_health": "ACTIVE",
+      "conversion_runtime": "ACTIVE",
+      "provider_health": 94,
+      "signal_rate": 3,
+      "conversion_efficiency": 88,
+      "websocket_stability": "STABLE",
+      "reconnect_frequency": 0,
+      "memory_pressure": "STABLE",
+      "runtime_latency_ms": 120,
+      "recovery_health": "GREEN",
+      "generated_at": "2026-05-17T02:26:36.385Z"
+    },
+    "supabase": {
+      "supabase": "DEGRADED",
+      "all_required_keys_configured": false,
+      "checks": {
+        "SUPABASE_URL": false,
+        "SUPABASE_SERVICE_ROLE_KEY": false,
+        "VITE_SUPABASE_URL": false,
+        "VITE_SUPABASE_ANON_KEY": false,
+        "EXPO_PUBLIC_SUPABASE_URL": false,
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": false
+      },
+      "database_target": null,
+      "generated_at": "2026-05-17T02:26:36.405Z"
+    },
+    "operator_alerts": {
+      "runtime": "ONLINE",
+      "alerts": [
+        {
+          "level": "CRITICAL",
+          "type": "WHALE_PAYMENT",
+          "amount": 1997,
+          "message": "High-ticket PIX approved",
+          "confidence": 93
+        },
+        {
+          "level": "WARNING",
+          "type": "CHECKOUT_ABANDONMENT",
+          "message": "Checkout abandonment rising in HOT funnel",
+          "confidence": 79
+        },
+        {
+          "level": "WARNING",
+          "type": "FAILED_PAYMENT",
+          "message": "Payment failure pattern detected",
+          "confidence": 76
+        },
+        {
+          "level": "CRITICAL",
+          "type": "EXPLOSIVE_SIGNAL",
+          "message": "High-conversion whale activity detected",
+          "confidence": 94
+        },
+        {
+          "level": "WARNING",
+          "type": "PROVIDER_INSTABILITY",
+          "message": "Provider retry cadence elevated, recovery active",
+          "confidence": 82
+        },
+        {
+          "level": "INFO",
+          "type": "SIGNAL_SPIKE",
+          "message": "Signal throughput above baseline",
+          "confidence": 78
+        }
+      ],
+      "generated_at": "2026-05-17T02:26:36.405Z"
+    },
+    "generated_at": "2026-05-17T02:26:36.406Z"
+  }
+}
