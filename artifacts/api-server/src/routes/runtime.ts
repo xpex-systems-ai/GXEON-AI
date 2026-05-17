@@ -39,6 +39,8 @@ const { getSanitizedProviderSummary, sanitizeRuntimeEvent } = require(pathFromRo
 const { ensureWallet, upsertWallet, transferCredits, getCreditRuntime } = require(pathFromRoot("creditRuntime.cjs"));
 const { settleCommission, getCommissionRuntime } = require(pathFromRoot("commissionEngine.cjs"));
 const { enqueueTask, runSchedulerCycle, autoTopupViaPix, getAutonomousRevenueRuntime } = require(pathFromRoot("autonomousRevenueScheduler.cjs"));
+const { generateSignal, consumePremiumSignal, getXRadarMetrics } = require(pathFromRoot("xRadarEngine.cjs"));
+const { runXRadarScanCycle } = require(pathFromRoot("xRadarScheduler.cjs"));
 
 const router = Router();
 
@@ -204,6 +206,23 @@ router.post("/v1/runtime/tasks/run-cycle", (req, res) => {
 
 router.post("/v1/runtime/credits/auto-topup", (req, res) => {
   res.status(201).json(autoTopupViaPix(req.body ?? {}));
+});
+
+router.get("/v1/x-radar/metrics", (_req, res) => {
+  res.json(getXRadarMetrics());
+});
+
+router.post("/v1/x-radar/signals/generate", (req, res) => {
+  res.status(201).json(generateSignal(req.body ?? {}));
+});
+
+router.post("/v1/x-radar/signals/consume", (req, res) => {
+  const outcome = consumePremiumSignal(req.body ?? {});
+  res.status(outcome.ok ? 201 : 402).json(outcome);
+});
+
+router.post("/v1/x-radar/scan-cycle", (req, res) => {
+  res.status(201).json(runXRadarScanCycle(req.body ?? {}));
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {
