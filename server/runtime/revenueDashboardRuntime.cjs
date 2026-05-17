@@ -14,6 +14,13 @@ function getRevenueDashboardMetrics() {
   const mem = readMemory();
   const pending = (mem.pending_pix_followups || []).filter((f) => f.followup_status !== 'RESOLVED').length;
   const notifications = (mem.revenue_notifications || []).length;
+  const payments = mem.payments || [];
+  const subs = Object.values(mem.subscriptions || {});
+  const pixApproved = payments.filter((p) => p.status === 'APPROVED').length;
+  const pixPending = payments.filter((p) => p.status === 'PENDING').length;
+  const pixGmv = payments.filter((p) => p.status === 'APPROVED').reduce((acc, p) => acc + Number(p.amount || 0), 0);
+  const mrr = subs.filter((s) => s.status === 'ACTIVE').reduce((acc, s) => acc + Number(s.brl_monthly || 0), 0);
+  const conversionRate = (pixApproved + pixPending) > 0 ? Number(((pixApproved / (pixApproved + pixPending)) * 100).toFixed(2)) : 0;
   return {
     revenue_dashboard: 'ACTIVE',
     platform_revenue_credits: c.platform_revenue,
@@ -24,6 +31,12 @@ function getRevenueDashboardMetrics() {
     autonomous_tasks_settled: a.settled,
     autonomous_tasks_queued: a.queued,
     wallet_count: cr.wallet_count,
+    pix_approved_count: pixApproved,
+    pix_pending_count: pixPending,
+    pix_approved_gmv_brl: Number(pixGmv.toFixed(2)),
+    active_subscriptions: subs.filter((s) => s.status === 'ACTIVE').length,
+    mrr_brl: Number(mrr.toFixed(2)),
+    pix_conversion_rate_pct: conversionRate,
     pending_pix_followups: pending,
     revenue_notifications: notifications,
     generated_at: new Date().toISOString(),
