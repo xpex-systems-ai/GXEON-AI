@@ -1,0 +1,205 @@
+{
+  "mission": "GXEON_FULL_CODE_AUDIT_V2",
+  "executive_summary": [
+    "O GXEON já possui base funcional de runtime/monetização, mas está em estágio de produto técnico, não de operação fintech robusta.",
+    "O core de pagamentos PIX existe e funciona em memória local, porém com fragilidade de persistência e replay hardening insuficiente.",
+    "Há risco real de perda de estado financeiro em restart e risco de abuso por rotas públicas sensíveis sem autenticação forte.",
+    "Existe conflito operacional ESM/CJS no empacotamento do API server, com dependência de resolução dinâmica de módulos runtime.",
+    "Supabase está com cobertura parcial e sem evidência de RLS/RPC no escopo auditado, reduzindo governança de dados transacionais.",
+    "Há oportunidade de monetização rápida com execution fees, subscriptions e signal tiers usando endpoints e telemetry já existentes.",
+    "Quick wins de 7–14 dias são viáveis para destravar receita real com baixo refactor, focando segurança/perímetro e checkout reliability.",
+    "Conclusão: potencial alto de receita, maturidade técnica média, risco alto se escalar volume sem hardening imediato."
+  ],
+  "technical_health": {
+    "module_system": "Misto ESM (api-server TS) + CJS (server/runtime). Há acoplamento via createRequire e path dinâmico; risco de quebra em build/start multi-diretório.",
+    "supabase": "Integração parcial no runtime auditado; validação atual indica variáveis críticas ausentes em ambiente local de teste; sem evidência de schema/RLS/RPC versionados no recorte analisado.",
+    "webhook": "Mercado webhook possui verificação de assinatura e deduplicação por ID, porém a deduplicação depende de memória/arquivo local, vulnerável a restart e múltiplas instâncias.",
+    "overall_score": "71/100"
+  },
+  "scores_0_10": {
+    "Architecture": 7.2,
+    "Stability": 6.8,
+    "Monetization Readiness": 7.5,
+    "Security": 6.1,
+    "Scalability": 6.0
+  },
+  "monetization_opportunities": [
+    {
+      "name": "Plano Subscription Pro (signals + runtime intelligence)",
+      "effort": "Low",
+      "potential_revenue": "R$ 25.000–60.000/mês",
+      "time_to_revenue": "10-14 dias",
+      "status": "Ready"
+    },
+    {
+      "name": "Execution fee por automação PIX/autonomous runs",
+      "effort": "Low",
+      "potential_revenue": "R$ 12.000–40.000/mês",
+      "time_to_revenue": "7-12 dias",
+      "status": "Needs Fix"
+    },
+    {
+      "name": "Taxa premium por alertas críticos e recovery assistido",
+      "effort": "Medium",
+      "potential_revenue": "R$ 8.000–25.000/mês",
+      "time_to_revenue": "14-21 dias",
+      "status": "Ready"
+    },
+    {
+      "name": "A2A signal marketplace (tiers + SLA)",
+      "effort": "Medium",
+      "potential_revenue": "R$ 35.000–120.000/mês",
+      "time_to_revenue": "21-45 dias",
+      "status": "New"
+    },
+    {
+      "name": "Credits pré-pagos para chamadas runtime/governance",
+      "effort": "Medium",
+      "potential_revenue": "R$ 18.000–70.000/mês",
+      "time_to_revenue": "14-30 dias",
+      "status": "Needs Fix"
+    }
+  ],
+  "priority_action_plan": {
+    "next_7_days": [
+      "Fechar autenticação/autorização de rotas financeiras e webhook-sensitive.",
+      "Persistir idempotência de webhook em storage transacional (Supabase/Postgres) com unique index.",
+      "Fixar bootstrap de módulos runtime para eliminar drift ESM/CJS em produção.",
+      "Criar painel mínimo de revenue funnel: created -> pending -> approved -> failed."
+    ],
+    "next_30_days": [
+      "Implantar billing por plano + limites por tenant + enforcement em runtime endpoints.",
+      "Adicionar trilha de auditoria financeira imutável e reconciliação diária.",
+      "Implementar retries com backoff/jitter e circuit-breaker para provider instability.",
+      "Publicar SLA operativo com alerting de latência e disponibilidade."
+    ],
+    "next_90_days": [
+      "Multi-tenant monetization engine com pricing dinâmico por volume/feature.",
+      "A2A monetization fabric: signal subscriptions, execution fees, partner revshare.",
+      "Governança enterprise: RLS completo, RBAC por domínio, compliance de logs e retenção.",
+      "Escalabilidade horizontal segura com workers idempotentes e scheduler único distribuído."
+    ]
+  },
+  "critical_risks": [
+    "Rotas financeiras públicas sem proteção robusta: risco de abuso e fraude operacional.",
+    "Deduplicação de webhook volátil: risco de replay em restart/failover.",
+    "Dependência de estado em memória/arquivo local para eventos financeiros.",
+    "Cobertura Supabase insuficiente para trilha transacional confiável em escala.",
+    "Risco de instabilidade de bootstrap por path resolution em builds/execução multiambiente."
+  ],
+  "monetization_relevant_endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime/conversion-dna",
+      "file": "artifacts/api-server/src/routes/runtime.ts",
+      "line": 103
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime/payments",
+      "file": "artifacts/api-server/src/routes/runtime.ts",
+      "line": 112
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/payments/create",
+      "file": "artifacts/api-server/src/routes/runtime.ts",
+      "line": 116
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/payments/auto",
+      "file": "artifacts/api-server/src/routes/runtime.ts",
+      "line": 120
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/webhooks/mercado-pago",
+      "file": "artifacts/api-server/src/routes/runtime.ts",
+      "line": 124
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime/monetization",
+      "file": "artifacts/api-server/src/routes/runtime.ts",
+      "line": 131
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime/revenue",
+      "file": "artifacts/api-server/src/routes/runtime.ts",
+      "line": 135
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime/financial-core",
+      "file": "artifacts/api-server/src/routes/runtime.ts",
+      "line": 139
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/runtime/monetization-audit",
+      "file": "artifacts/api-server/src/routes/runtime.ts",
+      "line": 143
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/conversion/funnels",
+      "file": "artifacts/api-server/src/routes/conversion.ts",
+      "line": 94
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/conversion/leads",
+      "file": "artifacts/api-server/src/routes/conversion.ts",
+      "line": 108
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/conversion/telemetry",
+      "file": "artifacts/api-server/src/routes/conversion.ts",
+      "line": 147
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/conversion/forecast",
+      "file": "artifacts/api-server/src/routes/conversion.ts",
+      "line": 167
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/conversion/opportunities",
+      "file": "artifacts/api-server/src/routes/conversion.ts",
+      "line": 179
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/conversion/runtime",
+      "file": "artifacts/api-server/src/routes/conversion.ts",
+      "line": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/revenue/live",
+      "file": "artifacts/api-server/src/routes/conversion.ts",
+      "line": 224
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/revenue/forecast",
+      "file": "artifacts/api-server/src/routes/phase8.ts",
+      "line": 186
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/conversion/live",
+      "file": "artifacts/api-server/src/routes/phase8.ts",
+      "line": 287
+    }
+  ],
+  "dead_code_and_debt": [
+    "Duplicidade de rota /v1/runtime/production detectada entre módulos runtime e phase8.",
+    "Dados sintéticos de phase8 convivem com rotas core e podem contaminar leitura operacional.",
+    "Acoplamento alto de rotas runtime a módulos CJS sem camada de interface estável."
+  ]
+}

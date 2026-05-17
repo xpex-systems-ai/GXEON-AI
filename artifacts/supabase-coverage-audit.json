@@ -1,0 +1,21 @@
+{
+  "coverage": {
+    "dashboard": "PARTIAL",
+    "mobile": "PARTIAL",
+    "telemetry": "PARTIAL",
+    "governance": "LIMITED",
+    "monetization": "PARTIAL",
+    "snapshots": "LIMITED",
+    "operators": "LIMITED",
+    "alerts": "LIMITED"
+  },
+  "duplicated_clients": [
+    "No direct client instantiation in runtime modules; env-flag based checks only"
+  ],
+  "unsafe_keys": [],
+  "missing_env_candidates": [
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY"
+  ],
+  "read_write_pattern": "runtime status checks mostly env-driven"
+}

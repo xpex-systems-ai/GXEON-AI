@@ -1,9 +1,22 @@
 import { Router } from "express";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { existsSync } from "node:fs";
 
 const require = createRequire(import.meta.url);
-const pathFromRoot = (file: string) => path.join(process.cwd(), "server/runtime", file);
+const resolveRuntimeRoot = () => {
+  const candidates = [
+    path.resolve(process.cwd(), "server/runtime"),
+    path.resolve(process.cwd(), "../server/runtime"),
+    path.resolve(process.cwd(), "../../server/runtime"),
+  ];
+
+  const match = candidates.find((dir) => existsSync(dir));
+  return match ?? candidates[0];
+};
+
+const runtimeRoot = resolveRuntimeRoot();
+const pathFromRoot = (file: string) => path.join(runtimeRoot, file);
 const { getRuntimeSyncStatus } = require(pathFromRoot("runtimeHeartbeat.cjs"));
 const { getRecoveryStatus } = require(pathFromRoot("runtimeRecovery.cjs"));
 const { getProductionRuntimeStatus } = require(pathFromRoot("productionRuntime.cjs"));
@@ -23,6 +36,8 @@ const { getRevenueTelemetry } = require(pathFromRoot("revenueTelemetry.cjs"));
 const { runMonetizationAudit } = require(pathFromRoot("monetizationAudit.cjs"));
 const { executeAutonomousPixRun } = require(pathFromRoot("paymentOrchestrator.cjs"));
 const { getSanitizedProviderSummary, sanitizeRuntimeEvent } = require(pathFromRoot("runtimeLogSanitizer.cjs"));
+const { ensureWallet, upsertWallet, transferCredits, getCreditRuntime } = require(pathFromRoot("creditRuntime.cjs"));
+const { settleCommission, getCommissionRuntime } = require(pathFromRoot("commissionEngine.cjs"));
 
 const router = Router();
 
@@ -129,6 +144,49 @@ router.get("/v1/runtime/financial-core", (_req, res) => {
 
 router.get("/v1/runtime/monetization-audit", (_req, res) => {
   res.json(runMonetizationAudit());
+});
+
+router.get("/v1/runtime/credits", (_req, res) => {
+  res.json(getCreditRuntime());
+});
+
+router.post("/v1/runtime/credits/wallet", (req, res) => {
+  try {
+    res.status(201).json(upsertWallet(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
+});
+
+router.post("/v1/runtime/credits/transfer", (req, res) => {
+  try {
+    const outcome = transferCredits(req.body ?? {});
+    res.status(outcome.ok ? 201 : 402).json(outcome);
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
+});
+
+router.get("/v1/runtime/commissions", (_req, res) => {
+  res.json(getCommissionRuntime());
+});
+
+router.post("/v1/runtime/commissions/settle", (req, res) => {
+  try {
+    const payload = req.body ?? {};
+    ensureWallet(payload.producer_agent_id || "agent_producer");
+    ensureWallet(payload.consumer_agent_id || "agent_consumer");
+    const settlement = settleCommission(payload);
+    const transfer = transferCredits({
+      from_agent_id: payload.consumer_agent_id || "agent_consumer",
+      to_agent_id: payload.producer_agent_id || "agent_producer",
+      amount: settlement.producer_net,
+      reason: "TASK_SETTLEMENT_NET",
+    });
+    res.status(201).json({ settlement, transfer });
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {

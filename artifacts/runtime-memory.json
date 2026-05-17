@@ -3,5 +3,46 @@
   "radar_last_scan": "2026-05-16T19:25:01.156Z",
   "tracked_pools": 29,
   "smart_tracking": true,
-  "updated_at": "2026-05-16T19:26:01.102Z"
+  "updated_at": "2026-05-17T03:11:11.614Z",
+  "credit_wallets": {
+    "agent_a": {
+      "agent_id": "agent_a",
+      "balance": 398,
+      "credit_limit": 1000,
+      "total_spent": 102,
+      "total_earned": 0,
+      "updated_at": "2026-05-17T03:11:11.614Z"
+    },
+    "agent_b": {
+      "agent_id": "agent_b",
+      "balance": 202,
+      "credit_limit": 500,
+      "total_spent": 0,
+      "total_earned": 102,
+      "updated_at": "2026-05-17T03:11:11.614Z"
+    }
+  },
+  "commission_settlements": [
+    {
+      "settlement_id": "set_1778987471613_qw2pvb",
+      "task_id": "t1",
+      "consumer_agent_id": "agent_a",
+      "producer_agent_id": "agent_b",
+      "gross_amount": 120,
+      "platform_rate": 0.15,
+      "platform_fee": 18,
+      "producer_net": 102,
+      "created_at": "2026-05-17T03:11:11.613Z"
+    }
+  ],
+  "credit_ledger": [
+    {
+      "event_id": "cred_1778987471614_7tpveu",
+      "from_agent_id": "agent_a",
+      "to_agent_id": "agent_b",
+      "amount": 102,
+      "reason": "TASK_SETTLEMENT_NET",
+      "created_at": "2026-05-17T03:11:11.614Z"
+    }
+  ]
 }
