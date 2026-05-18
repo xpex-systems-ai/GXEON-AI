@@ -1,34 +1,34 @@
-# MASTER BLUEPRINT — ONJOB OS
+# MASTER_BLUEPRINT — ONJOB_OS / Foundation_Brain
 
-## Visão
-Construir uma infraestrutura operacional inteligente para trabalho digital, transformando caos criativo em estrutura institucional viva.
+## Vision
+Construir uma infraestrutura operacional inteligente para trabalho digital.
 
-## Missão
-Documentar, estruturar, institucionalizar e monetizar operações digitais em escala.
+## Mission
+Estruturar, automatizar e monetizar operações digitais em escala.
 
-## Identidade Operacional
+## Identity Operational
+Componentes centrais da identidade operacional:
+- Copilot
+- GitHub
+- Supabase
+- Teams
+- Runtime Engine
 
-| Componente | Papel |
-|---|---|
-| **GXEON CORE** | Cérebro técnico invisível |
-| **ONJOB OS** | Produto operacional |
-| **Microsoft Copilot** | Cockpit executivo |
-| **OneDrive / SharePoint** | Memória institucional |
-| **GitHub** | DNA técnico |
-| **Supabase** | Memória viva |
-| **Railway** | Runtime operacional |
-| **Dashboard** | Consciência operacional |
-| **Power Automate** | Automação institucional |
-| **Teams** | Coordenação operacional |
-
-## Roadmap Estratégico
+## Roadmap
 1. Phase 1: Foundation Brain
-2. Phase 2: Agent Layer
-3. Phase 3: Money Engine
-4. Phase 4: Operational Automation
-5. Phase 5: Enterprise Governance
-6. Phase 6: Agent Marketplace
+2. Phase 2: Layer Integration
+3. Phase 3: Cognitive Automation
+4. Phase 4: Enterprise Governance
+5. Phase 5: Systemic Reinforcement
+6. Phase 6: Hyper Convergence
 7. Phase 7: Global Scale
 
 ## Manifesto
-> ONJOB OS não é apenas software. É uma empresa operacional viva, onde memória vira inteligência, inteligência vira execução, execução vira receita e receita vira escala.
+ONJOB OS como empresa operacional viva.
+
+## Integration with Audit
+Objetivo de integração: unir governança técnica (Audit) com visão estratégica (Blueprint).
+
+Alinhamento:
+- O audit reforça qualidade e segurança.
+- O blueprint guia expansão e monetização.
