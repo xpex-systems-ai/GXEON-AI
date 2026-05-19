@@ -1,0 +1,17 @@
+{
+  "artifact": "FullSystemAudit.request.v1.1",
+  "purpose": "Auditoria completa de código e governança técnica",
+  "features": {
+    "granularity": "multi-layer",
+    "metrics": [
+      "risk scoring",
+      "thresholds",
+      "objectives"
+    ],
+    "output_format": "JSON"
+  },
+  "integration": {
+    "goal": "Unir governança técnica (Audit) com visão estratégica (Blueprint)",
+    "alignment": "O audit reforça qualidade e segurança enquanto o blueprint guia expansão e monetização"
+  }
+}
