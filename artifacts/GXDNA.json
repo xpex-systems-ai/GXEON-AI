@@ -1,46 +1,32 @@
 {
   "GXDNA": {
-    "version": "1.0",
+    "version": "2.0",
     "agents": [
       {
-        "name": "AgenteIntegracao",
-        "role": "Detectar e plugar APIs",
-        "protocols": ["REST", "Webhooks", "GraphQL"],
-        "actions": ["scan", "connect", "validate"]
-      },
-      {
-        "name": "AgenteMonetizacao",
-        "role": "Cobrança imediata por uso",
+        "name": "AgenteMonetizacaoPIX",
+        "role": "Repasse imediato via PIX",
         "billing": {
-          "model": "pay_per_use",
-          "currency": "USD",
-          "trigger": "onExecution"
+          "model": "instant_transfer",
+          "currency": "BRL",
+          "trigger": "onExecution",
+          "method": "PIX",
+          "recipient": {
+            "type": "dynamic",
+            "lookup": "client_registry",
+            "validation": "checksum"
+          }
         },
-        "actions": ["charge", "log", "report"]
-      },
-      {
-        "name": "AgenteAuditoria",
-        "role": "Validar transações e compliance",
-        "rules": ["ISO27001", "GDPR", "LGPD"],
-        "actions": ["verify", "record", "alert"]
-      },
-      {
-        "name": "AgenteEscalabilidade",
-        "role": "Replicar integrações",
-        "strategy": "multiTenant",
-        "actions": ["clone", "deploy", "monitor"]
+        "actions": ["charge", "transfer", "notify", "log"]
       }
     ],
     "pipeline": [
-      "AgenteIntegracao",
-      "AgenteAuditoria",
-      "AgenteMonetizacao",
-      "AgenteEscalabilidade"
+      "AgenteMonetizacaoPIX"
     ],
     "output": {
       "status": "success",
-      "revenue": "immediate",
-      "logs": "stored"
+      "revenue": "instant",
+      "logs": "stored",
+      "confirmation": "PIX transaction ID"
     }
   }
 }
