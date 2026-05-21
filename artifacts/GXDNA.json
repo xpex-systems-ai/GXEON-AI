@@ -1,0 +1,46 @@
+{
+  "GXDNA": {
+    "version": "1.0",
+    "agents": [
+      {
+        "name": "AgenteIntegracao",
+        "role": "Detectar e plugar APIs",
+        "protocols": ["REST", "Webhooks", "GraphQL"],
+        "actions": ["scan", "connect", "validate"]
+      },
+      {
+        "name": "AgenteMonetizacao",
+        "role": "Cobrança imediata por uso",
+        "billing": {
+          "model": "pay_per_use",
+          "currency": "USD",
+          "trigger": "onExecution"
+        },
+        "actions": ["charge", "log", "report"]
+      },
+      {
+        "name": "AgenteAuditoria",
+        "role": "Validar transações e compliance",
+        "rules": ["ISO27001", "GDPR", "LGPD"],
+        "actions": ["verify", "record", "alert"]
+      },
+      {
+        "name": "AgenteEscalabilidade",
+        "role": "Replicar integrações",
+        "strategy": "multiTenant",
+        "actions": ["clone", "deploy", "monitor"]
+      }
+    ],
+    "pipeline": [
+      "AgenteIntegracao",
+      "AgenteAuditoria",
+      "AgenteMonetizacao",
+      "AgenteEscalabilidade"
+    ],
+    "output": {
+      "status": "success",
+      "revenue": "immediate",
+      "logs": "stored"
+    }
+  }
+}
