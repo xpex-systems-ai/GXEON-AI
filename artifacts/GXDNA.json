@@ -9,7 +9,10 @@
       "runtime": "instant",
       "validation": {
         "recipient_lookup": "dynamic",
-        "rules": ["validate_key_format", "check_recipient_status"]
+        "rules": [
+          "validate_key_format",
+          "check_recipient_status"
+        ]
       },
       "output": {
         "confirmation_id": "PIX_TX_ID",
@@ -24,7 +27,10 @@
       "runtime": "gateway",
       "validation": {
         "api_keys": "secured_env",
-        "policies": ["auth_flow", "webhook_integrity"]
+        "policies": [
+          "auth_flow",
+          "webhook_integrity"
+        ]
       },
       "output": {
         "transaction_id": "MP_TX_ID",
@@ -36,7 +42,10 @@
       "type": "AgentToAgent",
       "function": "orchestration",
       "runtime": "multi-agent",
-      "tasks": ["handoff_execution", "cross_module_validation"],
+      "tasks": [
+        "handoff_execution",
+        "cross_module_validation"
+      ],
       "output": {
         "audit_log": "A2A_FLOW_LOG",
         "status": "validated"
@@ -46,7 +55,10 @@
       "type": "MachineToMachine",
       "function": "automation",
       "runtime": "continuous",
-      "tasks": ["scheduler_validation", "loop_detection"],
+      "tasks": [
+        "scheduler_validation",
+        "loop_detection"
+      ],
       "output": {
         "runtime_health": "stable",
         "execution_id": "M2M_RUN_ID"
@@ -85,7 +97,12 @@
     "task_success_rate": "95%+"
   },
   "resilience": {
-    "failover": ["auto_restart", "circuit_breaker", "retry_backoff", "fallback_execution"],
+    "failover": [
+      "auto_restart",
+      "circuit_breaker",
+      "retry_backoff",
+      "fallback_execution"
+    ],
     "webhook_reconnection": "validated"
   },
   "cost_projection": {
@@ -95,7 +112,12 @@
     "margin": "85-99.7%"
   },
   "deployment_status": {
-    "checklist": ["rotate_credentials", "configure_domain", "final_integration_test", "backup_drill"],
+    "checklist": [
+      "rotate_credentials",
+      "configure_domain",
+      "final_integration_test",
+      "backup_drill"
+    ],
     "status": "GO_FOR_PRODUCTION",
     "confidence": "97%+"
   }
