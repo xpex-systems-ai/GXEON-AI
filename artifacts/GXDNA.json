@@ -1,0 +1,32 @@
+{
+  "GXDNA": {
+    "version": "2.0",
+    "agents": [
+      {
+        "name": "AgenteMonetizacaoPIX",
+        "role": "Repasse imediato via PIX",
+        "billing": {
+          "model": "instant_transfer",
+          "currency": "BRL",
+          "trigger": "onExecution",
+          "method": "PIX",
+          "recipient": {
+            "type": "dynamic",
+            "lookup": "client_registry",
+            "validation": "checksum"
+          }
+        },
+        "actions": ["charge", "transfer", "notify", "log"]
+      }
+    ],
+    "pipeline": [
+      "AgenteMonetizacaoPIX"
+    ],
+    "output": {
+      "status": "success",
+      "revenue": "instant",
+      "logs": "stored",
+      "confirmation": "PIX transaction ID"
+    }
+  }
+}
