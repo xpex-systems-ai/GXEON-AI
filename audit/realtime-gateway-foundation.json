@@ -1,0 +1,1 @@
+{"implementation":"gateway/realtime/wsGateway.cjs","websocket":true,"heartbeat":true,"filtering":["workflow_id","type","operator"],"replay_safe":"via persisted events API"}

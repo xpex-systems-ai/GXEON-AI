@@ -1,0 +1,1 @@
+{"endpoints":["/api/runtime/snapshot","/api/operators/control-plane","/api/runtime/events","/api/workflows/history"],"properties":["pagination","filtering","deterministic outputs"]}

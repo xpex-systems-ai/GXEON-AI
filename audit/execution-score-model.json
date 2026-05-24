@@ -1,0 +1,1 @@
+{"score":{"formula":"w1*success+w2*speed+w3*proof-w4*disputes-w5*fraud","window":"rolling_30d"}}

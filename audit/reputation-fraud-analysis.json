@@ -1,0 +1,1 @@
+{"fraud_risks":["synthetic executions","replay tampering","billing-proof mismatch"],"mitigations":["event replay checks","proof linkage enforcement"]}

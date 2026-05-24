@@ -1,0 +1,24 @@
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const { summarize } = require('../../analytics/runtime/metricsKernel.cjs');
+const { getOperatorView } = require('../../analytics/operators/controlPlane.cjs');
+const { buildLiveOverview, queueHealth, revenueStream, marketplaceSignals } = require('../../dashboard/backend/aggregationEngine.cjs');
+const EVT = path.join(process.cwd(), '.gxeon_runtime', 'events.jsonl');
+const WF = path.join(process.cwd(), '.gxeon_runtime', 'workflows.jsonl');
+const read=(f)=>fs.existsSync(f)?fs.readFileSync(f,'utf8').split('\n').filter(Boolean).map(x=>JSON.parse(x)):[];
+const j=(res,c,p)=>{res.writeHead(c,{'Content-Type':'application/json'});res.end(JSON.stringify(p));};
+const page=(arr,q)=>{const o=Math.max(parseInt(q.get('offset')||'0',10),0);const l=Math.min(Math.max(parseInt(q.get('limit')||'50',10),1),500);return {total:arr.length,items:arr.slice(o,o+l),offset:o,limit:l};};
+const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://x');
+ if(req.method==='GET'&&u.pathname==='/api/dashboard/live-overview') return j(res,200,buildLiveOverview());
+ if(req.method==='GET'&&u.pathname==='/api/dashboard/runtime-health') return j(res,200,summarize());
+ if(req.method==='GET'&&u.pathname==='/api/dashboard/live-events') return j(res,200,page(read(EVT),u.searchParams));
+ if(req.method==='GET'&&u.pathname==='/api/dashboard/revenue-stream') return j(res,200,revenueStream());
+ if(req.method==='GET'&&u.pathname==='/api/dashboard/operator-feed') return j(res,200,getOperatorView());
+ if(req.method==='GET'&&u.pathname==='/api/dashboard/workflow-live-status') return j(res,200,page(read(WF),u.searchParams));
+ if(req.method==='GET'&&u.pathname==='/api/dashboard/queue-health') return j(res,200,queueHealth());
+ if(req.method==='GET'&&u.pathname==='/api/dashboard/marketplace-signals') return j(res,200,marketplaceSignals());
+ j(res,404,{error:'NOT_FOUND'});
+});
+module.exports={server};
+if(require.main===module){server.listen(Number(process.env.GXEON_DASHBOARD_API_PORT||8791),()=>console.log('dashboard api on'));}

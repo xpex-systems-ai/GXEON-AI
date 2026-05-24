@@ -1,0 +1,1 @@
+{"operator_view":"analytics/operators/controlPlane.cjs","signals":["active","failed","dead_letter","saturation","health"]}

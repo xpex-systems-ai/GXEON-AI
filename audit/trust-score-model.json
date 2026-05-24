@@ -1,0 +1,1 @@
+{"trust_score":{"formula":"weighted event outcomes with decay","inputs":["success","proof_validity","disputes","chargebacks","sla"]}}

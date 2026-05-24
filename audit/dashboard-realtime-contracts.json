@@ -1,0 +1,1 @@
+{"contracts_path":"contracts/frontend","contracts":["websocket_payload","realtime_dashboard","runtime_stream_schema","live_alert","operator_session","workflow_live_state"]}

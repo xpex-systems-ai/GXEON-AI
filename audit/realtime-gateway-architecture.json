@@ -1,0 +1,1 @@
+{"gateway":{"mode":"poll now, stream later","backends":["HTTP snapshot","future websocket/event gateway"],"dedup_required":true}}

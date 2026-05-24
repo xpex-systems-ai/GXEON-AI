@@ -1,0 +1,1 @@
+{"aggregation":{"mode":"batch snapshot from durable logs","future":"incremental stream aggregation"}}

@@ -1,0 +1,1 @@
+{"name":"operator_snapshot","version":"1.0.0","source":"/api/runtime/snapshot","fields":["generated_at","workflow_totals","queue_metrics","event_metrics","health_score"]}

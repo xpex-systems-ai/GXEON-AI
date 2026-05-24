@@ -1,0 +1,1 @@
+{"paths":["credit deduction RPC","reserved->completed/refunded transitions","manual refund controls","signal consumption monetization logging"],"risks":["stuck reserved transactions","non-durable in-memory accounting","idempotency gaps"]}

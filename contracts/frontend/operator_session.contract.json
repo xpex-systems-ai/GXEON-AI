@@ -1,0 +1,1 @@
+{"name":"operator_session","version":"1.0.0","fields":["operator_id","role","connected_at","filter_scope"]}

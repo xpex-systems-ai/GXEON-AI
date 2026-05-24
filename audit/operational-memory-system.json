@@ -1,0 +1,1 @@
+{"memory":{"user_profile":"durable","workflow_history":"durable","execution_preferences":"durable","session_hints":"ephemeral"}}

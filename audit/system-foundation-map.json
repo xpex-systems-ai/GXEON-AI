@@ -1,0 +1,23 @@
+{
+  "repository": "GXEON-AI",
+  "audit_date": "2026-05-14",
+  "runtime_surfaces": [
+    {"surface": "Primary API server", "entrypoints": ["server/index.js", "server/production.js"], "stack": "Node.js + Express (CommonJS)", "classification": ["CORE", "CRITICAL"]},
+    {"surface": "Marketplace server", "entrypoints": ["server/index-marketplace.js", "server/marketplace-integration.js"], "stack": "Node.js + Express (ESM)", "classification": ["REFACTOR", "CRITICAL"]},
+    {"surface": "Task orchestration", "entrypoints": ["core/task_engine.js", "core/swarm_orchestrator.js", "server/routes/task_engine.js"], "stack": "In-process loops + ad-hoc orchestration", "classification": ["REFACTOR", "CRITICAL"]},
+    {"surface": "Supabase Edge billing", "entrypoints": ["supabase/functions/deduct-credits/index.ts"], "stack": "Deno edge function + RPC", "classification": ["CORE", "CRITICAL"]},
+    {"surface": "Dashboards", "entrypoints": ["dashboard/app/*", "web/pages/*"], "stack": "Next.js", "classification": ["CORE"]},
+    {"surface": "Onchain execution", "entrypoints": ["contracts/*.sol", "core/onchain_executor.js", "server/services/flashSweeper.js"], "stack": "Hardhat + Ethereum integrations", "classification": ["ISOLATE", "CRITICAL"]}
+  ],
+  "data_planes": {
+    "primary": "Supabase Postgres (service role direct access)",
+    "secondary": ["In-memory Maps/Sets/Buffers", "File-based artifacts/reports"],
+    "eventing": ["Kafka client in swarm orchestrator", "No durable broker abstraction across modules"]
+  },
+  "notable_architecture_traits": [
+    "Polyglot module style (CJS + ESM) in same repo and same runtime domain.",
+    "Multiple parallel server entrypoints with overlapping responsibilities.",
+    "Business-critical control paths rely on periodic setInterval/setTimeout loops.",
+    "Billing logic split between DB RPC, middleware, route-level manual compensation, and local in-memory accounting."
+  ]
+}

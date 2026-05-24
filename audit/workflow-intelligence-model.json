@@ -1,0 +1,1 @@
+{"workflow_intelligence":{"metrics":["completion rate","retry ratio","dead-letter ratio","latency buckets"],"source":"replay-safe logs"}}

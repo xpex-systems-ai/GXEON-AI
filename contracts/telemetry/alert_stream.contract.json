@@ -1,0 +1,1 @@
+{"name":"operator_alert_stream","version":"1.0.0","source":"/api/operators/control-plane","alerts":["QUEUE_SATURATION_HIGH","DEAD_LETTER_PRESENT","RUNTIME_HEALTH_DEGRADED"]}
