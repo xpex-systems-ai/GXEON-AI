@@ -1,0 +1,1 @@
+{"name":"ws_runtime_event","version":"1.0.0","payload":{"channel":"runtime.events","event":"object"},"filters":["workflow_id","type","operator"]}

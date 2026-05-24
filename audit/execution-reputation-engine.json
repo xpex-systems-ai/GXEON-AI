@@ -1,0 +1,1 @@
+{"reputation":{"event_driven":true,"inputs":["completion history","retry ratio","billing consistency","proof integrity"],"anti_manipulation":"deterministic historical scoring"}}

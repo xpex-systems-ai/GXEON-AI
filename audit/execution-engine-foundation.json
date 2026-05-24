@@ -1,0 +1,1 @@
+{"implemented_components":["workflow engine","queue dispatcher","worker runner","durable persistence","compensation"],"deterministic_retry":true}

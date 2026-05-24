@@ -1,0 +1,17 @@
+{
+  "durability_gaps": [
+    "Execution state not fully journaled before side effects.",
+    "Billing telemetry depends on in-memory aggregation between flushes.",
+    "No unified event log for agent lifecycle + billing + settlement correlations.",
+    "Stuck-reserved transaction handling appears manual/operational rather than automatic deterministic reconciliation."
+  ],
+  "event_driven_maturity": {
+    "level": "partial",
+    "notes": "Event concepts exist (Kafka mention, webhooks, logs) but not a repository-wide durable event contract."
+  },
+  "persistence_strategy": {
+    "primary": "Supabase Postgres",
+    "secondary": "volatile in-process state",
+    "assessment": "Strong DB presence but weak workflow durability boundaries"
+  }
+}

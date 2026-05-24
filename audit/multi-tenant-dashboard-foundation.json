@@ -1,0 +1,1 @@
+{"multi_tenant":{"tenant_scoped_filters":true,"isolation_boundaries":["data","alerts","economics"],"scaling_ready":"partial"}}

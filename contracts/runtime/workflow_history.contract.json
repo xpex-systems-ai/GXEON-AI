@@ -1,0 +1,1 @@
+{"name":"workflow_history","version":"1.0.0","source":"/api/workflows/history","pagination":{"offset":true,"limit":true},"filters":["workflow_id"]}

@@ -1,0 +1,1 @@
+{"name":"operator_permission_model","version":"1.0.0","roles":{"viewer":["read_snapshot","read_events"],"operator":["viewer","trigger_recovery"],"admin":["operator","emergency_stop"]}}

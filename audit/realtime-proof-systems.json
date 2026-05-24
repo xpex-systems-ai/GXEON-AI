@@ -1,0 +1,1 @@
+{"streams":["execution_feed","completion_stream","charge_confirmations","queue_activity"],"transport":"websocket/sse with backpressure rules"}

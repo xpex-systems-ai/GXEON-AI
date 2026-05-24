@@ -1,0 +1,1 @@
+{"separation":{"frontend":"stateless contract consumer","runtime":"event/state producer","coupling":"API-only"}}

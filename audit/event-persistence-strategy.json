@@ -1,0 +1,1 @@
+{"strategy":"append-only durable envelopes","migration_target":"Kafka/Redpanda topic persistence"}
