@@ -34,19 +34,26 @@ function hasWsServerDependency() {
   const { RealtimeGateway } = require('../../gateway/realtime/wsGateway.cjs');
 
   const gw = new RealtimeGateway();
-  const gwServer = gw.start(0);
-  gwServer.close();
-  const gw2 = new RealtimeGateway();
-  gw2.start(8792);
+  const gwServer = gw.start(8792);
   dashApi.listen(8793);
+  const timeout = setTimeout(() => {
+    console.error(JSON.stringify({ status: 'FAIL', reason: 'SMOKE_TIMEOUT' }));
+    try { gwServer.close(); } catch {}
+    try { dashApi.close(); } catch {}
+    process.exit(1);
+  }, 10000);
 
   const ws = new WebSocket('ws://127.0.0.1:8792/?type=WORKFLOW_STATE_CHANGED');
   ws.on('open', () =>
     saveEvent({ event_id: 'evt_test', type: 'WORKFLOW_STATE_CHANGED', workflow_id: 'wf_test', at: new Date().toISOString() })
   );
   ws.on('message', (m) => {
-    console.log('WS', m.toString().slice(0, 120));
+    const payload = m.toString();
+    if (!payload.includes('"WORKFLOW_STATE_CHANGED"')) return;
+    console.log('WS', payload.slice(0, 120));
+    clearTimeout(timeout);
     ws.close();
+    gwServer.close();
     dashApi.close();
     process.exit(0);
   });
