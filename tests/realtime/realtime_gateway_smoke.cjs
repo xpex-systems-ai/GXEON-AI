@@ -1,4 +1,4 @@
-const WebSocket = require('ws');
+const WebSocket = globalThis.WebSocket || require('ws');
 const http = require('http');
 const { RealtimeGateway } = require('../../gateway/realtime/wsGateway.cjs');
 const { server: dashApi } = require('../../api/dashboard/dashboardApiV2.cjs');
