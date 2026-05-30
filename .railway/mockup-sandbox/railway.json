@@ -1,0 +1,21 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "RAILPACK",
+    "buildCommand": "PORT=${PORT:-3000} BASE_PATH=${BASE_PATH:-/} pnpm --filter @workspace/mockup-sandbox run build",
+    "watchPatterns": [
+      "/package.json",
+      "/pnpm-lock.yaml",
+      "/pnpm-workspace.yaml",
+      "/tsconfig*.json",
+      "/artifacts/mockup-sandbox/**"
+    ]
+  },
+  "deploy": {
+    "startCommand": "PORT=$PORT BASE_PATH=${BASE_PATH:-/} pnpm --filter @workspace/mockup-sandbox run preview -- --host 0.0.0.0",
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 30,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  }
+}
