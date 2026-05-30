@@ -30,7 +30,7 @@ const { getSupabaseRuntimeStatus } = require(pathFromRoot("supabaseRuntime.cjs")
 const { getSignalIntelligence } = require(pathFromRoot("signalEnrichment.cjs"));
 const { getConversionDNA, getMonetizationDNA } = require(pathFromRoot("conversionDNA.cjs"));
 const { getOperatorAlerts } = require(pathFromRoot("operatorAlerts.cjs"));
-const { createPixPayment, getPaymentsRuntime } = require(pathFromRoot("paymentRuntime.cjs"));
+const { createPixPayment, getPaymentsRuntimeAsync } = require(pathFromRoot("paymentRuntime.cjs"));
 const { processWebhook, processPendingPixFollowups } = require(pathFromRoot("mercadoWebhookRuntime.cjs"));
 const { getRevenueTelemetry } = require(pathFromRoot("revenueTelemetry.cjs"));
 const { runMonetizationAudit } = require(pathFromRoot("monetizationAudit.cjs"));
@@ -116,23 +116,46 @@ router.get("/v1/runtime/alerts", (_req, res) => {
 });
 
 
-router.get("/v1/runtime/payments", (_req, res) => {
-  res.json(getPaymentsRuntime());
+router.get("/v1/runtime/payments", async (_req, res) => {
+  try {
+    res.json(await getPaymentsRuntimeAsync());
+  } catch (error) {
+    res.status(503).json({ error: String(error) });
+  }
 });
 
-router.post("/v1/runtime/payments/create", (req, res) => {
-  res.status(201).json(createPixPayment(req.body ?? {}));
+router.post("/v1/runtime/payments/create", async (req, res) => {
+  try {
+    res.status(201).json(await createPixPayment(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
 });
 
-router.post("/v1/runtime/payments/auto", (req, res) => {
-  res.status(201).json(executeAutonomousPixRun(req.body ?? {}));
+router.post("/v1/runtime/payments/auto", async (req, res) => {
+  try {
+    res.status(201).json(await executeAutonomousPixRun(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
 });
 
-router.post("/v1/webhooks/mercado-pago", (req, res) => {
-  const sig = String(req.headers["x-signature"] || req.headers["x-mercado-signature"] || "");
-  const raw = JSON.stringify(req.body ?? {});
-  const result = processWebhook(req.body ?? {}, sig, raw);
-  res.status(result.accepted ? 200 : 401).json(result);
+router.post("/v1/webhooks/mercado-pago", async (req, res) => {
+  try {
+    const sig = String(req.headers["x-signature"] || req.headers["x-mercado-signature"] || "");
+    const raw = typeof (req as unknown as { rawBody?: string }).rawBody === "string"
+      ? (req as unknown as { rawBody: string }).rawBody
+      : JSON.stringify(req.body ?? {});
+    const result = await processWebhook(req.body ?? {}, {
+      signature: sig,
+      rawBody: raw,
+      requestId: String(req.headers["x-request-id"] || ""),
+      dataId: String(req.query["data.id"] || req.query.id || req.body?.data?.id || ""),
+    });
+    res.status(result.accepted ? 200 : 401).json(result);
+  } catch (error) {
+    res.status(500).json({ accepted: false, error: String(error) });
+  }
 });
 
 router.get("/v1/runtime/monetization", (_req, res) => {
@@ -202,12 +225,20 @@ router.post("/v1/runtime/tasks/enqueue", (req, res) => {
   res.status(201).json(enqueueTask(req.body ?? {}));
 });
 
-router.post("/v1/runtime/tasks/run-cycle", (req, res) => {
-  res.status(201).json(runSchedulerCycle(req.body ?? {}));
+router.post("/v1/runtime/tasks/run-cycle", async (req, res) => {
+  try {
+    res.status(201).json(await runSchedulerCycle(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
 });
 
-router.post("/v1/runtime/credits/auto-topup", (req, res) => {
-  res.status(201).json(autoTopupViaPix(req.body ?? {}));
+router.post("/v1/runtime/credits/auto-topup", async (req, res) => {
+  try {
+    res.status(201).json(await autoTopupViaPix(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
 });
 
 router.post("/v1/runtime/tasks/generate-from-radar", (req, res) => {

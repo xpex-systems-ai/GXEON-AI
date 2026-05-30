@@ -6,21 +6,21 @@ Localizar o caminho mais curto para monetização real do runtime GXEON, separan
 
 ## Executive Summary
 
-- **Status Mercado Pago:** existe apenas runtime local com `provider: "mercado_pago"`; não há SDK oficial Mercado Pago instalado nem chamada HTTP/API real para criação de cobrança PIX.
-- **Status PIX:** o fluxo cria registros locais `PENDING`, processa webhooks simulados/recebidos e ativa créditos/subscriptions em memória local.
-- **Persistência financeira:** pagamentos, ledger, wallets, subscriptions, follow-ups e settlements são persistidos em `artifacts/runtime-memory.json` via `server/runtime/runtimeMemory.cjs`, não em Supabase/Postgres transacional.
-- **Readiness para pagamento real:** **NOT_READY** até implementar adapter Mercado Pago real, schema financeiro persistente, webhook seguro com raw body/secret obrigatório e reconciliação.
-- **Caminho mais curto para receita:** implementar um adapter Mercado Pago PIX mínimo no backend, persistir em Supabase/Postgres, expor checkout PIX ao dashboard e validar webhook aprovado end-to-end.
+- **Status Mercado Pago:** adapter HTTP real criado para `/v1/payments` e `/v1/payments/:id`; ainda exige `MERCADO_PAGO_ACCESS_TOKEN`, `DATABASE_URL` e credenciais/payer reais para operar em produção.
+- **Status PIX:** o fluxo de criação agora persiste transação/tentativa em PostgreSQL quando configurado, chama Mercado Pago para gerar PIX e mantém fallback local apenas como leitura/degradação sem criar cobrança real.
+- **Persistência financeira:** payments, attempts, webhook inbox, wallet credits e ledger P0 têm fundação PostgreSQL/Drizzle; subscriptions/follow-ups/commissions ainda precisam de migração P1.
+- **Readiness para pagamento real:** **FOUNDATION_READY / ENV_BLOCKED**; adapter, schema e webhook seguro existem, mas a primeira cobrança real depende de aplicar migration e configurar Mercado Pago/Supabase/Postgres.
+- **Caminho mais curto para receita:** aplicar migration, configurar envs Mercado Pago/Postgres, criar uma cobrança PIX real via API e validar `payment.approved` persistido end-to-end.
 
 ## Mercado Pago Status
 
 | Item | Estado | Evidência |
 | --- | --- | --- |
-| SDK oficial Mercado Pago | **Ausente** | Busca em manifests e lockfile não encontrou `mercadopago`, `mercado-pago` ou `@mercadopago/*`. |
+| SDK oficial Mercado Pago | **Não usado** | A integração usa cliente HTTP server-side direto contra a API Mercado Pago para evitar dependência nova. |
 | Provider marcado como Mercado Pago | **Presente, local** | `createPixPayment` cria objeto com `provider: 'mercado_pago'`. |
-| Criação de cobrança PIX real | **Ausente** | `createPixPayment` gera ID local `pix_<timestamp>`, status `PENDING`, grava em memória e retorna o objeto, sem SDK/fetch/HTTP externo. |
+| Criação de cobrança PIX real | **Implementada no adapter** | `createPixPayment` exige envs reais, persiste transação e chama `createPixCharge` para gerar QR/copia-e-cola/ticket. |
 | Webhook Mercado Pago | **Parcial** | Existe rota `/api/v1/webhooks/mercado-pago` que chama `processWebhook`. |
-| Segurança webhook | **Bloqueador** | `verifyWebhookSignature` aceita qualquer payload quando `MERCADO_PAGO_WEBHOOK_SECRET` não está configurado. |
+| Segurança webhook | **Implementada / env obrigatório** | `verifyWebhookSignature` valida `x-signature`/`x-request-id`; sem secret só aceita se `ALLOW_UNSIGNED_MP_WEBHOOKS=true`. |
 
 ## PIX Flow Atual
 
@@ -94,31 +94,31 @@ Tabelas Supabase já referenciadas pelo dashboard: `global_transactions`, `actor
 
 ## Real Payment Readiness
 
-**Classificação:** `NOT_READY_FOR_REAL_CHARGE`.
+**Classificação:** `FOUNDATION_READY_ENV_BLOCKED`.
 
 Motivos:
 
-1. Não há SDK oficial Mercado Pago instalado.
-2. Não há chamada real para criação de cobrança PIX no provider.
-3. Não há retorno de QR code, copia-e-cola PIX, payment id real ou checkout URL real.
-4. Webhook aceita payload sem secret configurado.
-5. Webhook usa `JSON.stringify(req.body)` em vez de raw body original, o que pode invalidar validação de assinatura provider-real.
-6. Persistência crítica está em JSON local, sem transação, lock, RLS/policies, índices ou idempotência persistente no banco.
-7. Schema financeiro Drizzle/Supabase não existe no repositório.
-8. Dashboard lê tabelas Supabase que não são declaradas no schema versionado.
+1. O adapter real usa HTTP direto, sem SDK oficial, e exige validar credenciais Mercado Pago em sandbox/live.
+2. A criação PIX real já chama `/v1/payments`, mas depende de `MERCADO_PAGO_ACCESS_TOKEN`, payer real e `DATABASE_URL` com migration aplicada.
+3. O retorno de QR code, base64, copia-e-cola e ticket URL está implementado, mas precisa ser validado contra resposta real do provider.
+4. Webhook rejeita assinatura inválida e só permite bypass explícito com `ALLOW_UNSIGNED_MP_WEBHOOKS=true`.
+5. O endpoint captura raw body para auditoria/compatibilidade e valida a assinatura pelo manifest `id/request-id/ts`.
+6. Persistência P0 usa PostgreSQL para transactions, attempts, webhook inbox, wallet e ledger; subscriptions/follow-ups/commissions seguem P1.
+7. Schema financeiro Drizzle/Supabase P0 existe no repositório e precisa ser aplicado no ambiente alvo.
+8. Dashboard continua sem mudança por restrição; exposição visual do checkout/status real fica para etapa posterior.
 
 ## Production Blockers
 
-1. **Implementar adapter Mercado Pago real** com SDK oficial ou HTTP assinado, usando access token server-side.
-2. **Adicionar schema financeiro versionado** para transactions, payments, ledger, webhooks, wallets, subscriptions e settlements.
-3. **Migrar persistência de `runtime-memory.json` para Supabase/Postgres** nas rotas financeiras críticas.
-4. **Tornar `MERCADO_PAGO_WEBHOOK_SECRET` obrigatório em produção** e rejeitar webhook sem assinatura válida.
-5. **Capturar raw body no endpoint webhook** antes de `express.json()` ou com middleware específico.
-6. **Adicionar idempotência persistente** por provider payment id + action/type + external reference.
-7. **Implementar reconciliação** Mercado Pago -> banco interno.
-8. **Expor checkout PIX real** ao frontend com QR code/copia-e-cola e status polling/realtime.
-9. **Garantir que tabelas Supabase usadas pelo dashboard existem** e possuem RLS/policies apropriadas.
-10. **Remover dependência de dados financeiros simulados** para métricas de revenue readiness.
+1. **Aplicar migration financeira** no PostgreSQL/Supabase alvo antes da primeira cobrança real.
+2. **Configurar `MERCADO_PAGO_ACCESS_TOKEN` e `MERCADO_PAGO_WEBHOOK_SECRET`** em produção.
+3. **Configurar payer real/test user** via payload ou `MERCADO_PAGO_DEFAULT_PAYER_EMAIL`.
+4. **Validar webhook público/reachability** para Mercado Pago entregar `payment.approved`.
+5. **Executar teste sandbox/live** para confirmar QR/copia-e-cola/ticket URL e status approved.
+6. **Implementar reconciliação** Mercado Pago -> banco interno.
+7. **Migrar subscriptions/follow-ups/commissions** para tabelas P1.
+8. **Expor checkout/status real no frontend** em fase separada, pois esta fase não altera dashboard.
+9. **Configurar RLS/policies Supabase** antes de leitura direta por clientes.
+10. **Desativar qualquer fallback local de escrita** em produção após validação end-to-end.
 
 ## Fastest Path to Revenue
 

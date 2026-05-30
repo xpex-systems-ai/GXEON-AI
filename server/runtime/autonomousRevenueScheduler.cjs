@@ -27,7 +27,7 @@ function enqueueTask(task = {}) {
   return item;
 }
 
-function runSchedulerCycle(input = {}) {
+async function runSchedulerCycle(input = {}) {
   const maxTasks = Math.max(1, Math.min(Number(input.max_tasks || 5), 50));
   const failRate = Math.max(0, Math.min(Number(input.fail_rate || 0), 0.9));
   const queue = getQueue();
@@ -61,7 +61,7 @@ function runSchedulerCycle(input = {}) {
       task.status = 'BLOCKED';
       task.blocked_at = new Date().toISOString();
       if (transfer.code === 'CREDIT_LIMIT_EXCEEDED' || transfer.code === 'RATE_LIMIT_EXCEEDED') {
-        topupsTriggered.push(autoTopupViaPix({ agent_id: task.consumer_agent_id, amount: input.topup_amount || 297 }));
+        topupsTriggered.push(await autoTopupViaPix({ agent_id: task.consumer_agent_id, amount: input.topup_amount || 297 }));
       }
       continue;
     }
@@ -131,13 +131,17 @@ function activateSubscriptionPlan(input = {}) {
   return subscribeAgent({ agent_id: input.agent_id, plan: input.plan || 'BASIC' });
 }
 
-function autoTopupViaPix({ agent_id, amount = 197 }) {
+async function autoTopupViaPix({ agent_id, amount = 197, payer, payer_email, plan } = {}) {
   ensureWallet(agent_id || 'agent_buyer_1');
-  const payment = createPixPayment({
+  const payment = await createPixPayment({
     amount: Number(amount),
     conversion_class: 'READY_TO_PAY',
     cta_source: 'AUTO_TOPUP',
     signal_source: 'CREDIT_LOW',
+    agent_id: agent_id || 'agent_buyer_1',
+    payer,
+    payer_email,
+    plan,
   });
   const mem = readMemory();
   const pending = mem.pending_pix_followups || [];
