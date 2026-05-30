@@ -1,6 +1,6 @@
 # GXEON Mission 005 Infrastructure Activation Report
 
-- **Generated at:** `2026-05-30T05:30:08.294Z`
+- **Generated at:** `2026-05-30T05:46:28.851Z`
 - **Target:** `FIRST_REAL_PIX`
 - **Decision:** **NO_GO**
 - **Production confidence score:** **0/100**
@@ -10,6 +10,7 @@
 - DATABASE_PRODUCTION_REPORT: NOT_READY
 - SUPABASE_PRODUCTION_REPORT: NOT_READY
 - MERCADOPAGO_PRODUCTION_REPORT: NOT_READY
+- FINANCIAL_SECURITY_REPORT: NOT_READY
 - RAILWAY_PRODUCTION_REPORT: NOT_READY
 - OBSERVABILITY_REPORT: NOT_READY
 - PIX_SIMULATION_REPORT: NOT_READY
@@ -40,24 +41,26 @@
 14. Real PIX payment creation was not validated.
 15. Settlement flow is not ready.
 16. PIX recovery flow is not ready.
-17. Missing Railway identity env vars: RAILWAY_PROJECT_ID, RAILWAY_SERVICE_ID.
-18. Railway/Node production environment is not verified.
-19. Railway deployment health endpoint did not validate.
-20. Rollback readiness is not proven with deployment ID and verified database backup.
-21. Production health endpoints did not validate.
-22. Monitoring provider is not configured.
-23. Alert routing is not configured.
-24. Incident recovery is blocked by rollback readiness failure.
-25. Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true and Mercado Pago prerequisites pass.
-26. Webhook validation did not pass.
-27. Ledger update validation is blocked until DB and settlement flow are ready.
-28. Wallet update validation is blocked until ledger update validation passes.
+17. FINANCIAL_AUTH_TOKEN is not configured.
+18. Missing Railway identity env vars: RAILWAY_PROJECT_ID, RAILWAY_SERVICE_ID.
+19. Railway/Node production environment is not verified.
+20. Railway deployment health endpoint did not validate.
+21. Rollback readiness is not proven with deployment ID and verified database backup.
+22. Production health endpoints did not validate.
+23. Monitoring provider is not configured.
+24. Alert routing is not configured.
+25. Incident recovery is blocked by rollback readiness failure.
+26. Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true and Mercado Pago prerequisites pass.
+27. Webhook validation did not pass.
+28. Ledger update validation is blocked until DB and settlement flow are ready.
+29. Wallet update validation is blocked until ledger update validation passes.
 
 ## Report files
 
 - `artifacts/DATABASE_PRODUCTION_REPORT.json`
 - `artifacts/SUPABASE_PRODUCTION_REPORT.json`
 - `artifacts/MERCADOPAGO_PRODUCTION_REPORT.json`
+- `artifacts/FINANCIAL_SECURITY_REPORT.json`
 - `artifacts/RAILWAY_PRODUCTION_REPORT.json`
 - `artifacts/OBSERVABILITY_REPORT.json`
 - `artifacts/PIX_SIMULATION_REPORT.json`

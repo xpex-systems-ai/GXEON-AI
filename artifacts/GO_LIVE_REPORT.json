@@ -3,7 +3,7 @@
   "mission_id": "GXEON_MISSION_005",
   "phase": "INFRASTRUCTURE_ACTIVATION",
   "target": "FIRST_REAL_PIX",
-  "generated_at": "2026-05-30T05:30:08.294Z",
+  "generated_at": "2026-05-30T05:46:28.851Z",
   "production_score": 0,
   "production_score_max": 100,
   "score_breakdown": [
@@ -50,6 +50,14 @@
   },
   "first_real_pix_ready": false,
   "first_real_revenue_ready": false,
+  "real_pix_ready": false,
+  "revenue_ready": false,
+  "database_ready": false,
+  "supabase_ready": false,
+  "mercadopago_ready": false,
+  "railway_ready": false,
+  "observability_ready": false,
+  "financial_security_ready": false,
   "go_live_decision": "NO_GO",
   "remaining_blockers": [
     "DATABASE_URL is not configured.",
@@ -68,6 +76,7 @@
     "Real PIX payment creation was not validated.",
     "Settlement flow is not ready.",
     "PIX recovery flow is not ready.",
+    "FINANCIAL_AUTH_TOKEN is not configured.",
     "Missing Railway identity env vars: RAILWAY_PROJECT_ID, RAILWAY_SERVICE_ID.",
     "Railway/Node production environment is not verified.",
     "Railway deployment health endpoint did not validate.",
@@ -80,6 +89,17 @@
     "Webhook validation did not pass.",
     "Ledger update validation is blocked until DB and settlement flow are ready.",
     "Wallet update validation is blocked until ledger update validation passes."
+  ],
+  "generated_reports": [
+    "DATABASE_PRODUCTION_REPORT.json",
+    "SUPABASE_PRODUCTION_REPORT.json",
+    "MERCADOPAGO_PRODUCTION_REPORT.json",
+    "FINANCIAL_SECURITY_REPORT.json",
+    "RAILWAY_PRODUCTION_REPORT.json",
+    "OBSERVABILITY_REPORT.json",
+    "PIX_SIMULATION_REPORT.json",
+    "GO_LIVE_REPORT.json",
+    "GXEON_INFRASTRUCTURE_ACTIVATION_REPORT.json"
   ],
   "final_answers": {
     "can_process_real_pix_safely": false,

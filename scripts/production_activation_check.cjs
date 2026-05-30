@@ -102,6 +102,39 @@ const REQUIRED_MERCADO_PAGO_KEYS = [
   "FINANCIAL_AUTH_TOKEN",
 ];
 
+const REQUIRED_FINANCIAL_SCOPES = [
+  "financial:payments:create",
+  "financial:payments:auto",
+  "financial:credits:wallet",
+  "financial:credits:transfer",
+  "financial:credits:auto-topup",
+  "financial:commissions:settle",
+  "financial:revenue:tasks",
+  "financial:revenue:scheduler",
+  "financial:revenue:radar",
+  "financial:payments:followups",
+  "financial:x-radar:signals",
+  "financial:x-radar:consume",
+  "financial:x-radar:scan",
+  "financial:x-radar:revenue",
+  "financial:monetization:subscriptions",
+  "financial:revenue-engine:checkout",
+  "financial:revenue-engine:recovery",
+  "financial:revenue-engine:subscriptions",
+  "financial:revenue-engine:credits",
+  "financial:revenue-engine:radar",
+  "financial:revenue-engine:entitlements",
+];
+
+const FINANCIAL_AUTH_SOURCE = path.resolve(
+  __dirname,
+  "../artifacts/api-server/src/middlewares/financialAuth.ts",
+);
+const RUNTIME_ROUTE_SOURCE = path.resolve(
+  __dirname,
+  "../artifacts/api-server/src/routes/runtime.ts",
+);
+
 const RAILWAY_KEYS = [
   "RAILWAY_ENVIRONMENT",
   "RAILWAY_PROJECT_ID",
@@ -846,6 +879,162 @@ async function validateMercadoPago(databaseReport) {
   return report;
 }
 
+async function validateFinancialSecurity() {
+  const middlewareSource = fs.existsSync(FINANCIAL_AUTH_SOURCE)
+    ? fs.readFileSync(FINANCIAL_AUTH_SOURCE, "utf8")
+    : "";
+  const routeSource = fs.existsSync(RUNTIME_ROUTE_SOURCE)
+    ? fs.readFileSync(RUNTIME_ROUTE_SOURCE, "utf8")
+    : "";
+
+  const protectedScopes = [
+    ...routeSource.matchAll(/financialMutation\("([^"\n]+)"\)/g),
+  ].map((match) => match[1]);
+  const missingScopes = REQUIRED_FINANCIAL_SCOPES.filter(
+    (scope) => !protectedScopes.includes(scope),
+  );
+  const duplicateScopes = protectedScopes.filter(
+    (scope, index) => protectedScopes.indexOf(scope) !== index,
+  );
+
+  const middlewareChecks = {
+    source_present: Boolean(middlewareSource),
+    exports_financial_auth: middlewareSource.includes(
+      "export function financialAuth",
+    ),
+    exports_rate_limit: middlewareSource.includes(
+      "export function financialRateLimit",
+    ),
+    exports_idempotency: middlewareSource.includes(
+      "export function financialIdempotency",
+    ),
+    exports_financial_mutation: middlewareSource.includes(
+      "export function financialMutation",
+    ),
+    token_fail_closed:
+      middlewareSource.includes("FINANCIAL_AUTH_TOKEN not set") &&
+      middlewareSource.includes("status(503)"),
+    scope_validation:
+      middlewareSource.includes("function hasScope") &&
+      middlewareSource.includes("Insufficient financial scope"),
+    rate_limit_headers:
+      middlewareSource.includes("X-RateLimit-Limit") &&
+      middlewareSource.includes("status(429)"),
+    idempotency_required:
+      middlewareSource.includes("Idempotency-Key header is required") &&
+      middlewareSource.includes("status(428)"),
+    idempotency_replay:
+      middlewareSource.includes("Idempotency-Replayed") &&
+      middlewareSource.includes("Idempotency-Key payload mismatch"),
+  };
+
+  const env = {
+    FINANCIAL_AUTH_TOKEN: Boolean(process.env.FINANCIAL_AUTH_TOKEN),
+    FINANCIAL_AUTH_SCOPES: Boolean(
+      process.env.FINANCIAL_AUTH_SCOPES || process.env.FINANCIAL_API_SCOPES,
+    ),
+    FINANCIAL_RATE_LIMIT_WINDOW_MS: Boolean(
+      process.env.FINANCIAL_RATE_LIMIT_WINDOW_MS,
+    ),
+    FINANCIAL_RATE_LIMIT_MAX_REQUESTS: Boolean(
+      process.env.FINANCIAL_RATE_LIMIT_MAX_REQUESTS,
+    ),
+  };
+
+  const scopeReady =
+    middlewareChecks.scope_validation && missingScopes.length === 0;
+  const rateLimitReady =
+    middlewareChecks.exports_rate_limit && middlewareChecks.rate_limit_headers;
+  const idempotencyReady =
+    middlewareChecks.exports_idempotency &&
+    middlewareChecks.idempotency_required &&
+    middlewareChecks.idempotency_replay;
+  const mutationProtectionReady =
+    routeSource.includes("import { financialMutation }") &&
+    protectedScopes.length >= REQUIRED_FINANCIAL_SCOPES.length &&
+    missingScopes.length === 0;
+
+  const report = {
+    report: "FINANCIAL_SECURITY_REPORT",
+    generated_at: GENERATED_AT,
+    ready: false,
+    env,
+    token: {
+      ready: env.FINANCIAL_AUTH_TOKEN,
+      status: env.FINANCIAL_AUTH_TOKEN
+        ? "FINANCIAL_AUTH_TOKEN_CONFIGURED"
+        : "BLOCKED_FINANCIAL_AUTH_TOKEN_MISSING",
+    },
+    middleware: {
+      ready: Object.values(middlewareChecks).every(Boolean),
+      checks: middlewareChecks,
+    },
+    scopes: {
+      ready: scopeReady,
+      required: REQUIRED_FINANCIAL_SCOPES,
+      protected: protectedScopes,
+      missing: missingScopes,
+      duplicates: [...new Set(duplicateScopes)],
+    },
+    rate_limit: {
+      ready: rateLimitReady,
+      status: rateLimitReady
+        ? "RATE_LIMIT_MIDDLEWARE_PRESENT"
+        : "RATE_LIMIT_MIDDLEWARE_INCOMPLETE",
+      configured_window_ms:
+        process.env.FINANCIAL_RATE_LIMIT_WINDOW_MS || "DEFAULT_60000",
+      configured_max_requests:
+        process.env.FINANCIAL_RATE_LIMIT_MAX_REQUESTS || "DEFAULT_30",
+    },
+    idempotency: {
+      ready: idempotencyReady,
+      status: idempotencyReady
+        ? "IDEMPOTENCY_MIDDLEWARE_PRESENT"
+        : "IDEMPOTENCY_MIDDLEWARE_INCOMPLETE",
+      required_header: "Idempotency-Key",
+    },
+    mutation_protection: {
+      ready: mutationProtectionReady,
+      protected_route_count: protectedScopes.length,
+      expected_route_count: REQUIRED_FINANCIAL_SCOPES.length,
+    },
+    blockers: [],
+  };
+
+  if (!report.token.ready)
+    report.blockers.push("FINANCIAL_AUTH_TOKEN is not configured.");
+  if (!report.middleware.ready)
+    report.blockers.push(
+      "FinancialAuthMiddleware static validation did not pass.",
+    );
+  if (!report.scopes.ready)
+    report.blockers.push(
+      `Financial scope coverage missing: ${missingScopes.join(", ") || "none"}.`,
+    );
+  if (!report.rate_limit.ready)
+    report.blockers.push(
+      "Financial mutation rate limit validation did not pass.",
+    );
+  if (!report.idempotency.ready)
+    report.blockers.push(
+      "Financial mutation idempotency validation did not pass.",
+    );
+  if (!report.mutation_protection.ready)
+    report.blockers.push(
+      "Financial mutation route protection coverage did not pass.",
+    );
+
+  report.ready =
+    report.token.ready &&
+    report.middleware.ready &&
+    report.scopes.ready &&
+    report.rate_limit.ready &&
+    report.idempotency.ready &&
+    report.mutation_protection.ready;
+
+  return report;
+}
+
 async function validateRailway() {
   const env = envPresence(RAILWAY_KEYS);
   const baseUrl =
@@ -1144,7 +1333,7 @@ function calculateScore(reports) {
     {
       key: "financial_auth",
       weight: 10,
-      ready: Boolean(process.env.FINANCIAL_AUTH_TOKEN),
+      ready: reports.financialSecurity.ready,
     },
   ];
   const score = categories.reduce(
@@ -1159,6 +1348,7 @@ function flattenBlockers(reports) {
     ...reports.database.blockers,
     ...reports.supabase.blockers,
     ...reports.mercadopago.blockers,
+    ...reports.financialSecurity.blockers,
     ...reports.railway.blockers,
     ...reports.observability.blockers,
     ...reports.pix.blockers,
@@ -1174,7 +1364,7 @@ function buildGoLiveReport(reports) {
     railway_ready: reports.railway.ready,
     observability_ready: reports.observability.ready,
     rollback_ready: reports.railway.rollback_readiness.ready,
-    financial_auth_ready: Boolean(process.env.FINANCIAL_AUTH_TOKEN),
+    financial_auth_ready: reports.financialSecurity.ready,
     pix_runtime_ready: reports.mercadopago.pix_runtime.ready,
   };
   const ready = boolsReady(requirements) && reports.pix.ready;
@@ -1190,8 +1380,27 @@ function buildGoLiveReport(reports) {
     go_live_requirements: requirements,
     first_real_pix_ready: ready,
     first_real_revenue_ready: ready,
+    real_pix_ready: ready,
+    revenue_ready: ready,
+    database_ready: reports.database.ready,
+    supabase_ready: reports.supabase.ready,
+    mercadopago_ready: reports.mercadopago.ready,
+    railway_ready: reports.railway.ready,
+    observability_ready: reports.observability.ready,
+    financial_security_ready: reports.financialSecurity.ready,
     go_live_decision: ready ? "GO" : "NO_GO",
     remaining_blockers: flattenBlockers(reports),
+    generated_reports: [
+      "DATABASE_PRODUCTION_REPORT.json",
+      "SUPABASE_PRODUCTION_REPORT.json",
+      "MERCADOPAGO_PRODUCTION_REPORT.json",
+      "FINANCIAL_SECURITY_REPORT.json",
+      "RAILWAY_PRODUCTION_REPORT.json",
+      "OBSERVABILITY_REPORT.json",
+      "PIX_SIMULATION_REPORT.json",
+      "GO_LIVE_REPORT.json",
+      "GXEON_INFRASTRUCTURE_ACTIVATION_REPORT.json",
+    ],
     final_answers: {
       can_process_real_pix_safely: ready,
       can_receive_revenue_in_production: ready,
@@ -1215,6 +1424,7 @@ function writeMarkdown(goLive, reports) {
     `- DATABASE_PRODUCTION_REPORT: ${reports.database.ready ? "READY" : "NOT_READY"}`,
     `- SUPABASE_PRODUCTION_REPORT: ${reports.supabase.ready ? "READY" : "NOT_READY"}`,
     `- MERCADOPAGO_PRODUCTION_REPORT: ${reports.mercadopago.ready ? "READY" : "NOT_READY"}`,
+    `- FINANCIAL_SECURITY_REPORT: ${reports.financialSecurity.ready ? "READY" : "NOT_READY"}`,
     `- RAILWAY_PRODUCTION_REPORT: ${reports.railway.ready ? "READY" : "NOT_READY"}`,
     `- OBSERVABILITY_REPORT: ${reports.observability.ready ? "READY" : "NOT_READY"}`,
     `- PIX_SIMULATION_REPORT: ${reports.pix.ready ? "READY" : "NOT_READY"}`,
@@ -1238,6 +1448,7 @@ function writeMarkdown(goLive, reports) {
     "- `artifacts/DATABASE_PRODUCTION_REPORT.json`",
     "- `artifacts/SUPABASE_PRODUCTION_REPORT.json`",
     "- `artifacts/MERCADOPAGO_PRODUCTION_REPORT.json`",
+    "- `artifacts/FINANCIAL_SECURITY_REPORT.json`",
     "- `artifacts/RAILWAY_PRODUCTION_REPORT.json`",
     "- `artifacts/OBSERVABILITY_REPORT.json`",
     "- `artifacts/PIX_SIMULATION_REPORT.json`",
@@ -1253,6 +1464,7 @@ async function main() {
   const database = await validateDatabase();
   const supabase = await validateSupabase(database);
   const mercadopago = await validateMercadoPago(database);
+  const financialSecurity = await validateFinancialSecurity();
   const railway = await validateRailway();
   const observability = await validateObservability(railway);
   const pix = await validatePixSimulation(database, mercadopago);
@@ -1260,6 +1472,7 @@ async function main() {
     database,
     supabase,
     mercadopago,
+    financialSecurity,
     railway,
     observability,
     pix,
@@ -1269,6 +1482,7 @@ async function main() {
   writeJson("DATABASE_PRODUCTION_REPORT.json", database);
   writeJson("SUPABASE_PRODUCTION_REPORT.json", supabase);
   writeJson("MERCADOPAGO_PRODUCTION_REPORT.json", mercadopago);
+  writeJson("FINANCIAL_SECURITY_REPORT.json", financialSecurity);
   writeJson("RAILWAY_PRODUCTION_REPORT.json", railway);
   writeJson("OBSERVABILITY_REPORT.json", observability);
   writeJson("PIX_SIMULATION_REPORT.json", pix);

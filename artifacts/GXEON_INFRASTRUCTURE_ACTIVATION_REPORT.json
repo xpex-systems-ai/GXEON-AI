@@ -3,7 +3,7 @@
   "mission_id": "GXEON_MISSION_005",
   "phase": "INFRASTRUCTURE_ACTIVATION",
   "target": "FIRST_REAL_PIX",
-  "generated_at": "2026-05-30T05:30:08.294Z",
+  "generated_at": "2026-05-30T05:46:28.851Z",
   "production_score": 0,
   "production_score_max": 100,
   "score_breakdown": [
@@ -50,6 +50,14 @@
   },
   "first_real_pix_ready": false,
   "first_real_revenue_ready": false,
+  "real_pix_ready": false,
+  "revenue_ready": false,
+  "database_ready": false,
+  "supabase_ready": false,
+  "mercadopago_ready": false,
+  "railway_ready": false,
+  "observability_ready": false,
+  "financial_security_ready": false,
   "go_live_decision": "NO_GO",
   "remaining_blockers": [
     "DATABASE_URL is not configured.",
@@ -68,6 +76,7 @@
     "Real PIX payment creation was not validated.",
     "Settlement flow is not ready.",
     "PIX recovery flow is not ready.",
+    "FINANCIAL_AUTH_TOKEN is not configured.",
     "Missing Railway identity env vars: RAILWAY_PROJECT_ID, RAILWAY_SERVICE_ID.",
     "Railway/Node production environment is not verified.",
     "Railway deployment health endpoint did not validate.",
@@ -81,6 +90,17 @@
     "Ledger update validation is blocked until DB and settlement flow are ready.",
     "Wallet update validation is blocked until ledger update validation passes."
   ],
+  "generated_reports": [
+    "DATABASE_PRODUCTION_REPORT.json",
+    "SUPABASE_PRODUCTION_REPORT.json",
+    "MERCADOPAGO_PRODUCTION_REPORT.json",
+    "FINANCIAL_SECURITY_REPORT.json",
+    "RAILWAY_PRODUCTION_REPORT.json",
+    "OBSERVABILITY_REPORT.json",
+    "PIX_SIMULATION_REPORT.json",
+    "GO_LIVE_REPORT.json",
+    "GXEON_INFRASTRUCTURE_ACTIVATION_REPORT.json"
+  ],
   "final_answers": {
     "can_process_real_pix_safely": false,
     "can_receive_revenue_in_production": false,
@@ -90,7 +110,7 @@
   "reports": {
     "database": {
       "report": "DATABASE_PRODUCTION_REPORT",
-      "generated_at": "2026-05-30T05:30:08.294Z",
+      "generated_at": "2026-05-30T05:46:28.851Z",
       "ready": false,
       "provider": {
         "provider": "NOT_CONFIGURED",
@@ -209,7 +229,7 @@
     },
     "supabase": {
       "report": "SUPABASE_PRODUCTION_REPORT",
-      "generated_at": "2026-05-30T05:30:08.294Z",
+      "generated_at": "2026-05-30T05:46:28.851Z",
       "ready": false,
       "env": {
         "SUPABASE_URL": false,
@@ -281,7 +301,7 @@
     },
     "mercadopago": {
       "report": "MERCADOPAGO_PRODUCTION_REPORT",
-      "generated_at": "2026-05-30T05:30:08.294Z",
+      "generated_at": "2026-05-30T05:46:28.851Z",
       "ready": false,
       "env": {
         "DATABASE_URL": false,
@@ -351,7 +371,7 @@
         "api_base": "https://api.mercadopago.com",
         "webhook_url_configured": false,
         "safety": "CREDENTIALS_MASKED_ENV_ONLY",
-        "generated_at": "2026-05-30T05:30:08.298Z"
+        "generated_at": "2026-05-30T05:46:28.855Z"
       },
       "access_token_validation": {
         "ready": false,
@@ -395,9 +415,109 @@
         "PIX recovery flow is not ready."
       ]
     },
+    "financialSecurity": {
+      "report": "FINANCIAL_SECURITY_REPORT",
+      "generated_at": "2026-05-30T05:46:28.851Z",
+      "ready": false,
+      "env": {
+        "FINANCIAL_AUTH_TOKEN": false,
+        "FINANCIAL_AUTH_SCOPES": false,
+        "FINANCIAL_RATE_LIMIT_WINDOW_MS": false,
+        "FINANCIAL_RATE_LIMIT_MAX_REQUESTS": false
+      },
+      "token": {
+        "ready": false,
+        "status": "BLOCKED_FINANCIAL_AUTH_TOKEN_MISSING"
+      },
+      "middleware": {
+        "ready": true,
+        "checks": {
+          "source_present": true,
+          "exports_financial_auth": true,
+          "exports_rate_limit": true,
+          "exports_idempotency": true,
+          "exports_financial_mutation": true,
+          "token_fail_closed": true,
+          "scope_validation": true,
+          "rate_limit_headers": true,
+          "idempotency_required": true,
+          "idempotency_replay": true
+        }
+      },
+      "scopes": {
+        "ready": true,
+        "required": [
+          "financial:payments:create",
+          "financial:payments:auto",
+          "financial:credits:wallet",
+          "financial:credits:transfer",
+          "financial:credits:auto-topup",
+          "financial:commissions:settle",
+          "financial:revenue:tasks",
+          "financial:revenue:scheduler",
+          "financial:revenue:radar",
+          "financial:payments:followups",
+          "financial:x-radar:signals",
+          "financial:x-radar:consume",
+          "financial:x-radar:scan",
+          "financial:x-radar:revenue",
+          "financial:monetization:subscriptions",
+          "financial:revenue-engine:checkout",
+          "financial:revenue-engine:recovery",
+          "financial:revenue-engine:subscriptions",
+          "financial:revenue-engine:credits",
+          "financial:revenue-engine:radar",
+          "financial:revenue-engine:entitlements"
+        ],
+        "protected": [
+          "financial:payments:create",
+          "financial:payments:auto",
+          "financial:credits:wallet",
+          "financial:credits:transfer",
+          "financial:commissions:settle",
+          "financial:revenue:tasks",
+          "financial:revenue:scheduler",
+          "financial:credits:auto-topup",
+          "financial:revenue:radar",
+          "financial:x-radar:signals",
+          "financial:x-radar:consume",
+          "financial:x-radar:scan",
+          "financial:x-radar:revenue",
+          "financial:monetization:subscriptions",
+          "financial:payments:followups",
+          "financial:revenue-engine:checkout",
+          "financial:revenue-engine:recovery",
+          "financial:revenue-engine:subscriptions",
+          "financial:revenue-engine:credits",
+          "financial:revenue-engine:radar",
+          "financial:revenue-engine:entitlements"
+        ],
+        "missing": [],
+        "duplicates": []
+      },
+      "rate_limit": {
+        "ready": true,
+        "status": "RATE_LIMIT_MIDDLEWARE_PRESENT",
+        "configured_window_ms": "DEFAULT_60000",
+        "configured_max_requests": "DEFAULT_30"
+      },
+      "idempotency": {
+        "ready": true,
+        "status": "IDEMPOTENCY_MIDDLEWARE_PRESENT",
+        "required_header": "Idempotency-Key"
+      },
+      "mutation_protection": {
+        "ready": true,
+        "protected_route_count": 21,
+        "expected_route_count": 21
+      },
+      "blockers": [
+        "FINANCIAL_AUTH_TOKEN is not configured."
+      ]
+    },
     "railway": {
       "report": "RAILWAY_PRODUCTION_REPORT",
-      "generated_at": "2026-05-30T05:30:08.294Z",
+      "generated_at": "2026-05-30T05:46:28.851Z",
       "ready": false,
       "env": {
         "RAILWAY_ENVIRONMENT": false,
@@ -423,9 +543,9 @@
         "dashboard_runtime": "ACTIVE",
         "supabase_validation": "DEGRADED",
         "deployment_sync": "ACTIVE",
-        "last_commit": "bdbf2d3",
-        "last_sync": "2026-05-30T05:25:17+00:00",
-        "generated_at": "2026-05-30T05:30:08.396Z"
+        "last_commit": "71297a1",
+        "last_sync": "2026-05-30T05:44:58+00:00",
+        "generated_at": "2026-05-30T05:46:28.937Z"
       },
       "deployment_integrity": {
         "deployment": "HEALTHY",
@@ -437,7 +557,7 @@
         "commit_synchronization": "ACTIVE",
         "artifact_presence": "PRESENT",
         "environment_integrity": "DEGRADED",
-        "generated_at": "2026-05-30T05:30:08.419Z"
+        "generated_at": "2026-05-30T05:46:28.954Z"
       },
       "deployment_health": {
         "ready": false,
@@ -456,7 +576,7 @@
     },
     "observability": {
       "report": "OBSERVABILITY_REPORT",
-      "generated_at": "2026-05-30T05:30:08.294Z",
+      "generated_at": "2026-05-30T05:46:28.851Z",
       "ready": false,
       "structured_logs": {
         "ready": true,
@@ -521,7 +641,7 @@
           "governance": "NO_STOP"
         },
         "recovery_log": "Non-main branch detected; synchronization retry suggested.",
-        "generated_at": "2026-05-30T05:30:08.442Z"
+        "generated_at": "2026-05-30T05:46:28.974Z"
       },
       "blockers": [
         "Production health endpoints did not validate.",
@@ -532,7 +652,7 @@
     },
     "pix": {
       "report": "PIX_SIMULATION_REPORT",
-      "generated_at": "2026-05-30T05:30:08.294Z",
+      "generated_at": "2026-05-30T05:46:28.851Z",
       "ready": false,
       "mode": "SAFE_DRY_RUN_DEFAULT",
       "checkout_created": false,

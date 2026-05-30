@@ -1,6 +1,6 @@
 {
   "report": "RAILWAY_PRODUCTION_REPORT",
-  "generated_at": "2026-05-30T05:30:08.294Z",
+  "generated_at": "2026-05-30T05:46:28.851Z",
   "ready": false,
   "env": {
     "RAILWAY_ENVIRONMENT": false,
@@ -26,9 +26,9 @@
     "dashboard_runtime": "ACTIVE",
     "supabase_validation": "DEGRADED",
     "deployment_sync": "ACTIVE",
-    "last_commit": "bdbf2d3",
-    "last_sync": "2026-05-30T05:25:17+00:00",
-    "generated_at": "2026-05-30T05:30:08.396Z"
+    "last_commit": "71297a1",
+    "last_sync": "2026-05-30T05:44:58+00:00",
+    "generated_at": "2026-05-30T05:46:28.937Z"
   },
   "deployment_integrity": {
     "deployment": "HEALTHY",
@@ -40,7 +40,7 @@
     "commit_synchronization": "ACTIVE",
     "artifact_presence": "PRESENT",
     "environment_integrity": "DEGRADED",
-    "generated_at": "2026-05-30T05:30:08.419Z"
+    "generated_at": "2026-05-30T05:46:28.954Z"
   },
   "deployment_health": {
     "ready": false,
