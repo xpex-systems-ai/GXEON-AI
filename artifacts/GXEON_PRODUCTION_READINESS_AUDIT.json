@@ -1,0 +1,164 @@
+{
+  "mission_id": "GXEON_MISSION_004",
+  "phase": "PRODUCTION_READINESS",
+  "priority": "P0_CRITICAL",
+  "execution_mode": "AUDIT_AND_VALIDATION",
+  "operator": "Junior Sena",
+  "orchestrator": "ChatGPT_GX",
+  "generated_at": "2026-05-30T05:06:43Z",
+  "audit_constraints": {
+    "no_feature_building": true,
+    "no_dashboard_changes": true,
+    "no_ui_changes": true,
+    "no_refactoring": true,
+    "audit_only": true
+  },
+  "database_report": {
+    "ready": false,
+    "database_url_configured": false,
+    "connectivity": "BLOCKED_DATABASE_URL_MISSING",
+    "migrations_local_manifest": "lib/db/drizzle/meta/_journal.json contains 0000_financial_foundation",
+    "migrations_remote_status": "NOT_VALIDATED_DATABASE_URL_MISSING",
+    "transaction_tables_expected": [
+      "global_transactions",
+      "payment_attempts",
+      "payment_webhook_events"
+    ],
+    "ledger_tables_expected": ["actor_wallets", "financial_ledger"],
+    "indexes_expected": [
+      "actor_wallets_actor_id_uq",
+      "global_transactions_transaction_id_uq",
+      "global_transactions_external_reference_uq",
+      "payment_attempts_idempotency_key_uq",
+      "financial_ledger_idempotency_key_uq",
+      "payment_webhook_events_idempotency_key_uq"
+    ],
+    "blockers": [
+      "DATABASE_URL is not configured in the validation environment.",
+      "Database connectivity, applied migration status, production transaction tables, ledger tables, and live indexes cannot be verified without DATABASE_URL."
+    ]
+  },
+  "supabase_report": {
+    "ready": false,
+    "required_keys_configured": false,
+    "checks": {
+      "SUPABASE_URL": false,
+      "SUPABASE_SERVICE_ROLE_KEY": false,
+      "VITE_SUPABASE_URL": false,
+      "VITE_SUPABASE_ANON_KEY": false,
+      "EXPO_PUBLIC_SUPABASE_URL": false,
+      "EXPO_PUBLIC_SUPABASE_ANON_KEY": false
+    },
+    "rls_policies": "NOT_VALIDATED_SUPABASE_KEYS_MISSING",
+    "realtime_subscriptions": "NOT_VALIDATED_SUPABASE_KEYS_MISSING",
+    "auth_configuration": "NOT_VALIDATED_SUPABASE_KEYS_MISSING",
+    "blockers": [
+      "All required Supabase backend, web, and Expo public environment variables are missing.",
+      "RLS policies, realtime subscriptions, and auth configuration cannot be validated without Supabase credentials."
+    ]
+  },
+  "mercadopago_report": {
+    "ready": false,
+    "mode": "NOT_CONFIGURED",
+    "ready_for_real_pix": false,
+    "can_create_pix": false,
+    "missing_required": ["DATABASE_URL", "MERCADO_PAGO_ACCESS_TOKEN"],
+    "webhook_url_configured": false,
+    "webhook_secret_configured": false,
+    "payment_runtime": {
+      "status": "DEGRADED",
+      "storage": "LOCAL_JSON_FALLBACK_READONLY",
+      "duplicate_detector": "LOCAL_MEMORY_ONLY"
+    },
+    "recovery_runtime": "AVAILABLE_BUT_NOT_PRODUCTION_VERIFIED",
+    "blockers": [
+      "MERCADO_PAGO_ACCESS_TOKEN is missing.",
+      "MERCADO_PAGO_NOTIFICATION_URL is missing.",
+      "MERCADO_PAGO_WEBHOOK_SECRET is missing.",
+      "PIX creation is blocked because DATABASE_URL and MERCADO_PAGO_ACCESS_TOKEN are missing."
+    ]
+  },
+  "railway_report": {
+    "ready": false,
+    "deployment_health_local_runtime": "HEALTH_ENDPOINT_PASS",
+    "railway_env_detected": false,
+    "restart_policies": "NOT_VALIDATED_RAILWAY_CONTEXT_MISSING",
+    "production_environment": "NOT_VALIDATED_RAILWAY_CONTEXT_MISSING",
+    "deployment_health": "PARTIAL_LOCAL_API_ONLY",
+    "blockers": [
+      "No Railway environment variables were present in the validation shell.",
+      "Railway deployment, restart policies, production env vars, and hosted deployment health were not independently verifiable from this environment."
+    ]
+  },
+  "observability_report": {
+    "ready": false,
+    "logs": "LOCAL_API_LOGS_AVAILABLE",
+    "health_endpoints": {
+      "/api/healthz": 200,
+      "/api/v1/runtime/readiness": 200,
+      "/api/v1/runtime/payments": 200
+    },
+    "monitoring": "NOT_VALIDATED_NO_MONITORING_PROVIDER_CONFIG",
+    "alert_readiness": "PARTIAL_LOCAL_OPERATOR_ALERT_RUNTIME_ONLY",
+    "rollback_readiness": "NOT_READY_BRANCH_DRIFT_AND_PRODUCTION_ENV_UNVERIFIED",
+    "blockers": [
+      "Production monitoring/alerting integration is not configured or not visible in this validation environment.",
+      "Runtime governance reported branch drift/retrying sync in the generated governance report.",
+      "Rollback readiness cannot be approved without verified Railway production deployment and database backups."
+    ]
+  },
+  "go_live_report": {
+    "checkout_creation_simulation": "BLOCKED_MISSING_FINANCIAL_AUTH_TOKEN_AND_PIX_ENV",
+    "pix_generation_simulation": "BLOCKED_MERCADO_PAGO_NOT_CONFIGURED",
+    "webhook_processing_simulation": "REJECTED_INVALID_SIGNATURE_AS_EXPECTED_WITHOUT_WEBHOOK_SECRET",
+    "settlement_flow_simulation": "BLOCKED_DATABASE_URL_MISSING",
+    "revenue_engine_lifecycle_simulation": "BLOCKED_DATABASE_URL_AND_MERCADO_PAGO_ACCESS_TOKEN_MISSING",
+    "protected_mutation_probe": {
+      "path": "/api/v1/runtime/payments/create",
+      "status": 503,
+      "reason": "FINANCIAL_AUTH_TOKEN not configured"
+    }
+  },
+  "production_score": {
+    "score": 24,
+    "max_score": 100,
+    "grade": "NO_GO",
+    "scoring_basis": {
+      "database": 0,
+      "supabase": 0,
+      "mercadopago_pix": 0,
+      "railway": 4,
+      "observability": 10,
+      "financial_auth_guardrail": 10
+    }
+  },
+  "final_decision": {
+    "can_process_first_real_pix_transaction": false,
+    "can_enter_production": false,
+    "go_live_decision": "NO_GO",
+    "exact_blockers": [
+      "DATABASE_URL missing; no production database connectivity or financial table verification possible.",
+      "MERCADO_PAGO_ACCESS_TOKEN missing; PIX payment creation cannot run.",
+      "MERCADO_PAGO_NOTIFICATION_URL missing; Mercado Pago webhook delivery target is not configured.",
+      "MERCADO_PAGO_WEBHOOK_SECRET missing; webhook authenticity cannot be validated in production mode.",
+      "FINANCIAL_AUTH_TOKEN missing; protected financial mutation endpoints intentionally return 503.",
+      "All required Supabase backend/web/mobile keys are missing; RLS, realtime, and auth cannot be validated.",
+      "Railway production deployment and restart policy were not verifiable from the validation environment.",
+      "Production monitoring, alert routing, database backups, and rollback readiness are not proven."
+    ]
+  },
+  "commands_executed": [
+    "node scripts/supabase_env_check.cjs",
+    "node scripts/mercado_pago_env_check.cjs",
+    "node scripts/runtime_platform_cleanup_check.cjs",
+    "node scripts/runtime_governance_report.cjs",
+    "node - <<'NODE' // DATABASE_URL presence and financialDb configuration check",
+    "pnpm --filter @workspace/api-server run build",
+    "PORT=4010 pnpm --filter @workspace/api-server run start",
+    "curl -sS -i http://127.0.0.1:4010/api/healthz",
+    "curl -sS -i http://127.0.0.1:4010/api/v1/runtime/readiness",
+    "curl -sS -i http://127.0.0.1:4010/api/v1/runtime/payments",
+    "curl -sS -i -X POST http://127.0.0.1:4010/api/v1/runtime/payments/create -H 'Content-Type: application/json' -d '{\"amount\":1}'",
+    "node - <<'NODE' // processWebhook unsigned simulation"
+  ]
+}
