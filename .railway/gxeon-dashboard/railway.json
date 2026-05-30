@@ -1,0 +1,22 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "builder": "RAILPACK",
+    "buildCommand": "PORT=${PORT:-3000} BASE_PATH=${BASE_PATH:-/} pnpm --filter @workspace/api-client-react run build && PORT=${PORT:-3000} BASE_PATH=${BASE_PATH:-/} pnpm --filter @workspace/gxeon-dashboard run build",
+    "watchPatterns": [
+      "/package.json",
+      "/pnpm-lock.yaml",
+      "/pnpm-workspace.yaml",
+      "/tsconfig*.json",
+      "/artifacts/gxeon-dashboard/**",
+      "/lib/api-client-react/**"
+    ]
+  },
+  "deploy": {
+    "startCommand": "PORT=$PORT BASE_PATH=${BASE_PATH:-/} pnpm --filter @workspace/gxeon-dashboard run serve",
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 30,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  }
+}
