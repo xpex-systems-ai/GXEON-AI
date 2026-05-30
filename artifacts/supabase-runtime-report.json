@@ -1,14 +1,14 @@
 {
-  "supabase": "SYNCHRONIZED",
-  "all_required_keys_configured": true,
+  "supabase": "DEGRADED",
+  "all_required_keys_configured": false,
   "checks": {
-    "SUPABASE_URL": true,
-    "SUPABASE_SERVICE_ROLE_KEY": true,
-    "VITE_SUPABASE_URL": true,
-    "VITE_SUPABASE_ANON_KEY": true,
-    "EXPO_PUBLIC_SUPABASE_URL": true,
-    "EXPO_PUBLIC_SUPABASE_ANON_KEY": true
+    "SUPABASE_URL": false,
+    "SUPABASE_SERVICE_ROLE_KEY": false,
+    "VITE_SUPABASE_URL": false,
+    "VITE_SUPABASE_ANON_KEY": false,
+    "EXPO_PUBLIC_SUPABASE_URL": false,
+    "EXPO_PUBLIC_SUPABASE_ANON_KEY": false
   },
-  "database_target": "https://telxvphgrsvsnxvmjkce.supabase.co",
-  "generated_at": "2026-05-27T19:04:06.160Z"
+  "database_target": null,
+  "generated_at": "2026-05-30T01:12:50.174Z"
 }

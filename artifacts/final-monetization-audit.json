@@ -16,7 +16,7 @@
     "revenue_throughput_sec": 0.8,
     "approval_latency_ms": 1400,
     "checkout_abandonment": 0,
-    "generated_at": "2026-05-17T02:56:21.817Z"
+    "generated_at": "2026-05-30T01:12:49.450Z"
   },
   "railway": {
     "runtime": "LIVE",
@@ -31,7 +31,7 @@
     "memory_pressure": "STABLE",
     "runtime_latency_ms": 120,
     "recovery_health": "GREEN",
-    "generated_at": "2026-05-17T02:56:21.818Z"
+    "generated_at": "2026-05-30T01:12:49.457Z"
   },
   "supabase": {
     "supabase": "DEGRADED",
@@ -45,7 +45,7 @@
       "EXPO_PUBLIC_SUPABASE_ANON_KEY": false
     },
     "database_target": null,
-    "generated_at": "2026-05-17T02:56:21.835Z"
+    "generated_at": "2026-05-30T01:12:49.472Z"
   },
   "operator_alerts": {
     "runtime": "ONLINE",
@@ -88,7 +88,7 @@
         "confidence": 78
       }
     ],
-    "generated_at": "2026-05-17T02:56:21.835Z"
+    "generated_at": "2026-05-30T01:12:49.472Z"
   },
-  "generated_at": "2026-05-17T02:56:21.836Z"
+  "generated_at": "2026-05-30T01:12:49.473Z"
 }
