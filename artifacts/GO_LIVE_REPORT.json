@@ -1,0 +1,110 @@
+{
+  "report": "GO_LIVE_REPORT",
+  "mission_id": "GXEON_MISSION_005",
+  "phase": "INFRASTRUCTURE_ACTIVATION",
+  "target": "FIRST_REAL_PIX",
+  "generated_at": "2026-05-30T05:46:28.851Z",
+  "production_score": 0,
+  "production_score_max": 100,
+  "score_breakdown": [
+    {
+      "key": "database",
+      "weight": 20,
+      "ready": false
+    },
+    {
+      "key": "supabase",
+      "weight": 15,
+      "ready": false
+    },
+    {
+      "key": "mercadopago",
+      "weight": 25,
+      "ready": false
+    },
+    {
+      "key": "railway",
+      "weight": 15,
+      "ready": false
+    },
+    {
+      "key": "observability",
+      "weight": 15,
+      "ready": false
+    },
+    {
+      "key": "financial_auth",
+      "weight": 10,
+      "ready": false
+    }
+  ],
+  "go_live_requirements": {
+    "database_ready": false,
+    "supabase_ready": false,
+    "mercadopago_ready": false,
+    "railway_ready": false,
+    "observability_ready": false,
+    "rollback_ready": false,
+    "financial_auth_ready": false,
+    "pix_runtime_ready": false
+  },
+  "first_real_pix_ready": false,
+  "first_real_revenue_ready": false,
+  "real_pix_ready": false,
+  "revenue_ready": false,
+  "database_ready": false,
+  "supabase_ready": false,
+  "mercadopago_ready": false,
+  "railway_ready": false,
+  "observability_ready": false,
+  "financial_security_ready": false,
+  "go_live_decision": "NO_GO",
+  "remaining_blockers": [
+    "DATABASE_URL is not configured.",
+    "Cannot validate connection, remote migrations, financial tables, indexes, or transaction persistence.",
+    "Missing Supabase env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+    "Web frontend Supabase env pair is incomplete.",
+    "Mobile Supabase env pair is incomplete.",
+    "Supabase auth validation did not pass.",
+    "Supabase realtime validation did not pass.",
+    "Supabase/Postgres RLS policy validation did not pass.",
+    "Supabase storage validation did not pass.",
+    "Missing Mercado Pago / financial env vars: DATABASE_URL, MERCADO_PAGO_ACCESS_TOKEN, MERCADO_PAGO_WEBHOOK_SECRET, MERCADO_PAGO_NOTIFICATION_URL, FINANCIAL_AUTH_TOKEN.",
+    "Mercado Pago access token validation did not pass.",
+    "Mercado Pago webhook URL/secret/signature validation did not pass.",
+    "PIX runtime is not production-ready.",
+    "Real PIX payment creation was not validated.",
+    "Settlement flow is not ready.",
+    "PIX recovery flow is not ready.",
+    "FINANCIAL_AUTH_TOKEN is not configured.",
+    "Missing Railway identity env vars: RAILWAY_PROJECT_ID, RAILWAY_SERVICE_ID.",
+    "Railway/Node production environment is not verified.",
+    "Railway deployment health endpoint did not validate.",
+    "Rollback readiness is not proven with deployment ID and verified database backup.",
+    "Production health endpoints did not validate.",
+    "Monitoring provider is not configured.",
+    "Alert routing is not configured.",
+    "Incident recovery is blocked by rollback readiness failure.",
+    "Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true and Mercado Pago prerequisites pass.",
+    "Webhook validation did not pass.",
+    "Ledger update validation is blocked until DB and settlement flow are ready.",
+    "Wallet update validation is blocked until ledger update validation passes."
+  ],
+  "generated_reports": [
+    "DATABASE_PRODUCTION_REPORT.json",
+    "SUPABASE_PRODUCTION_REPORT.json",
+    "MERCADOPAGO_PRODUCTION_REPORT.json",
+    "FINANCIAL_SECURITY_REPORT.json",
+    "RAILWAY_PRODUCTION_REPORT.json",
+    "OBSERVABILITY_REPORT.json",
+    "PIX_SIMULATION_REPORT.json",
+    "GO_LIVE_REPORT.json",
+    "GXEON_INFRASTRUCTURE_ACTIVATION_REPORT.json"
+  ],
+  "final_answers": {
+    "can_process_real_pix_safely": false,
+    "can_receive_revenue_in_production": false,
+    "production_confidence_score": "0/100",
+    "go_live_decision": "NO_GO"
+  }
+}

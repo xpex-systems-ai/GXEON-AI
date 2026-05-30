@@ -1,0 +1,21 @@
+{
+  "report": "PIX_SIMULATION_REPORT",
+  "generated_at": "2026-05-30T05:46:28.851Z",
+  "ready": false,
+  "mode": "SAFE_DRY_RUN_DEFAULT",
+  "checkout_created": false,
+  "pix_generated": false,
+  "qr_code_validated": false,
+  "copy_paste_code_validated": false,
+  "payment_simulated": false,
+  "webhook_validated": false,
+  "ledger_updated": false,
+  "wallet_updated": false,
+  "dashboard_metrics_validated": true,
+  "blockers": [
+    "Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true and Mercado Pago prerequisites pass.",
+    "Webhook validation did not pass.",
+    "Ledger update validation is blocked until DB and settlement flow are ready.",
+    "Wallet update validation is blocked until ledger update validation passes."
+  ]
+}

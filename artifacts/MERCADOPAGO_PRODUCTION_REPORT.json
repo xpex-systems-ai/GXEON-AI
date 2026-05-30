@@ -1,0 +1,116 @@
+{
+  "report": "MERCADOPAGO_PRODUCTION_REPORT",
+  "generated_at": "2026-05-30T05:46:28.851Z",
+  "ready": false,
+  "env": {
+    "DATABASE_URL": false,
+    "MERCADO_PAGO_ACCESS_TOKEN": false,
+    "MERCADO_PAGO_WEBHOOK_SECRET": false,
+    "MERCADO_PAGO_NOTIFICATION_URL": false,
+    "FINANCIAL_AUTH_TOKEN": false
+  },
+  "config": {
+    "provider": "mercado_pago",
+    "mode": "NOT_CONFIGURED",
+    "ready_for_real_pix": false,
+    "can_create_pix": false,
+    "missing_required": [
+      "DATABASE_URL",
+      "MERCADO_PAGO_ACCESS_TOKEN"
+    ],
+    "required": {
+      "DATABASE_URL": false,
+      "MERCADO_PAGO_ACCESS_TOKEN": false
+    },
+    "optional": {
+      "MERCADO_PAGO_PUBLIC_KEY": false,
+      "MERCADO_PAGO_CLIENT_ID": false,
+      "MERCADO_PAGO_CLIENT_SECRET": false,
+      "MERCADO_PAGO_PIX_KEY": false,
+      "MERCADO_PAGO_DEFAULT_PAYER_EMAIL": false,
+      "MERCADO_PAGO_NOTIFICATION_URL": false
+    },
+    "credentials": {
+      "access_token": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "public_key": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "client_id": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "client_secret": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "pix_key": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "default_payer_email": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "database_url": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      }
+    },
+    "api_base": "https://api.mercadopago.com",
+    "webhook_url_configured": false,
+    "safety": "CREDENTIALS_MASKED_ENV_ONLY",
+    "generated_at": "2026-05-30T05:46:28.855Z"
+  },
+  "access_token_validation": {
+    "ready": false,
+    "status": "BLOCKED_ACCESS_TOKEN_MISSING"
+  },
+  "webhook": {
+    "ready": false,
+    "url_configured": false,
+    "secret_configured": false,
+    "signature_probe": "UNSIGNED_WEBHOOK_REJECTED_SECRET_MISSING"
+  },
+  "pix_runtime": {
+    "ready": false,
+    "status": "DEGRADED",
+    "storage": "LOCAL_JSON_FALLBACK_READONLY",
+    "duplicate_detector": "LOCAL_MEMORY_ONLY"
+  },
+  "payment_creation": {
+    "ready": false,
+    "status": "SKIPPED_REQUIRES_GXEON_ALLOW_REAL_PIX_VALIDATION_TRUE"
+  },
+  "payment_status": {
+    "ready": false,
+    "status": "SKIPPED_MERCADO_PAGO_VALIDATION_PAYMENT_ID_MISSING"
+  },
+  "settlement_flow": {
+    "ready": false,
+    "status": "BLOCKED_DATABASE_NOT_READY"
+  },
+  "recovery_flow": {
+    "ready": false,
+    "status": "BLOCKED_PIX_RUNTIME_OR_WEBHOOK_NOT_READY"
+  },
+  "blockers": [
+    "Missing Mercado Pago / financial env vars: DATABASE_URL, MERCADO_PAGO_ACCESS_TOKEN, MERCADO_PAGO_WEBHOOK_SECRET, MERCADO_PAGO_NOTIFICATION_URL, FINANCIAL_AUTH_TOKEN.",
+    "Mercado Pago access token validation did not pass.",
+    "Mercado Pago webhook URL/secret/signature validation did not pass.",
+    "PIX runtime is not production-ready.",
+    "Real PIX payment creation was not validated.",
+    "Settlement flow is not ready.",
+    "PIX recovery flow is not ready."
+  ]
+}
