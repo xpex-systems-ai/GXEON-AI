@@ -1,0 +1,76 @@
+{
+  "report": "OBSERVABILITY_REPORT",
+  "generated_at": "2026-05-30T06:09:30.396Z",
+  "ready": false,
+  "structured_logs": {
+    "ready": true,
+    "status": "PINO_HTTP_CONFIGURED_IN_API_SERVER"
+  },
+  "health_endpoints": {
+    "ready": false,
+    "status": "BLOCKED_PRODUCTION_BASE_URL_OR_RAILWAY_PUBLIC_DOMAIN_MISSING",
+    "probes": []
+  },
+  "monitoring": {
+    "ready": false,
+    "status": "NOT_CONFIGURED"
+  },
+  "alerts": {
+    "ready": false,
+    "status": "NOT_CONFIGURED"
+  },
+  "metrics": {
+    "ready": true,
+    "status": "REVENUE_DASHBOARD_METRICS_AVAILABLE",
+    "sample_keys": [
+      "revenue_dashboard",
+      "platform_revenue_credits",
+      "gross_volume_credits",
+      "signals_generated",
+      "signals_delivered",
+      "revenue_per_signal_credits",
+      "autonomous_tasks_settled",
+      "autonomous_tasks_queued",
+      "wallet_count",
+      "pix_approved_count",
+      "pix_pending_count",
+      "pix_approved_gmv_brl"
+    ]
+  },
+  "incident_recovery": {
+    "status": "RETRYING_SYNC",
+    "failed_sync_detected": false,
+    "branch_drift_detected": true,
+    "runtime_mismatch_detected": false,
+    "auto_retry_enabled": true,
+    "sync_retry_counter": 1,
+    "retry_queue": [
+      "git pull origin main",
+      "runtime refresh",
+      "integrity recheck"
+    ],
+    "deployment_rollback_marker": "ROLLBACK_NOT_REQUIRED_PENDING_SYNC",
+    "drift_correction": "ENABLED",
+    "runtime_mismatch_correction": "ENABLED",
+    "degraded_state_recovery": "ENABLED",
+    "websocket_recovery": "ENABLED",
+    "provider_reconnection_orchestration": "ACTIVE",
+    "provider_cooldown_state": "IDLE",
+    "degraded_provider_isolation": "ENABLED",
+    "provider_health_score": 95,
+    "non_blocking_guarantees": {
+      "runtime": "NO_TERMINATION",
+      "dashboard": "NO_BLOCK",
+      "telemetry": "NO_STOP",
+      "governance": "NO_STOP"
+    },
+    "recovery_log": "Non-main branch detected; synchronization retry suggested.",
+    "generated_at": "2026-05-30T06:09:30.528Z"
+  },
+  "blockers": [
+    "Production health endpoints did not validate.",
+    "Monitoring provider is not configured.",
+    "Alert routing is not configured.",
+    "Incident recovery is blocked by rollback readiness failure."
+  ]
+}

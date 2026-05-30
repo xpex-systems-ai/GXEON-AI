@@ -1,0 +1,59 @@
+{
+  "report": "RAILWAY_PRODUCTION_REPORT",
+  "generated_at": "2026-05-30T06:09:30.396Z",
+  "ready": false,
+  "env": {
+    "RAILWAY_ENVIRONMENT": false,
+    "RAILWAY_PROJECT_ID": false,
+    "RAILWAY_SERVICE_ID": false,
+    "RAILWAY_PUBLIC_DOMAIN": false,
+    "RAILWAY_DEPLOYMENT_ID": false,
+    "PORT": false,
+    "NODE_ENV": false
+  },
+  "deployment_target": null,
+  "production_environment": false,
+  "restart_policy": "NOT_EXPOSED_IN_ENV",
+  "build_runtime": {
+    "production_runtime": "ACTIVE",
+    "runtime": "LIVE",
+    "heartbeat": "ACTIVE",
+    "recovery": "RETRYING_SYNC",
+    "governance": "ACTIVE",
+    "telemetry": "ACTIVE",
+    "conversion_runtime": "ACTIVE",
+    "swarm_monitoring": "ACTIVE",
+    "dashboard_runtime": "ACTIVE",
+    "supabase_validation": "DEGRADED",
+    "deployment_sync": "ACTIVE",
+    "last_commit": "f9763fc",
+    "last_sync": "2026-05-30T06:06:02+00:00",
+    "generated_at": "2026-05-30T06:09:30.493Z"
+  },
+  "deployment_integrity": {
+    "deployment": "HEALTHY",
+    "sync": "ACTIVE",
+    "branch": "work",
+    "dashboard": "ONLINE",
+    "runtime": "LIVE",
+    "runtime_freshness": "FRESH",
+    "commit_synchronization": "ACTIVE",
+    "artifact_presence": "PRESENT",
+    "environment_integrity": "DEGRADED",
+    "generated_at": "2026-05-30T06:09:30.509Z"
+  },
+  "deployment_health": {
+    "ready": false,
+    "status": "BLOCKED_PRODUCTION_BASE_URL_OR_RAILWAY_PUBLIC_DOMAIN_MISSING"
+  },
+  "rollback_readiness": {
+    "ready": false,
+    "status": "BLOCKED_DATABASE_BACKUP_VERIFIED_NOT_TRUE"
+  },
+  "blockers": [
+    "Missing Railway identity env vars: RAILWAY_PROJECT_ID, RAILWAY_SERVICE_ID.",
+    "Railway/Node production environment is not verified.",
+    "Railway deployment health endpoint did not validate.",
+    "Rollback readiness is not proven with deployment ID and verified database backup."
+  ]
+}

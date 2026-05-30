@@ -15,7 +15,8 @@
     "runtime:platform:check": "node scripts/runtime_platform_cleanup_check.cjs",
     "supabase:check": "node scripts/supabase_env_check.cjs",
     "deploy:railway:auto": "bash scripts/railway_autodeploy.sh work",
-    "mercado:check": "node scripts/mercado_pago_env_check.cjs"
+    "mercado:check": "node scripts/mercado_pago_env_check.cjs",
+    "production:activate": "node scripts/production_activation_check.cjs"
   },
   "private": true,
   "devDependencies": {

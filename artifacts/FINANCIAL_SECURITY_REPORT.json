@@ -1,0 +1,100 @@
+{
+  "report": "FINANCIAL_SECURITY_REPORT",
+  "generated_at": "2026-05-30T06:09:30.396Z",
+  "ready": false,
+  "env": {
+    "FINANCIAL_AUTH_TOKEN": false,
+    "FINANCIAL_AUTH_SCOPES": false,
+    "FINANCIAL_RATE_LIMIT_WINDOW_MS": false,
+    "FINANCIAL_RATE_LIMIT_MAX_REQUESTS": false
+  },
+  "token": {
+    "ready": false,
+    "status": "BLOCKED_FINANCIAL_AUTH_TOKEN_MISSING"
+  },
+  "middleware": {
+    "ready": true,
+    "checks": {
+      "source_present": true,
+      "exports_financial_auth": true,
+      "exports_rate_limit": true,
+      "exports_idempotency": true,
+      "exports_financial_mutation": true,
+      "token_fail_closed": true,
+      "scope_validation": true,
+      "rate_limit_headers": true,
+      "idempotency_required": true,
+      "idempotency_replay": true
+    }
+  },
+  "scopes": {
+    "ready": true,
+    "required": [
+      "financial:payments:create",
+      "financial:payments:auto",
+      "financial:credits:wallet",
+      "financial:credits:transfer",
+      "financial:credits:auto-topup",
+      "financial:commissions:settle",
+      "financial:revenue:tasks",
+      "financial:revenue:scheduler",
+      "financial:revenue:radar",
+      "financial:payments:followups",
+      "financial:x-radar:signals",
+      "financial:x-radar:consume",
+      "financial:x-radar:scan",
+      "financial:x-radar:revenue",
+      "financial:monetization:subscriptions",
+      "financial:revenue-engine:checkout",
+      "financial:revenue-engine:recovery",
+      "financial:revenue-engine:subscriptions",
+      "financial:revenue-engine:credits",
+      "financial:revenue-engine:radar",
+      "financial:revenue-engine:entitlements"
+    ],
+    "protected": [
+      "financial:payments:create",
+      "financial:payments:auto",
+      "financial:credits:wallet",
+      "financial:credits:transfer",
+      "financial:commissions:settle",
+      "financial:revenue:tasks",
+      "financial:revenue:scheduler",
+      "financial:credits:auto-topup",
+      "financial:revenue:radar",
+      "financial:x-radar:signals",
+      "financial:x-radar:consume",
+      "financial:x-radar:scan",
+      "financial:x-radar:revenue",
+      "financial:monetization:subscriptions",
+      "financial:payments:followups",
+      "financial:revenue-engine:checkout",
+      "financial:revenue-engine:recovery",
+      "financial:revenue-engine:subscriptions",
+      "financial:revenue-engine:credits",
+      "financial:revenue-engine:radar",
+      "financial:revenue-engine:entitlements"
+    ],
+    "missing": [],
+    "duplicates": []
+  },
+  "rate_limit": {
+    "ready": true,
+    "status": "RATE_LIMIT_MIDDLEWARE_PRESENT",
+    "configured_window_ms": "DEFAULT_60000",
+    "configured_max_requests": "DEFAULT_30"
+  },
+  "idempotency": {
+    "ready": true,
+    "status": "IDEMPOTENCY_MIDDLEWARE_PRESENT",
+    "required_header": "Idempotency-Key"
+  },
+  "mutation_protection": {
+    "ready": true,
+    "protected_route_count": 21,
+    "expected_route_count": 21
+  },
+  "blockers": [
+    "FINANCIAL_AUTH_TOKEN is not configured."
+  ]
+}
