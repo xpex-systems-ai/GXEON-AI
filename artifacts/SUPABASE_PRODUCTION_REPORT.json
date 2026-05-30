@@ -1,0 +1,72 @@
+{
+  "report": "SUPABASE_PRODUCTION_REPORT",
+  "generated_at": "2026-05-30T06:03:01.021Z",
+  "ready": false,
+  "env": {
+    "SUPABASE_URL": false,
+    "SUPABASE_SERVICE_ROLE_KEY": false,
+    "VITE_SUPABASE_URL": false,
+    "VITE_SUPABASE_ANON_KEY": false,
+    "EXPO_PUBLIC_SUPABASE_URL": false,
+    "EXPO_PUBLIC_SUPABASE_ANON_KEY": false
+  },
+  "credentials": {
+    "SUPABASE_URL": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "SUPABASE_SERVICE_ROLE_KEY": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "VITE_SUPABASE_URL": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "VITE_SUPABASE_ANON_KEY": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "EXPO_PUBLIC_SUPABASE_URL": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "EXPO_PUBLIC_SUPABASE_ANON_KEY": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    }
+  },
+  "frontend_integration": false,
+  "mobile_integration": false,
+  "auth": {
+    "ready": false,
+    "status": "BLOCKED_SUPABASE_URL_OR_ANON_KEY_MISSING"
+  },
+  "realtime": {
+    "ready": false,
+    "status": "BLOCKED_SUPABASE_URL_OR_ANON_KEY_MISSING"
+  },
+  "rls_policies": {
+    "ready": false,
+    "status": "BLOCKED_DATABASE_CONNECTION_MISSING"
+  },
+  "storage": {
+    "ready": false,
+    "status": "BLOCKED_SUPABASE_URL_OR_SERVICE_ROLE_MISSING"
+  },
+  "blockers": [
+    "Missing Supabase env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+    "Web frontend Supabase env pair is incomplete.",
+    "Mobile Supabase env pair is incomplete.",
+    "Supabase auth validation did not pass.",
+    "Supabase realtime validation did not pass.",
+    "Supabase/Postgres RLS policy validation did not pass.",
+    "Supabase storage validation did not pass."
+  ]
+}

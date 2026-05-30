@@ -1,0 +1,832 @@
+{
+  "report": "GO_LIVE_REPORT",
+  "mission_id": "GXEON_MISSION_006_FINAL_PRODUCTION_UNLOCK",
+  "version": "6.0",
+  "mode": "AUDIT_AND_REMEDIATION",
+  "phase": "FINAL_PRODUCTION_UNLOCK",
+  "target": "FIRST_REAL_PIX",
+  "generated_at": "2026-05-30T06:03:01.021Z",
+  "production_score": 0,
+  "production_score_max": 100,
+  "minimum_go_live_score": 95,
+  "score_breakdown": [
+    {
+      "key": "database",
+      "weight": 15,
+      "ready": false
+    },
+    {
+      "key": "supabase",
+      "weight": 15,
+      "ready": false
+    },
+    {
+      "key": "mercado_pago",
+      "weight": 20,
+      "ready": false
+    },
+    {
+      "key": "financial_security",
+      "weight": 20,
+      "ready": false
+    },
+    {
+      "key": "railway",
+      "weight": 10,
+      "ready": false
+    },
+    {
+      "key": "observability",
+      "weight": 10,
+      "ready": false
+    },
+    {
+      "key": "pix_simulation",
+      "weight": 10,
+      "ready": false
+    }
+  ],
+  "go_live_requirements": {
+    "database_ready": false,
+    "supabase_ready": false,
+    "mercadopago_ready": false,
+    "railway_ready": false,
+    "observability_ready": false,
+    "rollback_ready": false,
+    "financial_auth_ready": false,
+    "pix_runtime_ready": false
+  },
+  "first_real_pix_ready": false,
+  "first_real_revenue_ready": false,
+  "real_pix_ready": false,
+  "revenue_ready": false,
+  "database_ready": false,
+  "supabase_ready": false,
+  "mercadopago_ready": false,
+  "railway_ready": false,
+  "observability_ready": false,
+  "financial_security_ready": false,
+  "go_live_decision": "NO_GO",
+  "remaining_blockers": [
+    "DATABASE_URL is not configured.",
+    "Cannot validate connection, remote migrations, financial tables, indexes, or transaction persistence.",
+    "Missing Supabase env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+    "Web frontend Supabase env pair is incomplete.",
+    "Mobile Supabase env pair is incomplete.",
+    "Supabase auth validation did not pass.",
+    "Supabase realtime validation did not pass.",
+    "Supabase/Postgres RLS policy validation did not pass.",
+    "Supabase storage validation did not pass.",
+    "Missing Mercado Pago / financial env vars: DATABASE_URL, MERCADO_PAGO_ACCESS_TOKEN, MERCADO_PAGO_WEBHOOK_SECRET, MERCADO_PAGO_NOTIFICATION_URL, FINANCIAL_AUTH_TOKEN.",
+    "Mercado Pago access token validation did not pass.",
+    "Mercado Pago webhook URL/secret/signature validation did not pass.",
+    "PIX runtime is not production-ready.",
+    "Real PIX payment creation was not validated.",
+    "Settlement flow is not ready.",
+    "PIX recovery flow is not ready.",
+    "FINANCIAL_AUTH_TOKEN is not configured.",
+    "Missing Railway identity env vars: RAILWAY_PROJECT_ID, RAILWAY_SERVICE_ID.",
+    "Railway/Node production environment is not verified.",
+    "Railway deployment health endpoint did not validate.",
+    "Rollback readiness is not proven with deployment ID and verified database backup.",
+    "Production health endpoints did not validate.",
+    "Monitoring provider is not configured.",
+    "Alert routing is not configured.",
+    "Incident recovery is blocked by rollback readiness failure.",
+    "Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true, GXEON_OPERATOR_CONFIRMED_REAL_PIX=true, and Mercado Pago prerequisites pass.",
+    "Real PIX payment confirmation is missing: GXEON_REAL_PIX_PAYMENT_CONFIRMED=true was not provided after real payment execution.",
+    "Webhook validation did not pass.",
+    "Ledger update validation is blocked until DB and settlement flow are ready.",
+    "Wallet update validation is blocked until ledger update validation passes."
+  ],
+  "missing_environment_variables": [
+    "DATABASE_URL",
+    "SUPABASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_ANON_KEY",
+    "EXPO_PUBLIC_SUPABASE_URL",
+    "EXPO_PUBLIC_SUPABASE_ANON_KEY",
+    "MERCADO_PAGO_ACCESS_TOKEN",
+    "MERCADO_PAGO_NOTIFICATION_URL",
+    "MERCADO_PAGO_WEBHOOK_SECRET",
+    "FINANCIAL_AUTH_TOKEN",
+    "RAILWAY_PROJECT_ID",
+    "RAILWAY_SERVICE_ID"
+  ],
+  "failed_validations": [
+    "database",
+    "database.connection",
+    "database.ledger_tables",
+    "database.payment_tables",
+    "database.indexes",
+    "database.transaction_persistence",
+    "supabase",
+    "supabase.auth",
+    "supabase.realtime",
+    "supabase.rls_policies",
+    "supabase.storage",
+    "mercadopago",
+    "mercadopago.access_token_validation",
+    "mercadopago.webhook",
+    "mercadopago.pix_runtime",
+    "mercadopago.payment_creation",
+    "mercadopago.payment_status",
+    "mercadopago.settlement_flow",
+    "mercadopago.recovery_flow",
+    "financialSecurity",
+    "financialSecurity.token",
+    "railway",
+    "railway.deployment_health",
+    "railway.rollback_readiness",
+    "observability",
+    "observability.health_endpoints",
+    "observability.monitoring",
+    "observability.alerts",
+    "pix"
+  ],
+  "report_readiness": {
+    "database": false,
+    "supabase": false,
+    "mercadopago": false,
+    "financialSecurity": false,
+    "railway": false,
+    "observability": false,
+    "pix": false
+  },
+  "evidence": {
+    "fail_closed": true,
+    "mock_data_allowed": false,
+    "fake_success_allowed": false,
+    "real_pix_requires_operator_confirmation": true,
+    "operator_confirmation_env": "GXEON_OPERATOR_CONFIRMED_REAL_PIX",
+    "real_pix_creation_guard_env": "GXEON_ALLOW_REAL_PIX_VALIDATION",
+    "generated_at": "2026-05-30T06:03:01.021Z"
+  },
+  "generated_reports": [
+    "DATABASE_PRODUCTION_REPORT.json",
+    "SUPABASE_PRODUCTION_REPORT.json",
+    "MERCADOPAGO_PRODUCTION_REPORT.json",
+    "FINANCIAL_SECURITY_REPORT.json",
+    "RAILWAY_PRODUCTION_REPORT.json",
+    "OBSERVABILITY_REPORT.json",
+    "PIX_SIMULATION_REPORT.json",
+    "GO_LIVE_REPORT.json",
+    "GXEON_INFRASTRUCTURE_ACTIVATION_REPORT.json"
+  ],
+  "final_answers": {
+    "can_process_real_pix_safely": false,
+    "can_receive_revenue_in_production": false,
+    "production_confidence_score": "0/100",
+    "go_live_decision": "NO_GO",
+    "remaining_blockers": [
+      "DATABASE_URL is not configured.",
+      "Cannot validate connection, remote migrations, financial tables, indexes, or transaction persistence.",
+      "Missing Supabase env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+      "Web frontend Supabase env pair is incomplete.",
+      "Mobile Supabase env pair is incomplete.",
+      "Supabase auth validation did not pass.",
+      "Supabase realtime validation did not pass.",
+      "Supabase/Postgres RLS policy validation did not pass.",
+      "Supabase storage validation did not pass.",
+      "Missing Mercado Pago / financial env vars: DATABASE_URL, MERCADO_PAGO_ACCESS_TOKEN, MERCADO_PAGO_WEBHOOK_SECRET, MERCADO_PAGO_NOTIFICATION_URL, FINANCIAL_AUTH_TOKEN.",
+      "Mercado Pago access token validation did not pass.",
+      "Mercado Pago webhook URL/secret/signature validation did not pass.",
+      "PIX runtime is not production-ready.",
+      "Real PIX payment creation was not validated.",
+      "Settlement flow is not ready.",
+      "PIX recovery flow is not ready.",
+      "FINANCIAL_AUTH_TOKEN is not configured.",
+      "Missing Railway identity env vars: RAILWAY_PROJECT_ID, RAILWAY_SERVICE_ID.",
+      "Railway/Node production environment is not verified.",
+      "Railway deployment health endpoint did not validate.",
+      "Rollback readiness is not proven with deployment ID and verified database backup.",
+      "Production health endpoints did not validate.",
+      "Monitoring provider is not configured.",
+      "Alert routing is not configured.",
+      "Incident recovery is blocked by rollback readiness failure.",
+      "Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true, GXEON_OPERATOR_CONFIRMED_REAL_PIX=true, and Mercado Pago prerequisites pass.",
+      "Real PIX payment confirmation is missing: GXEON_REAL_PIX_PAYMENT_CONFIRMED=true was not provided after real payment execution.",
+      "Webhook validation did not pass.",
+      "Ledger update validation is blocked until DB and settlement flow are ready.",
+      "Wallet update validation is blocked until ledger update validation passes."
+    ],
+    "missing_environment_variables": [
+      "DATABASE_URL",
+      "SUPABASE_URL",
+      "SUPABASE_SERVICE_ROLE_KEY",
+      "VITE_SUPABASE_URL",
+      "VITE_SUPABASE_ANON_KEY",
+      "EXPO_PUBLIC_SUPABASE_URL",
+      "EXPO_PUBLIC_SUPABASE_ANON_KEY",
+      "MERCADO_PAGO_ACCESS_TOKEN",
+      "MERCADO_PAGO_NOTIFICATION_URL",
+      "MERCADO_PAGO_WEBHOOK_SECRET",
+      "FINANCIAL_AUTH_TOKEN",
+      "RAILWAY_PROJECT_ID",
+      "RAILWAY_SERVICE_ID"
+    ],
+    "failed_validations": [
+      "database",
+      "database.connection",
+      "database.ledger_tables",
+      "database.payment_tables",
+      "database.indexes",
+      "database.transaction_persistence",
+      "supabase",
+      "supabase.auth",
+      "supabase.realtime",
+      "supabase.rls_policies",
+      "supabase.storage",
+      "mercadopago",
+      "mercadopago.access_token_validation",
+      "mercadopago.webhook",
+      "mercadopago.pix_runtime",
+      "mercadopago.payment_creation",
+      "mercadopago.payment_status",
+      "mercadopago.settlement_flow",
+      "mercadopago.recovery_flow",
+      "financialSecurity",
+      "financialSecurity.token",
+      "railway",
+      "railway.deployment_health",
+      "railway.rollback_readiness",
+      "observability",
+      "observability.health_endpoints",
+      "observability.monitoring",
+      "observability.alerts",
+      "pix"
+    ]
+  },
+  "reports": {
+    "database": {
+      "report": "DATABASE_PRODUCTION_REPORT",
+      "generated_at": "2026-05-30T06:03:01.021Z",
+      "ready": false,
+      "provider": {
+        "provider": "NOT_CONFIGURED",
+        "host": null,
+        "database": null
+      },
+      "database_url": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "connection": {
+        "ok": false,
+        "status": "BLOCKED_DATABASE_URL_MISSING"
+      },
+      "migrations": {
+        "local_migration_present": true,
+        "local_journal_registered": true,
+        "remote_valid": false,
+        "status": "BLOCKED_DATABASE_URL_MISSING"
+      },
+      "ledger_tables": {
+        "ready": false,
+        "expected": [
+          "actor_wallets",
+          "financial_ledger"
+        ],
+        "present": [],
+        "missing": [
+          "actor_wallets",
+          "financial_ledger"
+        ]
+      },
+      "payment_tables": {
+        "ready": false,
+        "expected": [
+          "global_transactions",
+          "payment_attempts",
+          "payment_webhook_events"
+        ],
+        "present": [],
+        "missing": [
+          "global_transactions",
+          "payment_attempts",
+          "payment_webhook_events"
+        ]
+      },
+      "indexes": {
+        "ready": false,
+        "expected": [
+          "actor_wallets_actor_id_uq",
+          "actor_wallets_actor_code_idx",
+          "actor_wallets_status_idx",
+          "financial_ledger_ledger_entry_id_uq",
+          "financial_ledger_idempotency_key_uq",
+          "financial_ledger_actor_id_idx",
+          "financial_ledger_wallet_id_idx",
+          "financial_ledger_transaction_id_idx",
+          "financial_ledger_source_idx",
+          "financial_ledger_created_at_idx",
+          "global_transactions_transaction_id_uq",
+          "global_transactions_external_reference_uq",
+          "global_transactions_provider_payment_id_idx",
+          "global_transactions_actor_id_idx",
+          "global_transactions_status_idx",
+          "global_transactions_created_at_idx",
+          "payment_attempts_idempotency_key_uq",
+          "payment_attempts_transaction_id_idx",
+          "payment_attempts_provider_payment_id_idx",
+          "payment_attempts_status_idx",
+          "payment_attempts_created_at_idx",
+          "payment_webhook_events_idempotency_key_uq",
+          "payment_webhook_events_provider_event_uq",
+          "payment_webhook_events_provider_payment_id_idx",
+          "payment_webhook_events_processing_status_idx",
+          "payment_webhook_events_received_at_idx"
+        ],
+        "present": [],
+        "missing": [
+          "actor_wallets_actor_id_uq",
+          "actor_wallets_actor_code_idx",
+          "actor_wallets_status_idx",
+          "financial_ledger_ledger_entry_id_uq",
+          "financial_ledger_idempotency_key_uq",
+          "financial_ledger_actor_id_idx",
+          "financial_ledger_wallet_id_idx",
+          "financial_ledger_transaction_id_idx",
+          "financial_ledger_source_idx",
+          "financial_ledger_created_at_idx",
+          "global_transactions_transaction_id_uq",
+          "global_transactions_external_reference_uq",
+          "global_transactions_provider_payment_id_idx",
+          "global_transactions_actor_id_idx",
+          "global_transactions_status_idx",
+          "global_transactions_created_at_idx",
+          "payment_attempts_idempotency_key_uq",
+          "payment_attempts_transaction_id_idx",
+          "payment_attempts_provider_payment_id_idx",
+          "payment_attempts_status_idx",
+          "payment_attempts_created_at_idx",
+          "payment_webhook_events_idempotency_key_uq",
+          "payment_webhook_events_provider_event_uq",
+          "payment_webhook_events_provider_payment_id_idx",
+          "payment_webhook_events_processing_status_idx",
+          "payment_webhook_events_received_at_idx"
+        ]
+      },
+      "transaction_persistence": {
+        "ready": false,
+        "status": "BLOCKED_DATABASE_URL_MISSING"
+      },
+      "blockers": [
+        "DATABASE_URL is not configured.",
+        "Cannot validate connection, remote migrations, financial tables, indexes, or transaction persistence."
+      ]
+    },
+    "supabase": {
+      "report": "SUPABASE_PRODUCTION_REPORT",
+      "generated_at": "2026-05-30T06:03:01.021Z",
+      "ready": false,
+      "env": {
+        "SUPABASE_URL": false,
+        "SUPABASE_SERVICE_ROLE_KEY": false,
+        "VITE_SUPABASE_URL": false,
+        "VITE_SUPABASE_ANON_KEY": false,
+        "EXPO_PUBLIC_SUPABASE_URL": false,
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": false
+      },
+      "credentials": {
+        "SUPABASE_URL": {
+          "configured": false,
+          "masked": null,
+          "length": 0
+        },
+        "SUPABASE_SERVICE_ROLE_KEY": {
+          "configured": false,
+          "masked": null,
+          "length": 0
+        },
+        "VITE_SUPABASE_URL": {
+          "configured": false,
+          "masked": null,
+          "length": 0
+        },
+        "VITE_SUPABASE_ANON_KEY": {
+          "configured": false,
+          "masked": null,
+          "length": 0
+        },
+        "EXPO_PUBLIC_SUPABASE_URL": {
+          "configured": false,
+          "masked": null,
+          "length": 0
+        },
+        "EXPO_PUBLIC_SUPABASE_ANON_KEY": {
+          "configured": false,
+          "masked": null,
+          "length": 0
+        }
+      },
+      "frontend_integration": false,
+      "mobile_integration": false,
+      "auth": {
+        "ready": false,
+        "status": "BLOCKED_SUPABASE_URL_OR_ANON_KEY_MISSING"
+      },
+      "realtime": {
+        "ready": false,
+        "status": "BLOCKED_SUPABASE_URL_OR_ANON_KEY_MISSING"
+      },
+      "rls_policies": {
+        "ready": false,
+        "status": "BLOCKED_DATABASE_CONNECTION_MISSING"
+      },
+      "storage": {
+        "ready": false,
+        "status": "BLOCKED_SUPABASE_URL_OR_SERVICE_ROLE_MISSING"
+      },
+      "blockers": [
+        "Missing Supabase env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+        "Web frontend Supabase env pair is incomplete.",
+        "Mobile Supabase env pair is incomplete.",
+        "Supabase auth validation did not pass.",
+        "Supabase realtime validation did not pass.",
+        "Supabase/Postgres RLS policy validation did not pass.",
+        "Supabase storage validation did not pass."
+      ]
+    },
+    "mercadopago": {
+      "report": "MERCADOPAGO_PRODUCTION_REPORT",
+      "generated_at": "2026-05-30T06:03:01.021Z",
+      "ready": false,
+      "env": {
+        "DATABASE_URL": false,
+        "MERCADO_PAGO_ACCESS_TOKEN": false,
+        "MERCADO_PAGO_WEBHOOK_SECRET": false,
+        "MERCADO_PAGO_NOTIFICATION_URL": false,
+        "FINANCIAL_AUTH_TOKEN": false
+      },
+      "config": {
+        "provider": "mercado_pago",
+        "mode": "NOT_CONFIGURED",
+        "ready_for_real_pix": false,
+        "can_create_pix": false,
+        "missing_required": [
+          "DATABASE_URL",
+          "MERCADO_PAGO_ACCESS_TOKEN"
+        ],
+        "required": {
+          "DATABASE_URL": false,
+          "MERCADO_PAGO_ACCESS_TOKEN": false
+        },
+        "optional": {
+          "MERCADO_PAGO_PUBLIC_KEY": false,
+          "MERCADO_PAGO_CLIENT_ID": false,
+          "MERCADO_PAGO_CLIENT_SECRET": false,
+          "MERCADO_PAGO_PIX_KEY": false,
+          "MERCADO_PAGO_DEFAULT_PAYER_EMAIL": false,
+          "MERCADO_PAGO_NOTIFICATION_URL": false
+        },
+        "credentials": {
+          "access_token": {
+            "configured": false,
+            "masked": null,
+            "length": 0
+          },
+          "public_key": {
+            "configured": false,
+            "masked": null,
+            "length": 0
+          },
+          "client_id": {
+            "configured": false,
+            "masked": null,
+            "length": 0
+          },
+          "client_secret": {
+            "configured": false,
+            "masked": null,
+            "length": 0
+          },
+          "pix_key": {
+            "configured": false,
+            "masked": null,
+            "length": 0
+          },
+          "default_payer_email": {
+            "configured": false,
+            "masked": null,
+            "length": 0
+          },
+          "database_url": {
+            "configured": false,
+            "masked": null,
+            "length": 0
+          }
+        },
+        "api_base": "https://api.mercadopago.com",
+        "webhook_url_configured": false,
+        "safety": "CREDENTIALS_MASKED_ENV_ONLY",
+        "generated_at": "2026-05-30T06:03:01.023Z"
+      },
+      "access_token_validation": {
+        "ready": false,
+        "status": "BLOCKED_ACCESS_TOKEN_MISSING"
+      },
+      "webhook": {
+        "ready": false,
+        "url_configured": false,
+        "secret_configured": false,
+        "signature_probe": "UNSIGNED_WEBHOOK_REJECTED_SECRET_MISSING"
+      },
+      "pix_runtime": {
+        "ready": false,
+        "status": "DEGRADED",
+        "storage": "LOCAL_JSON_FALLBACK_READONLY",
+        "duplicate_detector": "LOCAL_MEMORY_ONLY"
+      },
+      "payment_creation": {
+        "ready": false,
+        "status": "SKIPPED_REQUIRES_GXEON_ALLOW_REAL_PIX_VALIDATION_TRUE"
+      },
+      "payment_status": {
+        "ready": false,
+        "status": "SKIPPED_MERCADO_PAGO_VALIDATION_PAYMENT_ID_MISSING"
+      },
+      "settlement_flow": {
+        "ready": false,
+        "status": "BLOCKED_DATABASE_NOT_READY"
+      },
+      "recovery_flow": {
+        "ready": false,
+        "status": "BLOCKED_PIX_RUNTIME_OR_WEBHOOK_NOT_READY"
+      },
+      "blockers": [
+        "Missing Mercado Pago / financial env vars: DATABASE_URL, MERCADO_PAGO_ACCESS_TOKEN, MERCADO_PAGO_WEBHOOK_SECRET, MERCADO_PAGO_NOTIFICATION_URL, FINANCIAL_AUTH_TOKEN.",
+        "Mercado Pago access token validation did not pass.",
+        "Mercado Pago webhook URL/secret/signature validation did not pass.",
+        "PIX runtime is not production-ready.",
+        "Real PIX payment creation was not validated.",
+        "Settlement flow is not ready.",
+        "PIX recovery flow is not ready."
+      ]
+    },
+    "financialSecurity": {
+      "report": "FINANCIAL_SECURITY_REPORT",
+      "generated_at": "2026-05-30T06:03:01.021Z",
+      "ready": false,
+      "env": {
+        "FINANCIAL_AUTH_TOKEN": false,
+        "FINANCIAL_AUTH_SCOPES": false,
+        "FINANCIAL_RATE_LIMIT_WINDOW_MS": false,
+        "FINANCIAL_RATE_LIMIT_MAX_REQUESTS": false
+      },
+      "token": {
+        "ready": false,
+        "status": "BLOCKED_FINANCIAL_AUTH_TOKEN_MISSING"
+      },
+      "middleware": {
+        "ready": true,
+        "checks": {
+          "source_present": true,
+          "exports_financial_auth": true,
+          "exports_rate_limit": true,
+          "exports_idempotency": true,
+          "exports_financial_mutation": true,
+          "token_fail_closed": true,
+          "scope_validation": true,
+          "rate_limit_headers": true,
+          "idempotency_required": true,
+          "idempotency_replay": true
+        }
+      },
+      "scopes": {
+        "ready": true,
+        "required": [
+          "financial:payments:create",
+          "financial:payments:auto",
+          "financial:credits:wallet",
+          "financial:credits:transfer",
+          "financial:credits:auto-topup",
+          "financial:commissions:settle",
+          "financial:revenue:tasks",
+          "financial:revenue:scheduler",
+          "financial:revenue:radar",
+          "financial:payments:followups",
+          "financial:x-radar:signals",
+          "financial:x-radar:consume",
+          "financial:x-radar:scan",
+          "financial:x-radar:revenue",
+          "financial:monetization:subscriptions",
+          "financial:revenue-engine:checkout",
+          "financial:revenue-engine:recovery",
+          "financial:revenue-engine:subscriptions",
+          "financial:revenue-engine:credits",
+          "financial:revenue-engine:radar",
+          "financial:revenue-engine:entitlements"
+        ],
+        "protected": [
+          "financial:payments:create",
+          "financial:payments:auto",
+          "financial:credits:wallet",
+          "financial:credits:transfer",
+          "financial:commissions:settle",
+          "financial:revenue:tasks",
+          "financial:revenue:scheduler",
+          "financial:credits:auto-topup",
+          "financial:revenue:radar",
+          "financial:x-radar:signals",
+          "financial:x-radar:consume",
+          "financial:x-radar:scan",
+          "financial:x-radar:revenue",
+          "financial:monetization:subscriptions",
+          "financial:payments:followups",
+          "financial:revenue-engine:checkout",
+          "financial:revenue-engine:recovery",
+          "financial:revenue-engine:subscriptions",
+          "financial:revenue-engine:credits",
+          "financial:revenue-engine:radar",
+          "financial:revenue-engine:entitlements"
+        ],
+        "missing": [],
+        "duplicates": []
+      },
+      "rate_limit": {
+        "ready": true,
+        "status": "RATE_LIMIT_MIDDLEWARE_PRESENT",
+        "configured_window_ms": "DEFAULT_60000",
+        "configured_max_requests": "DEFAULT_30"
+      },
+      "idempotency": {
+        "ready": true,
+        "status": "IDEMPOTENCY_MIDDLEWARE_PRESENT",
+        "required_header": "Idempotency-Key"
+      },
+      "mutation_protection": {
+        "ready": true,
+        "protected_route_count": 21,
+        "expected_route_count": 21
+      },
+      "blockers": [
+        "FINANCIAL_AUTH_TOKEN is not configured."
+      ]
+    },
+    "railway": {
+      "report": "RAILWAY_PRODUCTION_REPORT",
+      "generated_at": "2026-05-30T06:03:01.021Z",
+      "ready": false,
+      "env": {
+        "RAILWAY_ENVIRONMENT": false,
+        "RAILWAY_PROJECT_ID": false,
+        "RAILWAY_SERVICE_ID": false,
+        "RAILWAY_PUBLIC_DOMAIN": false,
+        "RAILWAY_DEPLOYMENT_ID": false,
+        "PORT": false,
+        "NODE_ENV": false
+      },
+      "deployment_target": null,
+      "production_environment": false,
+      "restart_policy": "NOT_EXPOSED_IN_ENV",
+      "build_runtime": {
+        "production_runtime": "ACTIVE",
+        "runtime": "LIVE",
+        "heartbeat": "ACTIVE",
+        "recovery": "RETRYING_SYNC",
+        "governance": "ACTIVE",
+        "telemetry": "ACTIVE",
+        "conversion_runtime": "ACTIVE",
+        "swarm_monitoring": "ACTIVE",
+        "dashboard_runtime": "ACTIVE",
+        "supabase_validation": "DEGRADED",
+        "deployment_sync": "ACTIVE",
+        "last_commit": "5f1b9c2",
+        "last_sync": "2026-05-30T06:00:34+00:00",
+        "generated_at": "2026-05-30T06:03:01.099Z"
+      },
+      "deployment_integrity": {
+        "deployment": "HEALTHY",
+        "sync": "ACTIVE",
+        "branch": "work",
+        "dashboard": "ONLINE",
+        "runtime": "LIVE",
+        "runtime_freshness": "FRESH",
+        "commit_synchronization": "ACTIVE",
+        "artifact_presence": "PRESENT",
+        "environment_integrity": "DEGRADED",
+        "generated_at": "2026-05-30T06:03:01.116Z"
+      },
+      "deployment_health": {
+        "ready": false,
+        "status": "BLOCKED_PRODUCTION_BASE_URL_OR_RAILWAY_PUBLIC_DOMAIN_MISSING"
+      },
+      "rollback_readiness": {
+        "ready": false,
+        "status": "BLOCKED_DATABASE_BACKUP_VERIFIED_NOT_TRUE"
+      },
+      "blockers": [
+        "Missing Railway identity env vars: RAILWAY_PROJECT_ID, RAILWAY_SERVICE_ID.",
+        "Railway/Node production environment is not verified.",
+        "Railway deployment health endpoint did not validate.",
+        "Rollback readiness is not proven with deployment ID and verified database backup."
+      ]
+    },
+    "observability": {
+      "report": "OBSERVABILITY_REPORT",
+      "generated_at": "2026-05-30T06:03:01.021Z",
+      "ready": false,
+      "structured_logs": {
+        "ready": true,
+        "status": "PINO_HTTP_CONFIGURED_IN_API_SERVER"
+      },
+      "health_endpoints": {
+        "ready": false,
+        "status": "BLOCKED_PRODUCTION_BASE_URL_OR_RAILWAY_PUBLIC_DOMAIN_MISSING",
+        "probes": []
+      },
+      "monitoring": {
+        "ready": false,
+        "status": "NOT_CONFIGURED"
+      },
+      "alerts": {
+        "ready": false,
+        "status": "NOT_CONFIGURED"
+      },
+      "metrics": {
+        "ready": true,
+        "status": "REVENUE_DASHBOARD_METRICS_AVAILABLE",
+        "sample_keys": [
+          "revenue_dashboard",
+          "platform_revenue_credits",
+          "gross_volume_credits",
+          "signals_generated",
+          "signals_delivered",
+          "revenue_per_signal_credits",
+          "autonomous_tasks_settled",
+          "autonomous_tasks_queued",
+          "wallet_count",
+          "pix_approved_count",
+          "pix_pending_count",
+          "pix_approved_gmv_brl"
+        ]
+      },
+      "incident_recovery": {
+        "status": "RETRYING_SYNC",
+        "failed_sync_detected": false,
+        "branch_drift_detected": true,
+        "runtime_mismatch_detected": false,
+        "auto_retry_enabled": true,
+        "sync_retry_counter": 1,
+        "retry_queue": [
+          "git pull origin main",
+          "runtime refresh",
+          "integrity recheck"
+        ],
+        "deployment_rollback_marker": "ROLLBACK_NOT_REQUIRED_PENDING_SYNC",
+        "drift_correction": "ENABLED",
+        "runtime_mismatch_correction": "ENABLED",
+        "degraded_state_recovery": "ENABLED",
+        "websocket_recovery": "ENABLED",
+        "provider_reconnection_orchestration": "ACTIVE",
+        "provider_cooldown_state": "IDLE",
+        "degraded_provider_isolation": "ENABLED",
+        "provider_health_score": 95,
+        "non_blocking_guarantees": {
+          "runtime": "NO_TERMINATION",
+          "dashboard": "NO_BLOCK",
+          "telemetry": "NO_STOP",
+          "governance": "NO_STOP"
+        },
+        "recovery_log": "Non-main branch detected; synchronization retry suggested.",
+        "generated_at": "2026-05-30T06:03:01.135Z"
+      },
+      "blockers": [
+        "Production health endpoints did not validate.",
+        "Monitoring provider is not configured.",
+        "Alert routing is not configured.",
+        "Incident recovery is blocked by rollback readiness failure."
+      ]
+    },
+    "pix": {
+      "report": "PIX_SIMULATION_REPORT",
+      "generated_at": "2026-05-30T06:03:01.021Z",
+      "ready": false,
+      "mode": "SAFE_FAIL_CLOSED_DEFAULT",
+      "operator_confirmation": {
+        "required": true,
+        "confirmed": false,
+        "env": "GXEON_OPERATOR_CONFIRMED_REAL_PIX"
+      },
+      "checkout_created": false,
+      "pix_generated": false,
+      "qr_code_validated": false,
+      "copy_paste_code_validated": false,
+      "payment_simulated": false,
+      "webhook_validated": false,
+      "ledger_updated": false,
+      "wallet_updated": false,
+      "dashboard_metrics_validated": true,
+      "blockers": [
+        "Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true, GXEON_OPERATOR_CONFIRMED_REAL_PIX=true, and Mercado Pago prerequisites pass.",
+        "Real PIX payment confirmation is missing: GXEON_REAL_PIX_PAYMENT_CONFIRMED=true was not provided after real payment execution.",
+        "Webhook validation did not pass.",
+        "Ledger update validation is blocked until DB and settlement flow are ready.",
+        "Wallet update validation is blocked until ledger update validation passes."
+      ]
+    }
+  }
+}
