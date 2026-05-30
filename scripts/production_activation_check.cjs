@@ -145,6 +145,24 @@ const RAILWAY_KEYS = [
   "NODE_ENV",
 ];
 
+const REQUIRED_PRODUCTION_ENVS = [
+  "DATABASE_URL",
+  "SUPABASE_URL",
+  "SUPABASE_SERVICE_ROLE_KEY",
+  "VITE_SUPABASE_URL",
+  "VITE_SUPABASE_ANON_KEY",
+  "EXPO_PUBLIC_SUPABASE_URL",
+  "EXPO_PUBLIC_SUPABASE_ANON_KEY",
+  "MERCADO_PAGO_ACCESS_TOKEN",
+  "MERCADO_PAGO_NOTIFICATION_URL",
+  "MERCADO_PAGO_WEBHOOK_SECRET",
+  "FINANCIAL_AUTH_TOKEN",
+  "RAILWAY_PROJECT_ID",
+  "RAILWAY_SERVICE_ID",
+];
+
+const MINIMUM_GO_LIVE_SCORE = 95;
+
 function mask(value = "") {
   const text = String(value || "");
   if (!text) return { configured: false, masked: null, length: 0 };
@@ -169,6 +187,39 @@ function envPresence(keys) {
 
 function boolsReady(object) {
   return Object.values(object).every(Boolean);
+}
+
+function missingEnvironmentVariables() {
+  return REQUIRED_PRODUCTION_ENVS.filter((key) => !process.env[key]);
+}
+
+function collectFailedValidations(value, prefix = "") {
+  if (!value || typeof value !== "object") return [];
+  const failures = [];
+  if (
+    Object.prototype.hasOwnProperty.call(value, "ready") &&
+    value.ready === false
+  ) {
+    failures.push(prefix || "root");
+  }
+  if (Object.prototype.hasOwnProperty.call(value, "ok") && value.ok === false) {
+    failures.push(prefix || "root");
+  }
+  for (const [key, nested] of Object.entries(value)) {
+    if (
+      key === "blockers" ||
+      key === "missing" ||
+      key === "expected" ||
+      key === "present"
+    )
+      continue;
+    if (nested && typeof nested === "object") {
+      failures.push(
+        ...collectFailedValidations(nested, prefix ? `${prefix}.${key}` : key),
+      );
+    }
+  }
+  return [...new Set(failures)];
 }
 
 function writeJson(name, data) {
@@ -807,13 +858,19 @@ async function validateMercadoPago(databaseReport) {
     }
   }
 
-  if (process.env.GXEON_ALLOW_REAL_PIX_VALIDATION === "true") {
+  if (
+    process.env.GXEON_ALLOW_REAL_PIX_VALIDATION === "true" &&
+    process.env.GXEON_OPERATOR_CONFIRMED_REAL_PIX === "true"
+  ) {
     try {
       const payment = await createPixPayment({
         amount: Number(process.env.GXEON_REAL_PIX_VALIDATION_AMOUNT || 1),
         description: "GXEON production activation validation PIX",
         payer_email: process.env.MERCADO_PAGO_DEFAULT_PAYER_EMAIL,
-        metadata: { audit: "GXEON_MISSION_005", generated_at: GENERATED_AT },
+        metadata: {
+          audit: "GXEON_MISSION_006_FINAL_PRODUCTION_UNLOCK",
+          generated_at: GENERATED_AT,
+        },
       });
       report.payment_creation = {
         ready: Boolean(payment.qrCode || payment.copyPastePix),
@@ -830,6 +887,12 @@ async function validateMercadoPago(databaseReport) {
         error: String(error.message || error),
       };
     }
+  } else if (process.env.GXEON_ALLOW_REAL_PIX_VALIDATION === "true") {
+    report.payment_creation = {
+      ready: false,
+      status: "BLOCKED_OPERATOR_CONFIRMATION_REQUIRED",
+      required_confirmation_env: "GXEON_OPERATOR_CONFIRMED_REAL_PIX=true",
+    };
   }
 
   report.recovery_flow = {
@@ -1249,9 +1312,17 @@ async function validatePixSimulation(databaseReport, mercadoPagoReport) {
     generated_at: GENERATED_AT,
     ready: false,
     mode:
-      process.env.GXEON_ALLOW_REAL_PIX_VALIDATION === "true"
-        ? "REAL_PROVIDER_VALIDATION_ENABLED"
-        : "SAFE_DRY_RUN_DEFAULT",
+      process.env.GXEON_ALLOW_REAL_PIX_VALIDATION === "true" &&
+      process.env.GXEON_OPERATOR_CONFIRMED_REAL_PIX === "true"
+        ? "REAL_PROVIDER_VALIDATION_OPERATOR_CONFIRMED"
+        : process.env.GXEON_ALLOW_REAL_PIX_VALIDATION === "true"
+          ? "BLOCKED_OPERATOR_CONFIRMATION_REQUIRED"
+          : "SAFE_FAIL_CLOSED_DEFAULT",
+    operator_confirmation: {
+      required: true,
+      confirmed: process.env.GXEON_OPERATOR_CONFIRMED_REAL_PIX === "true",
+      env: "GXEON_OPERATOR_CONFIRMED_REAL_PIX",
+    },
     checkout_created: false,
     pix_generated: false,
     qr_code_validated: false,
@@ -1268,6 +1339,7 @@ async function validatePixSimulation(databaseReport, mercadoPagoReport) {
 
   if (
     process.env.GXEON_ALLOW_REAL_PIX_VALIDATION === "true" &&
+    process.env.GXEON_OPERATOR_CONFIRMED_REAL_PIX === "true" &&
     mercadoPagoReport.payment_creation.ready
   ) {
     report.checkout_created = true;
@@ -1276,14 +1348,18 @@ async function validatePixSimulation(databaseReport, mercadoPagoReport) {
     report.copy_paste_code_validated = true;
   } else {
     report.blockers.push(
-      "Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true and Mercado Pago prerequisites pass.",
+      "Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true, GXEON_OPERATOR_CONFIRMED_REAL_PIX=true, and Mercado Pago prerequisites pass.",
     );
   }
 
-  report.payment_simulated = report.webhook_validated;
+  report.payment_simulated =
+    report.pix_generated &&
+    process.env.GXEON_REAL_PIX_PAYMENT_CONFIRMED === "true";
   report.ledger_updated =
+    report.payment_simulated &&
     databaseReport.transaction_persistence.ready &&
-    mercadoPagoReport.settlement_flow.ready;
+    mercadoPagoReport.settlement_flow.ready &&
+    process.env.GXEON_REAL_PIX_WEBHOOK_CONFIRMED === "true";
   report.wallet_updated = report.ledger_updated;
 
   try {
@@ -1297,6 +1373,17 @@ async function validatePixSimulation(databaseReport, mercadoPagoReport) {
     );
   }
 
+  if (
+    process.env.GXEON_ALLOW_REAL_PIX_VALIDATION === "true" &&
+    !report.operator_confirmation.confirmed
+  )
+    report.blockers.push(
+      "Operator confirmation for real PIX validation is missing: set GXEON_OPERATOR_CONFIRMED_REAL_PIX=true only when the operator approves a real provider PIX test.",
+    );
+  if (!report.payment_simulated)
+    report.blockers.push(
+      "Real PIX payment confirmation is missing: GXEON_REAL_PIX_PAYMENT_CONFIRMED=true was not provided after real payment execution.",
+    );
   if (!report.webhook_validated)
     report.blockers.push("Webhook validation did not pass.");
   if (!report.ledger_updated)
@@ -1325,16 +1412,17 @@ async function validatePixSimulation(databaseReport, mercadoPagoReport) {
 
 function calculateScore(reports) {
   const categories = [
-    { key: "database", weight: 20, ready: reports.database.ready },
+    { key: "database", weight: 15, ready: reports.database.ready },
     { key: "supabase", weight: 15, ready: reports.supabase.ready },
-    { key: "mercadopago", weight: 25, ready: reports.mercadopago.ready },
-    { key: "railway", weight: 15, ready: reports.railway.ready },
-    { key: "observability", weight: 15, ready: reports.observability.ready },
+    { key: "mercado_pago", weight: 20, ready: reports.mercadopago.ready },
     {
-      key: "financial_auth",
-      weight: 10,
+      key: "financial_security",
+      weight: 20,
       ready: reports.financialSecurity.ready,
     },
+    { key: "railway", weight: 10, ready: reports.railway.ready },
+    { key: "observability", weight: 10, ready: reports.observability.ready },
+    { key: "pix_simulation", weight: 10, ready: reports.pix.ready },
   ];
   const score = categories.reduce(
     (sum, item) => sum + (item.ready ? item.weight : 0),
@@ -1355,8 +1443,25 @@ function flattenBlockers(reports) {
   ].filter(Boolean);
 }
 
+function flattenFailedValidations(reports) {
+  return Object.entries(reports).flatMap(([name, report]) =>
+    collectFailedValidations(report, name),
+  );
+}
+
+function reportReadiness(reports) {
+  return Object.fromEntries(
+    Object.entries(reports).map(([name, report]) => [
+      name,
+      Boolean(report.ready),
+    ]),
+  );
+}
+
 function buildGoLiveReport(reports) {
   const score = calculateScore(reports);
+  const missingEnvVars = missingEnvironmentVariables();
+  const failedValidations = flattenFailedValidations(reports);
   const requirements = {
     database_ready: reports.database.ready,
     supabase_ready: reports.supabase.ready,
@@ -1367,15 +1472,23 @@ function buildGoLiveReport(reports) {
     financial_auth_ready: reports.financialSecurity.ready,
     pix_runtime_ready: reports.mercadopago.pix_runtime.ready,
   };
-  const ready = boolsReady(requirements) && reports.pix.ready;
+  const ready =
+    boolsReady(requirements) &&
+    reports.pix.ready &&
+    score.score >= MINIMUM_GO_LIVE_SCORE &&
+    missingEnvVars.length === 0 &&
+    failedValidations.length === 0;
   return {
     report: "GO_LIVE_REPORT",
-    mission_id: "GXEON_MISSION_005",
-    phase: "INFRASTRUCTURE_ACTIVATION",
+    mission_id: "GXEON_MISSION_006_FINAL_PRODUCTION_UNLOCK",
+    version: "6.0",
+    mode: "AUDIT_AND_REMEDIATION",
+    phase: "FINAL_PRODUCTION_UNLOCK",
     target: "FIRST_REAL_PIX",
     generated_at: GENERATED_AT,
     production_score: score.score,
     production_score_max: score.max_score,
+    minimum_go_live_score: MINIMUM_GO_LIVE_SCORE,
     score_breakdown: score.breakdown,
     go_live_requirements: requirements,
     first_real_pix_ready: ready,
@@ -1390,6 +1503,18 @@ function buildGoLiveReport(reports) {
     financial_security_ready: reports.financialSecurity.ready,
     go_live_decision: ready ? "GO" : "NO_GO",
     remaining_blockers: flattenBlockers(reports),
+    missing_environment_variables: missingEnvVars,
+    failed_validations: failedValidations,
+    report_readiness: reportReadiness(reports),
+    evidence: {
+      fail_closed: true,
+      mock_data_allowed: false,
+      fake_success_allowed: false,
+      real_pix_requires_operator_confirmation: true,
+      operator_confirmation_env: "GXEON_OPERATOR_CONFIRMED_REAL_PIX",
+      real_pix_creation_guard_env: "GXEON_ALLOW_REAL_PIX_VALIDATION",
+      generated_at: GENERATED_AT,
+    },
     generated_reports: [
       "DATABASE_PRODUCTION_REPORT.json",
       "SUPABASE_PRODUCTION_REPORT.json",
@@ -1406,13 +1531,16 @@ function buildGoLiveReport(reports) {
       can_receive_revenue_in_production: ready,
       production_confidence_score: `${score.score}/100`,
       go_live_decision: ready ? "GO" : "NO_GO",
+      remaining_blockers: flattenBlockers(reports),
+      missing_environment_variables: missingEnvVars,
+      failed_validations: failedValidations,
     },
   };
 }
 
 function writeMarkdown(goLive, reports) {
   const lines = [
-    "# GXEON Mission 005 Infrastructure Activation Report",
+    "# GXEON Mission 006 Final Production Unlock Report",
     "",
     `- **Generated at:** \`${GENERATED_AT}\``,
     "- **Target:** `FIRST_REAL_PIX`",
@@ -1442,6 +1570,20 @@ function writeMarkdown(goLive, reports) {
     ...goLive.remaining_blockers.map(
       (blocker, index) => `${index + 1}. ${blocker}`,
     ),
+    "",
+    "## Missing environment variables",
+    "",
+    ...(goLive.missing_environment_variables.length
+      ? goLive.missing_environment_variables.map(
+          (name, index) => `${index + 1}. ${name}`,
+        )
+      : ["None"]),
+    "",
+    "## Failed validations",
+    "",
+    ...(goLive.failed_validations.length
+      ? goLive.failed_validations.map((name, index) => `${index + 1}. ${name}`)
+      : ["None"]),
     "",
     "## Report files",
     "",

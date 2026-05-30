@@ -1,6 +1,6 @@
 {
   "report": "FINANCIAL_SECURITY_REPORT",
-  "generated_at": "2026-05-30T05:46:28.851Z",
+  "generated_at": "2026-05-30T06:03:01.021Z",
   "ready": false,
   "env": {
     "FINANCIAL_AUTH_TOKEN": false,

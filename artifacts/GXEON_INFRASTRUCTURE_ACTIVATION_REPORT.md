@@ -1,6 +1,6 @@
-# GXEON Mission 005 Infrastructure Activation Report
+# GXEON Mission 006 Final Production Unlock Report
 
-- **Generated at:** `2026-05-30T05:46:28.851Z`
+- **Generated at:** `2026-05-30T06:03:01.021Z`
 - **Target:** `FIRST_REAL_PIX`
 - **Decision:** **NO_GO**
 - **Production confidence score:** **0/100**
@@ -50,10 +50,59 @@
 23. Monitoring provider is not configured.
 24. Alert routing is not configured.
 25. Incident recovery is blocked by rollback readiness failure.
-26. Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true and Mercado Pago prerequisites pass.
-27. Webhook validation did not pass.
-28. Ledger update validation is blocked until DB and settlement flow are ready.
-29. Wallet update validation is blocked until ledger update validation passes.
+26. Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true, GXEON_OPERATOR_CONFIRMED_REAL_PIX=true, and Mercado Pago prerequisites pass.
+27. Real PIX payment confirmation is missing: GXEON_REAL_PIX_PAYMENT_CONFIRMED=true was not provided after real payment execution.
+28. Webhook validation did not pass.
+29. Ledger update validation is blocked until DB and settlement flow are ready.
+30. Wallet update validation is blocked until ledger update validation passes.
+
+## Missing environment variables
+
+1. DATABASE_URL
+2. SUPABASE_URL
+3. SUPABASE_SERVICE_ROLE_KEY
+4. VITE_SUPABASE_URL
+5. VITE_SUPABASE_ANON_KEY
+6. EXPO_PUBLIC_SUPABASE_URL
+7. EXPO_PUBLIC_SUPABASE_ANON_KEY
+8. MERCADO_PAGO_ACCESS_TOKEN
+9. MERCADO_PAGO_NOTIFICATION_URL
+10. MERCADO_PAGO_WEBHOOK_SECRET
+11. FINANCIAL_AUTH_TOKEN
+12. RAILWAY_PROJECT_ID
+13. RAILWAY_SERVICE_ID
+
+## Failed validations
+
+1. database
+2. database.connection
+3. database.ledger_tables
+4. database.payment_tables
+5. database.indexes
+6. database.transaction_persistence
+7. supabase
+8. supabase.auth
+9. supabase.realtime
+10. supabase.rls_policies
+11. supabase.storage
+12. mercadopago
+13. mercadopago.access_token_validation
+14. mercadopago.webhook
+15. mercadopago.pix_runtime
+16. mercadopago.payment_creation
+17. mercadopago.payment_status
+18. mercadopago.settlement_flow
+19. mercadopago.recovery_flow
+20. financialSecurity
+21. financialSecurity.token
+22. railway
+23. railway.deployment_health
+24. railway.rollback_readiness
+25. observability
+26. observability.health_endpoints
+27. observability.monitoring
+28. observability.alerts
+29. pix
 
 ## Report files
 
