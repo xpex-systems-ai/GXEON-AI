@@ -1,0 +1,143 @@
+{
+  "mission_id": "GXEON_MISSION_003",
+  "phase": "FINANCIAL_AUTH_HARDENING",
+  "priority": "P0_CRITICAL",
+  "generated_at": "2026-05-30T00:00:00.000Z",
+  "status": "IMPLEMENTED",
+  "controls": {
+    "financial_auth_middleware": true,
+    "scope_validation": true,
+    "rate_limit": true,
+    "idempotency_enforcement": true,
+    "protected_routes": true
+  },
+  "middleware": {
+    "file": "artifacts/api-server/src/middlewares/financialAuth.ts",
+    "required_token_env": ["FINANCIAL_AUTH_TOKEN", "FINANCIAL_API_TOKEN"],
+    "scope_env": ["FINANCIAL_AUTH_SCOPES", "FINANCIAL_API_SCOPES"],
+    "token_headers": [
+      "Authorization: Bearer <token>",
+      "X-Financial-Auth-Token"
+    ],
+    "scope_header": "X-Financial-Scopes",
+    "rate_limit_env": [
+      "FINANCIAL_RATE_LIMIT_WINDOW_MS",
+      "FINANCIAL_RATE_LIMIT_MAX_REQUESTS"
+    ],
+    "idempotency_header": "Idempotency-Key"
+  },
+  "protected_mutation_routes": [
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/payments/create",
+      "scope": "financial:payments:create"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/payments/auto",
+      "scope": "financial:payments:auto"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/credits/wallet",
+      "scope": "financial:credits:wallet"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/credits/transfer",
+      "scope": "financial:credits:transfer"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/credits/auto-topup",
+      "scope": "financial:credits:auto-topup"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/commissions/settle",
+      "scope": "financial:commissions:settle"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/tasks/enqueue",
+      "scope": "financial:revenue:tasks"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/tasks/run-cycle",
+      "scope": "financial:revenue:scheduler"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/tasks/generate-from-radar",
+      "scope": "financial:revenue:radar"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/runtime/pix/followups/process",
+      "scope": "financial:payments:followups"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/x-radar/signals/generate",
+      "scope": "financial:x-radar:signals"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/x-radar/signals/consume",
+      "scope": "financial:x-radar:consume"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/x-radar/scan-cycle",
+      "scope": "financial:x-radar:scan"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/x-radar/revenue-cycle",
+      "scope": "financial:x-radar:revenue"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/monetization/subscriptions/subscribe",
+      "scope": "financial:monetization:subscriptions"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/revenue-engine/checkout",
+      "scope": "financial:revenue-engine:checkout"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/revenue-engine/recovery/process",
+      "scope": "financial:revenue-engine:recovery"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/revenue-engine/subscriptions/sale",
+      "scope": "financial:revenue-engine:subscriptions"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/revenue-engine/credits/packs/sale",
+      "scope": "financial:revenue-engine:credits"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/revenue-engine/radar/checkout",
+      "scope": "financial:revenue-engine:radar"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/revenue-engine/entitlements/activate",
+      "scope": "financial:revenue-engine:entitlements"
+    }
+  ],
+  "webhooks": {
+    "mercado_pago": "Excluded from FinancialAuthMiddleware because external provider callbacks use Mercado Pago signature validation in the webhook runtime."
+  },
+  "residual_risks": [
+    "Rate limiting and idempotency stores are process-local; use a shared store before horizontally scaling multiple API instances.",
+    "FINANCIAL_AUTH_TOKEN must be provisioned via production secret management before enabling financial mutations."
+  ]
+}
