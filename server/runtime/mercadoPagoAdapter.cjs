@@ -10,6 +10,60 @@ function getApiBase() {
   return (process.env.MERCADO_PAGO_API_BASE || DEFAULT_API_BASE).replace(/\/+$/, '');
 }
 
+function maskCredential(value = '') {
+  const text = String(value || '');
+  if (!text) return { configured: false, masked: null, length: 0 };
+  if (text.length <= 12) return { configured: true, masked: `${text.slice(0, 2)}…${text.slice(-2)}`, length: text.length };
+  return { configured: true, masked: `${text.slice(0, 8)}…${text.slice(-6)}`, length: text.length };
+}
+
+function getMercadoPagoRuntimeConfig() {
+  const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN || '';
+  const publicKey = process.env.MERCADO_PAGO_PUBLIC_KEY || '';
+  const clientId = process.env.MERCADO_PAGO_CLIENT_ID || '';
+  const clientSecret = process.env.MERCADO_PAGO_CLIENT_SECRET || '';
+  const pixKey = process.env.MERCADO_PAGO_PIX_KEY || '';
+  const defaultPayerEmail = process.env.MERCADO_PAGO_DEFAULT_PAYER_EMAIL || '';
+  const databaseUrl = process.env.DATABASE_URL || '';
+  const required = {
+    DATABASE_URL: Boolean(databaseUrl),
+    MERCADO_PAGO_ACCESS_TOKEN: Boolean(accessToken),
+  };
+  const optional = {
+    MERCADO_PAGO_PUBLIC_KEY: Boolean(publicKey),
+    MERCADO_PAGO_CLIENT_ID: Boolean(clientId),
+    MERCADO_PAGO_CLIENT_SECRET: Boolean(clientSecret),
+    MERCADO_PAGO_PIX_KEY: Boolean(pixKey),
+    MERCADO_PAGO_DEFAULT_PAYER_EMAIL: Boolean(defaultPayerEmail),
+    MERCADO_PAGO_NOTIFICATION_URL: Boolean(process.env.MERCADO_PAGO_NOTIFICATION_URL),
+  };
+  const missingRequired = Object.entries(required).filter(([, ok]) => !ok).map(([key]) => key);
+  const tokenLooksProduction = accessToken.startsWith('APP_USR-');
+
+  return {
+    provider: 'mercado_pago',
+    mode: tokenLooksProduction ? 'PRODUCTION' : accessToken ? 'NON_STANDARD_TOKEN' : 'NOT_CONFIGURED',
+    ready_for_real_pix: missingRequired.length === 0 && tokenLooksProduction,
+    can_create_pix: missingRequired.length === 0,
+    missing_required: missingRequired,
+    required,
+    optional,
+    credentials: {
+      access_token: maskCredential(accessToken),
+      public_key: maskCredential(publicKey),
+      client_id: maskCredential(clientId),
+      client_secret: maskCredential(clientSecret),
+      pix_key: maskCredential(pixKey),
+      default_payer_email: maskCredential(defaultPayerEmail),
+      database_url: maskCredential(databaseUrl),
+    },
+    api_base: getApiBase(),
+    webhook_url_configured: Boolean(process.env.MERCADO_PAGO_NOTIFICATION_URL),
+    safety: 'CREDENTIALS_MASKED_ENV_ONLY',
+    generated_at: new Date().toISOString(),
+  };
+}
+
 function requireAccessToken() {
   const token = getAccessToken();
   if (!token) {
@@ -141,4 +195,4 @@ async function getPaymentStatus(providerPaymentId) {
   return extractPixData(raw);
 }
 
-module.exports = { createPixCharge, getPaymentStatus, normalizePaymentStatus };
+module.exports = { createPixCharge, getPaymentStatus, normalizePaymentStatus, getMercadoPagoRuntimeConfig, maskCredential };

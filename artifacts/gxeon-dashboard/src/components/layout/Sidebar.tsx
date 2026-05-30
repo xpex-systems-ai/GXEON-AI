@@ -15,6 +15,7 @@ import {
   TrendingUp,
   GitMerge,
   Zap,
+  ShoppingCart,
 } from "lucide-react";
 
 const routes = [
@@ -22,6 +23,7 @@ const routes = [
   { label: "Live Runtime", icon: Activity, href: "/live-runtime" },
   { label: "Conversion Center", icon: Zap, href: "/conversion" },
   { label: "Revenue", icon: DollarSign, href: "/revenue" },
+  { label: "Revenue Engine", icon: ShoppingCart, href: "/revenue-engine" },
   { label: "Revenue Streams", icon: TrendingUp, href: "/revenue-streams" },
   { label: "Transactions", icon: CreditCard, href: "/transactions" },
   { label: "Commissions", icon: Wallet, href: "/commissions" },
