@@ -1,0 +1,27 @@
+{
+  "report": "PIX_SIMULATION_REPORT",
+  "generated_at": "2026-05-30T06:21:23.143Z",
+  "ready": false,
+  "mode": "SAFE_FAIL_CLOSED_DEFAULT",
+  "operator_confirmation": {
+    "required": true,
+    "confirmed": false,
+    "env": "GXEON_OPERATOR_CONFIRMED_REAL_PIX"
+  },
+  "checkout_created": false,
+  "pix_generated": false,
+  "qr_code_validated": false,
+  "copy_paste_code_validated": false,
+  "payment_simulated": false,
+  "webhook_validated": false,
+  "ledger_updated": false,
+  "wallet_updated": false,
+  "dashboard_metrics_validated": true,
+  "blockers": [
+    "Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true, GXEON_OPERATOR_CONFIRMED_REAL_PIX=true, and Mercado Pago prerequisites pass.",
+    "Real PIX payment confirmation is missing: GXEON_REAL_PIX_PAYMENT_CONFIRMED=true was not provided after real payment execution.",
+    "Webhook validation did not pass.",
+    "Ledger update validation is blocked until DB and settlement flow are ready.",
+    "Wallet update validation is blocked until ledger update validation passes."
+  ]
+}

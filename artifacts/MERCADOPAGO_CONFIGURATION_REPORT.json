@@ -1,0 +1,73 @@
+{
+  "report": "MERCADOPAGO_CONFIGURATION_REPORT",
+  "generated_at": "2026-05-30T06:21:23.143Z",
+  "status": "CONFIGURED_WITHOUT_COMMITTED_SECRETS",
+  "secrets_committed": false,
+  "files": [
+    "payments/mercado-pago-production.env.example",
+    ".env.mercadopago.example"
+  ],
+  "required_secret_envs": [
+    "MERCADO_PAGO_ACCESS_TOKEN",
+    "MERCADO_PAGO_NOTIFICATION_URL",
+    "MERCADO_PAGO_WEBHOOK_SECRET",
+    "FINANCIAL_AUTH_TOKEN",
+    "DATABASE_URL"
+  ],
+  "optional_secret_envs": [
+    "MERCADO_PAGO_PUBLIC_KEY",
+    "MERCADO_PAGO_CLIENT_ID",
+    "MERCADO_PAGO_CLIENT_SECRET",
+    "MERCADO_PAGO_PIX_KEY",
+    "MERCADO_PAGO_DEFAULT_PAYER_EMAIL"
+  ],
+  "credentials": {
+    "access_token": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "public_key": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "client_id": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "client_secret": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "pix_key": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "default_payer_email": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "database_url": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    }
+  },
+  "mode": "NOT_CONFIGURED",
+  "ready_for_real_pix": false,
+  "can_create_pix": false,
+  "missing_required": [
+    "DATABASE_URL",
+    "MERCADO_PAGO_ACCESS_TOKEN"
+  ],
+  "notes": [
+    "Mercado Pago credentials supplied by an operator must be stored only in the secret manager or untracked local env files.",
+    "If production Mercado Pago credentials were exposed in chat, rotate them before processing real revenue.",
+    "Real PIX validation remains fail-closed until GXEON_ALLOW_REAL_PIX_VALIDATION=true and GXEON_OPERATOR_CONFIRMED_REAL_PIX=true are set intentionally."
+  ]
+}

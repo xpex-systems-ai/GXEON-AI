@@ -1,0 +1,119 @@
+{
+  "report": "DATABASE_PRODUCTION_REPORT",
+  "generated_at": "2026-05-30T06:21:23.143Z",
+  "ready": false,
+  "provider": {
+    "provider": "NOT_CONFIGURED",
+    "host": null,
+    "database": null
+  },
+  "database_url": {
+    "configured": false,
+    "masked": null,
+    "length": 0
+  },
+  "connection": {
+    "ok": false,
+    "status": "BLOCKED_DATABASE_URL_MISSING"
+  },
+  "migrations": {
+    "local_migration_present": true,
+    "local_journal_registered": true,
+    "remote_valid": false,
+    "status": "BLOCKED_DATABASE_URL_MISSING"
+  },
+  "ledger_tables": {
+    "ready": false,
+    "expected": [
+      "actor_wallets",
+      "financial_ledger"
+    ],
+    "present": [],
+    "missing": [
+      "actor_wallets",
+      "financial_ledger"
+    ]
+  },
+  "payment_tables": {
+    "ready": false,
+    "expected": [
+      "global_transactions",
+      "payment_attempts",
+      "payment_webhook_events"
+    ],
+    "present": [],
+    "missing": [
+      "global_transactions",
+      "payment_attempts",
+      "payment_webhook_events"
+    ]
+  },
+  "indexes": {
+    "ready": false,
+    "expected": [
+      "actor_wallets_actor_id_uq",
+      "actor_wallets_actor_code_idx",
+      "actor_wallets_status_idx",
+      "financial_ledger_ledger_entry_id_uq",
+      "financial_ledger_idempotency_key_uq",
+      "financial_ledger_actor_id_idx",
+      "financial_ledger_wallet_id_idx",
+      "financial_ledger_transaction_id_idx",
+      "financial_ledger_source_idx",
+      "financial_ledger_created_at_idx",
+      "global_transactions_transaction_id_uq",
+      "global_transactions_external_reference_uq",
+      "global_transactions_provider_payment_id_idx",
+      "global_transactions_actor_id_idx",
+      "global_transactions_status_idx",
+      "global_transactions_created_at_idx",
+      "payment_attempts_idempotency_key_uq",
+      "payment_attempts_transaction_id_idx",
+      "payment_attempts_provider_payment_id_idx",
+      "payment_attempts_status_idx",
+      "payment_attempts_created_at_idx",
+      "payment_webhook_events_idempotency_key_uq",
+      "payment_webhook_events_provider_event_uq",
+      "payment_webhook_events_provider_payment_id_idx",
+      "payment_webhook_events_processing_status_idx",
+      "payment_webhook_events_received_at_idx"
+    ],
+    "present": [],
+    "missing": [
+      "actor_wallets_actor_id_uq",
+      "actor_wallets_actor_code_idx",
+      "actor_wallets_status_idx",
+      "financial_ledger_ledger_entry_id_uq",
+      "financial_ledger_idempotency_key_uq",
+      "financial_ledger_actor_id_idx",
+      "financial_ledger_wallet_id_idx",
+      "financial_ledger_transaction_id_idx",
+      "financial_ledger_source_idx",
+      "financial_ledger_created_at_idx",
+      "global_transactions_transaction_id_uq",
+      "global_transactions_external_reference_uq",
+      "global_transactions_provider_payment_id_idx",
+      "global_transactions_actor_id_idx",
+      "global_transactions_status_idx",
+      "global_transactions_created_at_idx",
+      "payment_attempts_idempotency_key_uq",
+      "payment_attempts_transaction_id_idx",
+      "payment_attempts_provider_payment_id_idx",
+      "payment_attempts_status_idx",
+      "payment_attempts_created_at_idx",
+      "payment_webhook_events_idempotency_key_uq",
+      "payment_webhook_events_provider_event_uq",
+      "payment_webhook_events_provider_payment_id_idx",
+      "payment_webhook_events_processing_status_idx",
+      "payment_webhook_events_received_at_idx"
+    ]
+  },
+  "transaction_persistence": {
+    "ready": false,
+    "status": "BLOCKED_DATABASE_URL_MISSING"
+  },
+  "blockers": [
+    "DATABASE_URL is not configured.",
+    "Cannot validate connection, remote migrations, financial tables, indexes, or transaction persistence."
+  ]
+}
