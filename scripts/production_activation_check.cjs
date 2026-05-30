@@ -275,6 +275,44 @@ async function queryRows(pool, text, params = []) {
   return result.rows;
 }
 
+function buildMercadoPagoConfigurationReport() {
+  const config = getMercadoPagoRuntimeConfig();
+  return {
+    report: "MERCADOPAGO_CONFIGURATION_REPORT",
+    generated_at: GENERATED_AT,
+    status: "CONFIGURED_WITHOUT_COMMITTED_SECRETS",
+    secrets_committed: false,
+    files: [
+      "payments/mercado-pago-production.env.example",
+      ".env.mercadopago.example",
+    ],
+    required_secret_envs: [
+      "MERCADO_PAGO_ACCESS_TOKEN",
+      "MERCADO_PAGO_NOTIFICATION_URL",
+      "MERCADO_PAGO_WEBHOOK_SECRET",
+      "FINANCIAL_AUTH_TOKEN",
+      "DATABASE_URL",
+    ],
+    optional_secret_envs: [
+      "MERCADO_PAGO_PUBLIC_KEY",
+      "MERCADO_PAGO_CLIENT_ID",
+      "MERCADO_PAGO_CLIENT_SECRET",
+      "MERCADO_PAGO_PIX_KEY",
+      "MERCADO_PAGO_DEFAULT_PAYER_EMAIL",
+    ],
+    credentials: config.credentials,
+    mode: config.mode,
+    ready_for_real_pix: config.ready_for_real_pix,
+    can_create_pix: config.can_create_pix,
+    missing_required: config.missing_required,
+    notes: [
+      "Mercado Pago credentials supplied by an operator must be stored only in the secret manager or untracked local env files.",
+      "If production Mercado Pago credentials were exposed in chat, rotate them before processing real revenue.",
+      "Real PIX validation remains fail-closed until GXEON_ALLOW_REAL_PIX_VALIDATION=true and GXEON_OPERATOR_CONFIRMED_REAL_PIX=true are set intentionally.",
+    ],
+  };
+}
+
 function buildSupabaseConfigurationReport() {
   return {
     report: "SUPABASE_CONFIGURATION_REPORT",
@@ -1567,6 +1605,7 @@ function buildGoLiveReport(reports) {
       "SUPABASE_PRODUCTION_REPORT.json",
       "SUPABASE_CONFIGURATION_REPORT.json",
       "MERCADOPAGO_PRODUCTION_REPORT.json",
+      "MERCADOPAGO_CONFIGURATION_REPORT.json",
       "FINANCIAL_SECURITY_REPORT.json",
       "RAILWAY_PRODUCTION_REPORT.json",
       "OBSERVABILITY_REPORT.json",
@@ -1639,6 +1678,7 @@ function writeMarkdown(goLive, reports) {
     "- `artifacts/SUPABASE_PRODUCTION_REPORT.json`",
     "- `artifacts/SUPABASE_CONFIGURATION_REPORT.json`",
     "- `artifacts/MERCADOPAGO_PRODUCTION_REPORT.json`",
+    "- `artifacts/MERCADOPAGO_CONFIGURATION_REPORT.json`",
     "- `artifacts/FINANCIAL_SECURITY_REPORT.json`",
     "- `artifacts/RAILWAY_PRODUCTION_REPORT.json`",
     "- `artifacts/OBSERVABILITY_REPORT.json`",
@@ -1677,6 +1717,10 @@ async function main() {
     buildSupabaseConfigurationReport(),
   );
   writeJson("MERCADOPAGO_PRODUCTION_REPORT.json", mercadopago);
+  writeJson(
+    "MERCADOPAGO_CONFIGURATION_REPORT.json",
+    buildMercadoPagoConfigurationReport(),
+  );
   writeJson("FINANCIAL_SECURITY_REPORT.json", financialSecurity);
   writeJson("RAILWAY_PRODUCTION_REPORT.json", railway);
   writeJson("OBSERVABILITY_REPORT.json", observability);

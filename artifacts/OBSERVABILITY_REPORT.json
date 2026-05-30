@@ -1,6 +1,6 @@
 {
   "report": "OBSERVABILITY_REPORT",
-  "generated_at": "2026-05-30T06:09:30.396Z",
+  "generated_at": "2026-05-30T06:21:23.143Z",
   "ready": false,
   "structured_logs": {
     "ready": true,
@@ -65,7 +65,7 @@
       "governance": "NO_STOP"
     },
     "recovery_log": "Non-main branch detected; synchronization retry suggested.",
-    "generated_at": "2026-05-30T06:09:30.528Z"
+    "generated_at": "2026-05-30T06:21:23.350Z"
   },
   "blockers": [
     "Production health endpoints did not validate.",

@@ -1,6 +1,6 @@
 # GXEON Mission 006 Final Production Unlock Report
 
-- **Generated at:** `2026-05-30T06:09:30.396Z`
+- **Generated at:** `2026-05-30T06:21:23.143Z`
 - **Target:** `FIRST_REAL_PIX`
 - **Decision:** **NO_GO**
 - **Production confidence score:** **0/100**
@@ -110,6 +110,7 @@
 - `artifacts/SUPABASE_PRODUCTION_REPORT.json`
 - `artifacts/SUPABASE_CONFIGURATION_REPORT.json`
 - `artifacts/MERCADOPAGO_PRODUCTION_REPORT.json`
+- `artifacts/MERCADOPAGO_CONFIGURATION_REPORT.json`
 - `artifacts/FINANCIAL_SECURITY_REPORT.json`
 - `artifacts/RAILWAY_PRODUCTION_REPORT.json`
 - `artifacts/OBSERVABILITY_REPORT.json`

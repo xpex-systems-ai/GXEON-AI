@@ -5,7 +5,7 @@
   "mode": "AUDIT_AND_REMEDIATION",
   "phase": "FINAL_PRODUCTION_UNLOCK",
   "target": "FIRST_REAL_PIX",
-  "generated_at": "2026-05-30T06:09:30.396Z",
+  "generated_at": "2026-05-30T06:21:23.143Z",
   "production_score": 0,
   "production_score_max": 100,
   "minimum_go_live_score": 95,
@@ -161,13 +161,14 @@
     "real_pix_requires_operator_confirmation": true,
     "operator_confirmation_env": "GXEON_OPERATOR_CONFIRMED_REAL_PIX",
     "real_pix_creation_guard_env": "GXEON_ALLOW_REAL_PIX_VALIDATION",
-    "generated_at": "2026-05-30T06:09:30.396Z"
+    "generated_at": "2026-05-30T06:21:23.143Z"
   },
   "generated_reports": [
     "DATABASE_PRODUCTION_REPORT.json",
     "SUPABASE_PRODUCTION_REPORT.json",
     "SUPABASE_CONFIGURATION_REPORT.json",
     "MERCADOPAGO_PRODUCTION_REPORT.json",
+    "MERCADOPAGO_CONFIGURATION_REPORT.json",
     "FINANCIAL_SECURITY_REPORT.json",
     "RAILWAY_PRODUCTION_REPORT.json",
     "OBSERVABILITY_REPORT.json",
