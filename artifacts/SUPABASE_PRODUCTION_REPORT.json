@@ -1,6 +1,6 @@
 {
   "report": "SUPABASE_PRODUCTION_REPORT",
-  "generated_at": "2026-05-30T06:03:01.021Z",
+  "generated_at": "2026-05-30T06:09:30.396Z",
   "ready": false,
   "env": {
     "SUPABASE_URL": false,
@@ -37,6 +37,16 @@
       "length": 0
     },
     "EXPO_PUBLIC_SUPABASE_ANON_KEY": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "SUPABASE_ANON_KEY": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "SUPABASE_PUBLISHABLE_KEY": {
       "configured": false,
       "masked": null,
       "length": 0

@@ -7,6 +7,7 @@ const { randomUUID } = require("node:crypto");
 const pg = require("../lib/db/node_modules/pg");
 const {
   getSupabaseRuntimeStatus,
+  getSupabaseEnv,
 } = require("../server/runtime/supabaseRuntime.cjs");
 const {
   getMercadoPagoRuntimeConfig,
@@ -162,6 +163,8 @@ const REQUIRED_PRODUCTION_ENVS = [
 ];
 
 const MINIMUM_GO_LIVE_SCORE = 95;
+const SUPABASE_PROJECT_REF = "telxvphgrsvsnxvmjkce";
+const SUPABASE_PROJECT_URL = "https://telxvphgrsvsnxvmjkce.supabase.co";
 
 function mask(value = "") {
   const text = String(value || "");
@@ -189,8 +192,22 @@ function boolsReady(object) {
   return Object.values(object).every(Boolean);
 }
 
+function productionEnvConfigured(key) {
+  if (
+    key.startsWith("SUPABASE") ||
+    key.startsWith("VITE_SUPABASE") ||
+    key.startsWith("EXPO_PUBLIC_SUPABASE")
+  ) {
+    const resolved = getSupabaseEnv();
+    return Boolean(resolved[key]);
+  }
+  return Boolean(process.env[key]);
+}
+
 function missingEnvironmentVariables() {
-  return REQUIRED_PRODUCTION_ENVS.filter((key) => !process.env[key]);
+  return REQUIRED_PRODUCTION_ENVS.filter(
+    (key) => !productionEnvConfigured(key),
+  );
 }
 
 function collectFailedValidations(value, prefix = "") {
@@ -256,6 +273,40 @@ function detectDatabaseProvider(databaseUrl = process.env.DATABASE_URL || "") {
 async function queryRows(pool, text, params = []) {
   const result = await pool.query(text, params);
   return result.rows;
+}
+
+function buildSupabaseConfigurationReport() {
+  return {
+    report: "SUPABASE_CONFIGURATION_REPORT",
+    generated_at: GENERATED_AT,
+    project_ref: SUPABASE_PROJECT_REF,
+    project_url: SUPABASE_PROJECT_URL,
+    status: "CONFIGURED_WITHOUT_COMMITTED_SECRETS",
+    secrets_committed: false,
+    files: [
+      "supabase/config.toml",
+      "supabase/README.md",
+      ".env.supabase.example",
+    ],
+    required_secret_envs: [
+      "SUPABASE_URL",
+      "SUPABASE_SERVICE_ROLE_KEY",
+      "SUPABASE_ANON_KEY or SUPABASE_PUBLISHABLE_KEY",
+      "VITE_SUPABASE_URL",
+      "VITE_SUPABASE_ANON_KEY",
+      "EXPO_PUBLIC_SUPABASE_URL",
+      "EXPO_PUBLIC_SUPABASE_ANON_KEY",
+      "DATABASE_URL",
+    ],
+    database_url_status: process.env.DATABASE_URL
+      ? "DATABASE_URL_CONFIGURED"
+      : "BLOCKED_PASSWORD_PLACEHOLDER_PROVIDED",
+    notes: [
+      "Supabase project metadata is safe to commit; service role keys and database passwords are not.",
+      "The production activation script resolves Supabase URL/anon aliases for backend, web, and mobile validation.",
+      "A real database connection still requires replacing [YOUR-PASSWORD] in DATABASE_URL.",
+    ],
+  };
 }
 
 async function validateDatabase() {
@@ -518,31 +569,27 @@ async function fetchJsonProbe(url, options = {}) {
 
 async function validateSupabase(databaseReport) {
   const status = getSupabaseRuntimeStatus();
-  const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  const resolved = getSupabaseEnv();
+  const serviceRole = resolved.SUPABASE_SERVICE_ROLE_KEY || "";
   const anonKey =
-    process.env.VITE_SUPABASE_ANON_KEY ||
-    process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ||
-    "";
-  const supabaseUrl = (
-    process.env.SUPABASE_URL ||
-    process.env.VITE_SUPABASE_URL ||
-    process.env.EXPO_PUBLIC_SUPABASE_URL ||
-    ""
-  ).replace(/\/+$/, "");
+    resolved.SUPABASE_ANON_KEY || resolved.VITE_SUPABASE_ANON_KEY || "";
+  const supabaseUrl = (resolved.SUPABASE_URL || "").replace(/\/+$/, "");
   const report = {
     report: "SUPABASE_PRODUCTION_REPORT",
     generated_at: GENERATED_AT,
     ready: false,
     env: status.checks,
     credentials: {
-      SUPABASE_URL: mask(process.env.SUPABASE_URL),
+      SUPABASE_URL: mask(resolved.SUPABASE_URL),
       SUPABASE_SERVICE_ROLE_KEY: mask(serviceRole),
-      VITE_SUPABASE_URL: mask(process.env.VITE_SUPABASE_URL),
-      VITE_SUPABASE_ANON_KEY: mask(process.env.VITE_SUPABASE_ANON_KEY),
-      EXPO_PUBLIC_SUPABASE_URL: mask(process.env.EXPO_PUBLIC_SUPABASE_URL),
+      VITE_SUPABASE_URL: mask(resolved.VITE_SUPABASE_URL),
+      VITE_SUPABASE_ANON_KEY: mask(resolved.VITE_SUPABASE_ANON_KEY),
+      EXPO_PUBLIC_SUPABASE_URL: mask(resolved.EXPO_PUBLIC_SUPABASE_URL),
       EXPO_PUBLIC_SUPABASE_ANON_KEY: mask(
-        process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
+        resolved.EXPO_PUBLIC_SUPABASE_ANON_KEY,
       ),
+      SUPABASE_ANON_KEY: mask(resolved.SUPABASE_ANON_KEY),
+      SUPABASE_PUBLISHABLE_KEY: mask(resolved.SUPABASE_PUBLISHABLE_KEY),
     },
     frontend_integration: Boolean(
       process.env.VITE_SUPABASE_URL && process.env.VITE_SUPABASE_ANON_KEY,
@@ -1518,6 +1565,7 @@ function buildGoLiveReport(reports) {
     generated_reports: [
       "DATABASE_PRODUCTION_REPORT.json",
       "SUPABASE_PRODUCTION_REPORT.json",
+      "SUPABASE_CONFIGURATION_REPORT.json",
       "MERCADOPAGO_PRODUCTION_REPORT.json",
       "FINANCIAL_SECURITY_REPORT.json",
       "RAILWAY_PRODUCTION_REPORT.json",
@@ -1589,6 +1637,7 @@ function writeMarkdown(goLive, reports) {
     "",
     "- `artifacts/DATABASE_PRODUCTION_REPORT.json`",
     "- `artifacts/SUPABASE_PRODUCTION_REPORT.json`",
+    "- `artifacts/SUPABASE_CONFIGURATION_REPORT.json`",
     "- `artifacts/MERCADOPAGO_PRODUCTION_REPORT.json`",
     "- `artifacts/FINANCIAL_SECURITY_REPORT.json`",
     "- `artifacts/RAILWAY_PRODUCTION_REPORT.json`",
@@ -1623,6 +1672,10 @@ async function main() {
 
   writeJson("DATABASE_PRODUCTION_REPORT.json", database);
   writeJson("SUPABASE_PRODUCTION_REPORT.json", supabase);
+  writeJson(
+    "SUPABASE_CONFIGURATION_REPORT.json",
+    buildSupabaseConfigurationReport(),
+  );
   writeJson("MERCADOPAGO_PRODUCTION_REPORT.json", mercadopago);
   writeJson("FINANCIAL_SECURITY_REPORT.json", financialSecurity);
   writeJson("RAILWAY_PRODUCTION_REPORT.json", railway);

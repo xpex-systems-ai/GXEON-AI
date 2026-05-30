@@ -1,0 +1,29 @@
+{
+  "report": "SUPABASE_CONFIGURATION_REPORT",
+  "generated_at": "2026-05-30T06:09:30.396Z",
+  "project_ref": "telxvphgrsvsnxvmjkce",
+  "project_url": "https://telxvphgrsvsnxvmjkce.supabase.co",
+  "status": "CONFIGURED_WITHOUT_COMMITTED_SECRETS",
+  "secrets_committed": false,
+  "files": [
+    "supabase/config.toml",
+    "supabase/README.md",
+    ".env.supabase.example"
+  ],
+  "required_secret_envs": [
+    "SUPABASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_ANON_KEY or SUPABASE_PUBLISHABLE_KEY",
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_ANON_KEY",
+    "EXPO_PUBLIC_SUPABASE_URL",
+    "EXPO_PUBLIC_SUPABASE_ANON_KEY",
+    "DATABASE_URL"
+  ],
+  "database_url_status": "BLOCKED_PASSWORD_PLACEHOLDER_PROVIDED",
+  "notes": [
+    "Supabase project metadata is safe to commit; service role keys and database passwords are not.",
+    "The production activation script resolves Supabase URL/anon aliases for backend, web, and mobile validation.",
+    "A real database connection still requires replacing [YOUR-PASSWORD] in DATABASE_URL."
+  ]
+}

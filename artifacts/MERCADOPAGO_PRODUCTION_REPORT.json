@@ -1,6 +1,6 @@
 {
   "report": "MERCADOPAGO_PRODUCTION_REPORT",
-  "generated_at": "2026-05-30T06:03:01.021Z",
+  "generated_at": "2026-05-30T06:09:30.396Z",
   "ready": false,
   "env": {
     "DATABASE_URL": false,
@@ -70,7 +70,7 @@
     "api_base": "https://api.mercadopago.com",
     "webhook_url_configured": false,
     "safety": "CREDENTIALS_MASKED_ENV_ONLY",
-    "generated_at": "2026-05-30T06:03:01.023Z"
+    "generated_at": "2026-05-30T06:09:30.400Z"
   },
   "access_token_validation": {
     "ready": false,
