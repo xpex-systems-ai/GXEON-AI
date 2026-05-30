@@ -3,6 +3,7 @@
 const { randomUUID } = require('node:crypto');
 const { readMemory, writeMemory } = require('./runtimeMemory.cjs');
 const { createPixPayment, getPaymentsRuntimeAsync } = require('./paymentRuntime.cjs');
+const { getMercadoPagoRuntimeConfig } = require('./mercadoPagoAdapter.cjs');
 const { subscribeAgent } = require('./subscriptionRuntime.cjs');
 const { ensureWallet, upsertWallet } = require('./creditRuntime.cjs');
 
@@ -23,6 +24,7 @@ const MARKETPLACE_ITEMS = [
   { id: 'dataset_sale_b2b_intent', type: 'dataset_sale', title: 'Dataset B2B Intent', price: 97, recurring: false, conversion_copy: 'Leads enriquecidos com intenção e urgência para outbound.' },
   { id: 'workflow_sale_pix_recovery', type: 'workflow_sale', title: 'Workflow PIX Recovery', price: 147, recurring: false, conversion_copy: 'Fluxo pronto com WhatsApp, e-mail e desconto progressivo.' },
   { id: 'subscription_marketplace_pro', type: 'subscription', title: 'Marketplace Pro', price: 97, recurring: true, conversion_copy: 'Assinatura para publicar, vender e ranquear ativos GXEON.' },
+  { id: 'radar_signal_priority_pack', type: 'workflow_sale', title: 'X-Radar Signal Priority Pack', price: 97, recurring: false, conversion_copy: 'Checkout PIX imediato para transformar sinais X-Radar em venda real.' },
 ];
 
 const RECOVERY_FLOWS = [
@@ -61,14 +63,20 @@ function buildDynamicOffer({ kind = 'subscription', offer_id, actor_id } = {}) {
   const orderBump = kind === 'credit_pack'
     ? { id: 'support_fast_lane', label: 'Ativar prioridade por 7 dias', price: 19 }
     : { id: 'credits_bump_100', label: '+100 créditos de implementação', price: 29 };
+  const state = getRevenueEngineMemory();
+  const paidCount = state.checkouts.filter((checkout) => checkout.status === 'PAID').length;
+  const generatedCount = state.checkouts.length;
+  const socialProof = paidCount > 0
+    ? `${paidCount} checkout(s) PIX pagos dentro do motor GXEON.`
+    : `${generatedCount} checkout(s) PIX gerados pelo motor GXEON em produção.`;
   return {
     kind,
     offer,
     amount,
     headline: kind === 'subscription' ? `Plano ${offer.name} com ativação imediata` : offer.title || `${offer.credits} créditos GXEON`,
-    social_proof: '1.284 ativações PIX processadas pelo motor GXEON este mês',
-    scarcity: 'Bônus de implantação disponível para os próximos 37 checkouts',
-    urgency: 'QR PIX expira em 30 minutos e o bônus é recalculado em tempo real',
+    social_proof: socialProof,
+    scarcity: 'Bônus operacional liberado somente enquanto o checkout PIX estiver pendente.',
+    urgency: 'QR PIX expira em 30 minutos e o follow-up automático inicia se o pagamento ficar pendente.',
     upsell: orderBump,
     downsell: { id: 'starter_recovery', label: 'Começar com oferta de entrada', price: 47 },
     one_click_recovery_url: `/revenue-engine?recover=${encodeURIComponent(actor_id || 'buyer')}&offer=${encodeURIComponent(offer.id)}`,
@@ -222,8 +230,11 @@ function getRevenueAnalytics() {
 }
 
 function getRevenueCatalog() {
+  const mercadoPago = getMercadoPagoRuntimeConfig();
   return {
     status: 'REVENUE_READY',
+    mercado_pago: mercadoPago,
+    radar_monetization: { status: mercadoPago.ready_for_real_pix ? 'READY_FOR_REAL_PIX' : 'WAITING_FOR_ENV', offer_id: 'radar_signal_priority_pack', source: 'X_RADAR_REVENUE_ENGINE' },
     checkout_engine: ['pix_qr_render', 'copy_paste_pix', 'ticket_url_redirect', 'checkout_expiration_timer', 'payment_status_realtime', 'auto_refresh_status'],
     conversion_engine: ['social_proof', 'scarcity', 'urgency', 'dynamic_offer', 'upsell', 'downsell', 'one_click_recovery'],
     cart_recovery: { channels: ['whatsapp', 'email'], flows: RECOVERY_FLOWS },
@@ -244,6 +255,43 @@ async function sellCreditPack(input = {}) {
   const pack = findOffer('credit_pack', input.pack_id || input.offer_id);
   ensureWallet(input.actor_id || input.agent_id || 'agent_buyer_1');
   return createRevenueCheckout({ ...input, kind: 'credit_pack', offer_id: pack.id, amount: pack.price, metadata: { ...(input.metadata || {}), credits: pack.credits + pack.bonus } });
+}
+
+
+async function createRadarMonetizationCheckout(input = {}) {
+  const { generateSignal } = require('./xRadarEngine.cjs');
+  const signal = input.signal || generateSignal({
+    category: input.category || 'MEV',
+    score: input.score || 88,
+    source: 'X_RADAR_REVENUE_ENGINE',
+    producer_agent_id: input.producer_agent_id || 'signal_producer_1',
+  });
+  const amount = Number(input.amount || input.price || Math.max(47, Math.round(Number(signal.expected_roi_pct || 3) * 10)));
+  const checkout = await createRevenueCheckout({
+    ...input,
+    kind: 'marketplace',
+    offer_id: input.offer_id || 'radar_signal_priority_pack',
+    amount,
+    actor_id: input.actor_id || input.consumer_agent_id || 'radar_buyer_1',
+    description: input.description || `X-Radar premium signal ${signal.signal_id}`,
+    metadata: {
+      ...(input.metadata || {}),
+      signal_id: signal.signal_id,
+      signal_category: signal.category,
+      signal_confidence_score: signal.confidence_score,
+      signal_expected_roi_pct: signal.expected_roi_pct,
+      signal_source: signal.source,
+      monetization_channel: 'X_RADAR_REAL_PIX',
+    },
+  });
+
+  const mem = readMemory();
+  const radarSales = mem.x_radar_revenue_sales || [];
+  writeMemory({
+    x_radar_revenue_sales: [{ signal, checkout_id: checkout.id, amount: checkout.amount, status: checkout.status, created_at: new Date().toISOString() }, ...radarSales].slice(0, 5000),
+  });
+
+  return { status: 'RADAR_PIX_CHECKOUT_CREATED', signal, checkout, generated_at: new Date().toISOString() };
 }
 
 function activatePaidEntitlement({ actor_id, kind, offer_id } = {}) {
@@ -267,5 +315,6 @@ module.exports = {
   getRevenueCatalog,
   sellSubscription,
   sellCreditPack,
+  createRadarMonetizationCheckout,
   activatePaidEntitlement,
 };

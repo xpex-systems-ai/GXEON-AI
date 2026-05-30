@@ -40,7 +40,7 @@ const { ensureWallet, upsertWallet, transferCredits, getCreditRuntime } = requir
 const { settleCommission, getCommissionRuntime } = require(pathFromRoot("commissionEngine.cjs"));
 const { enqueueTask, runSchedulerCycle, autoTopupViaPix, getAutonomousRevenueRuntime, generateSellableTasksFromRadar } = require(pathFromRoot("autonomousRevenueScheduler.cjs"));
 const { generateSignal, consumePremiumSignal, getXRadarMetrics } = require(pathFromRoot("xRadarEngine.cjs"));
-const { runXRadarScanCycle } = require(pathFromRoot("xRadarScheduler.cjs"));
+const { runXRadarScanCycle, runXRadarRevenueCycle } = require(pathFromRoot("xRadarScheduler.cjs"));
 const { subscribeAgent, getSubscriptionCatalog } = require(pathFromRoot("subscriptionRuntime.cjs"));
 const { getRevenueDashboardMetrics } = require(pathFromRoot("revenueDashboardRuntime.cjs"));
 const {
@@ -51,6 +51,7 @@ const {
   getRevenueCatalog,
   sellSubscription,
   sellCreditPack,
+  createRadarMonetizationCheckout,
   activatePaidEntitlement,
 } = require(pathFromRoot("revenueEngineRuntime.cjs"));
 
@@ -272,6 +273,14 @@ router.post("/v1/x-radar/scan-cycle", (req, res) => {
   res.status(201).json(runXRadarScanCycle(req.body ?? {}));
 });
 
+router.post("/v1/x-radar/revenue-cycle", async (req, res) => {
+  try {
+    res.status(201).json(await runXRadarRevenueCycle(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
+});
+
 router.get("/v1/monetization/subscriptions/catalog", (_req, res) => {
   res.json(getSubscriptionCatalog());
 });
@@ -336,6 +345,14 @@ router.post("/v1/revenue-engine/subscriptions/sale", async (req, res) => {
 router.post("/v1/revenue-engine/credits/packs/sale", async (req, res) => {
   try {
     res.status(201).json(await sellCreditPack(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
+});
+
+router.post("/v1/revenue-engine/radar/checkout", async (req, res) => {
+  try {
+    res.status(201).json(await createRadarMonetizationCheckout(req.body ?? {}));
   } catch (error) {
     res.status(400).json({ error: String(error) });
   }

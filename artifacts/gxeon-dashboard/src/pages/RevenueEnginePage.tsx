@@ -31,8 +31,18 @@ type Plan = { id: string; name: string; price: number; interval: string; credits
 type Pack = { id: string; credits: number; price: number; bonus: number };
 type MarketplaceItem = { id: string; type: string; title: string; price: number; recurring: boolean; conversion_copy: string };
 type RecoveryFlow = { trigger: string; channel: string; action: string; delay_minutes: number; message: string };
+type MercadoPagoStatus = {
+  mode: string;
+  ready_for_real_pix: boolean;
+  can_create_pix: boolean;
+  missing_required: string[];
+  credentials: Record<string, { configured: boolean; masked: string | null; length: number }>;
+  safety: string;
+};
 type Catalog = {
   status: string;
+  mercado_pago: MercadoPagoStatus;
+  radar_monetization: { status: string; offer_id: string; source: string };
   checkout_engine: string[];
   conversion_engine: string[];
   cart_recovery: { channels: string[]; flows: RecoveryFlow[] };
@@ -143,6 +153,25 @@ export default function RevenueEnginePage() {
     }
   }
 
+  async function createRadarCheckout() {
+    setCreating(true);
+    setError(null);
+    setStatusMessage(null);
+    try {
+      const data = await fetchJson<{ checkout: Checkout; signal: { signal_id: string; confidence_score: number } }>("/api/v1/revenue-engine/radar/checkout", {
+        method: "POST",
+        body: JSON.stringify({ actor_id: actorId, payer_email: payerEmail, amount: selectedOffer && "price" in selectedOffer ? selectedOffer.price : undefined }),
+      });
+      setCheckout(data.checkout);
+      setStatusMessage(`X-Radar monetizado: checkout PIX criado para o sinal ${data.signal.signal_id} (${data.signal.confidence_score}).`);
+      await loadCatalog();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Falha ao monetizar X-Radar via PIX");
+    } finally {
+      setCreating(false);
+    }
+  }
+
   async function createCheckout() {
     setCreating(true);
     setError(null);
@@ -227,12 +256,39 @@ export default function RevenueEnginePage() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={loadCatalog}><RefreshCw className="mr-2 h-4 w-4" />Atualizar</Button>
-          <Button onClick={createCheckout} disabled={creating}><QrCode className="mr-2 h-4 w-4" />Gerar PIX real</Button>
+          <Button variant="outline" onClick={createRadarCheckout} disabled={creating || !catalog?.mercado_pago.ready_for_real_pix}><Sparkles className="mr-2 h-4 w-4" />Monetizar Radar</Button>
+          <Button onClick={createCheckout} disabled={creating || !catalog?.mercado_pago.can_create_pix}><QrCode className="mr-2 h-4 w-4" />Gerar PIX real</Button>
         </div>
       </div>
 
       {error && <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive"><AlertCircle className="mr-2 inline h-4 w-4" />{error}</div>}
       {statusMessage && <div className="rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-600"><CheckCircle2 className="mr-2 inline h-4 w-4" />{statusMessage}</div>}
+
+      {catalog?.mercado_pago && (
+        <Card className="border-green-500/20 bg-green-500/5">
+          <CardContent className="grid gap-4 pt-6 md:grid-cols-[1fr_1fr_auto] md:items-center">
+            <div>
+              <p className="text-sm text-muted-foreground">Mercado Pago Produção</p>
+              <div className="mt-1 flex items-center gap-2">
+                <Badge variant={catalog.mercado_pago.ready_for_real_pix ? "default" : "outline"}>{catalog.mercado_pago.mode}</Badge>
+                <span className={catalog.mercado_pago.ready_for_real_pix ? "text-sm font-semibold text-green-600" : "text-sm font-semibold text-yellow-600"}>
+                  {catalog.mercado_pago.ready_for_real_pix ? "PIX real habilitado" : "Aguardando variáveis seguras"}
+                </span>
+              </div>
+              {catalog.mercado_pago.missing_required.length > 0 && <p className="mt-1 text-xs text-muted-foreground">Faltando: {catalog.mercado_pago.missing_required.join(", ")}</p>}
+            </div>
+            <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+              <span>Access Token: {catalog.mercado_pago.credentials.access_token?.masked || "não configurado"}</span>
+              <span>Public Key: {catalog.mercado_pago.credentials.public_key?.masked || "não configurado"}</span>
+              <span>Client ID: {catalog.mercado_pago.credentials.client_id?.masked || "não configurado"}</span>
+              <span>PIX Key: {catalog.mercado_pago.credentials.pix_key?.masked || "não configurado"}</span>
+            </div>
+            <Button onClick={createRadarCheckout} disabled={creating || !catalog.mercado_pago.ready_for_real_pix}>
+              <Sparkles className="mr-2 h-4 w-4" />PIX do Radar agora
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {analytics && (
         <div className="grid gap-4 md:grid-cols-4">
