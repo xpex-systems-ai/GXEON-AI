@@ -19,6 +19,7 @@ import GovernancePage from "@/pages/GovernancePage";
 import TestPage from "@/pages/TestPage";
 import ConversionPage from "@/pages/ConversionPage";
 import LiveRuntimePage from "@/pages/LiveRuntimePage";
+import RevenueEnginePage from "@/pages/RevenueEnginePage";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ function Router() {
             <Route path="/datasets" component={DatasetsPage} />
             <Route path="/health" component={HealthPage} />
             <Route path="/revenue" component={RevenuePage} />
+            <Route path="/revenue-engine" component={RevenueEnginePage} />
             <Route path="/revenue-streams" component={RevenueStreamsPage} />
             <Route path="/settings" component={SettingsPage} />
             <Route path="/system-logs" component={SystemLogsPage} />

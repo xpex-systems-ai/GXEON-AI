@@ -43,6 +43,16 @@ const { generateSignal, consumePremiumSignal, getXRadarMetrics } = require(pathF
 const { runXRadarScanCycle } = require(pathFromRoot("xRadarScheduler.cjs"));
 const { subscribeAgent, getSubscriptionCatalog } = require(pathFromRoot("subscriptionRuntime.cjs"));
 const { getRevenueDashboardMetrics } = require(pathFromRoot("revenueDashboardRuntime.cjs"));
+const {
+  createRevenueCheckout,
+  getCheckoutStatus,
+  processCartRecovery,
+  getRevenueAnalytics,
+  getRevenueCatalog,
+  sellSubscription,
+  sellCreditPack,
+  activatePaidEntitlement,
+} = require(pathFromRoot("revenueEngineRuntime.cjs"));
 
 const router = Router();
 
@@ -280,6 +290,63 @@ router.post("/v1/runtime/pix/followups/process", (req, res) => {
 
 router.get("/v1/runtime/revenue-dashboard", (_req, res) => {
   res.json(getRevenueDashboardMetrics());
+});
+
+
+router.get("/v1/revenue-engine/catalog", (_req, res) => {
+  res.json(getRevenueCatalog());
+});
+
+router.get("/v1/revenue-engine/analytics", (_req, res) => {
+  res.json(getRevenueAnalytics());
+});
+
+router.post("/v1/revenue-engine/checkout", async (req, res) => {
+  try {
+    res.status(201).json(await createRevenueCheckout(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
+});
+
+router.get("/v1/revenue-engine/checkout/:id/status", async (req, res) => {
+  try {
+    res.json(await getCheckoutStatus(req.params.id));
+  } catch (error) {
+    res.status(404).json({ error: String(error) });
+  }
+});
+
+router.post("/v1/revenue-engine/recovery/process", (req, res) => {
+  try {
+    res.status(201).json(processCartRecovery(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
+});
+
+router.post("/v1/revenue-engine/subscriptions/sale", async (req, res) => {
+  try {
+    res.status(201).json(await sellSubscription(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
+});
+
+router.post("/v1/revenue-engine/credits/packs/sale", async (req, res) => {
+  try {
+    res.status(201).json(await sellCreditPack(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
+});
+
+router.post("/v1/revenue-engine/entitlements/activate", (req, res) => {
+  try {
+    res.status(201).json(activatePaidEntitlement(req.body ?? {}));
+  } catch (error) {
+    res.status(400).json({ error: String(error) });
+  }
 });
 
 router.get("/v1/runtime/readiness", (_req, res) => {
