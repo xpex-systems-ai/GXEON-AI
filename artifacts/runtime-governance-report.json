@@ -1,18 +1,18 @@
 {
-  "generated_at": "2026-05-17T02:55:58.429Z",
+  "generated_at": "2026-05-30T01:12:49.473Z",
   "runtime_governance": "ACTIVE",
   "dashboard_integrity": "ACTIVE",
   "runtime_sync": {
     "runtime": "LIVE",
     "github_sync": "ACTIVE",
     "replit_runtime": "ONLINE",
-    "last_commit": "9f7d3d0",
-    "last_sync": "2026-05-17T02:55:01+00:00",
+    "last_commit": "1f48932",
+    "last_sync": "2026-05-27T16:09:06-03:00",
     "branch": "work",
     "dashboard": "ACTIVE",
-    "deployment_freshness_seconds": 57,
+    "deployment_freshness_seconds": 194623,
     "synchronized": true,
-    "generated_at": "2026-05-17T02:55:58.479Z"
+    "generated_at": "2026-05-30T01:12:49.516Z"
   },
   "conversion_engine": "ACTIVE",
   "heartbeat_runtime": "ACTIVE",
@@ -44,7 +44,7 @@
       "governance": "NO_STOP"
     },
     "recovery_log": "Non-main branch detected; synchronization retry suggested.",
-    "generated_at": "2026-05-17T02:55:58.504Z"
+    "generated_at": "2026-05-30T01:12:49.529Z"
   },
   "supabase_connectivity": "DEGRADED",
   "route_integrity": "ACTIVE",
@@ -60,9 +60,9 @@
     "dashboard_runtime": "ACTIVE",
     "supabase_validation": "DEGRADED",
     "deployment_sync": "ACTIVE",
-    "last_commit": "9f7d3d0",
-    "last_sync": "2026-05-17T02:55:01+00:00",
-    "generated_at": "2026-05-17T02:55:58.576Z"
+    "last_commit": "1f48932",
+    "last_sync": "2026-05-27T16:09:06-03:00",
+    "generated_at": "2026-05-30T01:12:49.585Z"
   },
   "deployment_integrity": {
     "deployment": "HEALTHY",
@@ -74,7 +74,7 @@
     "commit_synchronization": "ACTIVE",
     "artifact_presence": "PRESENT",
     "environment_integrity": "DEGRADED",
-    "generated_at": "2026-05-17T02:55:58.590Z"
+    "generated_at": "2026-05-30T01:12:49.598Z"
   },
   "runtime_snapshot": {
     "status": "ACTIVE",
@@ -82,7 +82,7 @@
     "runtime_health": "GREEN",
     "sync_history": "TRACKED",
     "recovery_history": "TRACKED",
-    "generated_at": "2026-05-17T02:55:58.590Z"
+    "generated_at": "2026-05-30T01:12:49.598Z"
   },
   "monetization_audit": {
     "monetization_readiness": "PARTIAL",
@@ -102,7 +102,7 @@
       "revenue_throughput_sec": 0.8,
       "approval_latency_ms": 1400,
       "checkout_abandonment": 0,
-      "generated_at": "2026-05-17T02:55:58.408Z"
+      "generated_at": "2026-05-30T01:12:49.450Z"
     },
     "railway": {
       "runtime": "LIVE",
@@ -117,7 +117,7 @@
       "memory_pressure": "STABLE",
       "runtime_latency_ms": 120,
       "recovery_health": "GREEN",
-      "generated_at": "2026-05-17T02:55:58.410Z"
+      "generated_at": "2026-05-30T01:12:49.457Z"
     },
     "supabase": {
       "supabase": "DEGRADED",
@@ -131,7 +131,7 @@
         "EXPO_PUBLIC_SUPABASE_ANON_KEY": false
       },
       "database_target": null,
-      "generated_at": "2026-05-17T02:55:58.428Z"
+      "generated_at": "2026-05-30T01:12:49.472Z"
     },
     "operator_alerts": {
       "runtime": "ONLINE",
@@ -174,8 +174,8 @@
           "confidence": 78
         }
       ],
-      "generated_at": "2026-05-17T02:55:58.428Z"
+      "generated_at": "2026-05-30T01:12:49.472Z"
     },
-    "generated_at": "2026-05-17T02:55:58.428Z"
+    "generated_at": "2026-05-30T01:12:49.473Z"
   }
 }
