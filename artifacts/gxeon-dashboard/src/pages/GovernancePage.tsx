@@ -45,14 +45,14 @@ function governanceHeaders(): HeadersInit {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-async function fetchGovernance(endpoint: string) {
+async function fetchGovernance<T>(endpoint: string): Promise<T> {
   const res = await fetch(`${API_BASE}/v1/governance/${endpoint}`, {
     headers: governanceHeaders(),
   });
   if (res.status === 401) throw Object.assign(new Error("unauthorized"), { status: 401 });
   if (res.status === 503) throw Object.assign(new Error("not_configured"), { status: 503 });
   if (!res.ok) throw Object.assign(new Error(`${endpoint}: ${res.status}`), { status: res.status });
-  return res.json();
+  return res.json() as Promise<T>;
 }
 
 async function generateReports() {
@@ -78,19 +78,19 @@ export default function GovernancePage() {
     setLoading(true);
     setError(null);
     try {
-      const settle = (p: Promise<unknown>) => p.catch((err: unknown) => {
+      const settle = <T,>(p: Promise<T>): Promise<T | null> => p.catch((err: unknown) => {
         const status = (err as { status?: number }).status;
         if (status === 401) throw err;
         if (status === 503) throw err;
         return null;
       });
       const [branches, merge, conflicts, deployments, runtimeSync, recovery] = await Promise.all([
-        settle(fetchGovernance("branches")),
-        settle(fetchGovernance("merge")),
-        settle(fetchGovernance("conflicts")),
-        settle(fetchGovernance("deployments")),
-        settle(fetchGovernance("runtime-sync")),
-        settle(fetchGovernance("recovery")),
+        settle(fetchGovernance<GovernanceData["branches"]>("branches")),
+        settle(fetchGovernance<GovernanceData["merge"]>("merge")),
+        settle(fetchGovernance<GovernanceData["conflicts"]>("conflicts")),
+        settle(fetchGovernance<GovernanceData["deployments"]>("deployments")),
+        settle(fetchGovernance<GovernanceData["runtimeSync"]>("runtime-sync")),
+        settle(fetchGovernance<GovernanceData["recovery"]>("recovery")),
       ]);
       setData({ branches, merge, conflicts, deployments, runtimeSync, recovery });
     } catch (err) {
