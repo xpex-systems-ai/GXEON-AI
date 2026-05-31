@@ -5,7 +5,7 @@
   "mode": "AUDIT_AND_REMEDIATION",
   "phase": "FINAL_PRODUCTION_UNLOCK",
   "target": "FIRST_REAL_PIX",
-  "generated_at": "2026-05-30T06:21:23.143Z",
+  "generated_at": "2026-05-31T00:40:01.577Z",
   "production_score": 0,
   "production_score_max": 100,
   "minimum_go_live_score": 95,
@@ -161,7 +161,7 @@
     "real_pix_requires_operator_confirmation": true,
     "operator_confirmation_env": "GXEON_OPERATOR_CONFIRMED_REAL_PIX",
     "real_pix_creation_guard_env": "GXEON_ALLOW_REAL_PIX_VALIDATION",
-    "generated_at": "2026-05-30T06:21:23.143Z"
+    "generated_at": "2026-05-31T00:40:01.577Z"
   },
   "generated_reports": [
     "DATABASE_PRODUCTION_REPORT.json",
@@ -263,7 +263,7 @@
   "reports": {
     "database": {
       "report": "DATABASE_PRODUCTION_REPORT",
-      "generated_at": "2026-05-30T06:21:23.143Z",
+      "generated_at": "2026-05-31T00:40:01.577Z",
       "ready": false,
       "provider": {
         "provider": "NOT_CONFIGURED",
@@ -382,7 +382,7 @@
     },
     "supabase": {
       "report": "SUPABASE_PRODUCTION_REPORT",
-      "generated_at": "2026-05-30T06:21:23.143Z",
+      "generated_at": "2026-05-31T00:40:01.577Z",
       "ready": false,
       "env": {
         "SUPABASE_URL": false,
@@ -464,7 +464,7 @@
     },
     "mercadopago": {
       "report": "MERCADOPAGO_PRODUCTION_REPORT",
-      "generated_at": "2026-05-30T06:21:23.143Z",
+      "generated_at": "2026-05-31T00:40:01.577Z",
       "ready": false,
       "env": {
         "DATABASE_URL": false,
@@ -534,7 +534,7 @@
         "api_base": "https://api.mercadopago.com",
         "webhook_url_configured": false,
         "safety": "CREDENTIALS_MASKED_ENV_ONLY",
-        "generated_at": "2026-05-30T06:21:23.150Z"
+        "generated_at": "2026-05-31T00:40:01.580Z"
       },
       "access_token_validation": {
         "ready": false,
@@ -580,7 +580,7 @@
     },
     "financialSecurity": {
       "report": "FINANCIAL_SECURITY_REPORT",
-      "generated_at": "2026-05-30T06:21:23.143Z",
+      "generated_at": "2026-05-31T00:40:01.577Z",
       "ready": false,
       "env": {
         "FINANCIAL_AUTH_TOKEN": false,
@@ -680,7 +680,7 @@
     },
     "railway": {
       "report": "RAILWAY_PRODUCTION_REPORT",
-      "generated_at": "2026-05-30T06:21:23.143Z",
+      "generated_at": "2026-05-31T00:40:01.577Z",
       "ready": false,
       "env": {
         "RAILWAY_ENVIRONMENT": false,
@@ -706,9 +706,9 @@
         "dashboard_runtime": "ACTIVE",
         "supabase_validation": "DEGRADED",
         "deployment_sync": "ACTIVE",
-        "last_commit": "c68efe0",
-        "last_sync": "2026-05-30T06:20:04+00:00",
-        "generated_at": "2026-05-30T06:21:23.287Z"
+        "last_commit": "52ca372",
+        "last_sync": "2026-05-30T11:19:42-03:00",
+        "generated_at": "2026-05-31T00:40:01.650Z"
       },
       "deployment_integrity": {
         "deployment": "HEALTHY",
@@ -720,7 +720,7 @@
         "commit_synchronization": "ACTIVE",
         "artifact_presence": "PRESENT",
         "environment_integrity": "DEGRADED",
-        "generated_at": "2026-05-30T06:21:23.319Z"
+        "generated_at": "2026-05-31T00:40:01.665Z"
       },
       "deployment_health": {
         "ready": false,
@@ -739,7 +739,7 @@
     },
     "observability": {
       "report": "OBSERVABILITY_REPORT",
-      "generated_at": "2026-05-30T06:21:23.143Z",
+      "generated_at": "2026-05-31T00:40:01.577Z",
       "ready": false,
       "structured_logs": {
         "ready": true,
@@ -804,7 +804,7 @@
           "governance": "NO_STOP"
         },
         "recovery_log": "Non-main branch detected; synchronization retry suggested.",
-        "generated_at": "2026-05-30T06:21:23.350Z"
+        "generated_at": "2026-05-31T00:40:01.683Z"
       },
       "blockers": [
         "Production health endpoints did not validate.",
@@ -815,7 +815,7 @@
     },
     "pix": {
       "report": "PIX_SIMULATION_REPORT",
-      "generated_at": "2026-05-30T06:21:23.143Z",
+      "generated_at": "2026-05-31T00:40:01.577Z",
       "ready": false,
       "mode": "SAFE_FAIL_CLOSED_DEFAULT",
       "operator_confirmation": {

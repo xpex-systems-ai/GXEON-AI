@@ -1,0 +1,231 @@
+{
+  "report": "GXEON_FINAL_DEPLOY_GATE_REPORT",
+  "version": "1.0.0",
+  "generated_at": "2026-05-31T00:41:26.839Z",
+  "final_status": "NO_GO",
+  "score": 53,
+  "max_score": 100,
+  "production_readiness": false,
+  "risk": "CRITICAL",
+  "rollback_available": false,
+  "explicit_go_signal": false,
+  "no_auto_deploy": true,
+  "layer_results": [
+    {
+      "layer": "code_integrity",
+      "weight": 0.2,
+      "score": 18,
+      "risk": "LOW",
+      "status": "PASS",
+      "checks": {
+        "typescript_compilation_errors": "PASS: pnpm run typecheck completed successfully",
+        "dependency_conflicts": "PASS: pnpm workspace commands resolved dependencies from lockfile",
+        "monorepo_structure_validity": "PASS: pnpm-workspace.yaml contains apps, libs, and scripts workspace packages",
+        "unused_or_dead_modules": "WARNING: not fully audited by automated dead-code tooling in this run",
+        "import_resolution_health": "PASS: TypeScript project references and production builds resolved imports"
+      }
+    },
+    {
+      "layer": "architecture_coherence",
+      "weight": 0.15,
+      "score": 13,
+      "risk": "LOW",
+      "status": "PASS_WITH_WARNINGS",
+      "checks": {
+        "frontend_backend_separation": "PASS: dashboard, mobile, api-server, db, and API client packages are isolated by workspace boundaries",
+        "service_isolation": "PASS: API server and frontend deploy configs are separate",
+        "workspace_boundaries": "PASS: shared lib packages are consumed through workspace dependencies",
+        "api_consistency": "PASS: API server health route validates against generated zod contract",
+        "shared_lib_integrity": "WARNING: generated API clients should be regenerated before contract changes"
+      }
+    },
+    {
+      "layer": "runtime_health",
+      "weight": 0.15,
+      "score": 11,
+      "risk": "MEDIUM",
+      "status": "PARTIAL",
+      "checks": {
+        "api_boot_success": "PASS: API server started and returned /api/healthz status ok",
+        "dashboard_render_success": "PASS: dashboard production build completed",
+        "mobile_boot_success": "FAIL: mobile static build requires deployment domain env",
+        "error_logs_absence": "WARNING: API was terminated after smoke test; pnpm reported SIGTERM from controlled shutdown",
+        "memory_leak_risk": "STABLE"
+      }
+    },
+    {
+      "layer": "database_integrity",
+      "weight": 0.15,
+      "score": 0,
+      "risk": "CRITICAL",
+      "status": "FAIL_CLOSED",
+      "checks": {
+        "supabase_connection": "DEGRADED",
+        "migration_consistency": "FAIL: blocked because DATABASE_URL is not configured",
+        "table_schema_validity": "FAIL: remote table validation was not possible without DATABASE_URL",
+        "rls_policies_active": "FAIL: Supabase/Postgres RLS policy validation did not pass",
+        "env_vars_present": false
+      }
+    },
+    {
+      "layer": "monetization_engine",
+      "weight": 0.15,
+      "score": 5,
+      "risk": "CRITICAL",
+      "status": "INCOMPLETE",
+      "checks": {
+        "payment_gateway_active": "FAIL: Mercado Pago credentials are not configured",
+        "webhook_signature_validation": "FAIL: webhook URL/secret/signature validation did not pass",
+        "idempotency_handling": "PASS",
+        "revenue_pipeline_active": "ACTIVE",
+        "billing_flow_complete": "FAIL: real PIX creation, settlement, ledger, and wallet update validation are blocked"
+      }
+    },
+    {
+      "layer": "deployment_pipeline",
+      "weight": 0.2,
+      "score": 6,
+      "risk": "CRITICAL",
+      "status": "FAILED",
+      "checks": {
+        "railway_build_success": "FAIL: Railway identity and deployment health env vars are missing",
+        "ci_cd_pipeline_green": "FAIL: pnpm run predeploy:validate failed at Supabase env validation",
+        "environment_variables_configured": false,
+        "service_separation_valid": "REPLIT_ONLY",
+        "rollback_mechanism_present": false
+      }
+    }
+  ],
+  "critical_blockers": [
+    "DATABASE_URL is not configured.",
+    "Cannot validate connection, remote migrations, financial tables, indexes, or transaction persistence.",
+    "Missing Supabase env vars: SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY, EXPO_PUBLIC_SUPABASE_URL, EXPO_PUBLIC_SUPABASE_ANON_KEY.",
+    "Web frontend Supabase env pair is incomplete.",
+    "Mobile Supabase env pair is incomplete.",
+    "Supabase auth validation did not pass.",
+    "Supabase realtime validation did not pass.",
+    "Supabase/Postgres RLS policy validation did not pass.",
+    "Supabase storage validation did not pass.",
+    "Missing Mercado Pago / financial env vars: DATABASE_URL, MERCADO_PAGO_ACCESS_TOKEN, MERCADO_PAGO_WEBHOOK_SECRET, MERCADO_PAGO_NOTIFICATION_URL, FINANCIAL_AUTH_TOKEN.",
+    "Mercado Pago access token validation did not pass.",
+    "Mercado Pago webhook URL/secret/signature validation did not pass.",
+    "PIX runtime is not production-ready.",
+    "Real PIX payment creation was not validated.",
+    "Settlement flow is not ready.",
+    "PIX recovery flow is not ready.",
+    "FINANCIAL_AUTH_TOKEN is not configured.",
+    "Missing Railway identity env vars: RAILWAY_PROJECT_ID, RAILWAY_SERVICE_ID.",
+    "Railway/Node production environment is not verified.",
+    "Railway deployment health endpoint did not validate.",
+    "Rollback readiness is not proven with deployment ID and verified database backup.",
+    "Production health endpoints did not validate.",
+    "Monitoring provider is not configured.",
+    "Alert routing is not configured.",
+    "Incident recovery is blocked by rollback readiness failure.",
+    "Real checkout/PIX generation skipped until GXEON_ALLOW_REAL_PIX_VALIDATION=true, GXEON_OPERATOR_CONFIRMED_REAL_PIX=true, and Mercado Pago prerequisites pass.",
+    "Real PIX payment confirmation is missing: GXEON_REAL_PIX_PAYMENT_CONFIRMED=true was not provided after real payment execution.",
+    "Webhook validation did not pass.",
+    "Ledger update validation is blocked until DB and settlement flow are ready.",
+    "Wallet update validation is blocked until ledger update validation passes."
+  ],
+  "warnings": [
+    "Dashboard build emits chunk-size warnings and sourcemap warning messages for UI components.",
+    "Mobile build could not complete until REPLIT_INTERNAL_APP_DOMAIN, REPLIT_DEV_DOMAIN, or EXPO_PUBLIC_DOMAIN is set.",
+    "Runtime governance reports branch drift and pending sync retry state.",
+    "Supabase, Mercado Pago, Railway, observability, and rollback validations are fail-closed because production env vars are absent."
+  ],
+  "recommended_actions": [
+    "Configure DATABASE_URL and validate remote migrations, financial tables, indexes, and transaction persistence.",
+    "Configure Supabase backend, web, and mobile env vars, then validate auth, realtime, RLS policies, and storage.",
+    "Configure Mercado Pago credentials, webhook secret, notification URL, and financial auth token; run a guarded real PIX validation only after operator confirmation.",
+    "Set Railway project/service env vars, run deployment health checks, and document a tested rollback path with verified database backup.",
+    "Configure monitoring and alert routing before exposing production traffic.",
+    "Set a mobile deployment domain env var and rerun the mobile build.",
+    "Rerun pnpm run predeploy:validate and scripts/production_activation_check.cjs; only deploy after all critical blockers are cleared."
+  ],
+  "evidence": {
+    "go_live_decision": "NO_GO",
+    "go_live_score": 0,
+    "go_live_requirements": {
+      "database_ready": false,
+      "supabase_ready": false,
+      "mercadopago_ready": false,
+      "railway_ready": false,
+      "observability_ready": false,
+      "rollback_ready": false,
+      "financial_auth_ready": false,
+      "pix_runtime_ready": false
+    },
+    "missing_environment_variables": [
+      "DATABASE_URL",
+      "SUPABASE_URL",
+      "SUPABASE_SERVICE_ROLE_KEY",
+      "VITE_SUPABASE_URL",
+      "VITE_SUPABASE_ANON_KEY",
+      "EXPO_PUBLIC_SUPABASE_URL",
+      "EXPO_PUBLIC_SUPABASE_ANON_KEY",
+      "MERCADO_PAGO_ACCESS_TOKEN",
+      "MERCADO_PAGO_NOTIFICATION_URL",
+      "MERCADO_PAGO_WEBHOOK_SECRET",
+      "FINANCIAL_AUTH_TOKEN",
+      "RAILWAY_PROJECT_ID",
+      "RAILWAY_SERVICE_ID"
+    ],
+    "failed_validations": [
+      "database",
+      "database.connection",
+      "database.ledger_tables",
+      "database.payment_tables",
+      "database.indexes",
+      "database.transaction_persistence",
+      "supabase",
+      "supabase.auth",
+      "supabase.realtime",
+      "supabase.rls_policies",
+      "supabase.storage",
+      "mercadopago",
+      "mercadopago.access_token_validation",
+      "mercadopago.webhook",
+      "mercadopago.pix_runtime",
+      "mercadopago.payment_creation",
+      "mercadopago.payment_status",
+      "mercadopago.settlement_flow",
+      "mercadopago.recovery_flow",
+      "financialSecurity",
+      "financialSecurity.token",
+      "railway",
+      "railway.deployment_health",
+      "railway.rollback_readiness",
+      "observability",
+      "observability.health_endpoints",
+      "observability.monitoring",
+      "observability.alerts",
+      "pix"
+    ],
+    "supabase_status": "DEGRADED",
+    "supabase_all_required_keys_configured": false,
+    "runtime_recovery_status": "RETRYING_SYNC",
+    "runtime_branch_drift_detected": true,
+    "deployment_integrity": {
+      "deployment": "HEALTHY",
+      "sync": "ACTIVE",
+      "branch": "work",
+      "dashboard": "ONLINE",
+      "runtime": "LIVE",
+      "runtime_freshness": "FRESH",
+      "commit_synchronization": "ACTIVE",
+      "artifact_presence": "PRESENT",
+      "environment_integrity": "DEGRADED",
+      "generated_at": "2026-05-31T00:39:54.591Z"
+    },
+    "payment_flow_idempotency": "PASS",
+    "source_reports": [
+      "artifacts/GO_LIVE_REPORT.json",
+      "artifacts/runtime-governance-report.json",
+      "artifacts/supabase-runtime-report.json",
+      "artifacts/payment-flow-report.json",
+      "artifacts/final-monetization-audit.json",
+      "artifacts/runtime-platform-cleanup-report.json"
+    ]
+  }
+}

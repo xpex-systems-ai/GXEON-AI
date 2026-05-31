@@ -1,6 +1,6 @@
 {
   "report": "MERCADOPAGO_CONFIGURATION_REPORT",
-  "generated_at": "2026-05-30T06:21:23.143Z",
+  "generated_at": "2026-05-31T00:40:01.577Z",
   "status": "CONFIGURED_WITHOUT_COMMITTED_SECRETS",
   "secrets_committed": false,
   "files": [
