@@ -135,7 +135,7 @@
     "Supabase, Mercado Pago, Railway, observability, and rollback validations are fail-closed because production env vars are absent."
   ],
   "recommended_actions": [
-    "Configure DATABASE_URL and validate remote migrations, financial tables, indexes, and transaction persistence.",
+    "Run pnpm run db:provision:railway after Railway CLI authentication; export DATABASE_URL from the created PostgreSQL service, apply Drizzle migrations, and validate artifacts/DATABASE_PROVISIONING_REPORT.json.",
     "Configure Supabase backend, web, and mobile env vars, then validate auth, realtime, RLS policies, and storage.",
     "Configure Mercado Pago credentials, webhook secret, notification URL, and financial auth token; run a guarded real PIX validation only after operator confirmation.",
     "Set Railway project/service env vars, run deployment health checks, and document a tested rollback path with verified database backup.",
@@ -225,7 +225,10 @@
       "artifacts/supabase-runtime-report.json",
       "artifacts/payment-flow-report.json",
       "artifacts/final-monetization-audit.json",
-      "artifacts/runtime-platform-cleanup-report.json"
-    ]
+      "artifacts/runtime-platform-cleanup-report.json",
+      "artifacts/DATABASE_PROVISIONING_REPORT.json"
+    ],
+    "database_provisioning_status": "FAILED",
+    "database_provisioning_blocker": "DATABASE_URL is not configured."
   }
 }
