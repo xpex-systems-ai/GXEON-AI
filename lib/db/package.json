@@ -9,7 +9,8 @@
   },
   "scripts": {
     "push": "drizzle-kit push --config ./drizzle.config.ts",
-    "push-force": "drizzle-kit push --force --config ./drizzle.config.ts"
+    "push-force": "drizzle-kit push --force --config ./drizzle.config.ts",
+    "validate:financial": "node ../../scripts/validate_financial_db.cjs"
   },
   "dependencies": {
     "drizzle-orm": "catalog:",

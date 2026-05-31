@@ -1,0 +1,60 @@
+{
+  "report": "DATABASE_PROVISIONING_REPORT",
+  "generated_at": "2026-05-31T03:35:03.462Z",
+  "status": "FAILED",
+  "database_url_configured": false,
+  "database_url_masked": null,
+  "expected": {
+    "tables": [
+      "actor_wallets",
+      "global_transactions",
+      "payment_attempts",
+      "financial_ledger",
+      "payment_webhook_events"
+    ],
+    "enums": [
+      "ledger_entry_type",
+      "ledger_source_type",
+      "payment_attempt_status",
+      "transaction_status",
+      "wallet_status",
+      "webhook_processing_status"
+    ],
+    "enum_count": 6
+  },
+  "actual": {
+    "tables": [],
+    "enums": {}
+  },
+  "checks": {
+    "connection": false,
+    "tables_present": false,
+    "enums_present": false,
+    "enum_values_present": false,
+    "write_smoke_requested": false,
+    "write_smoke_passed": false
+  },
+  "missing": {
+    "tables": [
+      "actor_wallets",
+      "global_transactions",
+      "payment_attempts",
+      "financial_ledger",
+      "payment_webhook_events"
+    ],
+    "enums": [
+      "ledger_entry_type",
+      "ledger_source_type",
+      "payment_attempt_status",
+      "transaction_status",
+      "wallet_status",
+      "webhook_processing_status"
+    ],
+    "enum_values": {}
+  },
+  "notes": [
+    "The schema currently defines 6 financial ENUM types; the step-01 checklist text says 7 but lists 6 names.",
+    "Write smoke uses a rolled-back transaction so production data is not retained."
+  ],
+  "blocker": "DATABASE_URL is not configured."
+}

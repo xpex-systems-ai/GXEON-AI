@@ -1,6 +1,6 @@
 {
   "report": "SUPABASE_PRODUCTION_REPORT",
-  "generated_at": "2026-05-30T06:21:23.143Z",
+  "generated_at": "2026-05-31T00:40:01.577Z",
   "ready": false,
   "env": {
     "SUPABASE_URL": false,

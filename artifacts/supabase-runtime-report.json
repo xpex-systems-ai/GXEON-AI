@@ -9,6 +9,59 @@
     "EXPO_PUBLIC_SUPABASE_URL": false,
     "EXPO_PUBLIC_SUPABASE_ANON_KEY": false
   },
+  "aliases_supported": {
+    "anon_key": [
+      "SUPABASE_ANON_KEY",
+      "SUPABASE_PUBLISHABLE_KEY"
+    ],
+    "url_fallback": [
+      "SUPABASE_URL",
+      "VITE_SUPABASE_URL",
+      "EXPO_PUBLIC_SUPABASE_URL"
+    ]
+  },
+  "resolved": {
+    "SUPABASE_URL": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "SUPABASE_SERVICE_ROLE_KEY": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "VITE_SUPABASE_URL": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "VITE_SUPABASE_ANON_KEY": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "EXPO_PUBLIC_SUPABASE_URL": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "EXPO_PUBLIC_SUPABASE_ANON_KEY": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "SUPABASE_ANON_KEY": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    },
+    "SUPABASE_PUBLISHABLE_KEY": {
+      "configured": false,
+      "masked": null,
+      "length": 0
+    }
+  },
   "database_target": null,
-  "generated_at": "2026-05-30T01:12:50.174Z"
+  "generated_at": "2026-05-31T00:39:55.360Z"
 }

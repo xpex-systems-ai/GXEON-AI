@@ -1,7 +1,7 @@
 {
   "monetization_readiness": "PARTIAL",
   "runtime_state": "DEGRADED",
-  "financial_integrity": "PASS",
+  "financial_integrity": "WARNING",
   "recommended_mode": "MANUAL",
   "risk_score": 45,
   "stability_score": 55,
@@ -16,7 +16,7 @@
     "revenue_throughput_sec": 0.8,
     "approval_latency_ms": 1400,
     "checkout_abandonment": 0,
-    "generated_at": "2026-05-30T01:12:49.450Z"
+    "generated_at": "2026-05-31T00:39:54.389Z"
   },
   "railway": {
     "runtime": "LIVE",
@@ -31,7 +31,7 @@
     "memory_pressure": "STABLE",
     "runtime_latency_ms": 120,
     "recovery_health": "GREEN",
-    "generated_at": "2026-05-30T01:12:49.457Z"
+    "generated_at": "2026-05-31T00:39:54.391Z"
   },
   "supabase": {
     "supabase": "DEGRADED",
@@ -44,8 +44,61 @@
       "EXPO_PUBLIC_SUPABASE_URL": false,
       "EXPO_PUBLIC_SUPABASE_ANON_KEY": false
     },
+    "aliases_supported": {
+      "anon_key": [
+        "SUPABASE_ANON_KEY",
+        "SUPABASE_PUBLISHABLE_KEY"
+      ],
+      "url_fallback": [
+        "SUPABASE_URL",
+        "VITE_SUPABASE_URL",
+        "EXPO_PUBLIC_SUPABASE_URL"
+      ]
+    },
+    "resolved": {
+      "SUPABASE_URL": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "SUPABASE_SERVICE_ROLE_KEY": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "VITE_SUPABASE_URL": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "VITE_SUPABASE_ANON_KEY": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "EXPO_PUBLIC_SUPABASE_URL": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "EXPO_PUBLIC_SUPABASE_ANON_KEY": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "SUPABASE_ANON_KEY": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      },
+      "SUPABASE_PUBLISHABLE_KEY": {
+        "configured": false,
+        "masked": null,
+        "length": 0
+      }
+    },
     "database_target": null,
-    "generated_at": "2026-05-30T01:12:49.472Z"
+    "generated_at": "2026-05-31T00:39:54.416Z"
   },
   "operator_alerts": {
     "runtime": "ONLINE",
@@ -88,7 +141,7 @@
         "confidence": 78
       }
     ],
-    "generated_at": "2026-05-30T01:12:49.472Z"
+    "generated_at": "2026-05-31T00:39:54.417Z"
   },
-  "generated_at": "2026-05-30T01:12:49.473Z"
+  "generated_at": "2026-05-31T00:39:54.417Z"
 }

@@ -17,7 +17,9 @@
     "supabase:check": "node scripts/supabase_env_check.cjs",
     "deploy:railway:auto": "bash scripts/railway_autodeploy.sh work",
     "mercado:check": "node scripts/mercado_pago_env_check.cjs",
-    "production:activate": "node scripts/production_activation_check.cjs"
+    "production:activate": "node scripts/production_activation_check.cjs",
+    "db:provision:railway": "bash scripts/provision_railway_postgres.sh",
+    "db:validate:financial": "pnpm --filter @workspace/db run validate:financial"
   },
   "private": true,
   "devDependencies": {
