@@ -5,6 +5,7 @@ const j=(res,c,p)=>{res.writeHead(c,{'Content-Type':'application/json'});res.end
 
 function num(q,k){ return Number(q.get(k)||0); }
 const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://x');
+ if(req.method==='GET'&&(u.pathname==='/healthz'||u.pathname==='/api/healthz')) return j(res,200,{status:'ok',service:'gxeon-conversion-api'});
  if(req.method==='GET'&&u.pathname==='/api/conversion/snapshot') return j(res,200,computeConversionSnapshot());
  if(req.method==='POST'&&u.pathname==='/api/conversion/tick') return j(res,200,runConversionTick());
  if(req.method==='GET'&&u.pathname==='/api/conversion/behavior-score') {
@@ -18,4 +19,4 @@ const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://x');
  j(res,404,{error:'NOT_FOUND'});
 });
 module.exports={server};
-if(require.main===module){server.listen(Number(process.env.GXEON_CONVERSION_API_PORT||8794),()=>console.log('conversion api on'));}
+if(require.main===module){server.listen(Number(process.env.PORT||process.env.GXEON_CONVERSION_API_PORT||8794),()=>console.log('conversion api on'));}
