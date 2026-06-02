@@ -1,6 +1,8 @@
 'use strict';
 
 const crypto = require('node:crypto');
+
+const DEFAULT_WEBHOOK_TIMESTAMP_TOLERANCE_MS = 15 * 60 * 1000;
 const { readMemory, writeMemory } = require('./runtimeMemory.cjs');
 const { getPaymentStatus } = require('./mercadoPagoAdapter.cjs');
 const { activateSubscriptionFromPayment } = require('./subscriptionRuntime.cjs');
@@ -40,22 +42,39 @@ function buildMercadoPagoSignatureManifest({ dataId, requestId, ts }) {
   return manifest;
 }
 
+function resolveWebhookTimestampToleranceMs(options = {}) {
+  const configured = options.timestampToleranceMs || process.env.MP_WEBHOOK_TIMESTAMP_TOLERANCE_MS;
+  const value = Number(configured || DEFAULT_WEBHOOK_TIMESTAMP_TOLERANCE_MS);
+  return Number.isFinite(value) && value > 0 ? value : DEFAULT_WEBHOOK_TIMESTAMP_TOLERANCE_MS;
+}
+
+function isWebhookTimestampFresh(ts, options = {}) {
+  if (!ts) return false;
+  const value = Number(ts);
+  if (!Number.isFinite(value) || value <= 0) return false;
+  const timestampMs = value < 10_000_000_000 ? value * 1000 : value;
+  const nowMs = Number(options.nowMs || Date.now());
+  return Math.abs(nowMs - timestampMs) <= resolveWebhookTimestampToleranceMs(options);
+}
+
 function verifyWebhookSignature(payload = {}, options = {}) {
   const secret = options.secret || process.env.MERCADO_PAGO_WEBHOOK_SECRET || '';
-  if (!secret) return process.env.ALLOW_UNSIGNED_MP_WEBHOOKS === 'true';
+  if (!secret) {
+    return process.env.NODE_ENV !== 'production' && process.env.ALLOW_UNSIGNED_MP_WEBHOOKS === 'true';
+  }
 
   const parsed = parseSignatureHeader(options.signature || '');
   const v1 = parsed.v1 || String(options.signature || '').trim();
   const ts = parsed.ts;
   const dataId = resolveWebhookDataId(payload, options.dataId);
   const manifest = buildMercadoPagoSignatureManifest({ dataId, requestId: options.requestId, ts });
-  if (!manifest || !v1) return false;
+  if (!manifest || !v1 || !isWebhookTimestampFresh(ts, options)) return false;
 
   const digest = crypto.createHmac('sha256', secret).update(manifest).digest('hex');
   if (safeTimingEqualHex(digest, v1)) return true;
 
   // Compatibility for older internal smoke tests that signed the raw body directly.
-  if (options.rawBody) {
+  if (process.env.NODE_ENV !== 'production' && options.rawBody) {
     const rawDigest = crypto.createHmac('sha256', secret).update(options.rawBody).digest('hex');
     return safeTimingEqualHex(rawDigest, v1);
   }
@@ -261,4 +280,10 @@ function processPendingPixFollowups(input = {}) {
   return { followup_processor: 'ACTIVE', processed_count: processed.length, processed };
 }
 
-module.exports = { processWebhook, processPendingPixFollowups, verifyWebhookSignature, buildMercadoPagoSignatureManifest };
+module.exports = {
+  processWebhook,
+  processPendingPixFollowups,
+  verifyWebhookSignature,
+  buildMercadoPagoSignatureManifest,
+  isWebhookTimestampFresh,
+};
