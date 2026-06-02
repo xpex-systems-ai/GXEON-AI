@@ -8,6 +8,30 @@ let metroProcess = null;
 
 const projectRoot = path.resolve(__dirname, "..");
 
+function configureLocalMetroNetworking() {
+  const requiredHosts = ["localhost", "127.0.0.1", "::1"];
+
+  for (const key of ["NO_PROXY", "no_proxy"]) {
+    const existing = process.env[key]
+      ? process.env[key].split(",").map((entry) => entry.trim()).filter(Boolean)
+      : [];
+    const next = new Set(existing);
+    for (const host of requiredHosts) {
+      next.add(host);
+    }
+    process.env[key] = Array.from(next).join(",");
+  }
+
+  // Metro and this build script exchange bundles/manifests exclusively through
+  // localhost. Some CI sandboxes expose HTTP(S)_PROXY values that Undici applies
+  // before honoring no_proxy, which breaks those localhost requests.
+  for (const key of ["HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"]) {
+    delete process.env[key];
+  }
+}
+
+configureLocalMetroNetworking();
+
 function findWorkspaceRoot(startDir) {
   let dir = startDir;
   while (dir !== path.dirname(dir)) {
