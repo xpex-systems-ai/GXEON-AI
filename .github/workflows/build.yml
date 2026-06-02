@@ -1,0 +1,32 @@
+name: GXEON Build
+
+on:
+  pull_request:
+  push:
+    branches: [main, work]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Monorepo build
+    runs-on: ubuntu-latest
+    env:
+      BASE_PATH: /
+      PORT: 3000
+      EXPO_PUBLIC_DOMAIN: localhost
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.1
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build monorepo
+        run: pnpm run build
