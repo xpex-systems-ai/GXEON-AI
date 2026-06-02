@@ -1,0 +1,31 @@
+name: GXEON Monorepo Health
+
+on:
+  pull_request:
+  push:
+    branches: [main, work]
+  workflow_dispatch:
+
+jobs:
+  health-report:
+    name: Operational radar report
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Generate health reports
+        run: npm run health:report
+      - name: Upload health reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: gxeon-monorepo-health
+          path: |
+            MONOREPO_HEALTH_REPORT.md
+            DEPENDENCY_GRAPH.md
+            WORKSPACE_STATUS.md
+            GITHUB_ACTIONS_STATUS.md
+            DEPLOY_READINESS_REPORT.md
