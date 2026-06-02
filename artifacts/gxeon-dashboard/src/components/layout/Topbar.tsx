@@ -22,12 +22,12 @@ export function Topbar() {
 
     async function fetchTotalRevenue() {
       const { data } = await supabase
-        .from('transactions')
-        .select('amount')
+        .from('global_transactions')
+        .select('base_amount')
         .eq('status', 'PAID');
 
       if (data) {
-        const total = data.reduce((sum, tx) => sum + (tx.amount || 0), 0);
+        const total = data.reduce((sum, tx) => sum + Number(tx.base_amount || 0), 0);
         setTotalRevenue(total);
       }
     }
@@ -38,7 +38,7 @@ export function Topbar() {
       .channel('dashboard-topbar')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'transactions' },
+        { event: '*', schema: 'public', table: 'global_transactions' },
         () => {
           fetchTotalRevenue();
           setLastUpdate(new Date());
