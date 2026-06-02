@@ -63,7 +63,7 @@ Workers
 | `runtimeMemory.cjs` | filesystem local, `SUPABASE_URL` como sinal | Médio. |
 | `analytics/runtime/metricsKernel.cjs` | `.gxeon_runtime` JSONL | Médio. |
 | `dashboard/backend/aggregationEngine.cjs` | metrics/control/revenue signals | Médio. |
-| `gateway/realtime/wsGateway.cjs` | `ws`, events JSONL/dashboard API | Médio; smoke bloqueado se `ws` ausente. |
+| `gateway/realtime/wsGateway.cjs` | `ws`, events JSONL/dashboard API | Médio; `ws` declarado como dependência runtime. |
 
 ## 3. Dependências externas mapeadas
 
@@ -110,7 +110,7 @@ Workers
 | `SUPABASE_URL` ausente → status Supabase/produção degradado e mobile sem live data | High | Afeta experiência e readiness. |
 | `PORT` ausente no API server Express → bootstrap falha | Critical | Serviço principal não sobe. |
 | Fila em memória + JSONL local → restart perde jobs pendentes e rate-limit/idempotência em memória | High | Risco em produção horizontal. |
-| `ws` ausente → realtime gateway smoke bloqueado | Medium | Impacta validação realtime. |
+| `ws` ausente → realtime gateway não inicia | Medium | Mitigado nesta missão com dependência runtime declarada. |
 
 ## 8. Maior gargalo atual
 

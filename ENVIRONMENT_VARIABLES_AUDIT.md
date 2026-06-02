@@ -101,9 +101,11 @@
 
 | Variável | Obrigatória? | Consumidor | Risco |
 |---|---:|---|---|
-| `GXEON_OPERATOR_API_PORT` | Opcional | operator API | Low; default `8787`. |
-| `GXEON_DASHBOARD_API_PORT` | Opcional | dashboard API | Low; default `8791`. |
-| `GXEON_CONVERSION_API_PORT` | Opcional | conversion API | Low; default `8794`. |
+| `PORT` | Obrigatória no Railway | APIs auxiliares e gateway realtime | Critical para deploy Railway; tem prioridade sobre fallbacks locais. |
+| `GXEON_OPERATOR_API_PORT` | Opcional local | operator API | Low; default `8787`. |
+| `GXEON_DASHBOARD_API_PORT` | Opcional local | dashboard API | Low; default `8791`. |
+| `GXEON_CONVERSION_API_PORT` | Opcional local | conversion API | Low; default `8794`. |
+| `GXEON_WS_PORT` | Opcional local | realtime gateway | Low; default `8790`. |
 
 ## 2. Inconsistências identificadas
 

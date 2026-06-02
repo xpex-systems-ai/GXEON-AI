@@ -21,7 +21,7 @@ Resultado executivo:
 | `api/dashboard/dashboardApiV2.cjs` | Rodável localmente | Depende de dados JSONL/agregadores. |
 | `api/conversion/conversionApi.cjs` | Rodável localmente | Simulação/conversion runtime local. |
 | Worker base | Rodável localmente | Fila em memória, executor demo. |
-| Realtime gateway | Mapeado | Smoke depende de pacote `ws`. |
+| Realtime gateway | Mapeado/healthcheck ready | Dependência `ws` declarada e smoke validado. |
 | Supabase | Não conectado | Env/checks apenas. |
 | Mercado Pago | Não conectado | Env/checks/webhook mapeados apenas. |
 | Railway | Não conectado | Configs e readiness mapeados. |
@@ -82,7 +82,7 @@ Auxiliary APIs
 4. Duplicidade/possível divergência entre rotas runtime e Phase 8.
 5. APIs auxiliares CJS e API Express principal coexistem sem um contrato único de ativação.
 6. Dependências frontend usam rotas `/api/v1/*`, enquanto APIs auxiliares expõem `/api/dashboard/*`, `/api/runtime/*`, `/api/conversion/*`.
-7. Realtime gateway depende de `ws` e precisa validação explícita no workspace.
+7. Realtime gateway depende de `ws`, agora declarado como dependência runtime e validado por smoke test.
 
 ## Environment Audit
 

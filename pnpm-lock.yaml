@@ -156,6 +156,10 @@ overrides:
 importers:
 
   .:
+    dependencies:
+      ws:
+        specifier: 8.20.1
+        version: 8.20.1
     devDependencies:
       prettier:
         specifier: ^3.8.3

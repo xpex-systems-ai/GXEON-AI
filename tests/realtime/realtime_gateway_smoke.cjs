@@ -3,11 +3,10 @@ const { server: dashApi } = require('../../api/dashboard/dashboardApiV2.cjs');
 const { saveEvent } = require('../../runtime/persistence/store.cjs');
 
 function resolveWsClient() {
-  if (globalThis.WebSocket) return globalThis.WebSocket;
   try {
     return require('ws');
   } catch {
-    return null;
+    return globalThis.WebSocket || null;
   }
 }
 

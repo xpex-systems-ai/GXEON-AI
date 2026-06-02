@@ -45,6 +45,7 @@
 
 [Realtime]
   gateway/realtime/wsGateway.cjs -> WebSocket stream over runtime events
+  -> HTTP healthcheck /healthz for Railway readiness
 ```
 
 ## 2. Fluxo completo — operação local de workflow
@@ -117,9 +118,9 @@ Webhook notification
 Ativos/rodáveis localmente:
 
 - `artifacts/api-server` se `PORT` for definido.
-- `api/runtime/operatorApiServer.cjs` com porta default `8787`.
-- `api/dashboard/dashboardApiV2.cjs` com porta default `8791`.
-- `api/conversion/conversionApi.cjs` com porta default `8794`.
+- `api/runtime/operatorApiServer.cjs` com `PORT` Railway e fallback local `8787`.
+- `api/dashboard/dashboardApiV2.cjs` com `PORT` Railway e fallback local `8791`.
+- `api/conversion/conversionApi.cjs` com `PORT` Railway e fallback local `8794`.
 - Worker local via `tools/run_live_runtime.cjs`.
 - Dashboard web/mobile como apps de workspace conforme scripts de build/serve.
 

@@ -10,8 +10,22 @@ function parseQuery(url='') { const q = new URL(url, 'http://x').searchParams; r
 function matchFilter(evt, f){ if(f.workflow_id && evt.workflow_id!==f.workflow_id) return false; if(f.type && evt.type!==f.type) return false; return true; }
 
 class RealtimeGateway {
-  constructor() { this.wss = null; this.server = http.createServer(); this.clients = new Set(); this.cursor = 0; }
-  start(port=8790){
+  constructor() {
+    this.wss = null;
+    this.server = http.createServer((req, res) => {
+      const pathname = new URL(req.url || '/', 'http://localhost').pathname;
+      if (req.method === 'GET' && (pathname === '/healthz' || pathname === '/api/healthz')) {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ status: 'ok', service: 'gxeon-realtime-gateway' }));
+        return;
+      }
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'NOT_FOUND' }));
+    });
+    this.clients = new Set();
+    this.cursor = 0;
+  }
+  start(port=Number(process.env.PORT || process.env.GXEON_WS_PORT || 8790)){
     this.wss = new WebSocket.Server({ server: this.server });
     this.wss.on('connection', (ws, req)=>{
       ws.isAlive = true; ws.filter = parseQuery(req.url);
@@ -32,4 +46,4 @@ class RealtimeGateway {
   broadcast(evt){ const payload = JSON.stringify({channel:'runtime.events', event:evt}); for(const ws of this.clients){ if(ws.readyState===WebSocket.OPEN && matchFilter(evt, ws.filter||{})) ws.send(payload); } }
 }
 module.exports = { RealtimeGateway };
-if(require.main===module){ const g=new RealtimeGateway(); g.start(Number(process.env.GXEON_WS_PORT||8790)); console.log('WS gateway on'); }
+if(require.main===module){ const g=new RealtimeGateway(); const port=Number(process.env.PORT||process.env.GXEON_WS_PORT||8790); g.start(port); console.log(`WS gateway on ${port}`); }

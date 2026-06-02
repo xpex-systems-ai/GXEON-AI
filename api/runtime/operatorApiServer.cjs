@@ -29,6 +29,7 @@ function filterFeed(events, q) {
 
 const server = http.createServer((req, res) => {
   const parsed = new URL(req.url, 'http://localhost');
+  if (req.method === 'GET' && (parsed.pathname === '/healthz' || parsed.pathname === '/api/healthz')) return json(res, 200, { status: 'ok', service: 'gxeon-operator-api' });
   if (req.method === 'GET' && parsed.pathname === '/api/runtime/snapshot') return json(res, 200, summarize());
   if (req.method === 'GET' && parsed.pathname === '/api/operators/control-plane') return json(res, 200, getOperatorView());
   if (req.method === 'GET' && parsed.pathname === '/api/runtime/events') return json(res, 200, filterFeed(readJsonl(EVT_FILE), Object.fromEntries(parsed.searchParams)));
@@ -41,7 +42,7 @@ const server = http.createServer((req, res) => {
 });
 
 if (require.main === module) {
-  const port = Number(process.env.GXEON_OPERATOR_API_PORT || 8787);
+  const port = Number(process.env.PORT || process.env.GXEON_OPERATOR_API_PORT || 8787);
   server.listen(port, () => console.log(`[GXEON_OPERATOR_API] listening on ${port}`));
 }
 

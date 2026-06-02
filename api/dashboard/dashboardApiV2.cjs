@@ -10,6 +10,7 @@ const read=(f)=>fs.existsSync(f)?fs.readFileSync(f,'utf8').split('\n').filter(Bo
 const j=(res,c,p)=>{res.writeHead(c,{'Content-Type':'application/json'});res.end(JSON.stringify(p));};
 const page=(arr,q)=>{const o=Math.max(parseInt(q.get('offset')||'0',10),0);const l=Math.min(Math.max(parseInt(q.get('limit')||'50',10),1),500);return {total:arr.length,items:arr.slice(o,o+l),offset:o,limit:l};};
 const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://x');
+ if(req.method==='GET'&&(u.pathname==='/healthz'||u.pathname==='/api/healthz')) return j(res,200,{status:'ok',service:'gxeon-dashboard-api'});
  if(req.method==='GET'&&u.pathname==='/api/dashboard/live-overview') return j(res,200,buildLiveOverview());
  if(req.method==='GET'&&u.pathname==='/api/dashboard/runtime-health') return j(res,200,summarize());
  if(req.method==='GET'&&u.pathname==='/api/dashboard/live-events') return j(res,200,page(read(EVT),u.searchParams));
@@ -21,4 +22,4 @@ const server=http.createServer((req,res)=>{const u=new URL(req.url,'http://x');
  j(res,404,{error:'NOT_FOUND'});
 });
 module.exports={server};
-if(require.main===module){server.listen(Number(process.env.GXEON_DASHBOARD_API_PORT||8791),()=>console.log('dashboard api on'));}
+if(require.main===module){server.listen(Number(process.env.PORT||process.env.GXEON_DASHBOARD_API_PORT||8791),()=>console.log('dashboard api on'));}

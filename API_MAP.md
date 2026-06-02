@@ -7,9 +7,9 @@
 | Serviço | Runtime | Entrada | Porta/env | Status auditado | Observações |
 |---|---:|---|---|---|---|
 | `artifacts/api-server` | Express/TypeScript | `artifacts/api-server/src/index.ts` → `app.ts` → `/api` | `PORT` obrigatório | Serviço principal implantável | Contém APIs de runtime, webhook Mercado Pago, governança, conversão, observabilidade e health. |
-| `api/runtime/operatorApiServer.cjs` | Node HTTP CJS | servidor standalone | `GXEON_OPERATOR_API_PORT` ou `8787` | Serviço auxiliar/local | Lê `.gxeon_runtime/*.jsonl`; expõe snapshot, eventos e histórico. |
-| `api/dashboard/dashboardApiV2.cjs` | Node HTTP CJS | servidor standalone | `GXEON_DASHBOARD_API_PORT` ou `8791` | Serviço auxiliar/local | Agrega runtime, dashboard, fila, revenue stream e marketplace signals. |
-| `api/conversion/conversionApi.cjs` | Node HTTP CJS | servidor standalone | `GXEON_CONVERSION_API_PORT` ou `8794` | Serviço auxiliar/local | Expõe simulações/snapshots de conversão sem integração externa. |
+| `api/runtime/operatorApiServer.cjs` | Node HTTP CJS | servidor standalone | `PORT`, ou `GXEON_OPERATOR_API_PORT`/`8787` local | Serviço auxiliar/local | Lê `.gxeon_runtime/*.jsonl`; expõe snapshot, eventos e histórico. |
+| `api/dashboard/dashboardApiV2.cjs` | Node HTTP CJS | servidor standalone | `PORT`, ou `GXEON_DASHBOARD_API_PORT`/`8791` local | Serviço auxiliar/local | Agrega runtime, dashboard, fila, revenue stream e marketplace signals. |
+| `api/conversion/conversionApi.cjs` | Node HTTP CJS | servidor standalone | `PORT`, ou `GXEON_CONVERSION_API_PORT`/`8794` local | Serviço auxiliar/local | Expõe simulações/snapshots de conversão sem integração externa. |
 
 ## 2. Middleware global e acoplamento de API
 
@@ -164,6 +164,7 @@ Todas usam `governanceAuth`:
 
 | Método | Rota | Controller | Fonte de dados |
 |---|---|---|---|
+| GET | `/healthz`, `/api/healthz` | healthcheck Railway-ready | status local do serviço. |
 | GET | `/api/runtime/snapshot` | `summarize()` | `.gxeon_runtime/workflows.jsonl`, `events.jsonl`. |
 | GET | `/api/operators/control-plane` | `getOperatorView()` | `metricsKernel`. |
 | GET | `/api/runtime/events` | `filterFeed(readJsonl(EVT_FILE))` | eventos JSONL. |
@@ -173,6 +174,7 @@ Todas usam `governanceAuth`:
 
 | Método | Rota | Controller | Fonte de dados |
 |---|---|---|---|
+| GET | `/healthz`, `/api/healthz` | healthcheck Railway-ready | status local do serviço. |
 | GET | `/api/dashboard/live-overview` | `buildLiveOverview()` | aggregation engine + runtime. |
 | GET | `/api/dashboard/runtime-health` | `summarize()` | metrics kernel. |
 | GET | `/api/dashboard/live-events` | pagina eventos | JSONL local. |
@@ -186,6 +188,7 @@ Todas usam `governanceAuth`:
 
 | Método | Rota | Controller | Fonte de dados |
 |---|---|---|---|
+| GET | `/healthz`, `/api/healthz` | healthcheck Railway-ready | status local do serviço. |
 | GET | `/api/conversion/snapshot` | `computeConversionSnapshot()` | conversion engine. |
 | POST | `/api/conversion/tick` | `runConversionTick()` | conversion engine. |
 | GET | `/api/conversion/behavior-score` | `behaviorScore(payload)` | query params numéricos. |
