@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-06-04T00:00:00.000Z",
+  "scan_mode": "static_repository_scan",
+  "runtime_observation": "not_observed_static_only_no_railway_credentials_or_logs",
+  "scores": {
+    "backend_health": 82,
+    "runtime_stability": 69,
+    "security_posture": 71,
+    "monetization_readiness": 86,
+    "architecture_cohesion": 76,
+    "overall": 77
+  },
+  "service_count": 4,
+  "api_route_count": 86,
+  "webhook_count": 1,
+  "worker_like_module_count": 7,
+  "database": {
+    "orm": "drizzle-orm",
+    "provider_targets": [
+      "postgres",
+      "supabase_postgres"
+    ],
+    "tables": [
+      "actor_wallets",
+      "global_transactions",
+      "payment_attempts",
+      "financial_ledger",
+      "payment_webhook_events"
+    ],
+    "connection_pooling": "node-postgres Pool via @workspace/db"
+  },
+  "critical_findings": [
+    "Unauthenticated financial wallet and transaction read endpoints",
+    "Webhook idempotency falls back to non-durable memory when DATABASE_URL is absent",
+    "Worker-like jobs are HTTP-triggered and lack a supervised Railway worker/cron",
+    "Live Railway logs/restarts/secrets were not observable from this environment"
+  ],
+  "high_findings": [
+    "Duplicate /api/v1/runtime/production route",
+    "Duplicate /api/v1/runtime/alerts route",
+    "server/runtime dynamic modules should be explicitly included in API Railway watch/build context",
+    "Open runtime and business intelligence read surfaces need public/internal classification"
+  ],
+  "recommended_next_actions": [
+    "Add auth to financial read endpoints",
+    "Make DATABASE_URL mandatory for production payment/webhook mode",
+    "Add Railway worker or cron service for task, x-radar and PIX followup cycles",
+    "Run live Railway validation with secrets and deployment logs",
+    "Complete Mercado Pago sandbox end-to-end payment and webhook test"
+  ]
+}
