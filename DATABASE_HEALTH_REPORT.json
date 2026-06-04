@@ -1,0 +1,135 @@
+{
+  "report": "DATABASE_HEALTH_REPORT",
+  "mission": "EXTERNAL_RUNTIME_VALIDATION",
+  "priority": "CRITICAL",
+  "mode": "REAL_EXECUTION",
+  "generatedAt": "2026-06-04T13:09:26.562Z",
+  "finalStatus": "BLOCKED",
+  "noFalsePositive": true,
+  "objective": "Execute real validation outside the current sandbox using an external environment with Supabase access.",
+  "status": "BLOCKED",
+  "healthStatus": "BLOCKED",
+  "environment": {
+    "requiredExternalRuntime": [
+      "Replit",
+      "Vercel",
+      "Railway",
+      "Render",
+      "VM Linux",
+      "GitHub Actions"
+    ],
+    "externalRuntimeSelected": null,
+    "externalRuntimeAvailable": false,
+    "externalRuntimes": [
+      {
+        "name": "Replit",
+        "cli": "replit",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "Vercel",
+        "cli": "vercel",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "Railway",
+        "cli": "railway",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "Render",
+        "cli": "render",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "VM Linux",
+        "cli": "ssh",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE",
+        "reason": "No remote host, SSH target, or credentials were provided."
+      },
+      {
+        "name": "GitHub Actions",
+        "cli": "gh",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      }
+    ],
+    "supabaseEnvironmentConfigured": {
+      "DATABASE_URL": false,
+      "DIRECT_URL": false,
+      "SUPABASE_URL": false,
+      "SUPABASE_ANON_KEY": false,
+      "SUPABASE_SERVICE_ROLE_KEY": false
+    },
+    "missingSupabaseEnvironment": [
+      "DATABASE_URL",
+      "DIRECT_URL",
+      "SUPABASE_URL",
+      "SUPABASE_ANON_KEY",
+      "SUPABASE_SERVICE_ROLE_KEY"
+    ],
+    "secretsMasked": true
+  },
+  "gates": {
+    "dns": {
+      "status": "BLOCKED",
+      "reason": "No available external runtime was authenticated/provisioned for execution."
+    },
+    "tcp": {
+      "status": "BLOCKED",
+      "reason": "DNS/TCP validation must run from an external runtime; none is available."
+    },
+    "tls": {
+      "status": "BLOCKED",
+      "reason": "TLS validation must run from an external runtime; none is available."
+    },
+    "postgres": {
+      "status": "BLOCKED",
+      "reason": "DATABASE_URL/DIRECT_URL are absent and no external runtime is available."
+    },
+    "drizzle": {
+      "status": "BLOCKED",
+      "reason": "Drizzle push intentionally not executed without external runtime and database credentials."
+    },
+    "schema": {
+      "status": "BLOCKED",
+      "reason": "Schema validation requires PostgreSQL connectivity."
+    },
+    "crud": {
+      "status": "BLOCKED",
+      "reason": "Diagnostic cannot create real rows without external runtime/database access."
+    },
+    "rollback": {
+      "status": "BLOCKED",
+      "reason": "Rollback validation requires PostgreSQL connectivity."
+    },
+    "api": {
+      "status": "BLOCKED",
+      "reason": "Financial endpoint validation against external runtime was not possible."
+    }
+  },
+  "operationalScore": 0,
+  "successCriteria": {
+    "DNS": "BLOCKED",
+    "TCP": "BLOCKED",
+    "TLS": "BLOCKED",
+    "POSTGRES": "BLOCKED",
+    "DRIZZLE": "BLOCKED",
+    "CRUD": "BLOCKED",
+    "ROLLBACK": "BLOCKED",
+    "API": "BLOCKED"
+  },
+  "exactFailurePoint": "Preflight: no required external execution runtime or credentials are available in this environment.",
+  "rootCause": "The requested REAL_EXECUTION outside the sandbox cannot be started because no external runtime CLI/token/remote host is available and Supabase environment variables are absent. No Supabase success or failure can be asserted from an external environment."
+}

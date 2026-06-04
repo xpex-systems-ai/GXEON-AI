@@ -1,51 +1,59 @@
 {
   "report": "DATABASE_HEALTH_REPORT",
   "mission": "MISSION_003_8_SUPABASE_GO_LIVE",
-  "generatedAt": "2026-06-04T06:08:05.987Z",
-  "status": "BLOCKED",
+  "generatedAt": "2026-06-04T12:20:49.714Z",
+  "status": "FAILED",
   "databaseConnection": false,
   "schemaDeployed": false,
   "crudValidated": false,
   "rollbackValidated": false,
-  "apiStatus": "BLOCKED",
+  "apiStatus": "FAILED",
   "productionReady": false,
-  "supabaseProjectId": "zphpeynirstwzrzgybct",
+  "supabaseProjectId": "zphpeynirstwzrzgvbct",
+  "databaseLatencyMs": null,
+  "tableCounts": null,
   "environment": {
     "configured": {
-      "DATABASE_URL": false,
-      "DIRECT_URL": false,
+      "DATABASE_URL": true,
+      "DIRECT_URL": true,
       "SUPABASE_URL": true,
-      "SUPABASE_ANON_KEY": false,
-      "SUPABASE_SERVICE_ROLE_KEY": false
+      "SUPABASE_ANON_KEY": true,
+      "SUPABASE_SERVICE_ROLE_KEY": true
     },
-    "missing": [
-      "DATABASE_URL",
-      "DIRECT_URL",
-      "SUPABASE_ANON_KEY",
-      "SUPABASE_SERVICE_ROLE_KEY"
-    ],
+    "missing": [],
     "masked": {
-      "DATABASE_URL": null,
-      "DIRECT_URL": null,
-      "SUPABASE_URL": "https://zphpeynirstwzrzgybct.supabase.co",
-      "SUPABASE_ANON_KEY": null,
-      "SUPABASE_SERVICE_ROLE_KEY": null
+      "DATABASE_URL": "postgresql://***:***@db.zphpeynirstwzrzgvbct.supabase.co:5432/postgres",
+      "DIRECT_URL": "postgresql://***:***@db.zphpeynirstwzrzgvbct.supabase.co:5432/postgres",
+      "SUPABASE_URL": "https://zphpeynirstwzrzgvbct.supabase.co",
+      "SUPABASE_ANON_KEY": "eyJhbGciOiJI***z0bnOg",
+      "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJI***WELIOI"
     },
-    "supabaseProjectId": "zphpeynirstwzrzgybct",
-    "valid": false
+    "supabaseProjectId": "zphpeynirstwzrzgvbct",
+    "valid": true
   },
   "supabaseRest": {
-    "status": "BLOCKED",
+    "status": "FAILED",
+    "projectId": "zphpeynirstwzrzgvbct",
     "anon": {
+      "label": "anon",
       "ok": false,
-      "status": null
+      "status": null,
+      "latencyMs": 5536.93,
+      "error": "fetch failed"
     },
     "serviceRole": {
+      "label": "service_role",
       "ok": false,
-      "status": null
-    },
-    "reason": "SUPABASE_URL, SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY are required for REST validation."
+      "status": null,
+      "latencyMs": 13.78,
+      "error": "fetch failed"
+    }
   },
-  "operationalScore": 0,
-  "reason": "Supabase go-live blocked. Missing required env vars: DATABASE_URL, DIRECT_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY."
+  "activationCommand": {
+    "command": "pnpm run supabase:activate:push",
+    "status": "FAILED",
+    "exitCode": 1
+  },
+  "operationalScore": 9,
+  "reason": "Supabase go-live requires every environment, schema, CRUD, rollback and API gate to pass."
 }

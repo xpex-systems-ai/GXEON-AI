@@ -1,0 +1,53 @@
+{
+  "report": "FINANCIAL_RUNTIME_REPORT",
+  "mission": "EXTERNAL_RUNTIME_VALIDATION",
+  "priority": "CRITICAL",
+  "mode": "REAL_EXECUTION",
+  "generatedAt": "2026-06-04T13:09:26.562Z",
+  "finalStatus": "BLOCKED",
+  "noFalsePositive": true,
+  "status": "BLOCKED",
+  "databaseConfigured": false,
+  "databaseReachable": false,
+  "externalRuntime": {
+    "required": true,
+    "available": false,
+    "selected": null
+  },
+  "endpoints": [
+    {
+      "endpoint": "/api/v1/runtime/database",
+      "status": "BLOCKED",
+      "httpStatus": null,
+      "reason": "External runtime endpoint validation unavailable."
+    },
+    {
+      "endpoint": "/api/v1/financial/health",
+      "status": "BLOCKED",
+      "httpStatus": null,
+      "reason": "External runtime endpoint validation unavailable."
+    },
+    {
+      "endpoint": "/api/v1/financial/wallets",
+      "status": "BLOCKED",
+      "httpStatus": null,
+      "reason": "External runtime endpoint validation unavailable."
+    },
+    {
+      "endpoint": "/api/v1/financial/transactions",
+      "status": "BLOCKED",
+      "httpStatus": null,
+      "reason": "External runtime endpoint validation unavailable."
+    }
+  ],
+  "crudValidation": {
+    "actor_wallets": "BLOCKED_EXTERNAL_RUNTIME_UNAVAILABLE",
+    "global_transactions": "BLOCKED_EXTERNAL_RUNTIME_UNAVAILABLE",
+    "payment_attempts": "BLOCKED_EXTERNAL_RUNTIME_UNAVAILABLE",
+    "financial_ledger": "BLOCKED_EXTERNAL_RUNTIME_UNAVAILABLE",
+    "rollback": "BLOCKED_EXTERNAL_RUNTIME_UNAVAILABLE",
+    "realPersistenceValidated": false
+  },
+  "operationalScore": 0,
+  "rootCause": "The requested REAL_EXECUTION outside the sandbox cannot be started because no external runtime CLI/token/remote host is available and Supabase environment variables are absent. No Supabase success or failure can be asserted from an external environment."
+}
