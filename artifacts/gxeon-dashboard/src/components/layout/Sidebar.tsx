@@ -17,11 +17,13 @@ import {
   Zap,
   ShoppingCart,
   RadioTower,
+  Rocket,
 } from "lucide-react";
 
 const routes = [
   { label: "Overview", icon: LayoutDashboard, href: "/" },
   { label: "Operational Dashboard", icon: RadioTower, href: "/operational-dashboard" },
+  { label: "Deploy Engine", icon: Rocket, href: "/deploy-engine" },
   { label: "Live Runtime", icon: Activity, href: "/live-runtime" },
   { label: "Conversion Center", icon: Zap, href: "/conversion" },
   { label: "Revenue", icon: DollarSign, href: "/revenue" },
