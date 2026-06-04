@@ -1,0 +1,160 @@
+export const gxeoneDashboard = {
+  version: "1.0",
+  system: "GXEONE ECOSYSTEM",
+  type: "operational_intelligence_dashboard",
+  layout: {
+    theme: "dark_cybernetic",
+    style: "glassmorphism_neon",
+    grid: "12_column_responsive",
+    mode: "real_time_operational_view",
+  },
+  navigation: [
+    "Radar Center",
+    "Monetization Engine",
+    "System Health",
+    "Railway Runtime",
+    "API Gateway",
+    "Agent Control Center",
+    "Financial Ledger",
+    "Risk War Room",
+  ],
+  modules: {
+    radar_center: {
+      title: "GXEONE RADAR CORE",
+      type: "real_time_system_radar",
+      metrics: {
+        system_health_score: 82,
+        security_score: 45,
+        monetization_score: 78,
+        runtime_stability: 75,
+        architecture_cohesion: 72,
+      },
+      signals: [
+        "GREEN → monetization engines active",
+        "YELLOW → runtime instability detected",
+        "RED → security vulnerabilities present",
+      ],
+      live_feeds: [
+        "Railway logs stream",
+        "API request health",
+        "Worker execution status",
+        "Webhook events",
+        "Database latency",
+      ],
+    },
+    monetization_engine: {
+      title: "MONETIZATION CORE",
+      type: "revenue_intelligence_system",
+      revenue_streams: [
+        "API SaaS endpoints",
+        "Radar Intelligence API",
+        "Automation Agents API",
+        "Dashboard Subscription",
+        "Data Access Layer",
+      ],
+      pricing_model: {
+        api_calls: "per_request_billing",
+        subscription: "monthly_recurring",
+        enterprise: "custom_contract",
+        agents: "usage_based",
+      },
+      score: 78,
+    },
+    system_health: {
+      title: "SYSTEM HEALTH CENTER",
+      type: "infra_observability",
+      components: {
+        backend_railway: "YELLOW",
+        frontend_vercel: "READY",
+        database_supabase: "PENDING",
+        workers: "UNSTABLE",
+        apis: "PARTIALLY_HEALTHY",
+      },
+      alerts: [
+        "Missing auth middleware in some endpoints",
+        "Workers require retry mechanism",
+        "Database schema not fully deployed",
+      ],
+    },
+    railway_runtime: {
+      title: "RAILWAY COMMAND CENTER",
+      type: "backend_live_monitor",
+      services: [
+        { name: "api-server", status: "ACTIVE", health: "GOOD" },
+        { name: "workers", status: "DEGRADED", health: "WARNING" },
+        { name: "webhooks", status: "ACTIVE", health: "RISKY" },
+      ],
+      runtime_score: 75,
+    },
+    api_gateway: {
+      title: "API INTELLIGENCE LAYER",
+      type: "api_observability_and_control",
+      endpoints: {
+        authenticated: 65,
+        public: 20,
+        monetizable: 18,
+        missing_auth: 12,
+      },
+      risk: "HIGH",
+    },
+    agent_center: {
+      title: "AGENT CONTROL SYSTEM",
+      type: "ai_agent_orchestration",
+      agents: [
+        { name: "marketing_agent", status: "IDLE", roi: 2.1 },
+        { name: "dev_agent", status: "ACTIVE", roi: 1.8 },
+        { name: "ops_agent", status: "PARTIAL", roi: 1.4 },
+      ],
+      total_roi: 1.76,
+    },
+    financial_ledger: {
+      title: "GX FINANCIAL LEDGER",
+      type: "monetization_tracking_layer",
+      status: "EARLY_STAGE",
+      metrics: {
+        mrr: 0,
+        arr: 0,
+        api_revenue: 0,
+        projected_revenue: 1240,
+      },
+      status_message: "monetization not yet activated in production",
+    },
+    war_room: {
+      title: "WAR ROOM CONTROL PANEL",
+      type: "risk_and_crisis_management",
+      risk_levels: {
+        critical: 3,
+        high: 5,
+        medium: 7,
+        low: 4,
+      },
+      active_alerts: [
+        "Security middleware missing in API routes",
+        "Worker retry system unstable",
+        "Supabase schema not deployed",
+      ],
+      mode: "MONITORING",
+    },
+  },
+  global_status: {
+    system_state: "YELLOW",
+    readiness: 82,
+    monetization_ready: true,
+    production_ready: false,
+  },
+  execution_layer: {
+    backend: "Railway",
+    frontend: "Vercel",
+    database: "Supabase (pending schema)",
+    cli_integration: ["vercel-cli", "railway-cli", "supabase-cli"],
+  },
+  next_actions: [
+    "Add authentication middleware to API gateway",
+    "Fix worker retry system",
+    "Deploy Supabase schema",
+    "Activate monetization APIs",
+    "Connect real-time dashboard feeds",
+  ],
+} as const;
+
+export type GxeoneDashboard = typeof gxeoneDashboard;
