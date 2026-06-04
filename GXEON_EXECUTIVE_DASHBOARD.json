@@ -1,0 +1,239 @@
+{
+  "version": "1.0",
+  "generated_at": "2026-06-04T00:00:00.000Z",
+  "system": "GXEON RAILWAY COMMAND CENTER",
+  "type": "executive_scorecard_dashboard",
+  "scan_basis": {
+    "mode": "static_repository_scan",
+    "live_runtime_observed": false,
+    "source_reports": [
+      "RAILWAY_SYSTEM_MAP.md",
+      "BACKEND_ROUTE_MAP.md",
+      "WORKER_RUNTIME_MAP.md",
+      "WEBHOOK_SECURITY_REPORT.md",
+      "ENVIRONMENT_VARIABLE_AUDIT.md",
+      "MONETIZATION_OPPORTUNITY_REPORT.md",
+      "MONETIZATION_MAP.md",
+      "SYSTEM_RISK_MATRIX.md",
+      "RAILWAY_EXECUTION_SCORE.json"
+    ],
+    "runtime_note": "No Railway API credentials or live deployment logs were available during this scan; runtime stability is inferred from repository configuration and code paths."
+  },
+  "overall_status": {
+    "system_health": "YELLOW",
+    "execution_readiness": 82,
+    "monetization_readiness": 86,
+    "security_posture": "RED",
+    "architecture_stability": "YELLOW",
+    "runtime_stability": "YELLOW",
+    "overall_score": 77,
+    "next_state": "SECURE_READY_FOR_MONETIZATION"
+  },
+  "visual_indicators": {
+    "GREEN": {
+      "label": "operational_safe",
+      "description": "The module is ready for controlled production use after normal secret validation."
+    },
+    "YELLOW": {
+      "label": "needs_attention",
+      "description": "The module can operate, but requires hardening, monitoring, or deployment validation."
+    },
+    "RED": {
+      "label": "critical_blocker",
+      "description": "The module should not be scaled or monetized until the blocker is fixed."
+    }
+  },
+  "core_modules": [
+    {
+      "module": "Backend (Railway)",
+      "status": "YELLOW",
+      "score": 82,
+      "signals": [
+        "86 API route handlers mapped under /api",
+        "Duplicate runtime route definitions detected",
+        "Dynamic server/runtime modules must remain available in Railway build context"
+      ],
+      "primary_action": "Normalize duplicate routes and validate Railway build/watch coverage for server/runtime."
+    },
+    {
+      "module": "Security Layer",
+      "status": "RED",
+      "score": 45,
+      "signals": [
+        "Financial wallet and transaction read endpoints are open",
+        "Several runtime and business-intelligence read endpoints are open",
+        "Webhook safety depends on production secrets and durable DATABASE_URL-backed idempotency"
+      ],
+      "primary_action": "Add auth to financial reads and classify every runtime endpoint as public, internal, or admin-only."
+    },
+    {
+      "module": "Runtime Stability",
+      "status": "YELLOW",
+      "score": 69,
+      "signals": [
+        "Worker-like jobs are HTTP-triggered instead of supervised",
+        "Local memory fallback can be lost on Railway restart",
+        "Live crash/restart/log state was not observable from the repository-only scan"
+      ],
+      "primary_action": "Add Railway worker or cron execution for task, radar, and PIX followup cycles."
+    },
+    {
+      "module": "Monetization Engine",
+      "status": "GREEN",
+      "score": 86,
+      "signals": [
+        "PIX checkout path is mapped",
+        "Subscription, credit-pack, radar-checkout, and entitlement endpoints are present",
+        "Credits plus radar signals form the highest-value first SaaS package"
+      ],
+      "primary_action": "Activate monetization only after security, database, and webhook production gates pass."
+    },
+    {
+      "module": "Architecture Cohesion",
+      "status": "YELLOW",
+      "score": 76,
+      "signals": [
+        "Clear route/service/runtime/database layers exist",
+        "ESM TypeScript API depends on CommonJS runtime modules",
+        "Static/demo conversion surfaces share production API namespace"
+      ],
+      "primary_action": "Consolidate route ownership and document the TypeScript-to-CJS runtime boundary."
+    }
+  ],
+  "risk_matrix": {
+    "CRITICAL": [
+      {
+        "issue": "Financial endpoints without read authentication",
+        "impact": "customer and ledger data exposure",
+        "area": "security",
+        "evidence": [
+          "/api/v1/financial/wallets",
+          "/api/v1/financial/transactions"
+        ],
+        "recommended_fix": "Apply financial read auth or an admin-only middleware before production exposure."
+      },
+      {
+        "issue": "Webhook idempotency becomes non-durable without DATABASE_URL",
+        "impact": "duplicate or lost payment processing after restarts",
+        "area": "payments",
+        "evidence": [
+          "Mercado Pago webhook local memory fallback",
+          "payment_webhook_events requires Postgres for durable replay protection"
+        ],
+        "recommended_fix": "Make DATABASE_URL healthy before enabling production payment webhooks."
+      },
+      {
+        "issue": "Worker-like monetization jobs have no supervised retry loop",
+        "impact": "paid task loss or inconsistent execution",
+        "area": "runtime",
+        "evidence": [
+          "/api/v1/runtime/tasks/run-cycle",
+          "/api/v1/x-radar/revenue-cycle",
+          "/api/v1/runtime/pix/followups/process"
+        ],
+        "recommended_fix": "Move scheduled cycles to a Railway worker/cron with retry and alerting."
+      }
+    ],
+    "HIGH": [
+      {
+        "issue": "Duplicate runtime routes",
+        "impact": "shadowed handlers and confusing API contracts",
+        "area": "architecture",
+        "evidence": [
+          "/api/v1/runtime/production",
+          "/api/v1/runtime/alerts"
+        ],
+        "recommended_fix": "Assign one route owner and remove duplicate definitions."
+      },
+      {
+        "issue": "Runtime modules live outside the API artifact path",
+        "impact": "Railway build or watch rules may omit required CommonJS runtime files",
+        "area": "deployment",
+        "evidence": [
+          "server/runtime/*.cjs",
+          "artifacts/api-server/src/routes/runtime.ts"
+        ],
+        "recommended_fix": "Explicitly include server/runtime/** in the API deployment contract."
+      }
+    ],
+    "MEDIUM": [
+      "Open checkout status endpoint must return only non-sensitive data",
+      "Static/demo conversion data should be separated from production API namespace",
+      "External observability hooks are optional and were not validated live"
+    ],
+    "LOW": [
+      "Move generated audit reports into a docs/audits directory over time",
+      "Gradually normalize ESM/CJS runtime boundaries",
+      "Set narrow FINANCIAL_AUTH_SCOPES instead of relying on broad defaults"
+    ]
+  },
+  "monetization_layer": {
+    "status": "READY_PARTIAL",
+    "score": 86,
+    "revenue_streams": [
+      "GXEON Core API paid access",
+      "Radar Signals SaaS",
+      "Automation Agents Marketplace",
+      "Data-driven insights API",
+      "Subscription-based dashboard access",
+      "Credit-pack usage billing"
+    ],
+    "opportunity_highlights": [
+      "Transform Railway backend into a paid API product after auth hardening",
+      "Package x-radar signals as credit-metered premium intelligence",
+      "Sell automation agents through task execution and subscription endpoints",
+      "Use PIX checkout and Mercado Pago webhooks as the first real payment rail"
+    ],
+    "activation_gate": {
+      "can_sell_now": false,
+      "reason": "Security and webhook durability blockers must be closed before financial scale.",
+      "minimum_unlocks": [
+        "Authenticate financial read endpoints",
+        "Validate DATABASE_URL and migrations in production",
+        "Validate signed Mercado Pago sandbox webhook end-to-end",
+        "Add supervised worker/cron retry execution"
+      ]
+    }
+  },
+  "execution_recommendation": {
+    "priority_order": [
+      "Fix Security Layer (CRITICAL)",
+      "Add auth middleware to financial read and sensitive runtime endpoints",
+      "Require durable webhook idempotency with DATABASE_URL",
+      "Validate Mercado Pago signature path in sandbox",
+      "Add Railway worker/cron retry system",
+      "Normalize duplicate routes",
+      "Enable monitoring and alerting layer",
+      "Activate monetization APIs"
+    ],
+    "first_24_hours": [
+      "Protect /api/v1/financial/wallets and /api/v1/financial/transactions",
+      "Confirm production Railway has PORT, DATABASE_URL, FINANCIAL_AUTH_TOKEN, GOVERNANCE_TOKEN, MERCADO_PAGO_ACCESS_TOKEN, MERCADO_PAGO_WEBHOOK_SECRET, and MERCADO_PAGO_NOTIFICATION_URL",
+      "Run JSON/report sanity checks and production env validation scripts"
+    ],
+    "first_7_days": [
+      "Create a dedicated Railway worker/cron for queued monetization jobs",
+      "Add alerting for webhook failures, DB degradation, and job failures",
+      "Complete one sandbox PIX checkout through webhook, ledger, and wallet credit activation"
+    ]
+  },
+  "war_room_view": {
+    "mode": "ACTIVE",
+    "command_center": true,
+    "live_monitoring": false,
+    "render_target": "dashboard_scorecard",
+    "recommended_layout": [
+      "overall_status_banner",
+      "core_module_cards",
+      "critical_risk_table",
+      "monetization_streams_panel",
+      "execution_priority_timeline"
+    ],
+    "next_state": "SECURE_READY_FOR_MONETIZATION"
+  },
+  "final_insight": {
+    "summary": "GXEON already has strong monetizable structure, but it is not safe to scale financially until authentication, webhook durability, worker retry, and live monitoring gates are closed.",
+    "strategic_state": "EARLY_PRODUCTION_WITH_CRITICAL_SECURITY_GAPS",
+    "executive_decision": "Prioritize security and runtime stability before expanding paid API access."
+  }
+}
