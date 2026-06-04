@@ -1,0 +1,22 @@
+{
+  "report": "DATABASE_HEALTH_REPORT",
+  "generatedAt": "2026-06-04T04:55:22.543Z",
+  "status": "blocked",
+  "databaseOnline": false,
+  "schemaLoaded": false,
+  "financialRuntimeHealthy": false,
+  "apiStatusExpected": 503,
+  "databaseUrlConfigured": false,
+  "databaseUrlMasked": null,
+  "error": "DATABASE_URL is required for MISSION_003_6_DATABASE_PRODUCTION_READY.",
+  "drizzlePushStatus": "blocked_database_url_missing",
+  "healthScore": 0,
+  "counts": {
+    "wallets": 0,
+    "transactions": 0,
+    "ledgerEntries": 0
+  },
+  "risks": [
+    "DATABASE_URL is required for MISSION_003_6_DATABASE_PRODUCTION_READY."
+  ]
+}

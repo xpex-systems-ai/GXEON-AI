@@ -3,6 +3,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { existsSync } from "node:fs";
 import { financialMutation } from "../middlewares/financialAuth";
+import { getDatabaseRuntimeHealth } from "../services/financial";
 
 const require = createRequire(import.meta.url);
 const resolveRuntimeRoot = () => {
@@ -113,6 +114,15 @@ router.get("/v1/runtime/recovery", (_req, res) => {
 
 router.get("/v1/runtime/production", (_req, res) => {
   res.json(getProductionRuntimeStatus());
+});
+
+router.get("/v1/runtime/database", async (_req, res, next) => {
+  try {
+    const health = await getDatabaseRuntimeHealth();
+    res.status(health.status === "healthy" ? 200 : 503).json({ success: health.status === "healthy", ...health });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/v1/runtime/deployment", (_req, res) => {
