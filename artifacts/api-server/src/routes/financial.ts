@@ -17,7 +17,7 @@ function readLimit(value: unknown): number | undefined {
 router.get("/v1/financial/health", async (_req, res, next) => {
   try {
     const health = await financialMetricsService.health();
-    res.status(health.status === "ok" ? 200 : 503).json({ success: health.status === "ok", ...health });
+    res.status(health.status === "healthy" ? 200 : 503).json({ success: health.status === "healthy", ...health });
   } catch (error) {
     next(error);
   }
@@ -26,7 +26,7 @@ router.get("/v1/financial/health", async (_req, res, next) => {
 router.get("/v1/financial/wallets", async (req, res, next) => {
   try {
     const health = await financialMetricsService.health();
-    if (health.status !== "ok") {
+    if (health.status !== "healthy") {
       res.status(503).json({ success: false, ...health });
       return;
     }
@@ -41,7 +41,7 @@ router.get("/v1/financial/wallets", async (req, res, next) => {
 router.get("/v1/financial/transactions", async (req, res, next) => {
   try {
     const health = await financialMetricsService.health();
-    if (health.status !== "ok") {
+    if (health.status !== "healthy") {
       res.status(503).json({ success: false, ...health });
       return;
     }

@@ -13,12 +13,36 @@ function readCount(rows: Array<{ count: unknown }>): number {
   return Number(value);
 }
 
+function roundLatency(value: number): number {
+  return Math.round(value * 100) / 100;
+}
+
+function calculateHealthScore(metrics: Omit<FinancialMetrics, "healthScore">): number {
+  if (metrics.databaseLatencyMs === null) return 0;
+
+  const latencyPenalty = metrics.databaseLatencyMs > 50
+    ? Math.min(35, Math.ceil((metrics.databaseLatencyMs - 50) / 10))
+    : 0;
+  const dataPenalty = metrics.totalWallets > 0 && metrics.totalTransactions > 0 && metrics.totalLedgerEntries > 0
+    ? 0
+    : 15;
+
+  return Math.max(0, 100 - latencyPenalty - dataPenalty);
+}
+
 export class FinancialMetricsService {
-  async collect(): Promise<FinancialMetrics> {
+  async collect(sampleCount = 3): Promise<FinancialMetrics> {
     const db = getDb();
-    const latencyStart = performance.now();
-    await db.execute(sql`select 1`);
-    const databaseLatencyMs = Math.round((performance.now() - latencyStart) * 100) / 100;
+    const samples = await Promise.all(
+      Array.from({ length: Math.max(1, sampleCount) }, async () => {
+        const latencyStart = performance.now();
+        await db.execute(sql`select 1`);
+        return roundLatency(performance.now() - latencyStart);
+      }),
+    );
+    const databaseLatencyMs = roundLatency(
+      samples.reduce((total, sample) => total + sample, 0) / samples.length,
+    );
 
     const [walletRows, transactionRows, ledgerRows] = await Promise.all([
       db.select({ count: sql<number>`count(*)::int` }).from(actorWallets),
@@ -26,11 +50,17 @@ export class FinancialMetricsService {
       db.select({ count: sql<number>`count(*)::int` }).from(financialLedger),
     ]);
 
-    return {
+    const metricsWithoutScore = {
       databaseLatencyMs,
+      databaseLatencySamplesMs: samples,
       totalWallets: readCount(walletRows),
       totalTransactions: readCount(transactionRows),
       totalLedgerEntries: readCount(ledgerRows),
+    };
+
+    return {
+      ...metricsWithoutScore,
+      healthScore: calculateHealthScore(metricsWithoutScore),
     };
   }
 
@@ -45,9 +75,11 @@ export class FinancialMetricsService {
         checkedAt: new Date().toISOString(),
         metrics: {
           databaseLatencyMs: null,
+          databaseLatencySamplesMs: [],
           totalWallets: 0,
           totalTransactions: 0,
           totalLedgerEntries: 0,
+          healthScore: 0,
         },
         risks,
       };
@@ -55,8 +87,13 @@ export class FinancialMetricsService {
 
     try {
       const metrics = await this.collect();
+      const healthy = metrics.healthScore >= 85;
+      if (!healthy) {
+        risks.push("Financial runtime metrics are below the healthy threshold.");
+      }
+
       return {
-        status: "ok",
+        status: healthy ? "healthy" : "degraded",
         databaseConfigured: true,
         databaseReachable: true,
         checkedAt: new Date().toISOString(),
@@ -72,9 +109,11 @@ export class FinancialMetricsService {
         checkedAt: new Date().toISOString(),
         metrics: {
           databaseLatencyMs: null,
+          databaseLatencySamplesMs: [],
           totalWallets: 0,
           totalTransactions: 0,
           totalLedgerEntries: 0,
+          healthScore: 0,
         },
         risks,
       };
