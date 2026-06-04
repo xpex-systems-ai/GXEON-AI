@@ -1,21 +1,15 @@
 {
   "report": "DATABASE_SMOKE_RESULT",
-  "generatedAt": "2026-06-04T05:17:11.146Z",
+  "mission": "MISSION_003_8_SUPABASE_GO_LIVE",
+  "generatedAt": "2026-06-04T06:08:05.987Z",
   "status": "BLOCKED",
   "checks": {
-    "database_connected": false,
-    "schema_applied": false,
-    "all_tables_present": false,
-    "all_enums_present": false,
-    "foreign_keys_valid": false,
-    "indexes_valid": false,
-    "wallet_crud": false,
-    "transaction_crud": false,
-    "payment_attempt_crud": false,
-    "ledger_crud": false,
-    "webhook_crud": false,
-    "delete_validation": false,
-    "rollback_test": false
+    "database_connection": false,
+    "schema_deployed": false,
+    "crud_validated": false,
+    "rollback_validated": false,
+    "api_status_200": false,
+    "production_ready": false
   },
-  "reason": "DATABASE_URL is not configured; Supabase activation cannot connect to a real project."
+  "reason": "Supabase go-live blocked. Missing required env vars: DATABASE_URL, DIRECT_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY."
 }

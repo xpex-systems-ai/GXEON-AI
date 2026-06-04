@@ -25,7 +25,8 @@
     "db:production:validate": "node scripts/database_production_ready.cjs",
     "db:production:ready": "pnpm --filter @workspace/db run push && node scripts/database_production_ready.cjs",
     "supabase:activate": "node scripts/supabase_activation.cjs",
-    "supabase:activate:push": "pnpm --filter @workspace/db run push && node scripts/supabase_activation.cjs"
+    "supabase:activate:push": "pnpm --filter @workspace/db run push && node scripts/supabase_activation.cjs",
+    "supabase:go-live": "node scripts/supabase_go_live.cjs"
   },
   "private": true,
   "devDependencies": {

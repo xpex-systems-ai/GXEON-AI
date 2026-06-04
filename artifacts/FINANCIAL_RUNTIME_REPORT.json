@@ -1,7 +1,8 @@
 {
   "report": "FINANCIAL_RUNTIME_REPORT",
-  "generatedAt": "2026-06-04T05:17:11.146Z",
+  "mission": "MISSION_003_8_SUPABASE_GO_LIVE",
+  "generatedAt": "2026-06-04T06:08:05.987Z",
   "status": "BLOCKED",
-  "reason": "DATABASE_URL is not configured; Supabase activation cannot connect to a real project.",
-  "metrics": null
+  "financialRuntime": "BLOCKED",
+  "reason": "Supabase go-live blocked. Missing required env vars: DATABASE_URL, DIRECT_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY."
 }
