@@ -1,0 +1,74 @@
+{
+  "report": "TCP_CONNECTIVITY_REPORT",
+  "mission": "NETWORK_CONNECTIVITY_AUDIT",
+  "priority": "CRITICAL",
+  "mode": "DIAGNOSTIC_ONLY",
+  "generatedAt": "2026-06-04T12:47:27.118Z",
+  "targetHost": "db.zphpeynirstwzrzgvbct.supabase.co",
+  "checks": [
+    {
+      "name": "ping",
+      "command": "ping -c 4 db.zphpeynirstwzrzgvbct.supabase.co",
+      "status": "FAILED",
+      "evidence": "ping: db.zphpeynirstwzrzgvbct.supabase.co: Temporary failure in name resolution"
+    },
+    {
+      "name": "nc_5432",
+      "command": "nc -vz db.zphpeynirstwzrzgvbct.supabase.co 5432",
+      "port": 5432,
+      "status": "FAILED",
+      "tcpConnected": false,
+      "evidence": "nc: getaddrinfo for host \"db.zphpeynirstwzrzgvbct.supabase.co\" port 5432: Temporary failure in name resolution"
+    },
+    {
+      "name": "nc_6543",
+      "command": "nc -vz db.zphpeynirstwzrzgvbct.supabase.co 6543",
+      "port": 6543,
+      "status": "FAILED",
+      "tcpConnected": false,
+      "evidence": "nc: getaddrinfo for host \"db.zphpeynirstwzrzgvbct.supabase.co\" port 6543: Temporary failure in name resolution"
+    },
+    {
+      "name": "openssl_5432",
+      "command": "openssl s_client -connect db.zphpeynirstwzrzgvbct.supabase.co:5432",
+      "port": 5432,
+      "status": "FAILED",
+      "tlsHandshake": false,
+      "evidence": "40D7DCF5C77F0000:error:10080002:BIO routines:BIO_lookup_ex:system lib:../crypto/bio/bio_addr.c:738:Temporary failure in name resolution\nconnect:errno=11"
+    },
+    {
+      "name": "openssl_6543",
+      "command": "openssl s_client -connect db.zphpeynirstwzrzgvbct.supabase.co:6543",
+      "port": 6543,
+      "status": "FAILED",
+      "tlsHandshake": false,
+      "evidence": "4087C40F117F0000:error:10080002:BIO routines:BIO_lookup_ex:system lib:../crypto/bio/bio_addr.c:738:Temporary failure in name resolution\nconnect:errno=11"
+    },
+    {
+      "name": "curl_head_supabase_url",
+      "command": "curl -I https://zphpeynirstwzrzgvbct.supabase.co",
+      "status": "FAILED",
+      "httpStatusObserved": 403,
+      "evidence": "% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\ncurl: (56) CONNECT tunnel failed, response 403\nHTTP/1.1 403 Forbidden\ncontent-length: 9\ncontent-type: text/plain\ndate: Thu, 04 Jun 2026 12:46:34 GMT\nserver: envoy\nconnection: close"
+    }
+  ],
+  "outboundNetworkRestrictions": {
+    "detected": true,
+    "dnsResolver": "172.30.2.131",
+    "dnsFailure": "DNS queries to the configured resolver failed before TCP sockets could be opened.",
+    "proxy": {
+      "HTTP_PROXY": "http://proxy:8080",
+      "HTTPS_PROXY": "http://proxy:8080",
+      "http_proxy": "http://proxy:8080",
+      "https_proxy": "http://proxy:8080",
+      "NO_PROXY": "browser",
+      "no_proxy": "localhost,127.0.0.1,::1"
+    },
+    "httpsProxyFailure": "curl -I to the Supabase project URL returned CONNECT tunnel failed, response 403 via envoy."
+  },
+  "successCriteria": {
+    "tcp_5432": false,
+    "tcp_6543": false
+  },
+  "rootCause": "TCP and TLS checks fail because DNS resolution fails first; no evidence of an application-level PostgreSQL rejection was reached."
+}

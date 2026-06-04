@@ -1,0 +1,107 @@
+{
+  "report": "DATABASE_HEALTH_REPORT",
+  "mission": "SUPABASE_REAL_ACTIVATION",
+  "generatedAt": "2026-06-04T12:21:40.532Z",
+  "status": "FAILED",
+  "healthStatus": "DEGRADED",
+  "databaseConnection": "FAIL",
+  "directConnection": "FAIL",
+  "schemaValidation": "FAIL",
+  "crudValidation": "FAIL",
+  "rollbackValidation": "FAIL",
+  "apiValidation": "FAIL",
+  "supabaseOnline": true,
+  "supabaseProjectId": "zphpeynirstwzrzgvbct",
+  "databaseLatencyMs": null,
+  "tableCounts": null,
+  "environment": {
+    "configured": {
+      "DATABASE_URL": true,
+      "DIRECT_URL": true,
+      "SUPABASE_URL": true,
+      "SUPABASE_ANON_KEY": true,
+      "SUPABASE_SERVICE_ROLE_KEY": true
+    },
+    "missing": [],
+    "masked": {
+      "DATABASE_URL": "postgresql://***:***@db.zphpeynirstwzrzgvbct.supabase.co:5432/postgres",
+      "DIRECT_URL": "postgresql://***:***@db.zphpeynirstwzrzgvbct.supabase.co:5432/postgres",
+      "SUPABASE_URL": "https://zphpeynirstwzrzgvbct.supabase.co",
+      "SUPABASE_ANON_KEY": "eyJhbGciOiJI***z0bnOg",
+      "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJI***WELIOI"
+    },
+    "suppliedServiceRoleJwtRole": "service_role",
+    "directUrlContainsPasswordPlaceholder": false,
+    "databaseUrlNormalizedToPostgresConnectionString": true
+  },
+  "drizzlePush": {
+    "status": "FAILED",
+    "exitCode": 1
+  },
+  "supabaseRest": {
+    "status": "FAILED",
+    "projectId": "zphpeynirstwzrzgvbct",
+    "anon": {
+      "label": "anon",
+      "ok": false,
+      "status": null,
+      "latencyMs": 5536.93,
+      "error": "fetch failed"
+    },
+    "serviceRole": {
+      "label": "service_role",
+      "ok": false,
+      "status": null,
+      "latencyMs": 13.78,
+      "error": "fetch failed"
+    }
+  },
+  "endpoints": {
+    "status": "FAILED",
+    "baseUrl": "http://127.0.0.1:3010/api",
+    "passed": false,
+    "results": [
+      {
+        "endpoint": "/v1/runtime/database",
+        "httpStatus": 503,
+        "healthy": false,
+        "latencyMs": 5152.76,
+        "databaseReachable": false,
+        "status": "degraded"
+      },
+      {
+        "endpoint": "/v1/financial/health",
+        "httpStatus": 503,
+        "healthy": false,
+        "latencyMs": 5261.58,
+        "databaseReachable": false,
+        "status": "degraded"
+      },
+      {
+        "endpoint": "/v1/financial/wallets",
+        "httpStatus": 503,
+        "healthy": false,
+        "latencyMs": 5005.46,
+        "databaseReachable": false,
+        "status": "degraded"
+      },
+      {
+        "endpoint": "/v1/financial/transactions",
+        "httpStatus": 503,
+        "healthy": false,
+        "latencyMs": 5010.63,
+        "databaseReachable": false,
+        "status": "degraded"
+      }
+    ]
+  },
+  "failureReason": "getaddrinfo EAI_AGAIN db.zphpeynirstwzrzgvbct.supabase.co",
+  "successCriteria": {
+    "database_connection": "FAIL",
+    "schema_validation": "FAIL",
+    "crud_validation": "FAIL",
+    "rollback_validation": "FAIL",
+    "api_validation": "FAIL",
+    "health_status": "DEGRADED"
+  }
+}
