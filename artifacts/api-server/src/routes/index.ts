@@ -4,6 +4,7 @@ import governanceRouter from "./governance";
 import conversionRouter from "./conversion";
 import phase8Router from "./phase8";
 import runtimeRouter from "./runtime";
+import financialRouter from "./financial";
 
 const router: IRouter = Router();
 
@@ -12,5 +13,6 @@ router.use(governanceRouter);
 router.use(conversionRouter);
 router.use(phase8Router);
 router.use(runtimeRouter);
+router.use(financialRouter);
 
 export default router;
