@@ -1,0 +1,9 @@
+{
+  "report": "FINANCIAL_ENDPOINT_VALIDATION",
+  "mission": "MISSION_003_8_SUPABASE_GO_LIVE",
+  "generatedAt": "2026-06-04T06:08:05.987Z",
+  "status": "BLOCKED",
+  "passed": false,
+  "endpoints": [],
+  "reason": "Supabase go-live blocked. Missing required env vars: DATABASE_URL, DIRECT_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY."
+}

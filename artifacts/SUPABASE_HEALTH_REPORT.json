@@ -1,0 +1,18 @@
+{
+  "report": "SUPABASE_HEALTH_REPORT",
+  "generatedAt": "2026-06-04T05:17:11.146Z",
+  "mission": "MISSION_003_7_SUPABASE_ACTIVATION",
+  "status": "BLOCKED",
+  "databaseConnected": false,
+  "supabaseOnline": false,
+  "schemaApplied": false,
+  "financialRuntime": "BLOCKED",
+  "apiStatus": "BLOCKED",
+  "databaseUrlConfigured": false,
+  "databaseUrlMasked": null,
+  "directUrlConfigured": false,
+  "directUrlMasked": null,
+  "supabaseProjectId": null,
+  "reason": "DATABASE_URL is not configured; Supabase activation cannot connect to a real project.",
+  "operationalScore": 0
+}

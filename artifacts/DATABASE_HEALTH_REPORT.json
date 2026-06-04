@@ -1,0 +1,51 @@
+{
+  "report": "DATABASE_HEALTH_REPORT",
+  "mission": "MISSION_003_8_SUPABASE_GO_LIVE",
+  "generatedAt": "2026-06-04T06:08:05.987Z",
+  "status": "BLOCKED",
+  "databaseConnection": false,
+  "schemaDeployed": false,
+  "crudValidated": false,
+  "rollbackValidated": false,
+  "apiStatus": "BLOCKED",
+  "productionReady": false,
+  "supabaseProjectId": "zphpeynirstwzrzgybct",
+  "environment": {
+    "configured": {
+      "DATABASE_URL": false,
+      "DIRECT_URL": false,
+      "SUPABASE_URL": true,
+      "SUPABASE_ANON_KEY": false,
+      "SUPABASE_SERVICE_ROLE_KEY": false
+    },
+    "missing": [
+      "DATABASE_URL",
+      "DIRECT_URL",
+      "SUPABASE_ANON_KEY",
+      "SUPABASE_SERVICE_ROLE_KEY"
+    ],
+    "masked": {
+      "DATABASE_URL": null,
+      "DIRECT_URL": null,
+      "SUPABASE_URL": "https://zphpeynirstwzrzgybct.supabase.co",
+      "SUPABASE_ANON_KEY": null,
+      "SUPABASE_SERVICE_ROLE_KEY": null
+    },
+    "supabaseProjectId": "zphpeynirstwzrzgybct",
+    "valid": false
+  },
+  "supabaseRest": {
+    "status": "BLOCKED",
+    "anon": {
+      "ok": false,
+      "status": null
+    },
+    "serviceRole": {
+      "ok": false,
+      "status": null
+    },
+    "reason": "SUPABASE_URL, SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY are required for REST validation."
+  },
+  "operationalScore": 0,
+  "reason": "Supabase go-live blocked. Missing required env vars: DATABASE_URL, DIRECT_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY."
+}
