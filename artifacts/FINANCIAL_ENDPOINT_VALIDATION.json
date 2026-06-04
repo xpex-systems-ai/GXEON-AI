@@ -1,9 +1,101 @@
 {
   "report": "FINANCIAL_ENDPOINT_VALIDATION",
-  "mission": "MISSION_003_8_SUPABASE_GO_LIVE",
-  "generatedAt": "2026-06-04T06:08:05.987Z",
-  "status": "BLOCKED",
-  "passed": false,
-  "endpoints": [],
-  "reason": "Supabase go-live blocked. Missing required env vars: DATABASE_URL, DIRECT_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY."
+  "generatedAt": "2026-06-04T12:21:40.532Z",
+  "status": "FAILED",
+  "baseUrl": "http://127.0.0.1:3010/api",
+  "endpoints": [
+    {
+      "endpoint": "/v1/runtime/database",
+      "httpStatus": 503,
+      "latencyMs": 5152.76,
+      "healthy": false,
+      "body": {
+        "success": false,
+        "status": "degraded",
+        "databaseConfigured": true,
+        "databaseReachable": false,
+        "provider": "supabase_postgres",
+        "projectId": "zphpeynirstwzrzgvbct",
+        "pool": null,
+        "latencyMs": null,
+        "checkedAt": "2026-06-04T12:21:54.492Z",
+        "risks": [
+          "Failed query: select 1\nparams: "
+        ]
+      }
+    },
+    {
+      "endpoint": "/v1/financial/health",
+      "httpStatus": 503,
+      "latencyMs": 5261.58,
+      "healthy": false,
+      "body": {
+        "success": false,
+        "status": "degraded",
+        "databaseConfigured": true,
+        "databaseReachable": false,
+        "checkedAt": "2026-06-04T12:21:59.775Z",
+        "metrics": {
+          "databaseLatencyMs": null,
+          "databaseLatencySamplesMs": [],
+          "totalWallets": 0,
+          "totalTransactions": 0,
+          "totalLedgerEntries": 0,
+          "healthScore": 0
+        },
+        "risks": [
+          "Failed query: select 1\nparams: "
+        ]
+      }
+    },
+    {
+      "endpoint": "/v1/financial/wallets",
+      "httpStatus": 503,
+      "latencyMs": 5005.46,
+      "healthy": false,
+      "body": {
+        "success": false,
+        "status": "degraded",
+        "databaseConfigured": true,
+        "databaseReachable": false,
+        "checkedAt": "2026-06-04T12:22:04.781Z",
+        "metrics": {
+          "databaseLatencyMs": null,
+          "databaseLatencySamplesMs": [],
+          "totalWallets": 0,
+          "totalTransactions": 0,
+          "totalLedgerEntries": 0,
+          "healthScore": 0
+        },
+        "risks": [
+          "Failed query: select 1\nparams: "
+        ]
+      }
+    },
+    {
+      "endpoint": "/v1/financial/transactions",
+      "httpStatus": 503,
+      "latencyMs": 5010.63,
+      "healthy": false,
+      "body": {
+        "success": false,
+        "status": "degraded",
+        "databaseConfigured": true,
+        "databaseReachable": false,
+        "checkedAt": "2026-06-04T12:22:09.791Z",
+        "metrics": {
+          "databaseLatencyMs": null,
+          "databaseLatencySamplesMs": [],
+          "totalWallets": 0,
+          "totalTransactions": 0,
+          "totalLedgerEntries": 0,
+          "healthScore": 0
+        },
+        "risks": [
+          "Failed query: select 1\nparams: "
+        ]
+      }
+    }
+  ],
+  "passed": false
 }

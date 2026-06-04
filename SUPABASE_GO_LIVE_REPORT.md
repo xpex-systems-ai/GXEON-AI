@@ -1,35 +1,35 @@
 # SUPABASE GO-LIVE REPORT — MISSION_003_8_SUPABASE_GO_LIVE
 
-- **Generated at:** 2026-06-04T06:08:05.987Z
+- **Generated at:** 2026-06-04T12:20:49.714Z
 - **Branch:** `feature/supabase-go-live`
-- **Mission status:** BLOCKED
-- **Supabase Project ID:** zphpeynirstwzrzgybct
+- **Mission status:** FAILED
+- **Supabase Project ID:** zphpeynirstwzrzgvbct
 - **Database connection:** false
 - **Schema deployed:** false
 - **CRUD validated:** false
 - **Rollback validated:** false
-- **API status:** BLOCKED
+- **API status:** FAILED
 - **Production ready:** false
-- **Operational score:** 0
+- **Operational score:** 9
 
 ## Environment validation
 
-- DATABASE_URL: false
-- DIRECT_URL: false
+- DATABASE_URL: true
+- DIRECT_URL: true
 - SUPABASE_URL: true
-- SUPABASE_ANON_KEY: false
-- SUPABASE_SERVICE_ROLE_KEY: false
-- Missing: DATABASE_URL, DIRECT_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
+- SUPABASE_ANON_KEY: true
+- SUPABASE_SERVICE_ROLE_KEY: true
+- Missing: none
 
 ## Supabase REST validation
 
-- REST status: BLOCKED
+- REST status: FAILED
 - Anon status: n/a
 - Service role status: n/a
 
 ## Schema and database
 
-- Drizzle push: not executed
+- Drizzle push: FAILED
 - Tables present: false
 - Enums present: false
 - Foreign keys valid: false
@@ -47,10 +47,10 @@
 
 ## API validation
 
-- Endpoint validation: BLOCKED
-- Runtime database endpoint: n/a
-- Financial health endpoint: n/a
+- Endpoint validation: FAILED
+- Runtime database endpoint: 503
+- Financial health endpoint: 503
 
 ## Final status
 
-- Go-live is blocked: Supabase go-live blocked. Missing required env vars: DATABASE_URL, DIRECT_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY.
+- Go-live is blocked: Supabase go-live requires every environment, schema, CRUD, rollback and API gate to pass.
