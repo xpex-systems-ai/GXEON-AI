@@ -1,18 +1,25 @@
 {
   "report": "SUPABASE_HEALTH_REPORT",
-  "generatedAt": "2026-06-04T05:17:11.146Z",
+  "generatedAt": "2026-06-04T12:21:40.532Z",
   "mission": "MISSION_003_7_SUPABASE_ACTIVATION",
-  "status": "BLOCKED",
+  "status": "FAILED",
   "databaseConnected": false,
-  "supabaseOnline": false,
+  "directConnected": false,
+  "supabaseOnline": true,
+  "supabaseProjectId": "zphpeynirstwzrzgvbct",
   "schemaApplied": false,
-  "financialRuntime": "BLOCKED",
-  "apiStatus": "BLOCKED",
-  "databaseUrlConfigured": false,
-  "databaseUrlMasked": null,
-  "directUrlConfigured": false,
-  "directUrlMasked": null,
-  "supabaseProjectId": null,
-  "reason": "DATABASE_URL is not configured; Supabase activation cannot connect to a real project.",
-  "operationalScore": 0
+  "databaseLatencyMs": null,
+  "financialRuntime": "DEGRADED",
+  "apiStatus": "FAILED",
+  "databaseUrlConfigured": true,
+  "databaseUrlMasked": "postgresql://***:***@db.zphpeynirstwzrzgvbct.supabase.co:5432/postgres",
+  "directUrlConfigured": true,
+  "directUrlMasked": "postgresql://***:***@db.zphpeynirstwzrzgvbct.supabase.co:5432/postgres",
+  "tableCounts": null,
+  "operationalScore": 0,
+  "drizzlePush": {
+    "status": "FAILED",
+    "exitCode": 1
+  },
+  "reason": "getaddrinfo EAI_AGAIN db.zphpeynirstwzrzgvbct.supabase.co"
 }

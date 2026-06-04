@@ -1,18 +1,18 @@
 # SUPABASE ACTIVATION REPORT — MISSION_003_7_SUPABASE_ACTIVATION
 
-- **Generated at:** 2026-06-04T05:17:11.146Z
+- **Generated at:** 2026-06-04T12:21:40.532Z
 - **Branch:** `feature/supabase-activation`
-- **Mission status:** BLOCKED
-- **Supabase Project ID:** not detected
+- **Mission status:** FAILED
+- **Supabase Project ID:** zphpeynirstwzrzgvbct
 - **Database status:** BLOCKED
-- **Financial runtime:** BLOCKED
-- **API status:** BLOCKED
+- **Financial runtime:** DEGRADED
+- **API status:** FAILED
 - **Operational score:** 0
 
 ## Connectivity
 
-- DATABASE_URL configured: false
-- DIRECT_URL configured: false
+- DATABASE_URL configured: true
+- DIRECT_URL configured: true
 - Database latency: n/a ms
 
 ## Schema validation summary
@@ -42,8 +42,8 @@
 
 ## Endpoint validation summary
 
-- Endpoint validation: BLOCKED
-- Base URL: not configured
+- Endpoint validation: FAILED
+- Base URL: http://127.0.0.1:3010/api
 
 ## Next mission
 
