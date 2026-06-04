@@ -20,6 +20,8 @@ import TestPage from "@/pages/TestPage";
 import ConversionPage from "@/pages/ConversionPage";
 import LiveRuntimePage from "@/pages/LiveRuntimePage";
 import RevenueEnginePage from "@/pages/RevenueEnginePage";
+import OperationalDashboardPage from "@/pages/OperationalDashboardPage";
+import DeployEnginePage from "@/pages/DeployEnginePage";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +50,8 @@ function Router() {
             <Route path="/governance" component={GovernancePage} />
             <Route path="/conversion" component={ConversionPage} />
             <Route path="/live-runtime" component={LiveRuntimePage} />
+            <Route path="/operational-dashboard" component={OperationalDashboardPage} />
+            <Route path="/deploy-engine" component={DeployEnginePage} />
             <Route component={NotFound} />
           </Switch>
         </DashboardLayout>
