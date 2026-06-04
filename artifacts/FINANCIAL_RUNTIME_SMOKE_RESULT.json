@@ -1,0 +1,8 @@
+{
+  "report": "FINANCIAL_RUNTIME_SMOKE_RESULT",
+  "generatedAt": "2026-06-04T04:33:03.390Z",
+  "status": "FAILED",
+  "databaseUrlConfigured": false,
+  "databaseUrlMasked": null,
+  "error": "DATABASE_URL is required for financial runtime real validation"
+}
