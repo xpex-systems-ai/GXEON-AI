@@ -1,0 +1,19 @@
+{
+  "report": "POSTGRES_CONNECTIVITY_REPORT",
+  "mission": "NETWORK_CONNECTIVITY_AUDIT",
+  "priority": "CRITICAL",
+  "mode": "DIAGNOSTIC_ONLY",
+  "generatedAt": "2026-06-04T12:47:27.118Z",
+  "command": "psql $DATABASE_URL -c 'SELECT NOW();'",
+  "databaseUrlConfiguredInEnvironment": false,
+  "psqlInstalled": false,
+  "status": "NOT_RUN",
+  "postgres_connection": false,
+  "evidence": "timeout: failed to run command ‘psql’: No such file or directory",
+  "blocker": "psql is not installed in this container. Database host resolution also failed in DNS/TCP diagnostics, so a PostgreSQL session cannot be established from this environment.",
+  "relatedFailures": {
+    "dns_resolution": false,
+    "tcp_5432": false,
+    "tcp_6543": false
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "report": "DNS_REPORT",
+  "mission": "NETWORK_CONNECTIVITY_AUDIT",
+  "priority": "CRITICAL",
+  "mode": "DIAGNOSTIC_ONLY",
+  "generatedAt": "2026-06-04T12:47:27.118Z",
+  "targetHost": "db.zphpeynirstwzrzgvbct.supabase.co",
+  "resolver": {
+    "source": "/etc/resolv.conf",
+    "nameservers": [
+      "172.30.2.131"
+    ]
+  },
+  "checks": [
+    {
+      "name": "nslookup",
+      "command": "nslookup db.zphpeynirstwzrzgvbct.supabase.co",
+      "status": "FAILED",
+      "exitObservation": "no DNS servers could be reached",
+      "evidence": ";; communications error to 172.30.2.131#53: connection refused\n;; communications error to 172.30.2.131#53: connection refused\n;; communications error to 172.30.2.131#53: connection refused\n;; no servers could be reached"
+    },
+    {
+      "name": "dig",
+      "command": "dig db.zphpeynirstwzrzgvbct.supabase.co",
+      "status": "FAILED",
+      "exitObservation": "no DNS servers could be reached",
+      "evidence": ";; communications error to 172.30.2.131#53: connection refused\n;; communications error to 172.30.2.131#53: connection refused\n;; communications error to 172.30.2.131#53: connection refused\n\n; <<>> DiG 9.18.39-0ubuntu0.24.04.3-Ubuntu <<>> db.zphpeynirstwzrzgvbct.supabase.co\n;; global options: +cmd\n;; no servers could be reached"
+    },
+    {
+      "name": "host",
+      "command": "host db.zphpeynirstwzrzgvbct.supabase.co",
+      "status": "FAILED",
+      "exitObservation": "no DNS servers could be reached",
+      "evidence": ";; communications error to 172.30.2.131#53: timed out\n;; communications error to 172.30.2.131#53: connection refused\n;; no servers could be reached"
+    }
+  ],
+  "resolution": {
+    "dns_resolution": false,
+    "ipv4_addresses": [],
+    "ipv6_addresses": [],
+    "resolverFailure": true,
+    "observedErrors": [
+      "connection refused",
+      "timed out",
+      "no servers could be reached"
+    ]
+  },
+  "rootCause": "The configured DNS resolver 172.30.2.131 refused and/or timed out DNS queries from this execution environment, so db.zphpeynirstwzrzgvbct.supabase.co cannot be resolved locally."
+}
