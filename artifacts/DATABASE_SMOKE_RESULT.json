@@ -1,21 +1,21 @@
 {
   "report": "DATABASE_SMOKE_RESULT",
-  "generatedAt": "2026-06-04T04:55:22.543Z",
-  "status": "blocked",
+  "generatedAt": "2026-06-04T05:17:11.146Z",
+  "status": "BLOCKED",
   "checks": {
-    "database_connection": false,
-    "wallet_insert": false,
-    "wallet_update": false,
-    "wallet_select": false,
-    "transaction_insert": false,
-    "transaction_update": false,
-    "transaction_select": false,
-    "ledger_insert": false,
-    "ledger_update": false,
-    "ledger_select": false,
-    "rollback_test": false,
-    "foreign_keys": false,
-    "indexes": false
+    "database_connected": false,
+    "schema_applied": false,
+    "all_tables_present": false,
+    "all_enums_present": false,
+    "foreign_keys_valid": false,
+    "indexes_valid": false,
+    "wallet_crud": false,
+    "transaction_crud": false,
+    "payment_attempt_crud": false,
+    "ledger_crud": false,
+    "webhook_crud": false,
+    "delete_validation": false,
+    "rollback_test": false
   },
-  "error": "DATABASE_URL is required for MISSION_003_6_DATABASE_PRODUCTION_READY."
+  "reason": "DATABASE_URL is not configured; Supabase activation cannot connect to a real project."
 }

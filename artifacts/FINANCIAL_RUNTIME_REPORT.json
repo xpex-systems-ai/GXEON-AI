@@ -1,0 +1,7 @@
+{
+  "report": "FINANCIAL_RUNTIME_REPORT",
+  "generatedAt": "2026-06-04T05:17:11.146Z",
+  "status": "BLOCKED",
+  "reason": "DATABASE_URL is not configured; Supabase activation cannot connect to a real project.",
+  "metrics": null
+}

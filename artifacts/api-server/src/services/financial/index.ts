@@ -1,3 +1,4 @@
+export * from "./databaseRuntime";
 export * from "./ledgerService";
 export * from "./metrics";
 export * from "./transactionService";
