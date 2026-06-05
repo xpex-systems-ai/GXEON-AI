@@ -1,0 +1,225 @@
+import {
+  BarChart,
+  Blocks,
+  Bot,
+  Cpu,
+  Database,
+  Network,
+  Plug,
+  Radar,
+  Settings,
+  Shield,
+  Store,
+  Wallet,
+  Workflow,
+  Zap,
+  type LucideIcon,
+} from "lucide-react";
+
+export type GxeonModule = {
+  id: string;
+  name: string;
+  icon: LucideIcon;
+  route: string;
+  accent: string;
+  widgets: string[];
+  status?: "mock_ready" | "placeholder_only" | "all_disconnected";
+  description: string;
+};
+
+export const gxeonNavigation: GxeonModule[] = [
+  {
+    id: "command_center",
+    name: "Command Center",
+    icon: Cpu,
+    route: "/",
+    accent: "cyan",
+    widgets: ["System Status", "Live Metrics", "Execution Score", "Active Agents", "Revenue Overview", "Infrastructure Health"],
+    status: "mock_ready",
+    description: "Visão geral do ecossistema GXEON com telemetria simulada e prontidão operacional.",
+  },
+  {
+    id: "war_room",
+    name: "War Room",
+    icon: Shield,
+    route: "/war-room",
+    accent: "rose",
+    widgets: ["Risk Matrix", "Mission Tracker", "Execution Pipeline", "Critical Alerts", "Deployment Readiness"],
+    status: "mock_ready",
+    description: "Centro tático para risco, missões críticas e status de deploy sem acionar integrações reais.",
+  },
+  {
+    id: "radar_x",
+    name: "Radar X",
+    icon: Radar,
+    route: "/radar-x",
+    accent: "emerald",
+    widgets: ["Opportunity Scanner", "API Discovery", "Freelancer Sources", "Lead Sources", "Signal Streams", "Trend Detection"],
+    status: "placeholder_only",
+    description: "Camada visual de inteligência preditiva preparada para futuras fontes externas.",
+  },
+  {
+    id: "agent_hub",
+    name: "Agent Hub",
+    icon: Bot,
+    route: "/agent-hub",
+    accent: "violet",
+    widgets: ["Agent Registry", "Agent Status", "Agent Marketplace", "Agent Performance", "Agent Deployment"],
+    status: "mock_ready",
+    description: "Orquestração visual de agentes, desempenho e implantação em modo simulado.",
+  },
+  {
+    id: "marketplace",
+    name: "Marketplace",
+    icon: Store,
+    route: "/marketplace",
+    accent: "amber",
+    widgets: ["Products", "Services", "Digital Assets", "Subscriptions", "Offers"],
+    status: "mock_ready",
+    description: "Vitrine de ofertas, produtos e assinaturas pronta para ativação comercial gradual.",
+  },
+  {
+    id: "task_engine",
+    name: "Task Engine",
+    icon: Workflow,
+    route: "/task-engine",
+    accent: "blue",
+    widgets: ["Workflow Queue", "Execution Timeline", "Automation Rules", "SLA Monitor", "Operator Handoff"],
+    status: "mock_ready",
+    description: "Motor visual de tarefas para filas, automações e handoffs de execução.",
+  },
+  {
+    id: "financial_core",
+    name: "Financial Core",
+    icon: Wallet,
+    route: "/financial-core",
+    accent: "green",
+    widgets: ["Revenue Dashboard", "Transactions", "Subscriptions", "Billing", "Forecast"],
+    status: "mock_ready",
+    description: "Núcleo financeiro mockado para receita, billing, assinaturas e forecast.",
+  },
+  {
+    id: "ledger",
+    name: "Ledger",
+    icon: Database,
+    route: "/ledger",
+    accent: "teal",
+    widgets: ["Global Transactions", "Wallets", "Settlement", "Audit Trail"],
+    status: "mock_ready",
+    description: "Livro razão visual para auditoria, carteiras e liquidação em estado simulado.",
+  },
+  {
+    id: "blockchain",
+    name: "Blockchain",
+    icon: Blocks,
+    route: "/blockchain",
+    accent: "fuchsia",
+    widgets: ["Smart Contracts", "Nodes", "Wallet Connections", "On-chain Events"],
+    status: "placeholder_only",
+    description: "Área blockchain renderizada como placeholder seguro até conexão on-chain real.",
+  },
+  {
+    id: "api_gateway",
+    name: "API Gateway",
+    icon: Network,
+    route: "/api-gateway",
+    accent: "sky",
+    widgets: ["Connected APIs", "API Health", "API Usage", "API Marketplace"],
+    status: "all_disconnected",
+    description: "Gateway visual com APIs desconectadas, botões de conexão e métricas fictícias.",
+  },
+  {
+    id: "integrations",
+    name: "Integrations",
+    icon: Plug,
+    route: "/integrations",
+    accent: "orange",
+    widgets: ["Supabase", "Railway", "Vercel", "GitHub", "Mercado Pago", "OpenAI", "Freelancer", "Upwork", "Public Data Sources"],
+    status: "all_disconnected",
+    description: "Hub de provedores externos totalmente visível, mas sem ativar credenciais ou chamadas reais.",
+  },
+  {
+    id: "analytics",
+    name: "Analytics",
+    icon: BarChart,
+    route: "/analytics",
+    accent: "indigo",
+    widgets: ["North Star Metrics", "Conversion Funnel", "Cohort Radar", "Revenue Signals", "Operator Insights"],
+    status: "mock_ready",
+    description: "Analytics frontend-first para validar experiência, gráficos e narrativas executivas.",
+  },
+  {
+    id: "automation",
+    name: "Automation",
+    icon: Zap,
+    route: "/automation",
+    accent: "yellow",
+    widgets: ["Playbooks", "Triggers", "Rules Engine", "Scheduled Jobs", "Human Approval"],
+    status: "mock_ready",
+    description: "Camada de automação simulada para fluxos, gatilhos e aprovações humanas.",
+  },
+  {
+    id: "settings",
+    name: "Settings",
+    icon: Settings,
+    route: "/settings",
+    accent: "slate",
+    widgets: ["Workspace", "Access Control", "Feature Flags", "Theme", "Activation Plan"],
+    status: "mock_ready",
+    description: "Configurações operacionais, preferências visuais e plano de ativação gradual.",
+  },
+];
+
+export const integrationProviders = [
+  "Supabase",
+  "Railway",
+  "Vercel",
+  "GitHub",
+  "Mercado Pago",
+  "OpenAI",
+  "Freelancer",
+  "Upwork",
+  "Public Data Sources",
+];
+
+export const infrastructureStack = [
+  { label: "Frontend", value: "Vercel", state: "Visual ready" },
+  { label: "Backend", value: "Railway", state: "Pending connection" },
+  { label: "Database", value: "Supabase", state: "Pending connection" },
+  { label: "Repository", value: "GitHub", state: "Pending connection" },
+  { label: "Runtime", value: "Node.js", state: "Prepared" },
+  { label: "Package Manager", value: "pnpm", state: "Locked" },
+];
+
+export const activationPlan = [
+  "Renderizar 100% do ecossistema visual",
+  "Validar navegação completa e responsiva",
+  "Testar dados simulados e estados vazios",
+  "Publicar preview no Vercel",
+  "Conectar Railway, Supabase, Mercado Pago, Radar X e APIs externas por fases",
+];
+
+export function slugifyGxeonLabel(label: string) {
+  return label
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export function titleFromGxeonSlug(slug: string) {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+export function getGxeonModuleById(moduleId: string) {
+  return gxeonNavigation.find((module) => module.id === moduleId) ?? gxeonNavigation[0];
+}
+
+export function buildGxeonPlaceholderPath(moduleId: string, label: string) {
+  return `/placeholder/${moduleId}/${slugifyGxeonLabel(label)}`;
+}

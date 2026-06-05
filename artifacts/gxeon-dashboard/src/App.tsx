@@ -5,25 +5,47 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import NotFound from "@/pages/not-found";
 import DashboardPage from "@/pages/DashboardPage";
-import TransactionsPage from "@/pages/TransactionsPage";
-import CommissionsPage from "@/pages/CommissionsPage";
-import ActorsPage from "@/pages/ActorsPage";
-import ApiKeysPage from "@/pages/ApiKeysPage";
-import DatasetsPage from "@/pages/DatasetsPage";
-import HealthPage from "@/pages/HealthPage";
-import RevenuePage from "@/pages/RevenuePage";
-import RevenueStreamsPage from "@/pages/RevenueStreamsPage";
 import SettingsPage from "@/pages/SettingsPage";
-import SystemLogsPage from "@/pages/SystemLogsPage";
-import GovernancePage from "@/pages/GovernancePage";
 import TestPage from "@/pages/TestPage";
-import ConversionPage from "@/pages/ConversionPage";
-import LiveRuntimePage from "@/pages/LiveRuntimePage";
-import RevenueEnginePage from "@/pages/RevenueEnginePage";
-import OperationalDashboardPage from "@/pages/OperationalDashboardPage";
-import DeployEnginePage from "@/pages/DeployEnginePage";
+import GxeonOSPage from "@/pages/GxeonOSPage";
+import GxeonPlaceholderPage from "@/pages/GxeonPlaceholderPage";
 
 const queryClient = new QueryClient();
+
+const moduleRoutes = [
+  ["/", "command_center"],
+  ["/war-room", "war_room"],
+  ["/radar-x", "radar_x"],
+  ["/agent-hub", "agent_hub"],
+  ["/marketplace", "marketplace"],
+  ["/task-engine", "task_engine"],
+  ["/financial-core", "financial_core"],
+  ["/ledger", "ledger"],
+  ["/blockchain", "blockchain"],
+  ["/api-gateway", "api_gateway"],
+  ["/integrations", "integrations"],
+  ["/analytics", "analytics"],
+  ["/automation", "automation"],
+  ["/settings", "settings"],
+] as const;
+
+const professionalPlaceholderRoutes = [
+  ["/transactions", "ledger", "Transactions"],
+  ["/commissions", "financial_core", "Commissions"],
+  ["/actors", "agent_hub", "Actors"],
+  ["/api-keys", "api_gateway", "API Keys"],
+  ["/datasets", "analytics", "Datasets"],
+  ["/health", "command_center", "System Health"],
+  ["/revenue", "financial_core", "Revenue"],
+  ["/revenue-engine", "financial_core", "Revenue Engine"],
+  ["/revenue-streams", "financial_core", "Revenue Streams"],
+  ["/system-logs", "command_center", "System Logs"],
+  ["/governance", "war_room", "Git Governance"],
+  ["/conversion", "analytics", "Conversion Center"],
+  ["/live-runtime", "command_center", "Live Runtime"],
+  ["/operational-dashboard", "command_center", "Operational Dashboard"],
+  ["/deploy-engine", "automation", "Deploy Engine"],
+] as const;
 
 function Router() {
   return (
@@ -35,23 +57,15 @@ function Router() {
       <Route>
         <DashboardLayout>
           <Switch>
-            <Route path="/" component={DashboardPage} />
-            <Route path="/transactions" component={TransactionsPage} />
-            <Route path="/commissions" component={CommissionsPage} />
-            <Route path="/actors" component={ActorsPage} />
-            <Route path="/api-keys" component={ApiKeysPage} />
-            <Route path="/datasets" component={DatasetsPage} />
-            <Route path="/health" component={HealthPage} />
-            <Route path="/revenue" component={RevenuePage} />
-            <Route path="/revenue-engine" component={RevenueEnginePage} />
-            <Route path="/revenue-streams" component={RevenueStreamsPage} />
-            <Route path="/settings" component={SettingsPage} />
-            <Route path="/system-logs" component={SystemLogsPage} />
-            <Route path="/governance" component={GovernancePage} />
-            <Route path="/conversion" component={ConversionPage} />
-            <Route path="/live-runtime" component={LiveRuntimePage} />
-            <Route path="/operational-dashboard" component={OperationalDashboardPage} />
-            <Route path="/deploy-engine" component={DeployEnginePage} />
+            {moduleRoutes.map(([path, moduleId]) => (
+              <Route key={path} path={path} component={() => <GxeonOSPage moduleId={moduleId} />} />
+            ))}
+            <Route path="/placeholder/:moduleId/:blockSlug" component={() => <GxeonPlaceholderPage />} />
+            {professionalPlaceholderRoutes.map(([path, moduleId, blockTitle]) => (
+              <Route key={path} path={path} component={() => <GxeonPlaceholderPage moduleId={moduleId} blockTitle={blockTitle} />} />
+            ))}
+            <Route path="/legacy-dashboard" component={DashboardPage} />
+            <Route path="/legacy-settings" component={SettingsPage} />
             <Route component={NotFound} />
           </Switch>
         </DashboardLayout>
