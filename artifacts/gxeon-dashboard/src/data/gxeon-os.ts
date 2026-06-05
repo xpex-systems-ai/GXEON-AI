@@ -198,3 +198,28 @@ export const activationPlan = [
   "Publicar preview no Vercel",
   "Conectar Railway, Supabase, Mercado Pago, Radar X e APIs externas por fases",
 ];
+
+export function slugifyGxeonLabel(label: string) {
+  return label
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export function titleFromGxeonSlug(slug: string) {
+  return slug
+    .split("-")
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+export function getGxeonModuleById(moduleId: string) {
+  return gxeonNavigation.find((module) => module.id === moduleId) ?? gxeonNavigation[0];
+}
+
+export function buildGxeonPlaceholderPath(moduleId: string, label: string) {
+  return `/placeholder/${moduleId}/${slugifyGxeonLabel(label)}`;
+}
