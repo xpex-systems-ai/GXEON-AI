@@ -2,6 +2,7 @@ import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { buildGxeonPlaceholderPath, gxeonNavigation } from "@/data/gxeon-os";
+import { gxeonNavigation } from "@/data/gxeon-os";
 import { Atom, CircleDot } from "lucide-react";
 
 export function Sidebar() {
@@ -53,6 +54,10 @@ export function Sidebar() {
           <p className="mt-1 text-sm font-semibold text-white">100% visual · 0 APIs ativas</p>
         </div>
       </Link>
+      <div className="m-3 rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-4">
+        <p className="text-xs uppercase tracking-[0.25em] text-emerald-200/70">Activation state</p>
+        <p className="mt-1 text-sm font-semibold text-white">100% visual · 0 APIs ativas</p>
+      </div>
     </aside>
   );
 }
