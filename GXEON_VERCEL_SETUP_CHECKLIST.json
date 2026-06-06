@@ -1,0 +1,72 @@
+{
+  "mission": "GXEON_VERCEL_INTEGRATION_AUDIT",
+  "mode": "DIAGNOSTIC_ONLY",
+  "generated_at": "2026-06-06T00:00:00Z",
+  "status": "READY",
+  "safety": {
+    "code_modified": false,
+    "database_modified": false,
+    "migrations_run": false,
+    "secrets_exposed": false,
+    "vercel_project_created": false,
+    "production_deploy_triggered": false
+  },
+  "vercel_config": {
+    "vercel_json_exists": true,
+    "framework": "vite",
+    "framework_ready": true,
+    "installCommand": "pnpm install --frozen-lockfile",
+    "install_command_ready": true,
+    "buildCommand": "PORT=3000 BASE_PATH=/ pnpm --filter @workspace/gxeon-dashboard run build",
+    "build_command_injects_port": true,
+    "build_command_injects_base_path": true,
+    "outputDirectory": "artifacts/gxeon-dashboard/dist/public",
+    "output_directory_ready": true,
+    "spa_rewrite_ready": true
+  },
+  "dashboard_package": {
+    "package_json_exists": true,
+    "package_name": "@workspace/gxeon-dashboard",
+    "build_script": "vite build --config vite.config.ts",
+    "build_script_ready": true,
+    "vite_config_exists": true,
+    "vite_requires_port": true,
+    "vite_requires_base_path": true,
+    "vite_output_dir": "dist/public"
+  },
+  "frontend_environment_policy": {
+    "future_supabase_frontend_env_names": [
+      "VITE_SUPABASE_URL",
+      "VITE_SUPABASE_ANON_KEY"
+    ],
+    "optional_frontend_env_names": [
+      "VITE_API_BASE"
+    ],
+    "must_not_set_in_frontend": [
+      "SUPABASE_SERVICE_ROLE_KEY",
+      "DATABASE_URL",
+      "DIRECT_URL"
+    ],
+    "service_role_key_required_by_frontend": false,
+    "service_role_key_policy": "Never expose service-role keys in Vercel frontend/browser environment variables."
+  },
+  "operator_setup_checklist": [
+    "Import the GitHub repository into Vercel.",
+    "Ensure Vercel uses the root vercel.json configuration.",
+    "Confirm framework preset is Vite.",
+    "Confirm install command is pnpm install --frozen-lockfile.",
+    "Confirm build command is PORT=3000 BASE_PATH=/ pnpm --filter @workspace/gxeon-dashboard run build.",
+    "Confirm output directory is artifacts/gxeon-dashboard/dist/public.",
+    "Keep production deploys controlled; use GitHub pull request preview deployments for review.",
+    "Do not add SUPABASE_SERVICE_ROLE_KEY, DATABASE_URL, or DIRECT_URL to frontend Vercel variables.",
+    "When approved, add only VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY for browser-side Supabase access.",
+    "Open the generated Vercel preview URL from a pull request and verify /, /radar-x, /settings, and placeholder routes load."
+  ],
+  "success_criteria": {
+    "vercel_json_ready": true,
+    "dashboard_build_command_ready": true,
+    "output_directory_ready": true,
+    "frontend_secret_policy_clear": true,
+    "operator_can_configure_once_and_use_preview_flow": true
+  }
+}
