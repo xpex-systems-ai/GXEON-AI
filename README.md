@@ -76,6 +76,7 @@ The architecture is organized as a monorepo with clear boundaries between presen
 | Category | Status | Notes |
 | --- | --- | --- |
 | Repository presentation | Active / consolidated | README, navigation hub, status document, and GitHub templates are the canonical public review entry points. |
+| Repository presentation | Active | README, navigation hub, status document, and GitHub templates are being upgraded for public review. |
 | Dashboard | Visual demo | Dashboard package exists and build/typecheck commands are available. |
 | API server | Code package present | Activation status should be validated before production claims. |
 | External APIs | Not live by default | No live partner/API activation is claimed in this repository presentation. |
@@ -86,6 +87,7 @@ The architecture is organized as a monorepo with clear boundaries between presen
 ## Lean stack
 
 The active public stack should be read as a lean demo/review stack: dashboard, API package, shared contracts, database readiness libraries, and governance checks. Items below describe repository components, not live production activation.
+## Stack
 
 | Layer | Technology / package |
 | --- | --- |
@@ -97,6 +99,7 @@ The active public stack should be read as a lean demo/review stack: dashboard, A
 | Contracts | Zod, shared API spec/client packages |
 | Quality | TypeScript typecheck, Vite build, repository governance scripts |
 | Deployment targets | Vercel/GitHub Pages/Railway-oriented scripts and workflows where configured; deployment approval is separate from repository presentation |
+| Deployment targets | Vercel/GitHub Pages/Railway-oriented scripts and workflows where configured |
 
 ## Documentation map
 
