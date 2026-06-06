@@ -1,0 +1,56 @@
+{
+  "mission": "GXEON_LEAN_STACK_FOUNDATION",
+  "generated_at": "2026-06-06T00:00:00Z",
+  "status": "BLOCKED",
+  "reason": "Required Supabase/Postgres environment variables are not available in the current execution environment. Values were not printed.",
+  "files": {
+    "drizzle_config_exists": true,
+    "drizzle_config_path": "lib/db/drizzle.config.ts",
+    "schema_index_exists": true,
+    "schema_index_path": "lib/db/src/schema/index.ts",
+    "financial_schema_exists": true,
+    "financial_schema_path": "lib/db/src/schema/financial.ts",
+    "financial_migration_exists": true,
+    "financial_migration_path": "lib/db/drizzle/0000_financial_foundation.sql"
+  },
+  "financial_schema": {
+    "expected_tables": {
+      "actor_wallets": true,
+      "global_transactions": true,
+      "payment_attempts": true,
+      "financial_ledger": true,
+      "payment_webhook_events": true
+    },
+    "expected_enums": {
+      "transaction_status": true,
+      "payment_attempt_status": true,
+      "wallet_status": true,
+      "ledger_entry_type": true,
+      "ledger_source_type": true,
+      "webhook_processing_status": true
+    },
+    "index_exports_financial_schema": true
+  },
+  "package_scripts": {
+    "root_supabase_check": true,
+    "root_supabase_activate": true,
+    "root_supabase_activate_push": true,
+    "root_supabase_go_live": true,
+    "db_push": true,
+    "db_push_force": true,
+    "db_validate_financial": true
+  },
+  "env_availability": {
+    "DATABASE_URL": "MISSING",
+    "DIRECT_URL": "MISSING",
+    "SUPABASE_URL": "MISSING",
+    "SUPABASE_ANON_KEY": "MISSING",
+    "SUPABASE_SERVICE_ROLE_KEY": "MISSING"
+  },
+  "security": {
+    "env_values_printed": false,
+    "database_mutation_performed": false,
+    "production_deploy_performed": false
+  },
+  "recommendation": "Configure the required Supabase/Postgres environment variables securely, then rerun non-mutating validation. Only run db push, supabase activation, go-live, or migration commands after explicit operator confirmation."
+}

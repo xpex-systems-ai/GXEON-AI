@@ -1,0 +1,53 @@
+{
+  "mission": "GXEON_LEAN_STACK_FOUNDATION",
+  "generated_at": "2026-06-06T00:00:00Z",
+  "status": "DEGRADED",
+  "active_lean_stack": ["ChatGPT", "Codex", "GitHub", "Supabase"],
+  "policy": {
+    "no_deletion_performed": true,
+    "no_external_provider_connected": true,
+    "no_production_deploy_performed": true
+  },
+  "infrastructure_dependencies": [
+    {
+      "provider": "GitHub",
+      "classification": "active",
+      "evidence": [".github/workflows/build.yml", ".github/workflows/typecheck.yml", ".github/workflows/pages-deploy.yml", ".github/workflows/monorepo-health.yml", ".github/workflows/gxeon-runtime-sync.yml"],
+      "recommendation": "Keep active as source of truth, CI/audit layer, and pull request workflow."
+    },
+    {
+      "provider": "Supabase",
+      "classification": "active_but_env_blocked",
+      "evidence": ["supabase/config.toml", "supabase/README.md", "scripts/supabase_env_check.cjs", "scripts/supabase_activation.cjs", "scripts/supabase_go_live.cjs", "lib/db/drizzle.config.ts"],
+      "recommendation": "Keep active as database/auth/storage target. Inject required env vars before any activation or migration command."
+    },
+    {
+      "provider": "Vercel",
+      "classification": "blocked_legacy",
+      "evidence": ["vercel.json", "artifacts/gxeon-dashboard/src/data/gxeone-deploy-engine.ts", "artifacts/gxeon-dashboard/src/pages/DeployEnginePage.tsx"],
+      "recommendation": "Do not use in lean-stack mode. Preserve files for audit only until explicit cleanup mission."
+    },
+    {
+      "provider": "Codespaces",
+      "classification": "not_found",
+      "evidence": [],
+      "recommendation": "No action required; keep excluded."
+    },
+    {
+      "provider": "Replit",
+      "classification": "blocked_legacy_optional_dev_dependency",
+      "evidence": [".replit", "replit.nix", "pnpm-workspace.yaml catalog entries for @replit Vite plugins", "artifacts/mockup-sandbox/vite.config.ts"],
+      "recommendation": "Do not use Replit as runtime. Keep plugin references only until a separate dependency cleanup can confirm dashboard/sandbox builds remain stable without them."
+    },
+    {
+      "provider": "Railway",
+      "classification": "blocked_legacy_unless_strictly_required",
+      "evidence": ["artifacts/api-server/railway.json", "artifacts/gxeon-dashboard/railway.json", "artifacts/gxeon-dashboard-mobile/railway.json", "artifacts/mockup-sandbox/railway.json", "lib/api-client-react/railway.json", ".railway/api-server/railway.json", ".railway/gxeon-dashboard/railway.json", ".railway/gxeon-dashboard-mobile/railway.json", ".railway/mockup-sandbox/railway.json", "scripts/railway_autodeploy.sh", "scripts/provision_railway_postgres.sh"],
+      "recommendation": "Do not activate in lean-stack mode. Treat as legacy fallback only if the operator explicitly approves a strict runtime requirement."
+    }
+  ],
+  "remain_active": ["GitHub", "Supabase"],
+  "operator_tools": ["ChatGPT", "Codex"],
+  "blocked_for_now": ["Vercel", "Codespaces", "Replit", "Railway"],
+  "next_action": "Inject Supabase env vars in a secure environment, then run non-mutating checks before requesting explicit approval for any DB push or activation."
+}

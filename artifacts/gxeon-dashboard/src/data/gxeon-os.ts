@@ -36,7 +36,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "cyan",
     widgets: ["System Status", "Live Metrics", "Execution Score", "Active Agents", "Revenue Overview", "Infrastructure Health"],
     status: "mock_ready",
-    description: "Visão geral do ecossistema GXEON com telemetria simulada e prontidão operacional.",
+    description: "Investor demo command center for the GXEON execution operating model, using visual-only telemetry and safe preview states.",
   },
   {
     id: "war_room",
@@ -46,7 +46,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "rose",
     widgets: ["Risk Matrix", "Mission Tracker", "Execution Pipeline", "Critical Alerts", "Deployment Readiness"],
     status: "mock_ready",
-    description: "Centro tático para risco, missões críticas e status de deploy sem acionar integrações reais.",
+    description: "Tactical risk and mission surface for investor walkthroughs, with deployment readiness shown without real production actions.",
   },
   {
     id: "radar_x",
@@ -56,7 +56,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "emerald",
     widgets: ["Opportunity Scanner", "API Discovery", "Freelancer Sources", "Lead Sources", "Signal Streams", "Trend Detection"],
     status: "placeholder_only",
-    description: "Camada visual de inteligência preditiva preparada para futuras fontes externas.",
+    description: "Opportunity intelligence surface for showing how signals can become qualified execution work; external sources remain pending.",
   },
   {
     id: "agent_hub",
@@ -66,7 +66,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "violet",
     widgets: ["Agent Registry", "Agent Status", "Agent Marketplace", "Agent Performance", "Agent Deployment"],
     status: "mock_ready",
-    description: "Orquestração visual de agentes, desempenho e implantação em modo simulado.",
+    description: "Human/AI coordination surface for roles, accountability and handoffs, presented as a visual demo only.",
   },
   {
     id: "marketplace",
@@ -76,7 +76,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "amber",
     widgets: ["Products", "Services", "Digital Assets", "Subscriptions", "Offers"],
     status: "mock_ready",
-    description: "Vitrine de ofertas, produtos e assinaturas pronta para ativação comercial gradual.",
+    description: "Offer and job packaging layer for future monetization, currently shown without live transactions.",
   },
   {
     id: "task_engine",
@@ -86,7 +86,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "blue",
     widgets: ["Workflow Queue", "Execution Timeline", "Automation Rules", "SLA Monitor", "Operator Handoff"],
     status: "mock_ready",
-    description: "Motor visual de tarefas para filas, automações e handoffs de execução.",
+    description: "Execution queue layer that turns opportunities into tasks, milestones and operator handoffs in safe preview mode.",
   },
   {
     id: "financial_core",
@@ -96,7 +96,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "green",
     widgets: ["Revenue Dashboard", "Transactions", "Subscriptions", "Billing", "Forecast"],
     status: "mock_ready",
-    description: "Núcleo financeiro mockado para receita, billing, assinaturas e forecast.",
+    description: "Revenue and billing model for investor review; financial data is visual-only until Supabase activation is approved.",
   },
   {
     id: "ledger",
@@ -106,7 +106,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "teal",
     widgets: ["Global Transactions", "Wallets", "Settlement", "Audit Trail"],
     status: "mock_ready",
-    description: "Livro razão visual para auditoria, carteiras e liquidação em estado simulado.",
+    description: "Ledger and wallet visibility model for audit readiness; no database writes or settlements are active.",
   },
   {
     id: "blockchain",
@@ -116,7 +116,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "fuchsia",
     widgets: ["Smart Contracts", "Nodes", "Wallet Connections", "On-chain Events"],
     status: "placeholder_only",
-    description: "Área blockchain renderizada como placeholder seguro até conexão on-chain real.",
+    description: "Future blockchain surface, intentionally limited to a roadmap placeholder with no on-chain connection.",
   },
   {
     id: "api_gateway",
@@ -126,7 +126,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "sky",
     widgets: ["Connected APIs", "API Health", "API Usage", "API Marketplace"],
     status: "all_disconnected",
-    description: "Gateway visual com APIs desconectadas, botões de conexão e métricas fictícias.",
+    description: "API control surface showing disabled connections and activation gates; no real API calls are enabled.",
   },
   {
     id: "integrations",
@@ -134,9 +134,9 @@ export const gxeonNavigation: GxeonModule[] = [
     icon: Plug,
     route: "/integrations",
     accent: "orange",
-    widgets: ["Supabase", "Railway", "Vercel", "GitHub", "Mercado Pago", "OpenAI", "Freelancer", "Upwork", "Public Data Sources"],
+    widgets: ["Supabase", "Vercel", "GitHub", "Microsoft 365 / Copilot", "Mercado Pago", "OpenAI", "Freelancer", "Upwork", "Public Data Sources"],
     status: "all_disconnected",
-    description: "Hub de provedores externos totalmente visível, mas sem ativar credenciais ou chamadas reais.",
+    description: "Provider activation map for Supabase, Vercel, GitHub and future tools; credentials and calls remain disabled.",
   },
   {
     id: "analytics",
@@ -146,7 +146,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "indigo",
     widgets: ["North Star Metrics", "Conversion Funnel", "Cohort Radar", "Revenue Signals", "Operator Insights"],
     status: "mock_ready",
-    description: "Analytics frontend-first para validar experiência, gráficos e narrativas executivas.",
+    description: "Outcome intelligence layer for conversion, execution and revenue signals, using demo data only.",
   },
   {
     id: "automation",
@@ -156,7 +156,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "yellow",
     widgets: ["Playbooks", "Triggers", "Rules Engine", "Scheduled Jobs", "Human Approval"],
     status: "mock_ready",
-    description: "Camada de automação simulada para fluxos, gatilhos e aprovações humanas.",
+    description: "Human-approved playbook surface for future automation, with no autonomous production actions active.",
   },
   {
     id: "settings",
@@ -166,37 +166,37 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "slate",
     widgets: ["Workspace", "Access Control", "Feature Flags", "Theme", "Activation Plan"],
     status: "mock_ready",
-    description: "Configurações operacionais, preferências visuais e plano de ativação gradual.",
+    description: "Workspace settings and activation roadmap for safe, phased investor demo progression.",
   },
 ];
 
 export const integrationProviders = [
   "Supabase",
-  "Railway",
   "Vercel",
   "GitHub",
-  "Mercado Pago",
+  "Microsoft 365 / Copilot",
   "OpenAI",
+  "Mercado Pago",
   "Freelancer",
   "Upwork",
   "Public Data Sources",
 ];
 
 export const infrastructureStack = [
-  { label: "Frontend", value: "Vercel", state: "Visual ready" },
-  { label: "Backend", value: "Railway", state: "Pending connection" },
-  { label: "Database", value: "Supabase", state: "Pending connection" },
-  { label: "Repository", value: "GitHub", state: "Pending connection" },
-  { label: "Runtime", value: "Node.js", state: "Prepared" },
-  { label: "Package Manager", value: "pnpm", state: "Locked" },
+  { label: "Demo layer", value: "Vercel", state: "Preview-ready" },
+  { label: "Source of truth", value: "GitHub", state: "Active" },
+  { label: "Data/Auth/Storage", value: "Supabase", state: "Pending activation" },
+  { label: "Execution factory", value: "Codex", state: "Active" },
+  { label: "Strategy layer", value: "ChatGPT", state: "Active" },
+  { label: "Reporting", value: "Microsoft 365 / Copilot", state: "Planned" },
 ];
 
 export const activationPlan = [
-  "Renderizar 100% do ecossistema visual",
-  "Validar navegação completa e responsiva",
-  "Testar dados simulados e estados vazios",
-  "Publicar preview no Vercel",
-  "Conectar Railway, Supabase, Mercado Pago, Radar X e APIs externas por fases",
+  "Keep the investor demo visual-first and explicit",
+  "Validate Opportunity → Task → Execution → Revenue → Analytics",
+  "Collect screenshot and GitHub issue evidence",
+  "Run Supabase non-mutating readiness checks after credentials are secured",
+  "Activate integrations only through approved, auditable missions",
 ];
 
 export function slugifyGxeonLabel(label: string) {
