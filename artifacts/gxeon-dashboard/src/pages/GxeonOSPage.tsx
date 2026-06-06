@@ -58,7 +58,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               {[
-                ["Módulos renderizados", "14/14", "100%"],
+                ["Módulos renderizados", "15/15", "100%"],
                 ["Integrações externas", "0 ativas", "Seguro"],
                 ["Prontidão visual", "98%", "Vercel preview"],
               ].map(([label, value, hint]) => (
@@ -123,8 +123,11 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
             <CardTitle className="flex items-center gap-2 text-white"><Activity className="h-5 w-5 text-cyan-200" /> Module Widgets</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
-            {activeModule.widgets.map((widget) => (
-              <Link key={widget} href={buildGxeonPlaceholderPath(activeModule.id, widget)}>
+            {activeModule.widgets.map((widget) => {
+              const widgetHref = widget === "Opportunity Inbox" ? "/ops/opportunities" : buildGxeonPlaceholderPath(activeModule.id, widget);
+
+              return (
+                <Link key={widget} href={widgetHref}>
                 <div className="group rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-300/40 hover:bg-cyan-400/10">
                   <div className="flex items-center justify-between gap-3">
                     <p className="font-semibold text-white">{widget}</p>
@@ -132,8 +135,9 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
                   </div>
                   <p className="mt-2 text-sm text-slate-400">Mock dashboard block · ready for future activation</p>
                 </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </CardContent>
         </Card>
       </section>
