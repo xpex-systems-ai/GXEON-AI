@@ -80,6 +80,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
               <div>
                 <p className="text-xs uppercase tracking-[0.35em] text-slate-400">Activation mode</p>
                 <p className="text-lg font-semibold text-white">Visual-only safe preview</p>
+                <p className="text-lg font-semibold text-white">Visual-only safe mode</p>
               </div>
               <Lock className="h-7 w-7 text-emerald-300" />
             </div>
@@ -113,6 +114,11 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
             {isIntegrationSurface ? (
               <div className="rounded-2xl border border-orange-300/20 bg-orange-400/10 p-4 text-sm text-orange-100">
                 Integration blocked by policy: buttons and states are visual-only until explicit activation approval.
+              <p className="mt-3 text-sm text-slate-200">Nenhuma chamada externa é executada nesta tela; cada widget aponta para um placeholder profissional auditável.</p>
+            </div>
+            {isIntegrationSurface ? (
+              <div className="rounded-2xl border border-orange-300/20 bg-orange-400/10 p-4 text-sm text-orange-100">
+                Integração bloqueada por política: botões e estados são apenas visuais até autorização explícita.
               </div>
             ) : null}
           </CardContent>
@@ -131,6 +137,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
                     <ArrowRight className="h-4 w-4 text-cyan-200 transition group-hover:translate-x-1" />
                   </div>
                   <p className="mt-2 text-sm text-slate-400">Visual demo block · activation pending</p>
+                  <p className="mt-2 text-sm text-slate-400">Mock dashboard block · ready for future activation</p>
                 </div>
               </Link>
             ))}
@@ -148,6 +155,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
               <div className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-slate-300 transition hover:border-cyan-300/40 hover:bg-cyan-400/10">
                 <Search className="h-4 w-4" />
                 <span className="flex-1">Search modules, widgets, agents, revenue model or integration roadmap...</span>
+                <span className="flex-1">Buscar módulo, widget, agente, receita ou integração...</span>
                 <ArrowRight className="h-3 w-3 text-cyan-200 transition group-hover:translate-x-1" />
               </div>
             </Link>
@@ -155,6 +163,9 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
               "War Room shows investor demo risks and activation gates",
               "Radar X shows opportunity intake before external sources connect",
               "Financial Core models revenue tracking before Supabase activation",
+              "War Room monitorando 5 alertas críticos mockados",
+              "Radar X aguardando conexão de sinais externos",
+              "Financial Core pronto para validar jornada de billing",
             ].map((notification) => (
               <Link key={notification} href={buildGxeonPlaceholderPath("command_center", notification)}>
                 <div className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm text-slate-200 transition hover:border-fuchsia-300/30 hover:bg-fuchsia-400/10">
@@ -170,6 +181,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
         <Card className="border-emerald-300/20 bg-slate-950/75 backdrop-blur-xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white"><Sparkles className="h-5 w-5 text-emerald-200" /> Lean stack readiness</CardTitle>
+            <CardTitle className="flex items-center gap-2 text-white"><Sparkles className="h-5 w-5 text-emerald-200" /> Infrastructure readiness</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
             {infrastructureStack.map((item) => (
