@@ -122,6 +122,12 @@ export default function ExecutionTrackerPage() {
                     <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
                   </div>
                 </Link>
+                <Link href="/ops/validation">
+                  <div className="group flex items-center justify-between rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-sm font-semibold text-emerald-100 transition hover:border-emerald-200/40">
+                    View Delivery Validation P3
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  </div>
+                </Link>
               </div>
             </CardContent>
           </Card>
