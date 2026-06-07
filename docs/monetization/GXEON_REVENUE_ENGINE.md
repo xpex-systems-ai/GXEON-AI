@@ -32,7 +32,7 @@ Opportunity → Task → Execution → Revenue → Analytics
 
 | Tier | Intended audience | Possible value |
 | --- | --- | --- |
-| Demo / evaluation | Investors, partners, pilot companies | Visual walkthrough and workflow validation. |
+| Private offer sprint | Junior Sena and selected buyers | Scoped delivery offer, workflow validation, and cash-generation evidence. |
 | Team workspace | Small operating teams | Opportunity and task command center. |
 | Enterprise workspace | Larger companies | Governance, analytics, and controlled integrations. |
 | Partner implementation | Companies needing rollout support | Workflow mapping, training, and operational setup. |
@@ -49,6 +49,6 @@ Opportunity → Task → Execution → Revenue → Analytics
 
 - Define pilot pricing assumptions.
 - Define success metrics for partner pilots.
-- Create a demo-to-pilot conversion script.
+- Create an offer-to-paid-delivery conversion script.
 - Add evidence templates for pilot outcomes.
-- Align public claims with validated commercial status.
+- Align repository claims with validated commercial status.

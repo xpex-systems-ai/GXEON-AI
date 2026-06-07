@@ -10,7 +10,7 @@ GXEON OS should feel like an enterprise-grade command system: precise, technical
 
 > Turn opportunities into accountable execution and measurable revenue workflows.
 
-Use this message as the north star for README copy, demo scripts, partner decks, and issue summaries.
+Use this message as the north star for README copy, operator walkthroughs, monetization notes, and issue summaries.
 
 ## Voice and tone
 
@@ -18,15 +18,16 @@ Use this message as the north star for README copy, demo scripts, partner decks,
 | --- | --- |
 | Premium | Use concise, confident language. Avoid hype that cannot be verified. |
 | Technical | Explain architecture and status in concrete terms. |
-| Honest | Clearly label visual demos, pending integrations, and non-production status. |
+| Honest | Clearly label sample workflows, pending integrations, and non-production status. |
 | Operational | Emphasize workflows, checks, execution, measurement, and readiness. |
-| Investor-ready | Make the business thesis easy to understand without overstating traction. |
+| Private-QG ready | Make the operating mission easy to understand without overstating traction or activation. |
 
 ## Language rules
 
 Use:
 
-- "Visual demo"
+- "Private QG"
+- "Sample workflow"
 - "Pending production activation"
 - "Integration-ready roadmap"
 - "Monetization thesis"
@@ -47,7 +48,7 @@ Avoid unless proven by current evidence:
 | --- | --- |
 | Color feel | Dark enterprise interface, high contrast, electric accent colors, clean cards. |
 | Layout | Command-center density with clear hierarchy and generous spacing. |
-| Data visuals | Charts and metrics should support the story without implying real customer data unless marked as sample/demo data. |
+| Data visuals | Charts and metrics should support the story without implying real customer data unless marked as sample or validated ledger data. |
 | Screenshots | Capture full-page dashboard states and key flows with visible labels. |
 
 ## Naming hierarchy
@@ -63,15 +64,15 @@ Avoid unless proven by current evidence:
 
 Recommended status statements:
 
-- "Visual demo: active"
+- "Private QG: active"
 - "External APIs: disabled unless explicitly configured"
 - "Supabase production activation: pending readiness approval"
 - "Revenue claims: not asserted"
 
-## Reviewer promise
+## Operator promise
 
-Every public-facing page should help reviewers answer three questions quickly:
+Every command-center page should help the operator answer three questions quickly:
 
-1. What is GXEON OS?
+1. What is GXEON OS controlling?
 2. What exists today?
 3. What is intentionally not activated yet?
