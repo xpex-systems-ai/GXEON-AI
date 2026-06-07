@@ -88,12 +88,20 @@ export default function TaskQueuePage() {
                   </div>
                 </div>
               ))}
-              <Link href="/ops/opportunities">
-                <div className="group flex items-center justify-between rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-sm font-semibold text-emerald-100 transition hover:border-emerald-200/40">
-                  View Opportunity Inbox P0
-                  <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-                </div>
-              </Link>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                <Link href="/ops/opportunities">
+                  <div className="group flex items-center justify-between rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-sm font-semibold text-emerald-100 transition hover:border-emerald-200/40">
+                    View Opportunity Inbox P0
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  </div>
+                </Link>
+                <Link href="/ops/execution">
+                  <div className="group flex items-center justify-between rounded-2xl border border-violet-300/20 bg-violet-400/10 p-3 text-sm font-semibold text-violet-100 transition hover:border-violet-200/40">
+                    Track Execution P2
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  </div>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -124,14 +132,16 @@ export default function TaskQueuePage() {
             <p className="mt-1 text-sm text-slate-400">Closed UI state, not real revenue.</p>
           </CardContent>
         </Card>
-        <Card className="border-cyan-300/20 bg-slate-950/75 backdrop-blur-xl">
-          <CardContent className="p-5">
-            <Link2 className="h-6 w-6 text-cyan-200" />
-            <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">P0 references</p>
-            <p className="mt-2 text-3xl font-black text-white">10</p>
-            <p className="mt-1 text-sm text-slate-400">Tasks linked to Opportunity Inbox IDs.</p>
-          </CardContent>
-        </Card>
+        <Link href="/ops/execution">
+          <Card className="border-cyan-300/20 bg-slate-950/75 backdrop-blur-xl transition hover:border-violet-300/35 hover:bg-violet-400/10">
+            <CardContent className="p-5">
+              <Link2 className="h-6 w-6 text-cyan-200" />
+              <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">P2 tracker</p>
+              <p className="mt-2 text-3xl font-black text-white">Track</p>
+              <p className="mt-1 text-sm text-slate-400">Open sample/manual-first Execution Tracker.</p>
+            </CardContent>
+          </Card>
+        </Link>
       </section>
 
       <section className="space-y-4">
@@ -240,6 +250,13 @@ export default function TaskQueuePage() {
                       ) : (
                         <p className="mt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">Internal manual task</p>
                       )}
+                      <Link href="/ops/execution">
+                        <div className="mt-4 flex items-center justify-between gap-2 rounded-xl border border-violet-200/20 bg-violet-300/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-violet-100 transition hover:border-violet-200/40">
+                          <span>Track Execution · sample/manual-first</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </div>
+                      </Link>
+                      <p className="mt-2 text-[11px] text-blue-100/70">Visual affordance only: no backend mutation, database write, or external storage.</p>
                     </div>
                   </div>
                 </article>

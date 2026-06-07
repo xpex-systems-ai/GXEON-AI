@@ -11,6 +11,7 @@ import GxeonOSPage from "@/pages/GxeonOSPage";
 import GxeonPlaceholderPage from "@/pages/GxeonPlaceholderPage";
 import OpportunityInboxPage from "@/pages/OpportunityInboxPage";
 import TaskQueuePage from "@/pages/TaskQueuePage";
+import ExecutionTrackerPage from "@/pages/ExecutionTrackerPage";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ function Router() {
           <Switch>
             <Route path="/ops/opportunities" component={OpportunityInboxPage} />
             <Route path="/ops/tasks" component={TaskQueuePage} />
+            <Route path="/ops/execution" component={ExecutionTrackerPage} />
             {moduleRoutes.map(([path, moduleId]) => (
               <Route key={path} path={path} component={() => <GxeonOSPage moduleId={moduleId} />} />
             ))}
