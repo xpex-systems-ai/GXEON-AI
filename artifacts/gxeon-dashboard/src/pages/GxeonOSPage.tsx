@@ -124,7 +124,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
             {activeModule.widgets.map((widget) => {
-              const widgetHref = widget === "Opportunity Inbox" ? "/ops/opportunities" : buildGxeonPlaceholderPath(activeModule.id, widget);
+              const widgetHref = widget === "Opportunity Inbox" ? "/ops/opportunities" : widget === "Task Queue P1" ? "/ops/tasks" : buildGxeonPlaceholderPath(activeModule.id, widget);
 
               return (
                 <Link key={widget} href={widgetHref}>

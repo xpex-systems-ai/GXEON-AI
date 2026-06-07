@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -193,9 +194,13 @@ export default function OpportunityInboxPage() {
                     <div className="rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-4 lg:w-72">
                       <p className="text-xs uppercase tracking-[0.28em] text-emerald-100/70">Next manual action</p>
                       <p className="mt-2 text-sm font-semibold text-white">{opportunity.next_action}</p>
-                      <div className="mt-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100">
-                        Task candidate later <ArrowRight className="h-3 w-3" />
-                      </div>
+                      <Link href="/ops/tasks">
+                        <div className="mt-4 flex items-center justify-between gap-2 rounded-xl border border-emerald-200/20 bg-emerald-300/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100 transition hover:border-emerald-200/40">
+                          <span>Create Task · sample/manual-first</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </div>
+                      </Link>
+                      <p className="mt-2 text-[11px] text-emerald-100/70">Visual affordance only: no backend mutation, database write, or external storage.</p>
                     </div>
                   </div>
                 </article>
