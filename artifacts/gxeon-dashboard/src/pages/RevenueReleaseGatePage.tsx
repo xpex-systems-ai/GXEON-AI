@@ -72,6 +72,7 @@ export default function RevenueReleaseGatePage() {
               <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">Safe Preview Mode</Badge>
               <Badge variant="outline" className="border-amber-300/40 text-amber-100">No payment gateway</Badge>
               <Badge variant="outline" className="border-rose-300/40 text-rose-100">No revenue claims</Badge>
+              <Link href="/ops/ledger" className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-400/10 px-3 py-1 text-xs font-bold text-cyan-50 transition hover:bg-cyan-400/20">Open P5 Ledger <ArrowRight className="h-3.5 w-3.5" /></Link>
             </div>
             <div>
               <p className="mb-2 text-xs uppercase tracking-[0.5em] text-emerald-200/70">OPP → TASK → EXEC → VAL → RELEASE</p>
@@ -111,7 +112,7 @@ export default function RevenueReleaseGatePage() {
                 "Zero external API calls or Supabase writes",
                 "No Stripe, Mercado Pago, invoices, receipts, or ledger transactions",
                 "Estimated values are pipeline readiness labels, not revenue claims",
-                "P5 Financial Ledger remains a future manual accounting phase",
+                "P5 Financial Ledger is manual-first and visual-only",
               ].map((item) => (
                 <div key={item} className="flex gap-3 rounded-2xl border border-emerald-200/15 bg-slate-950/35 p-3">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
@@ -290,14 +291,15 @@ export default function RevenueReleaseGatePage() {
 
           <Card className="border-violet-300/20 bg-slate-950/75 backdrop-blur-xl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white"><WalletCards className="h-5 w-5 text-violet-200" /> Future P5 ledger boundary</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-white"><WalletCards className="h-5 w-5 text-violet-200" /> Financial Ledger P5 boundary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-violet-50">
               <p className="rounded-2xl border border-violet-300/20 bg-violet-400/10 p-3">
-                P4 stops at manual release readiness. The next phase should model expected, approved, received, and lost revenue as a visual accounting ledger before any real financial integration is considered.
+                P4 stops at manual release readiness. Financial Ledger P5 now models expected, approved, pending, received sample, and lost revenue as a visual accounting ledger before any real financial integration is considered.
               </p>
+              <Link href="/ops/ledger" className="inline-flex items-center gap-2 rounded-2xl border border-cyan-300/30 bg-cyan-400/10 px-4 py-3 text-sm font-bold text-cyan-50 transition hover:bg-cyan-400/20">Open Financial Ledger P5 <ArrowRight className="h-4 w-4" /></Link>
               <div className="grid gap-2">
-                {["Expected revenue", "Approved revenue", "Received revenue", "Lost revenue"].map((item) => (
+                {["Expected revenue", "Approved revenue", "Pending revenue", "Received sample revenue", "Lost revenue"].map((item) => (
                   <div key={item} className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
                     <BadgeDollarSign className="h-4 w-4" />
                     <span>{item} · P5 manual-first placeholder</span>
