@@ -85,6 +85,20 @@ export default function OpportunityInboxPage() {
                   </div>
                 </div>
               ))}
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                <Link href="/ops/tasks">
+                  <div className="group flex items-center justify-between rounded-2xl border border-blue-300/20 bg-blue-400/10 p-3 text-sm font-semibold text-blue-100 transition hover:border-blue-200/40">
+                    View Task Queue P1
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  </div>
+                </Link>
+                <Link href="/ops/execution">
+                  <div className="group flex items-center justify-between rounded-2xl border border-violet-300/20 bg-violet-400/10 p-3 text-sm font-semibold text-violet-100 transition hover:border-violet-200/40">
+                    View Execution Tracker P2
+                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                  </div>
+                </Link>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -197,6 +211,12 @@ export default function OpportunityInboxPage() {
                       <Link href="/ops/tasks">
                         <div className="mt-4 flex items-center justify-between gap-2 rounded-xl border border-emerald-200/20 bg-emerald-300/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100 transition hover:border-emerald-200/40">
                           <span>Create Task · sample/manual-first</span>
+                          <ArrowRight className="h-3 w-3" />
+                        </div>
+                      </Link>
+                      <Link href="/ops/execution">
+                        <div className="mt-3 flex items-center justify-between gap-2 rounded-xl border border-violet-200/20 bg-violet-300/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-violet-100 transition hover:border-violet-200/40">
+                          <span>Execution Tracker P2</span>
                           <ArrowRight className="h-3 w-3" />
                         </div>
                       </Link>
