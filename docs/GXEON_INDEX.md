@@ -1,5 +1,6 @@
 # GXEON Repository Index
 
+This index is the central navigation hub for reviewers who need to understand GXEON OS quickly and honestly. It groups the repository by audience, evidence type, and execution workstream while separating active demo components from future activation work.
 This index is the central navigation hub for reviewers who need to understand GXEON OS quickly and honestly. It groups the repository by audience, evidence type, and execution workstream.
 
 ## Start here
@@ -8,6 +9,7 @@ This index is the central navigation hub for reviewers who need to understand GX
 | --- | --- |
 | [README](../README.md) | High-level product story, architecture overview, stack, roadmap, and investor CTA. |
 | [Repository status](../GXEON_REPOSITORY_STATUS.md) | Current state, active stack, demo status, pending integrations, and next phase. |
+| [Docs README](README.md) | Short docs landing page that points back to this canonical index. |
 | [Docs README](README.md) | Existing docs landing page. |
 
 ## Investor and partner review
@@ -17,6 +19,7 @@ This index is the central navigation hub for reviewers who need to understand GX
 | [README](../README.md) | Fast narrative review of GXEON OS. |
 | [Repository status](../GXEON_REPOSITORY_STATUS.md) | Honest activation and readiness boundaries. |
 | [Revenue engine](monetization/GXEON_REVENUE_ENGINE.md) | Monetization thesis, packages, and non-claim boundaries. |
+| [Investor notes](investor/README.md) | Investor/partner review boundaries and current non-claims. |
 | `docs/investor/` | Reserved for future investor memos, demo notes, and partner materials. |
 
 ## Architecture
@@ -29,6 +32,7 @@ This index is the central navigation hub for reviewers who need to understand GX
 | `lib/api-spec/`, `lib/api-zod/`, `lib/api-client-react/` | Shared API contract packages. |
 | `lib/db/` | Database library and validation package. |
 | `runtime/`, `events/`, `queues/`, `operators/` | Execution and orchestration boundaries. |
+| [Architecture notes](architecture/README.md) | Active-vs-future component boundaries for technical reviewers. |
 | `docs/architecture/` | Reserved for deeper diagrams and technical design notes. |
 
 ## Evidence and demo proof
@@ -37,6 +41,7 @@ This index is the central navigation hub for reviewers who need to understand GX
 | --- | --- |
 | `.github/ISSUE_TEMPLATE/visual-evidence.md` | Submit screenshot/video evidence, including Awesome Screenshot links. |
 | `.github/ISSUE_TEMPLATE/execution-report.md` | Submit Codex/Copilot or execution-agent reports. |
+| [Evidence notes](evidence/README.md) | Evidence collection rules and current demo-proof status. |
 | `docs/evidence/` | Reserved for curated screenshots, review notes, and demo validation artifacts. |
 
 ## Roadmap
@@ -45,6 +50,7 @@ This index is the central navigation hub for reviewers who need to understand GX
 | --- | --- |
 | [Master roadmap](roadmap/GXEON_MASTER_ROADMAP.md) | Phase plan from repository presentation to production activation. |
 | [Repository status](../GXEON_REPOSITORY_STATUS.md#next-execution-phase) | Immediate next execution phase. |
+| [Roadmap directory](roadmap/GXEON_MASTER_ROADMAP.md) | Roadmap workstream home. |
 | `docs/roadmap/` | Roadmap workstream home. |
 
 ## Monetization
@@ -78,3 +84,7 @@ This index is the central navigation hub for reviewers who need to understand GX
 - Do not infer live external APIs, active customers, or revenue from presentation materials.
 - Confirm build/typecheck results before demo or investor review.
 - Record visual evidence through issue templates so reviewers can audit what was shown.
+
+## Canonical status boundary
+
+If older repository reports or artifact notes use stronger activation language, treat them as historical execution artifacts unless they are explicitly linked from this index as current status. The canonical public status is: visual demo, external APIs disabled unless explicitly configured and approved, Supabase production activation pending, and revenue not yet active.

@@ -75,6 +75,7 @@ The architecture is organized as a monorepo with clear boundaries between presen
 
 | Category | Status | Notes |
 | --- | --- | --- |
+| Repository presentation | Active / consolidated | README, navigation hub, status document, and GitHub templates are the canonical public review entry points. |
 | Repository presentation | Active | README, navigation hub, status document, and GitHub templates are being upgraded for public review. |
 | Dashboard | Visual demo | Dashboard package exists and build/typecheck commands are available. |
 | API server | Code package present | Activation status should be validated before production claims. |
@@ -83,6 +84,9 @@ The architecture is organized as a monorepo with clear boundaries between presen
 | Revenue | Thesis/roadmap | No revenue, customer, or user claims are made here. |
 | Investor readiness | In progress | Docs are structured for review, evidence collection, and partner conversations. |
 
+## Lean stack
+
+The active public stack should be read as a lean demo/review stack: dashboard, API package, shared contracts, database readiness libraries, and governance checks. Items below describe repository components, not live production activation.
 ## Stack
 
 | Layer | Technology / package |
@@ -94,6 +98,7 @@ The architecture is organized as a monorepo with clear boundaries between presen
 | Data tooling | Drizzle ORM, Supabase client package, workspace database library |
 | Contracts | Zod, shared API spec/client packages |
 | Quality | TypeScript typecheck, Vite build, repository governance scripts |
+| Deployment targets | Vercel/GitHub Pages/Railway-oriented scripts and workflows where configured; deployment approval is separate from repository presentation |
 | Deployment targets | Vercel/GitHub Pages/Railway-oriented scripts and workflows where configured |
 
 ## Documentation map
@@ -107,6 +112,9 @@ Key documents:
 - [Master roadmap](docs/roadmap/GXEON_MASTER_ROADMAP.md)
 - [Operating model](docs/operations/GXEON_OPERATING_MODEL.md)
 - [Revenue engine](docs/monetization/GXEON_REVENUE_ENGINE.md)
+- [Investor review notes](docs/investor/README.md)
+- [Architecture notes](docs/architecture/README.md)
+- [Evidence notes](docs/evidence/README.md)
 - [Railway database provisioning notes](docs/RAILWAY_DATABASE_PROVISIONING.md)
 
 ## Roadmap
