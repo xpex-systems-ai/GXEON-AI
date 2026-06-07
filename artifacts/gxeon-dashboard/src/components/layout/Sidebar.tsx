@@ -68,12 +68,13 @@ export function Sidebar() {
             <div key={group.title} className="space-y-2">
               <p className="px-3 text-[10px] font-bold uppercase tracking-[0.28em] text-amber-200/55">{group.title}</p>
               {routes.map((route) => {
-                const isActive = location === route.route;
+                const href = route.id === "integrations" ? "/ops/connectors" : route.route;
+                const isActive = location === href || location === route.route;
                 const Icon = route.icon;
                 visibleIndex += 1;
                 const isFuture = route.status === "future";
                 return (
-                  <Link key={route.route} href={route.route}>
+                  <Link key={route.route} href={href}>
                     <Button
                       variant="ghost"
                       className={cn(
