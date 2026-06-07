@@ -2,18 +2,20 @@ import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { OperationalEmptyState } from "@/components/ops/OperationalEmptyState";
 import {
   approvalStates,
   getApprovalStateCounts,
   getDeliveryValidationSummary,
   getEvidenceTypeCounts,
   getValidationsByApprovalState,
-  sampleDeliveryValidations,
+  activeOperationalValidations,
   type ApprovalState,
   type DeliveryRisk,
   type EvidenceState,
   type ValidationStatus,
 } from "@/data/delivery-validation";
+import { operationalEmptyStates } from "@/data/operational-mode";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { ArrowRight, BadgeCheck, ClipboardCheck, DatabaseZap, FileCheck2, GitPullRequestArrow, Image, KanbanSquare, Lock, Route, ShieldCheck, Sparkles, TriangleAlert, UploadCloud } from "lucide-react";
@@ -90,9 +92,9 @@ export default function DeliveryValidationPage() {
                 ["Approved", String(summary.approved), "Sample approval only"],
                 ["Revision requested", String(summary.revision_requested), "Needs manual change"],
                 ["Rejected", String(summary.rejected), "Evidence or quality failed"],
-                ["Archived", String(summary.archived), "Closed sample state"],
+                ["Archived", String(summary.archived), "Closed pendente state"],
                 ["Missing evidence", String(summary.missing_evidence), "No external fetch"],
-                ["Value in validation", formatCurrency(summary.delivery_value_under_validation_brl), "BRL estimate · sample only"],
+                ["Value in validation", formatCurrency(summary.delivery_value_under_validation_brl), "BRL estimate · registro real pendente"],
               ].map(([label, value, hint]) => (
                 <Card key={label} className="border-white/10 bg-white/[0.04] backdrop-blur">
                   <CardContent className="p-4">
@@ -110,7 +112,7 @@ export default function DeliveryValidationPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {[
-                [Route, "P0/P1/P2 relationship", "Every sample validation references the upstream opportunity, task and execution chain where available."],
+                [Route, "P0/P1/P2 relationship", "Every pendente validation references the upstream opportunity, task and execution chain where available."],
                 [Lock, "Manual approval workflow", "Pending Review, Approved, Revision Requested, Rejected and Archived are static visual states."],
                 [DatabaseZap, "No backend activation", "GitHub, Vercel, Supabase, Railway, payments, auth and storage remain disconnected."],
               ].map(([Icon, label, description]) => (
@@ -140,7 +142,7 @@ export default function DeliveryValidationPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             {approvalCounts.map(({ state, count }) => {
-              const share = sampleDeliveryValidations.length === 0 ? 0 : (count / sampleDeliveryValidations.length) * 100;
+              const share = activeOperationalValidations.length === 0 ? 0 : (count / activeOperationalValidations.length) * 100;
               return (
                 <div key={state} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
                   <div className="flex flex-wrap items-center justify-between gap-3">
@@ -170,7 +172,7 @@ export default function DeliveryValidationPage() {
                     </div>
                     <div className="mt-3 space-y-3">
                       {validations.length === 0 ? (
-                        <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-4 text-sm text-slate-500">No sample validations in this approval state.</div>
+                        <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-4 text-sm text-slate-500">No pendente validations in this approval state.</div>
                       ) : (
                         validations.map((validation) => (
                           <div key={validation.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
@@ -221,7 +223,10 @@ export default function DeliveryValidationPage() {
             <CardTitle className="flex items-center gap-2 text-white"><Sparkles className="h-5 w-5 text-cyan-200" /> Delivery validation cards</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
-            {sampleDeliveryValidations.map((validation) => (
+            {activeOperationalValidations.length === 0 ? (
+              <OperationalEmptyState {...operationalEmptyStates.validations} />
+            ) : (
+              activeOperationalValidations.map((validation) => (
               <article key={validation.id} className="rounded-3xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-300/35 hover:bg-cyan-400/10">
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                   <div className="min-w-0 flex-1">
@@ -230,7 +235,7 @@ export default function DeliveryValidationPage() {
                       <Badge variant="outline" className={cn("border", riskTone[validation.risk])}>{validation.risk}</Badge>
                       <Badge variant="outline" className={cn("border", approvalTone[validation.approval_state])}>{validation.approval_state.replaceAll("_", " ")}</Badge>
                       <Badge variant="outline" className={cn("border", validationTone[validation.validation_status])}>{validation.validation_status.replaceAll("_", " ")}</Badge>
-                      <Badge variant="outline" className="border-amber-300/30 text-amber-100">sample/manual-first</Badge>
+                      <Badge variant="outline" className="border-amber-300/30 text-amber-100">operacional</Badge>
                     </div>
                     <h2 className="mt-3 text-xl font-black text-white">{validation.title}</h2>
                     <p className="mt-2 text-sm text-slate-400">{validation.outcome_summary}</p>
@@ -277,7 +282,7 @@ export default function DeliveryValidationPage() {
                   </div>
                 </div>
               </article>
-            ))}
+            )))}
           </CardContent>
         </Card>
       </section>

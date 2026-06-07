@@ -56,6 +56,7 @@ export type LedgerSummary = {
 
 export const ledgerStatuses: LedgerStatus[] = ["FORECAST", "APPROVED", "PENDING_PAYMENT", "RECEIVED_SAMPLE", "LOST", "ARCHIVED"];
 
+// Archived sandbox/dev seed records are retained only for future testing and are not active operational records.
 export const sampleFinancialLedgerRecords: FinancialLedgerRecord[] = [
   {
     id: "LED-P5-001",
@@ -275,16 +276,18 @@ export const sampleFinancialLedgerRecords: FinancialLedgerRecord[] = [
   },
 ];
 
-export function getLedgerRecordsByStatus(status: LedgerStatus): FinancialLedgerRecord[] {
-  return sampleFinancialLedgerRecords.filter((record) => record.status === status);
+export const activeOperationalLedgerRecords: FinancialLedgerRecord[] = [];
+
+export function getLedgerRecordsByStatus(status: LedgerStatus, records: FinancialLedgerRecord[] = activeOperationalLedgerRecords): FinancialLedgerRecord[] {
+  return records.filter((record) => record.status === status);
 }
 
-export function getLedgerStatusCounts(): { status: LedgerStatus; count: number }[] {
-  return ledgerStatuses.map((status) => ({ status, count: getLedgerRecordsByStatus(status).length }));
+export function getLedgerStatusCounts(records: FinancialLedgerRecord[] = activeOperationalLedgerRecords): { status: LedgerStatus; count: number }[] {
+  return ledgerStatuses.map((status) => ({ status, count: getLedgerRecordsByStatus(status, records).length }));
 }
 
-export function getFinancialLedgerSummary(): LedgerSummary {
-  const activeRecords = sampleFinancialLedgerRecords.filter((record) => record.status !== "ARCHIVED");
+export function getFinancialLedgerSummary(records: FinancialLedgerRecord[] = activeOperationalLedgerRecords): LedgerSummary {
+  const activeRecords = records.filter((record) => record.status !== "ARCHIVED");
   const total = (field: keyof Pick<FinancialLedgerRecord, "expected_revenue_brl" | "approved_revenue_brl" | "pending_revenue_brl" | "received_revenue_brl" | "lost_revenue_brl">) =>
     activeRecords.reduce((sum, record) => sum + record[field], 0);
   const estimated = total("expected_revenue_brl");
@@ -294,7 +297,7 @@ export function getFinancialLedgerSummary(): LedgerSummary {
   const lost = total("lost_revenue_brl");
 
   return {
-    total_records: sampleFinancialLedgerRecords.length,
+    total_records: records.length,
     estimated_revenue_brl: estimated,
     approved_revenue_brl: approved,
     pending_revenue_brl: pending,

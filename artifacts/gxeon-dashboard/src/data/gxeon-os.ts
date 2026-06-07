@@ -29,7 +29,7 @@ export type GxeonModule = {
   route: string;
   accent: string;
   widgets: string[];
-  status?: "mock_ready" | "placeholder_only" | "all_disconnected";
+  status?: "operational" | "pending" | "locked" | "future" | "ready_to_connect";
   description: string;
 };
 
@@ -41,7 +41,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/",
     accent: "cyan",
     widgets: ["System Status", "Live Metrics", "Execution Score", "Active Agents", "Revenue Overview", "Infrastructure Health"],
-    status: "mock_ready",
+    status: "operational",
     description: "Visão central do Private QG com prioridades, segurança e execução de receita em modo manual-first.",
   },
   {
@@ -51,7 +51,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/war-room",
     accent: "rose",
     widgets: ["Risk Matrix", "Mission Tracker", "Execution Pipeline", "Critical Alerts", "Deployment Readiness"],
-    status: "mock_ready",
+    status: "operational",
     description: "Centro tático para risco, missões críticas e status de deploy sem acionar integrações reais.",
   },
   {
@@ -60,9 +60,9 @@ export const gxeonNavigation: GxeonModule[] = [
     icon: Radar,
     route: "/radar-x",
     accent: "emerald",
-    widgets: ["Opportunity Scanner", "API Discovery", "Workana Sources", "Lead Sources", "Signal Streams", "Trend Detection"],
-    status: "placeholder_only",
-    description: "Camada visual de inteligência preditiva preparada para futuras fontes externas.",
+    widgets: ["Captação pendente", "Workana", "99Freelas", "LinkedIn", "Indicação manual", "Formulário", "Email"],
+    status: "pending",
+    description: "Superfície operacional de captação pendente para entrada manual-first; sem scraping, acesso não autorizado ou mensagens automatizadas.",
   },
   {
     id: "agent_hub",
@@ -71,7 +71,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/agent-hub",
     accent: "violet",
     widgets: ["Agent Registry", "Agent Status", "Agent Marketplace", "Agent Performance", "Agent Deployment"],
-    status: "mock_ready",
+    status: "operational",
     description: "Orquestração visual de agentes, desempenho e implantação em modo privado/manual-first.",
   },
   {
@@ -81,7 +81,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/marketplace",
     accent: "amber",
     widgets: ["Products", "Services", "Digital Assets", "Subscriptions", "Offers"],
-    status: "mock_ready",
+    status: "operational",
     description: "Mesa visual de ofertas, serviços e ativos para monetização privada gradual.",
   },
   {
@@ -91,7 +91,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/task-engine",
     accent: "blue",
     widgets: ["Workflow Queue", "Execution Timeline", "Automation Rules", "SLA Monitor", "Operator Handoff"],
-    status: "mock_ready",
+    status: "operational",
     description: "Motor visual de tarefas para filas, automações e handoffs de execução.",
   },
   {
@@ -101,7 +101,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/financial-core",
     accent: "green",
     widgets: ["Revenue Dashboard", "Opportunity Inbox", "Task Queue P1", "Transactions", "Subscriptions", "Billing", "Forecast"],
-    status: "mock_ready",
+    status: "operational",
     description: "Núcleo financeiro visual para receita, billing, assinaturas e forecast sem transações reais.",
   },
   {
@@ -111,7 +111,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ops/opportunities",
     accent: "emerald",
     widgets: ["Opportunity Inbox", "Task Queue P1", "Manual Scoring", "Pipeline Status", "Task Queue Candidate", "Evidence Notes"],
-    status: "mock_ready",
+    status: "operational",
     description: "Inbox manual-first para capturar, classificar, pontuar e rotear oportunidades sem APIs externas.",
   },
 
@@ -122,7 +122,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ops/tasks",
     accent: "blue",
     widgets: ["Task Queue P1", "Manual Execution Board", "Task Status Counts", "Opportunity Links", "Execution Value"],
-    status: "mock_ready",
+    status: "operational",
     description: "Task Queue manual-first para transformar oportunidades qualificadas em tarefas executáveis sem APIs externas.",
   },
   {
@@ -132,7 +132,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ops/execution",
     accent: "violet",
     widgets: ["Execution Tracker", "Proof-of-Work", "Manual Status Board", "Blockers", "Deliverables", "Evidence States"],
-    status: "mock_ready",
+    status: "operational",
     description: "Execution Tracker manual-first para conectar tarefas a progresso, bloqueios, entregáveis e prova de trabalho sem APIs externas.",
   },
   {
@@ -142,7 +142,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ops/validation",
     accent: "emerald",
     widgets: ["Delivery Validation", "Approval Workflow", "Evidence Review", "Revision States", "Rejection States", "Release Gate Prep"],
-    status: "mock_ready",
+    status: "operational",
     description: "Delivery Validation manual-first para aprovar, revisar, rejeitar ou arquivar entregas sem APIs externas, persistência ou pagamentos.",
   },
   {
@@ -152,7 +152,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ops/release",
     accent: "green",
     widgets: ["Revenue Release Gate", "Financial Readiness", "Release Board", "Approval Chains", "Pipeline Traceability", "P5 Ledger Financeiro"],
-    status: "mock_ready",
+    status: "operational",
     description: "Revenue Release Gate manual-first para conectar validação de entrega à prontidão financeira sem APIs, banco de dados, gateways ou transações reais.",
   },
   {
@@ -162,8 +162,19 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ops/ledger",
     accent: "teal",
     widgets: ["Financial Ledger", "Revenue Accounting Board", "Revenue Metrics", "Release Links", "Pipeline Traceability", "P6 Persistence Prep"],
-    status: "mock_ready",
+    status: "operational",
     description: "Ledger financeiro manual-first para visibilidade contábil segura sem APIs, banco de dados, gateways, invoices ou transações reais.",
+  },
+
+  {
+    id: "monetization_board",
+    name: "Monetização",
+    icon: Wallet,
+    route: "/ops/monetization",
+    accent: "amber",
+    widgets: ["Leads", "Propostas", "Clientes", "Receita", "Ofertas iniciais", "Plano 7 dias"],
+    status: "operational",
+    description: "Board operacional para gerar caixa com contadores zerados, ofertas iniciais e ações manuais de 7 dias.",
   },
 
   {
@@ -173,7 +184,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ledger",
     accent: "teal",
     widgets: ["Global Transactions", "Wallets", "Settlement", "Audit Trail"],
-    status: "mock_ready",
+    status: "operational",
     description: "Livro razão visual para auditoria, carteiras e liquidação em estado seguro/manual-first.",
   },
   {
@@ -183,7 +194,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/blockchain",
     accent: "fuchsia",
     widgets: ["Smart Contracts", "Nodes", "Wallet Connections", "On-chain Events"],
-    status: "placeholder_only",
+    status: "pending",
     description: "Área blockchain renderizada como placeholder seguro até conexão on-chain real.",
   },
   {
@@ -193,7 +204,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/api-gateway",
     accent: "sky",
     widgets: ["Connected APIs", "API Health", "API Usage", "API Marketplace"],
-    status: "all_disconnected",
+    status: "locked",
     description: "Infraestrutura visual com APIs desconectadas, conectores travados e ativação controlada.",
   },
   {
@@ -203,7 +214,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/integrations",
     accent: "orange",
     widgets: ["Supabase", "Railway", "Vercel", "GitHub", "Mercado Pago", "Microsoft 365", "Workana", "99Freelas", "LinkedIn"],
-    status: "all_disconnected",
+    status: "locked",
     description: "Hub privado de conectores, credenciais fora do frontend e nenhuma chamada real ativada.",
   },
   {
@@ -213,7 +224,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/analytics",
     accent: "indigo",
     widgets: ["North Star Metrics", "Conversion Funnel", "Cohort Radar", "Revenue Signals", "Operator Insights"],
-    status: "mock_ready",
+    status: "operational",
     description: "Analytics visual para validar experiência, gráficos e sinais operacionais do QG.",
   },
   {
@@ -223,7 +234,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/automation",
     accent: "yellow",
     widgets: ["Playbooks", "Triggers", "Rules Engine", "Scheduled Jobs", "Human Approval"],
-    status: "mock_ready",
+    status: "operational",
     description: "Camada de automação visual para fluxos, gatilhos e aprovações humanas antes de qualquer ativação real.",
   },
   {
@@ -233,7 +244,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/settings",
     accent: "slate",
     widgets: ["Workspace", "Access Control", "Feature Flags", "Theme", "Activation Plan"],
-    status: "mock_ready",
+    status: "operational",
     description: "Configurações privadas do operador, preferências visuais e plano de ativação controlada.",
   },
 ];

@@ -15,6 +15,7 @@ import ExecutionTrackerPage from "@/pages/ExecutionTrackerPage";
 import DeliveryValidationPage from "@/pages/DeliveryValidationPage";
 import RevenueReleaseGatePage from "@/pages/RevenueReleaseGatePage";
 import FinancialLedgerPage from "@/pages/FinancialLedgerPage";
+import MonetizationBoardPage from "@/pages/MonetizationBoardPage";
 
 const queryClient = new QueryClient();
 
@@ -69,6 +70,7 @@ function Router() {
             <Route path="/ops/validation" component={DeliveryValidationPage} />
             <Route path="/ops/release" component={RevenueReleaseGatePage} />
             <Route path="/ops/ledger" component={FinancialLedgerPage} />
+            <Route path="/ops/monetization" component={MonetizationBoardPage} />
             {moduleRoutes.map(([path, moduleId]) => (
               <Route key={path} path={path} component={() => <GxeonOSPage moduleId={moduleId} />} />
             ))}

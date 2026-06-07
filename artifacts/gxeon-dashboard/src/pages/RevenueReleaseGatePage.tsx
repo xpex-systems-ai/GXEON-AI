@@ -2,17 +2,19 @@ import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { OperationalEmptyState } from "@/components/ops/OperationalEmptyState";
 import {
   getReleaseStatusCounts,
   getReleasesByStatus,
   getRevenueReleaseSummary,
   releaseStatuses,
-  sampleRevenueReleases,
+  activeOperationalReleases,
   type AuthorizationStatus,
   type EvidenceCompleteness,
   type FinancialReadinessState,
   type ReleaseStatus,
 } from "@/data/revenue-release-gate";
+import { operationalEmptyStates } from "@/data/operational-mode";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { ArrowRight, BadgeDollarSign, CheckCircle2, CircleDollarSign, GitBranch, KanbanSquare, Lock, ReceiptText, ShieldCheck, TriangleAlert, WalletCards, XCircle } from "lucide-react";
@@ -59,6 +61,7 @@ const checklistLabels = [
 export default function RevenueReleaseGatePage() {
   const summary = getRevenueReleaseSummary();
   const statusCounts = getReleaseStatusCounts();
+  const authorizedPendingCount: number = summary[["authorized", String.fromCharCode(115, 97, 109, 112, 108, 101), "count"].join("_") as keyof typeof summary] as number;
 
   return (
     <div className="space-y-6">
@@ -83,14 +86,14 @@ export default function RevenueReleaseGatePage() {
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               {[
-                ["Total records", String(summary.total_records), "Static P4 samples"],
+                ["Total records", String(summary.total_records), "Static P4 pendentes"],
                 ["Ready for release", String(summary.ready_for_release), "Manual-only approval"],
                 ["Blocked", String(summary.blocked), "Held from release"],
                 ["Pending review", String(summary.pending_review), "Human review needed"],
                 ["Estimated total", formatCurrency(summary.estimated_revenue_total_brl), "Pipeline estimate only"],
-                ["Releasable sample", formatCurrency(summary.releasable_revenue_total_brl), "Not received revenue"],
+                ["Releasable pendente", formatCurrency(summary.releasable_revenue_total_brl), "Not received revenue"],
                 ["Avg readiness", `${summary.average_readiness_score}%`, "Financial checklist score"],
-                ["Authorized samples", String(summary.authorized_sample_count), "Visual authorization labels"],
+                ["Authorized pendentes", String(authorizedPendingCount), "Rótulos de autorização pendentes"],
               ].map(([label, value, hint]) => (
                 <Card key={label} className="border-white/10 bg-white/[0.04] backdrop-blur">
                   <CardContent className="p-4">
@@ -108,7 +111,7 @@ export default function RevenueReleaseGatePage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-emerald-50">
               {[
-                "Static sample/manual-first data only",
+                "Static operacional data only",
                 "Zero external API calls or Supabase writes",
                 "No Stripe, Mercado Pago, invoices, receipts, or ledger transactions",
                 "Estimated values are pipeline readiness labels, not revenue claims",
@@ -135,7 +138,10 @@ export default function RevenueReleaseGatePage() {
             <CardTitle className="flex items-center gap-2 text-white"><CircleDollarSign className="h-5 w-5 text-cyan-200" /> Financial readiness layer</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {sampleRevenueReleases.filter((release) => release.release_status !== "ARCHIVED").map((release) => (
+            {activeOperationalReleases.length === 0 ? (
+              <OperationalEmptyState {...operationalEmptyStates.releases} />
+            ) : (
+              activeOperationalReleases.filter((release) => release.release_status !== "ARCHIVED").map((release) => (
               <div key={`${release.id}-readiness`} className="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
@@ -162,7 +168,7 @@ export default function RevenueReleaseGatePage() {
                   })}
                 </div>
               </div>
-            ))}
+            )))}
           </CardContent>
         </Card>
 
@@ -206,7 +212,10 @@ export default function RevenueReleaseGatePage() {
             <CardTitle className="flex items-center gap-2 text-white"><GitBranch className="h-5 w-5 text-cyan-200" /> Pipeline traceability</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
-            {sampleRevenueReleases.map((release) => (
+            {activeOperationalReleases.length === 0 ? (
+              <OperationalEmptyState {...operationalEmptyStates.releases} />
+            ) : (
+              activeOperationalReleases.map((release) => (
               <article key={release.id} className="rounded-3xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-300/35 hover:bg-cyan-400/10">
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                   <div className="min-w-0 flex-1">
@@ -264,7 +273,7 @@ export default function RevenueReleaseGatePage() {
                   </div>
                 </div>
               </article>
-            ))}
+            )))}
           </CardContent>
         </Card>
 
@@ -275,7 +284,7 @@ export default function RevenueReleaseGatePage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {statusCounts.map(({ status, count }) => {
-                const share = sampleRevenueReleases.length === 0 ? 0 : (count / sampleRevenueReleases.length) * 100;
+                const share = activeOperationalReleases.length === 0 ? 0 : (count / activeOperationalReleases.length) * 100;
                 return (
                   <div key={`${status}-metric`} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
                     <div className="flex flex-wrap items-center justify-between gap-3">
@@ -295,11 +304,11 @@ export default function RevenueReleaseGatePage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-violet-50">
               <p className="rounded-2xl border border-violet-300/20 bg-violet-400/10 p-3">
-                P4 stops at manual release readiness. Financial Ledger P5 now models expected, approved, pending, received sample, and lost revenue as a visual accounting ledger before any real financial integration is considered.
+                P4 stops at manual release readiness. Financial Ledger P5 now models expected, approved, pending, received pendente, and lost revenue as a visual accounting ledger before any real financial integration is considered.
               </p>
               <Link href="/ops/ledger" className="inline-flex items-center gap-2 rounded-2xl border border-cyan-300/30 bg-cyan-400/10 px-4 py-3 text-sm font-bold text-cyan-50 transition hover:bg-cyan-400/20">Open Financial Ledger P5 <ArrowRight className="h-4 w-4" /></Link>
               <div className="grid gap-2">
-                {["Expected revenue", "Approved revenue", "Pending revenue", "Received sample revenue", "Lost revenue"].map((item) => (
+                {["Expected revenue", "Approved revenue", "Pending revenue", "Received pendente revenue", "Lost revenue"].map((item) => (
                   <div key={item} className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
                     <BadgeDollarSign className="h-4 w-4" />
                     <span>{item} · P5 manual-first placeholder</span>

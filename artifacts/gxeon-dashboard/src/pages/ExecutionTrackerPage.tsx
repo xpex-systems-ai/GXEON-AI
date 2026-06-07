@@ -2,16 +2,18 @@ import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { OperationalEmptyState } from "@/components/ops/OperationalEmptyState";
 import {
   executionBoardStatuses,
   getExecutionSummary,
   getExecutionsByStatus,
   getProofStatusCounts,
-  sampleManualFirstExecutions,
+  activeOperationalExecutions,
   type ExecutionPriority,
   type ExecutionStatus,
   type ProofStatus,
 } from "@/data/execution-tracker";
+import { operationalEmptyStates } from "@/data/operational-mode";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ClipboardCheck, DatabaseZap, FileCheck2, KanbanSquare, Link2, Lock, Route, ShieldCheck, Sparkles, Target, TriangleAlert } from "lucide-react";
@@ -44,9 +46,9 @@ const proofTone: Record<ProofStatus, string> = {
 const proofLabel: Record<ProofStatus, string> = {
   MISSING: "Missing",
   DRAFT: "Draft",
-  ATTACHED_SAMPLE: "Attached sample",
+  ATTACHED_SAMPLE: "Attached pendente",
   READY_FOR_REVIEW: "Ready for review",
-  VERIFIED_SAMPLE: "Verified sample",
+  VERIFIED_SAMPLE: "Verified pendente",
 };
 
 export default function ExecutionTrackerPage() {
@@ -77,7 +79,7 @@ export default function ExecutionTrackerPage() {
                 ["Active executions", String(summary.active_executions), "Manual execution statuses"],
                 ["Blocked executions", String(summary.blocked_executions), "Needs operator evidence"],
                 ["Ready for review", String(summary.ready_for_review), "Status or proof review"],
-                ["Execution value", formatCurrency(summary.estimated_value_in_execution_brl), "BRL estimate · sample only"],
+                ["Execution value", formatCurrency(summary.estimated_value_in_execution_brl), "BRL estimate · registro real pendente"],
                 ["Average progress", `${summary.average_progress}%`, "Static progress signal"],
                 ["Missing proof", String(summary.missing_proof_count), "Evidence not attached"],
               ].map(([label, value, hint]) => (
@@ -97,8 +99,8 @@ export default function ExecutionTrackerPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {[
-                [Route, "P0 + P1 relationship", "Execution records reference sample Opportunity IDs and Task IDs where feasible."],
-                [Lock, "Manual proof only", "Proof labels are placeholders or sample evidence states until integrations are explicitly activated."],
+                [Route, "P0 + P1 relationship", "Execution records reference pendente Opportunity IDs and Task IDs where feasible."],
+                [Lock, "Manual proof only", "Proof labels are placeholders or pendente evidence states until integrations are explicitly activated."],
                 [DatabaseZap, "Integrations disabled", "No GitHub, Vercel, Microsoft 365, Supabase, Railway, storage or payment calls are made."],
               ].map(([Icon, label, description]) => (
                 <div key={String(label)} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
@@ -141,10 +143,10 @@ export default function ExecutionTrackerPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <p className="rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-sm text-amber-50">
-              Proof links and labels are placeholders/sample evidence until GitHub, Vercel, Microsoft 365, storage or database integrations are explicitly designed and activated.
+              Proof links and labels are placeholders/pendente evidence until GitHub, Vercel, Microsoft 365, storage or database integrations are explicitly designed and activated.
             </p>
             {proofCounts.map(({ status, count }) => {
-              const share = sampleManualFirstExecutions.length === 0 ? 0 : (count / sampleManualFirstExecutions.length) * 100;
+              const share = activeOperationalExecutions.length === 0 ? 0 : (count / activeOperationalExecutions.length) * 100;
               return (
                 <div key={status} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
                   <div className="flex flex-wrap items-center justify-between gap-3">
@@ -175,7 +177,7 @@ export default function ExecutionTrackerPage() {
                     <div className="mt-3 space-y-3">
                       {executions.length === 0 ? (
                         <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-4 text-sm text-slate-500">
-                          No sample/manual-first executions in this status yet.
+                          No operacional executions in this status yet.
                         </div>
                       ) : (
                         executions.map((execution) => (
@@ -205,7 +207,10 @@ export default function ExecutionTrackerPage() {
             <CardTitle className="flex items-center gap-2 text-white"><Sparkles className="h-5 w-5 text-cyan-200" /> Execution evidence cards</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
-            {sampleManualFirstExecutions.map((execution) => (
+            {activeOperationalExecutions.length === 0 ? (
+              <OperationalEmptyState {...operationalEmptyStates.executions} />
+            ) : (
+              activeOperationalExecutions.map((execution) => (
               <article key={execution.id} className="rounded-3xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-300/35 hover:bg-cyan-400/10">
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="min-w-0 flex-1">
@@ -214,7 +219,7 @@ export default function ExecutionTrackerPage() {
                       <Badge variant="outline" className={cn("border", priorityTone[execution.priority])}>{execution.priority}</Badge>
                       <Badge variant="outline" className={cn("border", statusTone[execution.status])}>{execution.status.replaceAll("_", " ")}</Badge>
                       <Badge variant="outline" className={cn("border", proofTone[execution.proof_status])}>{proofLabel[execution.proof_status]}</Badge>
-                      <Badge variant="outline" className="border-amber-300/30 text-amber-100">sample/manual-first</Badge>
+                      <Badge variant="outline" className="border-amber-300/30 text-amber-100">operacional</Badge>
                     </div>
                     <h2 className="mt-3 text-xl font-black text-white">{execution.title}</h2>
                     <p className="mt-2 text-sm text-slate-400">
@@ -278,7 +283,7 @@ export default function ExecutionTrackerPage() {
                   </div>
                 </div>
               </article>
-            ))}
+            )))}
           </CardContent>
         </Card>
       </section>

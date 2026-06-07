@@ -2,14 +2,16 @@ import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { OperationalEmptyState } from "@/components/ops/OperationalEmptyState";
 import {
   getTaskQueueSummary,
   getTasksByStatus,
-  sampleManualFirstTasks,
+  activeOperationalTasks,
   taskBoardStatuses,
   type TaskPriority,
   type TaskStatus,
 } from "@/data/task-queue";
+import { operationalEmptyStates } from "@/data/operational-mode";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ClipboardCheck, DatabaseZap, Gauge, KanbanSquare, Link2, Lock, Route, ShieldCheck, Sparkles, Target } from "lucide-react";
@@ -50,14 +52,14 @@ export default function TaskQueuePage() {
               <p className="mb-2 text-xs uppercase tracking-[0.5em] text-blue-200/70">OPORTUNIDADE → TAREFA → EXECUÇÃO → VALIDAÇÃO → RELEASE → LEDGER</p>
               <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">P1 · Fila de Tarefas do QG</h1>
               <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">
-                Second operational revenue-validation layer for GXEON OS. Qualified sample opportunities become execution-ready tasks that the operator can inspect before persistence, automation, payments, scraping, Supabase, Railway, or external platform connections exist.
+                Second operational revenue-validation layer for GXEON OS. Qualified pendente opportunities become execution-ready tasks that the operator can inspect before persistence, automation, payments, scraping, Supabase, Railway, or external platform connections exist.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               {[
                 ["Open tasks", String(summary.open_tasks), "Active manual statuses"],
                 ["Critical tasks", String(summary.critical_tasks), "Needs operator review"],
-                ["Potential execution value", formatCurrency(summary.potential_value_brl), "BRL estimate · sample only"],
+                ["Potential execution value", formatCurrency(summary.potential_value_brl), "BRL estimate · registro real pendente"],
                 ["Average progress", `${summary.average_progress}%`, "Static progress signal"],
               ].map(([label, value, hint]) => (
                 <Card key={label} className="border-white/10 bg-white/[0.04] backdrop-blur">
@@ -76,7 +78,7 @@ export default function TaskQueuePage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {[
-                [Route, "P0 relationship", "Tasks reference Opportunity Inbox sample IDs when feasible."],
+                [Route, "P0 relationship", "Tasks reference Opportunity Inbox pendente IDs when feasible."],
                 [Lock, "Manual execution only", "No drag-and-drop persistence, backend mutation, or external storage."],
                 [DatabaseZap, "Integrations disabled", "LinkedIn, Workana, Upwork, Supabase, Railway and payments remain disconnected."],
               ].map(([Icon, label, description]) => (
@@ -112,7 +114,7 @@ export default function TaskQueuePage() {
           <CardContent className="p-5">
             <ClipboardCheck className="h-6 w-6 text-blue-200" />
             <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">Sample tasks</p>
-            <p className="mt-2 text-3xl font-black text-white">{sampleManualFirstTasks.length}</p>
+            <p className="mt-2 text-3xl font-black text-white">{activeOperationalTasks.length}</p>
             <p className="mt-1 text-sm text-slate-400">Static/manual-first records only.</p>
           </CardContent>
         </Card>
@@ -127,7 +129,7 @@ export default function TaskQueuePage() {
         <Card className="border-emerald-300/20 bg-slate-950/75 backdrop-blur-xl">
           <CardContent className="p-5">
             <Gauge className="h-6 w-6 text-emerald-200" />
-            <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">Done samples</p>
+            <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">Done pendentes</p>
             <p className="mt-2 text-3xl font-black text-white">{summary.done_tasks}</p>
             <p className="mt-1 text-sm text-slate-400">Closed UI state, not real revenue.</p>
           </CardContent>
@@ -138,7 +140,7 @@ export default function TaskQueuePage() {
               <Link2 className="h-6 w-6 text-cyan-200" />
               <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">P2 tracker</p>
               <p className="mt-2 text-3xl font-black text-white">Track</p>
-              <p className="mt-1 text-sm text-slate-400">Open sample/manual-first Execution Tracker.</p>
+              <p className="mt-1 text-sm text-slate-400">Open operacional Execution Tracker.</p>
             </CardContent>
           </Card>
         </Link>
@@ -166,7 +168,7 @@ export default function TaskQueuePage() {
                 <CardContent className="space-y-3 p-4 pt-2">
                   {tasks.length === 0 ? (
                     <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-4 text-sm text-slate-500">
-                      No sample/manual-first tasks in this status yet.
+                      No operacional tasks in this status yet.
                     </div>
                   ) : (
                     tasks.map((task) => (
@@ -193,13 +195,13 @@ export default function TaskQueuePage() {
             <CardTitle className="flex items-center gap-2 text-white"><Sparkles className="h-5 w-5 text-cyan-200" /> Execution-ready task cards</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
-            {sampleManualFirstTasks.length === 0 ? (
+            {activeOperationalTasks.length === 0 ? (
               <div className="rounded-3xl border border-dashed border-cyan-300/30 bg-cyan-400/10 p-8 text-center">
                 <p className="text-xl font-bold text-white">No real tasks have been created yet.</p>
                 <p className="mt-2 text-slate-300">Future validated tasks should appear here only after explicit operator entry, consent, and safe persistence design.</p>
               </div>
             ) : (
-              sampleManualFirstTasks.map((task) => (
+              activeOperationalTasks.map((task) => (
                 <article key={task.id} className="rounded-3xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-300/35 hover:bg-cyan-400/10">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div className="min-w-0 flex-1">
@@ -208,7 +210,7 @@ export default function TaskQueuePage() {
                         <Badge variant="outline" className="border-white/15 text-slate-200">{task.category}</Badge>
                         <Badge variant="outline" className={cn("border", priorityTone[task.priority])}>{task.priority}</Badge>
                         <Badge variant="outline" className={cn("border", statusTone[task.status])}>{task.status.replaceAll("_", " ")}</Badge>
-                        <Badge variant="outline" className="border-amber-300/30 text-amber-100">sample/manual-first</Badge>
+                        <Badge variant="outline" className="border-amber-300/30 text-amber-100">operacional</Badge>
                       </div>
                       <h2 className="mt-3 text-xl font-black text-white">{task.title}</h2>
                       <p className="mt-2 text-sm text-slate-400">{task.evidence}</p>
@@ -252,7 +254,7 @@ export default function TaskQueuePage() {
                       )}
                       <Link href="/ops/execution">
                         <div className="mt-4 flex items-center justify-between gap-2 rounded-xl border border-violet-200/20 bg-violet-300/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-violet-100 transition hover:border-violet-200/40">
-                          <span>Track Execution · sample/manual-first</span>
+                          <span>Track Execution · operacional</span>
                           <ArrowRight className="h-3 w-3" />
                         </div>
                       </Link>

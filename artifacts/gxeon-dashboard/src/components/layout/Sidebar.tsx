@@ -8,31 +8,36 @@ const cockpitLabels: Record<string, string> = {
   command_center: "QG Central",
   war_room: "Sala de Guerra",
   radar_x: "Radar X",
-  agent_hub: "Agent Hub",
-  marketplace: "Mercado",
-  task_engine: "Task Engine",
-  financial_core: "Financial Core",
+  agent_hub: "Mission Control",
+  marketplace: "Propostas",
+  task_engine: "Tarefas",
+  financial_core: "Banco de Dados",
+  monetization_board: "Monetização",
   revenue_engine_p0: "P0 Caixa de Oportunidades",
   revenue_engine_p1: "P1 Fila de Tarefas",
   revenue_engine_p2: "P2 Rastreador de Execução",
   revenue_engine_p3: "P3 Validação de Entrega",
   revenue_engine_p4: "P4 Release Gate",
   revenue_engine_p5: "P5 Ledger Financeiro",
-  api_gateway: "Infraestrutura",
-  integrations: "Segurança",
+  api_gateway: "Analytics",
+  integrations: "Conectores",
+  automation: "Deploys",
+  settings: "Segurança",
 };
 
 const cockpitGroups = [
-  { title: "Command", ids: ["command_center", "war_room", "radar_x", "agent_hub"] },
-  { title: "Revenue Engine", ids: ["marketplace", "task_engine", "financial_core", "revenue_engine_p0", "revenue_engine_p1", "revenue_engine_p2", "revenue_engine_p3", "revenue_engine_p4", "revenue_engine_p5"] },
-  { title: "Infrastructure", ids: ["api_gateway", "integrations"] },
-  { title: "Future Modules", ids: ["ledger", "blockchain", "analytics", "automation", "settings"] },
+  { title: "Comando", ids: ["command_center", "war_room", "agent_hub"] },
+  { title: "Monetização", ids: ["monetization_board", "revenue_engine_p0", "revenue_engine_p1", "revenue_engine_p2", "revenue_engine_p3", "revenue_engine_p4", "revenue_engine_p5"] },
+  { title: "Captação", ids: ["radar_x", "marketplace"] },
+  { title: "Infraestrutura", ids: ["integrations", "financial_core", "automation", "api_gateway", "settings"] },
 ];
 
 const statusLabel = {
-  mock_ready: "manual-first ready",
-  placeholder_only: "future / inactive",
-  all_disconnected: "locked / controlled",
+  operational: "Operacional",
+  pending: "Pendente",
+  locked: "Bloqueado",
+  future: "Futuro",
+  ready_to_connect: "Pronto para conectar",
 };
 
 export function Sidebar() {
@@ -49,7 +54,7 @@ export function Sidebar() {
           </div>
           <div>
             <p className="text-xl font-black tracking-[0.22em] text-white">GXEON QG</p>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-amber-200/70">Private Operator Cockpit</p>
+            <p className="text-[10px] uppercase tracking-[0.25em] text-amber-200/70">QG Privado Operacional</p>
           </div>
         </Link>
       </div>
@@ -66,7 +71,7 @@ export function Sidebar() {
                 const isActive = location === route.route;
                 const Icon = route.icon;
                 visibleIndex += 1;
-                const isFuture = group.title === "Future Modules";
+                const isFuture = route.status === "future";
                 return (
                   <Link key={route.route} href={route.route}>
                     <Button
@@ -82,7 +87,7 @@ export function Sidebar() {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-semibold">{String(visibleIndex).padStart(2, "0")} · {cockpitLabels[route.id] ?? route.name}</span>
-                        <span className="block truncate text-[10px] uppercase tracking-[0.18em] text-stone-500">{isFuture ? "future / inactive" : statusLabel[route.status ?? "mock_ready"]}</span>
+                        <span className="block truncate text-[10px] uppercase tracking-[0.18em] text-stone-500">{statusLabel[route.status ?? "operational"]}</span>
                       </span>
                       {isActive && <CircleDot className="h-3 w-3 text-emerald-300" />}
                     </Button>
@@ -97,9 +102,9 @@ export function Sidebar() {
         <div className="m-3 rounded-2xl border border-amber-300/25 bg-amber-400/10 p-4 transition hover:border-amber-300/50 hover:bg-amber-400/15">
           <div className="flex items-center gap-2">
             <LockKeyhole className="h-4 w-4 text-amber-200" />
-            <p className="text-xs uppercase tracking-[0.25em] text-amber-200/70">Private QG Mode</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-amber-200/70">QG Privado</p>
           </div>
-          <p className="mt-1 text-sm font-semibold text-white">Safe Preview · 0 APIs ativas · sem segredos no frontend</p>
+          <p className="mt-1 text-sm font-semibold text-white">Operação Manual · Conectores Controlados · sem segredos no frontend</p>
         </div>
       </Link>
     </aside>

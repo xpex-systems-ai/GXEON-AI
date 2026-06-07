@@ -2,7 +2,9 @@ import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { activeOpportunityStatuses, getOpportunityInboxSummary, getOpportunityStatusCounts, opportunityScoringModel, sampleManualFirstOpportunities, type OpportunityPriority, type OpportunityStatus } from "@/data/opportunity-inbox";
+import { OperationalEmptyState } from "@/components/ops/OperationalEmptyState";
+import { activeOpportunityStatuses, getOpportunityInboxSummary, getOpportunityStatusCounts, opportunityScoringModel, activeOperationalOpportunities, type OpportunityPriority, type OpportunityStatus } from "@/data/opportunity-inbox";
+import { operationalEmptyStates } from "@/data/operational-mode";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ClipboardList, DatabaseZap, FileSearch, Hand, Inbox, Lock, Route, ShieldCheck, Sparkles, Target } from "lucide-react";
@@ -42,7 +44,7 @@ export default function OpportunityInboxPage() {
             <div className="flex flex-wrap items-center gap-3">
               <Badge className="border-emerald-300/40 bg-emerald-400/10 text-emerald-100">P0 Caixa de Oportunidades</Badge>
               <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">No external API calls</Badge>
-              <Badge variant="outline" className="border-amber-300/40 text-amber-100">Sample/manual-first data</Badge>
+              <Badge variant="outline" className="border-amber-300/40 text-amber-100">registros reais pendentes</Badge>
             </div>
             <div>
               <p className="mb-2 text-xs uppercase tracking-[0.5em] text-emerald-200/70">OPORTUNIDADE → TAREFA → EXECUÇÃO → VALIDAÇÃO → RELEASE → LEDGER</p>
@@ -53,8 +55,8 @@ export default function OpportunityInboxPage() {
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               {[
-                ["Valor visual do pipeline", formatCurrency(summary.activePipelineValueBrl), "BRL estimate · sample only"],
-                ["Alta prioridade P0", String(summary.highPriorityCount), `${summary.criticalPriorityCount} critical sample`],
+                ["Pipeline operacional", formatCurrency(summary.activePipelineValueBrl), "BRL real pendente"],
+                ["Alta prioridade P0", String(summary.highPriorityCount), `${summary.criticalPriorityCount} crítico pendente`],
                 ["Oportunidades manuais", String(summary.totalCount), `${summary.activeCount} active statuses`],
               ].map(([label, value, hint]) => (
                 <Card key={label} className="border-white/10 bg-white/[0.04] backdrop-blur">
@@ -108,9 +110,9 @@ export default function OpportunityInboxPage() {
         <Card className="border-cyan-300/20 bg-slate-950/75 backdrop-blur-xl">
           <CardContent className="p-5">
             <Inbox className="h-6 w-6 text-cyan-200" />
-            <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">Total estimated sample value</p>
+            <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">Valor real estimado</p>
             <p className="mt-2 text-3xl font-black text-white">{formatCurrency(summary.totalEstimatedValueBrl)}</p>
-            <p className="mt-1 text-sm text-slate-400">Includes archived/lost/won sample states; not recognized revenue.</p>
+            <p className="mt-1 text-sm text-slate-400">Estados arquivados não contam como receita reconhecida.</p>
           </CardContent>
         </Card>
         <Card className="border-emerald-300/20 bg-slate-950/75 backdrop-blur-xl">
@@ -132,7 +134,7 @@ export default function OpportunityInboxPage() {
         <Card className="border-violet-300/20 bg-slate-950/75 backdrop-blur-xl">
           <CardContent className="p-5">
             <Hand className="h-6 w-6 text-violet-200" />
-            <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">Closed sample guard</p>
+            <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">Guarda de estados fechados</p>
             <p className="mt-2 text-3xl font-black text-white">{formatCurrency(summary.wonSampleValueBrl)}</p>
             <p className="mt-1 text-sm text-slate-400">WON is present only to validate UI state; no real revenue is claimed.</p>
           </CardContent>
@@ -153,7 +155,7 @@ export default function OpportunityInboxPage() {
                     <Badge variant="outline" className={cn("border", statusTone[status])}>{status.replaceAll("_", " ")}</Badge>
                     <div className="text-right">
                       <p className="font-bold text-white">{count} opportunities</p>
-                      <p className="text-xs text-slate-400">{formatCurrency(estimatedValueBrl)} sample estimate</p>
+                      <p className="text-xs text-slate-400">{formatCurrency(estimatedValueBrl)} estimativa pendente</p>
                     </div>
                   </div>
                   <Progress value={statusShare} className="mt-3 h-2" />
@@ -165,16 +167,16 @@ export default function OpportunityInboxPage() {
 
         <Card className="border-cyan-300/20 bg-slate-950/75 backdrop-blur-xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white"><Sparkles className="h-5 w-5 text-cyan-200" /> Manual-first opportunity cards</CardTitle>
+            <CardTitle className="flex items-center gap-2 text-white"><Sparkles className="h-5 w-5 text-cyan-200" /> Oportunidades operacionais</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
-            {sampleManualFirstOpportunities.length === 0 ? (
+            {activeOperationalOpportunities.length === 0 ? (
               <div className="rounded-3xl border border-dashed border-cyan-300/30 bg-cyan-400/10 p-8 text-center">
                 <p className="text-xl font-bold text-white">No real opportunities have been registered yet.</p>
                 <p className="mt-2 text-slate-300">When operators add validated, consented, non-scraped opportunities, they should appear here before becoming Task Queue P0 candidates.</p>
               </div>
             ) : (
-              sampleManualFirstOpportunities.map((opportunity) => (
+              activeOperationalOpportunities.map((opportunity) => (
                 <article key={opportunity.id} className="rounded-3xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-300/35 hover:bg-cyan-400/10">
                   <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                     <div className="min-w-0 flex-1">
@@ -210,7 +212,7 @@ export default function OpportunityInboxPage() {
                       <p className="mt-2 text-sm font-semibold text-white">{opportunity.next_action}</p>
                       <Link href="/ops/tasks">
                         <div className="mt-4 flex items-center justify-between gap-2 rounded-xl border border-emerald-200/20 bg-emerald-300/10 px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-emerald-100 transition hover:border-emerald-200/40">
-                          <span>Create Task · sample/manual-first</span>
+                          <span>Criar tarefa operacional</span>
                           <ArrowRight className="h-3 w-3" />
                         </div>
                       </Link>
