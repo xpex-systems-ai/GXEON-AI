@@ -126,6 +126,7 @@ export default function DeliveryValidationPage() {
                 <Link href="/ops/opportunities"><div className="group flex items-center justify-between rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-sm font-semibold text-emerald-100 transition hover:border-emerald-200/40">P0 Inbox <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></div></Link>
                 <Link href="/ops/tasks"><div className="group flex items-center justify-between rounded-2xl border border-blue-300/20 bg-blue-400/10 p-3 text-sm font-semibold text-blue-100 transition hover:border-blue-200/40">P1 Tasks <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></div></Link>
                 <Link href="/ops/execution"><div className="group flex items-center justify-between rounded-2xl border border-violet-300/20 bg-violet-400/10 p-3 text-sm font-semibold text-violet-100 transition hover:border-violet-200/40">P2 Execution <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></div></Link>
+                <Link href="/ops/release"><div className="group flex items-center justify-between rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-sm font-semibold text-emerald-100 transition hover:border-emerald-200/40">P4 Release Gate <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></div></Link>
               </div>
             </CardContent>
           </Card>
