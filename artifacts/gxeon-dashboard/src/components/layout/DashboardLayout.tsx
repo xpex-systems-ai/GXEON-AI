@@ -3,8 +3,8 @@ import { Topbar } from "./Topbar";
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="dark min-h-screen bg-slate-950 text-foreground">
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_20%_10%,rgba(14,165,233,0.18),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(217,70,239,0.14),transparent_30%),linear-gradient(135deg,#020617_0%,#07111f_50%,#020617_100%)]" />
+    <div className="dark min-h-screen bg-[#030303] text-foreground">
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_18%_8%,rgba(245,158,11,0.18),transparent_30%),radial-gradient(circle_at_82%_16%,rgba(180,83,9,0.12),transparent_28%),linear-gradient(135deg,#030303_0%,#0b0905_48%,#120d04_100%)]" />
       <div className="flex h-screen overflow-hidden">
         <Sidebar />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">

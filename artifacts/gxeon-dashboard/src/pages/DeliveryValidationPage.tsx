@@ -71,14 +71,14 @@ export default function DeliveryValidationPage() {
         <div className="relative grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge className="border-emerald-300/40 bg-emerald-400/10 text-emerald-100">Manual-first mode</Badge>
+              <Badge className="border-emerald-300/40 bg-emerald-400/10 text-emerald-100">P3 Validação de Entrega</Badge>
               <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">Visual-only mode</Badge>
               <Badge variant="outline" className="border-amber-300/40 text-amber-100">No external API calls</Badge>
               <Badge variant="outline" className="border-rose-300/40 text-rose-100">No database mutations</Badge>
             </div>
             <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-emerald-200/70">P0 Opportunity → P1 Task → P2 Execution → P3 Delivery Validation</p>
-              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">Revenue Engine · Delivery Validation P3</h1>
+              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-emerald-200/70">P0 Oportunidade → P1 Tarefa → P2 Execução → P3 Validação</p>
+              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">P3 · Validação de Entrega do QG</h1>
               <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">
                 Fourth operational validation layer for GXEON OS. P3 validates execution outcomes with static approval states, rejection states, revision states and evidence checks before any persistence, payment, storage, automation or external integration is activated.
               </p>

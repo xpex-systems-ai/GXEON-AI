@@ -61,15 +61,15 @@ export default function ExecutionTrackerPage() {
         <div className="relative grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge className="border-violet-300/40 bg-violet-400/10 text-violet-100">Manual-first mode</Badge>
+              <Badge className="border-violet-300/40 bg-violet-400/10 text-violet-100">P2 Rastreador de Execução</Badge>
               <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">No external API calls</Badge>
               <Badge variant="outline" className="border-amber-300/40 text-amber-100">Sample/manual-first data</Badge>
             </div>
             <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-violet-200/70">Opportunity → Task → Execution → Revenue → Analytics</p>
-              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">Revenue Engine · Execution Tracker</h1>
+              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-violet-200/70">OPORTUNIDADE → TAREFA → EXECUÇÃO → VALIDAÇÃO → RELEASE → LEDGER</p>
+              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">P2 · Rastreador de Execução do QG</h1>
               <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">
-                Third operational revenue-validation layer for GXEON OS. This page connects Opportunity Inbox P0 and Task Queue P1 sample IDs to manual execution evidence, blockers, deliverables and proof-of-work before any database, payment, storage or external integration is activated.
+                Terceira camada do QG conectando P0 e P1 a evidências manuais de execução, bloqueios, entregáveis e prova de trabalho antes de qualquer banco, pagamento, storage ou integração externa.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">

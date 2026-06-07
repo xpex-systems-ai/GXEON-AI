@@ -35,16 +35,16 @@ export default function FinancialLedgerPage() {
         <div className="relative grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge className="border-cyan-300/40 bg-cyan-400/10 text-cyan-100">P5 Financial Ledger</Badge>
+              <Badge className="border-cyan-300/40 bg-cyan-400/10 text-cyan-100">P5 Ledger Financeiro</Badge>
               <Badge variant="outline" className="border-emerald-300/40 text-emerald-100">Safe Preview Mode</Badge>
               <Badge variant="outline" className="border-amber-300/40 text-amber-100">Manual accounting readiness</Badge>
               <Badge variant="outline" className="border-rose-300/40 text-rose-100">No invoices · no transactions</Badge>
             </div>
             <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-cyan-200/70">OPP → TASK → EXEC → VAL → RELEASE → LEDGER</p>
-              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">Financial Ledger P5</h1>
+              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-cyan-200/70">OPORTUNIDADE → TAREFA → EXECUÇÃO → VALIDAÇÃO → RELEASE → LEDGER</p>
+              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">P5 · Ledger Financeiro do QG</h1>
               <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">
-                Manual-first financial visibility layer connecting Revenue Release Gate P4 to accounting readiness. P5 models expected, approved, pending, received sample, and lost revenue without APIs, payment processing, Supabase writes, invoices, or real financial transactions.
+                Camada privada/manual-first de visibilidade financeira conectando P4 à prontidão contábil. O P5 modela receita esperada, aprovada, pendente, recebida visualmente e perdida sem APIs, processamento de pagamento, Supabase writes, invoices ou transações reais.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -74,7 +74,7 @@ export default function FinancialLedgerPage() {
 
           <Card className="border-emerald-300/20 bg-emerald-400/10 backdrop-blur">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white"><FileLock2 className="h-5 w-5 text-emerald-200" /> Safe ledger boundary</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-white"><FileLock2 className="h-5 w-5 text-emerald-200" /> Boundary seguro do ledger</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-emerald-50">
               {[

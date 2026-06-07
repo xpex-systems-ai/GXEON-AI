@@ -2,30 +2,23 @@ import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { activationPlan, buildGxeonPlaceholderPath, gxeonNavigation, infrastructureStack, integrationProviders } from "@/data/gxeon-os";
-import { Activity, ArrowRight, Bell, CheckCircle2, CircleDot, Lock, Search, Sparkles } from "lucide-react";
+import { activationPlan, buildGxeonPlaceholderPath, gxeonNavigation, infrastructureStack } from "@/data/gxeon-os";
+import { qgConnectors, qgMissionCards, qgRevenuePipeline, qgSafetyBoundaries, qgStatusBadges } from "@/data/qg-theme";
+import { ArrowRight, BrainCircuit, CheckCircle2, CircleDot, Lock, Search, ShieldCheck, Sparkles } from "lucide-react";
 
 const statusLabel = {
-  mock_ready: "Mock ready",
-  placeholder_only: "Placeholder only",
-  all_disconnected: "Disconnected",
+  mock_ready: "Manual-first ready",
+  placeholder_only: "Future / inactive",
+  all_disconnected: "Locked / disconnected",
 };
 
-const accentClasses: Record<string, string> = {
-  amber: "from-amber-500/25 to-orange-500/10 border-amber-400/30 text-amber-200",
-  blue: "from-blue-500/25 to-cyan-500/10 border-blue-400/30 text-blue-200",
-  cyan: "from-cyan-500/25 to-blue-500/10 border-cyan-400/30 text-cyan-200",
-  emerald: "from-emerald-500/25 to-green-500/10 border-emerald-400/30 text-emerald-200",
-  fuchsia: "from-fuchsia-500/25 to-pink-500/10 border-fuchsia-400/30 text-fuchsia-200",
-  green: "from-green-500/25 to-emerald-500/10 border-green-400/30 text-green-200",
-  indigo: "from-indigo-500/25 to-violet-500/10 border-indigo-400/30 text-indigo-200",
-  orange: "from-orange-500/25 to-red-500/10 border-orange-400/30 text-orange-200",
-  rose: "from-rose-500/25 to-red-500/10 border-rose-400/30 text-rose-200",
-  sky: "from-sky-500/25 to-cyan-500/10 border-sky-400/30 text-sky-200",
-  slate: "from-slate-500/25 to-slate-300/10 border-slate-400/30 text-slate-200",
-  teal: "from-teal-500/25 to-emerald-500/10 border-teal-400/30 text-teal-200",
-  violet: "from-violet-500/25 to-purple-500/10 border-violet-400/30 text-violet-200",
-  yellow: "from-yellow-500/25 to-amber-500/10 border-yellow-400/30 text-yellow-200",
+const connectorTone: Record<string, string> = {
+  ready: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
+  connected: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
+  pending: "border-amber-300/30 bg-amber-400/10 text-amber-100",
+  locked: "border-red-300/30 bg-red-400/10 text-red-100",
+  "manual-first": "border-cyan-300/30 bg-cyan-400/10 text-cyan-100",
+  future: "border-stone-300/20 bg-stone-400/10 text-stone-200",
 };
 
 type GxeonOSPageProps = {
@@ -35,156 +28,170 @@ type GxeonOSPageProps = {
 export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPageProps) {
   const activeModule = gxeonNavigation.find((module) => module.id === moduleId) ?? gxeonNavigation[0];
   const Icon = activeModule.icon;
-  const isIntegrationSurface = activeModule.id === "integrations" || activeModule.id === "api_gateway" || activeModule.id === "blockchain" || activeModule.id === "radar_x";
+  const isCommandCenter = activeModule.id === "command_center";
 
   return (
     <div className="space-y-6">
-      <section className="relative overflow-hidden rounded-[2rem] border border-cyan-400/20 bg-slate-950/80 p-6 shadow-2xl shadow-cyan-950/30 backdrop-blur-xl">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_10%,rgba(34,211,238,0.24),transparent_35%),radial-gradient(circle_at_20%_25%,rgba(168,85,247,0.18),transparent_32%)]" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300 to-transparent" />
-        <div className="relative grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
+      <section className="relative overflow-hidden rounded-[2rem] border border-amber-300/20 bg-[#080705]/90 p-6 shadow-2xl shadow-black/50 backdrop-blur-xl">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_12%,rgba(245,158,11,0.26),transparent_34%),radial-gradient(circle_at_16%_20%,rgba(120,53,15,0.28),transparent_34%)]" />
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-300 to-transparent" />
+        <div className="relative grid gap-6 lg:grid-cols-[1.25fr_0.75fr]">
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge className="border-cyan-300/40 bg-cyan-400/10 text-cyan-100">GXEON OS v2.0.0</Badge>
-              <Badge variant="outline" className="border-emerald-300/40 text-emerald-200">Frontend-first architecture</Badge>
-              <Badge variant="outline" className="border-fuchsia-300/40 text-fuchsia-200">External APIs disabled</Badge>
+              {qgStatusBadges.map((badge) => (
+                <Badge key={badge} variant="outline" className="border-amber-300/35 bg-amber-400/10 text-amber-100">{badge}</Badge>
+              ))}
             </div>
             <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-cyan-200/70">Captura · Prediz · Executa · Monetiza · Escala</p>
-              <h1 className="max-w-4xl text-4xl font-black tracking-tight text-white md:text-6xl">Quantum Command Center</h1>
-              <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">
-                Ecossistema visual completo do GXEON com todos os módulos navegáveis, dashboards mockados, badges de status e botões de conexão prontos para ativação gradual.
+              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-amber-200/70">OPORTUNIDADE → TAREFA → EXECUÇÃO → VALIDAÇÃO → RELEASE → LEDGER</p>
+              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">GXEON QG Operacional</h1>
+              <p className="mt-4 max-w-3xl text-base text-stone-300 md:text-lg">
+                Centro de comando privado para capturar oportunidades, transformar em execução, validar entregas e controlar receita.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               {[
-                ["Módulos renderizados", "15/15", "100%"],
-                ["Integrações externas", "0 ativas", "Seguro"],
-                ["Prontidão visual", "98%", "Vercel preview"],
+                ["Rotas P0-P5", "6/6", "preservadas"],
+                ["Conectores", "0 APIs", "ativação controlada"],
+                ["Modo", "Safe Preview", "sem segredos"],
               ].map(([label, value, hint]) => (
                 <Link key={label} href={buildGxeonPlaceholderPath("command_center", label)}>
-                  <div className="group rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur transition hover:border-cyan-300/40 hover:bg-cyan-400/10">
-                    <p className="text-xs uppercase tracking-[0.25em] text-slate-400">{label}</p>
+                  <div className="group rounded-2xl border border-amber-100/10 bg-amber-100/[0.04] p-4 backdrop-blur transition hover:border-amber-300/40 hover:bg-amber-400/10">
+                    <p className="text-xs uppercase tracking-[0.25em] text-stone-400">{label}</p>
                     <p className="mt-2 text-2xl font-bold text-white">{value}</p>
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-xs text-cyan-200">{hint}</p>
-                      <ArrowRight className="h-3 w-3 text-cyan-200 transition group-hover:translate-x-1" />
+                      <p className="text-xs text-amber-200">{hint}</p>
+                      <ArrowRight className="h-3 w-3 text-amber-200 transition group-hover:translate-x-1" />
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
           </div>
-          <div className="rounded-3xl border border-white/10 bg-black/30 p-4">
-            <div className="flex items-center justify-between">
+
+          <div className="relative overflow-hidden rounded-3xl border border-amber-300/20 bg-black/35 p-5">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.18),transparent_62%)]" />
+            <div className="relative flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.35em] text-slate-400">Activation mode</p>
-                <p className="text-lg font-semibold text-white">Visual-only safe mode</p>
+                <p className="text-xs uppercase tracking-[0.35em] text-stone-400">Golden neural core</p>
+                <p className="text-xl font-semibold text-white">Sound-of-intelligence cockpit</p>
               </div>
-              <Lock className="h-7 w-7 text-emerald-300" />
+              <BrainCircuit className="h-10 w-10 text-amber-200 drop-shadow-[0_0_18px_rgba(245,158,11,0.65)]" />
             </div>
-            <Progress value={98} className="mt-5 h-2" />
-            <div className="mt-5 grid gap-3">
-              {activationPlan.slice(0, 3).map((step) => (
-                <Link key={step} href={buildGxeonPlaceholderPath("command_center", step)}>
-                  <div className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-sm text-slate-200 transition hover:border-emerald-300/30 hover:bg-emerald-400/10">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-300" />
-                    <span className="flex-1">{step}</span>
-                    <ArrowRight className="h-3 w-3 text-emerald-200 transition group-hover:translate-x-1" />
+            <div className="relative mt-6 grid place-items-center py-6">
+              <div className="absolute h-44 w-44 rounded-full border border-amber-300/20" />
+              <div className="absolute h-32 w-32 rounded-full border border-amber-300/25" />
+              <div className="grid h-24 w-24 place-items-center rounded-full border border-amber-300/45 bg-amber-400/10 shadow-[0_0_55px_rgba(245,158,11,0.28)]">
+                <BrainCircuit className="h-12 w-12 text-amber-100" />
+              </div>
+            </div>
+            <Progress value={100} className="relative mt-2 h-2" />
+            <p className="relative mt-3 text-sm text-stone-300">Visual/manual-first: nenhuma chamada externa, nenhuma credencial e nenhum write de banco.</p>
+          </div>
+        </div>
+      </section>
+
+      {isCommandCenter && (
+        <>
+          <section className="rounded-[2rem] border border-amber-300/20 bg-[#080705]/80 p-5 backdrop-blur-xl">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-amber-200/70">Operator Mission Control</p>
+                <h2 className="text-2xl font-bold text-white">Prioridades imediatas do QG</h2>
+              </div>
+              <Badge className="bg-amber-300 text-black">Manual-first only</Badge>
+            </div>
+            <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
+              {qgMissionCards.map((mission) => (
+                <Link key={mission.title} href={mission.route}>
+                  <div className="group flex h-full flex-col rounded-2xl border border-amber-100/10 bg-amber-100/[0.04] p-4 transition hover:border-amber-300/40 hover:bg-amber-400/10">
+                    <p className="font-bold text-white">{mission.title}</p>
+                    <p className="mt-2 flex-1 text-sm text-stone-400">{mission.detail}</p>
+                    <span className="mt-4 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-200">{mission.callToAction}<ArrowRight className="h-3 w-3 transition group-hover:translate-x-1" /></span>
                   </div>
                 </Link>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      <section className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-        <Card className="border-white/10 bg-slate-950/75 backdrop-blur-xl">
+          <section className="rounded-[2rem] border border-amber-300/20 bg-[#080705]/80 p-5 backdrop-blur-xl">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase tracking-[0.35em] text-amber-200/70">Revenue Pipeline Map</p>
+                <h2 className="text-2xl font-bold text-white">P0 → P5 execução de receita</h2>
+              </div>
+              <Badge variant="outline" className="border-amber-300/40 text-amber-100">visual/manual-first · not automated</Badge>
+            </div>
+            <div className="mt-5 grid gap-3 lg:grid-cols-6">
+              {qgRevenuePipeline.map((stage, index) => {
+                const StageIcon = stage.icon;
+                return (
+                  <Link key={stage.stage} href={stage.route}>
+                    <div className="group relative h-full rounded-2xl border border-amber-300/18 bg-black/25 p-4 transition hover:border-amber-300/45 hover:bg-amber-400/10">
+                      {index < qgRevenuePipeline.length - 1 && <div className="absolute -right-3 top-1/2 hidden h-px w-6 bg-amber-300/50 lg:block" />}
+                      <div className="flex items-center justify-between gap-3">
+                        <span className="rounded-full border border-amber-300/35 bg-amber-400/10 px-3 py-1 text-xs font-black text-amber-100">{stage.stage}</span>
+                        <StageIcon className="h-5 w-5 text-amber-200" />
+                      </div>
+                      <p className="mt-3 font-bold text-white">{stage.title}</p>
+                      <p className="mt-1 text-sm text-stone-400">{stage.detail}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        </>
+      )}
+
+      <section className="grid gap-4 xl:grid-cols-[0.75fr_1.25fr]">
+        <Card className="border-amber-300/20 bg-[#080705]/80 backdrop-blur-xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white"><Icon className="h-5 w-5" /> {activeModule.name}</CardTitle>
+            <CardTitle className="flex items-center gap-2 text-white"><Icon className="h-5 w-5 text-amber-200" /> {activeModule.name}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className={`rounded-3xl border bg-gradient-to-br p-5 ${accentClasses[activeModule.accent] ?? accentClasses.cyan}`}>
-              <Badge variant="outline" className="border-current text-current">{statusLabel[activeModule.status ?? "mock_ready"]}</Badge>
-              <p className="mt-4 text-2xl font-black text-white">{activeModule.description}</p>
-              <p className="mt-3 text-sm text-slate-200">Nenhuma chamada externa é executada nesta tela; cada widget aponta para um placeholder profissional auditável.</p>
-            </div>
-            {isIntegrationSurface ? (
-              <div className="rounded-2xl border border-orange-300/20 bg-orange-400/10 p-4 text-sm text-orange-100">
-                Integração bloqueada por política: botões e estados são apenas visuais até autorização explícita.
-              </div>
-            ) : null}
-          </CardContent>
-        </Card>
-
-        <Card className="border-cyan-300/20 bg-slate-950/75 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white"><Activity className="h-5 w-5 text-cyan-200" /> Module Widgets</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-3 sm:grid-cols-2">
-            {activeModule.widgets.map((widget) => {
-              const widgetHref = widget === "Opportunity Inbox" ? "/ops/opportunities" : widget === "Task Queue P1" ? "/ops/tasks" : buildGxeonPlaceholderPath(activeModule.id, widget);
-
-              return (
-                <Link key={widget} href={widgetHref}>
-                <div className="group rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-300/40 hover:bg-cyan-400/10">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="font-semibold text-white">{widget}</p>
-                    <ArrowRight className="h-4 w-4 text-cyan-200 transition group-hover:translate-x-1" />
+            <Badge variant="outline" className="border-amber-300/40 text-amber-100">{statusLabel[activeModule.status ?? "mock_ready"]}</Badge>
+            <p className="text-stone-300">{activeModule.description}</p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {activeModule.widgets.map((widget) => (
+                <Link key={widget} href={buildGxeonPlaceholderPath(activeModule.id, widget)}>
+                  <div className="group rounded-2xl border border-amber-100/10 bg-amber-100/[0.03] p-4 transition hover:border-amber-300/40 hover:bg-amber-400/10">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="font-semibold text-white">{widget}</p>
+                      <ArrowRight className="h-4 w-4 text-amber-200 transition group-hover:translate-x-1" />
+                    </div>
+                    <p className="mt-2 text-sm text-stone-400">Bloco visual do QG · ativação futura controlada</p>
                   </div>
-                  <p className="mt-2 text-sm text-slate-400">Mock dashboard block · ready for future activation</p>
-                </div>
                 </Link>
-              );
-            })}
+              ))}
+            </div>
           </CardContent>
         </Card>
-      </section>
 
-      <section className="grid gap-4 lg:grid-cols-2">
-        <Card className="border-fuchsia-300/20 bg-slate-950/75 backdrop-blur-xl">
+        <Card className="border-amber-300/20 bg-[#080705]/80 backdrop-blur-xl">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white"><Search className="h-5 w-5 text-cyan-200" /> Global Search & Notifications</CardTitle>
+            <CardTitle className="flex items-center gap-2 text-white"><Search className="h-5 w-5 text-amber-200" /> Search, notifications & infrastructure</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <Link href={buildGxeonPlaceholderPath("command_center", "Global Search")}>
-              <div className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-slate-300 transition hover:border-cyan-300/40 hover:bg-cyan-400/10">
-                <Search className="h-4 w-4" />
-                <span className="flex-1">Buscar módulo, widget, agente, receita ou integração...</span>
-                <ArrowRight className="h-3 w-3 text-cyan-200 transition group-hover:translate-x-1" />
+          <CardContent className="grid gap-3 md:grid-cols-2">
+            <Link href={buildGxeonPlaceholderPath("command_center", "Private QG Search")}>
+              <div className="group rounded-2xl border border-amber-100/10 bg-amber-100/[0.04] p-4 text-stone-300 transition hover:border-amber-300/40 hover:bg-amber-400/10 md:col-span-2">
+                <div className="flex items-center gap-3"><Search className="h-4 w-4 text-amber-200" /><span>Buscar missão, módulo, tarefa, receita ou conector...</span><ArrowRight className="ml-auto h-3 w-3 text-amber-200 transition group-hover:translate-x-1" /></div>
               </div>
             </Link>
-            {[
-              "War Room monitorando 5 alertas críticos mockados",
-              "Radar X aguardando conexão de sinais externos",
-              "Financial Core pronto para validar jornada de billing",
-            ].map((notification) => (
+            {["Sala de Guerra pronta para checklist manual", "Radar X aguardando fontes consentidas", "Financial Core em controle visual de receita"].map((notification) => (
               <Link key={notification} href={buildGxeonPlaceholderPath("command_center", notification)}>
-                <div className="group flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm text-slate-200 transition hover:border-fuchsia-300/30 hover:bg-fuchsia-400/10">
-                  <Bell className="h-4 w-4 text-fuchsia-200" />
+                <div className="group flex items-center gap-3 rounded-xl border border-amber-100/10 bg-amber-100/[0.03] p-3 text-sm text-stone-200 transition hover:border-amber-300/30 hover:bg-amber-400/10">
+                  <CircleDot className="h-4 w-4 text-amber-200" />
                   <span className="flex-1">{notification}</span>
-                  <ArrowRight className="h-3 w-3 text-fuchsia-200 transition group-hover:translate-x-1" />
                 </div>
               </Link>
             ))}
-          </CardContent>
-        </Card>
-
-        <Card className="border-emerald-300/20 bg-slate-950/75 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white"><Sparkles className="h-5 w-5 text-emerald-200" /> Infrastructure readiness</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-3 sm:grid-cols-2">
             {infrastructureStack.map((item) => (
               <Link key={item.label} href={buildGxeonPlaceholderPath("command_center", `${item.label} ${item.value}`)}>
-                <div className="group rounded-xl border border-white/10 bg-white/[0.03] p-3 transition hover:border-emerald-300/40 hover:bg-emerald-400/10">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">{item.label}</p>
+                <div className="group rounded-xl border border-amber-100/10 bg-amber-100/[0.03] p-3 transition hover:border-amber-300/40 hover:bg-amber-400/10">
+                  <p className="text-xs uppercase tracking-[0.24em] text-stone-500">{item.label}</p>
                   <p className="text-lg font-bold text-white">{item.value}</p>
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-xs text-emerald-200">{item.state}</p>
-                    <ArrowRight className="h-3 w-3 text-emerald-200 transition group-hover:translate-x-1" />
-                  </div>
+                  <p className="text-xs text-amber-200">{item.state}</p>
                 </div>
               </Link>
             ))}
@@ -192,41 +199,67 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
         </Card>
       </section>
 
-      <section className="rounded-[2rem] border border-orange-300/20 bg-orange-500/10 p-5">
+      <section className="rounded-[2rem] border border-amber-300/20 bg-[#080705]/85 p-5 backdrop-blur-xl">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <p className="text-xs uppercase tracking-[0.35em] text-orange-200/70">Future connections</p>
-            <h2 className="text-2xl font-bold text-white">Integrações prontas para conectar depois</h2>
+            <p className="text-xs uppercase tracking-[0.35em] text-amber-200/70">Connectors Hub</p>
+            <h2 className="text-2xl font-bold text-white">Conectores privados preparados para ativação controlada</h2>
+            <p className="mt-1 text-sm text-stone-400">Credenciais ficam dentro dos dashboards dos provedores, nunca no frontend.</p>
           </div>
-          <Badge className="bg-orange-300 text-orange-950">All disconnected</Badge>
+          <Badge className="bg-amber-300 text-black">No auth flow · no API calls</Badge>
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {integrationProviders.map((provider) => (
-            <Link key={provider} href={buildGxeonPlaceholderPath("integrations", provider)}>
-              <div className="group rounded-2xl border border-orange-200/15 bg-black/25 p-4 transition hover:border-orange-200/45 hover:bg-orange-400/10">
-                <p className="font-semibold text-white">{provider}</p>
-                <p className="text-sm text-orange-100/75">pending · connect button visible</p>
-                <div className="mt-3 inline-flex items-center gap-2 rounded-md border border-orange-200/30 px-3 py-1.5 text-xs font-semibold text-orange-100">
-                  Connect later
-                  <ArrowRight className="h-3 w-3 transition group-hover:translate-x-1" />
+          {qgConnectors.map((connector) => {
+            const ConnectorIcon = connector.icon;
+            return (
+              <Link key={connector.name} href={connector.route}>
+                <div className="group rounded-2xl border border-amber-200/15 bg-black/25 p-4 transition hover:border-amber-200/45 hover:bg-amber-400/10">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="font-semibold text-white">{connector.name}</p>
+                    <ConnectorIcon className="h-4 w-4 text-amber-200" />
+                  </div>
+                  <Badge variant="outline" className={`mt-3 border ${connectorTone[connector.status]}`}>{connector.status}</Badge>
+                  <div className="mt-3 inline-flex items-center gap-2 rounded-md border border-amber-200/30 px-3 py-1.5 text-xs font-semibold text-amber-100">
+                    {connector.action}
+                    <ArrowRight className="h-3 w-3 transition group-hover:translate-x-1" />
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </section>
 
-      <section className="rounded-[2rem] border border-white/10 bg-slate-950/60 p-5">
-        <div className="flex flex-wrap items-center gap-3">
-          {activationPlan.map((step, index) => (
-            <Link key={step} href={buildGxeonPlaceholderPath("command_center", step)}>
-              <div className="group flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-slate-200 transition hover:border-cyan-300/40 hover:bg-cyan-400/10">
-                <CircleDot className="h-3 w-3 text-cyan-200" />
-                <span>{index + 1}. {step}</span>
+      <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+        <Card className="border-emerald-300/20 bg-emerald-400/10 backdrop-blur-xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white"><ShieldCheck className="h-5 w-5 text-emerald-200" /> QG safety boundary</CardTitle>
+          </CardHeader>
+          <CardContent className="grid gap-3 sm:grid-cols-2">
+            {qgSafetyBoundaries.map((item) => (
+              <div key={item} className="flex gap-3 rounded-2xl border border-emerald-300/20 bg-black/25 p-3 text-sm text-emerald-50">
+                <Lock className="mt-0.5 h-4 w-4 shrink-0" />
+                <span>{item}</span>
               </div>
-            </Link>
-          ))}
-        </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card className="border-amber-300/20 bg-[#080705]/80 backdrop-blur-xl">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white"><Sparkles className="h-5 w-5 text-amber-200" /> Controlled activation plan</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {activationPlan.map((step, index) => (
+              <Link key={step} href={buildGxeonPlaceholderPath("command_center", step)}>
+                <div className="group flex items-center gap-2 rounded-full border border-amber-100/10 bg-amber-100/[0.03] px-3 py-2 text-sm text-stone-200 transition hover:border-amber-300/40 hover:bg-amber-400/10">
+                  <CheckCircle2 className="h-3 w-3 text-amber-200" />
+                  <span>{index + 1}. {step}</span>
+                </div>
+              </Link>
+            ))}
+          </CardContent>
+        </Card>
       </section>
     </div>
   );

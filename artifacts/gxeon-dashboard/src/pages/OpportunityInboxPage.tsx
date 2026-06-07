@@ -40,22 +40,22 @@ export default function OpportunityInboxPage() {
         <div className="relative grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge className="border-emerald-300/40 bg-emerald-400/10 text-emerald-100">Manual-first revenue validation</Badge>
+              <Badge className="border-emerald-300/40 bg-emerald-400/10 text-emerald-100">P0 Caixa de Oportunidades</Badge>
               <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">No external API calls</Badge>
               <Badge variant="outline" className="border-amber-300/40 text-amber-100">Sample/manual-first data</Badge>
             </div>
             <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-emerald-200/70">Opportunity → Task → Execution → Revenue → Analytics</p>
-              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">Revenue Engine · Opportunity Inbox</h1>
+              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-emerald-200/70">OPORTUNIDADE → TAREFA → EXECUÇÃO → VALIDAÇÃO → RELEASE → LEDGER</p>
+              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">P0 · Caixa de Oportunidades do QG</h1>
               <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">
-                First operational revenue-validation layer for GXEON OS. Operators can capture, classify, score, and route opportunities manually before any database, payment, external platform, scraping, or automation is activated.
+                Primeira camada do QG para capturar, classificar, pontuar e rotear oportunidades manualmente antes de qualquer banco, pagamento, plataforma externa, scraping ou automação.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               {[
-                ["Active pipeline value", formatCurrency(summary.activePipelineValueBrl), "BRL estimate · sample only"],
-                ["High priority inbox", String(summary.highPriorityCount), `${summary.criticalPriorityCount} critical sample`],
-                ["Manual opportunities", String(summary.totalCount), `${summary.activeCount} active statuses`],
+                ["Valor visual do pipeline", formatCurrency(summary.activePipelineValueBrl), "BRL estimate · sample only"],
+                ["Alta prioridade P0", String(summary.highPriorityCount), `${summary.criticalPriorityCount} critical sample`],
+                ["Oportunidades manuais", String(summary.totalCount), `${summary.activeCount} active statuses`],
               ].map(([label, value, hint]) => (
                 <Card key={label} className="border-white/10 bg-white/[0.04] backdrop-blur">
                   <CardContent className="p-4">
@@ -69,7 +69,7 @@ export default function OpportunityInboxPage() {
           </div>
           <Card className="border-emerald-300/20 bg-black/30">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white"><ShieldCheck className="h-5 w-5 text-emerald-200" /> Activation boundary</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-white"><ShieldCheck className="h-5 w-5 text-emerald-200" /> Boundary operacional do QG</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {[
