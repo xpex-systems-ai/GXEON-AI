@@ -1,144 +1,109 @@
 # GXEON OS
 
-**The execution operating system for turning opportunities into accountable revenue workflows.**
+**Junior Sena's private operational command center for converting opportunities into shipped, validated, monetizable execution.**
 
-GXEON OS is a public-facing product and engineering repository for a visual enterprise demo of an opportunity-to-revenue operating layer. The current repository is structured to help investors, partners, companies, and technical reviewers understand the product vision, architecture, module boundaries, and execution roadmap without implying live production integrations that are not yet activated.
+GXEON OS is now positioned as a **private QG (quartel-general) command center repository**. It exists to help Junior Sena operate opportunities, tasks, execution, validation, release readiness, and financial ledger discipline from one controlled workspace. This repository is not a public launch surface, investor deck, or open demo promise.
 
-> **Demo:** `https://YOUR-VERCEL-DEMO-LINK.vercel.app`  
-> Replace this placeholder with the official Vercel deployment when approved.
+## Privacy-first statement
 
-## What GXEON OS is building
+GXEON is private by default. Repository content should describe operational intent, module boundaries, readiness state, and monetization work without exposing secrets, customer-sensitive information, private credentials, or unapproved production claims.
 
-GXEON OS is designed as a unified command center where teams can identify opportunities, convert them into tasks, route execution, track revenue impact, and review analytics from one operational surface.
+- Keep the GitHub repository visibility set to **Private**.
+- Store secrets only in approved provider dashboards or local ignored files.
+- Do not commit `.env` files, service-role keys, database URLs, API keys, payment secrets, private keys, screenshots with secrets, or customer-sensitive data.
+- Do not activate Supabase, Railway, payment providers, external APIs, or database migrations from documentation-only work.
+- Treat every integration as inactive until explicitly validated and approved.
 
-The repository currently emphasizes:
+## Mission
 
-- A premium visual dashboard experience.
-- Monorepo structure for apps, API packages, runtime modules, database libraries, and operational scripts.
-- Documentation that separates vision, architecture, roadmap, revenue model, and operating model.
-- Honest status reporting: visual demo first, production activation later.
+GXEON's monetization mission is to turn Junior Sena's operational opportunities into cash-generating delivery offers through a disciplined P0-P5 pipeline. The system should support fast opportunity capture, clear tasking, execution tracking, delivery validation, release discipline, and ledger-based revenue visibility.
 
-## Safety and status note
-
-This repository currently represents a **visual demo and enterprise repository presentation layer**. External APIs are not claimed as live, Supabase production activation is pending, and integrations should remain disabled until explicitly validated through the production-readiness process. No secrets should be committed to the repository.
-
-## Core flow
+## Private QG operating pipeline P0-P5
 
 ```text
-Opportunity → Task → Execution → Revenue → Analytics
+P0 Opportunity → P1 Task Queue → P2 Execution → P3 Validation → P4 Release → P5 Ledger
 ```
 
-| Stage | Meaning | Current repository role |
-| --- | --- | --- |
-| Opportunity | Capture market, customer, workflow, or operational potential. | Represented in product language, dashboard concepts, and roadmap docs. |
-| Task | Convert an opportunity into concrete execution units. | Supported by runtime and workflow module boundaries. |
-| Execution | Route work through operators, queues, runtime dispatchers, and apps. | Represented by runtime, operators, queues, and dashboard packages. |
-| Revenue | Connect completed execution to monetization pathways. | Documented as a thesis and roadmap, not represented as live revenue claims. |
-| Analytics | Measure signals, outcomes, telemetry, and performance. | Represented by analytics and telemetry module structure. |
-
-## Architecture overview
-
-```text
-┌────────────────────────────────────────────────────────────┐
-│                        GXEON OS                            │
-├────────────────────────────────────────────────────────────┤
-│ Dashboard / Mobile / Mockup Sandbox                         │
-│ API Server / API Spec / API Zod / React Client               │
-│ Runtime Engine / Dispatchers / Workers / Operators           │
-│ Events / Queues / Telemetry / Analytics                      │
-│ Database Library / Supabase Readiness / Governance Scripts   │
-│ Documentation / Evidence / Operations / Roadmap              │
-└────────────────────────────────────────────────────────────┘
-```
-
-The architecture is organized as a monorepo with clear boundaries between presentation, API contracts, runtime execution concepts, data readiness, and operational governance. The current objective is public clarity and reviewability without changing runtime behavior.
-
-## Module map
-
-| Area | Path | Purpose |
-| --- | --- | --- |
-| Web dashboard | `artifacts/gxeon-dashboard` | Vite/React dashboard visual experience. |
-| Mobile dashboard | `artifacts/gxeon-dashboard-mobile` | Mobile-oriented dashboard package. |
-| API server | `artifacts/api-server` | Express-based API server package. |
-| Mockup sandbox | `artifacts/mockup-sandbox` | Visual sandbox for product presentation. |
-| API contracts | `lib/api-spec`, `lib/api-zod`, `lib/api-client-react` | Shared API definitions and generated/typed client boundaries. |
-| Database library | `lib/db` | Database schema and validation package. |
-| Runtime | `runtime` | Execution engine, dispatcher, worker, compensation, persistence, and telemetry boundaries. |
-| Operators | `operators` | Operator and live-operator concepts. |
-| Events and queues | `events`, `queues` | Event and queue domain boundaries. |
-| Analytics and telemetry | `analytics`, `telemetry` | Measurement, realtime analytics, and reporting concepts. |
-| Billing and payments | `billing`, `payments` | Revenue-supporting domain boundaries. |
-| Governance and infrastructure | `governance`, `infrastructure`, `scripts` | Operational checks, deployment support, and governance scripts. |
-| Documentation hub | `docs` | Investor, architecture, evidence, roadmap, operations, monetization, and brand docs. |
+| Phase | Route | Purpose | Private QG rule |
+| --- | --- | --- | --- |
+| P0 Opportunity | `/ops/opportunities` | Capture monetization ideas, client leads, workflow gaps, and operational opportunities. | Record only safe, non-secret context unless stored in an approved private system. |
+| P1 Task Queue | `/ops/tasks` | Convert opportunities into prioritized, accountable execution tasks. | Keep scope, owner, acceptance criteria, and risk boundaries explicit. |
+| P2 Execution | `/ops/execution` | Track build, delivery, automation, and operator work. | Do not activate external systems without a controlled integration plan. |
+| P3 Validation | `/ops/validation` | Validate deliverables, evidence, quality, and readiness. | Separate evidence from secrets; redact sensitive screenshots before committing. |
+| P4 Release | `/ops/release` | Prepare controlled release steps and handoff decisions. | Release only after validation, rollback thinking, and environment separation are confirmed. |
+| P5 Ledger | `/ops/ledger` | Track money movement, offer performance, and revenue accountability. | No live revenue claim should be made unless backed by verified ledger evidence. |
 
 ## Current status
 
 | Category | Status | Notes |
 | --- | --- | --- |
-| Repository presentation | Active | README, navigation hub, status document, and GitHub templates are being upgraded for public review. |
-| Dashboard | Visual demo | Dashboard package exists and build/typecheck commands are available. |
-| API server | Code package present | Activation status should be validated before production claims. |
-| External APIs | Not live by default | No live partner/API activation is claimed in this repository presentation. |
-| Supabase | Pending production activation | Supabase readiness exists as a workstream; production database activation is not claimed. |
-| Revenue | Thesis/roadmap | No revenue, customer, or user claims are made here. |
-| Investor readiness | In progress | Docs are structured for review, evidence collection, and partner conversations. |
+| Repository positioning | Private QG lockdown active | Documentation is being oriented around private command-center operations. |
+| Dashboard | Buildable workspace package | Dashboard code remains present; P0-P5 routes must remain stable. |
+| API server | Code package present | Do not claim production activation without validation. |
+| Supabase | Inactive / readiness only | Do not connect, migrate, push schemas, or expose service-role keys. |
+| Railway | Inactive / readiness only | Do not provision or deploy from this lockdown work. |
+| External APIs | Inactive by default | No external API activation is part of this mission. |
+| Payments and billing | Inactive / planning | Payment secrets and provider credentials must stay out of the repo. |
+| Monetization | Active planning | Focus is immediate cash-generation offers routed through P0-P5. |
 
-## Stack
+## Stack overview
 
-| Layer | Technology / package |
+| Layer | Tools / packages |
 | --- | --- |
-| Monorepo | pnpm workspace |
-| Web app | React, Vite, TypeScript |
-| UI and motion | Radix UI, Tailwind CSS, Framer Motion, lucide-react, Recharts |
-| API | Express, TypeScript, Pino |
-| Data tooling | Drizzle ORM, Supabase client package, workspace database library |
-| Contracts | Zod, shared API spec/client packages |
-| Quality | TypeScript typecheck, Vite build, repository governance scripts |
-| Deployment targets | Vercel/GitHub Pages/Railway-oriented scripts and workflows where configured |
+| Monorepo | pnpm workspace, TypeScript |
+| Dashboard | Vite, React, Tailwind-oriented UI package structure |
+| API package | Express, TypeScript, Pino |
+| Contracts | API spec, Zod contracts, React client package |
+| Data readiness | Drizzle ORM, Supabase client package, database validation package |
+| Operations | Runtime, events, queues, operators, telemetry, analytics, governance scripts |
+| Validation | TypeScript checks, Vite builds, repository scripts, GitHub workflows |
 
-## Documentation map
+## Module map
 
-Start here: **[GXEON Repository Index](docs/GXEON_INDEX.md)**
-
-Key documents:
-
-- [Repository status](GXEON_REPOSITORY_STATUS.md)
-- [Brand guide](docs/brand/GXEON_BRAND_GUIDE.md)
-- [Master roadmap](docs/roadmap/GXEON_MASTER_ROADMAP.md)
-- [Operating model](docs/operations/GXEON_OPERATING_MODEL.md)
-- [Revenue engine](docs/monetization/GXEON_REVENUE_ENGINE.md)
-- [Railway database provisioning notes](docs/RAILWAY_DATABASE_PROVISIONING.md)
-
-## Roadmap
-
-| Phase | Focus | Outcome |
+| Area | Path | Purpose |
 | --- | --- | --- |
-| Phase 0 | Enterprise repository presentation | Premium public structure, README, templates, docs, and status clarity. |
-| Phase 1 | Demo hardening | Validate dashboard build, screenshot evidence, and navigation quality. |
-| Phase 2 | Integration readiness | Prepare API and Supabase activation checklists without enabling secrets or production writes. |
-| Phase 3 | Pilot operations | Define partner pilot workflows, reporting, support loops, and acceptance criteria. |
-| Phase 4 | Production activation | Activate approved services only after security, database, and governance checks pass. |
+| Web dashboard | `artifacts/gxeon-dashboard` | Private command-center dashboard experience. |
+| Mobile dashboard | `artifacts/gxeon-dashboard-mobile` | Mobile-oriented dashboard package. |
+| API server | `artifacts/api-server` | Express-based API server package. |
+| Mockup sandbox | `artifacts/mockup-sandbox` | Visual sandbox for controlled internal UI iteration. |
+| API contracts | `lib/api-spec`, `lib/api-zod`, `lib/api-client-react` | Shared API definitions and typed client boundaries. |
+| Database library | `lib/db` | Database schema and validation package; do not push migrations during lockdown. |
+| Runtime | `runtime` | Execution engine, dispatcher, worker, compensation, persistence, and telemetry boundaries. |
+| Operators | `operators` | Operator and live-operator concepts. |
+| Events and queues | `events`, `queues` | Event and queue domain boundaries. |
+| Analytics and telemetry | `analytics`, `telemetry` | Measurement and performance concepts. |
+| Billing and payments | `billing`, `payments` | Revenue-supporting boundaries; no provider activation by default. |
+| Governance and infrastructure | `governance`, `infrastructure`, `scripts` | Operational checks, platform scripts, and infrastructure references. |
+| Documentation hub | `docs` | Private QG operations, security, roadmap, and monetization documentation. |
 
-## Monetization thesis
+## Next phase: real monetization and controlled integrations
 
-GXEON OS is positioned around accountable execution infrastructure: a system that helps organizations move from opportunity discovery to measured revenue outcomes. Potential monetization paths include enterprise subscriptions, managed execution workspaces, workflow automation packages, analytics/reporting tiers, and partner implementation services.
+The next phase is not public launch activity. It is private execution toward real monetization with safety gates:
 
-These are strategic monetization directions, not claims of current revenue, active customers, or live integrations.
+1. Convert viable offers into P0 opportunities.
+2. Break the best opportunities into P1 tasks with owners, acceptance criteria, and revenue targets.
+3. Execute P2 delivery work for one immediate cash-generating offer at a time.
+4. Validate P3 evidence before any client handoff or release claim.
+5. Use P4 release discipline for controlled delivery, rollback notes, and environment separation.
+6. Track money, invoices, payment state, and lessons in P5 ledger workflows.
+7. Prepare integrations only after secrets, environments, provider dashboards, and rollback rules are documented.
 
-## Investor and partner CTA
+## Safety boundaries
 
-If you are reviewing GXEON OS as an investor, partner, or technical evaluator:
+- Do not activate APIs during repository-positioning work.
+- Do not connect Supabase or Railway during repository-positioning work.
+- Do not run database migrations from this mission.
+- Do not expose secrets in commits, logs, screenshots, issues, or documentation.
+- Do not remove or break core GXEON operational modules.
+- Preserve `/ops/opportunities`, `/ops/tasks`, `/ops/execution`, `/ops/validation`, `/ops/release`, and `/ops/ledger`.
+- Keep build configuration intact.
 
-1. Start with the [repository index](docs/GXEON_INDEX.md).
-2. Review the [repository status](GXEON_REPOSITORY_STATUS.md) for current activation boundaries.
-3. Review the [master roadmap](docs/roadmap/GXEON_MASTER_ROADMAP.md) and [revenue engine](docs/monetization/GXEON_REVENUE_ENGINE.md).
-4. Request a demo walkthrough, architecture review, or pilot-readiness session before assuming production integration status.
+## Operator checklist
 
-## Repository principles
+Before using GXEON for real monetization work:
 
-- Show the product clearly.
-- Keep status statements honest.
-- Do not expose secrets.
-- Do not activate integrations without explicit readiness checks.
-- Do not mutate databases during documentation or presentation work.
-- Preserve existing dashboard behavior while improving repository presentation.
+1. Confirm GitHub visibility is **Private** in repository settings.
+2. Review the private security checklist in `docs/operations/GXEON_PRIVATE_SECURITY_CHECKLIST.md`.
+3. Review the private QG status in `GXEON_PRIVATE_QG_STATUS.md`.
+4. Route new revenue work through the monetization plan in `docs/monetization/GXEON_REAL_MONETIZATION_PLAN.md`.
+5. Validate dashboard typecheck/build before relying on UI changes.
