@@ -11,22 +11,22 @@ export const privateQgTheme = {
 };
 
 export const qgStatusBadges = [
-  "Private QG Mode",
-  "Manual-first Execution",
-  "Safe Preview",
-  "No secrets in frontend",
+  "Modo Operacional Privado",
+  "aguardando registros reais",
+  "ativação controlada",
+  "primeira receita pendente",
 ];
 
 export const qgMissionCards = [
-  { title: "Stabilizar deploy", detail: "Verificar preview, rotas e build sem acionar integrações.", route: "/deploy-engine", callToAction: "Abrir checklist" },
-  { title: "Capturar primeira oportunidade real", detail: "Registrar manualmente uma oportunidade consentida no P0.", route: "/ops/opportunities", callToAction: "Ir para P0" },
-  { title: "Preparar primeira proposta", detail: "Converter oportunidade qualificada em tarefa operacional no P1.", route: "/ops/tasks", callToAction: "Ir para P1" },
-  { title: "Validar primeira entrega", detail: "Conferir evidências, revisões e aprovação manual no P3.", route: "/ops/validation", callToAction: "Ir para P3" },
-  { title: "Registrar primeira receita", detail: "Controlar release e ledger visual sem pagamentos reais.", route: "/ops/ledger", callToAction: "Ir para P5" },
+  { title: "captar lead", detail: "Selecionar um canal permitido e registrar o primeiro lead manualmente.", route: "/deploy-engine", callToAction: "Abrir checklist" },
+  { title: "criar proposta", detail: "Transformar dor validada em proposta simples com escopo e valor.", route: "/ops/opportunities", callToAction: "Ir para P0" },
+  { title: "registrar oportunidade", detail: "Registrar a primeira oportunidade real no P0 antes de criar tarefas.", route: "/ops/tasks", callToAction: "Ir para P1" },
+  { title: "executar entrega", detail: "Executar o primeiro escopo aprovado com evidências revisáveis.", route: "/ops/validation", callToAction: "Ir para P3" },
+  { title: "registrar recebimento", detail: "Registrar somente recebimento real confirmado fora do GXEON.", route: "/ops/ledger", callToAction: "Ir para P5" },
 ];
 
 export const qgRevenuePipeline: Array<{ stage: string; title: string; detail: string; route: string; icon: LucideIcon }> = [
-  { stage: "P0", title: "Opportunity Inbox", detail: "Caixa de oportunidades manual-first", route: "/ops/opportunities", icon: Inbox },
+  { stage: "P0", title: "Opportunity Inbox", detail: "Caixa de oportunidades CONNECTED_MANUAL", route: "/ops/opportunities", icon: Inbox },
   { stage: "P1", title: "Task Queue", detail: "Fila de tarefas executáveis", route: "/ops/tasks", icon: ListChecks },
   { stage: "P2", title: "Execution Tracker", detail: "Rastreador de execução e prova", route: "/ops/execution", icon: ClipboardCheck },
   { stage: "P3", title: "Delivery Validation", detail: "Validação humana de entrega", route: "/ops/validation", icon: BadgeCheck },
@@ -35,15 +35,15 @@ export const qgRevenuePipeline: Array<{ stage: string; title: string; detail: st
 ];
 
 export const qgConnectors = [
-  { name: "GitHub", status: "manual-first", action: "View status", route: "/integrations", icon: Github },
-  { name: "Vercel", status: "ready", action: "Prepare connector", route: "/deploy-engine", icon: Server },
-  { name: "Railway", status: "locked", action: "Locked", route: "/integrations", icon: Lock },
-  { name: "Supabase", status: "locked", action: "Locked", route: "/integrations", icon: ShieldCheck },
-  { name: "Microsoft 365", status: "future", action: "Connect later", route: "/integrations", icon: BrainCircuit },
-  { name: "Workana", status: "pending", action: "Prepare connector", route: "/ops/opportunities", icon: Inbox },
-  { name: "99Freelas", status: "pending", action: "Prepare connector", route: "/ops/opportunities", icon: Inbox },
-  { name: "LinkedIn", status: "manual-first", action: "View status", route: "/ops/opportunities", icon: Linkedin },
-  { name: "Mercado Pago", status: "locked", action: "Locked", route: "/ops/release", icon: ReceiptText },
+  { name: "GitHub", status: "CONNECTED_MANUAL", action: "Ver status", route: "/integrations", icon: Github },
+  { name: "Vercel", status: "READY_TO_CONNECT", action: "Preparar conector", route: "/deploy-engine", icon: Server },
+  { name: "Railway", status: "LOCKED", action: "Bloqueado", route: "/integrations", icon: Lock },
+  { name: "Supabase", status: "LOCKED", action: "Bloqueado", route: "/integrations", icon: ShieldCheck },
+  { name: "Microsoft 365", status: "FUTURE", action: "Bloqueado", route: "/integrations", icon: BrainCircuit },
+  { name: "Workana", status: "NEEDS_REVIEW", action: "Preparar conector", route: "/ops/opportunities", icon: Inbox },
+  { name: "99Freelas", status: "NEEDS_REVIEW", action: "Preparar conector", route: "/ops/opportunities", icon: Inbox },
+  { name: "LinkedIn", status: "CONNECTED_MANUAL", action: "Ver status", route: "/ops/opportunities", icon: Linkedin },
+  { name: "Mercado Pago", status: "LOCKED", action: "Bloqueado", route: "/ops/release", icon: ReceiptText },
 ];
 
 export const qgSafetyBoundaries = [

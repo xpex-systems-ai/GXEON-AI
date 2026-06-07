@@ -47,6 +47,7 @@ export const taskPipelineStatuses: TaskStatus[] = [
 export const taskBoardStatuses: TaskStatus[] = ["BACKLOG", "TRIAGE", "IN_PROGRESS", "WAITING_CLIENT", "REVIEW", "DONE"];
 export const activeTaskStatuses: TaskStatus[] = ["BACKLOG", "TRIAGE", "IN_PROGRESS", "WAITING_CLIENT", "REVIEW"];
 
+// Archived sandbox/dev seed records are retained only for future testing and are not active operational records.
 export const sampleManualFirstTasks: TaskQueueItem[] = [
   {
     id: "TASK-P1-001",
@@ -313,7 +314,9 @@ export const sampleManualFirstTasks: TaskQueueItem[] = [
   },
 ];
 
-export function getTaskStatusCounts(tasks: TaskQueueItem[] = sampleManualFirstTasks) {
+export const activeOperationalTasks: TaskQueueItem[] = [];
+
+export function getTaskStatusCounts(tasks: TaskQueueItem[] = activeOperationalTasks) {
   return taskPipelineStatuses.map((status) => ({
     status,
     count: tasks.filter((task) => task.status === status).length,
@@ -323,26 +326,26 @@ export function getTaskStatusCounts(tasks: TaskQueueItem[] = sampleManualFirstTa
   }));
 }
 
-export function getTasksByStatus(status: TaskStatus, tasks: TaskQueueItem[] = sampleManualFirstTasks) {
+export function getTasksByStatus(status: TaskStatus, tasks: TaskQueueItem[] = activeOperationalTasks) {
   return tasks.filter((task) => task.status === status);
 }
 
-export function getActiveTaskValue(tasks: TaskQueueItem[] = sampleManualFirstTasks) {
+export function getActiveTaskValue(tasks: TaskQueueItem[] = activeOperationalTasks) {
   return tasks
     .filter((task) => activeTaskStatuses.includes(task.status))
     .reduce((total, task) => total + task.estimated_value_brl, 0);
 }
 
-export function getCriticalTasks(tasks: TaskQueueItem[] = sampleManualFirstTasks) {
+export function getCriticalTasks(tasks: TaskQueueItem[] = activeOperationalTasks) {
   return tasks.filter((task) => task.priority === "CRITICAL" && task.status !== "DONE" && task.status !== "ARCHIVED");
 }
 
-export function getAverageTaskProgress(tasks: TaskQueueItem[] = sampleManualFirstTasks) {
+export function getAverageTaskProgress(tasks: TaskQueueItem[] = activeOperationalTasks) {
   if (tasks.length === 0) return 0;
   return Math.round(tasks.reduce((total, task) => total + task.progress_percent, 0) / tasks.length);
 }
 
-export function getTaskQueueSummary(tasks: TaskQueueItem[] = sampleManualFirstTasks): TaskQueueSummary {
+export function getTaskQueueSummary(tasks: TaskQueueItem[] = activeOperationalTasks): TaskQueueSummary {
   return {
     open_tasks: tasks.filter((task) => activeTaskStatuses.includes(task.status)).length,
     critical_tasks: getCriticalTasks(tasks).length,

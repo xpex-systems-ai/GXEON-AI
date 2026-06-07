@@ -2,14 +2,16 @@ import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { OperationalEmptyState } from "@/components/ops/OperationalEmptyState";
 import {
   getFinancialLedgerSummary,
   getLedgerRecordsByStatus,
   getLedgerStatusCounts,
   ledgerStatuses,
-  sampleFinancialLedgerRecords,
+  activeOperationalLedgerRecords,
   type LedgerStatus,
 } from "@/data/financial-ledger";
+import { operationalEmptyStates } from "@/data/operational-mode";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { ArrowRight, BadgeDollarSign, Banknote, BookOpenCheck, Calculator, CircleDollarSign, FileLock2, GitBranch, KanbanSquare, Lock, ReceiptText, ShieldCheck, TrendingDown, TrendingUp } from "lucide-react";
@@ -36,8 +38,8 @@ export default function FinancialLedgerPage() {
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
               <Badge className="border-cyan-300/40 bg-cyan-400/10 text-cyan-100">P5 Ledger Financeiro</Badge>
-              <Badge variant="outline" className="border-emerald-300/40 text-emerald-100">Safe Preview Mode</Badge>
-              <Badge variant="outline" className="border-amber-300/40 text-amber-100">Manual accounting readiness</Badge>
+              <Badge variant="outline" className="border-emerald-300/40 text-emerald-100">Ativação controlada</Badge>
+              <Badge variant="outline" className="border-amber-300/40 text-amber-100">Prontidão financeira manual</Badge>
               <Badge variant="outline" className="border-rose-300/40 text-rose-100">No invoices · no transactions</Badge>
             </div>
             <div>
@@ -50,9 +52,9 @@ export default function FinancialLedgerPage() {
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               {[
                 { label: "Estimated revenue", value: formatCurrency(summary.estimated_revenue_brl), hint: "Expected pipeline value", Icon: TrendingUp },
-                { label: "Approved revenue", value: formatCurrency(summary.approved_revenue_brl), hint: "Release-approved sample", Icon: BadgeDollarSign },
+                { label: "Approved revenue", value: formatCurrency(summary.approved_revenue_brl), hint: "Release aprovado pendente", Icon: BadgeDollarSign },
                 { label: "Pending revenue", value: formatCurrency(summary.pending_revenue_brl), hint: "Manual payment wait", Icon: CircleDollarSign },
-                { label: "Received sample", value: formatCurrency(summary.received_revenue_brl), hint: "Visual-only received state", Icon: Banknote },
+                { label: "Recebido pendente", value: formatCurrency(summary.received_revenue_brl), hint: "Recebimento real pendente", Icon: Banknote },
                 { label: "Lost revenue", value: formatCurrency(summary.lost_revenue_brl), hint: "Pipeline leakage label", Icon: TrendingDown },
                 { label: "Approval conversion", value: `${summary.approval_conversion_rate}%`, hint: "Approved ÷ estimated", Icon: Calculator },
                 { label: "Receipt conversion", value: `${summary.receipt_conversion_rate}%`, hint: "Received ÷ approved", Icon: BookOpenCheck },
@@ -78,7 +80,7 @@ export default function FinancialLedgerPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-emerald-50">
               {[
-                "Static manual-first records only",
+                "Registros reais pendentes",
                 "Zero external API calls or gateway connections",
                 "Zero Supabase writes and zero persistence side effects",
                 "Zero real invoices, transactions, settlements, refunds, or receipts",
@@ -103,7 +105,7 @@ export default function FinancialLedgerPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             {statusCounts.map(({ status, count }) => {
-              const share = sampleFinancialLedgerRecords.length === 0 ? 0 : (count / sampleFinancialLedgerRecords.length) * 100;
+              const share = activeOperationalLedgerRecords.length === 0 ? 0 : (count / activeOperationalLedgerRecords.length) * 100;
               return (
                 <div key={`${status}-metric`} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
                   <div className="flex flex-wrap items-center justify-between gap-3">
@@ -157,7 +159,10 @@ export default function FinancialLedgerPage() {
             <CardTitle className="flex items-center gap-2 text-white"><GitBranch className="h-5 w-5 text-emerald-200" /> Pipeline traceability</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-4">
-            {sampleFinancialLedgerRecords.map((record) => (
+            {activeOperationalLedgerRecords.length === 0 ? (
+              <OperationalEmptyState {...operationalEmptyStates.ledger} />
+            ) : (
+              activeOperationalLedgerRecords.map((record) => (
               <article key={record.id} className="rounded-3xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-300/35 hover:bg-cyan-400/10">
                 <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                   <div className="min-w-0 flex-1">
@@ -192,7 +197,7 @@ export default function FinancialLedgerPage() {
                   </div>
                 </div>
               </article>
-            ))}
+            )))}
           </CardContent>
         </Card>
 
@@ -208,7 +213,7 @@ export default function FinancialLedgerPage() {
               "FORECAST keeps expected revenue separate from approved release value.",
               "APPROVED mirrors P4 release readiness without creating receivables.",
               "PENDING_PAYMENT is a manual waiting state, not a gateway status.",
-              "RECEIVED_SAMPLE is a UI sample only, not proof of funds.",
+              "RECEIVED_SAMPLE permanece arquivado como estado de desenvolvimento, não prova fundos.",
               "LOST and ARCHIVED preserve operator learning without accounting entries.",
             ].map((item) => (
               <div key={item} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">{item}</div>

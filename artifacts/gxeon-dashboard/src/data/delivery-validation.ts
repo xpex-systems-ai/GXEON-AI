@@ -57,6 +57,7 @@ export const revisionStates: RevisionState[] = ["NONE", "COPY_REVISION", "VISUAL
 export const evidenceTypes: EvidenceType[] = ["GitHub PR", "Vercel Preview", "Screenshot", "Document", "Manual Validation"];
 export const evidenceStates: EvidenceState[] = ["MISSING", "SAMPLE_ATTACHED", "READY_FOR_REVIEW", "MANUALLY_VERIFIED", "NEEDS_REVISION"];
 
+// Archived sandbox/dev seed records are retained only for future testing and are not active operational records.
 export const sampleDeliveryValidations: DeliveryValidationRecord[] = [
   {
     id: "VAL-P3-001",
@@ -191,7 +192,9 @@ export const sampleDeliveryValidations: DeliveryValidationRecord[] = [
   },
 ];
 
-export function getDeliveryValidationSummary(validations: DeliveryValidationRecord[] = sampleDeliveryValidations): DeliveryValidationSummary {
+export const activeOperationalValidations: DeliveryValidationRecord[] = [];
+
+export function getDeliveryValidationSummary(validations: DeliveryValidationRecord[] = activeOperationalValidations): DeliveryValidationSummary {
   const pendingReview = validations.filter((validation) => validation.approval_state === "PENDING_REVIEW").length;
   const approved = validations.filter((validation) => validation.approval_state === "APPROVED").length;
   const revisionRequested = validations.filter((validation) => validation.approval_state === "REVISION_REQUESTED").length;
@@ -214,28 +217,28 @@ export function getDeliveryValidationSummary(validations: DeliveryValidationReco
   };
 }
 
-export function getApprovalStateCounts(validations: DeliveryValidationRecord[] = sampleDeliveryValidations) {
+export function getApprovalStateCounts(validations: DeliveryValidationRecord[] = activeOperationalValidations) {
   return approvalStates.map((state) => ({
     state,
     count: validations.filter((validation) => validation.approval_state === state).length,
   }));
 }
 
-export function getEvidenceTypeCounts(validations: DeliveryValidationRecord[] = sampleDeliveryValidations) {
+export function getEvidenceTypeCounts(validations: DeliveryValidationRecord[] = activeOperationalValidations) {
   return evidenceTypes.map((type) => ({
     type,
     count: validations.reduce((total, validation) => total + validation.evidence.filter((evidence) => evidence.type === type).length, 0),
   }));
 }
 
-export function getValidationsByApprovalState(state: ApprovalState, validations: DeliveryValidationRecord[] = sampleDeliveryValidations) {
+export function getValidationsByApprovalState(state: ApprovalState, validations: DeliveryValidationRecord[] = activeOperationalValidations) {
   return validations.filter((validation) => validation.approval_state === state);
 }
 
-export function getValidationsWithRevision(validations: DeliveryValidationRecord[] = sampleDeliveryValidations) {
+export function getValidationsWithRevision(validations: DeliveryValidationRecord[] = activeOperationalValidations) {
   return validations.filter((validation) => validation.revision_state !== "NONE");
 }
 
-export function getValidationsWithRejection(validations: DeliveryValidationRecord[] = sampleDeliveryValidations) {
+export function getValidationsWithRejection(validations: DeliveryValidationRecord[] = activeOperationalValidations) {
   return validations.filter((validation) => validation.rejection_state !== "NONE");
 }

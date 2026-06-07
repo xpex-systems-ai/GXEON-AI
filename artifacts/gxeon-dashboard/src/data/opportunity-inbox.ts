@@ -47,6 +47,7 @@ export const opportunityScoringModel = {
 
 export const activeOpportunityStatuses: OpportunityStatus[] = ["NEW", "REVIEWING", "QUALIFIED", "PROPOSAL_READY", "CONTACTED"];
 
+// Archived sandbox/dev seed records are retained only for future testing and are not active operational records.
 export const sampleManualFirstOpportunities: Opportunity[] = [
   {
     id: "OPP-P0-001",
@@ -230,7 +231,9 @@ export const sampleManualFirstOpportunities: Opportunity[] = [
   },
 ];
 
-export function getOpportunityStatusCounts(opportunities: Opportunity[] = sampleManualFirstOpportunities) {
+export const activeOperationalOpportunities: Opportunity[] = [];
+
+export function getOpportunityStatusCounts(opportunities: Opportunity[] = activeOperationalOpportunities) {
   return opportunityPipelineStatuses.map((status) => ({
     status,
     count: opportunities.filter((opportunity) => opportunity.status === status).length,
@@ -240,7 +243,7 @@ export function getOpportunityStatusCounts(opportunities: Opportunity[] = sample
   }));
 }
 
-export function getOpportunityInboxSummary(opportunities: Opportunity[] = sampleManualFirstOpportunities) {
+export function getOpportunityInboxSummary(opportunities: Opportunity[] = activeOperationalOpportunities) {
   const activeOpportunities = opportunities.filter((opportunity) => activeOpportunityStatuses.includes(opportunity.status));
   const wonSampleValue = opportunities
     .filter((opportunity) => opportunity.status === "WON")

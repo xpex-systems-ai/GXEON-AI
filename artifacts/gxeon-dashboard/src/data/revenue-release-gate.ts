@@ -60,6 +60,7 @@ export type RevenueReleaseSummary = {
 
 export const releaseStatuses: ReleaseStatus[] = ["PENDING_REVIEW", "READY_FOR_RELEASE", "BLOCKED", "RELEASED_SAMPLE", "ARCHIVED"];
 
+// Archived sandbox/dev seed records are retained only for future testing and are not active operational records.
 export const sampleRevenueReleases: RevenueReleaseRecord[] = [
   {
     id: "REL-P4-001",
@@ -265,29 +266,31 @@ export const sampleRevenueReleases: RevenueReleaseRecord[] = [
   },
 ];
 
-export function getRevenueReleaseSummary(): RevenueReleaseSummary {
-  const activeRecords = sampleRevenueReleases.filter((release) => release.release_status !== "ARCHIVED");
+export const activeOperationalReleases: RevenueReleaseRecord[] = [];
+
+export function getRevenueReleaseSummary(releases: RevenueReleaseRecord[] = activeOperationalReleases): RevenueReleaseSummary {
+  const activeRecords = releases.filter((release) => release.release_status !== "ARCHIVED");
   const readinessTotal = activeRecords.reduce((total, release) => total + release.readiness_score, 0);
 
   return {
-    total_records: sampleRevenueReleases.length,
-    pending_review: sampleRevenueReleases.filter((release) => release.release_status === "PENDING_REVIEW").length,
-    ready_for_release: sampleRevenueReleases.filter((release) => release.release_status === "READY_FOR_RELEASE").length,
-    blocked: sampleRevenueReleases.filter((release) => release.release_status === "BLOCKED").length,
-    released_sample: sampleRevenueReleases.filter((release) => release.release_status === "RELEASED_SAMPLE").length,
-    archived: sampleRevenueReleases.filter((release) => release.release_status === "ARCHIVED").length,
-    estimated_revenue_total_brl: sampleRevenueReleases.reduce((total, release) => total + release.estimated_revenue_brl, 0),
-    releasable_revenue_total_brl: sampleRevenueReleases.reduce((total, release) => total + release.releasable_revenue_brl, 0),
+    total_records: releases.length,
+    pending_review: releases.filter((release) => release.release_status === "PENDING_REVIEW").length,
+    ready_for_release: releases.filter((release) => release.release_status === "READY_FOR_RELEASE").length,
+    blocked: releases.filter((release) => release.release_status === "BLOCKED").length,
+    released_sample: releases.filter((release) => release.release_status === "RELEASED_SAMPLE").length,
+    archived: releases.filter((release) => release.release_status === "ARCHIVED").length,
+    estimated_revenue_total_brl: releases.reduce((total, release) => total + release.estimated_revenue_brl, 0),
+    releasable_revenue_total_brl: releases.reduce((total, release) => total + release.releasable_revenue_brl, 0),
     average_readiness_score: activeRecords.length === 0 ? 0 : Math.round(readinessTotal / activeRecords.length),
-    complete_evidence_count: sampleRevenueReleases.filter((release) => ["COMPLETE", "VERIFIED_SAMPLE"].includes(release.evidence_completeness)).length,
-    authorized_sample_count: sampleRevenueReleases.filter((release) => release.authorization_status === "AUTHORIZED_SAMPLE").length,
+    complete_evidence_count: releases.filter((release) => ["COMPLETE", "VERIFIED_SAMPLE"].includes(release.evidence_completeness)).length,
+    authorized_sample_count: releases.filter((release) => release.authorization_status === "AUTHORIZED_SAMPLE").length,
   };
 }
 
-export function getReleasesByStatus(status: ReleaseStatus): RevenueReleaseRecord[] {
-  return sampleRevenueReleases.filter((release) => release.release_status === status);
+export function getReleasesByStatus(status: ReleaseStatus, releases: RevenueReleaseRecord[] = activeOperationalReleases): RevenueReleaseRecord[] {
+  return releases.filter((release) => release.release_status === status);
 }
 
-export function getReleaseStatusCounts(): Array<{ status: ReleaseStatus; count: number }> {
-  return releaseStatuses.map((status) => ({ status, count: getReleasesByStatus(status).length }));
+export function getReleaseStatusCounts(releases: RevenueReleaseRecord[] = activeOperationalReleases): Array<{ status: ReleaseStatus; count: number }> {
+  return releaseStatuses.map((status) => ({ status, count: getReleasesByStatus(status, releases).length }));
 }

@@ -43,6 +43,7 @@ export const executionBoardStatuses: ExecutionStatus[] = ["NOT_STARTED", "IN_PRO
 export const activeExecutionStatuses: ExecutionStatus[] = ["NOT_STARTED", "IN_PROGRESS", "BLOCKED", "REVIEW"];
 export const proofStatuses: ProofStatus[] = ["MISSING", "DRAFT", "ATTACHED_SAMPLE", "READY_FOR_REVIEW", "VERIFIED_SAMPLE"];
 
+// Archived sandbox/dev seed records are retained only for future testing and are not active operational records.
 export const sampleManualFirstExecutions: ExecutionRecord[] = [
   {
     id: "EXEC-P2-001",
@@ -299,7 +300,9 @@ export const sampleManualFirstExecutions: ExecutionRecord[] = [
   },
 ];
 
-export function getExecutionStatusCounts(executions: ExecutionRecord[] = sampleManualFirstExecutions) {
+export const activeOperationalExecutions: ExecutionRecord[] = [];
+
+export function getExecutionStatusCounts(executions: ExecutionRecord[] = activeOperationalExecutions) {
   return executionStatuses.map((status) => ({
     status,
     count: executions.filter((execution) => execution.status === status).length,
@@ -309,33 +312,33 @@ export function getExecutionStatusCounts(executions: ExecutionRecord[] = sampleM
   }));
 }
 
-export function getProofStatusCounts(executions: ExecutionRecord[] = sampleManualFirstExecutions) {
+export function getProofStatusCounts(executions: ExecutionRecord[] = activeOperationalExecutions) {
   return proofStatuses.map((status) => ({
     status,
     count: executions.filter((execution) => execution.proof_status === status).length,
   }));
 }
 
-export function getExecutionsByStatus(status: ExecutionStatus, executions: ExecutionRecord[] = sampleManualFirstExecutions) {
+export function getExecutionsByStatus(status: ExecutionStatus, executions: ExecutionRecord[] = activeOperationalExecutions) {
   return executions.filter((execution) => execution.status === status);
 }
 
-export function getBlockedExecutions(executions: ExecutionRecord[] = sampleManualFirstExecutions) {
+export function getBlockedExecutions(executions: ExecutionRecord[] = activeOperationalExecutions) {
   return executions.filter((execution) => execution.status === "BLOCKED" || Boolean(execution.blocker));
 }
 
-export function getActiveExecutionValue(executions: ExecutionRecord[] = sampleManualFirstExecutions) {
+export function getActiveExecutionValue(executions: ExecutionRecord[] = activeOperationalExecutions) {
   return executions
     .filter((execution) => activeExecutionStatuses.includes(execution.status))
     .reduce((total, execution) => total + execution.estimated_value_brl, 0);
 }
 
-export function getAverageExecutionProgress(executions: ExecutionRecord[] = sampleManualFirstExecutions) {
+export function getAverageExecutionProgress(executions: ExecutionRecord[] = activeOperationalExecutions) {
   if (executions.length === 0) return 0;
   return Math.round(executions.reduce((total, execution) => total + execution.progress_percent, 0) / executions.length);
 }
 
-export function getExecutionSummary(executions: ExecutionRecord[] = sampleManualFirstExecutions): ExecutionSummary {
+export function getExecutionSummary(executions: ExecutionRecord[] = activeOperationalExecutions): ExecutionSummary {
   return {
     active_executions: executions.filter((execution) => activeExecutionStatuses.includes(execution.status)).length,
     blocked_executions: getBlockedExecutions(executions).length,

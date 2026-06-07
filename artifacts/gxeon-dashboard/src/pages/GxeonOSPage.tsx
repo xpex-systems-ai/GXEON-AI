@@ -3,22 +3,25 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { activationPlan, buildGxeonPlaceholderPath, gxeonNavigation, infrastructureStack } from "@/data/gxeon-os";
-import { qgConnectors, qgMissionCards, qgRevenuePipeline, qgSafetyBoundaries, qgStatusBadges } from "@/data/qg-theme";
+import { connectorsReadiness, connectorCredentialBoundary } from "@/data/connectors-readiness";
+import { operationalMode, operationalStatusCards } from "@/data/operational-mode";
+import { qgMissionCards, qgRevenuePipeline, qgSafetyBoundaries, qgStatusBadges } from "@/data/qg-theme";
 import { ArrowRight, BrainCircuit, CheckCircle2, CircleDot, Lock, Search, ShieldCheck, Sparkles } from "lucide-react";
 
 const statusLabel = {
-  mock_ready: "Manual-first ready",
-  placeholder_only: "Future / inactive",
-  all_disconnected: "Locked / disconnected",
+  operational: "Operacional",
+  pending: "Pendente",
+  locked: "Bloqueado",
+  future: "Futuro",
+  ready_to_connect: "Pronto para conectar",
 };
 
 const connectorTone: Record<string, string> = {
-  ready: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
-  connected: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
-  pending: "border-amber-300/30 bg-amber-400/10 text-amber-100",
-  locked: "border-red-300/30 bg-red-400/10 text-red-100",
-  "manual-first": "border-cyan-300/30 bg-cyan-400/10 text-cyan-100",
-  future: "border-stone-300/20 bg-stone-400/10 text-stone-200",
+  READY_TO_CONNECT: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
+  NEEDS_REVIEW: "border-amber-300/30 bg-amber-400/10 text-amber-100",
+  LOCKED: "border-red-300/30 bg-red-400/10 text-red-100",
+  CONNECTED_MANUAL: "border-cyan-300/30 bg-cyan-400/10 text-cyan-100",
+  FUTURE: "border-stone-300/20 bg-stone-400/10 text-stone-200",
 };
 
 type GxeonOSPageProps = {
@@ -50,17 +53,13 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
-              {[
-                ["Rotas P0-P5", "6/6", "preservadas"],
-                ["Conectores", "0 APIs", "ativação controlada"],
-                ["Modo", "Safe Preview", "sem segredos"],
-              ].map(([label, value, hint]) => (
+              {operationalStatusCards.map(({ label, value }) => (
                 <Link key={label} href={buildGxeonPlaceholderPath("command_center", label)}>
                   <div className="group rounded-2xl border border-amber-100/10 bg-amber-100/[0.04] p-4 backdrop-blur transition hover:border-amber-300/40 hover:bg-amber-400/10">
                     <p className="text-xs uppercase tracking-[0.25em] text-stone-400">{label}</p>
                     <p className="mt-2 text-2xl font-bold text-white">{value}</p>
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-xs text-amber-200">{hint}</p>
+                      <p className="text-xs text-amber-200">{operationalMode.noSecretsBoundary}</p>
                       <ArrowRight className="h-3 w-3 text-amber-200 transition group-hover:translate-x-1" />
                     </div>
                   </div>
@@ -86,7 +85,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
               </div>
             </div>
             <Progress value={100} className="relative mt-2 h-2" />
-            <p className="relative mt-3 text-sm text-stone-300">Visual/manual-first: nenhuma chamada externa, nenhuma credencial e nenhum write de banco.</p>
+            <p className="relative mt-3 text-sm text-stone-300">Operação privada: aguardando dados reais, conectores em ativação controlada e primeira receita pendente.</p>
           </div>
         </div>
       </section>
@@ -99,7 +98,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
                 <p className="text-xs uppercase tracking-[0.35em] text-amber-200/70">Operator Mission Control</p>
                 <h2 className="text-2xl font-bold text-white">Prioridades imediatas do QG</h2>
               </div>
-              <Badge className="bg-amber-300 text-black">Manual-first only</Badge>
+              <Badge className="bg-amber-300 text-black">Operação Manual</Badge>
             </div>
             <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-5">
               {qgMissionCards.map((mission) => (
@@ -120,7 +119,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
                 <p className="text-xs uppercase tracking-[0.35em] text-amber-200/70">Revenue Pipeline Map</p>
                 <h2 className="text-2xl font-bold text-white">P0 → P5 execução de receita</h2>
               </div>
-              <Badge variant="outline" className="border-amber-300/40 text-amber-100">visual/manual-first · not automated</Badge>
+              <Badge variant="outline" className="border-amber-300/40 text-amber-100">operacional · conectores controlados</Badge>
             </div>
             <div className="mt-5 grid gap-3 lg:grid-cols-6">
               {qgRevenuePipeline.map((stage, index) => {
@@ -150,7 +149,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
             <CardTitle className="flex items-center gap-2 text-white"><Icon className="h-5 w-5 text-amber-200" /> {activeModule.name}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Badge variant="outline" className="border-amber-300/40 text-amber-100">{statusLabel[activeModule.status ?? "mock_ready"]}</Badge>
+            <Badge variant="outline" className="border-amber-300/40 text-amber-100">{statusLabel[activeModule.status ?? "operational"]}</Badge>
             <p className="text-stone-300">{activeModule.description}</p>
             <div className="grid gap-3 sm:grid-cols-2">
               {activeModule.widgets.map((widget) => (
@@ -204,29 +203,30 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-amber-200/70">Connectors Hub</p>
             <h2 className="text-2xl font-bold text-white">Conectores privados preparados para ativação controlada</h2>
-            <p className="mt-1 text-sm text-stone-400">Credenciais ficam dentro dos dashboards dos provedores, nunca no frontend.</p>
+            <p className="mt-1 text-sm text-stone-400">{connectorCredentialBoundary}</p>
           </div>
           <Badge className="bg-amber-300 text-black">No auth flow · no API calls</Badge>
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {qgConnectors.map((connector) => {
-            const ConnectorIcon = connector.icon;
-            return (
-              <Link key={connector.name} href={connector.route}>
-                <div className="group rounded-2xl border border-amber-200/15 bg-black/25 p-4 transition hover:border-amber-200/45 hover:bg-amber-400/10">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="font-semibold text-white">{connector.name}</p>
-                    <ConnectorIcon className="h-4 w-4 text-amber-200" />
-                  </div>
-                  <Badge variant="outline" className={`mt-3 border ${connectorTone[connector.status]}`}>{connector.status}</Badge>
-                  <div className="mt-3 inline-flex items-center gap-2 rounded-md border border-amber-200/30 px-3 py-1.5 text-xs font-semibold text-amber-100">
-                    {connector.action}
-                    <ArrowRight className="h-3 w-3 transition group-hover:translate-x-1" />
-                  </div>
+          {connectorsReadiness.map((connector) => (
+            <Link key={connector.id} href={buildGxeonPlaceholderPath("integrations", `${connector.name} readiness`)}>
+              <div className="group rounded-2xl border border-amber-200/15 bg-black/25 p-4 transition hover:border-amber-200/45 hover:bg-amber-400/10">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="font-semibold text-white">{connector.name}</p>
+                  <Lock className="h-4 w-4 text-amber-200" />
                 </div>
-              </Link>
-            );
-          })}
+                <Badge variant="outline" className={`mt-3 border ${connectorTone[connector.status]}`}>{connector.status}</Badge>
+                <p className="mt-3 text-xs text-stone-400">{connector.nextAction}</p>
+                <p className="mt-2 text-xs text-amber-100">Risco: {connector.activationRisk}</p>
+                <p className="mt-2 text-xs text-stone-300">Operador: {connector.requiredOperatorAction}</p>
+                <p className="mt-2 text-[11px] uppercase tracking-[0.18em] text-stone-500">{connector.destinationDashboardHint}</p>
+                <div className="mt-3 inline-flex items-center gap-2 rounded-md border border-amber-200/30 px-3 py-1.5 text-xs font-semibold text-amber-100">
+                  {connector.buttonLabel}
+                  <ArrowRight className="h-3 w-3 transition group-hover:translate-x-1" />
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
 
