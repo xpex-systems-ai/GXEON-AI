@@ -68,17 +68,17 @@ export default function RevenueReleaseGatePage() {
         <div className="relative grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge className="border-emerald-300/40 bg-emerald-400/10 text-emerald-100">P4 Release Gate</Badge>
+              <Badge className="border-emerald-300/40 bg-emerald-400/10 text-emerald-100">P4 Release Gate do QG</Badge>
               <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">Safe Preview Mode</Badge>
               <Badge variant="outline" className="border-amber-300/40 text-amber-100">No payment gateway</Badge>
               <Badge variant="outline" className="border-rose-300/40 text-rose-100">No revenue claims</Badge>
               <Link href="/ops/ledger" className="inline-flex items-center gap-2 rounded-full border border-cyan-300/30 bg-cyan-400/10 px-3 py-1 text-xs font-bold text-cyan-50 transition hover:bg-cyan-400/20">Open P5 Ledger <ArrowRight className="h-3.5 w-3.5" /></Link>
             </div>
             <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-emerald-200/70">OPP → TASK → EXEC → VAL → RELEASE</p>
-              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">Revenue Release Gate P4</h1>
+              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-emerald-200/70">OPORTUNIDADE → TAREFA → EXECUÇÃO → VALIDAÇÃO → RELEASE → LEDGER</p>
+              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">P4 · Release Gate de Receita do QG</h1>
               <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">
-                Manual-first release validation layer connecting Delivery Validation P3 to Financial Readiness. P4 makes release eligibility visible without creating invoices, processing payments, writing databases, connecting Supabase, or activating automation.
+                Camada privada/manual-first que conecta P3 à prontidão financeira. O P4 deixa a elegibilidade de release visível sem criar invoices, processar pagamentos, escrever em bancos, conectar Supabase ou ativar automação.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -112,7 +112,7 @@ export default function RevenueReleaseGatePage() {
                 "Zero external API calls or Supabase writes",
                 "No Stripe, Mercado Pago, invoices, receipts, or ledger transactions",
                 "Estimated values are pipeline readiness labels, not revenue claims",
-                "P5 Financial Ledger is manual-first and visual-only",
+                "P5 Ledger Financeiro permanece manual-first e visual-only",
               ].map((item) => (
                 <div key={item} className="flex gap-3 rounded-2xl border border-emerald-200/15 bg-slate-950/35 p-3">
                   <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" />
@@ -291,7 +291,7 @@ export default function RevenueReleaseGatePage() {
 
           <Card className="border-violet-300/20 bg-slate-950/75 backdrop-blur-xl">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white"><WalletCards className="h-5 w-5 text-violet-200" /> Financial Ledger P5 boundary</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-white"><WalletCards className="h-5 w-5 text-violet-200" /> Boundary do P5 Ledger Financeiro</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-violet-50">
               <p className="rounded-2xl border border-violet-300/20 bg-violet-400/10 p-3">

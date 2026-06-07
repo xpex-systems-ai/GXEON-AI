@@ -36,17 +36,17 @@ export type GxeonModule = {
 export const gxeonNavigation: GxeonModule[] = [
   {
     id: "command_center",
-    name: "Command Center",
+    name: "QG Central",
     icon: Cpu,
     route: "/",
     accent: "cyan",
     widgets: ["System Status", "Live Metrics", "Execution Score", "Active Agents", "Revenue Overview", "Infrastructure Health"],
     status: "mock_ready",
-    description: "Visão geral do ecossistema GXEON com telemetria simulada e prontidão operacional.",
+    description: "Visão central do Private QG com prioridades, segurança e execução de receita em modo manual-first.",
   },
   {
     id: "war_room",
-    name: "War Room",
+    name: "Sala de Guerra",
     icon: Shield,
     route: "/war-room",
     accent: "rose",
@@ -60,7 +60,7 @@ export const gxeonNavigation: GxeonModule[] = [
     icon: Radar,
     route: "/radar-x",
     accent: "emerald",
-    widgets: ["Opportunity Scanner", "API Discovery", "Freelancer Sources", "Lead Sources", "Signal Streams", "Trend Detection"],
+    widgets: ["Opportunity Scanner", "API Discovery", "Workana Sources", "Lead Sources", "Signal Streams", "Trend Detection"],
     status: "placeholder_only",
     description: "Camada visual de inteligência preditiva preparada para futuras fontes externas.",
   },
@@ -72,17 +72,17 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "violet",
     widgets: ["Agent Registry", "Agent Status", "Agent Marketplace", "Agent Performance", "Agent Deployment"],
     status: "mock_ready",
-    description: "Orquestração visual de agentes, desempenho e implantação em modo simulado.",
+    description: "Orquestração visual de agentes, desempenho e implantação em modo privado/manual-first.",
   },
   {
     id: "marketplace",
-    name: "Marketplace",
+    name: "Mercado",
     icon: Store,
     route: "/marketplace",
     accent: "amber",
     widgets: ["Products", "Services", "Digital Assets", "Subscriptions", "Offers"],
     status: "mock_ready",
-    description: "Vitrine de ofertas, produtos e assinaturas pronta para ativação comercial gradual.",
+    description: "Mesa visual de ofertas, serviços e ativos para monetização privada gradual.",
   },
   {
     id: "task_engine",
@@ -102,11 +102,11 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "green",
     widgets: ["Revenue Dashboard", "Opportunity Inbox", "Task Queue P1", "Transactions", "Subscriptions", "Billing", "Forecast"],
     status: "mock_ready",
-    description: "Núcleo financeiro mockado para receita, billing, assinaturas e forecast.",
+    description: "Núcleo financeiro visual para receita, billing, assinaturas e forecast sem transações reais.",
   },
   {
     id: "revenue_engine_p0",
-    name: "Revenue Engine P0",
+    name: "P0 Caixa de Oportunidades",
     icon: Inbox,
     route: "/ops/opportunities",
     accent: "emerald",
@@ -117,7 +117,7 @@ export const gxeonNavigation: GxeonModule[] = [
 
   {
     id: "revenue_engine_p1",
-    name: "Revenue Engine P1",
+    name: "P1 Fila de Tarefas",
     icon: ListChecks,
     route: "/ops/tasks",
     accent: "blue",
@@ -127,7 +127,7 @@ export const gxeonNavigation: GxeonModule[] = [
   },
   {
     id: "revenue_engine_p2",
-    name: "Execution Tracker P2",
+    name: "P2 Rastreador de Execução",
     icon: ClipboardCheck,
     route: "/ops/execution",
     accent: "violet",
@@ -137,7 +137,7 @@ export const gxeonNavigation: GxeonModule[] = [
   },
   {
     id: "revenue_engine_p3",
-    name: "Delivery Validation P3",
+    name: "P3 Validação de Entrega",
     icon: BadgeCheck,
     route: "/ops/validation",
     accent: "emerald",
@@ -147,17 +147,17 @@ export const gxeonNavigation: GxeonModule[] = [
   },
   {
     id: "revenue_engine_p4",
-    name: "Release Gate P4",
+    name: "P4 Release Gate",
     icon: ReceiptText,
     route: "/ops/release",
     accent: "green",
-    widgets: ["Revenue Release Gate", "Financial Readiness", "Release Board", "Approval Chains", "Pipeline Traceability", "Financial Ledger P5"],
+    widgets: ["Revenue Release Gate", "Financial Readiness", "Release Board", "Approval Chains", "Pipeline Traceability", "P5 Ledger Financeiro"],
     status: "mock_ready",
     description: "Revenue Release Gate manual-first para conectar validação de entrega à prontidão financeira sem APIs, banco de dados, gateways ou transações reais.",
   },
   {
     id: "revenue_engine_p5",
-    name: "Financial Ledger P5",
+    name: "P5 Ledger Financeiro",
     icon: BookOpenCheck,
     route: "/ops/ledger",
     accent: "teal",
@@ -174,7 +174,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "teal",
     widgets: ["Global Transactions", "Wallets", "Settlement", "Audit Trail"],
     status: "mock_ready",
-    description: "Livro razão visual para auditoria, carteiras e liquidação em estado simulado.",
+    description: "Livro razão visual para auditoria, carteiras e liquidação em estado seguro/manual-first.",
   },
   {
     id: "blockchain",
@@ -188,23 +188,23 @@ export const gxeonNavigation: GxeonModule[] = [
   },
   {
     id: "api_gateway",
-    name: "API Gateway",
+    name: "Infraestrutura",
     icon: Network,
     route: "/api-gateway",
     accent: "sky",
     widgets: ["Connected APIs", "API Health", "API Usage", "API Marketplace"],
     status: "all_disconnected",
-    description: "Gateway visual com APIs desconectadas, botões de conexão e métricas fictícias.",
+    description: "Infraestrutura visual com APIs desconectadas, conectores travados e ativação controlada.",
   },
   {
     id: "integrations",
-    name: "Integrations",
+    name: "Segurança",
     icon: Plug,
     route: "/integrations",
     accent: "orange",
-    widgets: ["Supabase", "Railway", "Vercel", "GitHub", "Mercado Pago", "OpenAI", "Freelancer", "Upwork", "Public Data Sources"],
+    widgets: ["Supabase", "Railway", "Vercel", "GitHub", "Mercado Pago", "Microsoft 365", "Workana", "99Freelas", "LinkedIn"],
     status: "all_disconnected",
-    description: "Hub de provedores externos totalmente visível, mas sem ativar credenciais ou chamadas reais.",
+    description: "Hub privado de conectores, credenciais fora do frontend e nenhuma chamada real ativada.",
   },
   {
     id: "analytics",
@@ -214,7 +214,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "indigo",
     widgets: ["North Star Metrics", "Conversion Funnel", "Cohort Radar", "Revenue Signals", "Operator Insights"],
     status: "mock_ready",
-    description: "Analytics frontend-first para validar experiência, gráficos e narrativas executivas.",
+    description: "Analytics visual para validar experiência, gráficos e sinais operacionais do QG.",
   },
   {
     id: "automation",
@@ -224,7 +224,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "yellow",
     widgets: ["Playbooks", "Triggers", "Rules Engine", "Scheduled Jobs", "Human Approval"],
     status: "mock_ready",
-    description: "Camada de automação simulada para fluxos, gatilhos e aprovações humanas.",
+    description: "Camada de automação visual para fluxos, gatilhos e aprovações humanas antes de qualquer ativação real.",
   },
   {
     id: "settings",
@@ -234,7 +234,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "slate",
     widgets: ["Workspace", "Access Control", "Feature Flags", "Theme", "Activation Plan"],
     status: "mock_ready",
-    description: "Configurações operacionais, preferências visuais e plano de ativação gradual.",
+    description: "Configurações privadas do operador, preferências visuais e plano de ativação controlada.",
   },
 ];
 
@@ -244,10 +244,10 @@ export const integrationProviders = [
   "Vercel",
   "GitHub",
   "Mercado Pago",
-  "OpenAI",
-  "Freelancer",
-  "Upwork",
-  "Public Data Sources",
+  "Microsoft 365",
+  "Workana",
+  "99Freelas",
+  "LinkedIn",
 ];
 
 export const infrastructureStack = [
@@ -262,9 +262,9 @@ export const infrastructureStack = [
 export const activationPlan = [
   "Renderizar 100% do ecossistema visual",
   "Validar navegação completa e responsiva",
-  "Testar dados simulados e estados vazios",
+  "Testar dados sample/manual-first e estados vazios",
   "Publicar preview no Vercel",
-  "Conectar Railway, Supabase, Mercado Pago, Radar X e APIs externas por fases",
+  "Preparar Railway, Supabase, Mercado Pago, Radar X e APIs externas para ativação controlada fora do frontend",
 ];
 
 export function slugifyGxeonLabel(label: string) {
