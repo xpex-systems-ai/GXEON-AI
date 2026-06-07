@@ -209,7 +209,7 @@ export default function GxeonOSPage({ moduleId = "command_center" }: GxeonOSPage
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {connectorsReadiness.map((connector) => (
-            <Link key={connector.id} href={buildGxeonPlaceholderPath("integrations", `${connector.name} readiness`)}>
+            <Link key={connector.id} href="/ops/connectors">
               <div className="group rounded-2xl border border-amber-200/15 bg-black/25 p-4 transition hover:border-amber-200/45 hover:bg-amber-400/10">
                 <div className="flex items-center justify-between gap-3">
                   <p className="font-semibold text-white">{connector.name}</p>
