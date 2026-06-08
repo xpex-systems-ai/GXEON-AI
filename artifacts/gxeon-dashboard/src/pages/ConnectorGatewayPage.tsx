@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -131,9 +132,18 @@ export default function ConnectorGatewayPage() {
                 </div>
               </div>
 
-              <Button type="button" variant="outline" className={`mt-auto justify-between ${buttonTone[connector.status]}`} disabled={connector.status === "LOCKED"}>
-                {connector.buttonLabel}
-                <ArrowRight className="h-4 w-4" />
+              <Button type="button" variant="outline" className={`mt-auto justify-between ${buttonTone[connector.status]}`} disabled={connector.status === "LOCKED"} asChild={connector.id === "github"}>
+                {connector.id === "github" ? (
+                  <Link href="/ops/connectors/github">
+                    <span>{connector.buttonLabel}</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                ) : (
+                  <>
+                    {connector.buttonLabel}
+                    <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
               </Button>
               <p className="text-[11px] text-slate-500">Checklist: {connector.checklistHref}</p>
             </CardContent>

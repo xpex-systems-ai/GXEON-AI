@@ -47,7 +47,7 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
     stateStoreBoundary: "Estado futuro de sync e evidências será persistido somente após revisão de schema.",
     nextManualAction: "Definir repositórios permitidos, escopo read-only inicial e política de revisão de evidências.",
     buttonLabel: "Abrir checklist",
-    checklistHref: "docs/connectors/GITHUB_CONNECTOR_READINESS.md",
+    checklistHref: "docs/connectors/GITHUB_CONNECTION_CHECKLIST.md",
     risks: ["Permissões de repositório excessivas", "Vazamento de token", "Ações de escrita acidentais"],
     activationSteps: ["Mapear repositório e branch", "Aprovar app/OAuth com escopo mínimo", "Testar leitura em backend isolado", "Publicar estado manual conectado"],
     futureCapabilities: ["Repository metadata", "Issues", "Pull requests", "Commits", "Engineering evidence"],

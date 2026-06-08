@@ -17,6 +17,7 @@ import RevenueReleaseGatePage from "@/pages/RevenueReleaseGatePage";
 import FinancialLedgerPage from "@/pages/FinancialLedgerPage";
 import MonetizationBoardPage from "@/pages/MonetizationBoardPage";
 import ConnectorGatewayPage from "@/pages/ConnectorGatewayPage";
+import GitHubReadonlyConnectorPage from "@/pages/GitHubReadonlyConnectorPage";
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ function Router() {
             <Route path="/ops/release" component={RevenueReleaseGatePage} />
             <Route path="/ops/ledger" component={FinancialLedgerPage} />
             <Route path="/ops/monetization" component={MonetizationBoardPage} />
+            <Route path="/ops/connectors/github" component={GitHubReadonlyConnectorPage} />
             <Route path="/ops/connectors" component={ConnectorGatewayPage} />
             {moduleRoutes.map(([path, moduleId]) => (
               <Route key={path} path={path} component={() => <GxeonOSPage moduleId={moduleId} />} />
