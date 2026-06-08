@@ -1,9 +1,11 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { connectorGatewayProviders, connectorGatewaySafetyRules, ecosystemReadiness, operationalActivityFeed, REAL_DATA_MODE, type ConnectorGatewayId, type ConnectorGatewayStatus } from "@/data/connector-gateway";
 import { cn } from "@/lib/utils";
+import { fetchGitHubConnectorSnapshot } from "@/services/githubConnectorService";
 import { CheckCircle2, Eye, LockKeyhole, Plug, ShieldCheck, Wrench } from "lucide-react";
 import { FaMicrosoft } from "react-icons/fa";
 import { SiGithub, SiRailway, SiSupabase, SiVercel } from "react-icons/si";
@@ -33,8 +35,33 @@ const brandIcon: Record<ConnectorGatewayId, typeof SiGithub> = {
   microsoft365: FaMicrosoft,
 };
 
+function formatSync(value: string | null | undefined): string | null {
+  if (!value) return null;
+  return new Intl.DateTimeFormat("en-US", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value));
+}
+
 export default function ConnectorGatewayPage() {
   const [location] = useLocation();
+  const [githubGatewayOverride, setGithubGatewayOverride] = useState<{ status: ConnectorGatewayStatus; lastSync: string | null; healthScore: number } | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchGitHubConnectorSnapshot(controller.signal).then((snapshot) => {
+      if (snapshot.status === "CONNECTED_READONLY") {
+        setGithubGatewayOverride({ status: "CONNECTED", lastSync: formatSync(snapshot.health.lastSyncAt), healthScore: 100 });
+        return;
+      }
+      setGithubGatewayOverride({ status: "READY", lastSync: null, healthScore: 0 });
+    }).catch(() => {
+      if (!controller.signal.aborted) setGithubGatewayOverride({ status: "READY", lastSync: null, healthScore: 0 });
+    });
+    return () => controller.abort();
+  }, []);
+
+  const gatewayProviders = useMemo(() => connectorGatewayProviders.map((connector) => {
+    if (connector.id !== "github" || !githubGatewayOverride) return connector;
+    return { ...connector, status: githubGatewayOverride.status, lastSync: githubGatewayOverride.lastSync, healthScore: githubGatewayOverride.healthScore };
+  }), [githubGatewayOverride]);
 
   return (
     <div className="space-y-5">
@@ -59,7 +86,7 @@ export default function ConnectorGatewayPage() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        {connectorGatewayProviders.map((connector) => {
+        {gatewayProviders.map((connector) => {
           const href = connectorRoutes[connector.id];
           const active = location === href;
           const connected = connector.status === "CONNECTED";
@@ -93,7 +120,7 @@ export default function ConnectorGatewayPage() {
 
       <section className="grid gap-4 xl:grid-cols-[1fr_0.8fr]">
         <Card className="border-white/10 bg-[#090909]/85 text-white"><CardContent className="p-5"><h2 className="text-lg font-bold">Operational Activity Feed</h2><p className="mt-3 rounded-2xl border border-dashed border-white/10 p-5 text-sm text-stone-400">{operationalActivityFeed.length === 0 ? "EMPTY_REAL_DATA: nenhum evento de operador, conexão, deploy ou sincronização real registrado." : "Events available"}</p></CardContent></Card>
-        <Card className="border-white/10 bg-[#090909]/85 text-white"><CardContent className="p-5"><h2 className="text-lg font-bold">System Health Center</h2><div className="mt-4 grid gap-2 text-sm">{connectorGatewayProviders.map((connector) => <div key={connector.id} className="flex items-center justify-between border-b border-white/10 pb-2"><span>{connector.name} Health</span><span>{connector.healthScore}%</span></div>)}<div className="flex items-center justify-between pt-2 font-black text-emerald-100"><span>Global Health Score</span><span>{ecosystemReadiness.globalHealthScore}%</span></div></div></CardContent></Card>
+        <Card className="border-white/10 bg-[#090909]/85 text-white"><CardContent className="p-5"><h2 className="text-lg font-bold">System Health Center</h2><div className="mt-4 grid gap-2 text-sm">{gatewayProviders.map((connector) => <div key={connector.id} className="flex items-center justify-between border-b border-white/10 pb-2"><span>{connector.name} Health</span><span>{connector.healthScore}%</span></div>)}<div className="flex items-center justify-between pt-2 font-black text-emerald-100"><span>Global Health Score</span><span>{ecosystemReadiness.globalHealthScore}%</span></div></div></CardContent></Card>
       </section>
 
       <section className="grid gap-3 md:grid-cols-5">
