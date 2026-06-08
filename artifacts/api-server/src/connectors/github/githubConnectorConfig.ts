@@ -1,18 +1,25 @@
-import { type GitHubConnectorConfig, type GitHubConnectorRuntimeDiagnostics, type GitHubConnectorSafeStatus } from "./githubConnectorTypes";
-import { type GitHubConnectorConfig, type GitHubConnectorSafeStatus } from "./githubConnectorTypes";
+import {
+  type GitHubConnectorConfig,
+  type GitHubConnectorRuntimeDiagnostics,
+  type GitHubConnectorSafeStatus,
+} from "./githubConnectorTypes";
 
 const DEFAULT_OWNER = "xpex-systems-ai";
 const DEFAULT_REPO = "GXEON-AI";
 
 function runtimeServiceName(env: NodeJS.ProcessEnv): string | null {
-  return env["RAILWAY_SERVICE_NAME"]?.trim()
-    || env["RAILWAY_SERVICE_ID"]?.trim()
-    || env["VERCEL_PROJECT_PRODUCTION_URL"]?.trim()
-    || env["VERCEL_URL"]?.trim()
-    || null;
+  return (
+    env["RAILWAY_SERVICE_NAME"]?.trim() ||
+    env["RAILWAY_SERVICE_ID"]?.trim() ||
+    env["VERCEL_PROJECT_PRODUCTION_URL"]?.trim() ||
+    env["VERCEL_URL"]?.trim() ||
+    null
+  );
 }
 
-export function getGitHubConnectorConfig(env: NodeJS.ProcessEnv = process.env): GitHubConnectorConfig & { token: string | null } {
+export function getGitHubConnectorConfig(
+  env: NodeJS.ProcessEnv = process.env,
+): GitHubConnectorConfig & { token: string | null } {
   const token = env["GITHUB_CONNECTOR_TOKEN"]?.trim() || null;
   const owner = env["GITHUB_CONNECTOR_OWNER"]?.trim() || DEFAULT_OWNER;
   const repo = env["GITHUB_CONNECTOR_REPO"]?.trim() || DEFAULT_REPO;
@@ -24,7 +31,6 @@ export function getGitHubConnectorConfig(env: NodeJS.ProcessEnv = process.env): 
   if (!tokenPresent) missing.push("MISSING_TOKEN");
   if (!ownerPresent) missing.push("MISSING_OWNER");
   if (!repoPresent) missing.push("MISSING_REPO");
-  const missing = token ? [] : ["GITHUB_CONNECTOR_TOKEN"];
 
   return {
     owner,
@@ -38,7 +44,10 @@ export function getGitHubConnectorConfig(env: NodeJS.ProcessEnv = process.env): 
   };
 }
 
-export function toSafeGitHubConnectorStatus(config: GitHubConnectorConfig, lastSyncAt: string | null = null): GitHubConnectorSafeStatus {
+export function toSafeGitHubConnectorStatus(
+  config: GitHubConnectorConfig,
+  lastSyncAt: string | null = null,
+): GitHubConnectorSafeStatus {
   return {
     provider: "github",
     status: config.isConfigured ? "CONNECTED_READONLY" : "READY",
@@ -54,7 +63,9 @@ export function toSafeGitHubConnectorStatus(config: GitHubConnectorConfig, lastS
   };
 }
 
-export function toGitHubConnectorDiagnostics(env: NodeJS.ProcessEnv = process.env): GitHubConnectorRuntimeDiagnostics {
+export function toGitHubConnectorDiagnostics(
+  env: NodeJS.ProcessEnv = process.env,
+): GitHubConnectorRuntimeDiagnostics {
   const config = getGitHubConnectorConfig(env);
 
   return {
@@ -70,12 +81,5 @@ export function toGitHubConnectorDiagnostics(env: NodeJS.ProcessEnv = process.en
     runtimeServiceName: runtimeServiceName(env),
     nodeEnv: env["NODE_ENV"]?.trim() || null,
     timestamp: new Date().toISOString(),
-    owner: config.owner,
-    repo: config.repo,
-    missing: config.missing,
-    lastSyncAt,
-    message: config.isConfigured
-      ? "GitHub connector backend variables are configured for read-only runtime reads."
-      : "GitHub connector is ready but missing backend-only runtime credentials.",
   };
 }

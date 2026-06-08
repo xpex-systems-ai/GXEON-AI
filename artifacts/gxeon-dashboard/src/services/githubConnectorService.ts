@@ -5,8 +5,9 @@ import {
   type GitHubReadonlySnapshot,
 } from "@/data/github-readonly-connector";
 
-export type GitHubConnectorApiBaseMode = "same-origin" | "configured-backend-url";
-import { githubReadonlySnapshot, type GitHubReadonlySnapshot } from "@/data/github-readonly-connector";
+export type GitHubConnectorApiBaseMode =
+  | "same-origin"
+  | "configured-backend-url";
 
 export type GitHubConnectorServiceState = {
   loading: boolean;
@@ -17,9 +18,13 @@ export type GitHubConnectorServiceState = {
   data: GitHubReadonlySnapshot;
 };
 
-const configuredApiBaseUrl = (import.meta.env.VITE_GXEON_API_BASE_URL as string | undefined)?.trim().replace(/\/$/, "") ?? "";
+const configuredApiBaseUrl =
+  (import.meta.env.VITE_GXEON_API_BASE_URL as string | undefined)
+    ?.trim()
+    .replace(/\/$/, "") ?? "";
 
-export const githubConnectorApiBaseMode: GitHubConnectorApiBaseMode = configuredApiBaseUrl ? "configured-backend-url" : "same-origin";
+export const githubConnectorApiBaseMode: GitHubConnectorApiBaseMode =
+  configuredApiBaseUrl ? "configured-backend-url" : "same-origin";
 
 function apiUrl(path: string): string {
   return `${configuredApiBaseUrl}${path}`;
@@ -40,15 +45,11 @@ function backendUnavailableSnapshot(): GitHubReadonlySnapshot {
   };
 }
 
-export async function fetchGitHubConnectorSnapshot(signal?: AbortSignal): Promise<GitHubReadonlySnapshot> {
+export async function fetchGitHubConnectorSnapshot(
+  signal?: AbortSignal,
+): Promise<GitHubReadonlySnapshot> {
   try {
     const response = await fetch(apiUrl("/api/connectors/github/snapshot"), {
-  data: GitHubReadonlySnapshot;
-};
-
-export async function fetchGitHubConnectorSnapshot(signal?: AbortSignal): Promise<GitHubReadonlySnapshot> {
-  try {
-    const response = await fetch("/api/connectors/github/snapshot", {
       method: "GET",
       signal,
       headers: {
@@ -56,14 +57,17 @@ export async function fetchGitHubConnectorSnapshot(signal?: AbortSignal): Promis
       },
     });
 
-    const payload = await response.json() as GitHubReadonlySnapshot;
+    const payload = (await response.json()) as GitHubReadonlySnapshot;
     if (!response.ok) {
       return {
         ...githubReadonlySnapshot,
         ...payload,
         status: payload.status ?? "FAILED",
         statusLabel: payload.statusLabel ?? "FAILED",
-        lastErrorCode: payload.lastErrorCode ?? payload.health?.lastErrorCode ?? "GITHUB_READ_FAILED",
+        lastErrorCode:
+          payload.lastErrorCode ??
+          payload.health?.lastErrorCode ??
+          "GITHUB_READ_FAILED",
       };
     }
 
@@ -77,7 +81,9 @@ export async function fetchGitHubConnectorSnapshot(signal?: AbortSignal): Promis
   }
 }
 
-export async function fetchGitHubConnectorDiagnostics(signal?: AbortSignal): Promise<GitHubConnectorDiagnostics | null> {
+export async function fetchGitHubConnectorDiagnostics(
+  signal?: AbortSignal,
+): Promise<GitHubConnectorDiagnostics | null> {
   try {
     const response = await fetch(apiUrl("/api/connectors/github/diagnostics"), {
       method: "GET",
@@ -94,15 +100,5 @@ export async function fetchGitHubConnectorDiagnostics(signal?: AbortSignal): Pro
       throw error;
     }
     return null;
-    return {
-      ...githubReadonlySnapshot,
-      status: "READY",
-      statusLabel: "READY_BACKEND_UNAVAILABLE",
-      health: {
-        ...githubReadonlySnapshot.health,
-        githubConnector: "READY_FOR_CONNECTION",
-        lastSyncAt: null,
-      },
-    };
   }
 }
