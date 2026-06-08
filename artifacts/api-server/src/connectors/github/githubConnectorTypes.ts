@@ -35,7 +35,6 @@ export type GitHubConnectorRuntimeDiagnostics = {
   runtimeServiceName: string | null;
   nodeEnv: string | null;
   timestamp: string;
-  missing: string[];
 };
 
 export type GitHubConnectorSafeStatus = {
@@ -47,10 +46,6 @@ export type GitHubConnectorSafeStatus = {
   missing: GitHubConnectorErrorCode[];
   lastSyncAt: string | null;
   lastErrorCode: GitHubConnectorErrorCode;
-  owner: string;
-  repo: string;
-  missing: string[];
-  lastSyncAt: string | null;
   message: string;
 };
 
@@ -60,7 +55,10 @@ export type GitHubReadonlyRepository = {
   owner: string;
   visibility: "private" | "internal" | "public";
   defaultBranch: string;
-  status: "READY_FOR_READONLY_CONNECTION" | "WAITING_FOR_AUTHORIZATION" | "READONLY_CONNECTED";
+  status:
+    | "READY_FOR_READONLY_CONNECTION"
+    | "WAITING_FOR_AUTHORIZATION"
+    | "READONLY_CONNECTED";
   authorizedScopes: string[];
   lastReadAt: string | null;
 };
@@ -113,7 +111,10 @@ export type GitHubReadonlyHealth = {
   connectorGateway: "READY";
   githubConnector: "READY_FOR_CONNECTION" | "CONNECTED_READONLY" | "FAILED";
   nextActivation: "VERCEL_P2";
-  systemState: "FIRST_REAL_CONNECTOR_PREPARED" | "REAL_READONLY_CONNECTED" | "GITHUB_READ_FAILED";
+  systemState:
+    | "FIRST_REAL_CONNECTOR_PREPARED"
+    | "REAL_READONLY_CONNECTED"
+    | "GITHUB_READ_FAILED";
   lastSyncAt: string | null;
   lastErrorCode: GitHubConnectorErrorCode;
   externalApiCalls: false;
@@ -156,7 +157,10 @@ export type GitHubRawRepository = {
 export type GitHubRawBranch = {
   name: string;
   protected: boolean;
-  commit?: { sha?: string; commit?: { author?: { name?: string; date?: string } } };
+  commit?: {
+    sha?: string;
+    commit?: { author?: { name?: string; date?: string } };
+  };
 };
 
 export type GitHubRawPullRequest = {

@@ -1,28 +1,55 @@
-import { type GitHubConnectorErrorCode, type GitHubReadonlyEvidence, type GitHubReadonlySnapshot, type GitHubReadonlyRawSnapshot } from "./githubConnectorTypes";
-import { type GitHubReadonlyEvidence, type GitHubReadonlySnapshot, type GitHubReadonlyRawSnapshot } from "./githubConnectorTypes";
+import {
+  type GitHubConnectorErrorCode,
+  type GitHubReadonlyEvidence,
+  type GitHubReadonlyRawSnapshot,
+  type GitHubReadonlySnapshot,
+} from "./githubConnectorTypes";
 
-const allowedScopes = ["metadata:read", "contents:read", "pull_requests:read", "issues:read", "commit_statuses:read"];
+const allowedScopes = [
+  "metadata:read",
+  "contents:read",
+  "pull_requests:read",
+  "issues:read",
+  "commit_statuses:read",
+];
 
-function fallback(value: string | undefined | null, replacement = "unknown"): string {
+function fallback(
+  value: string | undefined | null,
+  replacement = "unknown",
+): string {
   return value?.trim() || replacement;
 }
 
 function firstLine(message: string | undefined): string {
-  return fallback(message, "Commit message unavailable").split("\n")[0] ?? "Commit message unavailable";
+  return (
+    fallback(message, "Commit message unavailable").split("\n")[0] ??
+    "Commit message unavailable"
+  );
 }
 
-function sortEvidence(evidence: GitHubReadonlyEvidence[]): GitHubReadonlyEvidence[] {
-  return evidence.sort((a, b) => Date.parse(b.occurredAt) - Date.parse(a.occurredAt)).slice(0, 12);
+function sortEvidence(
+  evidence: GitHubReadonlyEvidence[],
+): GitHubReadonlyEvidence[] {
+  return evidence
+    .sort((a, b) => Date.parse(b.occurredAt) - Date.parse(a.occurredAt))
+    .slice(0, 12);
 }
 
-export function normalizeGitHubReadonlySnapshot(raw: GitHubReadonlyRawSnapshot): GitHubReadonlySnapshot {
-  const owner = fallback(raw.repository.owner?.login, raw.repository.full_name.split("/")[0]);
+export function normalizeGitHubReadonlySnapshot(
+  raw: GitHubReadonlyRawSnapshot,
+): GitHubReadonlySnapshot {
+  const owner = fallback(
+    raw.repository.owner?.login,
+    raw.repository.full_name.split("/")[0],
+  );
   const defaultBranch = fallback(raw.repository.default_branch, "main");
   const repository = {
     id: String(raw.repository.id),
     name: raw.repository.name,
     owner,
-    visibility: raw.repository.visibility ?? (raw.repository.private ? "private" : "public"),
+    visibility:
+      raw.repository.visibility ??
+      (raw.repository.private ? "private" : "public"),
     defaultBranch,
     status: "READONLY_CONNECTED" as const,
     authorizedScopes: allowedScopes,
@@ -31,7 +58,8 @@ export function normalizeGitHubReadonlySnapshot(raw: GitHubReadonlyRawSnapshot):
 
   const branches = raw.branches.map((branch) => ({
     name: branch.name,
-    kind: branch.name === defaultBranch ? "MAIN" as const : "ACTIVE" as const,
+    kind:
+      branch.name === defaultBranch ? ("MAIN" as const) : ("ACTIVE" as const),
     lastCommitSha: fallback(branch.commit?.sha, "unknown"),
     lastCommitAuthor: fallback(branch.commit?.commit?.author?.name),
     lastActivityAt: fallback(branch.commit?.commit?.author?.date, raw.readAt),
@@ -41,7 +69,11 @@ export function normalizeGitHubReadonlySnapshot(raw: GitHubReadonlyRawSnapshot):
   const pullRequests = raw.pullRequests.map((pullRequest) => ({
     number: pullRequest.number,
     title: pullRequest.title,
-    state: pullRequest.merged_at ? "MERGED" as const : pullRequest.state === "open" ? "OPEN" as const : "CLOSED" as const,
+    state: pullRequest.merged_at
+      ? ("MERGED" as const)
+      : pullRequest.state === "open"
+        ? ("OPEN" as const)
+        : ("CLOSED" as const),
     sourceBranch: fallback(pullRequest.head?.ref),
     targetBranch: fallback(pullRequest.base?.ref, defaultBranch),
     author: fallback(pullRequest.user?.login),
@@ -51,7 +83,7 @@ export function normalizeGitHubReadonlySnapshot(raw: GitHubReadonlyRawSnapshot):
   const issues = raw.issues.map((issue) => ({
     number: issue.number,
     title: issue.title,
-    state: issue.state === "open" ? "OPEN" as const : "CLOSED" as const,
+    state: issue.state === "open" ? ("OPEN" as const) : ("CLOSED" as const),
     author: fallback(issue.user?.login),
     updatedAt: issue.updated_at,
   }));
@@ -97,8 +129,11 @@ export function normalizeGitHubReadonlySnapshot(raw: GitHubReadonlyRawSnapshot):
     configured: true,
     lastErrorCode: "NONE",
     repositoryCount: 1,
-    openPrs: pullRequests.filter((pullRequest) => pullRequest.state === "OPEN").length,
-    mergedPrs: pullRequests.filter((pullRequest) => pullRequest.state === "MERGED").length,
+    openPrs: pullRequests.filter((pullRequest) => pullRequest.state === "OPEN")
+      .length,
+    mergedPrs: pullRequests.filter(
+      (pullRequest) => pullRequest.state === "MERGED",
+    ).length,
     openIssues: issues.filter((issue) => issue.state === "OPEN").length,
     recentCommits: commits.length,
     repositories: [repository],
@@ -124,8 +159,11 @@ export function normalizeGitHubReadonlySnapshot(raw: GitHubReadonlyRawSnapshot):
   };
 }
 
-export function createGitHubReadonlyReadySnapshot(owner: string, repo: string, errorCode: GitHubConnectorErrorCode = "MISSING_TOKEN"): GitHubReadonlySnapshot {
-export function createGitHubReadonlyReadySnapshot(owner: string, repo: string): GitHubReadonlySnapshot {
+export function createGitHubReadonlyReadySnapshot(
+  owner: string,
+  repo: string,
+  errorCode: GitHubConnectorErrorCode = "MISSING_TOKEN",
+): GitHubReadonlySnapshot {
   return {
     status: "READY",
     statusLabel: "READY_FOR_READONLY_CONNECTION",
@@ -168,8 +206,12 @@ export function createGitHubReadonlyReadySnapshot(owner: string, repo: string): 
   };
 }
 
-export function createGitHubReadonlyFailedSnapshot(owner: string, repo: string, reason: string, errorCode: GitHubConnectorErrorCode = "GITHUB_READ_FAILED"): GitHubReadonlySnapshot {
-export function createGitHubReadonlyFailedSnapshot(owner: string, repo: string, reason: string): GitHubReadonlySnapshot {
+export function createGitHubReadonlyFailedSnapshot(
+  owner: string,
+  repo: string,
+  reason: string,
+  errorCode: GitHubConnectorErrorCode = "GITHUB_READ_FAILED",
+): GitHubReadonlySnapshot {
   return {
     ...createGitHubReadonlyReadySnapshot(owner, repo),
     status: "FAILED",
