@@ -127,6 +127,8 @@ export function normalizeGitHubReadonlySnapshot(
     status: "CONNECTED_READONLY",
     statusLabel: "CONNECTED_READONLY",
     configured: true,
+    connectionMode: "backend_token",
+    installation: null,
     lastErrorCode: "NONE",
     repositoryCount: 1,
     openPrs: pullRequests.filter((pullRequest) => pullRequest.state === "OPEN")
@@ -168,6 +170,8 @@ export function createGitHubReadonlyReadySnapshot(
     status: "READY",
     statusLabel: "READY_FOR_READONLY_CONNECTION",
     configured: false,
+    connectionMode: "not_connected",
+    installation: null,
     lastErrorCode: errorCode,
     repositoryCount: 0,
     openPrs: 0,
@@ -217,6 +221,8 @@ export function createGitHubReadonlyFailedSnapshot(
     status: "FAILED",
     statusLabel: "FAILED",
     configured: true,
+    connectionMode: "backend_token",
+    installation: null,
     lastErrorCode: errorCode,
     evidenceTimeline: [
       {

@@ -75,6 +75,14 @@ function messageForCode(code: GitHubClientErrorCode, status?: number): string {
       return "API server could not reach GitHub. Verify Railway outbound network access and GitHub availability.";
     case "GITHUB_READ_FAILED":
       return `GitHub read failed${status ? ` with status ${status}` : ""}.`;
+    case "MISSING_GITHUB_OAUTH_STATE_SECRET":
+    case "GITHUB_AUTH_CONFIG_MISSING":
+    case "GITHUB_AUTH_STATE_INVALID":
+    case "GITHUB_INSTALLATION_MISSING":
+    case "INSTALLATION_TOKEN_NOT_CONFIGURED":
+    case "INSTALLATION_TOKEN_FETCH_FAILED":
+    case "INSTALLATION_TOKEN_NETWORK_ERROR":
+      return "GitHub App connector is not ready for server-side read access.";
   }
 }
 
@@ -117,10 +125,17 @@ async function readJson<T>(url: string, token: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-export async function readGitHubReadonlySnapshot(): Promise<GitHubReadonlyRawSnapshot> {
+export async function readGitHubReadonlySnapshot(options?: {
+  token?: string;
+  owner?: string;
+  repo?: string;
+}): Promise<GitHubReadonlyRawSnapshot> {
   const config = getGitHubConnectorConfig();
+  const token = options?.token ?? config.token;
+  const owner = options?.owner ?? config.owner;
+  const repo = options?.repo ?? config.repo;
 
-  if (!config.tokenPresent || !config.token) {
+  if (!token) {
     throw new GitHubReadonlyClientError(
       "MISSING_TOKEN",
       503,
@@ -142,34 +157,34 @@ export async function readGitHubReadonlySnapshot(): Promise<GitHubReadonlyRawSna
     );
   }
 
-  const repoPath = `/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`;
+  const repoPath = `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`;
   const [repository, branches, pullRequests, issues, commits] =
     await Promise.all([
       readJson<GitHubReadonlyRawSnapshot["repository"]>(
         endpoint(repoPath),
-        config.token,
+        token,
       ),
       readJson<GitHubReadonlyRawSnapshot["branches"]>(
         endpoint(`${repoPath}/branches`, { per_page: DASHBOARD_PAGE_SIZE }),
-        config.token,
+        token,
       ),
       readJson<GitHubReadonlyRawSnapshot["pullRequests"]>(
         endpoint(`${repoPath}/pulls`, {
           state: "all",
           per_page: DASHBOARD_PAGE_SIZE,
         }),
-        config.token,
+        token,
       ),
       readJson<GitHubReadonlyRawSnapshot["issues"]>(
         endpoint(`${repoPath}/issues`, {
           state: "all",
           per_page: DASHBOARD_PAGE_SIZE,
         }),
-        config.token,
+        token,
       ),
       readJson<GitHubReadonlyRawSnapshot["commits"]>(
         endpoint(`${repoPath}/commits`, { per_page: DASHBOARD_PAGE_SIZE }),
-        config.token,
+        token,
       ),
     ]);
 

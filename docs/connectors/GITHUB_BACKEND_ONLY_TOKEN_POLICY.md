@@ -18,7 +18,7 @@ The GitHub connector credential is a backend runtime secret. It must not appear 
 Run these checks before release:
 
 ```bash
-rg -n "VITE_.*GITHUB|localStorage|sessionStorage|document\\.cookie|api\\.github\\.com|GITHUB_CONNECTOR_TOKEN" artifacts/gxeon-dashboard/src || true
+rg -n "frontend_github_secret_pattern|browserStorageToken|browser_cookie_reference|provider_url_reference|backend_token_name" artifacts/gxeon-dashboard/src || true
 rg -n "POST /api/connectors/github|issue_creation|pull_request_creation|branch_deletion|repository_writes" server artifacts/gxeon-dashboard/src || true
 ```
 

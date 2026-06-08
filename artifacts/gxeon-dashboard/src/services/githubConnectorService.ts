@@ -45,6 +45,37 @@ function backendUnavailableSnapshot(): GitHubReadonlySnapshot {
   };
 }
 
+export type GitHubConnectUrlResponse = {
+  url: string;
+  provider: "github";
+  mode: "github_app_installation" | "oauth_app_authorization";
+  stateIssuedAt: string;
+};
+
+export async function fetchGitHubConnectUrl(
+  signal?: AbortSignal,
+): Promise<GitHubConnectUrlResponse> {
+  const response = await fetch(apiUrl("/api/connectors/github/connect-url"), {
+    method: "GET",
+    signal,
+    headers: {
+      Accept: "application/json",
+    },
+  });
+  const payload = (await response.json()) as GitHubConnectUrlResponse & {
+    missing?: string[];
+    status?: string;
+  };
+
+  if (!response.ok) {
+    throw new Error(
+      payload.missing?.[0] ?? payload.status ?? "GITHUB_CONNECT_URL_FAILED",
+    );
+  }
+
+  return payload;
+}
+
 export async function fetchGitHubConnectorSnapshot(
   signal?: AbortSignal,
 ): Promise<GitHubReadonlySnapshot> {

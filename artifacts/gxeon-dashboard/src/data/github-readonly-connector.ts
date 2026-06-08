@@ -1,4 +1,9 @@
-export type GitHubConnectorStatus = "READY" | "CONNECTING" | "CONNECTED_READONLY" | "FAILED" | "DISCONNECTED";
+export type GitHubConnectorStatus =
+  | "READY"
+  | "CONNECTING"
+  | "CONNECTED_READONLY"
+  | "FAILED"
+  | "DISCONNECTED";
 
 export type GitHubConnectorErrorCode =
   | "NONE"
@@ -11,6 +16,13 @@ export type GitHubConnectorErrorCode =
   | "RATE_LIMITED"
   | "NETWORK_ERROR"
   | "GITHUB_READ_FAILED"
+  | "MISSING_GITHUB_OAUTH_STATE_SECRET"
+  | "GITHUB_AUTH_CONFIG_MISSING"
+  | "GITHUB_AUTH_STATE_INVALID"
+  | "GITHUB_INSTALLATION_MISSING"
+  | "INSTALLATION_TOKEN_NOT_CONFIGURED"
+  | "INSTALLATION_TOKEN_FETCH_FAILED"
+  | "INSTALLATION_TOKEN_NETWORK_ERROR"
   | "BACKEND_UNAVAILABLE";
 
 export type GitHubConnectorDiagnostics = {
@@ -20,6 +32,14 @@ export type GitHubConnectorDiagnostics = {
   ownerPresent: boolean;
   repoPresent: boolean;
   configured: boolean;
+  auth?: {
+    mode: "github_app_installation" | "oauth_app_authorization";
+    appInstallationReady: boolean;
+    installationTokenReady: boolean;
+    oauthReady: boolean;
+    missing: string[];
+  };
+  connection?: GitHubConnectionState;
   owner: string | null;
   repo: string | null;
   missing: GitHubConnectorErrorCode[];
@@ -28,7 +48,10 @@ export type GitHubConnectorDiagnostics = {
   timestamp: string;
 };
 
-export type GitHubRepositoryStatus = "READY_FOR_READONLY_CONNECTION" | "WAITING_FOR_AUTHORIZATION" | "READONLY_CONNECTED";
+export type GitHubRepositoryStatus =
+  | "READY_FOR_READONLY_CONNECTION"
+  | "WAITING_FOR_AUTHORIZATION"
+  | "READONLY_CONNECTED";
 
 export type GitHubBranchKind = "MAIN" | "ACTIVE";
 
@@ -36,7 +59,12 @@ export type GitHubPullRequestState = "OPEN" | "CLOSED" | "MERGED";
 
 export type GitHubIssueState = "OPEN" | "CLOSED";
 
-export type GitHubEvidenceType = "COMMIT" | "PULL_REQUEST" | "ISSUE" | "BRANCH" | "HEALTH";
+export type GitHubEvidenceType =
+  | "COMMIT"
+  | "PULL_REQUEST"
+  | "ISSUE"
+  | "BRANCH"
+  | "HEALTH";
 
 export type GitHubReadonlyRepository = {
   id: string;
@@ -97,21 +125,45 @@ export type GitHubReadonlyHealth = {
   connectorGateway: "READY";
   githubConnector: "READY_FOR_CONNECTION" | "CONNECTED_READONLY" | "FAILED";
   nextActivation: "VERCEL_P2";
-  systemState: "FIRST_REAL_CONNECTOR_PREPARED" | "REAL_READONLY_CONNECTED" | "GITHUB_READ_FAILED";
+  systemState:
+    | "FIRST_REAL_CONNECTOR_PREPARED"
+    | "REAL_READONLY_CONNECTED"
+    | "GITHUB_READ_FAILED";
   lastSyncAt: string | null;
   lastErrorCode: GitHubConnectorErrorCode;
   externalApiCalls: false;
-  oauthEnabled: false;
+  oauthEnabled: boolean;
   repositoryWriteAccess: false;
   databaseWrites: false;
   tokenStorageFrontend: false;
   secretExposure: false;
 };
 
+export type GitHubConnectionState =
+  | {
+      mode: "github_app_installation";
+      installationId: string;
+      accountLogin: string | null;
+      repositorySelection: "all" | "selected" | "unknown";
+      connectedAt: string;
+      setupAction: string | null;
+    }
+  | { mode: "not_connected"; connectedAt: null };
+
 export type GitHubReadonlySnapshot = {
   status: GitHubConnectorStatus;
   statusLabel: string;
   configured?: boolean;
+  connectionMode?:
+    | "github_app_installation"
+    | "backend_token"
+    | "not_connected";
+  installation?: {
+    installationId: string;
+    accountLogin: string | null;
+    repositorySelection: "all" | "selected" | "unknown";
+    connectedAt: string;
+  } | null;
   lastErrorCode: GitHubConnectorErrorCode;
   repositoryCount: number;
   openPrs: number;
@@ -147,7 +199,12 @@ export const githubReadonlyForbiddenActions = [
   "store_tokens_frontend",
 ] as const;
 
-export const githubReadonlyStatusFlow: GitHubConnectorStatus[] = ["READY", "CONNECTING", "CONNECTED_READONLY", "FAILED"];
+export const githubReadonlyStatusFlow: GitHubConnectorStatus[] = [
+  "READY",
+  "CONNECTING",
+  "CONNECTED_READONLY",
+  "FAILED",
+];
 
 export const githubReadonlySnapshot: GitHubReadonlySnapshot = {
   status: "READY",
@@ -169,7 +226,8 @@ export const githubReadonlySnapshot: GitHubReadonlySnapshot = {
       id: "gh-p1-prepared",
       type: "HEALTH",
       title: "GitHub P1 read-only gateway prepared",
-      description: "UI, status model, discovery placeholders and safety boundary are ready without OAuth, tokens, writes or API calls.",
+      description:
+        "UI, status model, discovery placeholders and safety boundary are ready for GitHub App installation without browser tokens, writes or credential forms.",
       occurredAt: "2026-06-08T00:00:00.000Z",
       source: "GXEON_CONNECTOR_ACTIVATION_P1_GITHUB_READONLY",
     },
@@ -191,9 +249,14 @@ export const githubReadonlySnapshot: GitHubReadonlySnapshot = {
 };
 
 export const githubReadonlyEmptyStateCopy = {
-  repositories: "Nenhum repositório autorizado ainda. A descoberta real será habilitada somente via backend read-only aprovado.",
-  branches: "Nenhuma branch lida ainda. Cards de main branch e branches ativas aguardam conexão read-only.",
-  pullRequests: "Nenhum pull request carregado. O monitor aceitará apenas estados open, closed e merged.",
-  issues: "Nenhuma issue carregada. O monitor aceitará apenas estados abertas e fechadas.",
-  commits: "Nenhum commit recente carregado. O painel exibirá SHA curto, autor, branch e data após sync seguro.",
+  repositories:
+    "Nenhum repositório autorizado ainda. A descoberta real será habilitada somente via backend read-only aprovado.",
+  branches:
+    "Nenhuma branch lida ainda. Cards de main branch e branches ativas aguardam conexão read-only.",
+  pullRequests:
+    "Nenhum pull request carregado. O monitor aceitará apenas estados open, closed e merged.",
+  issues:
+    "Nenhuma issue carregada. O monitor aceitará apenas estados abertas e fechadas.",
+  commits:
+    "Nenhum commit recente carregado. O painel exibirá SHA curto, autor, branch e data após sync seguro.",
 };
