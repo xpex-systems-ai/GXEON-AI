@@ -26,21 +26,151 @@ const configuredApiBaseUrl =
 export const githubConnectorApiBaseMode: GitHubConnectorApiBaseMode =
   configuredApiBaseUrl ? "configured-backend-url" : "same-origin";
 
+export const githubConnectorApiBaseDisplay =
+  configuredApiBaseUrl || "same-origin dashboard host";
+
 function apiUrl(path: string): string {
   return `${configuredApiBaseUrl}${path}`;
 }
 
-function backendUnavailableSnapshot(): GitHubReadonlySnapshot {
+export type SafeJsonFetchError = {
+  code: GitHubConnectorErrorCode | "CONFIG_MISSING";
+  message: string;
+  calledUrl: string;
+  apiBaseMode: GitHubConnectorApiBaseMode;
+  status: number | null;
+  contentType: string | null;
+  missing?: string[];
+};
+
+export class GitHubConnectorFetchError extends Error {
+  details: SafeJsonFetchError;
+
+  constructor(details: SafeJsonFetchError) {
+    super(details.message);
+    this.name = "GitHubConnectorFetchError";
+    this.details = details;
+  }
+}
+
+function safeErrorMessage(code: SafeJsonFetchError["code"]): string {
+  if (code === "BACKEND_URL_MISCONFIGURED") {
+    return "Set VITE_GXEON_API_BASE_URL to Railway API public URL and redeploy Vercel";
+  }
+  if (code === "BACKEND_RETURNED_HTML") {
+    return "Backend returned HTML instead of JSON.";
+  }
+  if (code === "BACKEND_UNAVAILABLE") {
+    return "Backend API is unreachable from this dashboard runtime.";
+  }
+  return code;
+}
+
+async function safeJsonFetch<T>(
+  path: string,
+  signal?: AbortSignal,
+): Promise<{ payload: T; contentType: string | null; calledUrl: string }> {
+  const calledUrl = apiUrl(path);
+  let response: Response;
+
+  try {
+    response = await fetch(calledUrl, {
+      method: "GET",
+      signal,
+      headers: { Accept: "application/json" },
+    });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+    throw new GitHubConnectorFetchError({
+      code: "BACKEND_UNAVAILABLE",
+      message: safeErrorMessage("BACKEND_UNAVAILABLE"),
+      calledUrl,
+      apiBaseMode: githubConnectorApiBaseMode,
+      status: null,
+      contentType: null,
+    });
+  }
+
+  const contentType = response.headers.get("content-type");
+  const bodyText = await response.text();
+  const trimmedBody = bodyText.trimStart();
+  const isHtml =
+    contentType?.toLowerCase().includes("text/html") ||
+    trimmedBody.toLowerCase().startsWith("<!doctype") ||
+    trimmedBody.toLowerCase().startsWith("<html");
+
+  if (isHtml) {
+    throw new GitHubConnectorFetchError({
+      code: "BACKEND_URL_MISCONFIGURED",
+      message: safeErrorMessage("BACKEND_URL_MISCONFIGURED"),
+      calledUrl,
+      apiBaseMode: githubConnectorApiBaseMode,
+      status: response.status,
+      contentType,
+    });
+  }
+
+  let payload: T & {
+    status?: string;
+    missing?: string[];
+    lastErrorCode?: GitHubConnectorErrorCode;
+    health?: { lastErrorCode?: GitHubConnectorErrorCode };
+  };
+  try {
+    payload = (bodyText ? JSON.parse(bodyText) : {}) as T & {
+      status?: string;
+      missing?: string[];
+      lastErrorCode?: GitHubConnectorErrorCode;
+      health?: { lastErrorCode?: GitHubConnectorErrorCode };
+    };
+  } catch {
+    throw new GitHubConnectorFetchError({
+      code: "BACKEND_RETURNED_HTML",
+      message: safeErrorMessage("BACKEND_RETURNED_HTML"),
+      calledUrl,
+      apiBaseMode: githubConnectorApiBaseMode,
+      status: response.status,
+      contentType,
+    });
+  }
+
+  if (!response.ok) {
+    const rawCode =
+      payload.lastErrorCode ?? payload.health?.lastErrorCode ?? payload.status;
+    const code = (rawCode ||
+      "GITHUB_READ_FAILED") as SafeJsonFetchError["code"];
+    throw new GitHubConnectorFetchError({
+      code,
+      message: safeErrorMessage(code),
+      calledUrl,
+      apiBaseMode: githubConnectorApiBaseMode,
+      status: response.status,
+      contentType,
+      missing: payload.missing,
+    });
+  }
+
+  return { payload, contentType, calledUrl };
+}
+
+function backendUnavailableSnapshot(
+  errorCode: GitHubConnectorErrorCode = "BACKEND_UNAVAILABLE",
+): GitHubReadonlySnapshot {
   return {
     ...githubReadonlySnapshot,
     status: "READY",
-    statusLabel: "READY_BACKEND_UNAVAILABLE",
-    lastErrorCode: "BACKEND_UNAVAILABLE",
+    statusLabel:
+      errorCode === "BACKEND_URL_MISCONFIGURED"
+        ? "BACKEND_URL_MISCONFIGURED"
+        : "READY_BACKEND_UNAVAILABLE",
+    lastErrorCode: errorCode,
     health: {
       ...githubReadonlySnapshot.health,
       githubConnector: "READY_FOR_CONNECTION",
       lastSyncAt: null,
-      lastErrorCode: "BACKEND_UNAVAILABLE",
+      lastErrorCode: errorCode,
     },
   };
 }
@@ -52,27 +182,28 @@ export type GitHubConnectUrlResponse = {
   stateIssuedAt: string;
 };
 
+export type GitHubFinalReadinessResponse = {
+  provider: "github";
+  status: "READY" | "CONFIG_MISSING";
+  apiRuntime: { online: boolean; routeStatus: "ONLINE" };
+  connectionMode: "github_app_installation" | "backend_token" | "not_connected";
+  missing: string[];
+  callbackUrl: string | null;
+  dashboardUrlPresent: boolean;
+  apiPublicUrlPresent: boolean;
+  auth: GitHubConnectorDiagnostics["auth"];
+  connector: GitHubConnectorDiagnostics;
+  connection: GitHubConnectorDiagnostics["connection"];
+  timestamp: string;
+};
+
 export async function fetchGitHubConnectUrl(
   signal?: AbortSignal,
 ): Promise<GitHubConnectUrlResponse> {
-  const response = await fetch(apiUrl("/api/connectors/github/connect-url"), {
-    method: "GET",
+  const { payload } = await safeJsonFetch<GitHubConnectUrlResponse>(
+    "/api/connectors/github/connect-url",
     signal,
-    headers: {
-      Accept: "application/json",
-    },
-  });
-  const payload = (await response.json()) as GitHubConnectUrlResponse & {
-    missing?: string[];
-    status?: string;
-  };
-
-  if (!response.ok) {
-    throw new Error(
-      payload.missing?.[0] ?? payload.status ?? "GITHUB_CONNECT_URL_FAILED",
-    );
-  }
-
+  );
   return payload;
 }
 
@@ -80,34 +211,22 @@ export async function fetchGitHubConnectorSnapshot(
   signal?: AbortSignal,
 ): Promise<GitHubReadonlySnapshot> {
   try {
-    const response = await fetch(apiUrl("/api/connectors/github/snapshot"), {
-      method: "GET",
+    const { payload } = await safeJsonFetch<GitHubReadonlySnapshot>(
+      "/api/connectors/github/snapshot",
       signal,
-      headers: {
-        Accept: "application/json",
-      },
-    });
-
-    const payload = (await response.json()) as GitHubReadonlySnapshot;
-    if (!response.ok) {
-      return {
-        ...githubReadonlySnapshot,
-        ...payload,
-        status: payload.status ?? "FAILED",
-        statusLabel: payload.statusLabel ?? "FAILED",
-        lastErrorCode:
-          payload.lastErrorCode ??
-          payload.health?.lastErrorCode ??
-          "GITHUB_READ_FAILED",
-      };
-    }
-
+    );
     return payload;
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
       throw error;
     }
-
+    if (error instanceof GitHubConnectorFetchError) {
+      return backendUnavailableSnapshot(
+        error.details.code === "CONFIG_MISSING"
+          ? "GITHUB_AUTH_CONFIG_MISSING"
+          : (error.details.code as GitHubConnectorErrorCode),
+      );
+    }
     return backendUnavailableSnapshot();
   }
 }
@@ -116,16 +235,28 @@ export async function fetchGitHubConnectorDiagnostics(
   signal?: AbortSignal,
 ): Promise<GitHubConnectorDiagnostics | null> {
   try {
-    const response = await fetch(apiUrl("/api/connectors/github/diagnostics"), {
-      method: "GET",
+    const { payload } = await safeJsonFetch<GitHubConnectorDiagnostics>(
+      "/api/connectors/github/diagnostics",
       signal,
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    );
+    return payload;
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+    return null;
+  }
+}
 
-    if (!response.ok) return null;
-    return response.json() as Promise<GitHubConnectorDiagnostics>;
+export async function fetchGitHubFinalReadiness(
+  signal?: AbortSignal,
+): Promise<GitHubFinalReadinessResponse | null> {
+  try {
+    const { payload } = await safeJsonFetch<GitHubFinalReadinessResponse>(
+      "/api/connectors/github/final-readiness",
+      signal,
+    );
+    return payload;
   } catch (error) {
     if (error instanceof DOMException && error.name === "AbortError") {
       throw error;

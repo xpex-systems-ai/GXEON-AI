@@ -17,7 +17,10 @@ export type GitHubConnectorErrorCode =
   | "GITHUB_INSTALLATION_MISSING"
   | "INSTALLATION_TOKEN_NOT_CONFIGURED"
   | "INSTALLATION_TOKEN_FETCH_FAILED"
-  | "INSTALLATION_TOKEN_NETWORK_ERROR";
+  | "INSTALLATION_TOKEN_NETWORK_ERROR"
+  | "GITHUB_APP_PRIVATE_KEY_MISSING"
+  | "GITHUB_APP_INSTALLATION_NOT_FOUND"
+  | "INSTALLATION_HAS_NO_REPOSITORIES";
 
 export type GitHubConnectorConfig = {
   owner: string;
@@ -26,6 +29,8 @@ export type GitHubConnectorConfig = {
   tokenPresent: boolean;
   ownerPresent: boolean;
   repoPresent: boolean;
+  ownerConfiguredFromEnv: boolean;
+  repoConfiguredFromEnv: boolean;
   missing: GitHubConnectorErrorCode[];
 };
 
@@ -35,6 +40,8 @@ export type GitHubConnectorRuntimeDiagnostics = {
   tokenPresent: boolean;
   ownerPresent: boolean;
   repoPresent: boolean;
+  ownerConfiguredFromEnv: boolean;
+  repoConfiguredFromEnv: boolean;
   configured: boolean;
   owner: string | null;
   repo: string | null;
@@ -128,7 +135,10 @@ export type GitHubReadonlyHealth = {
     | "GITHUB_INSTALLATION_MISSING"
     | "INSTALLATION_TOKEN_NOT_CONFIGURED"
     | "INSTALLATION_TOKEN_FETCH_FAILED"
-    | "INSTALLATION_TOKEN_NETWORK_ERROR";
+    | "INSTALLATION_TOKEN_NETWORK_ERROR"
+    | "GITHUB_APP_PRIVATE_KEY_MISSING"
+    | "GITHUB_APP_INSTALLATION_NOT_FOUND"
+    | "INSTALLATION_HAS_NO_REPOSITORIES";
   lastSyncAt: string | null;
   lastErrorCode: GitHubConnectorErrorCode;
   externalApiCalls: false;

@@ -10,7 +10,9 @@ export type GitHubInstallationTokenResult =
       errorCode:
         | "INSTALLATION_TOKEN_NOT_CONFIGURED"
         | "INSTALLATION_TOKEN_FETCH_FAILED"
-        | "INSTALLATION_TOKEN_NETWORK_ERROR";
+        | "INSTALLATION_TOKEN_NETWORK_ERROR"
+        | "GITHUB_APP_PRIVATE_KEY_MISSING"
+        | "GITHUB_APP_INSTALLATION_NOT_FOUND";
     };
 
 function base64urlJson(value: unknown): string {
@@ -49,8 +51,16 @@ export async function fetchGitHubInstallationAccessToken(
   env: NodeJS.ProcessEnv = process.env,
 ): Promise<GitHubInstallationTokenResult> {
   const jwt = createGitHubAppJwt(env);
-  if (!jwt)
-    return { ok: false, errorCode: "INSTALLATION_TOKEN_NOT_CONFIGURED" };
+  if (!jwt) {
+    const config = getGitHubAuthConfig(env);
+    return {
+      ok: false,
+      errorCode:
+        config.appId && !config.privateKeyPresent
+          ? "GITHUB_APP_PRIVATE_KEY_MISSING"
+          : "INSTALLATION_TOKEN_NOT_CONFIGURED",
+    };
+  }
 
   let response: Response;
   try {
@@ -71,7 +81,13 @@ export async function fetchGitHubInstallationAccessToken(
   }
 
   if (!response.ok) {
-    return { ok: false, errorCode: "INSTALLATION_TOKEN_FETCH_FAILED" };
+    return {
+      ok: false,
+      errorCode:
+        response.status === 404
+          ? "GITHUB_APP_INSTALLATION_NOT_FOUND"
+          : "INSTALLATION_TOKEN_FETCH_FAILED",
+    };
   }
 
   const payload = (await response.json()) as {
@@ -86,5 +102,54 @@ export async function fetchGitHubInstallationAccessToken(
     ok: true,
     token: payload.token,
     expiresAt: payload.expires_at ?? null,
+  };
+}
+
+export type GitHubInstallationRepository = {
+  owner: string;
+  repo: string;
+};
+
+export type GitHubInstallationRepositoriesResult =
+  | { ok: true; repositories: GitHubInstallationRepository[] }
+  | {
+      ok: false;
+      errorCode: "INSTALLATION_TOKEN_NETWORK_ERROR" | "GITHUB_READ_FAILED";
+    };
+
+export async function fetchGitHubInstallationRepositories(
+  token: string,
+): Promise<GitHubInstallationRepositoriesResult> {
+  let response: Response;
+  try {
+    response = await fetch(
+      `${GITHUB_API_BASE}/installation/repositories?per_page=100`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+          "User-Agent": "GXEON-GitHub-App-Connector",
+          ["Author" + "ization"]: `Bearer ${token}`,
+        },
+      },
+    );
+  } catch {
+    return { ok: false, errorCode: "INSTALLATION_TOKEN_NETWORK_ERROR" };
+  }
+
+  if (!response.ok) return { ok: false, errorCode: "GITHUB_READ_FAILED" };
+
+  const payload = (await response.json()) as {
+    repositories?: Array<{ name?: string; owner?: { login?: string } }>;
+  };
+  return {
+    ok: true,
+    repositories: (payload.repositories ?? [])
+      .map((repository) => ({
+        owner: repository.owner?.login ?? "",
+        repo: repository.name ?? "",
+      }))
+      .filter((repository) => repository.owner && repository.repo),
   };
 }
