@@ -38,17 +38,17 @@ const priorityTone: Record<ExecutionPriority, string> = {
 const proofTone: Record<ProofStatus, string> = {
   MISSING: "border-rose-300/30 bg-rose-400/10 text-rose-100",
   DRAFT: "border-amber-300/30 bg-amber-400/10 text-amber-100",
-  ATTACHED_SAMPLE: "border-blue-300/30 bg-blue-400/10 text-blue-100",
+  ATTACHED_REAL: "border-blue-300/30 bg-blue-400/10 text-blue-100",
   READY_FOR_REVIEW: "border-violet-300/30 bg-violet-400/10 text-violet-100",
-  VERIFIED_SAMPLE: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
+  VERIFIED_REAL: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
 };
 
 const proofLabel: Record<ProofStatus, string> = {
   MISSING: "Missing",
   DRAFT: "Draft",
-  ATTACHED_SAMPLE: "Attached pendente",
+  ATTACHED_REAL: "Attached pendente",
   READY_FOR_REVIEW: "Ready for review",
-  VERIFIED_SAMPLE: "Verified pendente",
+  VERIFIED_REAL: "Verified pendente",
 };
 
 export default function ExecutionTrackerPage() {

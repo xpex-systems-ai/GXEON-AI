@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { getFinancialLedgerSummary, getLedgerStatusCounts, sampleFinancialLedgerRecords } from "@/data/financial-ledger";
+import { getFinancialLedgerSummary, getLedgerStatusCounts, realFinancialLedgerRecords } from "@/data/financial-ledger";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { Banknote, BookOpenCheck, CircleDollarSign, TrendingDown, TrendingUp } from "lucide-react";
 
@@ -16,7 +16,7 @@ export default function FinancialLedgerPage() {
   const summary = getFinancialLedgerSummary();
   const statusCounts = getLedgerStatusCounts();
   const maxCount = Math.max(...statusCounts.map((item) => item.count), 1);
-  const recent = sampleFinancialLedgerRecords.slice(0, 5);
+  const recent = realFinancialLedgerRecords.slice(0, 5);
 
   return (
     <div className="space-y-5">

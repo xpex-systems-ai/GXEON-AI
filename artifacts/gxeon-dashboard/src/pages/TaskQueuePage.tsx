@@ -113,7 +113,7 @@ export default function TaskQueuePage() {
         <Card className="border-blue-300/20 bg-slate-950/75 backdrop-blur-xl">
           <CardContent className="p-5">
             <ClipboardCheck className="h-6 w-6 text-blue-200" />
-            <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">Sample tasks</p>
+            <p className="mt-4 text-xs uppercase tracking-[0.25em] text-slate-500">Real tasks</p>
             <p className="mt-2 text-3xl font-black text-white">{activeOperationalTasks.length}</p>
             <p className="mt-1 text-sm text-slate-400">Static/manual-first records only.</p>
           </CardContent>

@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { connectorGatewayProviders } from "@/data/connector-gateway";
 import { getFinancialLedgerSummary } from "@/data/financial-ledger";
-import { getOpportunityInboxSummary } from "@/data/opportunity-inbox";
+import { getOpportunitySummary } from "@/data/opportunity-inbox";
 import { formatCurrency } from "@/lib/format";
 import { ArrowRight, BadgeCheck, BookOpenCheck, CircleDot, Inbox, ListChecks, LockKeyhole, Plug, ShieldCheck, Workflow, Zap } from "lucide-react";
 
@@ -34,13 +34,13 @@ const accentTone: Record<string, string> = {
 };
 
 export default function GxeonOSPage({ moduleId: _moduleId = "command_center" }: { moduleId?: string }) {
-  const opportunities = getOpportunityInboxSummary();
+  const opportunities = getOpportunitySummary();
   const ledger = getFinancialLedgerSummary();
-  const connectedCount = connectorGatewayProviders.filter((connector) => connector.status === "CONNECTED_MANUAL").length;
-  const readyCount = connectorGatewayProviders.filter((connector) => connector.status === "READY_TO_PREPARE").length;
+  const connectedCount = connectorGatewayProviders.filter((connector) => connector.status === "CONNECTED").length;
+  const readyCount = connectorGatewayProviders.filter((connector) => connector.status === "READY").length;
 
   const kpis = [
-    { label: "Opportunities", value: opportunities.activeCount },
+    { label: "Opportunities", value: opportunities.active },
     { label: "Tasks", value: 0 },
     { label: "Executions", value: 0 },
     { label: "Revenue", value: formatCurrency(ledger.active_pipeline_brl) },
@@ -112,7 +112,7 @@ export default function GxeonOSPage({ moduleId: _moduleId = "command_center" }: 
                     <span>{stage}</span>
                     <span>0</span>
                   </div>
-                  <Progress value={stage === "Forecast" ? 12 : 0} className="h-2" />
+                  <Progress value={0} className="h-2" />
                 </div>
               ))}
             </div>
@@ -128,7 +128,7 @@ export default function GxeonOSPage({ moduleId: _moduleId = "command_center" }: 
             <div className="mt-5 grid grid-cols-3 gap-3">
               <div className="rounded-2xl border border-emerald-300/15 bg-emerald-400/10 p-3"><p className="text-2xl font-black">{connectedCount}</p><p className="text-xs text-emerald-100">Connected</p></div>
               <div className="rounded-2xl border border-amber-300/15 bg-amber-400/10 p-3"><p className="text-2xl font-black">{readyCount}</p><p className="text-xs text-amber-100">Ready</p></div>
-              <div className="rounded-2xl border border-stone-300/15 bg-stone-400/10 p-3"><p className="text-2xl font-black">2</p><p className="text-xs text-stone-300">Locked</p></div>
+              <div className="rounded-2xl border border-stone-300/15 bg-stone-400/10 p-3"><p className="text-2xl font-black">{connectorGatewayProviders.filter((connector) => connector.status === "LOCKED").length}</p><p className="text-xs text-stone-300">Locked</p></div>
             </div>
           </CardContent>
         </Card>

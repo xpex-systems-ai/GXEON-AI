@@ -273,7 +273,7 @@ export const infrastructureStack = [
 export const activationPlan = [
   "Renderizar 100% do ecossistema visual",
   "Validar navegação completa e responsiva",
-  "Testar dados sample/manual-first e estados vazios",
+  "Validar EMPTY_REAL_DATA e estados reais vazios",
   "Publicar preview no Vercel",
   "Preparar Railway, Supabase, Mercado Pago, Radar X e APIs externas para ativação controlada fora do frontend",
 ];

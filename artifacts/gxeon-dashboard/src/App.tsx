@@ -18,6 +18,7 @@ import FinancialLedgerPage from "@/pages/FinancialLedgerPage";
 import MonetizationBoardPage from "@/pages/MonetizationBoardPage";
 import ConnectorGatewayPage from "@/pages/ConnectorGatewayPage";
 import ConnectorDetailPage from "@/pages/ConnectorDetailPage";
+import HealthPage from "@/pages/HealthPage";
 
 const queryClient = new QueryClient();
 
@@ -79,6 +80,8 @@ function Router() {
             <Route path="/ops/connectors/supabase" component={() => <ConnectorDetailPage connectorId="supabase" />} />
             <Route path="/ops/connectors/m365" component={() => <ConnectorDetailPage connectorId="microsoft365" />} />
             <Route path="/ops/connectors" component={ConnectorGatewayPage} />
+            <Route path="/health" component={HealthPage} />
+            <Route path="/ops/health" component={HealthPage} />
             {moduleRoutes.map(([path, moduleId]) => (
               <Route key={path} path={path} component={() => <GxeonOSPage moduleId={moduleId} />} />
             ))}
