@@ -6,6 +6,7 @@ import phase8Router from "./phase8";
 import runtimeRouter from "./runtime";
 import financialRouter from "./financial";
 import githubConnectorRouter from "./connectors/github";
+import vercelConnectorRouter from "./connectors/vercel";
 
 const router: IRouter = Router();
 
@@ -16,5 +17,6 @@ router.use(phase8Router);
 router.use(runtimeRouter);
 router.use(financialRouter);
 router.use(githubConnectorRouter);
+router.use(vercelConnectorRouter);
 
 export default router;

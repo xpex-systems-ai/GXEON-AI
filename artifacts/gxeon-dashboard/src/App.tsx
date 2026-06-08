@@ -19,6 +19,7 @@ import MonetizationBoardPage from "@/pages/MonetizationBoardPage";
 import ConnectorGatewayPage from "@/pages/ConnectorGatewayPage";
 import ConnectorDetailPage from "@/pages/ConnectorDetailPage";
 import GitHubReadonlyConnectorPage from "@/pages/GitHubReadonlyConnectorPage";
+import VercelReadonlyConnectorPage from "@/pages/VercelReadonlyConnectorPage";
 import HealthPage from "@/pages/HealthPage";
 
 const queryClient = new QueryClient();
@@ -76,7 +77,7 @@ function Router() {
             <Route path="/ops/ledger" component={FinancialLedgerPage} />
             <Route path="/ops/monetization" component={MonetizationBoardPage} />
             <Route path="/ops/connectors/github" component={GitHubReadonlyConnectorPage} />
-            <Route path="/ops/connectors/vercel" component={() => <ConnectorDetailPage connectorId="vercel" />} />
+            <Route path="/ops/connectors/vercel" component={VercelReadonlyConnectorPage} />
             <Route path="/ops/connectors/railway" component={() => <ConnectorDetailPage connectorId="railway" />} />
             <Route path="/ops/connectors/supabase" component={() => <ConnectorDetailPage connectorId="supabase" />} />
             <Route path="/ops/connectors/m365" component={() => <ConnectorDetailPage connectorId="microsoft365" />} />
