@@ -31,6 +31,11 @@ function formatDate(value: string | null | undefined): string {
 }
 
 function statusTone(status: string): string {
+  if (
+    status === "CONNECTED_READONLY" ||
+    status === "PARTIAL_READONLY" ||
+    status === "READY"
+  ) {
   if (status === "CONNECTED_READONLY" || status === "READY") {
     return "border-emerald-300/30 bg-emerald-400/10 text-emerald-100";
   }
@@ -100,6 +105,44 @@ export default function VercelReadonlyConnectorPage() {
   const safeProductionUrl = snapshot.projects.find(
     (project) => project.productionUrl,
   )?.productionUrl;
+  const primarySectionError =
+    snapshot.projectsError ??
+    snapshot.deploymentsError ??
+    snapshot.domainsError ??
+    snapshot.aliasesError;
+  const connectorIssue = (() => {
+    if (snapshot.lastErrorCode === "VERCEL_404") {
+      return {
+        title: "Vercel API route/team/project mismatch",
+        detail:
+          primarySectionError?.hint ??
+          "The backend token is present, but Vercel returned 404 for one or more read-only resources.",
+        nextAction: diagnostics?.teamIdPresent
+          ? "Verify that the configured token has access to the requested Vercel team/project."
+          : "Add VERCEL_TEAM_ID if the project belongs to a Vercel team workspace.",
+      };
+    }
+    if (snapshot.configured && snapshot.latestDeployments.length === 0) {
+      return {
+        title: "No deployments returned by Vercel yet",
+        detail:
+          primarySectionError?.hint ??
+          primarySectionError?.message ??
+          "Projects may be loaded while deployments, domains or aliases are partial.",
+        nextAction: diagnostics?.teamIdPresent
+          ? "Verify read permissions for deployments/domains on the selected team."
+          : "If this is a team project, add VERCEL_TEAM_ID in Railway.",
+      };
+    }
+    if (!snapshot.configured) {
+      return {
+        title: "Backend token not configured",
+        detail: "Railway api-server has not reported VERCEL_TOKEN yet.",
+        nextAction: "Add VERCEL_TOKEN in Railway api-server variables.",
+      };
+    }
+    return null;
+  })();
 
   return (
     <div className="space-y-5 text-white">
@@ -177,6 +220,9 @@ export default function VercelReadonlyConnectorPage() {
               ))}
               {snapshot.latestDeployments.length === 0 && (
                 <p className="rounded-2xl border border-amber-300/20 bg-amber-400/10 p-4 text-sm text-amber-100">
+                  {snapshot.configured
+                    ? "No deployment data returned yet. Check diagnostics for team/project mismatch or partial section reads."
+                    : "No deployment data yet. Add VERCEL_TOKEN to Railway api-server to activate real reads."}
                   No deployment data yet. Add VERCEL_TOKEN to Railway api-server to activate real reads.
                 </p>
               )}
@@ -195,12 +241,30 @@ export default function VercelReadonlyConnectorPage() {
             <p><ShieldCheck className="mr-2 inline h-4 w-4 text-emerald-200" />Provider writes disabled: {String(snapshot.health.providerWrites)}.</p>
             <p><ShieldCheck className="mr-2 inline h-4 w-4 text-emerald-200" />Secret exposure disabled: {String(snapshot.health.secretExposure)}.</p>
             <p><Clock3 className="mr-2 inline h-4 w-4 text-emerald-200" />Diagnostics route: {diagnostics?.routeStatus ?? "UNREACHABLE"}.</p>
+            <p><Clock3 className="mr-2 inline h-4 w-4 text-emerald-200" />Projects probe: {diagnostics?.readProbe?.ok ? "OK" : diagnostics?.readProbe?.code ?? "not attempted"}.</p>
+            <p><Clock3 className="mr-2 inline h-4 w-4 text-emerald-200" />Team ID present: {String(diagnostics?.teamIdPresent ?? false)}.</p>
+            <p className="rounded-2xl border border-white/10 bg-black/30 p-3 text-xs text-stone-400">
+              Status remains READY when the backend token is missing, becomes PARTIAL_READONLY when projects load but optional sections fail, and becomes CONNECTED_READONLY only after backend snapshot confirms Vercel data.
             <p className="rounded-2xl border border-white/10 bg-black/30 p-3 text-xs text-stone-400">
               Status remains READY when the backend token is missing and becomes CONNECTED_READONLY only after backend snapshot confirms Vercel data.
             </p>
           </CardContent>
         </Card>
       </section>
+
+      {connectorIssue && (
+        <Card className="border-amber-300/20 bg-amber-400/10 text-amber-50">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TriangleAlert className="h-5 w-5" /> {connectorIssue.title}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 text-sm">
+            <p>{connectorIssue.detail}</p>
+            <p className="font-semibold">Next action: {connectorIssue.nextAction}</p>
+          </CardContent>
+        </Card>
+      )}
 
       <section className="grid gap-5 xl:grid-cols-2">
         <Card className="border-white/10 bg-[#080808]/90 text-white">

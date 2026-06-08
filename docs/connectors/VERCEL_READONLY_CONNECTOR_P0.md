@@ -17,6 +17,10 @@ Do not create any `VITE_*` Vercel token variable. The Vercel dashboard frontend 
 The connector performs only these backend `GET` requests:
 
 - `/v9/projects`
+- `/v6/deployments?projectId={projectIdOrName}`
+- `/v6/deployments?projectId={projectIdOrName}&target=production`
+- `/v9/projects/{projectIdOrName}/domains`
+- `/v4/aliases?projectId={projectIdOrName}`
 - `/v9/projects/{projectId}/deployments`
 - `/v9/deployments/{deploymentId}`
 - `/v9/projects/{projectId}/domains`
@@ -40,4 +44,5 @@ Dashboard route after Vercel dashboard redeploy:
 
 Without `VERCEL_TOKEN`, diagnostics returns `configured: false` and the snapshot remains `READY` with `lastErrorCode: MISSING_VERCEL_TOKEN`.
 
+With `VERCEL_TOKEN`, the backend reads real Vercel data and the snapshot becomes `CONNECTED_READONLY` after successful read-only API calls, or `PARTIAL_READONLY` when projects load but optional deployment/domain/alias sections fail. If corrected reads still return 404, add `VERCEL_TEAM_ID` for team-owned projects.
 With `VERCEL_TOKEN`, the backend reads real Vercel data and the snapshot becomes `CONNECTED_READONLY` only after successful read-only API calls.

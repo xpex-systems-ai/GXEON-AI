@@ -1,3 +1,8 @@
+export type VercelConnectorStatus =
+  | "READY"
+  | "CONNECTED_READONLY"
+  | "PARTIAL_READONLY"
+  | "FAILED";
 export type VercelConnectorStatus = "READY" | "CONNECTED_READONLY" | "FAILED";
 
 export type VercelConnectorErrorCode =
@@ -14,6 +19,12 @@ export type VercelConnectorErrorCode =
   | "BACKEND_URL_MISCONFIGURED"
   | "BACKEND_UNAVAILABLE";
 
+export type VercelConnectorSectionError = {
+  code: VercelConnectorErrorCode;
+  message: string;
+  hint: string | null;
+};
+
 export type VercelConnectorDiagnostics = {
   provider: "vercel";
   routeStatus: "ONLINE";
@@ -21,6 +32,18 @@ export type VercelConnectorDiagnostics = {
   tokenPresent: boolean;
   teamIdPresent: boolean;
   apiBaseUrlConfigured: boolean;
+  apiBaseUrl: string;
+  missing: VercelConnectorErrorCode[];
+  runtimeServiceName: string | null;
+  nodeEnv: string | null;
+  readProbe: {
+    attempted: boolean;
+    ok: boolean;
+    status: number | null;
+    code: VercelConnectorErrorCode | null;
+    projectCount: number | null;
+    hint: string | null;
+  } | null;
   missing: VercelConnectorErrorCode[];
   runtimeServiceName: string | null;
   nodeEnv: string | null;
@@ -61,6 +84,10 @@ export type VercelReadonlySnapshot = {
   statusLabel: string;
   configured: boolean;
   lastErrorCode: VercelConnectorErrorCode;
+  projectsError: VercelConnectorSectionError | null;
+  deploymentsError: VercelConnectorSectionError | null;
+  domainsError: VercelConnectorSectionError | null;
+  aliasesError: VercelConnectorSectionError | null;
   totalProjects: number;
   productionReady: number;
   failedLast24h: number;
@@ -71,6 +98,11 @@ export type VercelReadonlySnapshot = {
   evidenceTimeline: VercelReadonlyEvidence[];
   health: {
     connectorGateway: "READY";
+    vercelConnector:
+      | "READY_FOR_CONNECTION"
+      | "CONNECTED_READONLY"
+      | "PARTIAL_READONLY"
+      | "FAILED";
     vercelConnector: "READY_FOR_CONNECTION" | "CONNECTED_READONLY" | "FAILED";
     healthScore: number;
     lastSyncAt: string | null;
@@ -111,6 +143,10 @@ export const vercelReadonlySnapshotFallback: VercelReadonlySnapshot = {
   statusLabel: "READY_FOR_BACKEND_TOKEN",
   configured: false,
   lastErrorCode: "MISSING_VERCEL_TOKEN",
+  projectsError: null,
+  deploymentsError: null,
+  domainsError: null,
+  aliasesError: null,
   totalProjects: 0,
   productionReady: 0,
   failedLast24h: 0,

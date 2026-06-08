@@ -31,6 +31,9 @@ export function getVercelConnectorConfig(
   };
 }
 
+export function toVercelConnectorDiagnostics(
+  readProbe: VercelConnectorRuntimeDiagnostics["readProbe"] = null,
+): VercelConnectorRuntimeDiagnostics {
 export function toVercelConnectorDiagnostics(): VercelConnectorRuntimeDiagnostics {
   const config = getVercelConnectorConfig();
   return {
@@ -40,6 +43,11 @@ export function toVercelConnectorDiagnostics(): VercelConnectorRuntimeDiagnostic
     tokenPresent: config.tokenPresent,
     teamIdPresent: config.teamIdPresent,
     apiBaseUrlConfigured: Boolean(process.env["VERCEL_API_BASE_URL"]?.trim()),
+    apiBaseUrl: config.apiBaseUrl,
+    missing: config.missing,
+    runtimeServiceName: runtimeServiceName(process.env),
+    nodeEnv: clean(process.env["NODE_ENV"]),
+    readProbe,
     missing: config.missing,
     runtimeServiceName: runtimeServiceName(process.env),
     nodeEnv: clean(process.env["NODE_ENV"]),

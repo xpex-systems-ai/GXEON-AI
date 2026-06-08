@@ -17,6 +17,9 @@ function normalizeState(value: string | undefined): string {
   return value?.trim().toUpperCase() || "UNKNOWN";
 }
 
+function productionUrl(project: {
+  targets?: { production?: { alias?: string[]; url?: string } };
+}): string | null {
 function productionUrl(project: { targets?: { production?: { alias?: string[]; url?: string } } }): string | null {
   const alias = project.targets?.production?.alias?.[0];
   const url = project.targets?.production?.url;
@@ -28,11 +31,20 @@ function calculateHealthScore(args: {
   productionReady: number;
   failedLast24h: number;
   domainsConfigured: number;
+  isPartial: boolean;
 }): number {
   if (args.totalProjects === 0) return 0;
   const productionScore = (args.productionReady / args.totalProjects) * 55;
   const domainScore = Math.min(args.domainsConfigured / args.totalProjects, 1) * 25;
   const failurePenalty = Math.min(args.failedLast24h * 10, 40);
+  const partialPenalty = args.isPartial ? 15 : 0;
+  return Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(productionScore + domainScore + 20 - failurePenalty - partialPenalty),
+    ),
+  );
   return Math.max(0, Math.min(100, Math.round(productionScore + domainScore + 20 - failurePenalty)));
 }
 
@@ -40,6 +52,18 @@ function sortEvidence(evidence: VercelReadonlyEvidence[]): VercelReadonlyEvidenc
   return evidence
     .sort((a, b) => Date.parse(b.occurredAt) - Date.parse(a.occurredAt))
     .slice(0, 16);
+}
+
+function firstSectionError(
+  errors: VercelReadonlyRawSnapshot["sectionErrors"],
+): VercelConnectorErrorCode {
+  return (
+    errors.projectsError?.code ??
+    errors.deploymentsError?.code ??
+    errors.domainsError?.code ??
+    errors.aliasesError?.code ??
+    "NONE"
+  );
 }
 
 export function normalizeVercelReadonlySnapshot(
@@ -50,6 +74,7 @@ export function normalizeVercelReadonlySnapshot(
   )
     .flatMap(([projectId, deployments]) =>
       deployments.map((deployment) => ({
+        id: deployment.uid ?? deployment.id ?? deployment.url ?? "unknown",
         id: deployment.uid ?? deployment.id ?? "unknown",
         projectId,
         name: deployment.name ?? "unknown",
@@ -70,6 +95,7 @@ export function normalizeVercelReadonlySnapshot(
   }
 
   const projects: VercelReadonlyProject[] = raw.projects.map((project) => {
+    const id = project.id ?? project.name ?? "unknown";
     const id = project.id ?? "unknown";
     return {
       id,
@@ -84,6 +110,10 @@ export function normalizeVercelReadonlySnapshot(
   const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
   const failedLast24h = latestDeployments.filter((deployment) => {
     const createdAt = deployment.createdAt ? Date.parse(deployment.createdAt) : 0;
+    return (
+      createdAt >= oneDayAgo &&
+      ["ERROR", "CANCELED", "FAILED"].includes(deployment.state)
+    );
     return createdAt >= oneDayAgo && ["ERROR", "CANCELED", "FAILED"].includes(deployment.state);
   }).length;
   const productionReady = latestDeployments.filter(
@@ -93,11 +123,19 @@ export function normalizeVercelReadonlySnapshot(
   const previewCount = latestDeployments.filter(
     (deployment) => deployment.target === "preview",
   ).length;
+  const isPartial = Boolean(
+    raw.sectionErrors.deploymentsError ||
+      raw.sectionErrors.domainsError ||
+      raw.sectionErrors.aliasesError,
+  );
   const healthScore = calculateHealthScore({
     totalProjects: projects.length,
     productionReady,
     failedLast24h,
     domainsConfigured,
+    isPartial,
+  });
+  const lastErrorCode = firstSectionError(raw.sectionErrors);
   });
 
   const evidenceTimeline = sortEvidence([
@@ -117,10 +155,28 @@ export function normalizeVercelReadonlySnapshot(
       occurredAt: deployment.createdAt ?? raw.readAt,
       source: "Vercel read-only deployments endpoint",
     })),
+    ...Object.entries(raw.sectionErrors)
+      .filter(([, error]) => Boolean(error))
+      .map(([section, error]) => ({
+        id: `section-error-${section}`,
+        type: "HEALTH" as const,
+        title: `${section} partial read warning`,
+        description: error?.hint ?? error?.message ?? "Vercel section read failed.",
+        occurredAt: raw.readAt,
+        source: "Vercel read-only partial snapshot boundary",
+      })),
   ]);
 
   return {
     provider: "vercel",
+    status: isPartial ? "PARTIAL_READONLY" : "CONNECTED_READONLY",
+    statusLabel: isPartial ? "PARTIAL_READONLY" : "CONNECTED_READONLY",
+    configured: true,
+    lastErrorCode,
+    projectsError: raw.sectionErrors.projectsError,
+    deploymentsError: raw.sectionErrors.deploymentsError,
+    domainsError: raw.sectionErrors.domainsError,
+    aliasesError: raw.sectionErrors.aliasesError,
     status: "CONNECTED_READONLY",
     statusLabel: "CONNECTED_READONLY",
     configured: true,
@@ -135,6 +191,10 @@ export function normalizeVercelReadonlySnapshot(
     evidenceTimeline,
     health: {
       connectorGateway: "READY",
+      vercelConnector: isPartial ? "PARTIAL_READONLY" : "CONNECTED_READONLY",
+      healthScore,
+      lastSyncAt: raw.readAt,
+      lastErrorCode,
       vercelConnector: "CONNECTED_READONLY",
       healthScore,
       lastSyncAt: raw.readAt,
@@ -156,6 +216,10 @@ export function createVercelReadonlyReadySnapshot(
     statusLabel: "READY_FOR_BACKEND_TOKEN",
     configured: false,
     lastErrorCode: errorCode,
+    projectsError: null,
+    deploymentsError: null,
+    domainsError: null,
+    aliasesError: null,
     totalProjects: 0,
     productionReady: 0,
     failedLast24h: 0,
@@ -196,10 +260,19 @@ export function createVercelReadonlyFailedSnapshot(
     status: "FAILED",
     statusLabel: "FAILED_READONLY_SNAPSHOT",
     configured: true,
+    projectsError: {
+      code: errorCode,
+      message: reason,
+      hint:
+        errorCode === "VERCEL_404"
+          ? "Vercel API route/team/project mismatch. If the project belongs to a Vercel team, add VERCEL_TEAM_ID in Railway."
+          : null,
+    },
     evidenceTimeline: [
       {
         id: "vercel-p0-read-failed",
         type: "HEALTH",
+        title: "Vercel read-only projects read failed",
         title: "Vercel read-only snapshot failed",
         description: reason,
         occurredAt: new Date().toISOString(),

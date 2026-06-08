@@ -1,3 +1,8 @@
+export type VercelConnectorStatus =
+  | "READY"
+  | "CONNECTED_READONLY"
+  | "PARTIAL_READONLY"
+  | "FAILED";
 export type VercelConnectorStatus = "READY" | "CONNECTED_READONLY" | "FAILED";
 
 export type VercelConnectorErrorCode =
@@ -10,6 +15,12 @@ export type VercelConnectorErrorCode =
   | "VERCEL_5XX"
   | "NETWORK_ERROR"
   | "VERCEL_READ_FAILED";
+
+export type VercelConnectorSectionError = {
+  code: VercelConnectorErrorCode;
+  message: string;
+  hint: string | null;
+};
 
 export type VercelConnectorConfig = {
   apiBaseUrl: string;
@@ -27,6 +38,18 @@ export type VercelConnectorRuntimeDiagnostics = {
   tokenPresent: boolean;
   teamIdPresent: boolean;
   apiBaseUrlConfigured: boolean;
+  apiBaseUrl: string;
+  missing: VercelConnectorErrorCode[];
+  runtimeServiceName: string | null;
+  nodeEnv: string | null;
+  readProbe: {
+    attempted: boolean;
+    ok: boolean;
+    status: number | null;
+    code: VercelConnectorErrorCode | null;
+    projectCount: number | null;
+    hint: string | null;
+  } | null;
   missing: VercelConnectorErrorCode[];
   runtimeServiceName: string | null;
   nodeEnv: string | null;
@@ -73,6 +96,15 @@ export type VercelReadonlyRawSnapshot = {
   readAt: string;
   projects: VercelRawProject[];
   deploymentsByProject: Record<string, VercelRawDeployment[]>;
+  productionDeploymentsByProject: Record<string, VercelRawDeployment[]>;
+  domainsByProject: Record<string, VercelRawDomain[]>;
+  aliasesByProject: Record<string, VercelRawAlias[]>;
+  sectionErrors: {
+    projectsError: VercelConnectorSectionError | null;
+    deploymentsError: VercelConnectorSectionError | null;
+    domainsError: VercelConnectorSectionError | null;
+    aliasesError: VercelConnectorSectionError | null;
+  };
   domainsByProject: Record<string, VercelRawDomain[]>;
   aliases: VercelRawAlias[];
 };
@@ -107,6 +139,11 @@ export type VercelReadonlyEvidence = {
 
 export type VercelReadonlyHealth = {
   connectorGateway: "READY";
+  vercelConnector:
+    | "READY_FOR_CONNECTION"
+    | "CONNECTED_READONLY"
+    | "PARTIAL_READONLY"
+    | "FAILED";
   vercelConnector: "READY_FOR_CONNECTION" | "CONNECTED_READONLY" | "FAILED";
   healthScore: number;
   lastSyncAt: string | null;
@@ -122,6 +159,10 @@ export type VercelReadonlySnapshot = {
   statusLabel: string;
   configured: boolean;
   lastErrorCode: VercelConnectorErrorCode;
+  projectsError: VercelConnectorSectionError | null;
+  deploymentsError: VercelConnectorSectionError | null;
+  domainsError: VercelConnectorSectionError | null;
+  aliasesError: VercelConnectorSectionError | null;
   totalProjects: number;
   productionReady: number;
   failedLast24h: number;
