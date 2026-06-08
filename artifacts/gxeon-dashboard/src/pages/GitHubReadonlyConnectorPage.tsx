@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   githubReadonlyAllowedActions,
@@ -12,6 +13,7 @@ import {
   type GitHubReadonlySnapshot,
 } from "@/data/github-readonly-connector";
 import {
+  fetchGitHubConnectUrl,
   fetchGitHubConnectorDiagnostics,
   fetchGitHubConnectorSnapshot,
   githubConnectorApiBaseMode,
@@ -118,8 +120,35 @@ export default function GitHubReadonlyConnectorPage() {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [connectLoading, setConnectLoading] = useState(false);
   const [diagnostics, setDiagnostics] =
     useState<GitHubConnectorDiagnostics | null>(null);
+
+  const callbackError = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("error");
+  }, []);
+
+  const callbackConnected = useMemo(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("connected") === "github";
+  }, []);
+
+  async function handleConnectGitHub() {
+    setConnectLoading(true);
+    setError(null);
+    try {
+      const connectUrl = await fetchGitHubConnectUrl();
+      window.location.assign(connectUrl.url);
+    } catch (connectError) {
+      setConnectLoading(false);
+      setError(
+        connectError instanceof Error
+          ? connectError.message
+          : "GITHUB_CONNECT_URL_FAILED",
+      );
+    }
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -205,13 +234,13 @@ export default function GitHubReadonlyConnectorPage() {
           <div>
             <div className="mb-4 flex flex-wrap gap-2">
               <Badge className="border-amber-300/35 bg-amber-400/10 text-amber-100">
-                P2 GitHub Read-Only
+                P3 GitHub App Flow
               </Badge>
               <Badge className="border-emerald-300/35 bg-emerald-400/10 text-emerald-100">
-                Backend-only token boundary
+                Backend-only secret boundary
               </Badge>
               <Badge className="border-cyan-300/35 bg-cyan-400/10 text-cyan-100">
-                Same-origin dashboard reads
+                GitHub App installation
               </Badge>
               <Badge className="border-rose-300/35 bg-rose-400/10 text-rose-100">
                 No credential UI
@@ -224,10 +253,11 @@ export default function GitHubReadonlyConnectorPage() {
               GitHub Read-Only Connector
             </h1>
             <p className="mt-4 max-w-4xl text-base text-stone-300 md:text-lg">
-              The dashboard now reads a same-origin backend snapshot for
-              repository metadata, branches, pull requests, issues and commits.
-              If backend credentials are absent, the connector fails closed into
-              READY without exposing secrets or mutation controls.
+              Connect GitHub redirects to the official GitHub App installation
+              flow. The backend validates signed state, stores only safe
+              installation metadata, mints short-lived installation tokens
+              server-side and keeps the legacy backend token path as an
+              emergency read-only fallback.
             </p>
           </div>
           <Card className="border-amber-300/25 bg-black/35 text-white">
@@ -245,7 +275,29 @@ export default function GitHubReadonlyConnectorPage() {
               <p className="text-xs text-stone-500">
                 Last sync: {formatDate(snapshot.health.lastSyncAt)}
               </p>
+              {callbackConnected ? (
+                <p className="text-xs text-emerald-200">
+                  GitHub installation callback completed. Snapshot will use
+                  GitHub App mode when backend token minting is configured.
+                </p>
+              ) : null}
+              {callbackError ? (
+                <p className="text-xs text-red-200">
+                  Callback error: {callbackError}
+                </p>
+              ) : null}
               {error ? <p className="text-xs text-red-200">{error}</p> : null}
+              <Button
+                type="button"
+                onClick={handleConnectGitHub}
+                disabled={connectLoading}
+                className="w-full bg-amber-300 text-black hover:bg-amber-200"
+              >
+                <Github className="mr-2 h-4 w-4" />
+                {connectLoading
+                  ? "Preparing GitHub redirect..."
+                  : "Connect GitHub"}
+              </Button>
               <div className="grid grid-cols-2 gap-2 text-xs text-stone-400">
                 {githubReadonlyStatusFlow.map((status) => (
                   <div
@@ -271,13 +323,33 @@ export default function GitHubReadonlyConnectorPage() {
                   </strong>
                 </div>
                 <div className="flex justify-between gap-3">
-                  <span>Token present</span>
+                  <span>Backend token fallback</span>
                   <strong>
                     {diagnostics
                       ? diagnostics.tokenPresent
                         ? "yes"
                         : "no"
                       : "unknown"}
+                  </strong>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <span>Connection mode</span>
+                  <strong>
+                    {snapshot.connectionMode ??
+                      diagnostics?.connection?.mode ??
+                      "not_connected"}
+                  </strong>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <span>GitHub App ready</span>
+                  <strong>
+                    {diagnostics?.auth?.appInstallationReady ? "yes" : "no"}
+                  </strong>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <span>Installation token config</span>
+                  <strong>
+                    {diagnostics?.auth?.installationTokenReady ? "yes" : "no"}
                   </strong>
                 </div>
                 <div className="flex justify-between gap-3">
@@ -310,6 +382,27 @@ export default function GitHubReadonlyConnectorPage() {
                   <span>API base mode</span>
                   <strong>{githubConnectorApiBaseMode}</strong>
                 </div>
+                {snapshot.installation ? (
+                  <>
+                    <div className="flex justify-between gap-3">
+                      <span>Installation</span>
+                      <strong>#{snapshot.installation.installationId}</strong>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <span>Account</span>
+                      <strong>
+                        {snapshot.installation.accountLogin ??
+                          "selected in GitHub"}
+                      </strong>
+                    </div>
+                    <div className="flex justify-between gap-3">
+                      <span>Repository access</span>
+                      <strong>
+                        {snapshot.installation.repositorySelection}
+                      </strong>
+                    </div>
+                  </>
+                ) : null}
               </div>
             </CardContent>
           </Card>
@@ -501,8 +594,8 @@ export default function GitHubReadonlyConnectorPage() {
           <div className="flex items-center gap-3">
             <HeartPulse className="h-5 w-5 text-emerald-200" />
             <p className="font-bold">
-              Backend-only read foundation active. No OAuth UI, no credential
-              fields and no mutation buttons are present.
+              Backend-only GitHub App read foundation active. No credential
+              fields, browser tokens or mutation buttons are present.
             </p>
           </div>
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-emerald-100">

@@ -14,7 +14,7 @@ Use this checklist before moving the GitHub connector from prepared state into a
 
 - [ ] Confirm credentials are configured only in backend secret storage.
 - [ ] Confirm no token input exists in the frontend.
-- [ ] Confirm no token is written to localStorage, sessionStorage or browser cookies.
+- [ ] Confirm no token is written to browser persistent storage or browser cookies.
 - [ ] Confirm logs redact authorization headers and secrets.
 - [ ] Confirm generated bundles do not include GitHub secrets.
 

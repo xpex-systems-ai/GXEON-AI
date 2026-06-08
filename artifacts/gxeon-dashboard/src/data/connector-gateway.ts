@@ -1,10 +1,31 @@
-export type ConnectorGatewayId = "github" | "vercel" | "railway" | "supabase" | "microsoft365";
+export type ConnectorGatewayId =
+  | "github"
+  | "vercel"
+  | "railway"
+  | "supabase"
+  | "microsoft365";
 
-export type ConnectorGatewayStatus = "NOT_CONFIGURED" | "READY" | "CONNECTING" | "CONNECTED" | "ERROR" | "LOCKED";
+export type ConnectorGatewayStatus =
+  | "NOT_CONFIGURED"
+  | "READY"
+  | "CONNECTING"
+  | "CONNECTED"
+  | "ERROR"
+  | "LOCKED";
 
-export type ConnectorGatewayButtonLabel = "Connect GitHub" | "Connect Vercel" | "Connect Railway" | "Connect Supabase" | "Connect Microsoft 365" | "Review requirements" | "Locked";
+export type ConnectorGatewayButtonLabel =
+  | "Connect GitHub"
+  | "Connect Vercel"
+  | "Connect Railway"
+  | "Connect Supabase"
+  | "Connect Microsoft 365"
+  | "Review requirements"
+  | "Locked";
 
-export type ConnectorCredentialIndicator = "NO_CREDENTIALS_IN_FRONTEND" | "BACKEND_SECRET_REQUIRED" | "OPERATOR_APPROVAL_REQUIRED";
+export type ConnectorCredentialIndicator =
+  | "NO_CREDENTIALS_IN_FRONTEND"
+  | "BACKEND_SECRET_REQUIRED"
+  | "OPERATOR_APPROVAL_REQUIRED";
 
 export type ConnectorGatewayProvider = {
   id: ConnectorGatewayId;
@@ -28,7 +49,11 @@ export type ConnectorGatewayProvider = {
   checklistHref: string;
   risks: string[];
   activationSteps: string[];
-  readyScreen: Array<{ label: string; value: string; state: ConnectorGatewayStatus }>;
+  readyScreen: Array<{
+    label: string;
+    value: string;
+    state: ConnectorGatewayStatus;
+  }>;
   futureCapabilities: string[];
 };
 
@@ -52,7 +77,7 @@ export const REAL_DATA_MODE = {
 } as const;
 
 export const connectorGatewaySafetyRules = [
-  "Botões são superfícies controladas: não iniciam OAuth, callbacks, redirects de autorização ou requests externos no frontend.",
+  "Botões são superfícies controladas: GitHub usa somente URL de conexão emitida pelo backend; nenhum token ou secret entra no frontend.",
   "Credenciais reais permanecem somente em dashboards dos provedores ou armazenamento seguro de backend aprovado.",
   "Nenhum token, secret, tenant ID, service role key ou variável de ambiente sensível é armazenado no frontend.",
   "Status CONNECTED só pode aparecer depois de confirmação real do backend autorizado.",
@@ -65,36 +90,71 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
     name: "GitHub",
     officialBrand: "GitHub",
     priority: 1,
-    purpose: "Repositórios, issues, pull requests, commits e evidência de engenharia.",
+    purpose:
+      "Repositórios, issues, pull requests, commits e evidência de engenharia.",
     status: "READY",
     healthScore: 0,
     lastSync: null,
     uptime: "not measured",
     credentialIndicator: "BACKEND_SECRET_REQUIRED",
-    credentialLabel: "Backend runtime token only; no frontend credential path",
-    activationStyle: "Backend-only read-only runtime activation",
-    frontendBehavior: "Exibe readiness e botão Connect GitHub sem input de token.",
-    backendFuture: "Runtime autorizado lê repositórios, pull requests, issues e commits somente por API interna same-origin.",
-    runtimeBoundary: "Leituras GitHub ocorrem somente no backend com permissões mínimas e sem métodos de mutação.",
-    stateStoreBoundary: "Estado futuro de sync e evidências será persistido somente após revisão de schema.",
-    nextManualAction: "Confirmar repositórios permitidos, branch, escopo read-only inicial e política de revisão.",
+    credentialLabel:
+      "GitHub App secrets remain backend-only; no frontend credential path",
+    activationStyle: "GitHub App installation redirect via backend connect-url",
+    frontendBehavior:
+      "Exibe readiness e botão Connect GitHub sem input de token.",
+    backendFuture:
+      "Runtime autorizado via GitHub App lê repositórios, pull requests, issues e commits somente por API interna.",
+    runtimeBoundary:
+      "Leituras GitHub ocorrem somente no backend com permissões mínimas e sem métodos de mutação.",
+    stateStoreBoundary:
+      "Estado futuro de sync e evidências será persistido somente após revisão de schema.",
+    nextManualAction:
+      "Clicar Connect GitHub, instalar o GitHub App e selecionar repositórios permitidos.",
     buttonLabel: "Connect GitHub",
-    checklistHref: "docs/connectors/GITHUB_REAL_CONNECTION_P2.md",
-    risks: ["Permissões de repositório excessivas", "Vazamento de token", "Ações de escrita acidentais"],
-    activationSteps: ["Mapear repositório e branch", "Aprovar app/OAuth com escopo mínimo", "Testar leitura em backend isolado", "Publicar estado CONNECTED real"],
-    readyScreen: [
-      { label: "Repository read", value: "prepared", state: "READY" },
-      { label: "Connect GitHub", value: "operator action required", state: "READY" },
-      { label: "Repository list", value: "awaiting real connection", state: "NOT_CONFIGURED" },
+    checklistHref: "docs/connectors/GITHUB_APP_INSTALLATION_FLOW_P3.md",
+    risks: [
+      "Permissões de repositório excessivas",
+      "Vazamento de token",
+      "Ações de escrita acidentais",
     ],
-    futureCapabilities: ["Repository metadata", "Issues", "Pull requests", "Commits", "Engineering evidence"],
+    activationSteps: [
+      "Mapear repositório e branch",
+      "Instalar GitHub App com permissões read-only",
+      "Testar leitura em backend isolado",
+      "Publicar estado CONNECTED real",
+    ],
+    readyScreen: [
+      {
+        label: "Repository read",
+        value: "ready after GitHub App install",
+        state: "READY",
+      },
+      {
+        label: "Connect GitHub",
+        value: "primary operator action",
+        state: "READY",
+      },
+      {
+        label: "Repository list",
+        value: "awaiting backend-confirmed connection",
+        state: "READY",
+      },
+    ],
+    futureCapabilities: [
+      "Repository metadata",
+      "Issues",
+      "Pull requests",
+      "Commits",
+      "Engineering evidence",
+    ],
   },
   {
     id: "vercel",
     name: "Vercel",
     officialBrand: "Vercel",
     priority: 2,
-    purpose: "Production URL, Preview URL, deployments, status de produção e falhas de build.",
+    purpose:
+      "Production URL, Preview URL, deployments, status de produção e falhas de build.",
     status: "READY",
     healthScore: 0,
     lastSync: null,
@@ -102,29 +162,66 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
     credentialIndicator: "BACKEND_SECRET_REQUIRED",
     credentialLabel: "Vercel token pending in backend vault",
     activationStyle: "Token/dashboard controlled future activation",
-    frontendBehavior: "Exibe prontidão de deploy e botão Connect Vercel sem coletar token.",
-    backendFuture: "Runtime autorizado deverá ler deployments e status de projeto somente após configuração segura.",
-    runtimeBoundary: "Nenhum request para Vercel no UI; futura leitura server-side controlada.",
-    stateStoreBoundary: "Snapshots de deploy poderão ser gravados no state store somente depois da revisão Supabase.",
-    nextManualAction: "Confirmar projeto, production URL, preview URL, output directory e fonte do status de build.",
+    frontendBehavior:
+      "Exibe prontidão de deploy e botão Connect Vercel sem coletar token.",
+    backendFuture:
+      "Runtime autorizado deverá ler deployments e status de projeto somente após configuração segura.",
+    runtimeBoundary:
+      "Nenhum request para Vercel no UI; futura leitura server-side controlada.",
+    stateStoreBoundary:
+      "Snapshots de deploy poderão ser gravados no state store somente depois da revisão Supabase.",
+    nextManualAction:
+      "Confirmar projeto, production URL, preview URL, output directory e fonte do status de build.",
     buttonLabel: "Connect Vercel",
     checklistHref: "docs/connectors/VERCEL_CONNECTOR_READINESS.md",
-    risks: ["Exposição de token de projeto", "Output directory incorreto", "Status de produção falso"],
-    activationSteps: ["Mapear projeto Vercel", "Validar URLs reais", "Aprovar leitura server-side", "Confirmar deployment status real"],
-    readyScreen: [
-      { label: "Production URL", value: "awaiting connection", state: "NOT_CONFIGURED" },
-      { label: "Preview URL", value: "awaiting connection", state: "NOT_CONFIGURED" },
-      { label: "Deployment Status", value: "ready to read after auth", state: "READY" },
-      { label: "Project Health", value: "not measured", state: "NOT_CONFIGURED" },
+    risks: [
+      "Exposição de token de projeto",
+      "Output directory incorreto",
+      "Status de produção falso",
     ],
-    futureCapabilities: ["Deployments", "Preview URLs", "Production status", "Build failures", "Project health"],
+    activationSteps: [
+      "Mapear projeto Vercel",
+      "Validar URLs reais",
+      "Aprovar leitura server-side",
+      "Confirmar deployment status real",
+    ],
+    readyScreen: [
+      {
+        label: "Production URL",
+        value: "awaiting connection",
+        state: "NOT_CONFIGURED",
+      },
+      {
+        label: "Preview URL",
+        value: "awaiting connection",
+        state: "NOT_CONFIGURED",
+      },
+      {
+        label: "Deployment Status",
+        value: "ready to read after auth",
+        state: "READY",
+      },
+      {
+        label: "Project Health",
+        value: "not measured",
+        state: "NOT_CONFIGURED",
+      },
+    ],
+    futureCapabilities: [
+      "Deployments",
+      "Preview URLs",
+      "Production status",
+      "Build failures",
+      "Project health",
+    ],
   },
   {
     id: "railway",
     name: "Railway",
     officialBrand: "Railway",
     priority: 3,
-    purpose: "Services, workers, runtime, environment validation e deployment health.",
+    purpose:
+      "Services, workers, runtime, environment validation e deployment health.",
     status: "LOCKED",
     healthScore: 0,
     lastSync: null,
@@ -133,29 +230,53 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
     credentialLabel: "Runtime variables must be approved before unlock",
     activationStyle: "CLI/dashboard controlled future activation",
     frontendBehavior: "Exibe estado bloqueado e checklist de runtime.",
-    backendFuture: "Railway poderá hospedar o runtime de conectores para jobs server-side seguros.",
-    runtimeBoundary: "Bloqueado até revisão de variáveis, workers, logs, custos e janelas de execução.",
-    stateStoreBoundary: "Somente metadados operacionais aprovados poderão ser persistidos depois da revisão Supabase.",
-    nextManualAction: "Revisar limites de worker, variáveis de runtime, logs e orçamento antes de liberar qualquer job.",
+    backendFuture:
+      "Railway poderá hospedar o runtime de conectores para jobs server-side seguros.",
+    runtimeBoundary:
+      "Bloqueado até revisão de variáveis, workers, logs, custos e janelas de execução.",
+    stateStoreBoundary:
+      "Somente metadados operacionais aprovados poderão ser persistidos depois da revisão Supabase.",
+    nextManualAction:
+      "Revisar limites de worker, variáveis de runtime, logs e orçamento antes de liberar qualquer job.",
     buttonLabel: "Locked",
     checklistHref: "docs/connectors/RAILWAY_CONNECTOR_RUNTIME_READINESS.md",
-    risks: ["Variáveis de runtime expostas", "Workers executando cedo demais", "Custos não controlados"],
-    activationSteps: ["Definir serviço runtime", "Separar env vars server-side", "Criar limites de worker", "Ativar logs e custos"],
+    risks: [
+      "Variáveis de runtime expostas",
+      "Workers executando cedo demais",
+      "Custos não controlados",
+    ],
+    activationSteps: [
+      "Definir serviço runtime",
+      "Separar env vars server-side",
+      "Criar limites de worker",
+      "Ativar logs e custos",
+    ],
     readyScreen: [
       { label: "Services", value: "locked", state: "LOCKED" },
       { label: "Workers", value: "locked", state: "LOCKED" },
       { label: "Runtime", value: "awaiting validation", state: "LOCKED" },
       { label: "Environment Validation", value: "required", state: "READY" },
-      { label: "Deployment Health", value: "not measured", state: "NOT_CONFIGURED" },
+      {
+        label: "Deployment Health",
+        value: "not measured",
+        state: "NOT_CONFIGURED",
+      },
     ],
-    futureCapabilities: ["Connector workers", "Scheduled jobs", "Runtime logs", "Health checks", "Cost controls"],
+    futureCapabilities: [
+      "Connector workers",
+      "Scheduled jobs",
+      "Runtime logs",
+      "Health checks",
+      "Cost controls",
+    ],
   },
   {
     id: "supabase",
     name: "Supabase",
     officialBrand: "Supabase",
     priority: 4,
-    purpose: "Database status, RLS status, storage status, project status e migration readiness.",
+    purpose:
+      "Database status, RLS status, storage status, project status e migration readiness.",
     status: "LOCKED",
     healthScore: 0,
     lastSync: null,
@@ -164,29 +285,61 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
     credentialLabel: "Service role never exposed to frontend",
     activationStyle: "Dashboard controlled future activation",
     frontendBehavior: "Exibe prontidão de banco. Não expõe service role key.",
-    backendFuture: "Supabase poderá armazenar estados reais de conector, eventos operacionais e snapshots aprovados.",
-    runtimeBoundary: "Nenhum write client-side; mutations devem passar por backend autorizado.",
-    stateStoreBoundary: "RLS, migrations e tabelas operacionais precisam ser aprovadas antes de conexão.",
-    nextManualAction: "Validar schema, RLS, storage buckets e política de migrations antes do primeiro sync.",
+    backendFuture:
+      "Supabase poderá armazenar estados reais de conector, eventos operacionais e snapshots aprovados.",
+    runtimeBoundary:
+      "Nenhum write client-side; mutations devem passar por backend autorizado.",
+    stateStoreBoundary:
+      "RLS, migrations e tabelas operacionais precisam ser aprovadas antes de conexão.",
+    nextManualAction:
+      "Validar schema, RLS, storage buckets e política de migrations antes do primeiro sync.",
     buttonLabel: "Locked",
     checklistHref: "docs/connectors/SUPABASE_CONNECTOR_READINESS.md",
-    risks: ["Exposição de service role", "RLS ausente", "Migrations destrutivas"],
-    activationSteps: ["Validar project status", "Auditar RLS", "Revisar migrations", "Habilitar persistência real"],
+    risks: [
+      "Exposição de service role",
+      "RLS ausente",
+      "Migrations destrutivas",
+    ],
+    activationSteps: [
+      "Validar project status",
+      "Auditar RLS",
+      "Revisar migrations",
+      "Habilitar persistência real",
+    ],
     readyScreen: [
       { label: "Database Status", value: "locked", state: "LOCKED" },
       { label: "RLS Status", value: "validation required", state: "READY" },
-      { label: "Storage Status", value: "not configured", state: "NOT_CONFIGURED" },
-      { label: "Project Status", value: "awaiting connection", state: "NOT_CONFIGURED" },
-      { label: "Migration Readiness", value: "review required", state: "READY" },
+      {
+        label: "Storage Status",
+        value: "not configured",
+        state: "NOT_CONFIGURED",
+      },
+      {
+        label: "Project Status",
+        value: "awaiting connection",
+        state: "NOT_CONFIGURED",
+      },
+      {
+        label: "Migration Readiness",
+        value: "review required",
+        state: "READY",
+      },
     ],
-    futureCapabilities: ["Database status", "RLS audit", "Storage status", "Connector state", "Operational event store"],
+    futureCapabilities: [
+      "Database status",
+      "RLS audit",
+      "Storage status",
+      "Connector state",
+      "Operational event store",
+    ],
   },
   {
     id: "microsoft365",
     name: "Microsoft 365",
     officialBrand: "Microsoft 365",
     priority: 5,
-    purpose: "Outlook, Calendar, Contacts, OneDrive e Proposal Center manual-first.",
+    purpose:
+      "Outlook, Calendar, Contacts, OneDrive e Proposal Center manual-first.",
     status: "NOT_CONFIGURED",
     healthScore: 0,
     lastSync: null,
@@ -194,23 +347,47 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
     credentialIndicator: "OPERATOR_APPROVAL_REQUIRED",
     credentialLabel: "Tenant consent and Graph scopes not configured",
     activationStyle: "Microsoft Graph OAuth future activation",
-    frontendBehavior: "Exibe readiness e consentimento necessário sem pedir tenant secret.",
-    backendFuture: "Graph API só poderá ler dados aprovados após consentimento, auditoria e política manual-first.",
-    runtimeBoundary: "Nenhum email, calendário ou arquivo é lido ou enviado pelo frontend.",
-    stateStoreBoundary: "Dados pessoais exigem aprovação explícita, minimização e trilha de auditoria.",
-    nextManualAction: "Definir escopos permitidos, consentimento, política de contatos e proposal center.",
+    frontendBehavior:
+      "Exibe readiness e consentimento necessário sem pedir tenant secret.",
+    backendFuture:
+      "Graph API só poderá ler dados aprovados após consentimento, auditoria e política manual-first.",
+    runtimeBoundary:
+      "Nenhum email, calendário ou arquivo é lido ou enviado pelo frontend.",
+    stateStoreBoundary:
+      "Dados pessoais exigem aprovação explícita, minimização e trilha de auditoria.",
+    nextManualAction:
+      "Definir escopos permitidos, consentimento, política de contatos e proposal center.",
     buttonLabel: "Connect Microsoft 365",
     checklistHref: "docs/connectors/MICROSOFT365_CONNECTOR_READINESS.md",
-    risks: ["Acesso indevido a dados pessoais", "Envio automático sem aprovação", "Escopos Graph excessivos"],
-    activationSteps: ["Definir tenant e consentimento", "Aprovar escopos mínimos", "Testar leitura server-side", "Habilitar proposal center manual"],
+    risks: [
+      "Acesso indevido a dados pessoais",
+      "Envio automático sem aprovação",
+      "Escopos Graph excessivos",
+    ],
+    activationSteps: [
+      "Definir tenant e consentimento",
+      "Aprovar escopos mínimos",
+      "Testar leitura server-side",
+      "Habilitar proposal center manual",
+    ],
     readyScreen: [
       { label: "Outlook", value: "not configured", state: "NOT_CONFIGURED" },
       { label: "Calendar", value: "not configured", state: "NOT_CONFIGURED" },
       { label: "Contacts", value: "not configured", state: "NOT_CONFIGURED" },
       { label: "OneDrive", value: "not configured", state: "NOT_CONFIGURED" },
-      { label: "Proposal Center", value: "ready after consent", state: "READY" },
+      {
+        label: "Proposal Center",
+        value: "ready after consent",
+        state: "READY",
+      },
     ],
-    futureCapabilities: ["Outlook", "Calendar", "Contacts", "OneDrive", "Proposal Center"],
+    futureCapabilities: [
+      "Outlook",
+      "Calendar",
+      "Contacts",
+      "OneDrive",
+      "Proposal Center",
+    ],
   },
 ];
 
@@ -218,9 +395,15 @@ export const operationalActivityFeed: OperationalActivityEvent[] = [];
 
 export const ecosystemReadiness = {
   providers: connectorGatewayProviders.length,
-  ready: connectorGatewayProviders.filter((connector) => connector.status === "READY").length,
-  connected: connectorGatewayProviders.filter((connector) => connector.status === "CONNECTED").length,
-  locked: connectorGatewayProviders.filter((connector) => connector.status === "LOCKED").length,
+  ready: connectorGatewayProviders.filter(
+    (connector) => connector.status === "READY",
+  ).length,
+  connected: connectorGatewayProviders.filter(
+    (connector) => connector.status === "CONNECTED",
+  ).length,
+  locked: connectorGatewayProviders.filter(
+    (connector) => connector.status === "LOCKED",
+  ).length,
   globalHealthScore: 0,
   overallReadiness: "READY_FOR_REAL_CONNECTION",
   operationalUptime: "not measured until first real connector heartbeat",

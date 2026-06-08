@@ -6,14 +6,14 @@ GitHub P1 is a **read-only preparation phase**. It creates the GXEON operational
 
 ## Safety flags
 
-| Boundary | P1 value | Requirement |
-| --- | --- | --- |
-| OAuth enabled | `false` | No OAuth redirects, callbacks or consent flows from the frontend. |
-| External API calls | `false` | No GitHub REST, GraphQL or SDK calls from this phase. |
-| Frontend token storage | `false` | No token inputs, localStorage, sessionStorage, cookies or embedded credentials. |
-| Repository write access | `false` | No write scopes, push, merge, delete branch, settings mutation or automation. |
-| Database writes | `false` | No connector state persistence until schema/RLS review is complete. |
-| Secret exposure | `false` | No secrets in source, docs, UI copy, logs or generated bundles. |
+| Boundary                | P1 value | Requirement                                                                   |
+| ----------------------- | -------- | ----------------------------------------------------------------------------- |
+| OAuth enabled           | `false`  | No OAuth redirects, callbacks or consent flows from the frontend.             |
+| External API calls      | `false`  | No GitHub REST, GraphQL or SDK calls from this phase.                         |
+| Frontend token storage  | `false`  | No token inputs, browser persistent storage, cookies or embedded credentials. |
+| Repository write access | `false`  | No write scopes, push, merge, delete branch, settings mutation or automation. |
+| Database writes         | `false`  | No connector state persistence until schema/RLS review is complete.           |
+| Secret exposure         | `false`  | No secrets in source, docs, UI copy, logs or generated bundles.               |
 
 ## Credential handling rule
 

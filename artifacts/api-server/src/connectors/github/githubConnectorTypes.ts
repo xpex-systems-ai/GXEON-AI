@@ -10,7 +10,14 @@ export type GitHubConnectorErrorCode =
   | "GITHUB_404"
   | "RATE_LIMITED"
   | "NETWORK_ERROR"
-  | "GITHUB_READ_FAILED";
+  | "GITHUB_READ_FAILED"
+  | "MISSING_GITHUB_OAUTH_STATE_SECRET"
+  | "GITHUB_AUTH_CONFIG_MISSING"
+  | "GITHUB_AUTH_STATE_INVALID"
+  | "GITHUB_INSTALLATION_MISSING"
+  | "INSTALLATION_TOKEN_NOT_CONFIGURED"
+  | "INSTALLATION_TOKEN_FETCH_FAILED"
+  | "INSTALLATION_TOKEN_NETWORK_ERROR";
 
 export type GitHubConnectorConfig = {
   owner: string;
@@ -114,11 +121,18 @@ export type GitHubReadonlyHealth = {
   systemState:
     | "FIRST_REAL_CONNECTOR_PREPARED"
     | "REAL_READONLY_CONNECTED"
-    | "GITHUB_READ_FAILED";
+    | "GITHUB_READ_FAILED"
+    | "MISSING_GITHUB_OAUTH_STATE_SECRET"
+    | "GITHUB_AUTH_CONFIG_MISSING"
+    | "GITHUB_AUTH_STATE_INVALID"
+    | "GITHUB_INSTALLATION_MISSING"
+    | "INSTALLATION_TOKEN_NOT_CONFIGURED"
+    | "INSTALLATION_TOKEN_FETCH_FAILED"
+    | "INSTALLATION_TOKEN_NETWORK_ERROR";
   lastSyncAt: string | null;
   lastErrorCode: GitHubConnectorErrorCode;
   externalApiCalls: false;
-  oauthEnabled: false;
+  oauthEnabled: boolean;
   repositoryWriteAccess: false;
   databaseWrites: false;
   tokenStorageFrontend: false;
@@ -129,6 +143,16 @@ export type GitHubReadonlySnapshot = {
   status: GitHubConnectorStatus;
   statusLabel: string;
   configured: boolean;
+  connectionMode?:
+    | "github_app_installation"
+    | "backend_token"
+    | "not_connected";
+  installation?: {
+    installationId: string;
+    accountLogin: string | null;
+    repositorySelection: "all" | "selected" | "unknown";
+    connectedAt: string;
+  } | null;
   lastErrorCode: GitHubConnectorErrorCode;
   repositoryCount: number;
   openPrs: number;
