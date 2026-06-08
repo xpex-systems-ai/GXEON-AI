@@ -20,7 +20,12 @@ export type GitHubConnectorErrorCode =
   | "INSTALLATION_TOKEN_NETWORK_ERROR"
   | "GITHUB_APP_PRIVATE_KEY_MISSING"
   | "GITHUB_APP_INSTALLATION_NOT_FOUND"
-  | "INSTALLATION_HAS_NO_REPOSITORIES";
+  | "INSTALLATION_HAS_NO_REPOSITORIES"
+  | "GITHUB_APP_INSTALLATIONS_FETCH_FAILED"
+  | "GITHUB_APP_INSTALLATIONS_NETWORK_ERROR"
+  | "GITHUB_APP_NO_INSTALLATIONS"
+  | "GITHUB_APP_INSTALLATION_REPO_NOT_FOUND"
+  | "GITHUB_APP_INSTALLATION_DISCOVERY_FAILED";
 
 export type GitHubConnectorConfig = {
   owner: string;
@@ -162,6 +167,7 @@ export type GitHubReadonlySnapshot = {
     accountLogin: string | null;
     repositorySelection: "all" | "selected" | "unknown";
     connectedAt: string;
+    stateSource?: "memory" | "env" | "autodiscovered";
   } | null;
   lastErrorCode: GitHubConnectorErrorCode;
   repositoryCount: number;

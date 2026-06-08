@@ -184,7 +184,7 @@ export type GitHubConnectUrlResponse = {
 
 export type GitHubFinalReadinessResponse = {
   provider: "github";
-  status: "READY" | "CONFIG_MISSING";
+  status: "READY" | "READY_TO_DISCOVER_INSTALLATION" | "CONFIG_MISSING";
   apiRuntime: { online: boolean; routeStatus: "ONLINE" };
   connectionMode: "github_app_installation" | "backend_token" | "not_connected";
   missing: string[];
@@ -194,6 +194,11 @@ export type GitHubFinalReadinessResponse = {
   auth: GitHubConnectorDiagnostics["auth"];
   connector: GitHubConnectorDiagnostics;
   connection: GitHubConnectorDiagnostics["connection"];
+  canAutodiscoverInstallations?: boolean;
+  installationStatePresent?: boolean;
+  installationStateSource?: "memory" | "env" | "autodiscovered" | "none";
+  selectedRepoReady?: boolean;
+  nextStep?: string;
   timestamp: string;
 };
 
@@ -262,5 +267,30 @@ export async function fetchGitHubFinalReadiness(
       throw error;
     }
     return null;
+  }
+}
+
+export type GitHubConnectorActivityEvent = {
+  timestamp: string;
+  eventType: string;
+  status: "success" | "failed" | "info";
+  code: string | null;
+  metadata: Record<string, string | number | boolean | null>;
+};
+
+export async function fetchGitHubConnectorActivity(
+  signal?: AbortSignal,
+): Promise<GitHubConnectorActivityEvent[]> {
+  try {
+    const { payload } = await safeJsonFetch<{
+      provider: "github";
+      events?: GitHubConnectorActivityEvent[];
+    }>("/api/connectors/github/activity", signal);
+    return payload.events ?? [];
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") {
+      throw error;
+    }
+    return [];
   }
 }

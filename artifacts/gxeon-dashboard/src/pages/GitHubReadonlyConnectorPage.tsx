@@ -14,11 +14,13 @@ import {
 } from "@/data/github-readonly-connector";
 import {
   fetchGitHubConnectUrl,
+  fetchGitHubConnectorActivity,
   fetchGitHubConnectorDiagnostics,
   fetchGitHubConnectorSnapshot,
   fetchGitHubFinalReadiness,
   githubConnectorApiBaseDisplay,
   githubConnectorApiBaseMode,
+  type GitHubConnectorActivityEvent,
   type GitHubFinalReadinessResponse,
 } from "@/services/githubConnectorService";
 import {
@@ -128,6 +130,9 @@ export default function GitHubReadonlyConnectorPage() {
     useState<GitHubConnectorDiagnostics | null>(null);
   const [finalReadiness, setFinalReadiness] =
     useState<GitHubFinalReadinessResponse | null>(null);
+  const [activityEvents, setActivityEvents] = useState<
+    GitHubConnectorActivityEvent[]
+  >([]);
 
   const callbackError = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
@@ -164,11 +169,13 @@ export default function GitHubReadonlyConnectorPage() {
       fetchGitHubConnectorSnapshot(controller.signal),
       fetchGitHubConnectorDiagnostics(controller.signal),
       fetchGitHubFinalReadiness(controller.signal),
+      fetchGitHubConnectorActivity(controller.signal),
     ])
-      .then(([data, diagnosticData, readinessData]) => {
+      .then(([data, diagnosticData, readinessData, activityData]) => {
         setSnapshot(data);
         setDiagnostics(diagnosticData);
         setFinalReadiness(readinessData);
+        setActivityEvents(activityData);
         if (data.lastErrorCode === "BACKEND_URL_MISCONFIGURED") {
           setError(
             "Set VITE_GXEON_API_BASE_URL to Railway API public URL and redeploy Vercel",
@@ -216,8 +223,14 @@ export default function GitHubReadonlyConnectorPage() {
     diagnostics?.connection?.stateSource ??
     finalReadiness?.connection?.stateSource ??
     "none";
+  const githubAppReady = Boolean(
+    diagnostics?.auth?.appInstallationReady &&
+    diagnostics?.auth?.installationTokenReady,
+  );
   const lastBackendErrorCode =
-    snapshot.lastErrorCode ?? snapshot.health.lastErrorCode ?? "NONE";
+    snapshot.status === "FAILED"
+      ? (snapshot.lastErrorCode ?? snapshot.health.lastErrorCode ?? "NONE")
+      : "NONE";
   const actionableNextStep = (() => {
     if (connectionMode !== "not_connected") return null;
     if (lastBackendErrorCode === "BACKEND_URL_MISCONFIGURED") {
@@ -226,7 +239,12 @@ export default function GitHubReadonlyConnectorPage() {
     if (finalReadiness?.status === "CONFIG_MISSING") {
       return `Configure missing backend variables: ${finalReadiness.missing.join(", ")}`;
     }
-    return "Open Connect GitHub and complete the GitHub App installation.";
+    return (
+      finalReadiness?.nextStep ??
+      (githubAppReady
+        ? "Click Connect GitHub or wait for snapshot autodiscovery to resolve the installation."
+        : "Open Connect GitHub and complete the GitHub App installation.")
+    );
   })();
 
   const metricCards = useMemo(
@@ -379,9 +397,7 @@ export default function GitHubReadonlyConnectorPage() {
                 </div>
                 <div className="flex justify-between gap-3">
                   <span>GitHub App ready</span>
-                  <strong>
-                    {diagnostics?.auth?.appInstallationReady ? "yes" : "no"}
-                  </strong>
+                  <strong>{githubAppReady ? "yes" : "no"}</strong>
                 </div>
                 <div className="flex justify-between gap-3">
                   <span>Installation token config</span>
@@ -496,6 +512,60 @@ export default function GitHubReadonlyConnectorPage() {
           <MetricCard key={metric.label} {...metric} />
         ))}
       </section>
+
+      <Card className="border-white/10 bg-[#080808]/90 text-white">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <History className="h-5 w-5 text-amber-200" /> Connector Activity
+            Log
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {activityEvents.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-white/10 p-4 text-sm text-stone-400">
+              No backend activity events returned yet. Diagnostics, connect URL,
+              callback and snapshot reads will appear here without credentials
+              or raw GitHub payloads.
+            </p>
+          ) : (
+            activityEvents.slice(0, 8).map((event) => (
+              <div
+                key={`${event.timestamp}-${event.eventType}`}
+                className="rounded-2xl border border-white/10 bg-white/[0.03] p-4"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="font-bold">{event.eventType}</p>
+                  <Badge
+                    variant="outline"
+                    className={
+                      event.status === "success"
+                        ? "border-emerald-300/25 text-emerald-100"
+                        : event.status === "failed"
+                          ? "border-red-300/25 text-red-100"
+                          : "border-amber-300/25 text-amber-100"
+                    }
+                  >
+                    {event.status}
+                  </Badge>
+                </div>
+                {event.code ? (
+                  <p className="mt-2 text-xs text-amber-100">{event.code}</p>
+                ) : null}
+                <p className="mt-2 text-xs text-stone-500">
+                  {formatDate(event.timestamp)}
+                </p>
+                {Object.keys(event.metadata).length > 0 ? (
+                  <p className="mt-2 break-words text-xs text-stone-400">
+                    {Object.entries(event.metadata)
+                      .map(([key, value]) => `${key}: ${String(value)}`)
+                      .join(" · ")}
+                  </p>
+                ) : null}
+              </div>
+            ))
+          )}
+        </CardContent>
+      </Card>
 
       <section className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
         <Card className="border-white/10 bg-[#080808]/90 text-white">
