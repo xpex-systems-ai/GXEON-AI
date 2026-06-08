@@ -5,7 +5,7 @@ import { logger } from "../lib/logger";
  * Governance auth middleware.
  *
  * Accepts requests that present a valid GOVERNANCE_TOKEN in one of:
- *   - Authorization: Bearer <token>
+ *   - HTTP bearer credential header
  *   - X-Governance-Token: <token>
  *
  * When GOVERNANCE_TOKEN env var is not set, the middleware blocks all requests
@@ -15,7 +15,11 @@ import { logger } from "../lib/logger";
  * requests from loopback (127.x / ::1) are allowed through — this lets the
  * dashboard running on the same host call the API without needing a token.
  */
-export function governanceAuth(req: Request, res: Response, next: NextFunction) {
+export function governanceAuth(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   const configuredToken = process.env["GOVERNANCE_TOKEN"];
   const isDev = process.env["NODE_ENV"] === "development";
 
@@ -29,7 +33,8 @@ export function governanceAuth(req: Request, res: Response, next: NextFunction) 
     logger.warn("[GovernanceAuth] GOVERNANCE_TOKEN not set — blocking request");
     return res.status(503).json({
       success: false,
-      error: "Governance API requires GOVERNANCE_TOKEN to be set. Add it in Replit Secrets.",
+      error:
+        "Governance API requires GOVERNANCE_TOKEN to be set. Add it in Replit Secrets.",
     });
   }
 
@@ -46,6 +51,9 @@ export function governanceAuth(req: Request, res: Response, next: NextFunction) 
     return next();
   }
 
-  logger.warn({ url: req.url }, "[GovernanceAuth] Unauthorized governance request");
+  logger.warn(
+    { url: req.url },
+    "[GovernanceAuth] Unauthorized governance request",
+  );
   return res.status(401).json({ success: false, error: "Unauthorized" });
 }

@@ -16,7 +16,10 @@ import {
   fetchGitHubConnectUrl,
   fetchGitHubConnectorDiagnostics,
   fetchGitHubConnectorSnapshot,
+  fetchGitHubFinalReadiness,
+  githubConnectorApiBaseDisplay,
   githubConnectorApiBaseMode,
+  type GitHubFinalReadinessResponse,
 } from "@/services/githubConnectorService";
 import {
   Activity,
@@ -123,6 +126,8 @@ export default function GitHubReadonlyConnectorPage() {
   const [connectLoading, setConnectLoading] = useState(false);
   const [diagnostics, setDiagnostics] =
     useState<GitHubConnectorDiagnostics | null>(null);
+  const [finalReadiness, setFinalReadiness] =
+    useState<GitHubFinalReadinessResponse | null>(null);
 
   const callbackError = useMemo(() => {
     const params = new URLSearchParams(window.location.search);
@@ -158,11 +163,20 @@ export default function GitHubReadonlyConnectorPage() {
     Promise.all([
       fetchGitHubConnectorSnapshot(controller.signal),
       fetchGitHubConnectorDiagnostics(controller.signal),
+      fetchGitHubFinalReadiness(controller.signal),
     ])
-      .then(([data, diagnosticData]) => {
+      .then(([data, diagnosticData, readinessData]) => {
         setSnapshot(data);
         setDiagnostics(diagnosticData);
-        if (!diagnosticData && data.lastErrorCode === "BACKEND_UNAVAILABLE") {
+        setFinalReadiness(readinessData);
+        if (data.lastErrorCode === "BACKEND_URL_MISCONFIGURED") {
+          setError(
+            "Set VITE_GXEON_API_BASE_URL to Railway API public URL and redeploy Vercel",
+          );
+        } else if (
+          !diagnosticData &&
+          data.lastErrorCode === "BACKEND_UNAVAILABLE"
+        ) {
           setError("Backend API is unreachable from this dashboard runtime.");
         }
       })
@@ -189,6 +203,31 @@ export default function GitHubReadonlyConnectorPage() {
 
     return () => controller.abort();
   }, []);
+
+  const backendReachability =
+    finalReadiness?.apiRuntime.online || diagnostics ? "ONLINE" : "UNREACHABLE";
+  const connectionMode =
+    finalReadiness?.connectionMode ??
+    snapshot.connectionMode ??
+    diagnostics?.connection?.mode ??
+    "not_connected";
+  const installationStateSource =
+    snapshot.installation?.stateSource ??
+    diagnostics?.connection?.stateSource ??
+    finalReadiness?.connection?.stateSource ??
+    "none";
+  const lastBackendErrorCode =
+    snapshot.lastErrorCode ?? snapshot.health.lastErrorCode ?? "NONE";
+  const actionableNextStep = (() => {
+    if (connectionMode !== "not_connected") return null;
+    if (lastBackendErrorCode === "BACKEND_URL_MISCONFIGURED") {
+      return "Set VITE_GXEON_API_BASE_URL to Railway API public URL and redeploy Vercel";
+    }
+    if (finalReadiness?.status === "CONFIG_MISSING") {
+      return `Configure missing backend variables: ${finalReadiness.missing.join(", ")}`;
+    }
+    return "Open Connect GitHub and complete the GitHub App installation.";
+  })();
 
   const metricCards = useMemo(
     () => [
@@ -316,10 +355,12 @@ export default function GitHubReadonlyConnectorPage() {
                   <span>Backend reachability</span>
                   <strong
                     className={
-                      diagnostics ? "text-emerald-100" : "text-red-100"
+                      backendReachability === "ONLINE"
+                        ? "text-emerald-100"
+                        : "text-red-100"
                     }
                   >
-                    {diagnostics ? "ONLINE" : "UNREACHABLE"}
+                    {backendReachability}
                   </strong>
                 </div>
                 <div className="flex justify-between gap-3">
@@ -334,11 +375,7 @@ export default function GitHubReadonlyConnectorPage() {
                 </div>
                 <div className="flex justify-between gap-3">
                   <span>Connection mode</span>
-                  <strong>
-                    {snapshot.connectionMode ??
-                      diagnostics?.connection?.mode ??
-                      "not_connected"}
-                  </strong>
+                  <strong>{connectionMode}</strong>
                 </div>
                 <div className="flex justify-between gap-3">
                   <span>GitHub App ready</span>
@@ -374,14 +411,59 @@ export default function GitHubReadonlyConnectorPage() {
                 </div>
                 <div className="flex justify-between gap-3">
                   <span>Last backend error</span>
-                  <strong>
-                    {snapshot.lastErrorCode ?? snapshot.health.lastErrorCode}
-                  </strong>
+                  <strong>{lastBackendErrorCode}</strong>
                 </div>
                 <div className="flex justify-between gap-3">
                   <span>API base mode</span>
                   <strong>{githubConnectorApiBaseMode}</strong>
                 </div>
+                <div className="col-span-2 flex justify-between gap-3">
+                  <span>API URL called</span>
+                  <strong className="break-all text-right">
+                    {githubConnectorApiBaseDisplay}/api/connectors/github/*
+                  </strong>
+                </div>
+
+                <div className="flex justify-between gap-3">
+                  <span>Final readiness</span>
+                  <strong>
+                    {finalReadiness?.status ?? lastBackendErrorCode}
+                  </strong>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <span>Installation state source</span>
+                  <strong>{installationStateSource}</strong>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <span>Dashboard URL configured</span>
+                  <strong>
+                    {finalReadiness?.dashboardUrlPresent ? "yes" : "no"}
+                  </strong>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <span>API public URL configured</span>
+                  <strong>
+                    {finalReadiness?.apiPublicUrlPresent ? "yes" : "no"}
+                  </strong>
+                </div>
+                {finalReadiness?.status === "CONFIG_MISSING" ? (
+                  <div className="col-span-2 rounded-xl border border-amber-300/20 bg-amber-300/[0.04] p-2">
+                    <span className="block text-stone-500">
+                      Missing variables
+                    </span>
+                    <strong className="break-words text-amber-100">
+                      {finalReadiness.missing.join(", ") || "none"}
+                    </strong>
+                  </div>
+                ) : null}
+                {actionableNextStep ? (
+                  <div className="col-span-2 rounded-xl border border-cyan-300/20 bg-cyan-300/[0.04] p-2">
+                    <span className="block text-stone-500">Next step</span>
+                    <strong className="text-cyan-100">
+                      {actionableNextStep}
+                    </strong>
+                  </div>
+                ) : null}
                 {snapshot.installation ? (
                   <>
                     <div className="flex justify-between gap-3">

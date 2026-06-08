@@ -1,19 +1,8 @@
-# GitHub App Railway and Vercel Setup
-
-## Create the GitHub App
-
-Create a GitHub App in GitHub developer settings for the GXEON connector.
-
-Recommended app settings:
-
-- Homepage URL: the GXEON dashboard URL.
-- Callback URL: `https://YOUR-RAILWAY-API/api/connectors/github/callback`.
-- Repository permissions: Metadata read, Contents read, Pull requests read, Issues read, Commit statuses read.
-- Webhook: not required for P3 snapshot reads.
+# GitHub App Railway + Vercel Setup
 
 ## Railway API server variables
 
-Set these only on the Railway API server:
+Required for the GitHub App flow:
 
 - `GITHUB_APP_CLIENT_ID`
 - `GITHUB_APP_CLIENT_SECRET`
@@ -24,23 +13,35 @@ Set these only on the Railway API server:
 - `GXEON_DASHBOARD_URL`
 - `GXEON_API_PUBLIC_URL`
 
-Secret values must remain in Railway and must not be copied into Vercel or committed to the repository.
+Optional repository target variables:
 
-## Vercel dashboard variable
+- `GITHUB_CONNECTOR_OWNER`
+- `GITHUB_CONNECTOR_REPO`
 
-Set only this public variable in Vercel:
+If `GITHUB_CONNECTOR_REPO` is omitted and a GitHub App installation exists, the backend lists installation repositories and reads the first accessible repository safely.
 
-- `VITE_GXEON_API_BASE_URL=https://YOUR-RAILWAY-API`
+Optional installation metadata fallback after successful installation:
 
-Do not add GitHub tokens, GitHub private keys, GitHub client secrets, or installation tokens to Vercel.
+- `GITHUB_APP_INSTALLATION_ID`
+- `GITHUB_APP_ACCOUNT_LOGIN`
+- `GITHUB_APP_REPOSITORY_SELECTION`
 
-## Deployment validation
+These optional fallback variables persist safe metadata across Railway restarts. They are not access tokens and are safe to expose in diagnostics as metadata.
 
-After setting variables:
+## Vercel dashboard variables
 
-1. Redeploy the Railway API server.
-2. Redeploy the Vercel dashboard.
-3. Open `/ops/connectors/github`.
-4. Click **Connect GitHub**.
-5. Install the app and return to GXEON.
-6. Confirm the dashboard reports `CONNECTED_READONLY` with connection mode `github_app_installation`.
+Set only:
+
+- `VITE_GXEON_API_BASE_URL`
+
+This value must point to the Railway API public URL, for example `https://your-api.up.railway.app`. Do not add GitHub credentials to Vercel.
+
+## Validation commands
+
+```bash
+curl -s "$API_URL/api/connectors/github/final-readiness"
+curl -s "$API_URL/api/connectors/github/connect-url"
+curl -s "$API_URL/api/connectors/github/snapshot"
+```
+
+The response should be JSON. If Vercel receives HTML for an API call, the dashboard reports `BACKEND_URL_MISCONFIGURED` and tells the operator to set `VITE_GXEON_API_BASE_URL` to the Railway API public URL and redeploy Vercel.

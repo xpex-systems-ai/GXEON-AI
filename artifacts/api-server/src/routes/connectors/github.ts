@@ -3,7 +3,10 @@ import {
   getGitHubAuthConfig,
   safeGitHubAuthDiagnostics,
 } from "../../connectors/github/githubAuthConfig";
-import { fetchGitHubInstallationAccessToken } from "../../connectors/github/githubAppInstallationClient";
+import {
+  fetchGitHubInstallationAccessToken,
+  fetchGitHubInstallationRepositories,
+} from "../../connectors/github/githubAppInstallationClient";
 import {
   getGitHubConnectionState,
   getGitHubInstallationConnectionState,
@@ -85,6 +88,7 @@ function applyInstallationMetadata(
       accountLogin: installation.accountLogin,
       repositorySelection: installation.repositorySelection,
       connectedAt: installation.connectedAt,
+      stateSource: installation.stateSource,
     },
     health: {
       ...snapshot.health,
@@ -112,6 +116,50 @@ router.get("/connectors/github/status", (_req, res) => {
   });
 });
 
+function resolveConnectionMode():
+  | "github_app_installation"
+  | "backend_token"
+  | "not_connected" {
+  const connection = getGitHubConnectionState();
+  if (connection.mode === "github_app_installation") return connection.mode;
+  return getGitHubConnectorConfig().tokenPresent
+    ? "backend_token"
+    : "not_connected";
+}
+
+function missingFinalReadinessCodes(): string[] {
+  const authMissing = safeGitHubAuthDiagnostics().missing;
+  const config = getGitHubConnectorConfig();
+  const connectionMode = resolveConnectionMode();
+  if (connectionMode === "github_app_installation") return [];
+  if (connectionMode === "backend_token") return [];
+  return [...new Set([...authMissing, ...config.missing])];
+}
+
+router.get("/connectors/github/final-readiness", (_req, res) => {
+  const authConfig = getGitHubAuthConfig();
+  const connectorDiagnostics = toGitHubConnectorDiagnostics();
+  const connection = getGitHubConnectionState();
+  const connectionMode = resolveConnectionMode();
+  const missing = missingFinalReadinessCodes();
+
+  res.setHeader("Cache-Control", diagnosticsCacheHeader);
+  res.json({
+    provider: "github",
+    status: missing.length === 0 ? "READY" : "CONFIG_MISSING",
+    apiRuntime: { online: true, routeStatus: "ONLINE" },
+    connectionMode,
+    missing,
+    callbackUrl: authConfig.callbackUrl,
+    dashboardUrlPresent: Boolean(authConfig.dashboardUrl),
+    apiPublicUrlPresent: Boolean(authConfig.apiPublicUrl),
+    auth: safeGitHubAuthDiagnostics(authConfig),
+    connector: connectorDiagnostics,
+    connection,
+    timestamp: new Date().toISOString(),
+  });
+});
+
 router.get("/connectors/github/connect-url", (_req, res) => {
   const authConfig = getGitHubAuthConfig();
   const secret = stateSecret();
@@ -121,6 +169,13 @@ router.get("/connectors/github/connect-url", (_req, res) => {
     res.status(503).json({
       provider: "github",
       status: "CONFIG_MISSING",
+      readiness: {
+        appInstallationReady: authConfig.appInstallationReady,
+        installationTokenReady: authConfig.installationTokenReady,
+        callbackUrl: authConfig.callbackUrl,
+        dashboardUrlPresent: Boolean(authConfig.dashboardUrl),
+        apiPublicUrlPresent: Boolean(authConfig.apiPublicUrl),
+      },
       missing:
         authConfig.missing.length > 0
           ? authConfig.missing
@@ -158,6 +213,13 @@ router.get("/connectors/github/connect-url", (_req, res) => {
   res.status(503).json({
     provider: "github",
     status: "CONFIG_MISSING",
+    readiness: {
+      appInstallationReady: authConfig.appInstallationReady,
+      installationTokenReady: authConfig.installationTokenReady,
+      callbackUrl: authConfig.callbackUrl,
+      dashboardUrlPresent: Boolean(authConfig.dashboardUrl),
+      apiPublicUrlPresent: Boolean(authConfig.apiPublicUrl),
+    },
     missing: authConfig.missing,
   });
 });
@@ -222,6 +284,14 @@ router.get("/connectors/github/snapshot", async (_req, res) => {
       installation.installationId,
     );
 
+    const installationMetadata = {
+      installationId: installation.installationId,
+      accountLogin: installation.accountLogin,
+      repositorySelection: installation.repositorySelection,
+      connectedAt: installation.connectedAt,
+      stateSource: installation.stateSource,
+    };
+
     if (!tokenResult.ok) {
       res.status(503).json({
         ...createGitHubReadonlyFailedSnapshot(
@@ -231,21 +301,54 @@ router.get("/connectors/github/snapshot", async (_req, res) => {
           tokenResult.errorCode as GitHubConnectorErrorCode,
         ),
         connectionMode: "github_app_installation",
-        installation: {
-          installationId: installation.installationId,
-          accountLogin: installation.accountLogin,
-          repositorySelection: installation.repositorySelection,
-          connectedAt: installation.connectedAt,
-        },
+        installation: installationMetadata,
       });
       return;
+    }
+
+    let target = { owner: config.owner, repo: config.repo };
+    if (!config.repoConfiguredFromEnv) {
+      const repositoriesResult = await fetchGitHubInstallationRepositories(
+        tokenResult.token,
+      );
+
+      if (!repositoriesResult.ok) {
+        res.status(502).json({
+          ...createGitHubReadonlyFailedSnapshot(
+            config.owner,
+            config.repo,
+            "GitHub App installation repositories could not be listed.",
+            repositoriesResult.errorCode as GitHubConnectorErrorCode,
+          ),
+          connectionMode: "github_app_installation",
+          installation: installationMetadata,
+        });
+        return;
+      }
+
+      const firstRepository = repositoriesResult.repositories[0];
+      if (!firstRepository) {
+        res.status(404).json({
+          ...createGitHubReadonlyFailedSnapshot(
+            config.owner,
+            config.repo,
+            "GitHub App installation has no accessible repositories.",
+            "INSTALLATION_HAS_NO_REPOSITORIES",
+          ),
+          connectionMode: "github_app_installation",
+          installation: installationMetadata,
+        });
+        return;
+      }
+
+      target = firstRepository;
     }
 
     try {
       const rawSnapshot = await readGitHubReadonlySnapshot({
         token: tokenResult.token,
-        owner: config.owner,
-        repo: config.repo,
+        owner: target.owner,
+        repo: target.repo,
       });
       res.json(
         applyInstallationMetadata(normalizeGitHubReadonlySnapshot(rawSnapshot)),
@@ -265,18 +368,13 @@ router.get("/connectors/github/snapshot", async (_req, res) => {
         )
         .json({
           ...createGitHubReadonlyFailedSnapshot(
-            config.owner,
-            config.repo,
+            target.owner,
+            target.repo,
             reason,
             errorCode,
           ),
           connectionMode: "github_app_installation",
-          installation: {
-            installationId: installation.installationId,
-            accountLogin: installation.accountLogin,
-            repositorySelection: installation.repositorySelection,
-            connectedAt: installation.connectedAt,
-          },
+          installation: installationMetadata,
         });
     }
     return;

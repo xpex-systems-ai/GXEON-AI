@@ -82,6 +82,9 @@ function messageForCode(code: GitHubClientErrorCode, status?: number): string {
     case "INSTALLATION_TOKEN_NOT_CONFIGURED":
     case "INSTALLATION_TOKEN_FETCH_FAILED":
     case "INSTALLATION_TOKEN_NETWORK_ERROR":
+    case "GITHUB_APP_PRIVATE_KEY_MISSING":
+    case "GITHUB_APP_INSTALLATION_NOT_FOUND":
+    case "INSTALLATION_HAS_NO_REPOSITORIES":
       return "GitHub App connector is not ready for server-side read access.";
   }
 }
@@ -142,14 +145,14 @@ export async function readGitHubReadonlySnapshot(options?: {
       messageForCode("MISSING_TOKEN"),
     );
   }
-  if (!config.ownerPresent) {
+  if (!owner) {
     throw new GitHubReadonlyClientError(
       "MISSING_OWNER",
       503,
       messageForCode("MISSING_OWNER"),
     );
   }
-  if (!config.repoPresent) {
+  if (!repo) {
     throw new GitHubReadonlyClientError(
       "MISSING_REPO",
       503,

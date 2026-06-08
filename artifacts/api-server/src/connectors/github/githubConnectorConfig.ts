@@ -21,11 +21,15 @@ export function getGitHubConnectorConfig(
   env: NodeJS.ProcessEnv = process.env,
 ): GitHubConnectorConfig & { token: string | null } {
   const token = env["GITHUB_CONNECTOR_TOKEN"]?.trim() || null;
-  const owner = env["GITHUB_CONNECTOR_OWNER"]?.trim() || DEFAULT_OWNER;
-  const repo = env["GITHUB_CONNECTOR_REPO"]?.trim() || DEFAULT_REPO;
+  const ownerFromEnv = env["GITHUB_CONNECTOR_OWNER"]?.trim() || null;
+  const repoFromEnv = env["GITHUB_CONNECTOR_REPO"]?.trim() || null;
+  const owner = ownerFromEnv || DEFAULT_OWNER;
+  const repo = repoFromEnv || DEFAULT_REPO;
   const tokenPresent = Boolean(token);
   const ownerPresent = Boolean(owner);
   const repoPresent = Boolean(repo);
+  const ownerConfiguredFromEnv = Boolean(ownerFromEnv);
+  const repoConfiguredFromEnv = Boolean(repoFromEnv);
   const missing: GitHubConnectorConfig["missing"] = [];
 
   if (!tokenPresent) missing.push("MISSING_TOKEN");
@@ -39,6 +43,8 @@ export function getGitHubConnectorConfig(
     tokenPresent,
     ownerPresent,
     repoPresent,
+    ownerConfiguredFromEnv,
+    repoConfiguredFromEnv,
     isConfigured: missing.length === 0,
     missing,
   };
@@ -74,6 +80,8 @@ export function toGitHubConnectorDiagnostics(
     tokenPresent: config.tokenPresent,
     ownerPresent: config.ownerPresent,
     repoPresent: config.repoPresent,
+    ownerConfiguredFromEnv: config.ownerConfiguredFromEnv,
+    repoConfiguredFromEnv: config.repoConfiguredFromEnv,
     configured: config.isConfigured,
     owner: config.ownerPresent ? config.owner : null,
     repo: config.repoPresent ? config.repo : null,

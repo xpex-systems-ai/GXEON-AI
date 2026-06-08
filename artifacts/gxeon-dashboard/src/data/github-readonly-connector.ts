@@ -23,6 +23,11 @@ export type GitHubConnectorErrorCode =
   | "INSTALLATION_TOKEN_NOT_CONFIGURED"
   | "INSTALLATION_TOKEN_FETCH_FAILED"
   | "INSTALLATION_TOKEN_NETWORK_ERROR"
+  | "GITHUB_APP_PRIVATE_KEY_MISSING"
+  | "GITHUB_APP_INSTALLATION_NOT_FOUND"
+  | "INSTALLATION_HAS_NO_REPOSITORIES"
+  | "BACKEND_RETURNED_HTML"
+  | "BACKEND_URL_MISCONFIGURED"
   | "BACKEND_UNAVAILABLE";
 
 export type GitHubConnectorDiagnostics = {
@@ -38,8 +43,11 @@ export type GitHubConnectorDiagnostics = {
     installationTokenReady: boolean;
     oauthReady: boolean;
     missing: string[];
+    callbackUrl?: string | null;
   };
   connection?: GitHubConnectionState;
+  ownerConfiguredFromEnv?: boolean;
+  repoConfiguredFromEnv?: boolean;
   owner: string | null;
   repo: string | null;
   missing: GitHubConnectorErrorCode[];
@@ -128,7 +136,20 @@ export type GitHubReadonlyHealth = {
   systemState:
     | "FIRST_REAL_CONNECTOR_PREPARED"
     | "REAL_READONLY_CONNECTED"
-    | "GITHUB_READ_FAILED";
+    | "GITHUB_READ_FAILED"
+    | "MISSING_GITHUB_OAUTH_STATE_SECRET"
+    | "GITHUB_AUTH_CONFIG_MISSING"
+    | "GITHUB_AUTH_STATE_INVALID"
+    | "GITHUB_INSTALLATION_MISSING"
+    | "INSTALLATION_TOKEN_NOT_CONFIGURED"
+    | "INSTALLATION_TOKEN_FETCH_FAILED"
+    | "INSTALLATION_TOKEN_NETWORK_ERROR"
+    | "GITHUB_APP_PRIVATE_KEY_MISSING"
+    | "GITHUB_APP_INSTALLATION_NOT_FOUND"
+    | "INSTALLATION_HAS_NO_REPOSITORIES"
+    | "BACKEND_RETURNED_HTML"
+    | "BACKEND_URL_MISCONFIGURED"
+    | "BACKEND_UNAVAILABLE";
   lastSyncAt: string | null;
   lastErrorCode: GitHubConnectorErrorCode;
   externalApiCalls: false;
@@ -147,8 +168,9 @@ export type GitHubConnectionState =
       repositorySelection: "all" | "selected" | "unknown";
       connectedAt: string;
       setupAction: string | null;
+      stateSource?: "memory" | "env";
     }
-  | { mode: "not_connected"; connectedAt: null };
+  | { mode: "not_connected"; connectedAt: null; stateSource?: "none" };
 
 export type GitHubReadonlySnapshot = {
   status: GitHubConnectorStatus;
@@ -163,6 +185,7 @@ export type GitHubReadonlySnapshot = {
     accountLogin: string | null;
     repositorySelection: "all" | "selected" | "unknown";
     connectedAt: string;
+    stateSource?: "memory" | "env";
   } | null;
   lastErrorCode: GitHubConnectorErrorCode;
   repositoryCount: number;
