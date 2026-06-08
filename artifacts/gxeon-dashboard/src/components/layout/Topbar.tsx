@@ -1,51 +1,62 @@
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { buildGxeonPlaceholderPath } from "@/data/gxeon-os";
-import { Bell, LockKeyhole, Menu, Search, ShieldCheck, WifiOff, Zap } from "lucide-react";
+import { Bell, CircleDot, Menu, Search, ShieldCheck, Zap } from "lucide-react";
+
+const headerTabs = ["Status", "Operator", "Revenue", "Tasks", "Connectors"];
+const kpis = [
+  { label: "Opportunities", value: "0" },
+  { label: "Tasks", value: "0" },
+  { label: "Executions", value: "0" },
+  { label: "Revenue", value: "R$0" },
+  { label: "Connectors", value: "5" },
+];
 
 export function Topbar() {
   return (
-    <header className="sticky top-0 z-30 border-b border-amber-300/15 bg-[#050403]/90 px-4 py-3 backdrop-blur-xl md:px-6">
-      <div className="flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-30 border-b border-amber-300/10 bg-[#050505]/90 px-4 py-3 backdrop-blur-xl md:px-6">
+      <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
         <div className="flex min-w-0 items-center gap-3">
-          <Link href={buildGxeonPlaceholderPath("command_center", "Mobile navigation")}>
-            <Button variant="ghost" size="icon" className="border border-amber-300/15 text-amber-100 lg:hidden">
-              <Menu className="h-5 w-5" />
-            </Button>
+          <Button variant="ghost" size="icon" className="border border-amber-300/15 text-amber-100 lg:hidden">
+            <Menu className="h-5 w-5" />
+          </Button>
+          <Link href="/" className="flex items-center gap-3">
+            <h1 className="text-xl font-black tracking-[0.24em] text-white">GXEON OS</h1>
+            <Badge className="border-emerald-300/30 bg-emerald-400/10 text-emerald-100">
+              <CircleDot className="mr-1 h-3 w-3" /> Live
+            </Badge>
           </Link>
-          <Link href={buildGxeonPlaceholderPath("command_center", "QG Privado Search")}>
-            <div className="hidden rounded-2xl border border-amber-300/15 bg-amber-100/[0.04] px-4 py-2 text-sm text-stone-300 transition hover:border-amber-300/40 hover:bg-amber-400/10 md:flex md:min-w-[420px] md:items-center md:gap-3">
-              <Search className="h-4 w-4 text-amber-200" />
-              Busca do QG: rotas, missões, tarefas, receita, conectores...
-            </div>
-          </Link>
-          <Link href={buildGxeonPlaceholderPath("command_center", "QG Privado Session")}>
-            <Badge className="hidden border-amber-300/35 bg-amber-400/10 text-amber-100 transition hover:bg-amber-400/20 sm:inline-flex"><LockKeyhole className="mr-1 h-3 w-3" /> QG Privado</Badge>
-          </Link>
+          <nav className="hidden items-center gap-1 md:flex">
+            {headerTabs.map((tab) => (
+              <Link key={tab} href={tab === "Connectors" ? "/ops/connectors" : tab === "Tasks" ? "/ops/tasks" : tab === "Revenue" ? "/ops/ledger" : "/"}>
+                <span className="rounded-full px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-stone-400 transition hover:bg-amber-400/10 hover:text-amber-100">{tab}</span>
+              </Link>
+            ))}
+          </nav>
         </div>
-        <div className="flex items-center gap-2 md:gap-3">
-          <Link href={buildGxeonPlaceholderPath("integrations", "Controlled connectors")}>
-            <Badge variant="outline" className="border-amber-300/40 text-amber-200 transition hover:bg-amber-400/10"><WifiOff className="mr-1 h-3 w-3" /> Conectores Controlados</Badge>
-          </Link>
-          <Link href={buildGxeonPlaceholderPath("command_center", "Operação Manual")}>
-            <Badge variant="outline" className="hidden border-emerald-300/40 text-emerald-200 transition hover:bg-emerald-400/10 md:inline-flex"><ShieldCheck className="mr-1 h-3 w-3" /> Operação Manual</Badge>
-          </Link>
-          <Link href={buildGxeonPlaceholderPath("command_center", "Notification Center")}>
-            <Button size="icon" variant="ghost" className="relative rounded-full border border-amber-100/10 bg-amber-100/[0.04] text-amber-100">
-              <Bell className="h-4 w-4" />
-              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-300" />
-            </Button>
-          </Link>
-          <Link href={buildGxeonPlaceholderPath("settings", "Operator profile")}>
-            <div className="hidden items-center gap-2 rounded-2xl border border-amber-100/10 bg-amber-100/[0.04] px-3 py-2 transition hover:border-amber-300/30 hover:bg-amber-400/10 lg:flex">
-              <Zap className="h-4 w-4 text-amber-200" />
-              <div className="text-xs">
-                <p className="font-semibold text-white">Operator: Junior Sena</p>
-                <p className="text-stone-500">Sessão privada · operação manual</p>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {kpis.map((kpi) => (
+            <Link key={kpi.label} href={kpi.label === "Connectors" ? "/ops/connectors" : kpi.label === "Tasks" ? "/ops/tasks" : kpi.label === "Revenue" ? "/ops/ledger" : "/ops/opportunities"}>
+              <div className="rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 transition hover:-translate-y-0.5 hover:border-amber-300/30 hover:bg-amber-400/10">
+                <p className="text-[10px] uppercase tracking-[0.22em] text-stone-500">{kpi.label}</p>
+                <p className="text-sm font-black text-white">{kpi.value}</p>
               </div>
-            </div>
-          </Link>
+            </Link>
+          ))}
+          <div className="hidden rounded-2xl border border-white/10 bg-white/[0.035] px-3 py-2 text-stone-400 md:flex md:items-center md:gap-2">
+            <Search className="h-4 w-4 text-amber-200" />
+            <span className="text-sm">⌘K</span>
+          </div>
+          <Badge variant="outline" className="border-emerald-300/35 text-emerald-100"><ShieldCheck className="mr-1 h-3 w-3" /> Manual</Badge>
+          <Button size="icon" variant="ghost" className="relative rounded-full border border-white/10 bg-white/[0.035] text-amber-100">
+            <Bell className="h-4 w-4" />
+            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-300" />
+          </Button>
+          <div className="hidden items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.035] px-3 py-2 lg:flex">
+            <Zap className="h-4 w-4 text-amber-200" />
+            <p className="text-xs font-semibold text-white">Junior Sena</p>
+          </div>
         </div>
       </div>
     </header>

@@ -9,7 +9,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         <Sidebar />
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <Topbar />
-          <main className="flex-1 overflow-auto p-4 md:p-6">
+          <main className="route-fade flex-1 overflow-auto p-4 md:p-6">
             {children}
           </main>
         </div>

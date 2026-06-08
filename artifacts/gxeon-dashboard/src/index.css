@@ -134,3 +134,18 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground));
 }
+
+@keyframes routeFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.route-fade > * {
+  animation: routeFade 180ms ease-out both;
+}
