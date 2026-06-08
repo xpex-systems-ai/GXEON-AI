@@ -169,7 +169,7 @@ export default function GovernancePage() {
       {error === "unauthorized" && (
         <div className="bg-yellow-500/10 text-yellow-500 px-4 py-3 rounded-lg flex items-center gap-2">
           <AlertCircle className="h-4 w-4 shrink-0" />
-          <p className="font-medium">Governance API requires authentication. Set <code className="font-mono text-xs bg-yellow-500/20 px-1 rounded">VITE_GOVERNANCE_TOKEN</code> in Replit Secrets to match the server&apos;s <code className="font-mono text-xs bg-yellow-500/20 px-1 rounded">GOVERNANCE_TOKEN</code>.</p>
+          <p className="font-medium">Governance API requires authentication. Use the backend-approved governance auth configuration; do not place privileged tokens in the dashboard bundle.</p>
         </div>
       )}
       {error === "not_configured" && (

@@ -12,12 +12,14 @@ const navGroups = [
       { label: "Validation", href: "/ops/validation", icon: ShieldCheck, status: "live" },
       { label: "Release", href: "/ops/release", icon: Rocket, status: "live" },
       { label: "Ledger", href: "/ops/ledger", icon: Table2, status: "live" },
+      { label: "Monetization", href: "/ops/monetization", icon: CircleDot, status: "review" },
     ],
   },
   {
     title: "Acquisition",
     items: [
-      { label: "Radar X", href: "/radar-x", icon: Radar, status: "pending" },
+      { label: "Radar X", href: "/ops/radar-x", icon: Radar, status: "review" },
+      { label: "Agent Conectou", href: "/ops/agent-conectou", icon: Plug, status: "review" },
       { label: "Proposals", href: "/marketplace", icon: TrendingUp, status: "live" },
     ],
   },

@@ -7,6 +7,8 @@ import runtimeRouter from "./runtime";
 import financialRouter from "./financial";
 import githubConnectorRouter from "./connectors/github";
 import vercelConnectorRouter from "./connectors/vercel";
+import monetizationRouter from "./monetization";
+import radarRouter from "./radar";
 
 const router: IRouter = Router();
 
@@ -18,5 +20,7 @@ router.use(runtimeRouter);
 router.use(financialRouter);
 router.use(githubConnectorRouter);
 router.use(vercelConnectorRouter);
+router.use(monetizationRouter);
+router.use(radarRouter);
 
 export default router;

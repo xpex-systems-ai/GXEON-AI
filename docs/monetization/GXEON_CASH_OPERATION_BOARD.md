@@ -31,4 +31,4 @@ All counters start at zero:
 
 ## Boundaries
 
-The board does not create fake clients, fake revenue, gateway charges, database writes, invoices, or external API activity.
+The board does not create non-real clients, non-real revenue, gateway charges, database writes, invoices, or external API activity.
