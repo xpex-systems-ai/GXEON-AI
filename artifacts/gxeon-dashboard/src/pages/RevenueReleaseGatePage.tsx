@@ -9,7 +9,7 @@ import {
   getRevenueReleaseSummary,
   releaseStatuses,
   activeOperationalReleases,
-  type AuthorizationStatus,
+  type OperatorApprovalStatus,
   type EvidenceCompleteness,
   type FinancialReadinessState,
   type ReleaseStatus,
@@ -42,7 +42,7 @@ const evidenceTone: Record<EvidenceCompleteness, string> = {
   VERIFIED_REAL: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
 };
 
-const authorizationTone: Record<AuthorizationStatus, string> = {
+const authorizationTone: Record<OperatorApprovalStatus, string> = {
   NOT_REQUESTED: "border-slate-300/30 bg-slate-400/10 text-slate-100",
   PENDING_OPERATOR: "border-violet-300/30 bg-violet-400/10 text-violet-100",
   AUTHORIZED_REAL: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
