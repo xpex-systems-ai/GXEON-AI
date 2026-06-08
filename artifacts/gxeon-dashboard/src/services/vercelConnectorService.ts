@@ -3,7 +3,6 @@ export type VercelConnectorStatus =
   | "CONNECTED_READONLY"
   | "PARTIAL_READONLY"
   | "FAILED";
-export type VercelConnectorStatus = "READY" | "CONNECTED_READONLY" | "FAILED";
 
 export type VercelConnectorErrorCode =
   | "NONE"
@@ -44,9 +43,6 @@ export type VercelConnectorDiagnostics = {
     projectCount: number | null;
     hint: string | null;
   } | null;
-  missing: VercelConnectorErrorCode[];
-  runtimeServiceName: string | null;
-  nodeEnv: string | null;
   timestamp: string;
 };
 
@@ -103,7 +99,6 @@ export type VercelReadonlySnapshot = {
       | "CONNECTED_READONLY"
       | "PARTIAL_READONLY"
       | "FAILED";
-    vercelConnector: "READY_FOR_CONNECTION" | "CONNECTED_READONLY" | "FAILED";
     healthScore: number;
     lastSyncAt: string | null;
     lastErrorCode: VercelConnectorErrorCode;
