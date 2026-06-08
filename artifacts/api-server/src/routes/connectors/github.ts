@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { getGitHubConnectorConfig, toGitHubConnectorDiagnostics, toSafeGitHubConnectorStatus } from "../../connectors/github/githubConnectorConfig";
+import { getGitHubConnectorConfig, toSafeGitHubConnectorStatus } from "../../connectors/github/githubConnectorConfig";
 import { GitHubReadonlyClientError, readGitHubReadonlySnapshot } from "../../connectors/github/githubReadonlyClient";
 import { createGitHubReadonlyFailedSnapshot, createGitHubReadonlyReadySnapshot, normalizeGitHubReadonlySnapshot } from "../../connectors/github/githubReadonlyNormalizer";
 
@@ -24,6 +25,7 @@ router.get("/connectors/github/snapshot", async (_req, res) => {
 
   if (!config.isConfigured) {
     res.json(createGitHubReadonlyReadySnapshot(config.owner, config.repo, config.missing[0] ?? "MISSING_TOKEN"));
+    res.json(createGitHubReadonlyReadySnapshot(config.owner, config.repo));
     return;
   }
 
@@ -37,6 +39,8 @@ router.get("/connectors/github/snapshot", async (_req, res) => {
     const errorCode = error instanceof GitHubReadonlyClientError ? error.code : "GITHUB_READ_FAILED";
     res.status(error instanceof GitHubReadonlyClientError ? error.statusCode : 502).json(
       createGitHubReadonlyFailedSnapshot(config.owner, config.repo, reason, errorCode),
+    res.status(error instanceof GitHubReadonlyClientError ? error.statusCode : 502).json(
+      createGitHubReadonlyFailedSnapshot(config.owner, config.repo, reason),
     );
   }
 });

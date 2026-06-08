@@ -12,6 +12,7 @@ import {
   type GitHubReadonlySnapshot,
 } from "@/data/github-readonly-connector";
 import { fetchGitHubConnectorDiagnostics, fetchGitHubConnectorSnapshot, githubConnectorApiBaseMode } from "@/services/githubConnectorService";
+import { fetchGitHubConnectorSnapshot } from "@/services/githubConnectorService";
 import { Activity, AlertTriangle, CheckCircle2, CircleDot, Code2, GitBranch, GitPullRequest, Github, HeartPulse, History, LockKeyhole, RefreshCw, Server, ShieldCheck } from "lucide-react";
 
 const statusTone: Record<GitHubConnectorStatus, string> = {
@@ -96,6 +97,12 @@ export default function GitHubReadonlyConnectorPage() {
           lastErrorCode: "BACKEND_UNAVAILABLE",
           health: { ...githubReadonlySnapshot.health, lastErrorCode: "BACKEND_UNAVAILABLE" },
         });
+    fetchGitHubConnectorSnapshot(controller.signal)
+      .then((data) => setSnapshot(data))
+      .catch((loadError) => {
+        if (loadError instanceof DOMException && loadError.name === "AbortError") return;
+        setError("Backend GitHub connector snapshot unavailable.");
+        setSnapshot(githubReadonlySnapshot);
       })
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false);
@@ -238,6 +245,33 @@ export default function GitHubReadonlyConnectorPage() {
               </div>
             );
           })}
+      </section>
+
+      <section className="grid gap-4 xl:grid-cols-2">
+        <Card className="border-white/10 bg-[#080808]/90 text-white">
+          <CardHeader><CardTitle className="flex items-center gap-2"><Activity className="h-5 w-5 text-amber-200" /> Allowed Reads</CardTitle></CardHeader>
+          <CardContent className="grid gap-2 sm:grid-cols-2">
+            {githubReadonlyAllowedActions.map((action) => <Badge key={action} variant="outline" className="justify-start border-emerald-300/20 py-2 text-emerald-100"><CheckCircle2 className="mr-2 h-3 w-3" />{action}</Badge>)}
+          </CardContent>
+        </Card>
+        <Card className="border-white/10 bg-[#080808]/90 text-white">
+          <CardHeader><CardTitle className="flex items-center gap-2"><Server className="h-5 w-5 text-red-200" /> Forbidden Boundary</CardTitle></CardHeader>
+          <CardContent className="grid gap-2 sm:grid-cols-2">
+            {githubReadonlyForbiddenActions.map((action) => <Badge key={action} variant="outline" className="justify-start border-red-300/20 py-2 text-red-100"><AlertTriangle className="mr-2 h-3 w-3" />{action}</Badge>)}
+          </CardContent>
+        </Card>
+      </section>
+
+      <Card className="border-white/10 bg-[#080808]/90 text-white">
+        <CardHeader><CardTitle className="flex items-center gap-2"><History className="h-5 w-5 text-amber-200" /> Evidence Timeline</CardTitle></CardHeader>
+        <CardContent className="space-y-3">
+          {snapshot.evidenceTimeline.map((event) => (
+            <div key={event.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2"><p className="font-bold">{event.title}</p><Badge variant="outline" className="border-amber-300/25 text-amber-100">{event.type}</Badge></div>
+              <p className="mt-2 text-sm text-stone-400">{event.description}</p>
+              <p className="mt-3 text-xs text-stone-500">{formatDate(event.occurredAt)} · {event.source}</p>
+            </div>
+          ))}
         </CardContent>
       </Card>
 
@@ -251,6 +285,8 @@ export default function GitHubReadonlyConnectorPage() {
             <RefreshCw className="h-4 w-4" />
             Short-lived snapshot cache
           </div>
+          <div className="flex items-center gap-3"><HeartPulse className="h-5 w-5 text-emerald-200" /><p className="font-bold">Backend-only read foundation active. No OAuth UI, no credential fields and no mutation buttons are present.</p></div>
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-emerald-100"><RefreshCw className="h-4 w-4" /> Short-lived snapshot cache</div>
         </CardContent>
       </Card>
     </div>

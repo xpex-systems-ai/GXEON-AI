@@ -1,4 +1,5 @@
 import { type GitHubConnectorErrorCode, type GitHubReadonlyEvidence, type GitHubReadonlySnapshot, type GitHubReadonlyRawSnapshot } from "./githubConnectorTypes";
+import { type GitHubReadonlyEvidence, type GitHubReadonlySnapshot, type GitHubReadonlyRawSnapshot } from "./githubConnectorTypes";
 
 const allowedScopes = ["metadata:read", "contents:read", "pull_requests:read", "issues:read", "commit_statuses:read"];
 
@@ -124,6 +125,7 @@ export function normalizeGitHubReadonlySnapshot(raw: GitHubReadonlyRawSnapshot):
 }
 
 export function createGitHubReadonlyReadySnapshot(owner: string, repo: string, errorCode: GitHubConnectorErrorCode = "MISSING_TOKEN"): GitHubReadonlySnapshot {
+export function createGitHubReadonlyReadySnapshot(owner: string, repo: string): GitHubReadonlySnapshot {
   return {
     status: "READY",
     statusLabel: "READY_FOR_READONLY_CONNECTION",
@@ -167,6 +169,7 @@ export function createGitHubReadonlyReadySnapshot(owner: string, repo: string, e
 }
 
 export function createGitHubReadonlyFailedSnapshot(owner: string, repo: string, reason: string, errorCode: GitHubConnectorErrorCode = "GITHUB_READ_FAILED"): GitHubReadonlySnapshot {
+export function createGitHubReadonlyFailedSnapshot(owner: string, repo: string, reason: string): GitHubReadonlySnapshot {
   return {
     ...createGitHubReadonlyReadySnapshot(owner, repo),
     status: "FAILED",
