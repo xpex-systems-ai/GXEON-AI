@@ -36,6 +36,7 @@ function statusTone(status: string): string {
     status === "PARTIAL_READONLY" ||
     status === "READY"
   ) {
+  if (status === "CONNECTED_READONLY" || status === "READY") {
     return "border-emerald-300/30 bg-emerald-400/10 text-emerald-100";
   }
   if (status === "FAILED") return "border-red-300/30 bg-red-400/10 text-red-100";
@@ -222,6 +223,7 @@ export default function VercelReadonlyConnectorPage() {
                   {snapshot.configured
                     ? "No deployment data returned yet. Check diagnostics for team/project mismatch or partial section reads."
                     : "No deployment data yet. Add VERCEL_TOKEN to Railway api-server to activate real reads."}
+                  No deployment data yet. Add VERCEL_TOKEN to Railway api-server to activate real reads.
                 </p>
               )}
             </div>
@@ -243,6 +245,8 @@ export default function VercelReadonlyConnectorPage() {
             <p><Clock3 className="mr-2 inline h-4 w-4 text-emerald-200" />Team ID present: {String(diagnostics?.teamIdPresent ?? false)}.</p>
             <p className="rounded-2xl border border-white/10 bg-black/30 p-3 text-xs text-stone-400">
               Status remains READY when the backend token is missing, becomes PARTIAL_READONLY when projects load but optional sections fail, and becomes CONNECTED_READONLY only after backend snapshot confirms Vercel data.
+            <p className="rounded-2xl border border-white/10 bg-black/30 p-3 text-xs text-stone-400">
+              Status remains READY when the backend token is missing and becomes CONNECTED_READONLY only after backend snapshot confirms Vercel data.
             </p>
           </CardContent>
         </Card>

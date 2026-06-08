@@ -21,6 +21,7 @@ import type {
   VercelConnectorErrorCode,
   VercelConnectorSectionError,
 } from "../../connectors/vercel/vercelConnectorTypes";
+import type { VercelConnectorErrorCode } from "../../connectors/vercel/vercelConnectorTypes";
 
 const router = Router();
 const cacheHeader = "private, max-age=30, stale-while-revalidate=30";
@@ -79,6 +80,14 @@ router.get("/connectors/vercel/diagnostics", async (_req, res) => {
       teamIdPresent: diagnostics.teamIdPresent,
       probeOk: probe?.ok ?? false,
       probeStatus: probe?.status ?? null,
+router.get("/connectors/vercel/diagnostics", (_req, res) => {
+  const diagnostics = toVercelConnectorDiagnostics();
+  recordVercelConnectorActivity({
+    eventType: "diagnostics_checked",
+    status: "success",
+    metadata: {
+      configured: diagnostics.configured,
+      teamIdPresent: diagnostics.teamIdPresent,
     },
   });
   res.setHeader("Cache-Control", diagnosticsCacheHeader);
@@ -100,6 +109,7 @@ router.get("/connectors/vercel/snapshot", async (_req, res) => {
       configured: config.configured,
       teamIdPresent: config.teamIdPresent,
     },
+    metadata: { configured: config.configured, teamIdPresent: config.teamIdPresent },
   });
 
   if (!config.configured) {
@@ -126,6 +136,12 @@ router.get("/connectors/vercel/snapshot", async (_req, res) => {
       eventType: "domains_read",
       status: rawSnapshot.sectionErrors.domainsError ? "failed" : "success",
       code: rawSnapshot.sectionErrors.domainsError?.code,
+      status: "success",
+      metadata: { count: Object.values(rawSnapshot.deploymentsByProject).flat().length },
+    });
+    recordVercelConnectorActivity({
+      eventType: "domains_read",
+      status: "success",
       metadata: { count: Object.values(rawSnapshot.domainsByProject).flat().length },
     });
     const snapshot = normalizeVercelReadonlySnapshot(rawSnapshot);
@@ -134,6 +150,8 @@ router.get("/connectors/vercel/snapshot", async (_req, res) => {
         snapshot.status === "PARTIAL_READONLY" ? "snapshot_failed" : "snapshot_success",
       status: snapshot.status === "PARTIAL_READONLY" ? "info" : "success",
       code: snapshot.status === "PARTIAL_READONLY" ? snapshot.lastErrorCode : null,
+      eventType: "snapshot_success",
+      status: "success",
       metadata: {
         totalProjects: snapshot.totalProjects,
         productionReady: snapshot.productionReady,
@@ -152,6 +170,7 @@ router.get("/connectors/vercel/snapshot", async (_req, res) => {
       error instanceof Error || isSectionError(error)
         ? error.message
         : "Vercel projects read failed.";
+        : "VERCEL_READ_FAILED";
     recordVercelConnectorActivity({
       eventType: "snapshot_failed",
       status: "failed",
@@ -161,6 +180,7 @@ router.get("/connectors/vercel/snapshot", async (_req, res) => {
     res
       .status(code === "MISSING_VERCEL_TOKEN" ? 200 : 502)
       .json(createVercelReadonlyFailedSnapshot(reason, code));
+      .json(createVercelReadonlyFailedSnapshot(code, code));
   }
 });
 

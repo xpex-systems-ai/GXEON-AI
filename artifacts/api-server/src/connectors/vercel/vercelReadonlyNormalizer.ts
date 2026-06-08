@@ -20,6 +20,7 @@ function normalizeState(value: string | undefined): string {
 function productionUrl(project: {
   targets?: { production?: { alias?: string[]; url?: string } };
 }): string | null {
+function productionUrl(project: { targets?: { production?: { alias?: string[]; url?: string } } }): string | null {
   const alias = project.targets?.production?.alias?.[0];
   const url = project.targets?.production?.url;
   return alias ? `https://${alias}` : url ? `https://${url}` : null;
@@ -44,6 +45,7 @@ function calculateHealthScore(args: {
       Math.round(productionScore + domainScore + 20 - failurePenalty - partialPenalty),
     ),
   );
+  return Math.max(0, Math.min(100, Math.round(productionScore + domainScore + 20 - failurePenalty)));
 }
 
 function sortEvidence(evidence: VercelReadonlyEvidence[]): VercelReadonlyEvidence[] {
@@ -73,6 +75,7 @@ export function normalizeVercelReadonlySnapshot(
     .flatMap(([projectId, deployments]) =>
       deployments.map((deployment) => ({
         id: deployment.uid ?? deployment.id ?? deployment.url ?? "unknown",
+        id: deployment.uid ?? deployment.id ?? "unknown",
         projectId,
         name: deployment.name ?? "unknown",
         url: deployment.url ? `https://${deployment.url}` : null,
@@ -93,6 +96,7 @@ export function normalizeVercelReadonlySnapshot(
 
   const projects: VercelReadonlyProject[] = raw.projects.map((project) => {
     const id = project.id ?? project.name ?? "unknown";
+    const id = project.id ?? "unknown";
     return {
       id,
       name: project.name ?? "unknown",
@@ -110,6 +114,7 @@ export function normalizeVercelReadonlySnapshot(
       createdAt >= oneDayAgo &&
       ["ERROR", "CANCELED", "FAILED"].includes(deployment.state)
     );
+    return createdAt >= oneDayAgo && ["ERROR", "CANCELED", "FAILED"].includes(deployment.state);
   }).length;
   const productionReady = latestDeployments.filter(
     (deployment) => deployment.target === "production" && deployment.state === "READY",
@@ -131,6 +136,7 @@ export function normalizeVercelReadonlySnapshot(
     isPartial,
   });
   const lastErrorCode = firstSectionError(raw.sectionErrors);
+  });
 
   const evidenceTimeline = sortEvidence([
     ...projects.map((project) => ({
@@ -171,6 +177,10 @@ export function normalizeVercelReadonlySnapshot(
     deploymentsError: raw.sectionErrors.deploymentsError,
     domainsError: raw.sectionErrors.domainsError,
     aliasesError: raw.sectionErrors.aliasesError,
+    status: "CONNECTED_READONLY",
+    statusLabel: "CONNECTED_READONLY",
+    configured: true,
+    lastErrorCode: "NONE",
     totalProjects: projects.length,
     productionReady,
     failedLast24h,
@@ -185,6 +195,10 @@ export function normalizeVercelReadonlySnapshot(
       healthScore,
       lastSyncAt: raw.readAt,
       lastErrorCode,
+      vercelConnector: "CONNECTED_READONLY",
+      healthScore,
+      lastSyncAt: raw.readAt,
+      lastErrorCode: "NONE",
       frontendTokenStorage: false,
       providerWrites: false,
       secretExposure: false,
@@ -259,6 +273,7 @@ export function createVercelReadonlyFailedSnapshot(
         id: "vercel-p0-read-failed",
         type: "HEALTH",
         title: "Vercel read-only projects read failed",
+        title: "Vercel read-only snapshot failed",
         description: reason,
         occurredAt: new Date().toISOString(),
         source: "Vercel read-only fail-closed boundary",
