@@ -11,7 +11,6 @@ import type {
 
 const PROJECT_LIMIT = 25;
 const DEPLOYMENT_LIMIT = 20;
-const DEPLOYMENT_LIMIT = 8;
 const DOMAIN_LIMIT = 20;
 const ALIAS_LIMIT = 50;
 
@@ -26,7 +25,6 @@ export class VercelReadonlyClientError extends Error {
     message: string,
     status: number | null = null,
   ) {
-  constructor(code: VercelConnectorErrorCode, message: string, status: number | null = null) {
     super(message);
     this.name = "VercelReadonlyClientError";
     this.code = code;
@@ -100,7 +98,6 @@ async function vercelGet<T>(
     if (value !== null && value !== undefined) {
       url.searchParams.set(key, String(value));
     }
-    if (value !== null && value !== undefined) url.searchParams.set(key, String(value));
   }
 
   let response: Response;
@@ -278,45 +275,6 @@ export async function readVercelReadonlySnapshot(): Promise<VercelReadonlyRawSna
         );
       }
     }),
-export async function readVercelReadonlySnapshot(): Promise<VercelReadonlyRawSnapshot> {
-  const config = getVercelConnectorConfig();
-  const projectsPayload = await vercelGet<{ projects?: VercelRawProject[] }>(
-    config,
-    "/v9/projects",
-    { limit: PROJECT_LIMIT },
-  );
-  const projects = (projectsPayload.projects ?? []).slice(0, PROJECT_LIMIT);
-  const deploymentsByProject: Record<string, VercelRawDeployment[]> = {};
-  const domainsByProject: Record<string, VercelRawDomain[]> = {};
-
-  await Promise.all(
-    projects.map(async (project) => {
-      const projectId = project.id;
-      if (!projectId) return;
-      const deploymentsPayload = await vercelGet<{ deployments?: VercelRawDeployment[] }>(
-        config,
-        `/v9/projects/${encodeURIComponent(projectId)}/deployments`,
-        { limit: DEPLOYMENT_LIMIT },
-      );
-      deploymentsByProject[projectId] = (deploymentsPayload.deployments ?? []).slice(
-        0,
-        DEPLOYMENT_LIMIT,
-      );
-    }),
-  );
-
-  const deploymentIds = Object.values(deploymentsByProject)
-    .flat()
-    .map((deployment) => deployment.uid ?? deployment.id)
-    .filter((id): id is string => Boolean(id))
-    .slice(0, PROJECT_LIMIT);
-  await Promise.all(
-    deploymentIds.map((deploymentId) =>
-      vercelGet<VercelRawDeployment>(
-        config,
-        `/v9/deployments/${encodeURIComponent(deploymentId)}`,
-      ).catch(() => null),
-    ),
   );
 
   await Promise.all(
@@ -344,26 +302,6 @@ export async function readVercelReadonlySnapshot(): Promise<VercelReadonlyRawSna
     }),
   );
 
-      const projectId = project.id;
-      if (!projectId) return;
-      const domainsPayload = await vercelGet<{ domains?: VercelRawDomain[] }>(
-        config,
-        `/v9/projects/${encodeURIComponent(projectId)}/domains`,
-        { limit: DOMAIN_LIMIT },
-      );
-      domainsByProject[projectId] = (domainsPayload.domains ?? []).slice(
-        0,
-        DOMAIN_LIMIT,
-      );
-    }),
-  );
-
-  const aliasesPayload = await vercelGet<{ aliases?: VercelRawAlias[] }>(
-    config,
-    "/v9/aliases",
-    { limit: ALIAS_LIMIT },
-  );
-
   return {
     readAt: new Date().toISOString(),
     projects,
@@ -372,7 +310,5 @@ export async function readVercelReadonlySnapshot(): Promise<VercelReadonlyRawSna
     domainsByProject,
     aliasesByProject,
     sectionErrors,
-    domainsByProject,
-    aliases: (aliasesPayload.aliases ?? []).slice(0, ALIAS_LIMIT),
   };
 }

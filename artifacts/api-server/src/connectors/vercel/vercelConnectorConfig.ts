@@ -34,7 +34,6 @@ export function getVercelConnectorConfig(
 export function toVercelConnectorDiagnostics(
   readProbe: VercelConnectorRuntimeDiagnostics["readProbe"] = null,
 ): VercelConnectorRuntimeDiagnostics {
-export function toVercelConnectorDiagnostics(): VercelConnectorRuntimeDiagnostics {
   const config = getVercelConnectorConfig();
   return {
     provider: "vercel",
@@ -48,9 +47,6 @@ export function toVercelConnectorDiagnostics(): VercelConnectorRuntimeDiagnostic
     runtimeServiceName: runtimeServiceName(process.env),
     nodeEnv: clean(process.env["NODE_ENV"]),
     readProbe,
-    missing: config.missing,
-    runtimeServiceName: runtimeServiceName(process.env),
-    nodeEnv: clean(process.env["NODE_ENV"]),
     timestamp: new Date().toISOString(),
   };
 }
