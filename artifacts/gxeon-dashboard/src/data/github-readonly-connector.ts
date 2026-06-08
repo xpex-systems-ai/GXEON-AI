@@ -1,4 +1,4 @@
-export type GitHubConnectorStatus = "CONNECTING" | "CONNECTED_READONLY" | "FAILED" | "DISCONNECTED";
+export type GitHubConnectorStatus = "READY" | "CONNECTING" | "CONNECTED_READONLY" | "FAILED" | "DISCONNECTED";
 
 export type GitHubRepositoryStatus = "READY_FOR_READONLY_CONNECTION" | "WAITING_FOR_AUTHORIZATION" | "READONLY_CONNECTED";
 
@@ -67,9 +67,9 @@ export type GitHubReadonlyEvidence = {
 
 export type GitHubReadonlyHealth = {
   connectorGateway: "READY";
-  githubConnector: "READY_FOR_CONNECTION";
+  githubConnector: "READY_FOR_CONNECTION" | "CONNECTED_READONLY" | "FAILED";
   nextActivation: "VERCEL_P2";
-  systemState: "FIRST_REAL_CONNECTOR_PREPARED";
+  systemState: "FIRST_REAL_CONNECTOR_PREPARED" | "REAL_READONLY_CONNECTED" | "GITHUB_READ_FAILED";
   lastSyncAt: string | null;
   externalApiCalls: false;
   oauthEnabled: false;
@@ -82,6 +82,7 @@ export type GitHubReadonlyHealth = {
 export type GitHubReadonlySnapshot = {
   status: GitHubConnectorStatus;
   statusLabel: string;
+  configured?: boolean;
   repositoryCount: number;
   openPrs: number;
   mergedPrs: number;
@@ -106,21 +107,22 @@ export const githubReadonlyAllowedActions = [
 ] as const;
 
 export const githubReadonlyForbiddenActions = [
-  "create_issue",
-  "create_pr",
-  "merge_pr",
-  "delete_branch",
-  "push_commit",
-  "write_repository",
-  "modify_settings",
+  "issue_creation_forbidden",
+  "pull_request_creation_forbidden",
+  "pull_request_merge_forbidden",
+  "branch_deletion_forbidden",
+  "commit_push_forbidden",
+  "repository_writes_forbidden",
+  "settings_changes_forbidden",
   "store_tokens_frontend",
 ] as const;
 
-export const githubReadonlyStatusFlow: GitHubConnectorStatus[] = ["DISCONNECTED", "CONNECTING", "CONNECTED_READONLY", "FAILED"];
+export const githubReadonlyStatusFlow: GitHubConnectorStatus[] = ["READY", "CONNECTING", "CONNECTED_READONLY", "FAILED"];
 
 export const githubReadonlySnapshot: GitHubReadonlySnapshot = {
-  status: "DISCONNECTED",
+  status: "READY",
   statusLabel: "READY_FOR_READONLY_CONNECTION",
+  configured: false,
   repositoryCount: 0,
   openPrs: 0,
   mergedPrs: 0,

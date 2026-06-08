@@ -40,15 +40,8 @@ type GovernanceData = {
 
 const API_BASE = "/api";
 
-function governanceHeaders(): HeadersInit {
-  const token = import.meta.env.VITE_GOVERNANCE_TOKEN as string | undefined;
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
-
 async function fetchGovernance<T>(endpoint: string): Promise<T> {
-  const res = await fetch(`${API_BASE}/v1/governance/${endpoint}`, {
-    headers: governanceHeaders(),
-  });
+  const res = await fetch(`${API_BASE}/v1/governance/${endpoint}`);
   if (res.status === 401) throw Object.assign(new Error("unauthorized"), { status: 401 });
   if (res.status === 503) throw Object.assign(new Error("not_configured"), { status: 503 });
   if (!res.ok) throw Object.assign(new Error(`${endpoint}: ${res.status}`), { status: res.status });
@@ -58,7 +51,6 @@ async function fetchGovernance<T>(endpoint: string): Promise<T> {
 async function generateReports() {
   const res = await fetch(`${API_BASE}/v1/governance/reports`, {
     method: "POST",
-    headers: governanceHeaders(),
   });
   if (res.status === 401) throw Object.assign(new Error("unauthorized"), { status: 401 });
   if (res.status === 503) throw Object.assign(new Error("not_configured"), { status: 503 });

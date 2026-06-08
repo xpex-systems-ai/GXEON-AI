@@ -1,0 +1,157 @@
+export type GitHubConnectorStatus = "READY" | "CONNECTED_READONLY" | "FAILED";
+
+export type GitHubConnectorConfig = {
+  owner: string;
+  repo: string;
+  isConfigured: boolean;
+  missing: string[];
+};
+
+export type GitHubConnectorSafeStatus = {
+  provider: "github";
+  status: GitHubConnectorStatus;
+  configured: boolean;
+  owner: string;
+  repo: string;
+  missing: string[];
+  lastSyncAt: string | null;
+  message: string;
+};
+
+export type GitHubReadonlyRepository = {
+  id: string;
+  name: string;
+  owner: string;
+  visibility: "private" | "internal" | "public";
+  defaultBranch: string;
+  status: "READY_FOR_READONLY_CONNECTION" | "WAITING_FOR_AUTHORIZATION" | "READONLY_CONNECTED";
+  authorizedScopes: string[];
+  lastReadAt: string | null;
+};
+
+export type GitHubReadonlyBranch = {
+  name: string;
+  kind: "MAIN" | "ACTIVE";
+  lastCommitSha: string;
+  lastCommitAuthor: string;
+  lastActivityAt: string;
+  protected: boolean;
+};
+
+export type GitHubReadonlyPullRequest = {
+  number: number;
+  title: string;
+  state: "OPEN" | "CLOSED" | "MERGED";
+  sourceBranch: string;
+  targetBranch: string;
+  author: string;
+  updatedAt: string;
+};
+
+export type GitHubReadonlyIssue = {
+  number: number;
+  title: string;
+  state: "OPEN" | "CLOSED";
+  author: string;
+  updatedAt: string;
+};
+
+export type GitHubReadonlyCommit = {
+  sha: string;
+  message: string;
+  author: string;
+  branch: string;
+  committedAt: string;
+};
+
+export type GitHubReadonlyEvidence = {
+  id: string;
+  type: "COMMIT" | "PULL_REQUEST" | "ISSUE" | "BRANCH" | "HEALTH";
+  title: string;
+  description: string;
+  occurredAt: string;
+  source: string;
+};
+
+export type GitHubReadonlyHealth = {
+  connectorGateway: "READY";
+  githubConnector: "READY_FOR_CONNECTION" | "CONNECTED_READONLY" | "FAILED";
+  nextActivation: "VERCEL_P2";
+  systemState: "FIRST_REAL_CONNECTOR_PREPARED" | "REAL_READONLY_CONNECTED" | "GITHUB_READ_FAILED";
+  lastSyncAt: string | null;
+  externalApiCalls: false;
+  oauthEnabled: false;
+  repositoryWriteAccess: false;
+  databaseWrites: false;
+  tokenStorageFrontend: false;
+  secretExposure: false;
+};
+
+export type GitHubReadonlySnapshot = {
+  status: GitHubConnectorStatus;
+  statusLabel: string;
+  configured: boolean;
+  repositoryCount: number;
+  openPrs: number;
+  mergedPrs: number;
+  openIssues: number;
+  recentCommits: number;
+  repositories: GitHubReadonlyRepository[];
+  branches: GitHubReadonlyBranch[];
+  pullRequests: GitHubReadonlyPullRequest[];
+  issues: GitHubReadonlyIssue[];
+  commits: GitHubReadonlyCommit[];
+  evidenceTimeline: GitHubReadonlyEvidence[];
+  health: GitHubReadonlyHealth;
+};
+
+export type GitHubRawRepository = {
+  id: number;
+  name: string;
+  full_name: string;
+  private: boolean;
+  visibility?: "public" | "private" | "internal";
+  default_branch: string;
+  owner?: { login?: string };
+};
+
+export type GitHubRawBranch = {
+  name: string;
+  protected: boolean;
+  commit?: { sha?: string; commit?: { author?: { name?: string; date?: string } } };
+};
+
+export type GitHubRawPullRequest = {
+  number: number;
+  title: string;
+  state: "open" | "closed";
+  merged_at: string | null;
+  head?: { ref?: string };
+  base?: { ref?: string };
+  user?: { login?: string };
+  updated_at: string;
+};
+
+export type GitHubRawIssue = {
+  number: number;
+  title: string;
+  state: "open" | "closed";
+  pull_request?: unknown;
+  user?: { login?: string };
+  updated_at: string;
+};
+
+export type GitHubRawCommit = {
+  sha: string;
+  commit?: { message?: string; author?: { name?: string; date?: string } };
+  author?: { login?: string } | null;
+};
+
+export type GitHubReadonlyRawSnapshot = {
+  repository: GitHubRawRepository;
+  branches: GitHubRawBranch[];
+  pullRequests: GitHubRawPullRequest[];
+  issues: GitHubRawIssue[];
+  commits: GitHubRawCommit[];
+  readAt: string;
+};

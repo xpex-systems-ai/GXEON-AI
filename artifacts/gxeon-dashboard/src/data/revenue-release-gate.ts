@@ -1,7 +1,7 @@
 export type ReleaseStatus = "PENDING_REVIEW" | "READY_FOR_RELEASE" | "BLOCKED" | "RELEASED_REAL" | "ARCHIVED";
 export type FinancialReadinessState = "NOT_READY" | "NEEDS_REVIEW" | "READY_MANUAL" | "REAL_RELEASED" | "ARCHIVED";
 export type EvidenceCompleteness = "INCOMPLETE" | "PARTIAL" | "COMPLETE" | "VERIFIED_REAL";
-export type AuthorizationStatus = "NOT_REQUESTED" | "PENDING_OPERATOR" | "AUTHORIZED_REAL" | "BLOCKED" | "ARCHIVED";
+export type OperatorApprovalStatus = "NOT_REQUESTED" | "PENDING_OPERATOR" | "AUTHORIZED_REAL" | "BLOCKED" | "ARCHIVED";
 
 export type ReleaseApprovalStep = {
   role: "Operator" | "Validator" | "Financial Reviewer" | "Founder";
@@ -29,7 +29,7 @@ export type RevenueReleaseRecord = {
   release_status: ReleaseStatus;
   financial_readiness_state: FinancialReadinessState;
   evidence_completeness: EvidenceCompleteness;
-  authorization_status: AuthorizationStatus;
+  authorization_status: OperatorApprovalStatus;
   estimated_revenue_brl: number;
   releasable_revenue_brl: number;
   readiness_score: number;
