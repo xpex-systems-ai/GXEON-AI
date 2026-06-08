@@ -14,6 +14,7 @@ import {
 } from "@/data/connector-gateway";
 import { cn } from "@/lib/utils";
 import { fetchGitHubConnectorSnapshot } from "@/services/githubConnectorService";
+import { fetchVercelConnectorSnapshot } from "@/services/vercelConnectorService";
 import {
   CheckCircle2,
   Eye,
@@ -65,6 +66,11 @@ export default function ConnectorGatewayPage() {
     lastSync: string | null;
     healthScore: number;
   } | null>(null);
+  const [vercelGatewayOverride, setVercelGatewayOverride] = useState<{
+    status: ConnectorGatewayStatus;
+    lastSync: string | null;
+    healthScore: number;
+  } | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -95,19 +101,57 @@ export default function ConnectorGatewayPage() {
     return () => controller.abort();
   }, []);
 
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchVercelConnectorSnapshot(controller.signal)
+      .then((snapshot) => {
+        if (snapshot.status === "CONNECTED_READONLY") {
+          setVercelGatewayOverride({
+            status: "CONNECTED",
+            lastSync: formatSync(snapshot.health.lastSyncAt),
+            healthScore: snapshot.health.healthScore,
+          });
+          return;
+        }
+        setVercelGatewayOverride({
+          status: "READY",
+          lastSync: null,
+          healthScore: 0,
+        });
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setVercelGatewayOverride({
+            status: "READY",
+            lastSync: null,
+            healthScore: 0,
+          });
+      });
+    return () => controller.abort();
+  }, []);
+
   const gatewayProviders = useMemo(
     () =>
       connectorGatewayProviders.map((connector) => {
-        if (connector.id !== "github" || !githubGatewayOverride)
-          return connector;
-        return {
-          ...connector,
-          status: githubGatewayOverride.status,
-          lastSync: githubGatewayOverride.lastSync,
-          healthScore: githubGatewayOverride.healthScore,
-        };
+        if (connector.id === "github" && githubGatewayOverride) {
+          return {
+            ...connector,
+            status: githubGatewayOverride.status,
+            lastSync: githubGatewayOverride.lastSync,
+            healthScore: githubGatewayOverride.healthScore,
+          };
+        }
+        if (connector.id === "vercel" && vercelGatewayOverride) {
+          return {
+            ...connector,
+            status: vercelGatewayOverride.status,
+            lastSync: vercelGatewayOverride.lastSync,
+            healthScore: vercelGatewayOverride.healthScore,
+          };
+        }
+        return connector;
       }),
-    [githubGatewayOverride],
+    [githubGatewayOverride, vercelGatewayOverride],
   );
 
   return (
