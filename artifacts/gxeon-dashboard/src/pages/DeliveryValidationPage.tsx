@@ -34,12 +34,12 @@ const validationTone: Record<ValidationStatus, string> = {
   MANUAL_REVIEW: "border-violet-300/30 bg-violet-400/10 text-violet-100",
   VALIDATED: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
   VALIDATION_BLOCKED: "border-rose-300/30 bg-rose-400/10 text-rose-100",
-  CLOSED_SAMPLE: "border-slate-500/30 bg-slate-600/10 text-slate-300",
+  CLOSED_REAL: "border-slate-500/30 bg-slate-600/10 text-slate-300",
 };
 
 const evidenceTone: Record<EvidenceState, string> = {
   MISSING: "border-rose-300/30 bg-rose-400/10 text-rose-100",
-  SAMPLE_ATTACHED: "border-blue-300/30 bg-blue-400/10 text-blue-100",
+  REAL_ATTACHED: "border-blue-300/30 bg-blue-400/10 text-blue-100",
   READY_FOR_REVIEW: "border-violet-300/30 bg-violet-400/10 text-violet-100",
   MANUALLY_VERIFIED: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
   NEEDS_REVISION: "border-amber-300/30 bg-amber-400/10 text-amber-100",
@@ -89,7 +89,7 @@ export default function DeliveryValidationPage() {
               {[
                 ["Total validations", String(summary.total_validations), "Static P3 records"],
                 ["Pending review", String(summary.pending_review), "Human gate required"],
-                ["Approved", String(summary.approved), "Sample approval only"],
+                ["Approved", String(summary.approved), "Real approvals only"],
                 ["Revision requested", String(summary.revision_requested), "Needs manual change"],
                 ["Rejected", String(summary.rejected), "Evidence or quality failed"],
                 ["Archived", String(summary.archived), "Closed pendente state"],

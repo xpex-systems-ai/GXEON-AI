@@ -31,8 +31,8 @@ export default function MonetizationBoardPage() {
         <div className="relative space-y-5">
           <div className="flex flex-wrap items-center gap-3">
             <Badge className="border-amber-300/40 bg-amber-400/10 text-amber-100">Board de monetização operacional</Badge>
-            <Badge variant="outline" className="border-emerald-300/40 text-emerald-100">sem clientes fictícios</Badge>
-            <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">sem receita fictícia</Badge>
+            <Badge variant="outline" className="border-emerald-300/40 text-emerald-100">sem clientes não reais</Badge>
+            <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">sem receita não real</Badge>
           </div>
           <div>
             <p className="mb-2 text-xs uppercase tracking-[0.5em] text-amber-200/70">LEAD → PROPOSTA → CLIENTE → RECEITA</p>

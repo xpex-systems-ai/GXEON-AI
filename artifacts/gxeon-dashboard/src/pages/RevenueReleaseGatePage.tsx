@@ -23,7 +23,7 @@ const releaseTone: Record<ReleaseStatus, string> = {
   PENDING_REVIEW: "border-violet-300/30 bg-violet-400/10 text-violet-100",
   READY_FOR_RELEASE: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
   BLOCKED: "border-rose-300/30 bg-rose-400/10 text-rose-100",
-  RELEASED_SAMPLE: "border-cyan-300/30 bg-cyan-400/10 text-cyan-100",
+  RELEASED_REAL: "border-cyan-300/30 bg-cyan-400/10 text-cyan-100",
   ARCHIVED: "border-slate-500/30 bg-slate-600/10 text-slate-300",
 };
 
@@ -31,7 +31,7 @@ const financialTone: Record<FinancialReadinessState, string> = {
   NOT_READY: "border-rose-300/30 bg-rose-400/10 text-rose-100",
   NEEDS_REVIEW: "border-amber-300/30 bg-amber-400/10 text-amber-100",
   READY_MANUAL: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
-  SAMPLE_RELEASED: "border-cyan-300/30 bg-cyan-400/10 text-cyan-100",
+  REAL_RELEASED: "border-cyan-300/30 bg-cyan-400/10 text-cyan-100",
   ARCHIVED: "border-slate-500/30 bg-slate-600/10 text-slate-300",
 };
 
@@ -39,13 +39,13 @@ const evidenceTone: Record<EvidenceCompleteness, string> = {
   INCOMPLETE: "border-rose-300/30 bg-rose-400/10 text-rose-100",
   PARTIAL: "border-amber-300/30 bg-amber-400/10 text-amber-100",
   COMPLETE: "border-blue-300/30 bg-blue-400/10 text-blue-100",
-  VERIFIED_SAMPLE: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
+  VERIFIED_REAL: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
 };
 
 const authorizationTone: Record<AuthorizationStatus, string> = {
   NOT_REQUESTED: "border-slate-300/30 bg-slate-400/10 text-slate-100",
   PENDING_OPERATOR: "border-violet-300/30 bg-violet-400/10 text-violet-100",
-  AUTHORIZED_SAMPLE: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
+  AUTHORIZED_REAL: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
   BLOCKED: "border-rose-300/30 bg-rose-400/10 text-rose-100",
   ARCHIVED: "border-slate-500/30 bg-slate-600/10 text-slate-300",
 };

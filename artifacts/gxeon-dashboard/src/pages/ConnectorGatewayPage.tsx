@@ -2,11 +2,13 @@ import { Link, useLocation } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { connectorGatewayProviders, type ConnectorGatewayStatus } from "@/data/connector-gateway";
+import { connectorGatewayProviders, connectorGatewaySafetyRules, ecosystemReadiness, operationalActivityFeed, REAL_DATA_MODE, type ConnectorGatewayId, type ConnectorGatewayStatus } from "@/data/connector-gateway";
 import { cn } from "@/lib/utils";
-import { ArrowRight, CheckCircle2, Clock3, Eye, GitBranch, LockKeyhole, Plug, ShieldCheck, Wrench } from "lucide-react";
+import { CheckCircle2, Eye, LockKeyhole, Plug, ShieldCheck, Wrench } from "lucide-react";
+import { FaMicrosoft } from "react-icons/fa";
+import { SiGithub, SiRailway, SiSupabase, SiVercel } from "react-icons/si";
 
-const connectorRoutes: Record<string, string> = {
+const connectorRoutes: Record<ConnectorGatewayId, string> = {
   github: "/ops/connectors/github",
   vercel: "/ops/connectors/vercel",
   railway: "/ops/connectors/railway",
@@ -15,19 +17,20 @@ const connectorRoutes: Record<string, string> = {
 };
 
 const statusTone: Record<ConnectorGatewayStatus, string> = {
-  CONNECTED_MANUAL: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
-  READY_TO_PREPARE: "border-amber-300/30 bg-amber-400/10 text-amber-100",
-  NEEDS_REVIEW: "border-cyan-300/30 bg-cyan-400/10 text-cyan-100",
+  NOT_CONFIGURED: "border-stone-400/25 bg-stone-500/10 text-stone-200",
+  READY: "border-amber-300/30 bg-amber-400/10 text-amber-100",
+  CONNECTING: "border-cyan-300/30 bg-cyan-400/10 text-cyan-100",
+  CONNECTED: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
+  ERROR: "border-red-300/30 bg-red-400/10 text-red-100",
   LOCKED: "border-stone-400/25 bg-stone-500/10 text-stone-200",
-  FUTURE: "border-violet-300/25 bg-violet-400/10 text-violet-100",
 };
 
-const healthByStatus: Record<ConnectorGatewayStatus, string> = {
-  CONNECTED_MANUAL: "Healthy",
-  READY_TO_PREPARE: "Ready",
-  NEEDS_REVIEW: "Review",
-  LOCKED: "Locked",
-  FUTURE: "Future",
+const brandIcon: Record<ConnectorGatewayId, typeof SiGithub> = {
+  github: SiGithub,
+  vercel: SiVercel,
+  railway: SiRailway,
+  supabase: SiSupabase,
+  microsoft365: FaMicrosoft,
 };
 
 export default function ConnectorGatewayPage() {
@@ -40,15 +43,17 @@ export default function ConnectorGatewayPage() {
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <Badge className="border-amber-300/30 bg-amber-400/10 text-amber-100"><Plug className="mr-1 h-3 w-3" /> Connector Hub</Badge>
-              <Badge variant="outline" className="border-emerald-300/30 text-emerald-100"><ShieldCheck className="mr-1 h-3 w-3" /> Controlled</Badge>
-              <Badge variant="outline" className="border-cyan-300/30 text-cyan-100">No activation</Badge>
+              <Badge variant="outline" className="border-emerald-300/30 text-emerald-100"><ShieldCheck className="mr-1 h-3 w-3" /> No secrets in frontend</Badge>
+              <Badge variant="outline" className="border-cyan-300/30 text-cyan-100">{REAL_DATA_MODE.dashboardMode}</Badge>
             </div>
-            <h1 className="mt-4 text-4xl font-black tracking-tight text-white md:text-6xl">Connectors</h1>
+            <h1 className="mt-4 text-4xl font-black tracking-tight text-white md:text-6xl">Mission Control</h1>
+            <p className="mt-3 max-w-3xl text-sm text-stone-400">Conectores no topo do ecossistema, com status engine real-ready, health layer, readiness geral e feed operacional vazio até eventos reais.</p>
           </div>
-          <div className="grid grid-cols-3 gap-2 text-white">
-            <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-3"><p className="text-2xl font-black">5</p><p className="text-xs text-stone-400">Providers</p></div>
-            <div className="rounded-2xl border border-amber-300/15 bg-amber-400/10 p-3"><p className="text-2xl font-black">2</p><p className="text-xs text-amber-100">Ready</p></div>
-            <div className="rounded-2xl border border-stone-300/15 bg-stone-400/10 p-3"><p className="text-2xl font-black">2</p><p className="text-xs text-stone-300">Locked</p></div>
+          <div className="grid grid-cols-4 gap-2 text-white">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-3"><p className="text-2xl font-black">{ecosystemReadiness.providers}</p><p className="text-xs text-stone-400">Providers</p></div>
+            <div className="rounded-2xl border border-amber-300/15 bg-amber-400/10 p-3"><p className="text-2xl font-black">{ecosystemReadiness.ready}</p><p className="text-xs text-amber-100">Ready</p></div>
+            <div className="rounded-2xl border border-emerald-300/15 bg-emerald-400/10 p-3"><p className="text-2xl font-black">{ecosystemReadiness.connected}</p><p className="text-xs text-emerald-100">Connected</p></div>
+            <div className="rounded-2xl border border-cyan-300/15 bg-cyan-400/10 p-3"><p className="text-2xl font-black">0%</p><p className="text-xs text-cyan-100">Health</p></div>
           </div>
         </div>
       </section>
@@ -57,34 +62,26 @@ export default function ConnectorGatewayPage() {
         {connectorGatewayProviders.map((connector) => {
           const href = connectorRoutes[connector.id];
           const active = location === href;
-          const connected = connector.status === "CONNECTED_MANUAL";
+          const connected = connector.status === "CONNECTED";
+          const BrandIcon = brandIcon[connector.id];
           return (
             <Link key={connector.id} href={href}>
-              <Card
-                className={cn(
-                  "group h-full cursor-pointer overflow-hidden border-white/10 bg-[#090909]/85 text-white transition duration-200 hover:-translate-y-1 hover:border-amber-300/35 hover:bg-amber-400/[0.08] hover:shadow-[0_22px_55px_rgba(245,158,11,0.12)]",
-                  active && "border-amber-300/45 bg-amber-400/10 shadow-[0_0_34px_rgba(245,158,11,0.16)]",
-                  connected && "border-emerald-300/35",
-                )}
-              >
+              <Card className={cn("group h-full cursor-pointer overflow-hidden border-white/10 bg-[#090909]/85 text-white transition duration-200 hover:-translate-y-1 hover:border-amber-300/35 hover:bg-amber-400/[0.08]", active && "border-amber-300/45 bg-amber-400/10", connected && "border-emerald-300/35")}>
                 <CardContent className="flex h-full flex-col p-5">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="grid h-11 w-11 place-items-center rounded-2xl border border-amber-300/20 bg-amber-400/10 text-amber-100">
-                      {connector.id === "github" ? <GitBranch className="h-5 w-5" /> : <Plug className="h-5 w-5" />}
-                    </div>
+                    <div className="grid h-11 w-11 place-items-center rounded-2xl border border-white/10 bg-white text-black"><BrandIcon className="h-6 w-6" /></div>
                     <Badge variant="outline" className={cn("border", statusTone[connector.status])}>{connector.status.replaceAll("_", " ")}</Badge>
                   </div>
-
-                  <h2 className="mt-6 text-2xl font-black">{connector.name}</h2>
+                  <h2 className="mt-6 text-2xl font-black">{connector.officialBrand}</h2>
+                  <p className="mt-2 text-xs text-stone-500">{connector.purpose}</p>
                   <div className="mt-5 grid gap-3 text-sm">
-                    <div className="flex items-center justify-between border-b border-white/10 pb-2"><span className="text-stone-500">Health</span><span className="font-semibold">{healthByStatus[connector.status]}</span></div>
-                    <div className="flex items-center justify-between border-b border-white/10 pb-2"><span className="text-stone-500">Permissions</span><span className="font-semibold">Least</span></div>
-                    <div className="flex items-center justify-between border-b border-white/10 pb-2"><span className="text-stone-500">Last Sync</span><span className="font-semibold">—</span></div>
+                    <div className="flex items-center justify-between border-b border-white/10 pb-2"><span className="text-stone-500">Health score</span><span className="font-semibold">{connector.healthScore}%</span></div>
+                    <div className="flex items-center justify-between border-b border-white/10 pb-2"><span className="text-stone-500">Last sync</span><span className="font-semibold">{connector.lastSync ?? "never"}</span></div>
+                    <div className="flex items-center justify-between border-b border-white/10 pb-2"><span className="text-stone-500">Credentials</span><span className="font-semibold">backend only</span></div>
                   </div>
-
                   <div className="mt-auto grid grid-cols-3 gap-2 pt-5">
                     <Button variant="outline" size="sm" className="border-amber-300/25 bg-amber-400/10 text-amber-100 hover:bg-amber-400/20"><Eye className="mr-1 h-3 w-3" />Open</Button>
-                    <Button variant="outline" size="sm" className="border-cyan-300/20 bg-cyan-400/10 text-cyan-100 hover:bg-cyan-400/20"><CheckCircle2 className="mr-1 h-3 w-3" />Review</Button>
+                    <Button variant="outline" size="sm" className="border-cyan-300/20 bg-cyan-400/10 text-cyan-100 hover:bg-cyan-400/20"><CheckCircle2 className="mr-1 h-3 w-3" />Ready</Button>
                     <Button variant="outline" size="sm" className="border-white/10 bg-white/[0.035] text-stone-200 hover:bg-white/10"><Wrench className="mr-1 h-3 w-3" />Prepare</Button>
                   </div>
                 </CardContent>
@@ -94,12 +91,14 @@ export default function ConnectorGatewayPage() {
         })}
       </section>
 
-      <section className="grid gap-3 md:grid-cols-4">
-        {["No OAuth", "No token input", "No API calls", "No database writes"].map((rule) => (
-          <div key={rule} className="flex items-center gap-3 rounded-2xl border border-emerald-300/15 bg-emerald-400/[0.06] p-4 text-sm font-semibold text-emerald-50">
-            <LockKeyhole className="h-4 w-4 text-emerald-200" />
-            {rule}
-          </div>
+      <section className="grid gap-4 xl:grid-cols-[1fr_0.8fr]">
+        <Card className="border-white/10 bg-[#090909]/85 text-white"><CardContent className="p-5"><h2 className="text-lg font-bold">Operational Activity Feed</h2><p className="mt-3 rounded-2xl border border-dashed border-white/10 p-5 text-sm text-stone-400">{operationalActivityFeed.length === 0 ? "EMPTY_REAL_DATA: nenhum evento de operador, conexão, deploy ou sincronização real registrado." : "Events available"}</p></CardContent></Card>
+        <Card className="border-white/10 bg-[#090909]/85 text-white"><CardContent className="p-5"><h2 className="text-lg font-bold">System Health Center</h2><div className="mt-4 grid gap-2 text-sm">{connectorGatewayProviders.map((connector) => <div key={connector.id} className="flex items-center justify-between border-b border-white/10 pb-2"><span>{connector.name} Health</span><span>{connector.healthScore}%</span></div>)}<div className="flex items-center justify-between pt-2 font-black text-emerald-100"><span>Global Health Score</span><span>{ecosystemReadiness.globalHealthScore}%</span></div></div></CardContent></Card>
+      </section>
+
+      <section className="grid gap-3 md:grid-cols-5">
+        {connectorGatewaySafetyRules.map((rule) => (
+          <div key={rule} className="flex items-center gap-3 rounded-2xl border border-emerald-300/15 bg-emerald-400/[0.06] p-4 text-sm font-semibold text-emerald-50"><LockKeyhole className="h-4 w-4 text-emerald-200" />{rule}</div>
         ))}
       </section>
     </div>
