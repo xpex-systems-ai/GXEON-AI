@@ -1,9 +1,40 @@
 export type GitHubConnectorStatus = "READY" | "CONNECTED_READONLY" | "FAILED";
 
+export type GitHubConnectorErrorCode =
+  | "NONE"
+  | "MISSING_TOKEN"
+  | "MISSING_OWNER"
+  | "MISSING_REPO"
+  | "GITHUB_401"
+  | "GITHUB_403"
+  | "GITHUB_404"
+  | "RATE_LIMITED"
+  | "NETWORK_ERROR"
+  | "GITHUB_READ_FAILED";
+
 export type GitHubConnectorConfig = {
   owner: string;
   repo: string;
   isConfigured: boolean;
+  tokenPresent: boolean;
+  ownerPresent: boolean;
+  repoPresent: boolean;
+  missing: GitHubConnectorErrorCode[];
+};
+
+export type GitHubConnectorRuntimeDiagnostics = {
+  provider: "github";
+  routeStatus: "ONLINE";
+  tokenPresent: boolean;
+  ownerPresent: boolean;
+  repoPresent: boolean;
+  configured: boolean;
+  owner: string | null;
+  repo: string | null;
+  missing: GitHubConnectorErrorCode[];
+  runtimeServiceName: string | null;
+  nodeEnv: string | null;
+  timestamp: string;
   missing: string[];
 };
 
@@ -11,6 +42,11 @@ export type GitHubConnectorSafeStatus = {
   provider: "github";
   status: GitHubConnectorStatus;
   configured: boolean;
+  owner: string | null;
+  repo: string | null;
+  missing: GitHubConnectorErrorCode[];
+  lastSyncAt: string | null;
+  lastErrorCode: GitHubConnectorErrorCode;
   owner: string;
   repo: string;
   missing: string[];
@@ -79,6 +115,7 @@ export type GitHubReadonlyHealth = {
   nextActivation: "VERCEL_P2";
   systemState: "FIRST_REAL_CONNECTOR_PREPARED" | "REAL_READONLY_CONNECTED" | "GITHUB_READ_FAILED";
   lastSyncAt: string | null;
+  lastErrorCode: GitHubConnectorErrorCode;
   externalApiCalls: false;
   oauthEnabled: false;
   repositoryWriteAccess: false;
@@ -91,6 +128,7 @@ export type GitHubReadonlySnapshot = {
   status: GitHubConnectorStatus;
   statusLabel: string;
   configured: boolean;
+  lastErrorCode: GitHubConnectorErrorCode;
   repositoryCount: number;
   openPrs: number;
   mergedPrs: number;

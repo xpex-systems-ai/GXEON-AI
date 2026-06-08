@@ -7,9 +7,11 @@ import {
   githubReadonlyForbiddenActions,
   githubReadonlySnapshot,
   githubReadonlyStatusFlow,
+  type GitHubConnectorDiagnostics,
   type GitHubConnectorStatus,
   type GitHubReadonlySnapshot,
 } from "@/data/github-readonly-connector";
+import { fetchGitHubConnectorDiagnostics, fetchGitHubConnectorSnapshot, githubConnectorApiBaseMode } from "@/services/githubConnectorService";
 import { fetchGitHubConnectorSnapshot } from "@/services/githubConnectorService";
 import { Activity, AlertTriangle, CheckCircle2, CircleDot, Code2, GitBranch, GitPullRequest, Github, HeartPulse, History, LockKeyhole, RefreshCw, Server, ShieldCheck } from "lucide-react";
 
@@ -68,12 +70,33 @@ export default function GitHubReadonlyConnectorPage() {
   const [snapshot, setSnapshot] = useState<GitHubReadonlySnapshot>(githubReadonlySnapshot);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [diagnostics, setDiagnostics] = useState<GitHubConnectorDiagnostics | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
     setError(null);
 
+    Promise.all([
+      fetchGitHubConnectorSnapshot(controller.signal),
+      fetchGitHubConnectorDiagnostics(controller.signal),
+    ])
+      .then(([data, diagnosticData]) => {
+        setSnapshot(data);
+        setDiagnostics(diagnosticData);
+        if (!diagnosticData && data.lastErrorCode === "BACKEND_UNAVAILABLE") {
+          setError("Backend API is unreachable from this dashboard runtime.");
+        }
+      })
+      .catch((loadError) => {
+        if (loadError instanceof DOMException && loadError.name === "AbortError") return;
+        setError("Backend GitHub connector snapshot unavailable.");
+        setSnapshot({
+          ...githubReadonlySnapshot,
+          statusLabel: "READY_BACKEND_UNAVAILABLE",
+          lastErrorCode: "BACKEND_UNAVAILABLE",
+          health: { ...githubReadonlySnapshot.health, lastErrorCode: "BACKEND_UNAVAILABLE" },
+        });
     fetchGitHubConnectorSnapshot(controller.signal)
       .then((data) => setSnapshot(data))
       .catch((loadError) => {
@@ -130,6 +153,14 @@ export default function GitHubReadonlyConnectorPage() {
                     {status}
                   </div>
                 ))}
+              </div>
+              <div className="grid gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-xs text-stone-300">
+                <div className="flex justify-between gap-3"><span>Backend reachability</span><strong className={diagnostics ? "text-emerald-100" : "text-red-100"}>{diagnostics ? "ONLINE" : "UNREACHABLE"}</strong></div>
+                <div className="flex justify-between gap-3"><span>Token present</span><strong>{diagnostics ? (diagnostics.tokenPresent ? "yes" : "no") : "unknown"}</strong></div>
+                <div className="flex justify-between gap-3"><span>Owner configured</span><strong>{diagnostics ? (diagnostics.ownerPresent ? "yes" : "no") : "unknown"}</strong></div>
+                <div className="flex justify-between gap-3"><span>Repo configured</span><strong>{diagnostics ? (diagnostics.repoPresent ? "yes" : "no") : "unknown"}</strong></div>
+                <div className="flex justify-between gap-3"><span>Last backend error</span><strong>{snapshot.lastErrorCode ?? snapshot.health.lastErrorCode}</strong></div>
+                <div className="flex justify-between gap-3"><span>API base mode</span><strong>{githubConnectorApiBaseMode}</strong></div>
               </div>
             </CardContent>
           </Card>

@@ -1,3 +1,4 @@
+import { type GitHubConnectorErrorCode, type GitHubReadonlyEvidence, type GitHubReadonlySnapshot, type GitHubReadonlyRawSnapshot } from "./githubConnectorTypes";
 import { type GitHubReadonlyEvidence, type GitHubReadonlySnapshot, type GitHubReadonlyRawSnapshot } from "./githubConnectorTypes";
 
 const allowedScopes = ["metadata:read", "contents:read", "pull_requests:read", "issues:read", "commit_statuses:read"];
@@ -94,6 +95,7 @@ export function normalizeGitHubReadonlySnapshot(raw: GitHubReadonlyRawSnapshot):
     status: "CONNECTED_READONLY",
     statusLabel: "CONNECTED_READONLY",
     configured: true,
+    lastErrorCode: "NONE",
     repositoryCount: 1,
     openPrs: pullRequests.filter((pullRequest) => pullRequest.state === "OPEN").length,
     mergedPrs: pullRequests.filter((pullRequest) => pullRequest.state === "MERGED").length,
@@ -111,6 +113,7 @@ export function normalizeGitHubReadonlySnapshot(raw: GitHubReadonlyRawSnapshot):
       nextActivation: "VERCEL_P2",
       systemState: "REAL_READONLY_CONNECTED",
       lastSyncAt: raw.readAt,
+      lastErrorCode: "NONE",
       externalApiCalls: false,
       oauthEnabled: false,
       repositoryWriteAccess: false,
@@ -121,11 +124,13 @@ export function normalizeGitHubReadonlySnapshot(raw: GitHubReadonlyRawSnapshot):
   };
 }
 
+export function createGitHubReadonlyReadySnapshot(owner: string, repo: string, errorCode: GitHubConnectorErrorCode = "MISSING_TOKEN"): GitHubReadonlySnapshot {
 export function createGitHubReadonlyReadySnapshot(owner: string, repo: string): GitHubReadonlySnapshot {
   return {
     status: "READY",
     statusLabel: "READY_FOR_READONLY_CONNECTION",
     configured: false,
+    lastErrorCode: errorCode,
     repositoryCount: 0,
     openPrs: 0,
     mergedPrs: 0,
@@ -152,6 +157,7 @@ export function createGitHubReadonlyReadySnapshot(owner: string, repo: string): 
       nextActivation: "VERCEL_P2",
       systemState: "FIRST_REAL_CONNECTOR_PREPARED",
       lastSyncAt: null,
+      lastErrorCode: errorCode,
       externalApiCalls: false,
       oauthEnabled: false,
       repositoryWriteAccess: false,
@@ -162,12 +168,14 @@ export function createGitHubReadonlyReadySnapshot(owner: string, repo: string): 
   };
 }
 
+export function createGitHubReadonlyFailedSnapshot(owner: string, repo: string, reason: string, errorCode: GitHubConnectorErrorCode = "GITHUB_READ_FAILED"): GitHubReadonlySnapshot {
 export function createGitHubReadonlyFailedSnapshot(owner: string, repo: string, reason: string): GitHubReadonlySnapshot {
   return {
     ...createGitHubReadonlyReadySnapshot(owner, repo),
     status: "FAILED",
     statusLabel: "FAILED",
     configured: true,
+    lastErrorCode: errorCode,
     evidenceTimeline: [
       {
         id: "gh-p2-read-failed",
@@ -182,6 +190,7 @@ export function createGitHubReadonlyFailedSnapshot(owner: string, repo: string, 
       ...createGitHubReadonlyReadySnapshot(owner, repo).health,
       githubConnector: "FAILED",
       systemState: "GITHUB_READ_FAILED",
+      lastErrorCode: errorCode,
     },
   };
 }
