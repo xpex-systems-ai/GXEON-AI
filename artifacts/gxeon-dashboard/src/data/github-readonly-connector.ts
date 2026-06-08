@@ -26,6 +26,11 @@ export type GitHubConnectorErrorCode =
   | "GITHUB_APP_PRIVATE_KEY_MISSING"
   | "GITHUB_APP_INSTALLATION_NOT_FOUND"
   | "INSTALLATION_HAS_NO_REPOSITORIES"
+  | "GITHUB_APP_INSTALLATIONS_FETCH_FAILED"
+  | "GITHUB_APP_INSTALLATIONS_NETWORK_ERROR"
+  | "GITHUB_APP_NO_INSTALLATIONS"
+  | "GITHUB_APP_INSTALLATION_REPO_NOT_FOUND"
+  | "GITHUB_APP_INSTALLATION_DISCOVERY_FAILED"
   | "BACKEND_RETURNED_HTML"
   | "BACKEND_URL_MISCONFIGURED"
   | "BACKEND_UNAVAILABLE";
@@ -168,7 +173,7 @@ export type GitHubConnectionState =
       repositorySelection: "all" | "selected" | "unknown";
       connectedAt: string;
       setupAction: string | null;
-      stateSource?: "memory" | "env";
+      stateSource?: "memory" | "env" | "autodiscovered";
     }
   | { mode: "not_connected"; connectedAt: null; stateSource?: "none" };
 
@@ -185,7 +190,7 @@ export type GitHubReadonlySnapshot = {
     accountLogin: string | null;
     repositorySelection: "all" | "selected" | "unknown";
     connectedAt: string;
-    stateSource?: "memory" | "env";
+    stateSource?: "memory" | "env" | "autodiscovered";
   } | null;
   lastErrorCode: GitHubConnectorErrorCode;
   repositoryCount: number;

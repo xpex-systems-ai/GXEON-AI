@@ -85,6 +85,11 @@ function messageForCode(code: GitHubClientErrorCode, status?: number): string {
     case "GITHUB_APP_PRIVATE_KEY_MISSING":
     case "GITHUB_APP_INSTALLATION_NOT_FOUND":
     case "INSTALLATION_HAS_NO_REPOSITORIES":
+    case "GITHUB_APP_INSTALLATIONS_FETCH_FAILED":
+    case "GITHUB_APP_INSTALLATIONS_NETWORK_ERROR":
+    case "GITHUB_APP_NO_INSTALLATIONS":
+    case "GITHUB_APP_INSTALLATION_REPO_NOT_FOUND":
+    case "GITHUB_APP_INSTALLATION_DISCOVERY_FAILED":
       return "GitHub App connector is not ready for server-side read access.";
   }
 }

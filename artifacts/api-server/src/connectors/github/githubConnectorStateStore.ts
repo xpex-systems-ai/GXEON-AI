@@ -3,7 +3,11 @@ export type GitHubConnectorConnectionMode =
   | "backend_token"
   | "not_connected";
 
-export type GitHubInstallationStateSource = "memory" | "env" | "none";
+export type GitHubInstallationStateSource =
+  | "memory"
+  | "env"
+  | "autodiscovered"
+  | "none";
 
 export type GitHubInstallationConnectionState = {
   mode: "github_app_installation";
@@ -60,6 +64,7 @@ export function saveGitHubInstallationConnectionState(
     "mode" | "connectedAt" | "stateSource"
   > & {
     connectedAt?: string;
+    stateSource?: Exclude<GitHubInstallationStateSource, "none">;
   },
 ): GitHubInstallationConnectionState {
   installationState = {
@@ -69,7 +74,7 @@ export function saveGitHubInstallationConnectionState(
     repositorySelection: state.repositorySelection,
     setupAction: state.setupAction,
     connectedAt: state.connectedAt ?? new Date().toISOString(),
-    stateSource: "memory",
+    stateSource: state.stateSource ?? "memory",
   };
   return installationState;
 }

@@ -3,10 +3,7 @@ import {
   getGitHubAuthConfig,
   safeGitHubAuthDiagnostics,
 } from "../../connectors/github/githubAuthConfig";
-import {
-  fetchGitHubInstallationAccessToken,
-  fetchGitHubInstallationRepositories,
-} from "../../connectors/github/githubAppInstallationClient";
+import { fetchGitHubInstallationAccessToken } from "../../connectors/github/githubAppInstallationClient";
 import {
   getGitHubConnectionState,
   getGitHubInstallationConnectionState,
@@ -31,6 +28,11 @@ import {
   validateGitHubOAuthState,
 } from "../../connectors/github/githubOAuthState";
 import type { GitHubConnectorErrorCode } from "../../connectors/github/githubConnectorTypes";
+import { resolveGitHubInstallationForConfiguredRepo } from "../../connectors/github/githubInstallationResolver";
+import {
+  getGitHubConnectorActivity,
+  recordGitHubConnectorActivity,
+} from "../../connectors/github/githubConnectorActivityLog";
 
 const router = Router();
 const cacheHeader = "private, max-age=30, stale-while-revalidate=30";
@@ -76,10 +78,11 @@ function createOAuthUrl(
 
 function applyInstallationMetadata(
   snapshot: ReturnType<typeof normalizeGitHubReadonlySnapshot>,
+  installation: NonNullable<
+    ReturnType<typeof getGitHubInstallationConnectionState>
+  >,
+  repositoryCount = snapshot.repositoryCount,
 ) {
-  const installation = getGitHubInstallationConnectionState();
-  if (!installation) return snapshot;
-
   return {
     ...snapshot,
     connectionMode: "github_app_installation" as const,
@@ -90,6 +93,7 @@ function applyInstallationMetadata(
       connectedAt: installation.connectedAt,
       stateSource: installation.stateSource,
     },
+    repositoryCount,
     health: {
       ...snapshot.health,
       oauthEnabled: true,
@@ -98,11 +102,28 @@ function applyInstallationMetadata(
 }
 
 router.get("/connectors/github/diagnostics", (_req, res) => {
+  const auth = safeGitHubAuthDiagnostics();
+  const connection = getGitHubConnectionState();
+  const connector = toGitHubConnectorDiagnostics();
+  recordGitHubConnectorActivity({
+    eventType: "diagnostics_checked",
+    status: "success",
+    metadata: {
+      appInstallationReady: auth.appInstallationReady,
+      installationTokenReady: auth.installationTokenReady,
+      connectionMode: connection.mode,
+    },
+  });
   res.setHeader("Cache-Control", diagnosticsCacheHeader);
   res.json({
-    ...toGitHubConnectorDiagnostics(),
-    auth: safeGitHubAuthDiagnostics(),
-    connection: getGitHubConnectionState(),
+    ...connector,
+    auth,
+    connection,
+    canAutodiscoverInstallations:
+      auth.appInstallationReady && auth.installationTokenReady,
+    installationStatePresent: connection.mode === "github_app_installation",
+    installationStateSource: connection.stateSource,
+    selectedRepoReady: connector.ownerPresent && connector.repoPresent,
   });
 });
 
@@ -138,24 +159,46 @@ function missingFinalReadinessCodes(): string[] {
 
 router.get("/connectors/github/final-readiness", (_req, res) => {
   const authConfig = getGitHubAuthConfig();
+  const auth = safeGitHubAuthDiagnostics(authConfig);
   const connectorDiagnostics = toGitHubConnectorDiagnostics();
   const connection = getGitHubConnectionState();
   const connectionMode = resolveConnectionMode();
-  const missing = missingFinalReadinessCodes();
+  const canAutodiscoverInstallations =
+    auth.appInstallationReady && auth.installationTokenReady;
+  const missing = canAutodiscoverInstallations
+    ? []
+    : missingFinalReadinessCodes();
+  const installationStatePresent =
+    connection.mode === "github_app_installation";
 
   res.setHeader("Cache-Control", diagnosticsCacheHeader);
   res.json({
     provider: "github",
-    status: missing.length === 0 ? "READY" : "CONFIG_MISSING",
+    status:
+      missing.length === 0
+        ? installationStatePresent || connectionMode !== "not_connected"
+          ? "READY"
+          : "READY_TO_DISCOVER_INSTALLATION"
+        : "CONFIG_MISSING",
     apiRuntime: { online: true, routeStatus: "ONLINE" },
     connectionMode,
     missing,
     callbackUrl: authConfig.callbackUrl,
     dashboardUrlPresent: Boolean(authConfig.dashboardUrl),
     apiPublicUrlPresent: Boolean(authConfig.apiPublicUrl),
-    auth: safeGitHubAuthDiagnostics(authConfig),
+    auth,
     connector: connectorDiagnostics,
     connection,
+    canAutodiscoverInstallations,
+    installationStatePresent,
+    installationStateSource: connection.stateSource,
+    selectedRepoReady:
+      connectorDiagnostics.ownerPresent && connectorDiagnostics.repoPresent,
+    nextStep: installationStatePresent
+      ? "Run snapshot to refresh read-only repository data."
+      : canAutodiscoverInstallations
+        ? "Click Connect GitHub or run snapshot to autodiscover the GitHub App installation."
+        : "Complete GitHub App backend configuration, then click Connect GitHub.",
     timestamp: new Date().toISOString(),
   });
 });
@@ -187,6 +230,11 @@ router.get("/connectors/github/connect-url", (_req, res) => {
   const { state, issuedAt } = createGitHubOAuthState({ secret });
 
   if (authConfig.appSlug) {
+    recordGitHubConnectorActivity({
+      eventType: "connect_url_generated",
+      status: "success",
+      metadata: { mode: "github_app_installation" },
+    });
     res.json({
       url: createInstallationUrl(
         authConfig.appSlug,
@@ -201,6 +249,11 @@ router.get("/connectors/github/connect-url", (_req, res) => {
   }
 
   if (authConfig.clientId && authConfig.oauthReady) {
+    recordGitHubConnectorActivity({
+      eventType: "connect_url_generated",
+      status: "success",
+      metadata: { mode: "oauth_app_authorization" },
+    });
     res.json({
       url: createOAuthUrl(authConfig.clientId, state, authConfig.callbackUrl),
       provider: "github",
@@ -222,6 +275,11 @@ router.get("/connectors/github/connect-url", (_req, res) => {
     },
     missing: authConfig.missing,
   });
+});
+
+router.get("/connectors/github/activity", (_req, res) => {
+  res.setHeader("Cache-Control", diagnosticsCacheHeader);
+  res.json({ provider: "github", events: getGitHubConnectorActivity() });
 });
 
 router.get("/connectors/github/callback", (req, res) => {
@@ -252,6 +310,17 @@ router.get("/connectors/github/callback", (req, res) => {
     typeof req.query.setup_action === "string" ? req.query.setup_action : null;
   const code = typeof req.query.code === "string" ? req.query.code : null;
 
+  recordGitHubConnectorActivity({
+    eventType: "callback_received",
+    status: installationId ? "success" : "failed",
+    code: installationId ? null : "GITHUB_INSTALLATION_MISSING",
+    metadata: {
+      setupAction,
+      hasInstallationId: Boolean(installationId),
+      hasCode: Boolean(code),
+    },
+  });
+
   if (!installationId) {
     res.redirect(
       303,
@@ -264,11 +333,21 @@ router.get("/connectors/github/callback", (req, res) => {
     return;
   }
 
-  saveGitHubInstallationConnectionState({
+  const savedInstallation = saveGitHubInstallationConnectionState({
     installationId,
     accountLogin: null,
     repositorySelection: "unknown",
     setupAction,
+  });
+
+  recordGitHubConnectorActivity({
+    eventType: "installation_saved",
+    status: "success",
+    metadata: {
+      installationId: savedInstallation.installationId,
+      repositorySelection: savedInstallation.repositorySelection,
+      stateSource: savedInstallation.stateSource,
+    },
   });
 
   res.redirect(303, safeDashboardRedirect());
@@ -276,116 +355,154 @@ router.get("/connectors/github/callback", (req, res) => {
 
 router.get("/connectors/github/snapshot", async (_req, res) => {
   const config = getGitHubConnectorConfig();
-  const installation = getGitHubInstallationConnectionState();
+  const auth = safeGitHubAuthDiagnostics();
+  const appReady = auth.appInstallationReady && auth.installationTokenReady;
   res.setHeader("Cache-Control", cacheHeader);
 
-  if (installation) {
-    const tokenResult = await fetchGitHubInstallationAccessToken(
-      installation.installationId,
-    );
+  if (appReady) {
+    const resolved = await resolveGitHubInstallationForConfiguredRepo();
 
-    const installationMetadata = {
-      installationId: installation.installationId,
-      accountLogin: installation.accountLogin,
-      repositorySelection: installation.repositorySelection,
-      connectedAt: installation.connectedAt,
-      stateSource: installation.stateSource,
-    };
+    if (resolved.ok) {
+      const { installation, targetRepository, repositoryCount } =
+        resolved.value;
+      const installationMetadata = {
+        installationId: installation.installationId,
+        accountLogin: installation.accountLogin,
+        repositorySelection: installation.repositorySelection,
+        connectedAt: installation.connectedAt,
+        stateSource: installation.stateSource,
+      };
+      const tokenResult = await fetchGitHubInstallationAccessToken(
+        installation.installationId,
+      );
 
-    if (!tokenResult.ok) {
-      res.status(503).json({
-        ...createGitHubReadonlyFailedSnapshot(
-          config.owner,
-          config.repo,
-          "GitHub App installation token is not available on the backend runtime.",
-          tokenResult.errorCode as GitHubConnectorErrorCode,
-        ),
-        connectionMode: "github_app_installation",
-        installation: installationMetadata,
+      if (!tokenResult.ok) {
+        recordGitHubConnectorActivity({
+          eventType: "snapshot_failed",
+          status: "failed",
+          code: tokenResult.errorCode,
+          metadata: {
+            connectionMode: "github_app_installation",
+            installationId: installation.installationId,
+            owner: targetRepository.owner,
+            repo: targetRepository.repo,
+          },
+        });
+        res.status(503).json({
+          ...createGitHubReadonlyFailedSnapshot(
+            targetRepository.owner,
+            targetRepository.repo,
+            "GitHub App installation token is not available on the backend runtime.",
+            tokenResult.errorCode as GitHubConnectorErrorCode,
+          ),
+          connectionMode: "github_app_installation",
+          installation: installationMetadata,
+        });
+        return;
+      }
+
+      recordGitHubConnectorActivity({
+        eventType: "installation_token_minted",
+        status: "success",
+        metadata: { installationId: installation.installationId },
       });
+
+      try {
+        const rawSnapshot = await readGitHubReadonlySnapshot({
+          token: tokenResult.token,
+          owner: targetRepository.owner,
+          repo: targetRepository.repo,
+        });
+        const snapshot = applyInstallationMetadata(
+          normalizeGitHubReadonlySnapshot(rawSnapshot),
+          installation,
+          repositoryCount,
+        );
+        recordGitHubConnectorActivity({
+          eventType: "repository_snapshot_read",
+          status: "success",
+          metadata: {
+            connectionMode: "github_app_installation",
+            installationId: installation.installationId,
+            stateSource: installation.stateSource,
+            owner: targetRepository.owner,
+            repo: targetRepository.repo,
+            repositoryCount,
+            branches: snapshot.branches.length,
+            pullRequests: snapshot.pullRequests.length,
+            issues: snapshot.issues.length,
+            commits: snapshot.commits.length,
+          },
+        });
+        res.json(snapshot);
+      } catch (error) {
+        const reason =
+          error instanceof GitHubReadonlyClientError
+            ? error.message
+            : "GitHub App installation read failed with an unexpected backend error.";
+        const errorCode =
+          error instanceof GitHubReadonlyClientError
+            ? error.code
+            : "GITHUB_READ_FAILED";
+        recordGitHubConnectorActivity({
+          eventType: "snapshot_failed",
+          status: "failed",
+          code: errorCode,
+          metadata: {
+            connectionMode: "github_app_installation",
+            installationId: installation.installationId,
+            owner: targetRepository.owner,
+            repo: targetRepository.repo,
+          },
+        });
+        res
+          .status(
+            error instanceof GitHubReadonlyClientError ? error.statusCode : 502,
+          )
+          .json({
+            ...createGitHubReadonlyFailedSnapshot(
+              targetRepository.owner,
+              targetRepository.repo,
+              reason,
+              errorCode,
+            ),
+            connectionMode: "github_app_installation",
+            installation: installationMetadata,
+          });
+      }
       return;
     }
 
-    let target = { owner: config.owner, repo: config.repo };
-    if (!config.repoConfiguredFromEnv) {
-      const repositoriesResult = await fetchGitHubInstallationRepositories(
-        tokenResult.token,
-      );
-
-      if (!repositoriesResult.ok) {
-        res.status(502).json({
-          ...createGitHubReadonlyFailedSnapshot(
-            config.owner,
-            config.repo,
-            "GitHub App installation repositories could not be listed.",
-            repositoriesResult.errorCode as GitHubConnectorErrorCode,
-          ),
-          connectionMode: "github_app_installation",
-          installation: installationMetadata,
-        });
-        return;
-      }
-
-      const firstRepository = repositoriesResult.repositories[0];
-      if (!firstRepository) {
-        res.status(404).json({
-          ...createGitHubReadonlyFailedSnapshot(
-            config.owner,
-            config.repo,
-            "GitHub App installation has no accessible repositories.",
-            "INSTALLATION_HAS_NO_REPOSITORIES",
-          ),
-          connectionMode: "github_app_installation",
-          installation: installationMetadata,
-        });
-        return;
-      }
-
-      target = firstRepository;
-    }
-
-    try {
-      const rawSnapshot = await readGitHubReadonlySnapshot({
-        token: tokenResult.token,
-        owner: target.owner,
-        repo: target.repo,
+    if (!resolved.shouldFallbackToLegacyToken) {
+      recordGitHubConnectorActivity({
+        eventType: "snapshot_failed",
+        status: "failed",
+        code: resolved.errorCode,
+        metadata: { connectionMode: "github_app_installation" },
       });
-      res.json(
-        applyInstallationMetadata(normalizeGitHubReadonlySnapshot(rawSnapshot)),
-      );
-    } catch (error) {
-      const reason =
-        error instanceof GitHubReadonlyClientError
-          ? error.message
-          : "GitHub App installation read failed with an unexpected backend error.";
-      const errorCode =
-        error instanceof GitHubReadonlyClientError
-          ? error.code
-          : "GITHUB_READ_FAILED";
-      res
-        .status(
-          error instanceof GitHubReadonlyClientError ? error.statusCode : 502,
-        )
-        .json({
-          ...createGitHubReadonlyFailedSnapshot(
-            target.owner,
-            target.repo,
-            reason,
-            errorCode,
-          ),
-          connectionMode: "github_app_installation",
-          installation: installationMetadata,
-        });
+      res.status(404).json({
+        ...createGitHubReadonlyFailedSnapshot(
+          config.owner,
+          config.repo,
+          "GitHub App installation discovery could not find the configured repository.",
+          resolved.errorCode,
+        ),
+        connectionMode: "github_app_installation",
+        installation: null,
+      });
+      return;
     }
-    return;
   }
 
   if (!config.isConfigured) {
+    const readyCode = appReady
+      ? "GITHUB_APP_NO_INSTALLATIONS"
+      : (config.missing[0] ?? "MISSING_TOKEN");
     res.json({
       ...createGitHubReadonlyReadySnapshot(
         config.owner,
         config.repo,
-        config.missing[0] ?? "MISSING_TOKEN",
+        readyCode,
       ),
       connectionMode: "not_connected",
       installation: null,
@@ -395,11 +512,25 @@ router.get("/connectors/github/snapshot", async (_req, res) => {
 
   try {
     const rawSnapshot = await readGitHubReadonlySnapshot();
-    res.json({
+    const snapshot = {
       ...normalizeGitHubReadonlySnapshot(rawSnapshot),
-      connectionMode: "backend_token",
+      connectionMode: "backend_token" as const,
       installation: null,
+    };
+    recordGitHubConnectorActivity({
+      eventType: "repository_snapshot_read",
+      status: "success",
+      metadata: {
+        connectionMode: "backend_token",
+        owner: config.owner,
+        repo: config.repo,
+        branches: snapshot.branches.length,
+        pullRequests: snapshot.pullRequests.length,
+        issues: snapshot.issues.length,
+        commits: snapshot.commits.length,
+      },
     });
+    res.json(snapshot);
   } catch (error) {
     const reason =
       error instanceof GitHubReadonlyClientError
@@ -409,6 +540,17 @@ router.get("/connectors/github/snapshot", async (_req, res) => {
       error instanceof GitHubReadonlyClientError
         ? error.code
         : "GITHUB_READ_FAILED";
+
+    recordGitHubConnectorActivity({
+      eventType: "snapshot_failed",
+      status: "failed",
+      code: errorCode,
+      metadata: {
+        connectionMode: "backend_token",
+        owner: config.owner,
+        repo: config.repo,
+      },
+    });
 
     res
       .status(
