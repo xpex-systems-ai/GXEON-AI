@@ -16,6 +16,8 @@ import DeliveryValidationPage from "@/pages/DeliveryValidationPage";
 import RevenueReleaseGatePage from "@/pages/RevenueReleaseGatePage";
 import FinancialLedgerPage from "@/pages/FinancialLedgerPage";
 import MonetizationBoardPage from "@/pages/MonetizationBoardPage";
+import AgentConectouPage from "@/pages/AgentConectouPage";
+import RadarXOperationalPage from "@/pages/RadarXOperationalPage";
 import ConnectorGatewayPage from "@/pages/ConnectorGatewayPage";
 import ConnectorDetailPage from "@/pages/ConnectorDetailPage";
 import GitHubReadonlyConnectorPage from "@/pages/GitHubReadonlyConnectorPage";
@@ -76,6 +78,8 @@ function Router() {
             <Route path="/ops/release" component={RevenueReleaseGatePage} />
             <Route path="/ops/ledger" component={FinancialLedgerPage} />
             <Route path="/ops/monetization" component={MonetizationBoardPage} />
+            <Route path="/ops/agent-conectou" component={AgentConectouPage} />
+            <Route path="/ops/radar-x" component={RadarXOperationalPage} />
             <Route path="/ops/connectors/github" component={GitHubReadonlyConnectorPage} />
             <Route path="/ops/connectors/vercel" component={VercelReadonlyConnectorPage} />
             <Route path="/ops/connectors/railway" component={() => <ConnectorDetailPage connectorId="railway" />} />

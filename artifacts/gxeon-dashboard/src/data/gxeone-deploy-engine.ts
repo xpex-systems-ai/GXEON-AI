@@ -22,7 +22,7 @@ export const gxeoneDeployEngine = {
         "PORT",
         "DATABASE_URL",
         "SUPABASE_URL",
-        "SUPABASE_SERVICE_ROLE_KEY",
+        "BACKEND_SUPABASE_PRIVILEGED_KEY",
         "JWT_SECRET",
         "RAILWAY_ENVIRONMENT",
       ],
@@ -76,7 +76,7 @@ export const gxeoneDeployEngine = {
       "automation_agents_api",
       "subscription_dashboard_access",
     ],
-    locked_until_keys: ["SUPABASE_SERVICE_ROLE_KEY", "PAYMENT_PROVIDER_KEY"],
+    locked_until_keys: ["BACKEND_SUPABASE_PRIVILEGED_KEY", "PAYMENT_PROVIDER_KEY"],
   },
   railway_runtime_map: {
     services: [
