@@ -35,6 +35,7 @@ export type GitHubConnectorRuntimeDiagnostics = {
   runtimeServiceName: string | null;
   nodeEnv: string | null;
   timestamp: string;
+  missing: string[];
 };
 
 export type GitHubConnectorSafeStatus = {
@@ -46,6 +47,10 @@ export type GitHubConnectorSafeStatus = {
   missing: GitHubConnectorErrorCode[];
   lastSyncAt: string | null;
   lastErrorCode: GitHubConnectorErrorCode;
+  owner: string;
+  repo: string;
+  missing: string[];
+  lastSyncAt: string | null;
   message: string;
 };
 

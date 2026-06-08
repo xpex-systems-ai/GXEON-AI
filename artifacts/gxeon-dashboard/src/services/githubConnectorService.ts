@@ -6,6 +6,7 @@ import {
 } from "@/data/github-readonly-connector";
 
 export type GitHubConnectorApiBaseMode = "same-origin" | "configured-backend-url";
+import { githubReadonlySnapshot, type GitHubReadonlySnapshot } from "@/data/github-readonly-connector";
 
 export type GitHubConnectorServiceState = {
   loading: boolean;
@@ -42,6 +43,12 @@ function backendUnavailableSnapshot(): GitHubReadonlySnapshot {
 export async function fetchGitHubConnectorSnapshot(signal?: AbortSignal): Promise<GitHubReadonlySnapshot> {
   try {
     const response = await fetch(apiUrl("/api/connectors/github/snapshot"), {
+  data: GitHubReadonlySnapshot;
+};
+
+export async function fetchGitHubConnectorSnapshot(signal?: AbortSignal): Promise<GitHubReadonlySnapshot> {
+  try {
+    const response = await fetch("/api/connectors/github/snapshot", {
       method: "GET",
       signal,
       headers: {
@@ -87,5 +94,15 @@ export async function fetchGitHubConnectorDiagnostics(signal?: AbortSignal): Pro
       throw error;
     }
     return null;
+    return {
+      ...githubReadonlySnapshot,
+      status: "READY",
+      statusLabel: "READY_BACKEND_UNAVAILABLE",
+      health: {
+        ...githubReadonlySnapshot.health,
+        githubConnector: "READY_FOR_CONNECTION",
+        lastSyncAt: null,
+      },
+    };
   }
 }

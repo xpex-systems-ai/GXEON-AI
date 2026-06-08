@@ -12,6 +12,7 @@ import {
   type GitHubReadonlySnapshot,
 } from "@/data/github-readonly-connector";
 import { fetchGitHubConnectorDiagnostics, fetchGitHubConnectorSnapshot, githubConnectorApiBaseMode } from "@/services/githubConnectorService";
+import { fetchGitHubConnectorSnapshot } from "@/services/githubConnectorService";
 import { Activity, AlertTriangle, CheckCircle2, CircleDot, Code2, GitBranch, GitPullRequest, Github, HeartPulse, History, LockKeyhole, RefreshCw, Server, ShieldCheck } from "lucide-react";
 
 const statusTone: Record<GitHubConnectorStatus, string> = {
@@ -96,6 +97,12 @@ export default function GitHubReadonlyConnectorPage() {
           lastErrorCode: "BACKEND_UNAVAILABLE",
           health: { ...githubReadonlySnapshot.health, lastErrorCode: "BACKEND_UNAVAILABLE" },
         });
+    fetchGitHubConnectorSnapshot(controller.signal)
+      .then((data) => setSnapshot(data))
+      .catch((loadError) => {
+        if (loadError instanceof DOMException && loadError.name === "AbortError") return;
+        setError("Backend GitHub connector snapshot unavailable.");
+        setSnapshot(githubReadonlySnapshot);
       })
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false);

@@ -5,6 +5,12 @@ const GITHUB_API_BASE = "https://api." + "github.com";
 const DASHBOARD_PAGE_SIZE = 20;
 
 type GitHubClientErrorCode = Exclude<GitHubConnectorErrorCode, "NONE">;
+import { type GitHubReadonlyRawSnapshot } from "./githubConnectorTypes";
+
+const GITHUB_API_BASE = "https://api.github.com";
+const DASHBOARD_PAGE_SIZE = 20;
+
+type GitHubClientErrorCode = "NOT_CONFIGURED" | "RATE_LIMITED" | "GITHUB_READ_FAILED";
 
 export class GitHubReadonlyClientError extends Error {
   readonly code: GitHubClientErrorCode;
@@ -25,6 +31,7 @@ function readOnlyHeaders(token: string): Record<string, string> {
     "X-GitHub-Api-Version": "2022-11-28",
     "User-Agent": "GXEON-GitHub-Readonly-Connector",
     ["Author" + "ization"]: `${credentialScheme} ${token}`,
+    Authorization: `Bearer ${token}`,
   };
 }
 
@@ -82,6 +89,15 @@ async function readJson<T>(url: string, token: string): Promise<T> {
   if (!response.ok) {
     const code = errorForStatus(response.status);
     throw new GitHubReadonlyClientError(code, response.status, messageForCode(code, response.status));
+async function readJson<T>(url: string, token: string): Promise<T> {
+  const response = await fetch(url, { method: "GET", headers: readOnlyHeaders(token) });
+
+  if (response.status === 403 && response.headers.get("x-ratelimit-remaining") === "0") {
+    throw new GitHubReadonlyClientError("RATE_LIMITED", 429, "GitHub read rate limit reached.");
+  }
+
+  if (!response.ok) {
+    throw new GitHubReadonlyClientError("GITHUB_READ_FAILED", response.status, `GitHub read failed with status ${response.status}.`);
   }
 
   return response.json() as Promise<T>;
@@ -98,6 +114,8 @@ export async function readGitHubReadonlySnapshot(): Promise<GitHubReadonlyRawSna
   }
   if (!config.repoPresent) {
     throw new GitHubReadonlyClientError("MISSING_REPO", 503, messageForCode("MISSING_REPO"));
+  if (!config.isConfigured || !config.token) {
+    throw new GitHubReadonlyClientError("NOT_CONFIGURED", 503, "GitHub connector token is not configured in backend runtime.");
   }
 
   const repoPath = `/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`;
