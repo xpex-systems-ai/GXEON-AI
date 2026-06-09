@@ -8,6 +8,7 @@ import type {
 
 function firstError(raw: SupabaseReadonlyRawSnapshot): SupabaseConnectorErrorCode {
   return (
+    raw.sectionErrors.projectError?.code ??
     raw.sectionErrors.restError?.code ??
     raw.sectionErrors.authError?.code ??
     raw.sectionErrors.storageError?.code ??
@@ -76,7 +77,7 @@ function createEvidence(raw: SupabaseReadonlyRawSnapshot): SupabaseReadonlyEvide
 }
 
 function calculateHealth(raw: SupabaseReadonlyRawSnapshot, recentErrorPenalty = 0): number {
-  let score = 20;
+  let score = raw.probes.project.ok ? 20 : 10;
   if (raw.probes.rest.ok) score += 25;
   if (raw.probes.auth.ok) score += 10;
   if (raw.probes.storage.ok) score += 15;
@@ -84,6 +85,7 @@ function calculateHealth(raw: SupabaseReadonlyRawSnapshot, recentErrorPenalty = 
   if (raw.probes.rlsMetadata.ok) score += 10;
   if (raw.counts.rlsMissingTables && raw.counts.rlsMissingTables > 0) score -= 15;
   score -= recentErrorPenalty;
+  if (!raw.probes.rest.ok && !raw.probes.auth.ok && !raw.probes.storage.ok) score = raw.probes.project.ok ? Math.min(score, 15) : 0;
   return Math.max(0, Math.min(100, score));
 }
 
@@ -145,14 +147,18 @@ export function normalizeSupabaseReadonlySnapshot(
   raw: SupabaseReadonlyRawSnapshot,
 ): SupabaseReadonlySnapshot {
   const config = getSupabaseConnectorConfig();
-  const blockingFailure = !raw.probes.rest.ok;
+  const reachableSubsystems = [raw.probes.rest, raw.probes.auth, raw.probes.storage].filter(
+    (probe) => probe.ok,
+  ).length;
+  const hasRequiredFailure = reachableSubsystems === 0;
   const hasOptionalFailure = Boolean(
-    raw.sectionErrors.authError ||
+    raw.sectionErrors.restError ||
+      raw.sectionErrors.authError ||
       raw.sectionErrors.storageError ||
       raw.sectionErrors.databaseMetadataError ||
       raw.sectionErrors.rlsMetadataError,
   );
-  const status = blockingFailure
+  const status = hasRequiredFailure
     ? "FAILED"
     : hasOptionalFailure
       ? "PARTIAL_READONLY"

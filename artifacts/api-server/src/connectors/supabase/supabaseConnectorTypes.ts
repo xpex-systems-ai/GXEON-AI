@@ -12,6 +12,9 @@ export type SupabaseConnectorErrorCode =
   | "SUPABASE_404"
   | "RATE_LIMITED"
   | "SUPABASE_5XX"
+  | "INVALID_SUPABASE_URL"
+  | "TIMEOUT"
+  | "TLS_DNS_ERROR"
   | "NETWORK_ERROR"
   | "SUPABASE_READ_FAILED"
   | "DB_METADATA_UNAVAILABLE";
@@ -30,6 +33,8 @@ export type SupabaseConnectorSectionError = {
   hint: string | null;
   status?: number | null;
   stage?: SupabaseProbeStage;
+  host?: string | null;
+  path?: string | null;
 };
 
 export type SupabaseConnectorConfig = {
@@ -64,6 +69,8 @@ export type SupabaseConnectorRuntimeDiagnostics = {
     code: SupabaseConnectorErrorCode | null;
     safeMessage: string | null;
     hint: string | null;
+    host?: string | null;
+    path?: string | null;
   } | null;
   timestamp: string;
 };
@@ -102,6 +109,8 @@ export type SupabaseProbeResult = {
   status: number | null;
   code: SupabaseConnectorErrorCode | null;
   message: string | null;
+  host?: string | null;
+  path?: string | null;
 };
 
 export type SupabaseReadonlyEvidence = {
