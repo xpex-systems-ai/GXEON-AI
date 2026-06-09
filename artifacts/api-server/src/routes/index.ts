@@ -7,6 +7,7 @@ import runtimeRouter from "./runtime";
 import financialRouter from "./financial";
 import githubConnectorRouter from "./connectors/github";
 import vercelConnectorRouter from "./connectors/vercel";
+import railwayConnectorRouter from "./connectors/railway";
 import monetizationRouter from "./monetization";
 import radarRouter from "./radar";
 
@@ -20,6 +21,7 @@ router.use(runtimeRouter);
 router.use(financialRouter);
 router.use(githubConnectorRouter);
 router.use(vercelConnectorRouter);
+router.use(railwayConnectorRouter);
 router.use(monetizationRouter);
 router.use(radarRouter);
 
