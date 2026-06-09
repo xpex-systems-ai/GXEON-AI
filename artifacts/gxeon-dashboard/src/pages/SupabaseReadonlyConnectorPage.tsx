@@ -44,6 +44,11 @@ function boolLabel(value: boolean): string {
   return value ? "ready" : "pending";
 }
 
+function safeProbeTarget(host?: string | null, path?: string | null): string | null {
+  if (!host && !path) return null;
+  return `${host ?? "safe-host-unavailable"}${path ?? ""}`;
+}
+
 function MetricCard({
   label,
   value,
@@ -98,6 +103,7 @@ export default function SupabaseReadonlyConnectorPage() {
   }, []);
 
   const primarySectionError =
+    snapshot.projectError ??
     snapshot.restError ??
     snapshot.authError ??
     snapshot.storageError ??
@@ -115,14 +121,22 @@ export default function SupabaseReadonlyConnectorPage() {
     if (primarySectionError) {
       return [
         primarySectionError.hint ?? primarySectionError.message,
+        "If the failing code is INVALID_SUPABASE_URL, use https://PROJECT_REF.supabase.co with no path or query string.",
+        "Database metadata is optional and remains pending until SUPABASE_DB_URL is configured in the backend.",
         "Keep all fixes in backend runtime variables; do not add Supabase credentials to Vite env.",
       ];
     }
     return [
       "Backend read-only snapshot is available; no credential UI, SQL editor or row viewer is enabled.",
+      "Database metadata is optional and remains pending until SUPABASE_DB_URL is configured in the backend.",
       "P0 returns metadata counts and readiness signals only.",
     ];
   }, [primarySectionError, snapshot.configured]);
+
+  const diagnosticsTarget = safeProbeTarget(
+    diagnostics?.readProbe?.host,
+    diagnostics?.readProbe?.path,
+  );
 
   return (
     <div className="space-y-5 text-white">
@@ -202,6 +216,18 @@ export default function SupabaseReadonlyConnectorPage() {
               <p className="mt-2 font-bold">{snapshot.lastErrorCode}</p>
               <p className="mt-2 text-xs text-stone-400">
                 Probe: {diagnostics?.readProbe?.stage ?? "not attempted"} · Status: {diagnostics?.readProbe?.status ?? "n/a"}
+              </p>
+              <p className="mt-1 text-xs text-stone-400">
+                Code: {diagnostics?.readProbe?.code ?? snapshot.lastErrorCode} · OK: {String(diagnostics?.readProbe?.ok ?? false)}
+              </p>
+              {diagnostics?.readProbe?.safeMessage && (
+                <p className="mt-2 text-xs text-amber-100">{diagnostics.readProbe.safeMessage}</p>
+              )}
+              {diagnosticsTarget && (
+                <p className="mt-2 text-xs text-stone-500">Safe target: {diagnosticsTarget}</p>
+              )}
+              <p className="mt-2 text-xs text-stone-500">
+                DB metadata stays optional/pending until SUPABASE_DB_URL is approved for the backend.
               </p>
             </div>
             {diagnosticsHints.map((hint) => (

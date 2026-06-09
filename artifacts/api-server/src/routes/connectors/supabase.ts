@@ -37,32 +37,18 @@ function isSectionError(error: unknown): error is SupabaseConnectorSectionError 
 
 router.get("/connectors/supabase/diagnostics", async (_req, res) => {
   const config = getSupabaseConnectorConfig();
-  const probe = config.configured ? await probeSupabaseRestRead() : null;
-  const diagnostics = toSupabaseConnectorDiagnostics(
-    probe
-      ? {
-          attempted: true,
-          ok: probe.ok,
-          stage: "rest",
-          status: probe.status,
-          code: probe.code,
-          safeMessage: probe.safeMessage,
-          hint: probe.hint,
-        }
-      : {
-          attempted: false,
-          ok: false,
-          stage: null,
-          status: null,
-          code: config.missing[0] ?? null,
-          safeMessage: config.configured
-            ? null
-            : "Supabase backend URL and anon key are not configured.",
-          hint: config.configured
-            ? null
-            : "Add SUPABASE_URL and SUPABASE_ANON_KEY in Railway api-server variables.",
-        },
-  );
+  const probe = await probeSupabaseRestRead();
+  const diagnostics = toSupabaseConnectorDiagnostics({
+    attempted: probe.attempted,
+    ok: probe.ok,
+    stage: probe.stage,
+    status: probe.status,
+    code: probe.code,
+    safeMessage: probe.safeMessage,
+    hint: probe.hint,
+    host: probe.host ?? null,
+    path: probe.path ?? null,
+  });
   recordSupabaseConnectorActivity({
     eventType: "diagnostics_checked",
     status: probe?.ok || !config.configured ? "success" : "failed",
@@ -75,7 +61,8 @@ router.get("/connectors/supabase/diagnostics", async (_req, res) => {
       projectRefPresent: diagnostics.projectRefPresent,
       dbUrlPresent: diagnostics.dbUrlPresent,
       probeOk: probe?.ok ?? false,
-      probeStatus: probe?.status ?? null,
+      probeStatus: probe.status ?? null,
+      probeStage: probe.stage ?? null,
     },
   });
   res.setHeader("Cache-Control", diagnosticsCacheHeader);
@@ -148,8 +135,8 @@ router.get("/connectors/supabase/snapshot", async (_req, res) => {
     });
     const snapshot = normalizeSupabaseReadonlySnapshot(rawSnapshot);
     recordSupabaseConnectorActivity({
-      eventType: snapshot.status === "CONNECTED_READONLY" ? "snapshot_success" : "snapshot_failed",
-      status: snapshot.status === "CONNECTED_READONLY" ? "success" : "info",
+      eventType: snapshot.status === "FAILED" ? "snapshot_failed" : "snapshot_success",
+      status: snapshot.status === "FAILED" ? "failed" : "success",
       code: snapshot.status === "CONNECTED_READONLY" ? null : snapshot.lastErrorCode,
       metadata: {
         status: snapshot.status,
