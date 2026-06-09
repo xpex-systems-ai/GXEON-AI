@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { fetchGitHubConnectorSnapshot } from "@/services/githubConnectorService";
 import { fetchVercelConnectorSnapshot } from "@/services/vercelConnectorService";
 import { fetchRailwayConnectorSnapshot } from "@/services/railwayConnectorService";
+import { fetchSupabaseConnectorSnapshot } from "@/services/supabaseConnectorService";
 import {
   CheckCircle2,
   Eye,
@@ -73,6 +74,11 @@ export default function ConnectorGatewayPage() {
     healthScore: number;
   } | null>(null);
   const [railwayGatewayOverride, setRailwayGatewayOverride] = useState<{
+    status: ConnectorGatewayStatus;
+    lastSync: string | null;
+    healthScore: number;
+  } | null>(null);
+  const [supabaseGatewayOverride, setSupabaseGatewayOverride] = useState<{
     status: ConnectorGatewayStatus;
     lastSync: string | null;
     healthScore: number;
@@ -166,6 +172,36 @@ export default function ConnectorGatewayPage() {
     return () => controller.abort();
   }, []);
 
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchSupabaseConnectorSnapshot(controller.signal)
+      .then((snapshot) => {
+        if (snapshot.status === "CONNECTED_READONLY" || snapshot.status === "PARTIAL_READONLY") {
+          setSupabaseGatewayOverride({
+            status: "CONNECTED",
+            lastSync: formatSync(snapshot.health.lastSyncAt),
+            healthScore: snapshot.health.healthScore,
+          });
+          return;
+        }
+        setSupabaseGatewayOverride({
+          status: "READY",
+          lastSync: null,
+          healthScore: 0,
+        });
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setSupabaseGatewayOverride({
+            status: "READY",
+            lastSync: null,
+            healthScore: 0,
+          });
+      });
+    return () => controller.abort();
+  }, []);
+
   const gatewayProviders = useMemo(
     () =>
       connectorGatewayProviders.map((connector) => {
@@ -193,9 +229,17 @@ export default function ConnectorGatewayPage() {
             healthScore: railwayGatewayOverride.healthScore,
           };
         }
+        if (connector.id === "supabase" && supabaseGatewayOverride) {
+          return {
+            ...connector,
+            status: supabaseGatewayOverride.status,
+            lastSync: supabaseGatewayOverride.lastSync,
+            healthScore: supabaseGatewayOverride.healthScore,
+          };
+        }
         return connector;
       }),
-    [githubGatewayOverride, vercelGatewayOverride, railwayGatewayOverride],
+    [githubGatewayOverride, vercelGatewayOverride, railwayGatewayOverride, supabaseGatewayOverride],
   );
 
   return (
