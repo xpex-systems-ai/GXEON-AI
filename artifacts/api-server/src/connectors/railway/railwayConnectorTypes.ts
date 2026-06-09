@@ -16,10 +16,20 @@ export type RailwayConnectorErrorCode =
   | "NETWORK_ERROR"
   | "RAILWAY_READ_FAILED";
 
+export type RailwayGraphQlReadStage =
+  | "viewer"
+  | "projects"
+  | "project"
+  | "services"
+  | "deployments"
+  | "domains";
+
 export type RailwayConnectorSectionError = {
   code: RailwayConnectorErrorCode;
   message: string;
   hint: string | null;
+  status?: number | null;
+  stage?: RailwayGraphQlReadStage;
 };
 
 export type RailwayConnectorConfig = {
@@ -51,8 +61,10 @@ export type RailwayConnectorRuntimeDiagnostics = {
   readProbe: {
     attempted: boolean;
     ok: boolean;
+    stage: RailwayGraphQlReadStage | null;
     status: number | null;
     code: RailwayConnectorErrorCode | null;
+    safeMessage: string | null;
     projectCount: number | null;
     hint: string | null;
   } | null;

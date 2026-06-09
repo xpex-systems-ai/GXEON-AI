@@ -30,7 +30,8 @@ function isSectionError(error: unknown): error is RailwayConnectorSectionError {
   return typeof error === "object" && error !== null && "code" in error && "message" in error;
 }
 
-function safeDiagnosticHint(code: RailwayConnectorErrorCode | null): string | null {
+function safeDiagnosticHint(code: RailwayConnectorErrorCode | null, status: number | null = null): string | null {
+  if (status === 400) return "Railway GraphQL query/schema mismatch.";
   if (code === "MISSING_RAILWAY_TOKEN") return "Add RAILWAY_TOKEN in Railway api-server variables.";
   if (code === "RAILWAY_404") return "Verify RAILWAY_PROJECT_ID and RAILWAY_ENVIRONMENT_ID.";
   if (code === "RAILWAY_403") return "Railway token cannot read the configured project or team.";
@@ -47,16 +48,20 @@ router.get("/connectors/railway/diagnostics", async (_req, res) => {
       ? {
           attempted: true,
           ok: probe.ok,
+          stage: probe.stage,
           status: probe.status,
           code: probe.code,
+          safeMessage: probe.safeMessage,
           projectCount: probe.projectCount,
-          hint: probe.hint ?? safeDiagnosticHint(probe.code),
+          hint: probe.hint ?? safeDiagnosticHint(probe.code, probe.status),
         }
       : {
           attempted: false,
           ok: false,
+          stage: null,
           status: null,
           code: config.missing[0] ?? null,
+          safeMessage: config.configured ? null : "Railway backend token is not configured.",
           projectCount: null,
           hint: config.configured ? null : "Add RAILWAY_TOKEN in Railway api-server variables.",
         },
@@ -71,7 +76,9 @@ router.get("/connectors/railway/diagnostics", async (_req, res) => {
       projectIdPresent: diagnostics.projectIdPresent,
       environmentIdPresent: diagnostics.environmentIdPresent,
       probeOk: probe?.ok ?? false,
+      probeStage: probe?.stage ?? null,
       probeStatus: probe?.status ?? null,
+      probeCode: probe?.code ?? null,
     },
   });
   res.setHeader("Cache-Control", diagnosticsCacheHeader);
@@ -161,9 +168,16 @@ router.get("/connectors/railway/snapshot", async (_req, res) => {
       code,
       metadata: { configured: true },
     });
-    res
-      .status(code === "MISSING_RAILWAY_TOKEN" ? 200 : 502)
-      .json(createRailwayReadonlyFailedSnapshot(reason, code));
+    const failedSnapshot = createRailwayReadonlyFailedSnapshot(reason, code);
+    if (isSectionError(error) && failedSnapshot.projectsError) {
+      failedSnapshot.projectsError = {
+        ...failedSnapshot.projectsError,
+        hint: error.hint ?? safeDiagnosticHint(error.code, error.status ?? null),
+        status: error.status ?? null,
+        stage: error.stage,
+      };
+    }
+    res.status(code === "MISSING_RAILWAY_TOKEN" ? 200 : 502).json(failedSnapshot);
   }
 });
 
