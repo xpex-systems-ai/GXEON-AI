@@ -15,6 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import { fetchGitHubConnectorSnapshot } from "@/services/githubConnectorService";
 import { fetchVercelConnectorSnapshot } from "@/services/vercelConnectorService";
+import { fetchRailwayConnectorSnapshot } from "@/services/railwayConnectorService";
 import {
   CheckCircle2,
   Eye,
@@ -67,6 +68,11 @@ export default function ConnectorGatewayPage() {
     healthScore: number;
   } | null>(null);
   const [vercelGatewayOverride, setVercelGatewayOverride] = useState<{
+    status: ConnectorGatewayStatus;
+    lastSync: string | null;
+    healthScore: number;
+  } | null>(null);
+  const [railwayGatewayOverride, setRailwayGatewayOverride] = useState<{
     status: ConnectorGatewayStatus;
     lastSync: string | null;
     healthScore: number;
@@ -130,6 +136,36 @@ export default function ConnectorGatewayPage() {
     return () => controller.abort();
   }, []);
 
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchRailwayConnectorSnapshot(controller.signal)
+      .then((snapshot) => {
+        if (snapshot.status === "CONNECTED_READONLY" || snapshot.status === "PARTIAL_READONLY") {
+          setRailwayGatewayOverride({
+            status: "CONNECTED",
+            lastSync: formatSync(snapshot.health.lastSyncAt),
+            healthScore: snapshot.health.healthScore,
+          });
+          return;
+        }
+        setRailwayGatewayOverride({
+          status: "READY",
+          lastSync: null,
+          healthScore: 0,
+        });
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setRailwayGatewayOverride({
+            status: "READY",
+            lastSync: null,
+            healthScore: 0,
+          });
+      });
+    return () => controller.abort();
+  }, []);
+
   const gatewayProviders = useMemo(
     () =>
       connectorGatewayProviders.map((connector) => {
@@ -149,9 +185,17 @@ export default function ConnectorGatewayPage() {
             healthScore: vercelGatewayOverride.healthScore,
           };
         }
+        if (connector.id === "railway" && railwayGatewayOverride) {
+          return {
+            ...connector,
+            status: railwayGatewayOverride.status,
+            lastSync: railwayGatewayOverride.lastSync,
+            healthScore: railwayGatewayOverride.healthScore,
+          };
+        }
         return connector;
       }),
-    [githubGatewayOverride, vercelGatewayOverride],
+    [githubGatewayOverride, vercelGatewayOverride, railwayGatewayOverride],
   );
 
   return (

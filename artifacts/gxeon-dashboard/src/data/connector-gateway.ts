@@ -222,24 +222,24 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
     priority: 3,
     purpose:
       "Services, workers, runtime, environment validation e deployment health.",
-    status: "LOCKED",
+    status: "READY",
     healthScore: 0,
     lastSync: null,
     uptime: "not measured",
-    credentialIndicator: "OPERATOR_APPROVAL_REQUIRED",
-    credentialLabel: "Runtime variables must be approved before unlock",
-    activationStyle: "CLI/dashboard controlled future activation",
-    frontendBehavior: "Exibe estado bloqueado e checklist de runtime.",
+    credentialIndicator: "BACKEND_SECRET_REQUIRED",
+    credentialLabel: "RAILWAY_TOKEN stays in backend runtime variables only",
+    activationStyle: "READY_FOR_BACKEND_READONLY_CONNECTION",
+    frontendBehavior: "Exibe snapshot Railway lido somente pelo backend, sem UI de credenciais.",
     backendFuture:
-      "Railway poderá hospedar o runtime de conectores para jobs server-side seguros.",
+      "Railway GraphQL é consultado pelo api-server em modo somente leitura para projetos, serviços, deployments e domínios.",
     runtimeBoundary:
-      "Bloqueado até revisão de variáveis, workers, logs, custos e janelas de execução.",
+      "Sem escrita em projetos, serviços, variáveis, domínios, deployments ou comandos; o frontend chama apenas rotas GXEON.",
     stateStoreBoundary:
-      "Somente metadados operacionais aprovados poderão ser persistidos depois da revisão Supabase.",
+      "Somente metadados operacionais seguros aparecem no dashboard; valores de variáveis e logs brutos nunca são retornados.",
     nextManualAction:
-      "Revisar limites de worker, variáveis de runtime, logs e orçamento antes de liberar qualquer job.",
-    buttonLabel: "Locked",
-    checklistHref: "docs/connectors/RAILWAY_CONNECTOR_RUNTIME_READINESS.md",
+      "Adicionar RAILWAY_TOKEN ao runtime backend e opcionalmente RAILWAY_PROJECT_ID, RAILWAY_TEAM_ID e RAILWAY_ENVIRONMENT_ID.",
+    buttonLabel: "Connect Railway",
+    checklistHref: "docs/connectors/RAILWAY_READONLY_CONNECTOR_P0.md",
     risks: [
       "Variáveis de runtime expostas",
       "Workers executando cedo demais",
@@ -252,10 +252,10 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
       "Ativar logs e custos",
     ],
     readyScreen: [
-      { label: "Services", value: "locked", state: "LOCKED" },
-      { label: "Workers", value: "locked", state: "LOCKED" },
-      { label: "Runtime", value: "awaiting validation", state: "LOCKED" },
-      { label: "Environment Validation", value: "required", state: "READY" },
+      { label: "Services", value: "ready to read", state: "READY" },
+      { label: "Workers", value: "metadata only", state: "READY" },
+      { label: "Runtime", value: "backend read-only", state: "READY" },
+      { label: "Environment Validation", value: "presence only", state: "READY" },
       {
         label: "Deployment Health",
         value: "not measured",
