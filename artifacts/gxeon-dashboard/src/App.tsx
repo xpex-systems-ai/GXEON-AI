@@ -24,6 +24,7 @@ import GitHubReadonlyConnectorPage from "@/pages/GitHubReadonlyConnectorPage";
 import VercelReadonlyConnectorPage from "@/pages/VercelReadonlyConnectorPage";
 import RailwayReadonlyConnectorPage from "@/pages/RailwayReadonlyConnectorPage";
 import SupabaseReadonlyConnectorPage from "@/pages/SupabaseReadonlyConnectorPage";
+import Microsoft365ConnectorPage from "@/pages/Microsoft365ConnectorPage";
 import HealthPage from "@/pages/HealthPage";
 
 const queryClient = new QueryClient();
@@ -86,7 +87,7 @@ function Router() {
             <Route path="/ops/connectors/vercel" component={VercelReadonlyConnectorPage} />
             <Route path="/ops/connectors/railway" component={RailwayReadonlyConnectorPage} />
             <Route path="/ops/connectors/supabase" component={SupabaseReadonlyConnectorPage} />
-            <Route path="/ops/connectors/m365" component={() => <ConnectorDetailPage connectorId="microsoft365" />} />
+            <Route path="/ops/connectors/m365" component={Microsoft365ConnectorPage} />
             <Route path="/ops/connectors" component={ConnectorGatewayPage} />
             <Route path="/health" component={HealthPage} />
             <Route path="/ops/health" component={HealthPage} />

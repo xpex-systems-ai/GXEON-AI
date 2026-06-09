@@ -339,26 +339,26 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
     officialBrand: "Microsoft 365",
     priority: 5,
     purpose:
-      "Outlook, Calendar, Contacts, OneDrive e Proposal Center manual-first.",
+      "Outlook, Calendar, Contacts, OneDrive e Proposal Center para a Home Center Agents communication layer.",
     status: "NOT_CONFIGURED",
     healthScore: 0,
     lastSync: null,
     uptime: "not measured",
     credentialIndicator: "OPERATOR_APPROVAL_REQUIRED",
-    credentialLabel: "Tenant consent and Graph scopes not configured",
-    activationStyle: "Microsoft Graph OAuth future activation",
+    credentialLabel: "Tenant consent and Graph scopes remain backend-only",
+    activationStyle: "Microsoft Graph OAuth readiness via backend consent URL",
     frontendBehavior:
       "Exibe readiness e consentimento necessário sem pedir tenant secret.",
     backendFuture:
-      "Graph API só poderá ler dados aprovados após consentimento, auditoria e política manual-first.",
+      "Graph API só poderá ler dados aprovados após consentimento, auditoria e política manual-first da Home Center Agents communication layer.",
     runtimeBoundary:
       "Nenhum email, calendário ou arquivo é lido ou enviado pelo frontend.",
     stateStoreBoundary:
       "Dados pessoais exigem aprovação explícita, minimização e trilha de auditoria.",
     nextManualAction:
-      "Definir escopos permitidos, consentimento, política de contatos e proposal center.",
+      "Configurar App Registration, redirect URI e escopos mínimos offline_access/User.Read no backend.",
     buttonLabel: "Connect Microsoft 365",
-    checklistHref: "docs/connectors/MICROSOFT365_CONNECTOR_READINESS.md",
+    checklistHref: "docs/connectors/MICROSOFT365_CONNECTOR_P0.md",
     risks: [
       "Acesso indevido a dados pessoais",
       "Envio automático sem aprovação",
@@ -371,10 +371,10 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
       "Habilitar proposal center manual",
     ],
     readyScreen: [
-      { label: "Outlook", value: "not configured", state: "NOT_CONFIGURED" },
-      { label: "Calendar", value: "not configured", state: "NOT_CONFIGURED" },
-      { label: "Contacts", value: "not configured", state: "NOT_CONFIGURED" },
-      { label: "OneDrive", value: "not configured", state: "NOT_CONFIGURED" },
+      { label: "Outlook", value: "ready after consent", state: "READY" },
+      { label: "Calendar", value: "ready after consent", state: "READY" },
+      { label: "Contacts", value: "ready after consent", state: "READY" },
+      { label: "OneDrive", value: "ready after consent", state: "READY" },
       {
         label: "Proposal Center",
         value: "ready after consent",

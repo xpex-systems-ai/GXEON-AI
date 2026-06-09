@@ -17,6 +17,7 @@ import { fetchGitHubConnectorSnapshot } from "@/services/githubConnectorService"
 import { fetchVercelConnectorSnapshot } from "@/services/vercelConnectorService";
 import { fetchRailwayConnectorSnapshot } from "@/services/railwayConnectorService";
 import { fetchSupabaseConnectorSnapshot } from "@/services/supabaseConnectorService";
+import { fetchMicrosoft365ConnectorSnapshot } from "@/services/microsoft365ConnectorService";
 import {
   CheckCircle2,
   Eye,
@@ -79,6 +80,11 @@ export default function ConnectorGatewayPage() {
     healthScore: number;
   } | null>(null);
   const [supabaseGatewayOverride, setSupabaseGatewayOverride] = useState<{
+    status: ConnectorGatewayStatus;
+    lastSync: string | null;
+    healthScore: number;
+  } | null>(null);
+  const [microsoft365GatewayOverride, setMicrosoft365GatewayOverride] = useState<{
     status: ConnectorGatewayStatus;
     lastSync: string | null;
     healthScore: number;
@@ -202,6 +208,45 @@ export default function ConnectorGatewayPage() {
     return () => controller.abort();
   }, []);
 
+
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetchMicrosoft365ConnectorSnapshot(controller.signal)
+      .then((snapshot) => {
+        if (snapshot.status === "CONNECTED_READONLY") {
+          setMicrosoft365GatewayOverride({
+            status: "CONNECTED",
+            lastSync: formatSync(snapshot.health.lastSyncAt),
+            healthScore: snapshot.health.healthScore,
+          });
+          return;
+        }
+        if (snapshot.status === "READY_FOR_CONSENT") {
+          setMicrosoft365GatewayOverride({
+            status: "READY",
+            lastSync: formatSync(snapshot.health.lastSyncAt),
+            healthScore: snapshot.health.healthScore,
+          });
+          return;
+        }
+        setMicrosoft365GatewayOverride({
+          status: snapshot.status === "FAILED" ? "ERROR" : "NOT_CONFIGURED",
+          lastSync: null,
+          healthScore: snapshot.health.healthScore,
+        });
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setMicrosoft365GatewayOverride({
+            status: "NOT_CONFIGURED",
+            lastSync: null,
+            healthScore: 0,
+          });
+      });
+    return () => controller.abort();
+  }, []);
+
   const gatewayProviders = useMemo(
     () =>
       connectorGatewayProviders.map((connector) => {
@@ -237,9 +282,17 @@ export default function ConnectorGatewayPage() {
             healthScore: supabaseGatewayOverride.healthScore,
           };
         }
+        if (connector.id === "microsoft365" && microsoft365GatewayOverride) {
+          return {
+            ...connector,
+            status: microsoft365GatewayOverride.status,
+            lastSync: microsoft365GatewayOverride.lastSync,
+            healthScore: microsoft365GatewayOverride.healthScore,
+          };
+        }
         return connector;
       }),
-    [githubGatewayOverride, vercelGatewayOverride, railwayGatewayOverride, supabaseGatewayOverride],
+    [githubGatewayOverride, vercelGatewayOverride, railwayGatewayOverride, supabaseGatewayOverride, microsoft365GatewayOverride],
   );
 
   return (
