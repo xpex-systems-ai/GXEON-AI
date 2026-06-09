@@ -8,6 +8,7 @@ import financialRouter from "./financial";
 import githubConnectorRouter from "./connectors/github";
 import vercelConnectorRouter from "./connectors/vercel";
 import railwayConnectorRouter from "./connectors/railway";
+import supabaseConnectorRouter from "./connectors/supabase";
 import monetizationRouter from "./monetization";
 import radarRouter from "./radar";
 
@@ -22,6 +23,7 @@ router.use(financialRouter);
 router.use(githubConnectorRouter);
 router.use(vercelConnectorRouter);
 router.use(railwayConnectorRouter);
+router.use(supabaseConnectorRouter);
 router.use(monetizationRouter);
 router.use(radarRouter);
 

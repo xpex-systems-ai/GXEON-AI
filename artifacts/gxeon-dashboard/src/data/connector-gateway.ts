@@ -277,23 +277,23 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
     priority: 4,
     purpose:
       "Database status, RLS status, storage status, project status e migration readiness.",
-    status: "LOCKED",
+    status: "READY",
     healthScore: 0,
     lastSync: null,
     uptime: "not measured",
     credentialIndicator: "BACKEND_SECRET_REQUIRED",
-    credentialLabel: "Service role never exposed to frontend",
-    activationStyle: "Dashboard controlled future activation",
-    frontendBehavior: "Exibe prontidão de banco. Não expõe service role key.",
+    credentialLabel: "Supabase keys and DB URL remain backend-only",
+    activationStyle: "READY_FOR_BACKEND_READONLY_CONNECTION",
+    frontendBehavior: "Exibe snapshot Supabase lido somente pelo backend, sem UI de credenciais.",
     backendFuture:
-      "Supabase poderá armazenar estados reais de conector, eventos operacionais e snapshots aprovados.",
+      "api-server lê REST, auth, storage e metadados seguros de banco em modo somente leitura.",
     runtimeBoundary:
-      "Nenhum write client-side; mutations devem passar por backend autorizado.",
+      "Nenhum request direto para Supabase no browser; nenhuma operação de escrita, SQL ou mudança de schema em P0.",
     stateStoreBoundary:
-      "RLS, migrations e tabelas operacionais precisam ser aprovadas antes de conexão.",
+      "Somente readiness, contagens e postura RLS segura aparecem no dashboard; linhas de tabelas nunca são retornadas.",
     nextManualAction:
-      "Validar schema, RLS, storage buckets e política de migrations antes do primeiro sync.",
-    buttonLabel: "Locked",
+      "Adicionar SUPABASE_URL e SUPABASE_ANON_KEY ao backend; service role e DB URL são opcionais e backend-only.",
+    buttonLabel: "Connect Supabase",
     checklistHref: "docs/connectors/SUPABASE_CONNECTOR_READINESS.md",
     risks: [
       "Exposição de service role",
@@ -307,21 +307,21 @@ export const connectorGatewayProviders: ConnectorGatewayProvider[] = [
       "Habilitar persistência real",
     ],
     readyScreen: [
-      { label: "Database Status", value: "locked", state: "LOCKED" },
+      { label: "Database Status", value: "metadata-only read", state: "READY" },
       { label: "RLS Status", value: "validation required", state: "READY" },
       {
         label: "Storage Status",
-        value: "not configured",
-        state: "NOT_CONFIGURED",
+        value: "metadata-only read",
+        state: "READY",
       },
       {
         label: "Project Status",
-        value: "awaiting connection",
-        state: "NOT_CONFIGURED",
+        value: "ready for backend connection",
+        state: "READY",
       },
       {
-        label: "Migration Readiness",
-        value: "review required",
+        label: "Migration Boundary",
+        value: "disabled in P0",
         state: "READY",
       },
     ],
