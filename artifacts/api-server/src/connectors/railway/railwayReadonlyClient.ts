@@ -330,7 +330,7 @@ export async function readRailwayReadonlySnapshot(): Promise<RailwayReadonlyRawS
       const { data } = await railwayPost<{ project: RailwayRawProject | null }>(
         config,
         "project",
-        `query RailwaySelectedProjectRead($projectId: ID!) { project(id: $projectId) { ${PROJECT_MINIMAL_FIELDS} } }`,
+        `query RailwaySelectedProjectRead($projectId: String!) { project(id: $projectId) { ${PROJECT_MINIMAL_FIELDS} } }`,
         { projectId: config.projectId },
       );
       selectedProject = data.project;
@@ -354,7 +354,7 @@ export async function readRailwayReadonlySnapshot(): Promise<RailwayReadonlyRawS
       const { data } = await railwayPost<{ project: { services?: { edges?: Array<{ node?: RailwayRawService }> } } | null }>(
         config,
         "services",
-        `query RailwayServicesRead($projectId: ID!, $first: Int!) { project(id: $projectId) { services(first: $first) { edges { node { ${SERVICE_MINIMAL_FIELDS} } } } } }`,
+        `query RailwayServicesRead($projectId: String!, $first: Int!) { project(id: $projectId) { services(first: $first) { edges { node { ${SERVICE_MINIMAL_FIELDS} } } } } }`,
         { projectId: selectedProject.id, first: SERVICE_LIMIT },
       );
       services = unwrapEdges<RailwayRawService>(data.project?.services).slice(0, SERVICE_LIMIT);
@@ -368,7 +368,7 @@ export async function readRailwayReadonlySnapshot(): Promise<RailwayReadonlyRawS
       const { data } = await railwayPost<{ project: { services?: { edges?: Array<{ node?: RailwayRawService }> } } | null }>(
         config,
         "deployments",
-        `query RailwayDeploymentsRead($projectId: ID!, $first: Int!, $deploymentFirst: Int!) { project(id: $projectId) { services(first: $first) { edges { node { id deployments(first: $deploymentFirst) { edges { node { id status createdAt updatedAt serviceId } } } } } } } }`,
+        `query RailwayDeploymentsRead($projectId: String!, $first: Int!, $deploymentFirst: Int!) { project(id: $projectId) { services(first: $first) { edges { node { id deployments(first: $deploymentFirst) { edges { node { id status createdAt updatedAt serviceId } } } } } } } }`,
         { projectId: selectedProject.id, first: SERVICE_LIMIT, deploymentFirst: DEPLOYMENT_LIMIT },
       );
       services = mergeServiceMetadata(
@@ -383,7 +383,7 @@ export async function readRailwayReadonlySnapshot(): Promise<RailwayReadonlyRawS
       const { data } = await railwayPost<{ project: { services?: { edges?: Array<{ node?: RailwayRawService }> } } | null }>(
         config,
         "domains",
-        `query RailwayDomainsRead($projectId: ID!, $first: Int!) { project(id: $projectId) { services(first: $first) { edges { node { id domains { serviceDomains { id domain targetPort } customDomains { id domain targetPort } } } } } } }`,
+        `query RailwayDomainsRead($projectId: String!, $first: Int!) { project(id: $projectId) { services(first: $first) { edges { node { id domains { serviceDomains { id domain targetPort } customDomains { id domain targetPort } } } } } } }`,
         { projectId: selectedProject.id, first: SERVICE_LIMIT },
       );
       services = mergeServiceMetadata(
