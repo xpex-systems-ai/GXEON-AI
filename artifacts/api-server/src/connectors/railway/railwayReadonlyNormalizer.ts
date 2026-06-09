@@ -25,6 +25,12 @@ function firstError(raw: RailwayReadonlyRawSnapshot): RailwayConnectorSectionErr
   );
 }
 
+
+function hintForError(error: RailwayConnectorSectionError | null): string | null {
+  if (error?.status === 400) return "Railway GraphQL query/schema mismatch.";
+  return error?.hint ?? null;
+}
+
 function isFailureStatus(status: string): boolean {
   return /fail|crash|error|remov/i.test(status);
 }
@@ -159,7 +165,7 @@ export function normalizeRailwayReadonlySnapshot(
         id: `section-error-${section}`,
         type: "HEALTH" as const,
         title: `${section} partial read warning`,
-        description: sectionError?.hint ?? sectionError?.message ?? "Railway section read failed.",
+        description: hintForError(sectionError ?? null) ?? sectionError?.message ?? "Railway section read failed.",
         occurredAt: raw.readAt,
         source: "Railway fail-closed read boundary",
       })),
@@ -266,7 +272,9 @@ export function createRailwayReadonlyFailedSnapshot(
       hint:
         errorCode === "RAILWAY_404"
           ? "Configured Railway project or environment was not found for this backend token."
-          : null,
+          : errorCode === "RAILWAY_GRAPHQL_ERROR"
+            ? "Railway GraphQL query/schema mismatch."
+            : null,
     },
     evidenceTimeline: [
       {
