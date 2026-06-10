@@ -237,14 +237,6 @@ export async function searchGitHubOpportunityPreview(input: GitHubOpportunitySea
     const candidate = candidateFromIssue(item, repository, input.category);
     if (candidate) candidates.push({ ...candidate, opportunityScore: scoreGitHubOpportunity(candidate) });
     else skippedInvalidCandidates += 1;
-  const q = `${query} type:issue state:open archived:false`;
-  const search = await readJson<GitHubSearchIssuesResponse>(endpoint("/search/issues", { q, sort: "updated", order: "desc", per_page: limit }), token);
-  const candidates: ScoredGitHubOpportunityCandidate[] = [];
-
-  for (const item of search.items.slice(0, limit)) {
-    const repository = await readRepository(item.repository_url, token);
-    const candidate = candidateFromIssue(item, repository, input.category);
-    if (candidate) candidates.push({ ...candidate, opportunityScore: scoreGitHubOpportunity(candidate) });
     if (candidates.length >= GITHUB_OPPORTUNITY_MAX_CANDIDATES) break;
   }
 
@@ -265,8 +257,6 @@ export async function searchGitHubOpportunityPreview(input: GitHubOpportunitySea
       skippedInvalidCandidates,
       repositoryMetadataFailures,
     },
-    category: input.category && input.category.trim() ? inferGitHubOpportunityCategory({ requestedCategory: input.category }) : null,
-    maxCandidates: GITHUB_OPPORTUNITY_MAX_CANDIDATES,
     candidates,
   };
 }

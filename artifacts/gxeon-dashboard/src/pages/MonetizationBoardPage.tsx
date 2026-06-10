@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CircleDollarSign, HandCoins, Route, ShieldCheck } from "lucide-react";
 import { fetchMonetizationOffers, fetchMonetizationStatus, type MonetizationOffersResponse, type MonetizationRuntimeStatus } from "@/services/monetizationService";
 
-const fallbackPath = ["Offer", "Checkout", "Webhook", "Ledger", "Delivery"];
+const fallbackPath = ["Opportunity", "Proposal", "Task", "Evidence", "Payment Pending"];
 
 export default function MonetizationBoardPage() {
   const [status, setStatus] = useState<MonetizationRuntimeStatus | null>(null);
@@ -51,10 +51,11 @@ export default function MonetizationBoardPage() {
           <div>
             <p className="mb-2 text-xs uppercase tracking-[0.5em] text-amber-200/70">MICRODATA → MICROTASK → MICROTRANSACTION → LEDGER</p>
             <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">Monetization board · runtime ready</h1>
-            <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">P0 exposes offer templates, checkout readiness and ledger preview boundaries. It does not create checkout sessions or capture payment.</p>
+            <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">P0 exposes opportunity pipeline readiness, offer templates, checkout readiness and ledger preview boundaries. Revenue remains R$0 until an external provider confirms payment.</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link href="/ops/radar-x"><Button className="bg-amber-300 text-slate-950 hover:bg-amber-200">Open Radar X intake <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
+            <Link href="/ops/opportunities"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open Opportunity Inbox</Button></Link>
             <Link href="/ops/ledger"><Button variant="outline" className="border-white/20 text-white hover:bg-white/10">Open ledger</Button></Link>
           </div>
           {error && <p className="rounded-2xl border border-red-300/25 bg-red-500/10 p-3 text-sm text-red-100">Backend unavailable: {error}</p>}
@@ -71,6 +72,34 @@ export default function MonetizationBoardPage() {
             </CardContent>
           </Card>
         ))}
+      </section>
+
+
+
+      <section className="rounded-[2rem] border border-cyan-300/20 bg-cyan-400/10 p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.35em] text-cyan-200/70">Opportunity monetization pipeline</p>
+            <h2 className="text-2xl font-bold text-white">Opportunity → Proposal → Task → Evidence → Payment Pending</h2>
+            <p className="mt-1 text-sm text-cyan-50/80">Counts come from the P0 in-memory Opportunity Inbox when the backend is available. Payment remains pending and providers remain NOT_CONNECTED.</p>
+          </div>
+          <Link href="/ops/opportunities"><Button className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">Review inbox <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
+        </div>
+        <div className="mt-5 grid gap-3 md:grid-cols-3 xl:grid-cols-6">
+          {[
+            ["New", status?.opportunityPipeline?.new ?? 0],
+            ["Review", status?.opportunityPipeline?.review ?? 0],
+            ["Qualified", status?.opportunityPipeline?.qualified ?? 0],
+            ["Proposal", status?.opportunityPipeline?.proposalDrafted ?? 0],
+            ["Task", status?.opportunityPipeline?.taskReady ?? 0],
+            ["Evidence", status?.opportunityPipeline?.evidenceReady ?? 0],
+          ].map(([label, value]) => (
+            <div key={String(label)} className="rounded-2xl border border-cyan-300/20 bg-slate-950/60 p-4">
+              <p className="text-xs uppercase tracking-[0.25em] text-cyan-100/70">{label}</p>
+              <p className="mt-2 text-3xl font-black text-white">{value}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">

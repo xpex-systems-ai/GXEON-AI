@@ -33,6 +33,7 @@ export type MonetizationRuntimeStatus = {
   radar: "MANUAL_INTAKE_PREVIEW_READY";
   checkoutReadiness: CheckoutReadiness;
   counts: { offers: number; clients: number; revenue: number; ledgerPreviewEvents: number };
+  opportunityPipeline?: { new: number; review: number; qualified: number; proposalDrafted: number; taskReady: number; evidenceReady: number };
   firstRevenuePath: string[];
 };
 

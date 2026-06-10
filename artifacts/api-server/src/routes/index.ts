@@ -12,6 +12,7 @@ import supabaseConnectorRouter from "./connectors/supabase";
 import microsoft365ConnectorRouter from "./connectors/microsoft365";
 import monetizationRouter from "./monetization";
 import radarRouter from "./radar";
+import opportunitiesRouter from "./opportunities";
 
 const router: IRouter = Router();
 
@@ -28,5 +29,6 @@ router.use(supabaseConnectorRouter);
 router.use(microsoft365ConnectorRouter);
 router.use(monetizationRouter);
 router.use(radarRouter);
+router.use(opportunitiesRouter);
 
 export default router;
