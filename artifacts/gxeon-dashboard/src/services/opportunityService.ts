@@ -93,28 +93,58 @@ export type OpportunityEvidencePlan = {
   createdAt: string;
 };
 
-const configuredApiBaseUrl = (import.meta.env.VITE_GXEON_API_BASE_URL as string | undefined)?.trim().replace(/\/$/, "") ?? "";
+const configuredApiBaseUrl = (import.meta.env.VITE_GXEON_API_BASE_URL as string | undefined)?.trim().replace(/\/+$/, "") ?? "";
+const railwayBackendUrlMessage = "Set VITE_GXEON_API_BASE_URL to Railway API public URL and redeploy Vercel";
+
+function isVercelPreviewHost(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.location.hostname.endsWith(".vercel.app");
+}
 
 function apiUrl(path: string): string {
+  if (!configuredApiBaseUrl && isVercelPreviewHost()) {
+    throw new Error(`BACKEND_URL_MISCONFIGURED: ${railwayBackendUrlMessage}`);
+  }
   return `${configuredApiBaseUrl}${path}`;
 }
 
-async function readJson<T>(response: Response): Promise<T> {
-  const payload = (await response.json()) as { success: boolean; data: T; error?: string; message?: string };
-  if (!response.ok || !payload.success) throw new Error(payload.message ?? payload.error ?? `REQUEST_FAILED_${response.status}`);
-  return payload.data;
+async function readJson<T>(response: Response, route: string): Promise<T> {
+  const contentType = response.headers.get("content-type") ?? "";
+  const bodyText = await response.text();
+
+  if (!bodyText.trim()) {
+    throw new Error(`REQUEST_FAILED_${response.status}: Empty response body from ${route}`);
+  }
+
+  if (!contentType.toLowerCase().includes("application/json")) {
+    const bodyExcerpt = bodyText.trim().slice(0, 160);
+    throw new Error(`BACKEND_NON_JSON_RESPONSE: ${route} returned ${response.status}${bodyExcerpt ? ` - ${bodyExcerpt}` : ""}`);
+  }
+
+  let payload: { success?: boolean; data?: T; error?: string; message?: string };
+  try {
+    payload = JSON.parse(bodyText) as { success?: boolean; data?: T; error?: string; message?: string };
+  } catch {
+    throw new Error(`BACKEND_INVALID_JSON_RESPONSE: ${route} returned ${response.status}`);
+  }
+
+  if (!response.ok || !payload.success) {
+    throw new Error(`${payload.message ?? payload.error ?? `REQUEST_FAILED_${response.status}`}: ${route}`);
+  }
+
+  return payload.data as T;
 }
 
 async function jsonPost<T>(path: string, body: unknown): Promise<T> {
-  return readJson<T>(await fetch(apiUrl(path), { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify(body) }));
+  return readJson<T>(await fetch(apiUrl(path), { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify(body) }), path);
 }
 
 export async function fetchOpportunityStatus(signal?: AbortSignal) {
-  return readJson<OpportunityInboxStatus>(await fetch(apiUrl("/api/opportunities/status"), { headers: { Accept: "application/json" }, signal }));
+  return readJson<OpportunityInboxStatus>(await fetch(apiUrl("/api/opportunities/status"), { headers: { Accept: "application/json" }, signal }), "/api/opportunities/status");
 }
 
 export async function fetchOpportunities(signal?: AbortSignal) {
-  return readJson<{ opportunities: OpportunityRecord[]; counts: OpportunityPipelineCounts }>(await fetch(apiUrl("/api/opportunities"), { headers: { Accept: "application/json" }, signal }));
+  return readJson<{ opportunities: OpportunityRecord[]; counts: OpportunityPipelineCounts }>(await fetch(apiUrl("/api/opportunities"), { headers: { Accept: "application/json" }, signal }), "/api/opportunities");
 }
 
 export function createOpportunityFromRadarManualPreview(preview: RadarOpportunityPreview, operatorConfirmed: boolean) {
