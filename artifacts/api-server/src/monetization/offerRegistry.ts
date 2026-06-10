@@ -1,3 +1,4 @@
+import { getOpportunityPipelineCounts } from "../opportunities/opportunityInbox";
 import type { CheckoutReadiness, LedgerPreviewEvent, MonetizationRuntimeStatus, Offer, OfferTemplate } from "./monetizationTypes";
 
 export const offerTemplates: OfferTemplate[] = [
@@ -106,6 +107,7 @@ export function listLedgerPreviewEvents(): LedgerPreviewEvent[] {
 }
 
 export function getMonetizationRuntimeStatus(): MonetizationRuntimeStatus {
+  const opportunityCounts = getOpportunityPipelineCounts();
   return {
     status: "MONETIZATION_RUNTIME_READY",
     payments: "NOT_CONNECTED",
@@ -113,6 +115,14 @@ export function getMonetizationRuntimeStatus(): MonetizationRuntimeStatus {
     radar: "MANUAL_INTAKE_PREVIEW_READY",
     checkoutReadiness: getCheckoutReadiness(),
     counts: { offers: 0, clients: 0, revenue: 0, ledgerPreviewEvents: 0 },
-    firstRevenuePath: ["Offer", "Checkout", "Webhook", "Ledger", "Delivery"],
+    opportunityPipeline: {
+      new: opportunityCounts.new,
+      review: opportunityCounts.review,
+      qualified: opportunityCounts.qualified,
+      proposalDrafted: opportunityCounts.proposalDrafted,
+      taskReady: opportunityCounts.taskReady,
+      evidenceReady: opportunityCounts.evidenceReady,
+    },
+    firstRevenuePath: ["Opportunity", "Proposal", "Task", "Evidence", "Payment Pending"],
   };
 }

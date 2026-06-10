@@ -18,6 +18,7 @@ import {
   type RadarSource,
   type RadarStatus,
 } from "@/services/radarService";
+import { createOpportunityFromRadarGitHubPreview, createOpportunityFromRadarManualPreview } from "@/services/opportunityService";
 
 const fallbackSources: RadarSource[] = ["Manual", "Referral", "Workana", "99Freelas", "LinkedIn", "Email", "Form"];
 const githubQueryPresets = [
@@ -57,6 +58,11 @@ export default function RadarXOperationalPage() {
   const [githubPreview, setGithubPreview] = useState<GitHubOpportunityPreview | null>(null);
   const [githubError, setGithubError] = useState<string | null>(null);
   const [githubLoading, setGithubLoading] = useState(false);
+  const [manualInboxConfirmed, setManualInboxConfirmed] = useState(false);
+  const [githubInboxConfirmedId, setGithubInboxConfirmedId] = useState<string | null>(null);
+  const [inboxMessage, setInboxMessage] = useState<string | null>(null);
+  const [inboxError, setInboxError] = useState<string | null>(null);
+  const [inboxLoadingId, setInboxLoadingId] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -80,6 +86,9 @@ export default function RadarXOperationalPage() {
     setPreview(null);
     try {
       setPreview(await previewManualOpportunity({ source, title, problem, budget, urgency, contactChannel, notes, consentConfirmed }));
+      setInboxMessage(null);
+      setInboxError(null);
+      setManualInboxConfirmed(false);
     } catch (previewError) {
       setError(previewError instanceof Error ? previewError.message : "RADAR_PREVIEW_FAILED");
     } finally {
@@ -94,10 +103,46 @@ export default function RadarXOperationalPage() {
     setGithubPreview(null);
     try {
       setGithubPreview(await searchGitHubOpportunityPreview({ query: githubQuery, category: githubCategory || undefined, limit: githubLimit }));
+      setInboxMessage(null);
+      setInboxError(null);
+      setGithubInboxConfirmedId(null);
     } catch (previewError) {
       setGithubError(previewError instanceof Error ? previewError.message : "GITHUB_OPPORTUNITY_PREVIEW_FAILED");
     } finally {
       setGithubLoading(false);
+    }
+  }
+
+
+
+  async function handleAddManualToInbox() {
+    if (!preview) return;
+    setInboxLoadingId("manual");
+    setInboxError(null);
+    setInboxMessage(null);
+    try {
+      const result = await createOpportunityFromRadarManualPreview(preview, manualInboxConfirmed);
+      setInboxMessage(`Internal opportunity ${result.opportunity.id} added to REVIEW. No external action was taken.`);
+    } catch (addError) {
+      setInboxError(addError instanceof Error ? addError.message : "OPPORTUNITY_INBOX_ADD_FAILED");
+    } finally {
+      setInboxLoadingId(null);
+    }
+  }
+
+  async function handleAddGitHubToInbox(candidateId: string) {
+    const candidate = githubPreview?.candidates.find((item) => item.id === candidateId);
+    if (!candidate) return;
+    setInboxLoadingId(candidateId);
+    setInboxError(null);
+    setInboxMessage(null);
+    try {
+      const result = await createOpportunityFromRadarGitHubPreview(candidate, githubInboxConfirmedId === candidateId);
+      setInboxMessage(`Internal opportunity ${result.opportunity.id} added to REVIEW. No GitHub write or external contact occurred.`);
+    } catch (addError) {
+      setInboxError(addError instanceof Error ? addError.message : "OPPORTUNITY_INBOX_ADD_FAILED");
+    } finally {
+      setInboxLoadingId(null);
     }
   }
 
@@ -176,6 +221,13 @@ export default function RadarXOperationalPage() {
                     <div className="rounded-2xl border border-cyan-300/20 bg-cyan-400/10 p-4"><p className="text-sm uppercase tracking-[0.25em] text-cyan-100/70">Score</p><p className="text-5xl font-black text-white">{preview.score}</p></div>
                     <ul className="list-disc space-y-2 pl-5 text-sm text-slate-300">{preview.scoringExplanation.map((item) => <li key={item}>{item}</li>)}</ul>
                     <p className="rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-sm text-amber-50">{preview.recommendedNextStep}</p>
+                    <label className="flex items-center gap-3 rounded-2xl border border-cyan-300/20 bg-cyan-400/10 p-3 text-sm text-cyan-50">
+                      <input type="checkbox" checked={manualInboxConfirmed} onChange={(event) => setManualInboxConfirmed(event.target.checked)} />
+                      Operator confirms internal Opportunity Inbox add. No external action will be taken.
+                    </label>
+                    <Button type="button" disabled={!manualInboxConfirmed || inboxLoadingId === "manual"} onClick={handleAddManualToInbox} className="bg-emerald-300 text-slate-950 hover:bg-emerald-200">{inboxLoadingId === "manual" ? "Adding..." : "Add to Opportunity Inbox"}</Button>
+                    {inboxMessage && <p className="rounded-2xl border border-emerald-300/25 bg-emerald-500/10 p-3 text-sm text-emerald-100">{inboxMessage}</p>}
+                    {inboxError && <p className="rounded-2xl border border-red-300/25 bg-red-500/10 p-3 text-sm text-red-100">{inboxError}</p>}
                   </div>
                 ) : (
                   <p className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-slate-300">Submit the form to preview normalized scoring. No lead will be stored.</p>
@@ -235,6 +287,8 @@ export default function RadarXOperationalPage() {
                   </CardContent>
                 </Card>
               )}
+              {inboxMessage && <p className="rounded-2xl border border-emerald-300/25 bg-emerald-500/10 p-3 text-sm text-emerald-100">{inboxMessage}</p>}
+              {inboxError && <p className="rounded-2xl border border-red-300/25 bg-red-500/10 p-3 text-sm text-red-100">{inboxError}</p>}
               {githubPreview?.candidates.length ? githubPreview.candidates.map((candidate) => (
                 <Card key={candidate.id} className="border-cyan-300/20 bg-slate-950/75 backdrop-blur-xl">
                   <CardHeader>
@@ -254,9 +308,15 @@ export default function RadarXOperationalPage() {
                       <div className="rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-amber-50">Next step: {candidate.opportunityScore.recommendedNextStep}</div>
                     </div>
                     <ul className="list-disc space-y-1 pl-5">{candidate.opportunityScore.scoringExplanation.slice(0, 4).map((item) => <li key={item}>{item}</li>)}</ul>
-                    <div className="flex flex-wrap gap-3">
-                      <a className="rounded-md border border-cyan-300/30 px-3 py-2 text-cyan-100 hover:bg-cyan-400/10" href={candidate.url} target="_blank" rel="noreferrer">Open public issue</a>
-                      <Button disabled className="bg-slate-700 text-slate-300">Prepare manual review (P0 preview-only)</Button>
+                    <div className="space-y-3">
+                      <label className="flex items-center gap-3 rounded-2xl border border-cyan-300/20 bg-cyan-400/10 p-3 text-sm text-cyan-50">
+                        <input type="checkbox" checked={githubInboxConfirmedId === candidate.id} onChange={(event) => setGithubInboxConfirmedId(event.target.checked ? candidate.id : null)} />
+                        Operator confirms internal add only. No GitHub write, comment, issue, PR or external contact will occur.
+                      </label>
+                      <div className="flex flex-wrap gap-3">
+                        <a className="rounded-md border border-cyan-300/30 px-3 py-2 text-cyan-100 hover:bg-cyan-400/10" href={candidate.url} target="_blank" rel="noreferrer">Open public issue</a>
+                        <Button type="button" disabled={githubInboxConfirmedId !== candidate.id || inboxLoadingId === candidate.id} onClick={() => handleAddGitHubToInbox(candidate.id)} className="bg-emerald-300 text-slate-950 hover:bg-emerald-200">{inboxLoadingId === candidate.id ? "Adding..." : "Add to Opportunity Inbox"}</Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
