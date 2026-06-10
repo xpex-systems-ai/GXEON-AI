@@ -9,6 +9,14 @@
 - API routes for diagnostics, snapshot, activity and connect-url.
 - Dashboard service, dedicated `/ops/connectors/m365` page and connector gateway override.
 
+## Final onboarding blocker
+
+A personal Outlook account is not enough for GXEON App Registration onboarding when Azure portal reports the app is not contained in any directory. The operator must create or access a Microsoft Entra tenant/directory first, then create the GXEON OS Connector App Registration inside that directory.
+
+Use this Web redirect URI exactly in the App Registration:
+
+- `https://gxeon-api-server-production.up.railway.app/api/connectors/microsoft365/callback`
+
 ## Read-only guarantees
 
 - No Microsoft Graph mail, calendar, contact or drive data endpoints are called.
@@ -19,12 +27,26 @@
 
 ## Operator steps after merge
 
-1. Create Microsoft Entra App Registration.
-2. Configure supported account type.
-3. Add backend redirect URI.
-4. Add backend runtime variables: `MICROSOFT365_TENANT_ID`, `MICROSOFT365_CLIENT_ID`, `MICROSOFT365_CLIENT_SECRET`, `MICROSOFT365_REDIRECT_URI`, `MICROSOFT365_SCOPES=offline_access User.Read`.
-5. Redeploy the API server.
-6. Validate `/api/connectors/microsoft365/diagnostics`, `/api/connectors/microsoft365/snapshot`, `/api/connectors/microsoft365/activity`, `/api/connectors/microsoft365/connect-url` and `/ops/connectors/m365`.
+1. Create or access a Microsoft Entra tenant/directory.
+2. Create the GXEON OS Connector App Registration inside that directory.
+3. Configure supported account type.
+4. Add backend Web redirect URI: `https://gxeon-api-server-production.up.railway.app/api/connectors/microsoft365/callback`.
+5. Create a client secret and copy the secret value, not the Secret ID.
+6. Add Railway/api-server runtime variables:
+   - `MICROSOFT365_TENANT_ID`
+   - `MICROSOFT365_CLIENT_ID`
+   - `MICROSOFT365_CLIENT_SECRET`
+   - `MICROSOFT365_REDIRECT_URI=https://gxeon-api-server-production.up.railway.app/api/connectors/microsoft365/callback`
+   - `MICROSOFT365_SCOPES=offline_access User.Read`
+7. Redeploy the API server.
+8. Validate `/api/connectors/microsoft365/diagnostics`, `/api/connectors/microsoft365/snapshot`, `/api/connectors/microsoft365/activity`, `/api/connectors/microsoft365/connect-url` and `/ops/connectors/m365`.
+9. Click Connect Microsoft 365 only after diagnostics reaches `READY_FOR_CONSENT`.
+
+## Expected state progression
+
+- `NOT_CONFIGURED`: tenant/app/secret/redirect/scope env vars are missing or incomplete.
+- `READY_FOR_CONSENT`: tenant metadata probe succeeds, redirect URI is valid, scopes are safe and the backend consent URL is available.
+- `CONNECTED_READONLY` future: reserved for a separately approved backend-only callback/token phase; not active in P0.
 
 ## Rollback
 

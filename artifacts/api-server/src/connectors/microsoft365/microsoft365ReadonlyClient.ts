@@ -21,6 +21,7 @@ export class Microsoft365ReadonlyClientError extends Error {
 
 function normalizeMicrosoft365Error(status: number | null): Microsoft365ConnectorErrorCode {
   if (status === 400) return "MICROSOFT365_400";
+  if (status === 404) return "MICROSOFT365_404";
   if (status === 401) return "MICROSOFT365_401";
   if (status === 403) return "MICROSOFT365_403";
   if (status === 429) return "RATE_LIMITED";
@@ -56,7 +57,7 @@ export async function probeMicrosoft365TenantMetadata(): Promise<Microsoft365Ten
       ok: false,
       status: null,
       code: "MISSING_MICROSOFT365_CONFIG",
-      safeMessage: "Microsoft 365 tenant id is not configured in backend environment.",
+      safeMessage: "Create or access Microsoft Entra tenant before App Registration. Then configure MICROSOFT365_TENANT_ID in the backend runtime.",
       authorizationEndpointReady: false,
       tokenEndpointReady: false,
     };
@@ -74,7 +75,9 @@ export async function probeMicrosoft365TenantMetadata(): Promise<Microsoft365Ten
         ok: false,
         status: response.status,
         code: normalizeMicrosoft365Error(response.status),
-        safeMessage: "Microsoft identity tenant metadata endpoint did not return a successful readiness response.",
+        safeMessage: response.status === 400 || response.status === 404
+          ? "Check tenant ID or directory availability. A personal Outlook account without a Microsoft Entra tenant is not enough for App Registration."
+          : "Microsoft identity tenant metadata endpoint did not return a successful readiness response.",
         authorizationEndpointReady: false,
         tokenEndpointReady: false,
       };
@@ -116,7 +119,7 @@ export async function getMicrosoft365OAuthReadiness(): Promise<Microsoft365OAuth
     ok: false,
     status: null,
     code: "MISSING_MICROSOFT365_CONFIG" as const,
-    safeMessage: "Microsoft 365 backend environment is not configured.",
+    safeMessage: "Create or access Microsoft Entra tenant before App Registration. Then configure Microsoft 365 backend environment variables.",
     authorizationEndpointReady: false,
     tokenEndpointReady: false,
   };

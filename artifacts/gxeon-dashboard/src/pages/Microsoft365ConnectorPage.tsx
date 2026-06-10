@@ -87,14 +87,35 @@ export default function Microsoft365ConnectorPage() {
     return () => controller.abort();
   }, []);
 
+  const onboardingChecklist = [
+    "Create or access a Microsoft Entra tenant/directory.",
+    "Create the GXEON OS Connector App Registration inside that directory.",
+    "Add the Web redirect URI for the deployed api-server callback.",
+    "Create a client secret and copy the secret value for backend env only.",
+    "Configure Railway api-server environment variables.",
+    "Redeploy api-server so diagnostics read the new backend runtime.",
+    "Open diagnostics and confirm the tenant metadata probe succeeds.",
+    "Click Connect Microsoft 365 to open the backend-generated consent URL.",
+  ];
+
+  const requiredBackendEnvVars = [
+    "MICROSOFT365_TENANT_ID",
+    "MICROSOFT365_CLIENT_ID",
+    "MICROSOFT365_CLIENT_SECRET",
+    "MICROSOFT365_REDIRECT_URI",
+    "MICROSOFT365_SCOPES",
+  ];
+
   const diagnosticsHints = useMemo(() => {
     const hints: string[] = [];
-    if (!snapshot.configured) hints.push("Add MICROSOFT365_TENANT_ID, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI and SCOPES to the backend runtime only.");
+    if (!snapshot.tenantIdPresent) hints.push("Create or access Microsoft Entra tenant before App Registration; personal Outlook apps outside a directory cannot complete GXEON onboarding.");
+    if (!snapshot.configured) hints.push("Add MICROSOFT365_TENANT_ID, MICROSOFT365_CLIENT_ID, MICROSOFT365_CLIENT_SECRET, MICROSOFT365_REDIRECT_URI and MICROSOFT365_SCOPES to the backend runtime only.");
     if (!snapshot.redirectUriValid) hints.push("Redirect URI must be HTTPS in deployed environments; localhost is accepted only for local development.");
     if (!snapshot.scopePolicySafe) hints.push("Remove forbidden Microsoft Graph write scopes before consent can be generated.");
-    if (snapshot.configured && !snapshot.tenantReachable) hints.push("Tenant metadata is not reachable yet; verify tenant id and Railway outbound network.");
+    if (snapshot.configured && !snapshot.tenantReachable) hints.push("Tenant metadata is not reachable yet; check tenant ID or directory availability and Railway outbound network.");
+    if (diagnostics?.tenantProbe?.safeMessage) hints.push(diagnostics.tenantProbe.safeMessage);
     return hints.length ? hints : ["OAuth readiness is manual-first and read-only; consent URL is generated only by the backend."];
-  }, [snapshot]);
+  }, [diagnostics, snapshot]);
 
   async function handleConnect() {
     setConnectMessage("Generating backend consent URL...");
@@ -147,6 +168,48 @@ export default function Microsoft365ConnectorPage() {
         <MetricCard label="Consent readiness" value={boolLabel(snapshot.consentReady)} detail="Authorize URL can be generated server-side" />
         <MetricCard label="Scope policy" value={snapshot.scopePolicySafe ? "SAFE" : "BLOCKED"} detail={`${snapshot.safeScopes.length} safe scopes exposed`} />
         <MetricCard label="Connect URL" value={boolLabel(snapshot.connectUrlReady)} detail="Button opens only backend-provided URL" />
+      </section>
+
+      <section className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
+        <Card className="border-blue-300/15 bg-[#080808]/90 text-white">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2"><CheckCircle2 className="h-5 w-5 text-blue-100" /> Onboarding checklist</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <p className="text-sm text-stone-400">
+              Complete these steps outside GXEON before consent. A personal Outlook account alone is not enough; the App Registration must live inside a Microsoft Entra tenant/directory.
+            </p>
+            <ol className="space-y-2 text-sm text-stone-200">
+              {onboardingChecklist.map((item, index) => (
+                <li key={item} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20 text-xs font-black text-blue-100">{index + 1}</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ol>
+          </CardContent>
+        </Card>
+
+        <Card className="border-amber-300/15 bg-[#080808]/90 text-white">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2"><ShieldCheck className="h-5 w-5 text-amber-100" /> Railway backend env checklist</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.22em] text-stone-500">Required names only</p>
+              <div className="mt-3 grid gap-2">
+                {requiredBackendEnvVars.map((name) => (
+                  <code key={name} className="rounded-xl border border-white/10 bg-black/40 px-3 py-2 text-xs text-amber-50">{name}</code>
+                ))}
+              </div>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+              <p className="text-xs uppercase tracking-[0.22em] text-stone-500">Recommended scopes</p>
+              <p className="mt-2 font-mono text-sm text-emerald-100">offline_access User.Read</p>
+              <p className="mt-2 text-xs text-stone-400">No credential values are entered or stored in this dashboard.</p>
+            </div>
+          </CardContent>
+        </Card>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
