@@ -121,22 +121,50 @@ export type GitHubOpportunityPreview = {
   candidates: ScoredGitHubOpportunityCandidate[];
 };
 
-const configuredApiBaseUrl = (import.meta.env.VITE_GXEON_API_BASE_URL as string | undefined)?.trim().replace(/\/$/, "") ?? "";
+const configuredApiBaseUrl = (import.meta.env.VITE_GXEON_API_BASE_URL as string | undefined)?.trim().replace(/\/+$/, "") ?? "";
+const railwayBackendUrlMessage = "Set VITE_GXEON_API_BASE_URL to Railway API public URL and redeploy Vercel";
+
+function isVercelPreviewHost(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.location.hostname.endsWith(".vercel.app");
+}
 
 function apiUrl(path: string): string {
+  if (!configuredApiBaseUrl && isVercelPreviewHost()) {
+    throw new Error(`BACKEND_URL_MISCONFIGURED: ${railwayBackendUrlMessage}`);
+  }
   return `${configuredApiBaseUrl}${path}`;
 }
 
-async function readJson<T>(response: Response): Promise<T> {
-  const payload = (await response.json()) as { success: boolean; data: T; error?: string; message?: string };
-  if (!response.ok || !payload.success) {
-    throw new Error(payload.message ?? payload.error ?? `REQUEST_FAILED_${response.status}`);
+async function readJson<T>(response: Response, route: string): Promise<T> {
+  const contentType = response.headers.get("content-type") ?? "";
+  const bodyText = await response.text();
+
+  if (!bodyText.trim()) {
+    throw new Error(`REQUEST_FAILED_${response.status}: Empty response body from ${route}`);
   }
-  return payload.data;
+
+  if (!contentType.toLowerCase().includes("application/json")) {
+    const bodyExcerpt = bodyText.trim().slice(0, 160);
+    throw new Error(`BACKEND_NON_JSON_RESPONSE: ${route} returned ${response.status}${bodyExcerpt ? ` - ${bodyExcerpt}` : ""}`);
+  }
+
+  let payload: { success?: boolean; data?: T; error?: string; message?: string };
+  try {
+    payload = JSON.parse(bodyText) as { success?: boolean; data?: T; error?: string; message?: string };
+  } catch {
+    throw new Error(`BACKEND_INVALID_JSON_RESPONSE: ${route} returned ${response.status}`);
+  }
+
+  if (!response.ok || !payload.success) {
+    throw new Error(`${payload.message ?? payload.error ?? `REQUEST_FAILED_${response.status}`}: ${route}`);
+  }
+
+  return payload.data as T;
 }
 
 export async function fetchRadarStatus(signal?: AbortSignal) {
-  return readJson<RadarStatus>(await fetch(apiUrl("/api/radar/status"), { headers: { Accept: "application/json" }, signal }));
+  return readJson<RadarStatus>(await fetch(apiUrl("/api/radar/status"), { headers: { Accept: "application/json" }, signal }), "/api/radar/status");
 }
 
 export async function previewManualOpportunity(payload: RadarManualIntakePayload) {
@@ -146,11 +174,12 @@ export async function previewManualOpportunity(payload: RadarManualIntakePayload
       headers: { Accept: "application/json", "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     }),
+    "/api/radar/manual-intake/preview",
   );
 }
 
 export async function fetchGitHubRadarStatus(signal?: AbortSignal) {
-  return readJson<GitHubRadarStatus>(await fetch(apiUrl("/api/radar/github/status"), { headers: { Accept: "application/json" }, signal }));
+  return readJson<GitHubRadarStatus>(await fetch(apiUrl("/api/radar/github/status"), { headers: { Accept: "application/json" }, signal }), "/api/radar/github/status");
 }
 
 export async function searchGitHubOpportunityPreview(payload: { query: string; category?: string; limit?: number }) {
@@ -160,6 +189,7 @@ export async function searchGitHubOpportunityPreview(payload: { query: string; c
       headers: { Accept: "application/json", "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     }),
+    "/api/radar/github/search-preview",
   );
 }
 
@@ -170,5 +200,6 @@ export async function scoreGitHubOpportunityPreview(candidate: GitHubOpportunity
       headers: { Accept: "application/json", "Content-Type": "application/json" },
       body: JSON.stringify({ candidate }),
     }),
+    "/api/radar/github/score-preview",
   );
 }

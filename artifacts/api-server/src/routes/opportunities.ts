@@ -15,7 +15,7 @@ router.use("/opportunities", (_req, res, next) => {
 function requireOpportunity(id: string, res: Response) {
   const opportunity = getOpportunityById(id);
   if (!opportunity) {
-    res.status(404).json({ success: false, error: "OPPORTUNITY_NOT_FOUND" });
+    res.status(404).json({ success: false, error: "OPPORTUNITY_NOT_FOUND", message: "OPPORTUNITY_NOT_FOUND" });
     return null;
   }
   return opportunity;
@@ -25,24 +25,36 @@ function requireQualifiedForPreview(status: OpportunityStatus) {
   if (!["QUALIFIED", "PROPOSAL_DRAFTED", "TASK_READY", "EVIDENCE_READY"].includes(status)) throw new Error("OPPORTUNITY_QUALIFICATION_REQUIRED");
 }
 
-function safeError(res: Response, error: unknown, fallback = "OPPORTUNITY_REQUEST_FAILED") {
+function safeError(res: Response, error: unknown, fallback = "OPPORTUNITY_REQUEST_FAILED", statusCode?: number) {
   const message = error instanceof Error ? error.message : fallback;
-  const status = message === "OPPORTUNITY_NOT_FOUND" ? 404 : 400;
-  res.status(status).json({ success: false, error: message });
+  const status = statusCode ?? (message === "OPPORTUNITY_NOT_FOUND" ? 404 : 400);
+  res.status(status).json({ success: false, error: message, message });
 }
 
 router.get("/opportunities/status", (_req, res) => {
-  res.json({ success: true, data: getOpportunityInboxStatus() });
+  try {
+    res.json({ success: true, data: getOpportunityInboxStatus() });
+  } catch (error) {
+    safeError(res, error, "OPPORTUNITY_STATUS_FAILED", 500);
+  }
 });
 
 router.get("/opportunities", (_req, res) => {
-  res.json({ success: true, data: { opportunities: listOpportunities(), counts: getOpportunityInboxStatus().counts } });
+  try {
+    res.json({ success: true, data: { opportunities: listOpportunities(), counts: getOpportunityInboxStatus().counts } });
+  } catch (error) {
+    safeError(res, error, "OPPORTUNITY_LIST_FAILED", 500);
+  }
 });
 
 router.get("/opportunities/:id", (req, res) => {
-  const opportunity = requireOpportunity(req.params.id, res);
-  if (!opportunity) return;
-  res.json({ success: true, data: { opportunity } });
+  try {
+    const opportunity = requireOpportunity(req.params.id, res);
+    if (!opportunity) return;
+    res.json({ success: true, data: { opportunity } });
+  } catch (error) {
+    safeError(res, error, "OPPORTUNITY_GET_FAILED", 500);
+  }
 });
 
 router.post("/opportunities/from-radar-manual-preview", (req, res) => {
@@ -120,6 +132,10 @@ router.post("/opportunities/:id/evidence-plan", (req, res) => {
   } catch (error) {
     safeError(res, error, "OPPORTUNITY_EVIDENCE_PLAN_FAILED");
   }
+});
+
+router.use("/opportunities", (_req, res) => {
+  res.status(404).json({ success: false, error: "OPPORTUNITY_ROUTE_NOT_FOUND", message: "OPPORTUNITY_ROUTE_NOT_FOUND" });
 });
 
 export default router;
