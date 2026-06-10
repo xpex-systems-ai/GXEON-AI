@@ -96,9 +96,11 @@ export function previewManualOpportunity(payload: Partial<RadarManualIntakePaylo
 export function getRadarManualIntakeStatus() {
   return {
     status: "MANUAL_INTAKE_PREVIEW_READY" as const,
+    supportedModes: ["manual_intake", "github_opportunity_preview"] as const,
     persistence: "DISABLED_IN_P0" as const,
     scraping: "DISABLED" as const,
     marketplaceAutomation: "DISABLED" as const,
+    githubOpportunityEngine: "PREVIEW_READY" as const,
     acceptedSources: Array.from(allowedSources),
   };
 }
