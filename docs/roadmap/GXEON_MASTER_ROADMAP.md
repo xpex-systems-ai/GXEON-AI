@@ -1,102 +1,52 @@
 # GXEON Master Roadmap
 
-This roadmap organizes GXEON OS from private QG readiness through controlled production activation. It is intentionally honest: it does not claim live integrations, production database activation, revenue, or customer usage unless separately validated.
+## Status table
 
-## Phase 0 — Private QG lockdown and readiness
+| Fase | Nome | Objetivo | Status atual |
+| --- | --- | --- | --- |
+| P0 | Foundation | Repositório institucional, docs, arquitetura, segurança e templates | Em upgrade documental. |
+| P1 | Connector completion | Completar GitHub, Vercel, Railway, Supabase e Microsoft 365 dentro de limites | Parcial. |
+| P2 | Memory and evidence | Estruturar memória operacional, evidências e decisões | Planejado. |
+| P3 | Home Center Agents | Agentes de leitura/proposta e aprovação humana | Blueprint. |
+| P4 | Monetization | Radar X, offers, checkout readiness, webhook, ledger e delivery | Desenhado. |
+| P5 | Agent Economy | Agentes governados por valor, reputação e auditoria | Futuro. |
 
-**Goal:** Make the private repository safe, navigable, and ready for Junior Sena's operational command-center use.
+## Milestones
 
-Deliverables:
+### P0 Foundation
 
-- Private QG README with GXEON OS positioning.
-- Repository navigation hub.
-- Brand, roadmap, operations, monetization, and status documents.
-- GitHub issue and pull request templates.
-- Build/typecheck verification without runtime behavior changes.
+- README premium.
+- Hub de documentação.
+- Arquitetura de sistema, conhecimento, memória e conectores.
+- Templates de issue e PR.
+- Relatório de entrega.
 
-Exit criteria:
+### P1 Connector completion
 
-- The operator can understand GXEON OS status and boundaries in under 10 minutes.
-- Repository status is clear and honest.
-- No secrets are exposed.
-- No database mutation or integration activation occurred.
+- Validar scopes mínimos.
+- Finalizar provedores parciais.
+- Documentar env readiness sem segredos.
 
-## Phase 1 — Dashboard and workflow hardening
+### P2 Memory and evidence
 
-**Goal:** Make the dashboard and P0-P5 workflow reliable enough for repeatable private operations.
+- Padronizar evidências.
+- Criar mapas de storage.
+- Conectar decisões a tasks e PRs.
 
-Workstreams:
+### P3 Home Center Agents
 
-- Validate dashboard build and typecheck.
-- Capture screenshot/video evidence for key screens.
-- Create an operator walkthrough for the P0 Opportunity → P1 Task → P2 Execution → P3 Validation → P4 Release → P5 Ledger flow.
-- Confirm all sample data is labeled appropriately and contains no secrets.
+- Implementar agentes read-only.
+- Evoluir para proposta.
+- Exigir approval para execução.
 
-Exit criteria:
+### P4 Monetization
 
-- Visual evidence is filed in `docs/evidence/` or GitHub issues.
-- Workflow limitations are clear.
-- Any deployment link is approved, private as needed, and safe to use.
+- Formalizar ofertas.
+- Preparar checkout readiness.
+- Validar webhooks e ledger.
 
-## Phase 2 — Integration readiness
+### P5 Agent Economy
 
-**Goal:** Prepare external systems for activation without enabling them prematurely.
-
-Workstreams:
-
-- Supabase readiness checklist.
-- API server environment validation.
-- Secrets management plan.
-- Production activation runbook.
-- Rollback and audit plan.
-
-Exit criteria:
-
-- Required environment variables are documented outside repository secrets.
-- Activation checklist is reviewed.
-- Database mutation risk is controlled.
-
-## Phase 3 — Paid delivery operations
-
-**Goal:** Define controlled paid delivery execution for selected clients or internal monetization offers.
-
-Workstreams:
-
-- Pilot scope and acceptance criteria.
-- Support and incident model.
-- Data boundaries and privacy review.
-- Reporting cadence.
-- Client/operator feedback loop.
-
-Exit criteria:
-
-- Paid delivery can run without ambiguous ownership.
-- Metrics are defined before release.
-- Claims remain evidence-based.
-
-## Phase 4 — Production activation
-
-**Goal:** Activate approved production systems only after technical, security, and business readiness gates pass.
-
-Workstreams:
-
-- Database activation.
-- API integrations.
-- Observability and alerting.
-- Billing/payment controls where applicable.
-- Release governance.
-
-Exit criteria:
-
-- Production readiness checks pass.
-- Security and secrets reviews pass.
-- Operational owners are assigned.
-- Repository and operator status statements are updated to match reality.
-
-## Cross-phase principles
-
-- Do not change production logic during documentation-only readiness work.
-- Do not mutate production or staging databases without explicit approval.
-- Do not claim integrations are live until validated.
-- Preserve existing dashboard behavior.
-- Keep monetization and operator materials aligned with technical truth.
+- Medir contribuição dos agentes.
+- Criar reputação e custos.
+- Monetizar inteligência com governança.

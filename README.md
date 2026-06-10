@@ -1,109 +1,205 @@
 # GXEON OS
 
-**Junior Sena's private operational command center for converting opportunities into shipped, validated, monetizable execution.**
+## Sistema Operacional de Operações Digitais
 
-GXEON OS is now positioned as a **private QG (quartel-general) command center repository**. It exists to help Junior Sena operate opportunities, tasks, execution, validation, release readiness, and financial ledger discipline from one controlled workspace. This repository is not a public launch surface, investor deck, or open demo promise.
+**Captura • Executa • Monetiza**
 
-## Privacy-first statement
+_The operating system for digital operations, agent execution and monetized intelligence._
 
-GXEON is private by default. Repository content should describe operational intent, module boundaries, readiness state, and monetization work without exposing secrets, customer-sensitive information, private credentials, or unapproved production claims.
+![GitHub](https://img.shields.io/badge/GitHub-CONNECTED_READONLY-2ea44f)
+![Vercel](https://img.shields.io/badge/Vercel-CONNECTED_READONLY-000000)
+![Railway](https://img.shields.io/badge/Railway-PARTIAL_READONLY-6f42c1)
+![Supabase](https://img.shields.io/badge/Supabase-PARTIAL_READONLY-3ecf8e)
+![Microsoft%20365](https://img.shields.io/badge/Microsoft%20365-P0_READY_PENDING_ENV-0078d4)
+![Security](https://img.shields.io/badge/Security-read_only_first-blue)
+![Secrets](https://img.shields.io/badge/Secrets-backend_only-red)
 
-- Keep the GitHub repository visibility set to **Private**.
-- Store secrets only in approved provider dashboards or local ignored files.
-- Do not commit `.env` files, service-role keys, database URLs, API keys, payment secrets, private keys, screenshots with secrets, or customer-sensitive data.
-- Do not activate Supabase, Railway, payment providers, external APIs, or database migrations from documentation-only work.
-- Treat every integration as inactive until explicitly validated and approved.
+GXEON OS é o **Sistema Operacional de Operações Digitais** para transformar sinais, tarefas, agentes, evidências e monetização em um fluxo único de comando. Este repositório é o centro institucional, técnico e operacional do GXEON: documenta arquitetura, conectores, segurança, memória, agentes e roadmap sem expor credenciais, prometer autonomia inexistente ou inflar status de produção.
 
-## Mission
+---
 
-GXEON's monetization mission is to turn Junior Sena's operational opportunities into cash-generating delivery offers through a disciplined P0-P5 pipeline. The system should support fast opportunity capture, clear tasking, execution tracking, delivery validation, release discipline, and ledger-based revenue visibility.
+## Mission Control snapshot
 
-## Private QG operating pipeline P0-P5
+| Domínio | Estado atual | Papel operacional | Regra de segurança |
+| --- | --- | --- | --- |
+| GitHub | `CONNECTED_READONLY` | Código, PRs, Issues, ADRs | Fonte técnica de verdade; escrita via revisão humana. |
+| Vercel | `CONNECTED_READONLY` | Interface, Deploy, Frontend | Observabilidade e publicação controlada. |
+| Railway | `PARTIAL_READONLY` | Runtime, APIs, Workers, Logs | Parcial; não tratar como controle total. |
+| Supabase | `PARTIAL_READONLY` | Memória, Storage, Eventos, Evidências | Parcial; service credentials somente no backend. |
+| Microsoft 365 | `P0_READY_PENDING_ENV` | Email, Calendar, OneDrive, Documents | Conector P0 construído, pendente de ambiente aprovado. |
+| Home Center Agents | `BLUEPRINT_READY` | Casa dos agentes e missões | Agentes propositivos antes de execução aprovada. |
+| Security model | `READ_ONLY_FIRST` | Limites, auditoria e evidências | Sem segredos no frontend e fail closed. |
 
-```text
-P0 Opportunity → P1 Task Queue → P2 Execution → P3 Validation → P4 Release → P5 Ledger
+---
+
+## O que é GXEON OS
+
+GXEON OS é uma camada operacional para coordenar **operador humano + agentes de IA + infraestrutura conectada**. A proposta é capturar sinais operacionais, converter em tarefas, acionar agentes com permissões explícitas, anexar evidências, registrar decisões e preparar monetização com disciplina.
+
+Não é apresentado como automação irrestrita. O estado atual prioriza leitura, auditoria, proposta e aprovação humana antes de qualquer ação destrutiva ou financeira.
+
+---
+
+## Core stack
+
+| Camada | Provedor | Significado no GXEON |
+| --- | --- | --- |
+| Engenharia | GitHub | Repositórios, código, issues, pull requests, ADRs e histórico técnico. |
+| Interface | Vercel | Dashboard, frontend, publicação e visualização do Mission Control. |
+| Execução | Railway | Serviços, APIs, workers, runtime e logs operacionais. |
+| Memória | Supabase | Eventos, evidências, storage, dados operacionais e trilhas de execução. |
+| Comunicação | Microsoft 365 | Documentos, email, calendário, apresentações e operação humana. |
+| Agentes | Home Center Agents | Papéis, missões, aprovações, evidências e execução governada. |
+
+---
+
+## GXEON Digital Operations OS
+
+```mermaid
+flowchart LR
+  GitHub[GitHub\nCONNECTED_READONLY] --> OS[GXEON OS\nMission Control]
+  Vercel[Vercel\nCONNECTED_READONLY] --> OS
+  Railway[Railway\nPARTIAL_READONLY] --> OS
+  Supabase[Supabase\nPARTIAL_READONLY] --> OS
+  M365[Microsoft 365\nP0_READY_PENDING_ENV] --> OS
+  OS --> HCA[Home Center Agents\nBlueprint + Approval Gates]
+  HCA --> Evidence[Evidence + Ledger + Dashboard]
 ```
 
-| Phase | Route | Purpose | Private QG rule |
+---
+
+## Home Center Agents
+
+**Home Center Agents** é a casa operacional dos agentes do GXEON. Cada agente possui missão, escopo, conectores permitidos, limites de leitura/escrita, aprovação humana e exigência de evidência. A visão inclui Code Agent, Deploy Agent, Ops Agent, Revenue Agent, Finance Agent, Security Agent, Grok Auditor Agent e Operator Agent.
+
+A regra institucional é simples: agentes podem observar, explicar e propor; execução com impacto real exige aprovação, ambiente correto, rollback e prova anexada.
+
+---
+
+## Knowledge Architecture
+
+```mermaid
+flowchart TB
+  GitHub[GitHub\nTechnical Source of Truth] --> Knowledge[GXEON Knowledge Architecture]
+  M365[Microsoft 365\nCorporate Document Layer] --> Knowledge
+  Supabase[Supabase\nOperational Memory] --> Knowledge
+  Knowledge --> OS[GXEON OS\nDashboard + Execution Layer]
+  OS --> Decisions[Decisions + Evidence + Roadmap]
+```
+
+A arquitetura de conhecimento separa código, documentos corporativos, eventos operacionais, evidências e decisões. Essa separação evita confundir intenção com produção, proposta com execução e evidência com segredo.
+
+---
+
+## Connector Topology
+
+| Provider | Status | Papel | Boundary |
 | --- | --- | --- | --- |
-| P0 Opportunity | `/ops/opportunities` | Capture monetization ideas, client leads, workflow gaps, and operational opportunities. | Record only safe, non-secret context unless stored in an approved private system. |
-| P1 Task Queue | `/ops/tasks` | Convert opportunities into prioritized, accountable execution tasks. | Keep scope, owner, acceptance criteria, and risk boundaries explicit. |
-| P2 Execution | `/ops/execution` | Track build, delivery, automation, and operator work. | Do not activate external systems without a controlled integration plan. |
-| P3 Validation | `/ops/validation` | Validate deliverables, evidence, quality, and readiness. | Separate evidence from secrets; redact sensitive screenshots before committing. |
-| P4 Release | `/ops/release` | Prepare controlled release steps and handoff decisions. | Release only after validation, rollback thinking, and environment separation are confirmed. |
-| P5 Ledger | `/ops/ledger` | Track money movement, offer performance, and revenue accountability. | No live revenue claim should be made unless backed by verified ledger evidence. |
+| GitHub | `CONNECTED_READONLY` | Engenharia, código, PRs, issues e ADRs | Leitura conectada; escrita somente por fluxo aprovado. |
+| Vercel | `CONNECTED_READONLY` | Interface, dashboard, frontend e publicação | Leitura conectada; deploy tratado como operação controlada. |
+| Railway | `PARTIAL_READONLY` | Runtime, serviços, workers, APIs e logs | Parcial; não declarar cobertura total. |
+| Supabase | `PARTIAL_READONLY` | Memória, eventos, storage, evidências e dados | Parcial; credenciais sensíveis ficam no backend. |
+| Microsoft 365 | `P0_READY_PENDING_ENV` | Documentos, email, calendário e apresentações | Pronto em P0, pendente de variáveis de ambiente aprovadas. |
 
-## Current status
+---
 
-| Category | Status | Notes |
+## Operational Pipeline
+
+```mermaid
+flowchart LR
+  Radar[Radar X] --> Tasks[Tasks]
+  Tasks --> Agents[Agents]
+  Agents --> Execution[Execution]
+  Execution --> Evidence[Evidence]
+  Evidence --> Ledger[Ledger]
+  Ledger --> Dashboard[Dashboard]
+```
+
+1. **Radar X** captura sinais, oportunidades, riscos e demandas.
+2. **Tasks** convertem sinais em trabalho priorizado.
+3. **Agents** analisam, propõem e executam apenas quando autorizados.
+4. **Execution** registra atividade controlada.
+5. **Evidence** comprova resultado sem expor segredo.
+6. **Ledger** organiza valor, custos, entregas e aprendizado.
+7. **Dashboard** mostra estado operacional para decisão humana.
+
+---
+
+## Security Principles
+
+- **No secrets in frontend:** credenciais nunca entram em código cliente, markdown público, screenshots ou logs commitados.
+- **Backend-only credentials:** tokens, chaves e segredos vivem em provedores aprovados e rotas server-side.
+- **Read-only first:** conectores começam como leitura antes de qualquer capacidade mutável.
+- **Fail closed:** ausência de configuração segura bloqueia execução em vez de degradar permissões.
+- **Human approval gates:** ações destrutivas, financeiras, deploys e escritas externas exigem aprovação.
+- **Evidence and audit trail:** toda execução relevante deve gerar evidência segura e rastreável.
+
+---
+
+## Current Status
+
+| Área | Estado | Observação honesta |
 | --- | --- | --- |
-| Repository positioning | Private QG lockdown active | Documentation is being oriented around private command-center operations. |
-| Dashboard | Buildable workspace package | Dashboard code remains present; P0-P5 routes must remain stable. |
-| API server | Code package present | Do not claim production activation without validation. |
-| Supabase | Inactive / readiness only | Do not connect, migrate, push schemas, or expose service-role keys. |
-| Railway | Inactive / readiness only | Do not provision or deploy from this lockdown work. |
-| External APIs | Inactive by default | No external API activation is part of this mission. |
-| Payments and billing | Inactive / planning | Payment secrets and provider credentials must stay out of the repo. |
-| Monetization | Active planning | Focus is immediate cash-generation offers routed through P0-P5. |
+| Repository presentation | `P0_UPGRADED` | Este repositório agora possui documentação institucional e operacional. |
+| Connectors | `MIXED_READONLY` | GitHub e Vercel conectados em leitura; Railway e Supabase parciais; Microsoft 365 pendente de ambiente. |
+| Home Center Agents | `BLUEPRINT` | Blueprint e roadmap documentados; não tratados como runtime autônomo final. |
+| Monetization path | `DESIGNED` | Caminho documentado; receita deve ser registrada somente com evidência real. |
+| Security model | `DOCUMENTED` | Políticas de backend-only, leitura primeiro e aprovação humana formalizadas. |
 
-## Stack overview
+---
 
-| Layer | Tools / packages |
+## Roadmap
+
+| Fase | Nome | Resultado esperado |
+| --- | --- | --- |
+| P0 | Foundation | Repositório, arquitetura, segurança, conectores e narrativa alinhados. |
+| P1 | Connector completion | Completar conectores parciais sem violar limites de segurança. |
+| P2 | Memory and evidence | Consolidar memória operacional, evidências e decisões. |
+| P3 | Home Center Agents | Ativar agentes de leitura/proposta com gates humanos. |
+| P4 | Monetization | Conectar ofertas, checkout readiness, webhook e ledger real. |
+| P5 | Agent Economy | Evoluir agentes para economia governada por permissões, auditoria e valor comprovado. |
+
+---
+
+## Documentation Index
+
+| Documento | Finalidade |
 | --- | --- |
-| Monorepo | pnpm workspace, TypeScript |
-| Dashboard | Vite, React, Tailwind-oriented UI package structure |
-| API package | Express, TypeScript, Pino |
-| Contracts | API spec, Zod contracts, React client package |
-| Data readiness | Drizzle ORM, Supabase client package, database validation package |
-| Operations | Runtime, events, queues, operators, telemetry, analytics, governance scripts |
-| Validation | TypeScript checks, Vite builds, repository scripts, GitHub workflows |
+| [Docs hub](docs/README.md) | Índice central da documentação GXEON OS. |
+| [Manifesto](docs/manifesto/GXEON_MANIFESTO.md) | Missão, visão e princípios. |
+| [System Architecture](docs/architecture/GXEON_SYSTEM_ARCHITECTURE.md) | Camadas, fluxos e diagrama técnico. |
+| [Knowledge Architecture](docs/architecture/GXEON_KNOWLEDGE_ARCHITECTURE.md) | Árvore de conhecimento e fontes de verdade. |
+| [Company Memory Map](docs/architecture/GXEON_COMPANY_MEMORY_MAP.md) | Onde cada memória corporativa vive. |
+| [Connector Topology](docs/architecture/GXEON_CONNECTOR_TOPOLOGY.md) | Mapa de conectores, status e limites. |
+| [Home Center Agents Blueprint](docs/agents/HOME_CENTER_AGENTS_BLUEPRINT.md) | Casa dos agentes, papéis e permissões. |
+| [Home Center Agents Roadmap](docs/agents/HOME_CENTER_AGENTS_ROADMAP.md) | Fases de ativação governada. |
+| [Connectors Overview](docs/connectors/GXEON_CONNECTORS_OVERVIEW.md) | Visão operacional dos conectores. |
+| [Operational Playbook](docs/operations/GXEON_OPERATIONAL_PLAYBOOK.md) | Workflow do operador e validação. |
+| [Security Model](docs/security/GXEON_SECURITY_MODEL.md) | Políticas de segurança e ações proibidas. |
+| [Monetization Path](docs/monetization/GXEON_MONETIZATION_PATH.md) | Caminho Radar X até ledger e entrega. |
+| [Master Roadmap](docs/roadmap/GXEON_MASTER_ROADMAP.md) | P0-P5 e status atual. |
+| [Brand System](docs/brand/GXEON_BRAND_SYSTEM.md) | Voz, termos oficiais e tom. |
+| [Assets](docs/assets/README.md) | Estrutura de placeholders visuais. |
 
-## Module map
+---
 
-| Area | Path | Purpose |
-| --- | --- | --- |
-| Web dashboard | `artifacts/gxeon-dashboard` | Private command-center dashboard experience. |
-| Mobile dashboard | `artifacts/gxeon-dashboard-mobile` | Mobile-oriented dashboard package. |
-| API server | `artifacts/api-server` | Express-based API server package. |
-| Mockup sandbox | `artifacts/mockup-sandbox` | Visual sandbox for controlled internal UI iteration. |
-| API contracts | `lib/api-spec`, `lib/api-zod`, `lib/api-client-react` | Shared API definitions and typed client boundaries. |
-| Database library | `lib/db` | Database schema and validation package; do not push migrations during lockdown. |
-| Runtime | `runtime` | Execution engine, dispatcher, worker, compensation, persistence, and telemetry boundaries. |
-| Operators | `operators` | Operator and live-operator concepts. |
-| Events and queues | `events`, `queues` | Event and queue domain boundaries. |
-| Analytics and telemetry | `analytics`, `telemetry` | Measurement and performance concepts. |
-| Billing and payments | `billing`, `payments` | Revenue-supporting boundaries; no provider activation by default. |
-| Governance and infrastructure | `governance`, `infrastructure`, `scripts` | Operational checks, platform scripts, and infrastructure references. |
-| Documentation hub | `docs` | Private QG operations, security, roadmap, and monetization documentation. |
+## Operator Workflow
 
-## Next phase: real monetization and controlled integrations
+1. Abrir Mission Control e identificar sinais em Radar X.
+2. Converter sinal em task com objetivo, owner, risco e critério de aceite.
+3. Atribuir agente apenas com escopo e conector permitidos.
+4. Exigir evidência segura antes de marcar execução como concluída.
+5. Registrar decisão, impacto e rollback quando houver mudança operacional.
+6. Atualizar ledger apenas com fatos verificáveis, nunca com promessa ou estimativa não rotulada.
 
-The next phase is not public launch activity. It is private execution toward real monetization with safety gates:
+---
 
-1. Convert viable offers into P0 opportunities.
-2. Break the best opportunities into P1 tasks with owners, acceptance criteria, and revenue targets.
-3. Execute P2 delivery work for one immediate cash-generating offer at a time.
-4. Validate P3 evidence before any client handoff or release claim.
-5. Use P4 release discipline for controlled delivery, rollback notes, and environment separation.
-6. Track money, invoices, payment state, and lessons in P5 ledger workflows.
-7. Prepare integrations only after secrets, environments, provider dashboards, and rollback rules are documented.
+## No-secrets policy
 
-## Safety boundaries
+Este repositório não deve conter tokens, chaves privadas, client secrets, service role keys, arquivos de ambiente reais, URLs privadas ou screenshots com credenciais. Exemplos e templates devem usar nomes genéricos, sem valores reais. Qualquer credencial pertence ao backend, a um provedor de secrets ou a um ambiente local ignorado pelo Git.
 
-- Do not activate APIs during repository-positioning work.
-- Do not connect Supabase or Railway during repository-positioning work.
-- Do not run database migrations from this mission.
-- Do not expose secrets in commits, logs, screenshots, issues, or documentation.
-- Do not remove or break core GXEON operational modules.
-- Preserve `/ops/opportunities`, `/ops/tasks`, `/ops/execution`, `/ops/validation`, `/ops/release`, and `/ops/ledger`.
-- Keep build configuration intact.
+---
 
-## Operator checklist
+## Manifesto final
 
-Before using GXEON for real monetization work:
-
-1. Confirm GitHub visibility is **Private** in repository settings.
-2. Review the private security checklist in `docs/operations/GXEON_PRIVATE_SECURITY_CHECKLIST.md`.
-3. Review the private QG status in `GXEON_PRIVATE_QG_STATUS.md`.
-4. Route new revenue work through the monetization plan in `docs/monetization/GXEON_REAL_MONETIZATION_PLAN.md`.
-5. Validate dashboard typecheck/build before relying on UI changes.
+> GXEON OS não é apenas um painel. É uma disciplina operacional: capturar o que importa, executar com controle, monetizar com evidência e governar cada decisão como memória viva da empresa.
