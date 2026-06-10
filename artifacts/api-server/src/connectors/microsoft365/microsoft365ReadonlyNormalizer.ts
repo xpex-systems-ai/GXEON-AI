@@ -94,7 +94,11 @@ function evidence(readiness: {
       title: readiness.tenantReachable ? "Tenant metadata reachable" : "Tenant metadata not ready",
       description: readiness.tenantReachable
         ? "Microsoft identity OpenID metadata was reachable from the backend."
-        : "Tenant metadata is not confirmed; check backend tenant id and network reachability.",
+        : readiness.lastErrorCode === "MISSING_MICROSOFT365_CONFIG"
+          ? "Create or access Microsoft Entra tenant before App Registration, then configure the backend tenant id without exposing secrets."
+          : readiness.lastErrorCode === "MICROSOFT365_400" || readiness.lastErrorCode === "MICROSOFT365_404"
+            ? "Check tenant ID or directory availability before retrying consent readiness."
+            : "Tenant metadata is not confirmed; check backend tenant id and network reachability.",
       occurredAt: now,
       source: "Microsoft identity OpenID configuration probe",
     },
@@ -199,7 +203,7 @@ export function createMicrosoft365ReadonlyNotConfiguredSnapshot(
       ok: false,
       status: null,
       code: errorCode,
-      safeMessage: "Microsoft 365 backend OAuth environment is not configured.",
+      safeMessage: "Create or access Microsoft Entra tenant before App Registration. Then configure Microsoft 365 backend OAuth environment variables.",
       authorizationEndpointReady: false,
       tokenEndpointReady: false,
     },
