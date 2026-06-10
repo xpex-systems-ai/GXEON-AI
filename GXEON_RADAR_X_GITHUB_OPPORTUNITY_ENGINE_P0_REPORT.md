@@ -39,3 +39,7 @@ Radar X now supports two P0 preview modes:
 Without a backend token, the API performs public GitHub REST API search with a stricter default cap. If GitHub rate-limits the request, the route fails closed with a normalized diagnostic.
 
 With a backend token from `GITHUB_TOKEN`, `GITHUB_READONLY_TOKEN` or the existing `GITHUB_CONNECTOR_TOKEN`, the API can return up to ten preview-only scored candidates.
+
+## Follow-up hardening
+
+After the production heartbeat confirmed `authenticated: false`, the preview response was hardened with explicit public-mode diagnostics: `normalizedQuery`, `effectiveLimit`, `authenticated` and REST endpoint metadata. Repository metadata enrichment is best-effort so one public repository metadata read failure does not discard the entire issue-search preview response.

@@ -72,3 +72,17 @@ With the API server running on port 3000:
 - `GET http://localhost:3000/api/radar/github/status`
 - `POST http://localhost:3000/api/radar/github/search-preview`
 - `POST http://localhost:3000/api/radar/github/score-preview`
+
+## Production heartbeat and first opportunity search
+
+The heartbeat route should return `GITHUB_OPPORTUNITY_PREVIEW_READY` even when `authenticated` is `false`. In unauthenticated mode, the engine still uses public GitHub REST API search but applies a stricter effective limit to reduce rate-limit pressure.
+
+Production validation example:
+
+```bash
+curl -X POST https://gxeon-api-server-production.up.railway.app/api/radar/github/search-preview \
+  -H "Content-Type: application/json" \
+  -d "{\"query\":\"label:\\\"help wanted\\\" supabase integration\",\"limit\":3}"
+```
+
+The search response includes `normalizedQuery`, `effectiveLimit`, `authenticated` and diagnostics so operators can distinguish a healthy public-mode search from token-backed higher-stability mode.

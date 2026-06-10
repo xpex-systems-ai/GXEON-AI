@@ -137,6 +137,31 @@ async function readRepository(repositoryUrl: string, token: string | null): Prom
   return readJson<GitHubRepositoryResponse>(endpoint(`/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}`), token);
 }
 
+function fallbackRepository(repositoryUrl: string): GitHubRepositoryResponse {
+  const fullName = repositoryFullName(repositoryUrl);
+  return {
+    full_name: fullName ?? "unknown/unknown",
+    html_url: fullName ? `https://github.com/${fullName}` : undefined,
+    description: null,
+    stargazers_count: 0,
+    open_issues_count: 0,
+    pushed_at: null,
+    updated_at: null,
+    language: null,
+  };
+}
+
+async function readRepositoryBestEffort(repositoryUrl: string, token: string | null): Promise<{ repository: GitHubRepositoryResponse; metadataFailed: boolean }> {
+  try {
+    return { repository: await readRepository(repositoryUrl, token), metadataFailed: false };
+  } catch (error) {
+    if (error instanceof GitHubOpportunityClientError) {
+      return { repository: fallbackRepository(repositoryUrl), metadataFailed: true };
+    }
+    throw error;
+  }
+}
+
 function labelsFor(item: GitHubSearchIssueItem): string[] {
   return (item.labels ?? []).map((label) => cleanText(typeof label === "string" ? label : label.name, 80)).filter(Boolean).slice(0, 12);
 }
@@ -195,6 +220,23 @@ export async function searchGitHubOpportunityPreview(input: GitHubOpportunitySea
 
   const token = backendToken();
   const limit = normalizeLimit(input.limit, Boolean(token));
+  const normalizedQuery = `${query} type:issue state:open archived:false`;
+  const search = await readJson<GitHubSearchIssuesResponse>(endpoint("/search/issues", { q: normalizedQuery, sort: "updated", order: "desc", per_page: limit }), token);
+  const candidates: ScoredGitHubOpportunityCandidate[] = [];
+  let skippedPullRequests = 0;
+  let skippedInvalidCandidates = 0;
+  let repositoryMetadataFailures = 0;
+
+  for (const item of search.items.slice(0, limit)) {
+    if (item.pull_request) {
+      skippedPullRequests += 1;
+      continue;
+    }
+    const { repository, metadataFailed } = await readRepositoryBestEffort(item.repository_url, token);
+    if (metadataFailed) repositoryMetadataFailures += 1;
+    const candidate = candidateFromIssue(item, repository, input.category);
+    if (candidate) candidates.push({ ...candidate, opportunityScore: scoreGitHubOpportunity(candidate) });
+    else skippedInvalidCandidates += 1;
   const q = `${query} type:issue state:open archived:false`;
   const search = await readJson<GitHubSearchIssuesResponse>(endpoint("/search/issues", { q, sort: "updated", order: "desc", per_page: limit }), token);
   const candidates: ScoredGitHubOpportunityCandidate[] = [];
@@ -210,6 +252,19 @@ export async function searchGitHubOpportunityPreview(input: GitHubOpportunitySea
     status: "GITHUB_OPPORTUNITY_PREVIEW_READY",
     ...githubOpportunityRuntimeBoundaries,
     query,
+    normalizedQuery,
+    category: input.category && input.category.trim() ? inferGitHubOpportunityCategory({ requestedCategory: input.category }) : null,
+    maxCandidates: GITHUB_OPPORTUNITY_MAX_CANDIDATES,
+    effectiveLimit: limit,
+    authenticated: Boolean(token),
+    diagnostics: {
+      provider: "github_rest_api",
+      searchEndpoint: "/search/issues",
+      repositoryMetadataMode: "best_effort_public_rest_api",
+      skippedPullRequests,
+      skippedInvalidCandidates,
+      repositoryMetadataFailures,
+    },
     category: input.category && input.category.trim() ? inferGitHubOpportunityCategory({ requestedCategory: input.category }) : null,
     maxCandidates: GITHUB_OPPORTUNITY_MAX_CANDIDATES,
     candidates,

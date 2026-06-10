@@ -103,6 +103,19 @@ export type GitHubOpportunityPreview = {
   externalContact: "NONE";
   githubWrites: false;
   query: string;
+  normalizedQuery: string;
+  category: GitHubOpportunityCategory | null;
+  maxCandidates: 10;
+  effectiveLimit: number;
+  authenticated: boolean;
+  diagnostics: {
+    provider: "github_rest_api";
+    searchEndpoint: "/search/issues";
+    repositoryMetadataMode: "best_effort_public_rest_api";
+    skippedPullRequests: number;
+    skippedInvalidCandidates: number;
+    repositoryMetadataFailures: number;
+  };
   category: GitHubOpportunityCategory | null;
   maxCandidates: 10;
   candidates: ScoredGitHubOpportunityCandidate[];

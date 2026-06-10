@@ -225,6 +225,16 @@ export default function RadarXOperationalPage() {
           <div className="space-y-6">
             <RuntimeBoundaries status={status} githubStatus={githubStatus} />
             <div className="space-y-4">
+              {githubPreview && (
+                <Card className="border-white/10 bg-slate-950/75 backdrop-blur-xl">
+                  <CardContent className="grid gap-3 p-4 text-xs text-slate-300 md:grid-cols-2">
+                    <p>Normalized query: <span className="text-cyan-100">{githubPreview.normalizedQuery}</span></p>
+                    <p>Effective limit: {githubPreview.effectiveLimit} · authenticated: {githubPreview.authenticated ? "true" : "false"}</p>
+                    <p>Provider: {githubPreview.diagnostics.provider} {githubPreview.diagnostics.searchEndpoint}</p>
+                    <p>Skipped PRs: {githubPreview.diagnostics.skippedPullRequests} · metadata fallbacks: {githubPreview.diagnostics.repositoryMetadataFailures}</p>
+                  </CardContent>
+                </Card>
+              )}
               {githubPreview?.candidates.length ? githubPreview.candidates.map((candidate) => (
                 <Card key={candidate.id} className="border-cyan-300/20 bg-slate-950/75 backdrop-blur-xl">
                   <CardHeader>
