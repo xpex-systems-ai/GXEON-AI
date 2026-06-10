@@ -157,7 +157,8 @@ async function readJson<T>(response: Response, route: string): Promise<T> {
   }
 
   if (!response.ok || !payload.success) {
-    throw new Error(`${payload.message ?? payload.error ?? `REQUEST_FAILED_${response.status}`}: ${route}`);
+    const message = payload.message ?? payload.error ?? "Backend request failed";
+    throw new Error(`REQUEST_FAILED_${response.status}: ${message}: ${route}`);
   }
 
   return payload.data as T;
