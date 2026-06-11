@@ -11,6 +11,7 @@ import GxeonOSPage from "@/pages/GxeonOSPage";
 import GxeonPlaceholderPage from "@/pages/GxeonPlaceholderPage";
 import OpportunityInboxPage from "@/pages/OpportunityInboxPage";
 import TaskQueuePage from "@/pages/TaskQueuePage";
+import BrokerPage from "@/pages/BrokerPage";
 import ExecutionTrackerPage from "@/pages/ExecutionTrackerPage";
 import DeliveryValidationPage from "@/pages/DeliveryValidationPage";
 import RevenueReleaseGatePage from "@/pages/RevenueReleaseGatePage";
@@ -76,6 +77,7 @@ function Router() {
           <Switch>
             <Route path="/ops/opportunities" component={OpportunityInboxPage} />
             <Route path="/ops/tasks" component={TaskQueuePage} />
+            <Route path="/ops/broker" component={BrokerPage} />
             <Route path="/ops/execution" component={ExecutionTrackerPage} />
             <Route path="/ops/validation" component={DeliveryValidationPage} />
             <Route path="/ops/release" component={RevenueReleaseGatePage} />

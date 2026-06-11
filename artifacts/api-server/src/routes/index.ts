@@ -14,6 +14,7 @@ import monetizationRouter from "./monetization";
 import radarRouter from "./radar";
 import opportunitiesRouter from "./opportunities";
 import agentsRouter from "./agents";
+import brokerRouter from "./broker";
 import tasksRouter from "./tasks";
 
 const router: IRouter = Router();
@@ -34,5 +35,6 @@ router.use(radarRouter);
 router.use(opportunitiesRouter);
 router.use(tasksRouter);
 router.use(agentsRouter);
+router.use(brokerRouter);
 
 export default router;
