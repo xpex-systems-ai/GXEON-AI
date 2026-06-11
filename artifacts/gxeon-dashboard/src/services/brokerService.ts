@@ -1,3 +1,5 @@
+import { apiUrl, getApiBaseDiagnostic } from "./apiBase";
+
 export type BrokerMode = "PREVIEW_ONLY";
 export type BrokerRouteRole = "PLAN" | "DRAFT" | "REVIEW" | "SECURITY_REVIEW" | "OPERATOR_APPROVAL";
 
@@ -56,6 +58,12 @@ export type BrokerStatus = {
   quantumAdvisoryAvailable: boolean;
   registryAgentsAvailable: number;
   boundaries: string[];
+  diagnostics?: {
+    apiBase: string;
+    attemptedRoute: string;
+    failureType: "network_error" | "non_json" | "non_2xx" | "invalid_json" | "misconfigured_backend_url" | "unknown";
+    message: string;
+  };
 };
 
 export type BrokerPreviewRouteInput = {
@@ -69,23 +77,40 @@ export type BrokerPreviewRouteInput = {
   riskFlags?: string[];
 };
 
-const configuredApiBaseUrl = (import.meta.env.VITE_GXEON_API_BASE_URL as string | undefined)?.trim().replace(/\/+$/, "") ?? "";
-
-function apiUrl(path: string): string {
-  return `${configuredApiBaseUrl}${path}`;
-}
-
 async function readJson<T>(response: Response, route: string): Promise<T> {
   const contentType = response.headers.get("content-type") ?? "";
   const bodyText = await response.text();
   if (!bodyText.trim()) throw new Error(`REQUEST_FAILED_${response.status}: Empty response body from ${route}`);
-  if (!contentType.toLowerCase().includes("application/json")) throw new Error(`BACKEND_NON_JSON_RESPONSE: ${route} returned ${response.status}`);
-  const payload = JSON.parse(bodyText) as { success?: boolean; data?: T; error?: string; message?: string };
+  if (!contentType.toLowerCase().includes("application/json")) {
+    const bodyExcerpt = bodyText.trim().slice(0, 160);
+    throw new Error(`BACKEND_NON_JSON_RESPONSE: ${route} returned ${response.status}${bodyExcerpt ? ` - ${bodyExcerpt}` : ""}`);
+  }
+
+  let payload: { success?: boolean; data?: T; error?: string; message?: string };
+  try {
+    payload = JSON.parse(bodyText) as { success?: boolean; data?: T; error?: string; message?: string };
+  } catch {
+    throw new Error(`BACKEND_INVALID_JSON_RESPONSE: ${route} returned ${response.status}`);
+  }
+
   if (!response.ok || !payload.success) throw new Error(`REQUEST_FAILED_${response.status}: ${payload.message ?? payload.error ?? "Broker request failed"}`);
   return payload.data as T;
 }
 
-function fallbackStatus(): BrokerStatus {
+function classifyBrokerFailure(error: unknown): NonNullable<BrokerStatus["diagnostics"]>["failureType"] {
+  if (!(error instanceof Error)) return "unknown";
+  if (error.message.startsWith("BACKEND_URL_MISCONFIGURED")) return "misconfigured_backend_url";
+  if (error.message.startsWith("BACKEND_NON_JSON_RESPONSE")) return "non_json";
+  if (error.message.startsWith("BACKEND_INVALID_JSON_RESPONSE")) return "invalid_json";
+  if (error.message.startsWith("REQUEST_FAILED_")) return "non_2xx";
+  return "network_error";
+}
+
+function brokerFailureMessage(error: unknown): string {
+  return error instanceof Error ? error.message : "BROKER_BACKEND_UNAVAILABLE";
+}
+
+function fallbackStatus(error?: unknown, attemptedRoute = "/api/broker/status"): BrokerStatus {
   return {
     status: "BROKER_P0_FALLBACK",
     mode: "PREVIEW_ONLY",
@@ -99,6 +124,12 @@ function fallbackStatus(): BrokerStatus {
     quantumAdvisoryAvailable: false,
     registryAgentsAvailable: 0,
     boundaries: ["Backend unavailable; UI is showing safe fallback boundaries only.", "No execution, install, external contact, GitHub write or payment action is enabled."],
+    diagnostics: {
+      apiBase: getApiBaseDiagnostic(),
+      attemptedRoute,
+      failureType: classifyBrokerFailure(error),
+      message: brokerFailureMessage(error),
+    },
   };
 }
 
@@ -131,8 +162,9 @@ function fallbackDecision(input: BrokerPreviewRouteInput, reason: string): Broke
 export async function fetchBrokerStatus(signal?: AbortSignal): Promise<BrokerStatus> {
   try {
     return await readJson<BrokerStatus>(await fetch(apiUrl("/api/broker/status"), { headers: { Accept: "application/json" }, signal }), "/api/broker/status");
-  } catch {
-    return fallbackStatus();
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") throw error;
+    return fallbackStatus(error);
   }
 }
 
@@ -140,7 +172,8 @@ export async function fetchBrokerDecisions(signal?: AbortSignal): Promise<Broker
   try {
     const data = await readJson<{ decisions: BrokerDecisionPreview[] }>(await fetch(apiUrl("/api/broker/decisions"), { headers: { Accept: "application/json" }, signal }), "/api/broker/decisions");
     return data.decisions;
-  } catch {
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") throw error;
     return [];
   }
 }
@@ -149,7 +182,8 @@ export async function fetchBrokerDecisionById(id: string, signal?: AbortSignal):
   try {
     const data = await readJson<{ decision: BrokerDecisionPreview }>(await fetch(apiUrl(`/api/broker/decisions/${id}`), { headers: { Accept: "application/json" }, signal }), `/api/broker/decisions/${id}`);
     return data.decision;
-  } catch {
+  } catch (error) {
+    if (error instanceof DOMException && error.name === "AbortError") throw error;
     return null;
   }
 }
@@ -159,6 +193,7 @@ export async function previewBrokerRoute(input: BrokerPreviewRouteInput): Promis
     const data = await readJson<{ decision: BrokerDecisionPreview }>(await fetch(apiUrl("/api/broker/preview-route"), { method: "POST", headers: { Accept: "application/json", "Content-Type": "application/json" }, body: JSON.stringify(input) }), "/api/broker/preview-route");
     return data.decision;
   } catch (error) {
-    return fallbackDecision(input, error instanceof Error ? error.message : "BROKER_BACKEND_UNAVAILABLE");
+    if (error instanceof DOMException && error.name === "AbortError") throw error;
+    return fallbackDecision(input, brokerFailureMessage(error));
   }
 }
