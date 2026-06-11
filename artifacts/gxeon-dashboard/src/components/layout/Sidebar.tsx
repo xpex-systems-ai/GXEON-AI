@@ -19,7 +19,7 @@ const navGroups = [
     title: "Acquisition",
     items: [
       { label: "Radar X", href: "/ops/radar-x", icon: Radar, status: "review" },
-      { label: "Agent Conectou", href: "/ops/agent-conectou", icon: Plug, status: "review" },
+      { label: "Home Agents", href: "/ops/agent-conectou", icon: Plug, status: "review" },
       { label: "Proposals", href: "/marketplace", icon: TrendingUp, status: "live" },
     ],
   },
