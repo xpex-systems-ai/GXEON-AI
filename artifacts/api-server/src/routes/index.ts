@@ -13,6 +13,7 @@ import microsoft365ConnectorRouter from "./connectors/microsoft365";
 import monetizationRouter from "./monetization";
 import radarRouter from "./radar";
 import opportunitiesRouter from "./opportunities";
+import agentsRouter from "./agents";
 
 const router: IRouter = Router();
 
@@ -30,5 +31,6 @@ router.use(microsoft365ConnectorRouter);
 router.use(monetizationRouter);
 router.use(radarRouter);
 router.use(opportunitiesRouter);
+router.use(agentsRouter);
 
 export default router;
