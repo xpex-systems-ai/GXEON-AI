@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
-import { BrainCircuit, CircleDot, Database, GitBranch, Inbox, Kanban, ListChecks, LockKeyhole, Plug, Radar, Rocket, ShieldCheck, Table2, TrendingUp, Workflow } from "lucide-react";
+import { BrainCircuit, CircleDot, Database, GitBranch, Inbox, Kanban, ListChecks, LockKeyhole, Plug, Radar, Rocket, Route, ShieldCheck, Table2, TrendingUp, Workflow } from "lucide-react";
 
 const navGroups = [
   {
@@ -8,6 +8,7 @@ const navGroups = [
     items: [
       { label: "Inbox", href: "/ops/opportunities", icon: Inbox, status: "live" },
       { label: "Tasks", href: "/ops/tasks", icon: ListChecks, status: "live" },
+      { label: "Broker P0", href: "/ops/broker", icon: Route, status: "review" },
       { label: "Execution", href: "/ops/execution", icon: Workflow, status: "pending" },
       { label: "Validation", href: "/ops/validation", icon: ShieldCheck, status: "pending" },
       { label: "Release", href: "/ops/release", icon: Rocket, status: "pending" },

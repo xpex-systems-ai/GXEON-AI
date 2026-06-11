@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { approveManualExecution, blockTask, cancelTask, fetchTaskQueue, fetchTaskQueueStatus, type TaskQueueCounts, type TaskQueueReadinessStatus, type TaskQueueRecord, type TaskQueueStatus } from "@/services/taskQueueService";
+import { previewBrokerRoute, type BrokerDecisionPreview } from "@/services/brokerService";
 import { simulateQuantumTaskRoute } from "@/services/homeCenterAgentsService";
 import { ArrowRight, ClipboardCheck, Inbox, Link2, Lock, ShieldCheck, XCircle } from "lucide-react";
 
@@ -34,6 +35,7 @@ export default function TaskQueuePage() {
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [brokerPreview, setBrokerPreview] = useState<BrokerDecisionPreview | null>(null);
 
   async function refresh(signal?: AbortSignal) {
     const [runtimeStatus, queue] = await Promise.all([fetchTaskQueueStatus(signal), fetchTaskQueue(signal)]);
@@ -75,6 +77,30 @@ export default function TaskQueuePage() {
       await refresh();
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : "TASK_QUEUE_ACTION_FAILED");
+    } finally {
+      setLoadingAction(null);
+    }
+  }
+
+  async function previewTaskRoute(task: TaskQueueRecord) {
+    setLoadingAction(`broker:${task.id}`);
+    setError(null);
+    setNotice(null);
+    try {
+      const decision = await previewBrokerRoute({
+        taskId: task.id,
+        title: task.title,
+        summary: task.summary,
+        category: task.category,
+        requiredConnectors: task.requiredConnectors,
+        forbiddenActions: task.forbiddenActions,
+        approvalGates: task.approvalGates,
+        riskFlags: task.riskFlags,
+      });
+      setBrokerPreview(decision);
+      setNotice(`Broker preview created: ${decision.id}. Approval required; execution disabled.`);
+    } catch (brokerError) {
+      setError(brokerError instanceof Error ? brokerError.message : "BROKER_PREVIEW_FAILED");
     } finally {
       setLoadingAction(null);
     }
@@ -124,6 +150,7 @@ export default function TaskQueuePage() {
 
       {error ? <Card className="border-red-300/20 bg-red-500/10"><CardContent className="p-4 text-sm text-red-100">{error}</CardContent></Card> : null}
       {notice ? <Card className="border-emerald-300/20 bg-emerald-500/10"><CardContent className="p-4 text-sm text-emerald-100">{notice}</CardContent></Card> : null}
+      {brokerPreview ? <Card className="border-violet-300/20 bg-violet-500/10"><CardContent className="p-4 text-sm text-violet-50"><p className="font-bold">Broker route preview · {brokerPreview.mode}</p><p className="mt-1">Recommended: {brokerPreview.recommendedAgents.map((agent) => `${agent.agentName} (${agent.routeRole})`).join(" → ")}</p><p className="mt-1">Risk energy {brokerPreview.riskEnergy}; safety grade {brokerPreview.safetyGrade}; executionDisabled={String(brokerPreview.executionDisabled)}.</p></CardContent></Card> : null}
 
       <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
         {statusOrder.map((taskStatus) => <Card key={taskStatus} className="border-white/10 bg-slate-950/75"><CardContent className="p-4"><Badge variant="outline" className={statusTone[taskStatus]}>{taskStatus.replaceAll("_", " ")}</Badge><p className="mt-3 text-2xl font-black text-white">{counts[taskStatus]}</p></CardContent></Card>)}
@@ -155,6 +182,7 @@ export default function TaskQueuePage() {
                     <p className="mt-2 text-sm font-semibold text-white">{task.nextStep}</p>
                     {task.repository || task.sourceUrl ? <p className="mt-4 flex items-center gap-2 text-xs text-blue-100"><Link2 className="h-3 w-3" />{task.repository ?? task.sourceUrl}</p> : null}
                     <div className="mt-4 grid gap-2">
+                      <Button disabled={loadingAction === `broker:${task.id}`} onClick={() => previewTaskRoute(task)} variant="outline" className="border-violet-300/30 text-violet-100 hover:bg-violet-400/10"><ShieldCheck className="mr-2 h-4 w-4" />Preview Broker Route</Button>
                       <Button disabled={loadingAction === `approve:${task.id}` || task.status === "APPROVED_FOR_MANUAL_EXECUTION" || task.status === "DONE" || task.status === "CANCELLED"} onClick={() => mutateTask(task, "approve")} className="bg-blue-300 text-slate-950 hover:bg-blue-200"><ClipboardCheck className="mr-2 h-4 w-4" />Approve Manual Execution</Button>
                       <Button disabled={loadingAction === `block:${task.id}` || task.status === "BLOCKED" || task.status === "DONE" || task.status === "CANCELLED"} onClick={() => mutateTask(task, "block")} variant="outline" className="border-amber-300/30 text-amber-100 hover:bg-amber-400/10"><Lock className="mr-2 h-4 w-4" />Block</Button>
                       <Button disabled={loadingAction === `cancel:${task.id}` || task.status === "DONE" || task.status === "CANCELLED"} onClick={() => mutateTask(task, "cancel")} variant="outline" className="border-red-300/30 text-red-100 hover:bg-red-400/10"><XCircle className="mr-2 h-4 w-4" />Cancel</Button>
