@@ -1,14 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { OperationalEmptyState } from "@/components/ops/OperationalEmptyState";
 import { operationalEmptyStates } from "@/data/operational-mode";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
+import { createLedgerPreviewFromRelease } from "@/services/ledgerService";
 import { fetchReleaseGateStatus, fetchReleasePreviews, fallbackReleaseGateStatus, type EvidenceCompleteness, type FinancialReadinessState, type OperatorApprovalStatus, type ReleaseGatePreviewRecord, type ReleaseGateStatusSummary, type ReleaseStatus } from "@/services/releaseGateService";
-import { ArrowRight, BadgeDollarSign, CheckCircle2, CircleDollarSign, GitBranch, KanbanSquare, Lock, ReceiptText, ShieldCheck, TriangleAlert, WalletCards, XCircle } from "lucide-react";
+import { ArrowRight, BadgeDollarSign, CheckCircle2, CircleDollarSign, Lock, ReceiptText, ShieldCheck, TriangleAlert, WalletCards, XCircle } from "lucide-react";
 
 const releaseTone: Record<ReleaseStatus, string> = {
   PENDING_REVIEW: "border-violet-300/30 bg-violet-400/10 text-violet-100",
@@ -56,6 +58,7 @@ export default function RevenueReleaseGatePage() {
   const [status, setStatus] = useState<ReleaseGateStatusSummary>(() => fallbackReleaseGateStatus());
   const [previews, setPreviews] = useState<ReleaseGatePreviewRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [ledgerActionByReleaseId, setLedgerActionByReleaseId] = useState<Record<string, "creating" | "created" | "failed">>({});
 
   useEffect(() => {
     const controller = new AbortController();
@@ -87,6 +90,12 @@ export default function RevenueReleaseGatePage() {
   }, [previews]);
 
   const statusCounts = status.allowedReleaseStatuses.map((releaseStatus) => ({ status: releaseStatus, count: countStatus(previews, releaseStatus) }));
+
+  async function handleCreateLedgerPreview(release: ReleaseGatePreviewRecord) {
+    setLedgerActionByReleaseId((current) => ({ ...current, [release.id]: "creating" }));
+    const ledgerPreview = await createLedgerPreviewFromRelease(release);
+    setLedgerActionByReleaseId((current) => ({ ...current, [release.id]: ledgerPreview ? "created" : "failed" }));
+  }
 
   return (
     <div className="space-y-6">
@@ -159,7 +168,7 @@ export default function RevenueReleaseGatePage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {loading ? <p className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-slate-300">Loading release previews…</p> : null}
-            {!loading && previews.length === 0 ? <OperationalEmptyState state={operationalEmptyStates.revenueReleaseGate} /> : null}
+            {!loading && previews.length === 0 ? <OperationalEmptyState {...operationalEmptyStates.releases} /> : null}
             {previews.map((release) => (
               <article key={release.id} className="rounded-[1.5rem] border border-emerald-300/15 bg-white/[0.035] p-4 shadow-xl shadow-black/20">
                 <div className="flex flex-wrap items-start justify-between gap-4">
@@ -217,6 +226,25 @@ export default function RevenueReleaseGatePage() {
                       </div>
                     </div>
                     <p className="rounded-2xl border border-cyan-300/20 bg-cyan-400/10 p-3 text-sm font-semibold text-cyan-50">{release.p0_p1_p2_p3_p4_trace}</p>
+
+                    <div className="rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-sm text-amber-50">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <p className="text-xs uppercase tracking-[0.28em] text-amber-100/70">Ledger P0 preview action</p>
+                          <p className="mt-2 font-semibold text-white">Create an internal ledger preview only. No invoice, charge, receipt or real revenue claim.</p>
+                        </div>
+                        <Button
+                          type="button"
+                          disabled={ledgerActionByReleaseId[release.id] === "creating"}
+                          onClick={() => void handleCreateLedgerPreview(release)}
+                          className="rounded-2xl border border-amber-300/30 bg-amber-400/15 text-amber-50 hover:bg-amber-400/25"
+                        >
+                          {ledgerActionByReleaseId[release.id] === "creating" ? "Creating preview…" : "Create Ledger Preview"}
+                        </Button>
+                      </div>
+                      {ledgerActionByReleaseId[release.id] === "created" ? <Link href="/ops/ledger" className="mt-3 inline-flex font-bold text-cyan-100 underline-offset-4 hover:underline">Ledger preview created — open /ops/ledger</Link> : null}
+                      {ledgerActionByReleaseId[release.id] === "failed" ? <p className="mt-3 font-semibold text-rose-100">Ledger preview API unavailable. Safe fallback kept; no financial action was executed.</p> : null}
+                    </div>
                   </div>
                   <div className="space-y-3 rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-4 xl:w-[25rem]">
                     <div className="rounded-2xl border border-white/10 bg-slate-950/35 p-3 text-sm text-emerald-50">
