@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
-const rawPort = process.env.PORT ?? "3000";
+const rawPort = process.env.PORT ?? process.env.GXEON_DASHBOARD_PORT ?? "5173";
 const port = Number(rawPort);
 
 if (Number.isNaN(port) || port <= 0) {
@@ -12,6 +12,7 @@ if (Number.isNaN(port) || port <= 0) {
 }
 
 const basePath = process.env.BASE_PATH ?? "/";
+const apiProxyTarget = process.env.VITE_GXEON_API_PROXY_TARGET ?? "http://localhost:3000";
 
 export default defineConfig({
   base: basePath,
@@ -52,6 +53,13 @@ export default defineConfig({
     allowedHosts: true,
     fs: {
       strict: true,
+    },
+    proxy: {
+      "/api": {
+        target: apiProxyTarget,
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
   preview: {

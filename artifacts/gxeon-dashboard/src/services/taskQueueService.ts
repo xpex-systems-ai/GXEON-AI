@@ -1,3 +1,5 @@
+import { apiUrl } from "./apiBase";
+
 export type TaskQueueStatus = "TASK_READY" | "APPROVAL_REQUIRED" | "APPROVED_FOR_MANUAL_EXECUTION" | "BLOCKED" | "IN_REVIEW" | "DONE" | "CANCELLED";
 export type TaskQueuePriority = "LOW" | "MEDIUM" | "HIGH";
 
@@ -55,21 +57,6 @@ export type TaskQueueReadinessStatus = {
   safeTransitions: Record<TaskQueueStatus, TaskQueueStatus[]>;
   boundaries: string[];
 };
-
-const configuredApiBaseUrl = (import.meta.env.VITE_GXEON_API_BASE_URL as string | undefined)?.trim().replace(/\/+$/, "") ?? "";
-const railwayBackendUrlMessage = "Set VITE_GXEON_API_BASE_URL to Railway API public URL and redeploy Vercel";
-
-function isVercelPreviewHost(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.location.hostname.endsWith(".vercel.app");
-}
-
-function apiUrl(path: string): string {
-  if (!configuredApiBaseUrl && isVercelPreviewHost()) {
-    throw new Error(`BACKEND_URL_MISCONFIGURED: ${railwayBackendUrlMessage}`);
-  }
-  return `${configuredApiBaseUrl}${path}`;
-}
 
 async function readJson<T>(response: Response, route: string): Promise<T> {
   const contentType = response.headers.get("content-type") ?? "";

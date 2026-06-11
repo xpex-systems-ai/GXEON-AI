@@ -1,3 +1,5 @@
+import { apiUrl } from "./apiBase";
+
 export type AgentStatus = "OFFLINE" | "READY_FOR_INSTALL" | "INSTALLED_DISABLED" | "ACTIVE_MANUAL_ONLY";
 export type AgentPermission = "READ" | "PLAN" | "DRAFT" | "SUGGEST" | "APPROVE_REQUIRED";
 
@@ -258,8 +260,6 @@ export const fallbackHomeCenterAgents = {
   grokReadiness: fallbackGrokReadiness,
 };
 
-const configuredApiBaseUrl = (import.meta.env.VITE_GXEON_API_BASE_URL as string | undefined)?.trim().replace(/\/+$/, "") ?? "";
-
 function labelFromId(id: string): string {
   return id.split("_").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 }
@@ -269,10 +269,6 @@ function fallbackGates(agentId: string): AgentManualApprovalGate[] {
     { id: `${agentId}_operator_review`, label: "Operator review required", required: true, reason: "P0 allows planning and draft suggestions only." },
     { id: `${agentId}_execution_denied`, label: "Execution remains disabled", required: true, reason: "No autonomous execution, external contact, GitHub write or payment action is available." },
   ];
-}
-
-function apiUrl(path: string): string {
-  return `${configuredApiBaseUrl}${path}`;
 }
 
 async function readJson<T>(response: Response, route: string): Promise<T> {

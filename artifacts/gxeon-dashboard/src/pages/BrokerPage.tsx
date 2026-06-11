@@ -70,6 +70,16 @@ export default function BrokerPage() {
             <CardHeader><CardTitle className="flex items-center gap-2 text-white"><ShieldCheck className="h-5 w-5 text-violet-200" /> Broker boundaries</CardTitle></CardHeader>
             <CardContent className="space-y-3">
               {(status?.boundaries ?? ["Broker P0 is preview-only."]).map((item) => <div key={item} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-sm text-slate-300"><Lock className="mt-0.5 h-4 w-4 shrink-0 text-violet-200" /><span>{item}</span></div>)}
+              {status?.diagnostics ? (
+                <div className="rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-xs text-amber-100">
+                  <div className="font-bold uppercase tracking-[0.2em]">Backend diagnostic</div>
+                  <div className="mt-2 grid gap-1 text-amber-50/85">
+                    <span>API base: {status.diagnostics.apiBase}</span>
+                    <span>Route: {status.diagnostics.attemptedRoute}</span>
+                    <span>Failure: {status.diagnostics.failureType}</span>
+                  </div>
+                </div>
+              ) : null}
             </CardContent>
           </Card>
         </div>
