@@ -1,69 +1,81 @@
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { OperationalEmptyState } from "@/components/ops/OperationalEmptyState";
-import {
-  approvalStates,
-  getApprovalStateCounts,
-  getDeliveryValidationSummary,
-  getEvidenceTypeCounts,
-  getValidationsByApprovalState,
-  activeOperationalValidations,
-  type ApprovalState,
-  type DeliveryRisk,
-  type EvidenceState,
-  type ValidationStatus,
-} from "@/data/delivery-validation";
+import { activeOperationalValidations } from "@/data/delivery-validation";
 import { operationalEmptyStates } from "@/data/operational-mode";
-import { formatCurrency, formatDate } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { ArrowRight, BadgeCheck, ClipboardCheck, DatabaseZap, FileCheck2, GitPullRequestArrow, Image, KanbanSquare, Lock, Route, ShieldCheck, Sparkles, TriangleAlert, UploadCloud } from "lucide-react";
+import { fetchDeliveryValidationPreviews, fetchDeliveryValidationStatus, fallbackDeliveryValidationStatus, type ApprovalState, type DeliveryValidationPreviewRecord, type DeliveryValidationStatus, type DeliveryValidationStatusSummary, type EvidenceState } from "@/services/deliveryValidationService";
+import { ArrowRight, BadgeCheck, ClipboardCheck, FileCheck2, GitPullRequestArrow, Image, KanbanSquare, Lock, Route, ShieldCheck, Sparkles, TriangleAlert, UploadCloud } from "lucide-react";
 
 const approvalTone: Record<ApprovalState, string> = {
   PENDING_REVIEW: "border-violet-300/30 bg-violet-400/10 text-violet-100",
-  APPROVED: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
+  APPROVED_MANUAL: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
   REVISION_REQUESTED: "border-amber-300/30 bg-amber-400/10 text-amber-100",
   REJECTED: "border-rose-300/30 bg-rose-400/10 text-rose-100",
   ARCHIVED: "border-slate-500/30 bg-slate-600/10 text-slate-300",
 };
 
-const validationTone: Record<ValidationStatus, string> = {
+const validationTone: Record<DeliveryValidationStatus, string> = {
   AWAITING_EVIDENCE: "border-slate-300/30 bg-slate-400/10 text-slate-100",
   EVIDENCE_ATTACHED: "border-blue-300/30 bg-blue-400/10 text-blue-100",
   MANUAL_REVIEW: "border-violet-300/30 bg-violet-400/10 text-violet-100",
-  VALIDATED: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
   VALIDATION_BLOCKED: "border-rose-300/30 bg-rose-400/10 text-rose-100",
-  CLOSED_REAL: "border-slate-500/30 bg-slate-600/10 text-slate-300",
+  READY_FOR_RELEASE_REVIEW: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
+  CANCELLED: "border-slate-500/30 bg-slate-600/10 text-slate-300",
 };
 
 const evidenceTone: Record<EvidenceState, string> = {
   MISSING: "border-rose-300/30 bg-rose-400/10 text-rose-100",
-  REAL_ATTACHED: "border-blue-300/30 bg-blue-400/10 text-blue-100",
+  MANUAL_ATTACHED: "border-blue-300/30 bg-blue-400/10 text-blue-100",
   READY_FOR_REVIEW: "border-violet-300/30 bg-violet-400/10 text-violet-100",
   MANUALLY_VERIFIED: "border-emerald-300/30 bg-emerald-400/10 text-emerald-100",
   NEEDS_REVISION: "border-amber-300/30 bg-amber-400/10 text-amber-100",
 };
 
-const riskTone: Record<DeliveryRisk, string> = {
-  LOW: "border-slate-300/30 bg-slate-400/10 text-slate-100",
-  MEDIUM: "border-blue-300/30 bg-blue-400/10 text-blue-100",
-  HIGH: "border-orange-300/30 bg-orange-400/10 text-orange-100",
-  CRITICAL: "border-rose-300/30 bg-rose-400/10 text-rose-100",
-};
+const pipeline = ["Broker P0 Decision Preview", "Execution Center P0 Preview", "Delivery Validation P0 Preview", "Manual Evidence Review", "Revision or Rejection Gate", "Future Release Gate", "Future Ledger"];
 
-const evidenceIcon = {
-  "GitHub PR": GitPullRequestArrow,
-  "Vercel Preview": UploadCloud,
-  Screenshot: Image,
-  Document: FileCheck2,
-  "Manual Validation": ClipboardCheck,
-};
+function countByApproval(previews: DeliveryValidationPreviewRecord[], state: ApprovalState) {
+  return previews.filter((preview) => preview.approvalState === state).length;
+}
+
+function countMissingEvidence(previews: DeliveryValidationPreviewRecord[]) {
+  return previews.filter((preview) => preview.evidence.some((evidence) => evidence.state === "MISSING")).length;
+}
 
 export default function DeliveryValidationPage() {
-  const summary = getDeliveryValidationSummary();
-  const approvalCounts = getApprovalStateCounts();
-  const evidenceCounts = getEvidenceTypeCounts();
+  const [status, setStatus] = useState<DeliveryValidationStatusSummary>(() => fallbackDeliveryValidationStatus());
+  const [previews, setPreviews] = useState<DeliveryValidationPreviewRecord[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    async function load() {
+      try {
+        const [runtimeStatus, validationPreviews] = await Promise.all([fetchDeliveryValidationStatus(controller.signal), fetchDeliveryValidationPreviews(controller.signal)]);
+        setStatus(runtimeStatus);
+        setPreviews(validationPreviews);
+      } finally {
+        if (!controller.signal.aborted) setLoading(false);
+      }
+    }
+    load();
+    return () => controller.abort();
+  }, []);
+
+  const metrics = useMemo(() => [
+    ["Preview records", String(previews.length), "In-memory validation previews"],
+    ["Pending review", String(countByApproval(previews, "PENDING_REVIEW")), "Manual approval required"],
+    ["Revision requested", String(countByApproval(previews, "REVISION_REQUESTED")), "Manual change requested"],
+    ["Rejected", String(countByApproval(previews, "REJECTED")), "Manual rejection state"],
+    ["Missing evidence", String(countMissingEvidence(previews)), "Evidence must be described manually"],
+    ["Release disabled", status.releaseDisabled ? "TRUE" : "TRUE", "Future release gate only"],
+    ["Evidence required", status.evidenceRequired ? "TRUE" : "TRUE", "No evidence auto-fetch"],
+    ["Approval required", status.approvalRequired ? "TRUE" : "TRUE", "No real auto-approval"],
+  ], [previews, status.approvalRequired, status.evidenceRequired, status.releaseDisabled]);
 
   return (
     <div className="space-y-6">
@@ -73,29 +85,20 @@ export default function DeliveryValidationPage() {
         <div className="relative grid gap-6 lg:grid-cols-[1.35fr_0.65fr]">
           <div className="space-y-5">
             <div className="flex flex-wrap items-center gap-3">
-              <Badge className="border-emerald-300/40 bg-emerald-400/10 text-emerald-100">P3 Validação de Entrega</Badge>
-              <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">Visual-only mode</Badge>
-              <Badge variant="outline" className="border-amber-300/40 text-amber-100">No external API calls</Badge>
-              <Badge variant="outline" className="border-rose-300/40 text-rose-100">No database mutations</Badge>
+              <Badge className="border-emerald-300/40 bg-emerald-400/10 text-emerald-100">PREVIEW_ONLY</Badge>
+              <Badge variant="outline" className="border-violet-300/40 text-violet-100">MANUAL_REVIEW</Badge>
+              <Badge variant="outline" className="border-rose-300/40 text-rose-100">RELEASE_DISABLED</Badge>
+              <Badge variant="outline" className="border-amber-300/40 text-amber-100">EVIDENCE_REQUIRED</Badge>
             </div>
             <div>
-              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-emerald-200/70">P0 Oportunidade → P1 Tarefa → P2 Execução → P3 Validação</p>
-              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">P3 · Validação de Entrega do QG</h1>
+              <p className="mb-2 text-xs uppercase tracking-[0.5em] text-emerald-200/70">Broker → Execution Preview → Delivery Validation Preview → Manual Gate</p>
+              <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">Delivery Validation P0</h1>
               <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">
-                Fourth operational validation layer for GXEON OS. P3 validates execution outcomes with static approval states, rejection states, revision states and evidence checks before any persistence, payment, storage, automation or external integration is activated.
+                Safe preview-only validation runtime connected to Execution Center P0. It tracks evidence state, acceptance criteria, approval state, revision or rejection reasons and the next manual gate without releasing delivery, contacting external users, uploading evidence, writing GitHub data or touching payments.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-              {[
-                ["Total validations", String(summary.total_validations), "Static P3 records"],
-                ["Pending review", String(summary.pending_review), "Human gate required"],
-                ["Approved", String(summary.approved), "Real approvals only"],
-                ["Revision requested", String(summary.revision_requested), "Needs manual change"],
-                ["Rejected", String(summary.rejected), "Evidence or quality failed"],
-                ["Archived", String(summary.archived), "Closed pendente state"],
-                ["Missing evidence", String(summary.missing_evidence), "No external fetch"],
-                ["Value in validation", formatCurrency(summary.delivery_value_under_validation_brl), "BRL estimate · registro real pendente"],
-              ].map(([label, value, hint]) => (
+              {metrics.map(([label, value, hint]) => (
                 <Card key={label} className="border-white/10 bg-white/[0.04] backdrop-blur">
                   <CardContent className="p-4">
                     <p className="text-xs uppercase tracking-[0.25em] text-slate-400">{label}</p>
@@ -108,184 +111,147 @@ export default function DeliveryValidationPage() {
           </div>
           <Card className="border-emerald-300/20 bg-black/30">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white"><ShieldCheck className="h-5 w-5 text-emerald-200" /> P3 operating boundary</CardTitle>
+              <CardTitle className="flex items-center gap-2 text-white"><ShieldCheck className="h-5 w-5 text-emerald-200" /> Validation safety boundary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              {[
-                [Route, "P0/P1/P2 relationship", "Every pendente validation references the upstream opportunity, task and execution chain where available."],
-                [Lock, "Manual approval workflow", "Pending Review, Approved, Revision Requested, Rejected and Archived are static visual states."],
-                [DatabaseZap, "No backend activation", "GitHub, Vercel, Supabase, Railway, payments, auth and storage remain disconnected."],
-              ].map(([Icon, label, description]) => (
-                <div key={String(label)} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
-                  <Icon className="mt-0.5 h-4 w-4 shrink-0 text-emerald-200" />
-                  <div>
-                    <p className="font-semibold text-white">{String(label)}</p>
-                    <p className="text-sm text-slate-400">{String(description)}</p>
-                  </div>
+              {status.boundaries.map((item) => (
+                <div key={item} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-sm text-slate-300">
+                  <Lock className="mt-0.5 h-4 w-4 shrink-0 text-emerald-200" />
+                  <span>{item}</span>
                 </div>
               ))}
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3">
-                <Link href="/ops/opportunities"><div className="group flex items-center justify-between rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-sm font-semibold text-emerald-100 transition hover:border-emerald-200/40">P0 Inbox <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></div></Link>
-                <Link href="/ops/tasks"><div className="group flex items-center justify-between rounded-2xl border border-blue-300/20 bg-blue-400/10 p-3 text-sm font-semibold text-blue-100 transition hover:border-blue-200/40">P1 Tasks <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></div></Link>
-                <Link href="/ops/execution"><div className="group flex items-center justify-between rounded-2xl border border-violet-300/20 bg-violet-400/10 p-3 text-sm font-semibold text-violet-100 transition hover:border-violet-200/40">P2 Execution <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></div></Link>
-                <Link href="/ops/release"><div className="group flex items-center justify-between rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-sm font-semibold text-emerald-100 transition hover:border-emerald-200/40">P4 Release Gate <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></div></Link>
-              </div>
+              {status.diagnostics ? (
+                <div className="rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-xs text-amber-100">
+                  <div className="font-bold uppercase tracking-[0.2em]">Backend diagnostic</div>
+                  <div className="mt-2 grid gap-1 text-amber-50/85">
+                    <span>API base: {status.diagnostics.apiBase}</span>
+                    <span>Route: {status.diagnostics.attemptedRoute}</span>
+                    <span>Failure: {status.diagnostics.failureType}</span>
+                  </div>
+                </div>
+              ) : null}
             </CardContent>
           </Card>
         </div>
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[0.75fr_1.25fr]">
-        <Card className="border-cyan-300/20 bg-slate-950/75 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white"><BadgeCheck className="h-5 w-5 text-cyan-200" /> Approval workflow</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {approvalCounts.map(({ state, count }) => {
-              const share = activeOperationalValidations.length === 0 ? 0 : (count / activeOperationalValidations.length) * 100;
-              return (
-                <div key={state} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <Badge variant="outline" className={cn("border", approvalTone[state])}>{state.replaceAll("_", " ")}</Badge>
-                    <p className="font-bold text-white">{count} records</p>
-                  </div>
-                  <Progress value={share} className="mt-3 h-2" />
-                </div>
-              );
-            })}
-          </CardContent>
-        </Card>
+      <section className="grid gap-3 md:grid-cols-3 xl:grid-cols-7">
+        {pipeline.map((step, index) => (
+          <Card key={step} className="border-white/10 bg-slate-950/75">
+            <CardContent className="flex min-h-24 flex-col justify-between p-3 text-xs font-bold text-white">
+              <span className="grid h-8 w-8 place-items-center rounded-xl border border-emerald-300/20 bg-emerald-400/10 text-emerald-100">{index + 1}</span>
+              <span>{step}</span>
+            </CardContent>
+          </Card>
+        ))}
+      </section>
 
-        <Card className="border-emerald-300/20 bg-slate-950/75 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white"><KanbanSquare className="h-5 w-5 text-emerald-200" /> Static approval board</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-              {approvalStates.map((state) => {
-                const validations = getValidationsByApprovalState(state);
-                return (
-                  <div key={state} className="rounded-3xl border border-white/10 bg-white/[0.03] p-3">
-                    <div className="flex items-center justify-between gap-3">
-                      <Badge variant="outline" className={cn("border", approvalTone[state])}>{state.replaceAll("_", " ")}</Badge>
-                      <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs font-bold text-white">{validations.length}</span>
-                    </div>
-                    <div className="mt-3 space-y-3">
-                      {validations.length === 0 ? (
-                        <div className="rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-4 text-sm text-slate-500">No pendente validations in this approval state.</div>
-                      ) : (
-                        validations.map((validation) => (
-                          <div key={validation.id} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
-                            <div className="flex flex-wrap gap-2">
-                              <Badge variant="outline" className={cn("border text-[10px]", riskTone[validation.risk])}>{validation.risk}</Badge>
-                              <Badge variant="outline" className={cn("border text-[10px]", validationTone[validation.validation_status])}>{validation.validation_status.replaceAll("_", " ")}</Badge>
-                            </div>
-                            <p className="mt-2 text-sm font-bold text-white">{validation.title}</p>
-                            <p className="mt-1 text-xs text-slate-400">{validation.id}</p>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
+      {previews.length ? (
+        <section className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-2xl font-black text-white">Validation preview records</h2>
+              <p className="text-sm text-slate-400">Runtime API previews remain manual-first and release-disabled. No approve-real, upload, payment or GitHub write controls are rendered.</p>
             </div>
-          </CardContent>
-        </Card>
-      </section>
+            <Badge variant="outline" className="border-red-300/30 px-3 py-2 text-red-100">No release / approve-real / upload / pay / GitHub-write buttons</Badge>
+          </div>
+          <div className="grid gap-4 xl:grid-cols-2">
+            {previews.map((preview) => <ValidationPreviewCard key={preview.id} preview={preview} />)}
+          </div>
+        </section>
+      ) : (
+        <OperationalEmptyState
+          title={loading ? "Loading Delivery Validation previews…" : operationalEmptyStates.validations.title}
+          description={loading ? "Reading the safe preview-only validation API." : "No validation previews are in memory yet. Create one from an Execution Center P0 preview; the fallback state remains manual-first and release-disabled."}
+          nextManualAction={`Go to Execution Center P0, create a validation preview, then return here. Backend status: ${status.status}; static fallback records: ${activeOperationalValidations.length}.`}
+          previousRoute="/ops/execution"
+          nextRoute="/ops/release"
+        />
+      )}
+    </div>
+  );
+}
 
-      <section className="grid gap-6 xl:grid-cols-[0.7fr_1.3fr]">
-        <Card className="border-amber-300/20 bg-slate-950/75 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white"><FileCheck2 className="h-5 w-5 text-amber-200" /> Evidence validation layer</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <p className="rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-sm text-amber-50">
-              Evidence names are static labels only. P3 does not fetch GitHub PRs, Vercel previews, screenshots, documents or manual notes from external systems.
-            </p>
-            {evidenceCounts.map(({ type, count }) => {
-              const Icon = evidenceIcon[type];
-              return (
-                <div key={type} className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3">
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-9 w-9 place-items-center rounded-xl border border-white/10 bg-white/[0.04] text-amber-100"><Icon className="h-4 w-4" /></span>
-                    <p className="font-semibold text-white">{type}</p>
-                  </div>
-                  <Badge variant="outline" className="border-white/15 text-slate-200">{count}</Badge>
-                </div>
-              );
-            })}
-          </CardContent>
-        </Card>
+function ValidationPreviewCard({ preview }: { preview: DeliveryValidationPreviewRecord }) {
+  const evidenceProgress = preview.evidence.length ? Math.round((preview.evidence.filter((item) => item.state !== "MISSING" && item.state !== "NEEDS_REVISION").length / preview.evidence.length) * 100) : 0;
 
-        <Card className="border-cyan-300/20 bg-slate-950/75 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white"><Sparkles className="h-5 w-5 text-cyan-200" /> Delivery validation cards</CardTitle>
-          </CardHeader>
-          <CardContent className="grid gap-4">
-            {activeOperationalValidations.length === 0 ? (
-              <OperationalEmptyState {...operationalEmptyStates.validations} />
-            ) : (
-              activeOperationalValidations.map((validation) => (
-              <article key={validation.id} className="rounded-3xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-cyan-300/35 hover:bg-cyan-400/10">
-                <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge variant="outline" className="border-cyan-300/30 text-cyan-100">{validation.id}</Badge>
-                      <Badge variant="outline" className={cn("border", riskTone[validation.risk])}>{validation.risk}</Badge>
-                      <Badge variant="outline" className={cn("border", approvalTone[validation.approval_state])}>{validation.approval_state.replaceAll("_", " ")}</Badge>
-                      <Badge variant="outline" className={cn("border", validationTone[validation.validation_status])}>{validation.validation_status.replaceAll("_", " ")}</Badge>
-                      <Badge variant="outline" className="border-amber-300/30 text-amber-100">operacional</Badge>
-                    </div>
-                    <h2 className="mt-3 text-xl font-black text-white">{validation.title}</h2>
-                    <p className="mt-2 text-sm text-slate-400">{validation.outcome_summary}</p>
-                    <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                      <div><p className="text-xs uppercase tracking-[0.24em] text-slate-500">Client label</p><p className="font-bold text-white">{validation.client_label}</p></div>
-                      <div><p className="text-xs uppercase tracking-[0.24em] text-slate-500">Value</p><p className="font-bold text-white">{formatCurrency(validation.delivery_value_brl)}</p></div>
-                      <div><p className="text-xs uppercase tracking-[0.24em] text-slate-500">Validator</p><p className="font-bold text-white">{validation.validator}</p></div>
-                      <div><p className="text-xs uppercase tracking-[0.24em] text-slate-500">Updated</p><p className="font-bold text-white">{formatDate(validation.updated_at)}</p></div>
-                    </div>
-                    <p className="mt-4 rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-sm font-semibold text-emerald-50">{validation.p0_p1_p2_relationship}</p>
-                    <div className="mt-4 grid gap-2 md:grid-cols-3">
-                      {validation.acceptance_criteria.map((criteria) => (
-                        <div key={criteria} className="rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-sm text-slate-300">{criteria}</div>
-                      ))}
-                    </div>
-                    {validation.rejection_state !== "NONE" || validation.revision_state !== "NONE" ? (
-                      <div className="mt-4 flex gap-3 rounded-2xl border border-amber-300/20 bg-amber-400/10 p-3 text-sm text-amber-50">
-                        <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0" />
-                        <span>Rejection: {validation.rejection_state.replaceAll("_", " ")} · Revision: {validation.revision_state.replaceAll("_", " ")}</span>
-                      </div>
-                    ) : null}
-                  </div>
-                  <div className="space-y-3 rounded-2xl border border-violet-300/20 bg-violet-400/10 p-4 xl:w-[26rem]">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.28em] text-violet-100/70">Next manual gate</p>
-                      <p className="mt-2 text-sm font-semibold text-white">{validation.next_manual_gate}</p>
-                    </div>
-                    <div className="space-y-2">
-                      {validation.evidence.map((evidence) => {
-                        const Icon = evidenceIcon[evidence.type];
-                        return (
-                          <div key={`${validation.id}-${evidence.type}-${evidence.label}`} className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
-                            <div className="flex flex-wrap items-center gap-2">
-                              <Icon className="h-4 w-4 text-violet-100" />
-                              <Badge variant="outline" className="border-white/15 text-slate-200">{evidence.type}</Badge>
-                              <Badge variant="outline" className={cn("border", evidenceTone[evidence.state])}>{evidence.state.replaceAll("_", " ")}</Badge>
-                            </div>
-                            <p className="mt-2 text-sm font-bold text-white">{evidence.label}</p>
-                            <p className="mt-1 text-xs text-slate-400">{evidence.note}</p>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
+  return (
+    <Card className="border-emerald-300/20 bg-slate-950/80 backdrop-blur-xl">
+      <CardHeader>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.24em] text-slate-500">{preview.id}</p>
+            <CardTitle className="mt-2 text-2xl font-black text-white">{preview.title}</CardTitle>
+            <p className="mt-1 text-xs text-slate-400">Created {formatDate(preview.createdAt)} · Updated {formatDate(preview.updatedAt)}</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Badge variant="outline" className={cn("shrink-0 border", validationTone[preview.validationStatus])}>{preview.validationStatus.replaceAll("_", " ")}</Badge>
+            <Badge variant="outline" className={cn("shrink-0 border", approvalTone[preview.approvalState])}>{preview.approvalState.replaceAll("_", " ")}</Badge>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <MiniMetric label="Mode" value={preview.mode} />
+          <MiniMetric label="Risk energy" value={String(preview.riskEnergy)} />
+          <MiniMetric label="Release" value={preview.releaseDisabled ? "Disabled" : "Disabled"} />
+          <MiniMetric label="Evidence" value={preview.evidenceRequired ? "Required" : "Required"} />
+        </div>
+        <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-400">Evidence preview state</p>
+            <span className="text-xs text-emerald-200">{evidenceProgress}% not missing</span>
+          </div>
+          <Progress value={evidenceProgress} className="mb-3 h-2" />
+          <div className="grid gap-2">
+            {preview.evidence.map((evidence) => (
+              <div key={evidence.id} className="rounded-2xl border border-white/10 bg-white/[0.04] p-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <FileCheck2 className="h-4 w-4 text-emerald-100" />
+                  <Badge variant="outline" className={cn("border", evidenceTone[evidence.state])}>{evidence.state.replaceAll("_", " ")}</Badge>
+                  <Badge variant="outline" className="border-white/15 text-slate-200">{evidence.source.replaceAll("_", " ")}</Badge>
                 </div>
-              </article>
-            )))}
-          </CardContent>
-        </Card>
-      </section>
+                <p className="mt-2 text-sm font-bold text-white">{evidence.label}</p>
+                <p className="mt-1 text-xs text-slate-400">{evidence.note}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="grid gap-3 lg:grid-cols-2">
+          <ListBlock icon={ClipboardCheck} title="Acceptance criteria" items={preview.acceptanceCriteria} />
+          <ListBlock icon={FileCheck2} title="Evidence checklist" items={preview.evidenceChecklist} />
+          <ListBlock icon={TriangleAlert} title="Blocked actions" items={preview.blockedActions} danger />
+          <ListBlock icon={Route} title="Revision / rejection state" items={[`Rejection: ${preview.rejectionState}${preview.rejectionReason ? ` — ${preview.rejectionReason}` : ""}`, `Revision: ${preview.revisionState}${preview.revisionReason ? ` — ${preview.revisionReason}` : ""}`]} />
+        </div>
+        <div className="rounded-3xl border border-violet-300/20 bg-violet-500/10 p-4 text-sm text-violet-50">
+          <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-violet-100"><KanbanSquare className="h-4 w-4" /> Next manual gate</p>
+          {preview.nextManualGate}
+        </div>
+        <p className="rounded-3xl border border-emerald-300/20 bg-emerald-500/10 p-4 text-sm text-emerald-50">{preview.outcomeSummary}</p>
+        <div className="flex flex-wrap gap-2">
+          <Badge variant="outline" className="border-emerald-300/30 text-emerald-100">PREVIEW_ONLY</Badge>
+          <Badge variant="outline" className="border-violet-300/30 text-violet-100">MANUAL_REVIEW</Badge>
+          <Badge variant="outline" className="border-rose-300/30 text-rose-100">RELEASE_DISABLED</Badge>
+          <Badge variant="outline" className="border-amber-300/30 text-amber-100">EVIDENCE_REQUIRED</Badge>
+          {preview.executionPreviewId ? <Link href="/ops/execution" className="inline-flex items-center gap-1 rounded-md border border-emerald-300/30 px-2.5 py-0.5 text-xs font-semibold text-emerald-100"><GitPullRequestArrow className="h-3 w-3" /> Execution {preview.executionPreviewId}<ArrowRight className="h-3 w-3" /></Link> : null}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function MiniMetric({ label, value }: { label: string; value: string }) {
+  return <div className="rounded-2xl border border-white/10 bg-black/20 p-3"><p className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</p><p className="mt-1 truncate text-sm font-bold text-white">{value}</p></div>;
+}
+
+function ListBlock({ title, items, icon: Icon = Sparkles, danger = false }: { title: string; items: string[]; icon?: typeof Sparkles | typeof ClipboardCheck | typeof FileCheck2 | typeof TriangleAlert | typeof Route | typeof Image | typeof BadgeCheck | typeof UploadCloud; danger?: boolean }) {
+  const visibleItems = items.length ? items : ["None for preview"];
+  return (
+    <div className={cn("rounded-3xl border p-4", danger ? "border-red-300/20 bg-red-500/10" : "border-white/10 bg-white/[0.03]")}>
+      <p className={cn("mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em]", danger ? "text-red-100" : "text-slate-400")}><Icon className="h-4 w-4" />{title}</p>
+      <ul className="list-disc space-y-1 pl-4 text-xs text-slate-300">
+        {visibleItems.map((item) => <li key={item}>{item}</li>)}
+      </ul>
     </div>
   );
 }

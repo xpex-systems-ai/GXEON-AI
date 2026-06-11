@@ -9,6 +9,7 @@ import { operationalEmptyStates } from "@/data/operational-mode";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { fetchExecutionCenterStatus, fetchExecutionPreviews, fallbackExecutionStatus, type ExecutionCenterStatus, type ExecutionPreviewRecord, type ExecutionPreviewStatus } from "@/services/executionCenterService";
+import { createDeliveryValidationPreview, validationInputFromExecutionPreview } from "@/services/deliveryValidationService";
 import { ArrowRight, ClipboardCheck, FileCheck2, Link2, Lock, Route, ShieldCheck, Sparkles, Target, TriangleAlert, Undo2 } from "lucide-react";
 
 const statusTone: Record<ExecutionPreviewStatus, string> = {
@@ -152,6 +153,18 @@ export default function ExecutionTrackerPage() {
 
 function ExecutionPreviewCard({ preview }: { preview: ExecutionPreviewRecord }) {
   const checklistProgress = preview.checklist.length ? Math.round((preview.checklist.filter((item) => item.completed).length / preview.checklist.length) * 100) : 0;
+  const [creatingValidation, setCreatingValidation] = useState(false);
+  const [validationPreviewId, setValidationPreviewId] = useState<string | null>(null);
+
+  async function handleCreateValidationPreview() {
+    setCreatingValidation(true);
+    try {
+      const validationPreview = await createDeliveryValidationPreview(validationInputFromExecutionPreview(preview));
+      setValidationPreviewId(validationPreview.id);
+    } finally {
+      setCreatingValidation(false);
+    }
+  }
 
   return (
     <Card className="border-violet-300/20 bg-slate-950/80 backdrop-blur-xl">
@@ -194,6 +207,28 @@ function ExecutionPreviewCard({ preview }: { preview: ExecutionPreviewRecord }) 
         <div className="rounded-3xl border border-emerald-300/20 bg-emerald-500/10 p-4 text-sm text-emerald-50">
           <p className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-emerald-100"><Target className="h-4 w-4" /> Operator next action</p>
           {preview.operatorNextAction}
+        </div>
+
+        <div className="rounded-3xl border border-emerald-300/20 bg-emerald-500/10 p-4">
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-emerald-100">Delivery Validation P0 preview action</p>
+              <p className="mt-1 text-sm text-emerald-50">Create a preview-only/manual validation record from this execution preview. This does not release, approve real delivery, upload evidence, write to GitHub or execute anything.</p>
+            </div>
+            <button
+              type="button"
+              onClick={handleCreateValidationPreview}
+              disabled={creatingValidation}
+              className="rounded-2xl border border-emerald-300/30 bg-emerald-400/10 px-4 py-2 text-sm font-bold text-emerald-50 transition hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {creatingValidation ? "Creating preview…" : "Create Validation Preview"}
+            </button>
+          </div>
+          {validationPreviewId ? (
+            <Link href="/ops/validation" className="mt-3 inline-flex items-center gap-2 rounded-xl border border-emerald-300/30 px-3 py-2 text-xs font-semibold text-emerald-100">
+              Validation preview {validationPreviewId} created · Open /ops/validation <ArrowRight className="h-3 w-3" />
+            </Link>
+          ) : null}
         </div>
         <div className="flex flex-wrap gap-2">
           <Badge variant="outline" className="border-violet-300/30 text-violet-100">PREVIEW_ONLY</Badge>
