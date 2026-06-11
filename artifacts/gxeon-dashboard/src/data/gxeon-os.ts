@@ -123,7 +123,7 @@ export const gxeonNavigation: GxeonModule[] = [
     accent: "blue",
     widgets: ["Task Queue P1", "Manual Execution Board", "Task Status Counts", "Opportunity Links", "Execution Value"],
     status: "operational",
-    description: "Task Queue manual-first para transformar oportunidades qualificadas em tarefas executáveis sem APIs externas.",
+    description: "Task Queue P1 backend-wired e manual-first para converter Task Preview em tarefa interna; sem execução, GitHub write, contato externo ou pagamento.",
   },
   {
     id: "revenue_engine_p2",
@@ -132,8 +132,8 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ops/execution",
     accent: "violet",
     widgets: ["Execution Tracker", "Proof-of-Work", "Manual Status Board", "Blockers", "Deliverables", "Evidence States"],
-    status: "operational",
-    description: "Execution Tracker manual-first para conectar tarefas a progresso, bloqueios, entregáveis e prova de trabalho sem APIs externas.",
+    status: "future",
+    description: "Execution Tracker manual-first para conectar tarefas a progresso, bloqueios, entregáveis e prova de trabalho sem APIs externas; fase visual/next phase até backend dedicado.",
   },
   {
     id: "revenue_engine_p3",
@@ -142,7 +142,7 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ops/validation",
     accent: "emerald",
     widgets: ["Delivery Validation", "Approval Workflow", "Evidence Review", "Revision States", "Rejection States", "Release Gate Prep"],
-    status: "operational",
+    status: "future",
     description: "Delivery Validation manual-first para aprovar, revisar, rejeitar ou arquivar entregas sem APIs externas, persistência ou pagamentos.",
   },
   {
@@ -152,8 +152,8 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ops/release",
     accent: "green",
     widgets: ["Revenue Release Gate", "Financial Readiness", "Release Board", "Approval Chains", "Pipeline Traceability", "P5 Ledger Financeiro"],
-    status: "operational",
-    description: "Revenue Release Gate manual-first para conectar validação de entrega à prontidão financeira sem APIs, banco de dados, gateways ou transações reais.",
+    status: "future",
+    description: "Revenue Release Gate manual-first para conectar validação de entrega à prontidão financeira sem APIs, banco de dados, gateways ou transações reais; fase visual/next phase até backend dedicado.",
   },
   {
     id: "revenue_engine_p5",
@@ -162,8 +162,8 @@ export const gxeonNavigation: GxeonModule[] = [
     route: "/ops/ledger",
     accent: "teal",
     widgets: ["Financial Ledger", "Revenue Accounting Board", "Revenue Metrics", "Release Links", "Pipeline Traceability", "P6 Persistence Prep"],
-    status: "operational",
-    description: "Ledger financeiro manual-first para visibilidade contábil segura sem APIs, banco de dados, gateways, invoices ou transações reais.",
+    status: "future",
+    description: "Ledger financeiro manual-first para visibilidade contábil segura sem APIs, banco de dados, gateways, invoices ou transações reais; fase visual/next phase até backend dedicado.",
   },
 
   {

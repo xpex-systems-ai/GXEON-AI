@@ -1,4 +1,4 @@
-import type { AgentCapability, AgentForbiddenAction, AgentPermission, AgentPermissionMatrixRow, AgentReadinessStatus, GrokBuilderPreparationStatus, HomeCenterAgentRecord } from "./homeCenterAgentTypes";
+import type { AgentCapability, AgentForbiddenAction, AgentPermission, AgentManualApprovalGate, AgentPermissionMatrixRow, AgentReadinessStatus, GrokBuilderPreparationStatus, HomeCenterAgentRecord } from "./homeCenterAgentTypes";
 
 const capabilityDescriptions: Record<string, string> = {
   read_radar_candidates: "Read Radar X candidate previews without contacting external users.",
@@ -16,6 +16,7 @@ const capabilityDescriptions: Record<string, string> = {
   define_checklist: "Define execution checklist items for future approval.",
   define_required_connectors: "Identify connector visibility needed for a task.",
   define_rollback: "Define rollback requirements before future execution.",
+  read_task_queue: "Read internal P1 task queue records as preparation context only.",
   create_evidence_plan: "Prepare evidence plan requirements.",
   list_required_proofs: "List proofs required before completion can be claimed.",
   suggest_validation_artifacts: "Suggest validation artifacts for operator collection.",
@@ -48,7 +49,7 @@ function capabilities(ids: string[]): AgentCapability[] {
   }));
 }
 
-function manualGates(agentId: string) {
+function manualGates(agentId: string): AgentManualApprovalGate[] {
   return [
     { id: `${agentId}_operator_review`, label: "Operator review required", required: true, reason: "P0 allows planning and draft suggestions only." },
     { id: `${agentId}_execution_denied`, label: "Execution remains disabled", required: true, reason: "No autonomous execution, external contact, GitHub write or payment action is available." },
@@ -112,11 +113,12 @@ export const homeCenterAgents: HomeCenterAgentRecord[] = [
     name: "Task Agent",
     purpose: "Convert approved opportunities into execution checklists.",
     status: "READY_FOR_INSTALL",
-    capabilities: capabilities(["create_task_preview", "define_checklist", "define_required_connectors", "define_rollback"]),
+    capabilities: capabilities(["create_task_preview", "read_task_queue", "define_checklist", "define_required_connectors", "define_rollback"]),
     forbiddenActions: ["execute_code", "modify_repo", "deploy_service", "change_database"],
     connectorAccess: [
       { connector: "Opportunity Inbox", access: "READ_ONLY", required: true },
       { connector: "Task Preview", access: "PREVIEW_ONLY", required: true },
+      { connector: "P1 Task Queue", access: "READ_ONLY", required: false },
     ],
     manualApprovalGates: manualGates("task_agent"),
     autonomousExecution: false,
@@ -210,7 +212,7 @@ export function getHomeCenterAgentReadinessStatus(): AgentReadinessStatus {
     active: 0,
     defaultPolicy: "DENY_EXECUTION_ALLOW_PLANNING",
     boundaries: [
-      "Agents are registry records only in P0.",
+      "Agents are registry records only; P1 Task Queue is a preparation signal, not an active agent runtime.",
       "No install, execution, external-contact, GitHub-write or payment endpoints are exposed.",
       "All capabilities require operator review before any future action.",
     ],
@@ -253,7 +255,7 @@ export function getGrokBuilderPreparationStatus(): GrokBuilderPreparationStatus 
   return {
     readyForGrokBuilder: true,
     missingBeforeInstall: [],
-    entryConditions: ["Radar X online", "Opportunity Inbox online", "Proposal Preview online", "Task Preview online", "Evidence Plan online"],
+    entryConditions: ["Radar X online", "Opportunity Inbox online", "Proposal Preview online", "Task Preview online", "P1 Task Queue online for internal manual tasks", "Evidence Plan online"],
     installMode: "FUTURE_OPERATOR_APPROVED_INSTALL",
     p0PreparationOnly: true,
     noInstallEndpoint: true,
@@ -262,6 +264,8 @@ export function getGrokBuilderPreparationStatus(): GrokBuilderPreparationStatus 
       registryReady: true,
       permissionModelReady: true,
       readinessDashboardReady: true,
+      taskQueueAvailableAsPreparationSignal: true,
+      taskAgentActive: false,
       autonomousAgentsCreated: false,
     },
   };
