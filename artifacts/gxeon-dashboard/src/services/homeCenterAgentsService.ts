@@ -309,3 +309,46 @@ export function fetchHomeCenterAgentPermissions(signal?: AbortSignal) {
 export function fetchHomeCenterAgentGrokReadiness(signal?: AbortSignal) {
   return safeGet<GrokBuilderPreparationStatus>("/api/agents/home-center/grok-readiness", fallbackHomeCenterAgents.grokReadiness, signal);
 }
+
+// === Quantum Advisory helpers (Classical, advisory only) ===
+// Added without touching existing Home Center fetchers.
+
+export async function fetchQuantumStatus(signal?: AbortSignal) {
+  try {
+    const res = await fetch(apiUrl("/api/agents/home-center/quantum/status"), { headers: { Accept: "application/json" }, signal });
+    const payload = await res.json();
+    return payload.data || { status: "QUANTUM_INSPIRED_ADVISORY_READY", mode: "CLASSICAL_PREVIEW_ONLY", realQuantumHardware: false };
+  } catch {
+    return { status: "QUANTUM_INSPIRED_ADVISORY_READY", mode: "CLASSICAL_PREVIEW_ONLY", realQuantumHardware: false, fallback: true };
+  }
+}
+
+export async function simulateQuantumTaskRoute(input: any, signal?: AbortSignal) {
+  try {
+    const res = await fetch(apiUrl("/api/agents/home-center/quantum/simulate-task-route"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(input),
+      signal,
+    });
+    const payload = await res.json();
+    return payload.data;
+  } catch {
+    return { recommendedRoute: [], approvalRequired: true, executionStillDisabled: true, fallback: true };
+  }
+}
+
+export async function fetchQuantumRiskEnergy(input: any, signal?: AbortSignal) {
+  try {
+    const res = await fetch(apiUrl("/api/agents/home-center/quantum/risk-energy"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(input),
+      signal,
+    });
+    const payload = await res.json();
+    return payload.data;
+  } catch {
+    return { riskEnergy: { riskEnergy: 40, safetyGrade: 60, blockedActions: ["external_contact", "payment_action"], safeAlternative: "Stay in manual preview mode." }, fallback: true };
+  }
+}
