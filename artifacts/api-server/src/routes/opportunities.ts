@@ -115,7 +115,7 @@ router.post("/opportunities/:id/task-preview", (req, res) => {
     requireQualifiedForPreview(opportunity.status);
     const task = generateTaskPreview(opportunity);
     const updated = opportunity.status === "QUALIFIED" || opportunity.status === "PROPOSAL_DRAFTED" ? updateOpportunityStatus(opportunity.id, "TASK_READY") : opportunity;
-    res.json({ success: true, data: { task, opportunity: updated, mode: "PREVIEW_ONLY" } });
+    res.json({ success: true, data: { task, opportunity: updated, mode: "PREVIEW_ONLY", taskQueue: { convertibleToInternalTask: true, createRoute: `/api/tasks/from-opportunity/${opportunity.id}`, requiresOperatorConfirmed: true, autoCreated: false, boundaries: ["Internal task only", "No execution", "No GitHub write", "No external contact", "No payment action"] } } });
   } catch (error) {
     safeError(res, error, "OPPORTUNITY_TASK_PREVIEW_FAILED");
   }

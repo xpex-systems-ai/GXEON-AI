@@ -41,7 +41,7 @@ export type AgentCapability = {
 };
 
 export type AgentConnectorAccessRequirement = {
-  connector: "Radar X" | "Opportunity Inbox" | "Proposal Preview" | "Task Preview" | "Evidence Plan" | "Monetization Board" | "Governance";
+  connector: "Radar X" | "Opportunity Inbox" | "Proposal Preview" | "Task Preview" | "P1 Task Queue" | "Evidence Plan" | "Monetization Board" | "Governance";
   access: "READ_ONLY" | "PREVIEW_ONLY" | "OPERATOR_APPROVAL_REQUIRED";
   required: boolean;
 };
@@ -106,6 +106,8 @@ export type GrokBuilderPreparationStatus = {
     registryReady: true;
     permissionModelReady: true;
     readinessDashboardReady: true;
+    taskQueueAvailableAsPreparationSignal: true;
+    taskAgentActive: false;
     autonomousAgentsCreated: false;
   };
 };

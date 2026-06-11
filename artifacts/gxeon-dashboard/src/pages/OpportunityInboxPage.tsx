@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, ClipboardCheck, FileText, Inbox, ListChecks, ShieldCheck } from "lucide-react";
+import { createTaskFromOpportunity as createInternalTaskFromOpportunity } from "@/services/taskQueueService";
 import { fetchOpportunities, fetchOpportunityStatus, previewOpportunityEvidencePlan, previewOpportunityProposal, previewOpportunityTask, qualifyOpportunity, type OpportunityEvidencePlan, type OpportunityInboxStatus, type OpportunityPipelineCounts, type OpportunityProposalPreview, type OpportunityRecord, type OpportunityTaskPreview } from "@/services/opportunityService";
 
 const emptyCounts: OpportunityPipelineCounts = { total: 0, new: 0, review: 0, qualified: 0, proposalDrafted: 0, taskReady: 0, evidenceReady: 0, executionReady: 0, done: 0, lost: 0 };
@@ -19,6 +20,7 @@ export default function OpportunityInboxPage() {
   const [counts, setCounts] = useState<OpportunityPipelineCounts>(emptyCounts);
   const [selectedPreview, setSelectedPreview] = useState<PreviewPanel | null>(null);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
+  const [createdTaskMessage, setCreatedTaskMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   async function refresh(signal?: AbortSignal) {
@@ -40,6 +42,7 @@ export default function OpportunityInboxPage() {
   async function runAction(id: string, action: "qualify" | "proposal" | "task" | "evidence") {
     setLoadingAction(`${action}:${id}`);
     setError(null);
+    setCreatedTaskMessage(null);
     try {
       if (action === "qualify") await qualifyOpportunity(id);
       if (action === "proposal") {
@@ -57,6 +60,23 @@ export default function OpportunityInboxPage() {
       await refresh();
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : "OPPORTUNITY_ACTION_FAILED");
+    } finally {
+      setLoadingAction(null);
+    }
+  }
+
+  async function createInternalTask(preview: OpportunityTaskPreview) {
+    const confirmed = window.confirm("Create an internal P1 task only? This does not execute code, write to GitHub, contact anyone, or create any payment action.");
+    if (!confirmed) return;
+    setLoadingAction(`create-task:${preview.opportunityId}`);
+    setError(null);
+    setCreatedTaskMessage(null);
+    try {
+      const result = await createInternalTaskFromOpportunity(preview.opportunityId, true, preview.id);
+      setCreatedTaskMessage(`Internal task ${result.task.id} created. Open /ops/tasks to review; no execution occurred.`);
+      await refresh();
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : "TASK_CREATE_FAILED");
     } finally {
       setLoadingAction(null);
     }
@@ -148,14 +168,21 @@ export default function OpportunityInboxPage() {
               {(status?.boundaries ?? ["No external contact", "No GitHub writes", "No autonomous execution", "No checkout session creation", "No payment capture"]).map((item) => <p key={item}>✓ {item}</p>)}
             </CardContent>
           </Card>
-          <PreviewCard preview={selectedPreview} />
+          {createdTaskMessage ? (
+            <Card className="border-emerald-300/20 bg-emerald-400/10 backdrop-blur-xl">
+              <CardContent className="p-4 text-sm text-emerald-50">
+                {createdTaskMessage} <Link href="/ops/tasks" className="font-bold underline">Go to P1 Task Queue</Link>
+              </CardContent>
+            </Card>
+          ) : null}
+          <PreviewCard preview={selectedPreview} loadingAction={loadingAction} onCreateTask={createInternalTask} />
         </div>
       </section>
     </div>
   );
 }
 
-function PreviewCard({ preview }: { preview: PreviewPanel | null }) {
+function PreviewCard({ preview, loadingAction, onCreateTask }: { preview: PreviewPanel | null; loadingAction: string | null; onCreateTask: (preview: OpportunityTaskPreview) => void }) {
   if (!preview) {
     return <Card className="border-white/10 bg-slate-950/75 backdrop-blur-xl"><CardContent className="p-6 text-sm text-slate-300">Generate a Proposal Preview, Task Preview or Evidence Plan to inspect internal planning output. Nothing is sent or executed.</CardContent></Card>;
   }
@@ -163,7 +190,7 @@ function PreviewCard({ preview }: { preview: PreviewPanel | null }) {
     return <Card className="border-cyan-300/20 bg-slate-950/75 backdrop-blur-xl"><CardHeader><CardTitle className="text-white">Proposal Preview · {preview.data.mode}</CardTitle></CardHeader><CardContent className="space-y-3 text-sm text-slate-300"><p className="font-bold text-white">{preview.data.title}</p><p>{preview.data.recommendedSolution}</p><p>{preview.data.suggestedPriceRange.currency} {preview.data.suggestedPriceRange.min}-{preview.data.suggestedPriceRange.max} · {preview.data.estimatedEffort}</p><ul className="list-disc pl-5">{preview.data.deliverySteps.map((item) => <li key={item}>{item}</li>)}</ul></CardContent></Card>;
   }
   if (preview.kind === "task") {
-    return <Card className="border-amber-300/20 bg-slate-950/75 backdrop-blur-xl"><CardHeader><CardTitle className="text-white">Task Preview · {preview.data.mode}</CardTitle></CardHeader><CardContent className="space-y-3 text-sm text-slate-300"><p>Connectors: {preview.data.requiredConnectors.join(", ")}</p><ul className="list-disc pl-5">{preview.data.executionChecklist.map((item) => <li key={item}>{item}</li>)}</ul><p className="rounded-xl border border-red-300/20 bg-red-500/10 p-3 text-red-100">Forbidden: {preview.data.forbiddenActions.join(" ")}</p></CardContent></Card>;
+    return <Card className="border-amber-300/20 bg-slate-950/75 backdrop-blur-xl"><CardHeader><CardTitle className="text-white">Task Preview · {preview.data.mode}</CardTitle></CardHeader><CardContent className="space-y-3 text-sm text-slate-300"><p className="rounded-xl border border-amber-300/20 bg-amber-400/10 p-3 text-amber-50">This preview can be converted into an internal P1 task only. It will not execute, write to GitHub, contact anyone, or create payment activity.</p><p>Connectors: {preview.data.requiredConnectors.join(", ")}</p><ul className="list-disc pl-5">{preview.data.executionChecklist.map((item) => <li key={item}>{item}</li>)}</ul><p className="rounded-xl border border-red-300/20 bg-red-500/10 p-3 text-red-100">Forbidden: {preview.data.forbiddenActions.join(" ")}</p><Button disabled={loadingAction === `create-task:${preview.data.opportunityId}`} onClick={() => onCreateTask(preview.data)} className="w-full bg-amber-300 text-slate-950 hover:bg-amber-200"><ListChecks className="mr-2 h-4 w-4" />Create Internal Task</Button><Link href="/ops/tasks" className="block text-center text-xs font-bold uppercase tracking-[0.2em] text-amber-100 underline">Review P1 Task Queue</Link></CardContent></Card>;
   }
   return <Card className="border-emerald-300/20 bg-slate-950/75 backdrop-blur-xl"><CardHeader><CardTitle className="text-white">Evidence Plan · {preview.data.mode}</CardTitle></CardHeader><CardContent className="space-y-3 text-sm text-slate-300"><ul className="list-disc pl-5">{preview.data.requirements.map((item) => <li key={item}>{item}</li>)}</ul><p>Examples: {preview.data.examples.join(", ")}</p></CardContent></Card>;
 }
