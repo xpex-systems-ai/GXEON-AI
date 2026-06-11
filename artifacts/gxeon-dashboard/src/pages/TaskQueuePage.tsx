@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { approveManualExecution, blockTask, cancelTask, fetchTaskQueue, fetchTaskQueueStatus, type TaskQueueCounts, type TaskQueueReadinessStatus, type TaskQueueRecord, type TaskQueueStatus } from "@/services/taskQueueService";
+import { simulateQuantumTaskRoute } from "@/services/homeCenterAgentsService";
 import { ArrowRight, ClipboardCheck, Inbox, Link2, Lock, ShieldCheck, XCircle } from "lucide-react";
 
 const emptyCounts: TaskQueueCounts = { total: 0, open: 0, blocked: 0, approvedForManualExecution: 0, done: 0, cancelled: 0, TASK_READY: 0, APPROVAL_REQUIRED: 0, APPROVED_FOR_MANUAL_EXECUTION: 0, BLOCKED: 0, IN_REVIEW: 0, DONE: 0, CANCELLED: 0 };
@@ -89,6 +90,11 @@ export default function TaskQueuePage() {
               <Badge className="border-blue-300/40 bg-blue-400/10 text-blue-100">P1 Task Queue</Badge>
               <Badge variant="outline" className="border-emerald-300/40 text-emerald-100">Backend-wired · in-memory</Badge>
               <Badge variant="outline" className="border-amber-300/40 text-amber-100">Manual-first only</Badge>
+              <Button size="sm" variant="outline" className="h-7 text-xs border-violet-300/40" onClick={async () => {
+                const res = await simulateQuantumTaskRoute({ title: "Task from P1 queue", requiredConnectors: ["GitHub"] });
+                console.log("Quantum advisory:", res);
+                alert("Quantum route simulation (advisory only). Approval: REQUIRED. Execution: DISABLED.");
+              }}>Simulate Quantum Route</Button>
             </div>
             <div>
               <p className="mb-2 text-xs uppercase tracking-[0.5em] text-blue-200/70">RADAR X → OPPORTUNITY INBOX → TASK PREVIEW → INTERNAL TASK</p>

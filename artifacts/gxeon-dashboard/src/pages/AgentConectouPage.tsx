@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertTriangle, Bot, CheckCircle2, ExternalLink, PlugZap, ShieldCheck, Sparkles } from "lucide-react";
-import { fetchHomeCenterAgentGrokReadiness, fetchHomeCenterAgentPermissions, fetchHomeCenterAgentRegistry, fetchHomeCenterAgentStatus, fallbackHomeCenterAgents, type AgentReadinessStatus, type GrokBuilderPreparationStatus, type HomeCenterAgentPermissionsResponse, type HomeCenterAgentRegistryResponse } from "@/services/homeCenterAgentsService";
+import { fetchHomeCenterAgentGrokReadiness, fetchHomeCenterAgentPermissions, fetchHomeCenterAgentRegistry, fetchHomeCenterAgentStatus, fallbackHomeCenterAgents, fetchQuantumStatus, simulateQuantumTaskRoute, fetchQuantumRiskEnergy, type AgentReadinessStatus, type GrokBuilderPreparationStatus, type HomeCenterAgentPermissionsResponse, type HomeCenterAgentRegistryResponse } from "@/services/homeCenterAgentsService";
 
 const connectors = [
   { name: "GitHub", status: "CONNECTED_READONLY", detail: "Repository visibility preserved without write actions." },
@@ -202,6 +202,24 @@ export default function AgentConectouPage() {
           <span>{loading ? "Loading Home Center Agents readiness..." : "P0 boundary confirmed: agents are not executing yet; no credential UI, no payment capture and no destructive connector automation are enabled."}</span>
         </CardContent>
       </Card>
+
+      {/* Quantum-Inspired Advisory Layer (Classical) — added cleanly alongside Home Center P0 UI */}
+      <section className="mt-8 space-y-3">
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="border-violet-300/40 text-violet-100">Quantum-Inspired Advisory Layer</Badge>
+          <span className="text-xs text-slate-500">CLASSICAL • PREVIEW-ONLY • NO EXECUTION</span>
+        </div>
+        <Card className="border-violet-300/20 bg-slate-950/70">
+          <CardContent className="p-5 space-y-3 text-sm text-slate-300">
+            <p>Uses classical algorithms (amplitude scoring, risk-energy, capability matching) for opportunity prioritization and agent route suggestions. Results are advisory. Existing Home Center registry and P1 Task Queue are not modified.</p>
+            <div className="flex gap-2 flex-wrap">
+              <Button size="sm" variant="outline" onClick={async () => { const s = await fetchQuantumStatus(); alert(JSON.stringify(s)); }}>Quantum Status</Button>
+              <Button size="sm" variant="outline" onClick={async () => { const r = await simulateQuantumTaskRoute({ title: "Example task", requiredConnectors: ["GitHub"] }); alert("Simulated route (see console). Approval required: YES. Execution: DISABLED."); console.log(r); }}>Simulate Route</Button>
+              <Button size="sm" variant="outline" onClick={async () => { const re = await fetchQuantumRiskEnergy({ riskFlags: ["payment_not_connected"] }); alert("Risk sample: " + JSON.stringify(re)); }}>Sample Risk Energy</Button>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
     </div>
   );
 }
