@@ -16,6 +16,7 @@ import opportunitiesRouter from "./opportunities";
 import agentsRouter from "./agents";
 import brokerRouter from "./broker";
 import executionRouter from "./execution";
+import validationRouter from "./validation";
 import tasksRouter from "./tasks";
 
 const router: IRouter = Router();
@@ -38,5 +39,6 @@ router.use(tasksRouter);
 router.use(agentsRouter);
 router.use(brokerRouter);
 router.use(executionRouter);
+router.use(validationRouter);
 
 export default router;
