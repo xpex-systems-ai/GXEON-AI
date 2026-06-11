@@ -17,6 +17,7 @@ import agentsRouter from "./agents";
 import brokerRouter from "./broker";
 import executionRouter from "./execution";
 import validationRouter from "./validation";
+import releaseRouter from "./release";
 import tasksRouter from "./tasks";
 
 const router: IRouter = Router();
@@ -40,5 +41,6 @@ router.use(agentsRouter);
 router.use(brokerRouter);
 router.use(executionRouter);
 router.use(validationRouter);
+router.use(releaseRouter);
 
 export default router;

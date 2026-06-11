@@ -9,6 +9,7 @@ import { operationalEmptyStates } from "@/data/operational-mode";
 import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { fetchDeliveryValidationPreviews, fetchDeliveryValidationStatus, fallbackDeliveryValidationStatus, type ApprovalState, type DeliveryValidationPreviewRecord, type DeliveryValidationStatus, type DeliveryValidationStatusSummary, type EvidenceState } from "@/services/deliveryValidationService";
+import { createReleasePreview, releaseInputFromValidationPreview } from "@/services/releaseGateService";
 import { ArrowRight, BadgeCheck, ClipboardCheck, FileCheck2, GitPullRequestArrow, Image, KanbanSquare, Lock, Route, ShieldCheck, Sparkles, TriangleAlert, UploadCloud } from "lucide-react";
 
 const approvalTone: Record<ApprovalState, string> = {
@@ -50,6 +51,8 @@ export default function DeliveryValidationPage() {
   const [status, setStatus] = useState<DeliveryValidationStatusSummary>(() => fallbackDeliveryValidationStatus());
   const [previews, setPreviews] = useState<DeliveryValidationPreviewRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [releasePreviewLinks, setReleasePreviewLinks] = useState<Record<string, string>>({});
+  const [creatingReleasePreviewId, setCreatingReleasePreviewId] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -65,6 +68,17 @@ export default function DeliveryValidationPage() {
     load();
     return () => controller.abort();
   }, []);
+
+
+  async function handleCreateReleasePreview(preview: DeliveryValidationPreviewRecord) {
+    setCreatingReleasePreviewId(preview.id);
+    try {
+      const releasePreview = await createReleasePreview(releaseInputFromValidationPreview(preview));
+      setReleasePreviewLinks((current) => ({ ...current, [preview.id]: releasePreview.id }));
+    } finally {
+      setCreatingReleasePreviewId(null);
+    }
+  }
 
   const metrics = useMemo(() => [
     ["Preview records", String(previews.length), "In-memory validation previews"],
@@ -156,7 +170,7 @@ export default function DeliveryValidationPage() {
             <Badge variant="outline" className="border-red-300/30 px-3 py-2 text-red-100">No release / approve-real / upload / pay / GitHub-write buttons</Badge>
           </div>
           <div className="grid gap-4 xl:grid-cols-2">
-            {previews.map((preview) => <ValidationPreviewCard key={preview.id} preview={preview} />)}
+            {previews.map((preview) => <ValidationPreviewCard key={preview.id} preview={preview} releasePreviewId={releasePreviewLinks[preview.id]} creatingReleasePreview={creatingReleasePreviewId === preview.id} onCreateReleasePreview={handleCreateReleasePreview} />)}
           </div>
         </section>
       ) : (
@@ -172,7 +186,7 @@ export default function DeliveryValidationPage() {
   );
 }
 
-function ValidationPreviewCard({ preview }: { preview: DeliveryValidationPreviewRecord }) {
+function ValidationPreviewCard({ preview, releasePreviewId, creatingReleasePreview, onCreateReleasePreview }: { preview: DeliveryValidationPreviewRecord; releasePreviewId?: string; creatingReleasePreview: boolean; onCreateReleasePreview: (preview: DeliveryValidationPreviewRecord) => void }) {
   const evidenceProgress = preview.evidence.length ? Math.round((preview.evidence.filter((item) => item.state !== "MISSING" && item.state !== "NEEDS_REVISION").length / preview.evidence.length) * 100) : 0;
 
   return (
@@ -234,6 +248,23 @@ function ValidationPreviewCard({ preview }: { preview: DeliveryValidationPreview
           <Badge variant="outline" className="border-rose-300/30 text-rose-100">RELEASE_DISABLED</Badge>
           <Badge variant="outline" className="border-amber-300/30 text-amber-100">EVIDENCE_REQUIRED</Badge>
           {preview.executionPreviewId ? <Link href="/ops/execution" className="inline-flex items-center gap-1 rounded-md border border-emerald-300/30 px-2.5 py-0.5 text-xs font-semibold text-emerald-100"><GitPullRequestArrow className="h-3 w-3" /> Execution {preview.executionPreviewId}<ArrowRight className="h-3 w-3" /></Link> : null}
+        </div>
+        <div className="rounded-3xl border border-cyan-300/20 bg-cyan-400/10 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-cyan-100">Release Gate P0 preview action</p>
+              <p className="mt-1 text-sm text-cyan-50">Create Release Preview is preview/manual only. It does not approve release, invoice, claim revenue, write ledgers or mutate validation as released.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => onCreateReleasePreview(preview)}
+              disabled={creatingReleasePreview}
+              className="inline-flex items-center gap-2 rounded-2xl border border-cyan-300/30 bg-cyan-400/15 px-4 py-3 text-sm font-bold text-cyan-50 transition hover:bg-cyan-400/25 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <ShieldCheck className="h-4 w-4" /> {creatingReleasePreview ? "Creating preview…" : "Create Release Preview"}
+            </button>
+          </div>
+          {releasePreviewId ? <Link href="/ops/release" className="mt-3 inline-flex items-center gap-2 rounded-2xl border border-emerald-300/30 bg-emerald-400/10 px-4 py-3 text-sm font-bold text-emerald-50 transition hover:bg-emerald-400/20">Release preview {releasePreviewId} created · Open /ops/release <ArrowRight className="h-4 w-4" /></Link> : null}
         </div>
       </CardContent>
     </Card>
