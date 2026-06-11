@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { fetchBrokerDecisions, fetchBrokerStatus, previewBrokerRoute, type BrokerDecisionPreview, type BrokerStatus } from "@/services/brokerService";
+import { createExecutionPreview, type ExecutionPreviewRecord } from "@/services/executionCenterService";
 import { ArrowRight, BrainCircuit, ClipboardCheck, Lock, Route, ShieldCheck } from "lucide-react";
 
 const demoInput = {
@@ -21,6 +23,8 @@ export default function BrokerPage() {
   const [decisions, setDecisions] = useState<BrokerDecisionPreview[]>([]);
   const [activeDecision, setActiveDecision] = useState<BrokerDecisionPreview | null>(null);
   const [loading, setLoading] = useState(false);
+  const [executionPreviewLoading, setExecutionPreviewLoading] = useState(false);
+  const [createdExecutionPreview, setCreatedExecutionPreview] = useState<ExecutionPreviewRecord | null>(null);
 
   async function refresh(signal?: AbortSignal) {
     const [runtimeStatus, brokerDecisions] = await Promise.all([fetchBrokerStatus(signal), fetchBrokerDecisions(signal)]);
@@ -41,6 +45,25 @@ export default function BrokerPage() {
     setActiveDecision(decision);
     await refresh();
     setLoading(false);
+  }
+
+  async function createManualExecutionPreview() {
+    const decision = activeDecision ?? decisions[0];
+    if (!decision) return;
+    setExecutionPreviewLoading(true);
+    const executionPreview = await createExecutionPreview({
+      brokerDecisionId: decision.id,
+      brokerDecision: decision,
+      title: decision.title,
+      taskId: decision.taskId,
+      recommendedAgentIds: decision.recommendedAgents.map((agent) => agent.agentId),
+      riskEnergy: decision.riskEnergy,
+      blockedActions: decision.blockedActions,
+      approvalGates: decision.approvalGates.map((gate) => gate.label),
+      operatorNextAction: decision.operatorNextAction,
+    });
+    setCreatedExecutionPreview(executionPreview);
+    setExecutionPreviewLoading(false);
   }
 
   const displayDecision = activeDecision ?? decisions[0] ?? null;
@@ -64,6 +87,17 @@ export default function BrokerPage() {
             <div className="flex flex-wrap gap-3">
               <Button onClick={previewDemoRoute} disabled={loading} className="bg-violet-300 text-slate-950 hover:bg-violet-200"><Route className="mr-2 h-4 w-4" />{loading ? "Previewing…" : "Preview Broker Route"}</Button>
               <Badge variant="outline" className="border-red-300/30 px-3 py-2 text-red-100">No execute / approve / install controls</Badge>
+              {displayDecision ? (
+                <Button onClick={createManualExecutionPreview} disabled={executionPreviewLoading} variant="outline" className="border-cyan-300/40 bg-cyan-400/10 text-cyan-100 hover:bg-cyan-400/20 hover:text-white">
+                  <ClipboardCheck className="mr-2 h-4 w-4" />
+                  {executionPreviewLoading ? "Creating preview…" : "Create Execution Preview · manual only"}
+                </Button>
+              ) : null}
+              {createdExecutionPreview ? (
+                <Link href="/ops/execution" className="rounded-md border border-emerald-300/40 bg-emerald-400/10 px-4 py-2 text-sm font-bold text-emerald-100 hover:bg-emerald-400/20">
+                  View Execution Preview {createdExecutionPreview.id}
+                </Link>
+              ) : null}
             </div>
           </div>
           <Card className="border-violet-300/20 bg-black/30">
