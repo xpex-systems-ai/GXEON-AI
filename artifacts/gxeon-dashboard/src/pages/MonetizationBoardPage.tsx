@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CircleDollarSign, HandCoins, Route, ShieldCheck } from "lucide-react";
 import { fetchMonetizationOffers, fetchMonetizationStatus, type MonetizationOffersResponse, type MonetizationRuntimeStatus } from "@/services/monetizationService";
 
-const fallbackPath = ["Opportunity", "Proposal", "Task", "Evidence", "Payment Pending"];
+const fallbackPath = ["Opportunity", "Proposal", "Task", "Evidence", "Ledger Preview", "Manual Payment Review"];
 
 export default function MonetizationBoardPage() {
   const [status, setStatus] = useState<MonetizationRuntimeStatus | null>(null);
@@ -32,7 +32,7 @@ export default function MonetizationBoardPage() {
     { label: "Offers", value: String(status?.counts.offers ?? 0), hint: "real-data registry starts empty" },
     { label: "Clients", value: String(status?.counts.clients ?? 0), hint: "awaiting first approved customer" },
     { label: "Revenue", value: "R$ 0", hint: "requires externally confirmed payment" },
-    { label: "Ledger preview", value: String(status?.counts.ledgerPreviewEvents ?? 0), hint: "ready after webhook confirmation" },
+    { label: "Ledger preview", value: String(status?.counts.ledgerPreviewEvents ?? status?.ledgerPreviewReadiness?.previewEvents ?? 0), hint: "preview events only" },
   ];
 
   const checkout = offers?.checkoutReadiness ?? status?.checkoutReadiness;
@@ -46,12 +46,13 @@ export default function MonetizationBoardPage() {
           <div className="flex flex-wrap items-center gap-3">
             <Badge className="border-amber-300/40 bg-amber-400/10 text-amber-100">Monetization runtime P0</Badge>
             <Badge variant="outline" className="border-emerald-300/40 text-emerald-100">real empty state</Badge>
-            <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">payment providers NOT_CONNECTED</Badge>
+            <Badge variant="outline" className="border-cyan-300/40 text-cyan-100">payment providers {status?.payments ?? "NOT_CONNECTED"}</Badge>
+            <Badge variant="outline" className="border-white/20 text-white">mode {status?.mode ?? "PREVIEW_ONLY"}</Badge>
           </div>
           <div>
             <p className="mb-2 text-xs uppercase tracking-[0.5em] text-amber-200/70">MICRODATA → MICROTASK → MICROTRANSACTION → LEDGER</p>
             <h1 className="max-w-5xl text-4xl font-black tracking-tight text-white md:text-6xl">Monetization board · runtime ready</h1>
-            <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">P0 exposes opportunity pipeline readiness, offer templates, checkout readiness and ledger preview boundaries. Revenue remains R$0 until an external provider confirms payment.</p>
+            <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">P0 exposes opportunity pipeline readiness, offer templates, checkout readiness and ledger preview boundaries. Revenue remains R$0, with realRevenueClaimed=false, until a future manual payment review stage is approved outside P0.</p>
           </div>
           <div className="flex flex-wrap gap-3">
             <Link href="/ops/radar-x"><Button className="bg-amber-300 text-slate-950 hover:bg-amber-200">Open Radar X intake <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
@@ -80,8 +81,8 @@ export default function MonetizationBoardPage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-xs uppercase tracking-[0.35em] text-cyan-200/70">Opportunity monetization pipeline</p>
-            <h2 className="text-2xl font-bold text-white">Opportunity → Proposal → Task → Evidence → Payment Pending</h2>
-            <p className="mt-1 text-sm text-cyan-50/80">Counts come from the P0 in-memory Opportunity Inbox when the backend is available. Payment remains pending and providers remain NOT_CONNECTED.</p>
+            <h2 className="text-2xl font-bold text-white">Opportunity → Proposal → Task → Evidence → Ledger Preview → Manual Payment Review</h2>
+            <p className="mt-1 text-sm text-cyan-50/80">Counts come from the P0 in-memory Opportunity Inbox when the backend is available. Ledger preview events remain preview-only and providers remain NOT_CONNECTED.</p>
           </div>
           <Link href="/ops/opportunities"><Button className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">Review inbox <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
         </div>
@@ -154,7 +155,7 @@ export default function MonetizationBoardPage() {
                 <span key={step} className="flex items-center gap-2"><span className="rounded-full border border-white/15 bg-white/10 px-3 py-1">{step}</span>{index < firstRevenuePath.length - 1 && <ArrowRight className="h-4 w-4 text-amber-200" />}</span>
               ))}
             </div>
-            <p className="mt-3 text-sm text-amber-50/80">Ledger events remain preview-only until a real payment is manually connected, verified by webhook and approved for delivery tracking.</p>
+            <p className="mt-3 text-sm text-amber-50/80">Ledger events remain preview-only; P0 does not create checkout sessions, capture payments, issue invoices, contact customers, or claim real revenue.</p>
           </div>
           <Route className="h-8 w-8 text-amber-200" />
         </div>

@@ -1,21 +1,29 @@
-export type PaymentProviderStatus = {
-  provider: "mercado_pago" | "stripe";
-  label: string;
-  status: "NOT_CONNECTED" | "CONNECTED_READONLY" | "READY_FOR_TEST";
+export type MonetizationMode = "PREVIEW_ONLY";
+
+export type MonetizationSafetyBoundary = {
+  mode: MonetizationMode;
+  paymentProvidersConnected: false;
   captureEnabled: false;
   checkoutSessionCreationEnabled: false;
+  invoiceDisabled: true;
+  realRevenueClaimed: false;
+  approvalRequired: true;
+};
+
+export type PaymentProviderStatus = MonetizationSafetyBoundary & {
+  provider: "mercado_pago" | "stripe";
+  label: string;
+  status: "NOT_CONNECTED";
   nextStep: string;
 };
 
-export type CheckoutReadiness = {
+export type CheckoutReadiness = MonetizationSafetyBoundary & {
   status: "NOT_CONNECTED";
-  captureEnabled: false;
-  checkoutSessionCreationEnabled: false;
   boundary: string;
   providers: PaymentProviderStatus[];
 };
 
-export type OfferTemplate = {
+export type OfferTemplate = MonetizationSafetyBoundary & {
   id: string;
   title: string;
   category: string;
@@ -24,9 +32,13 @@ export type OfferTemplate = {
   evidenceRequirements: string[];
   manualApprovalRequired: true;
   status: "TEMPLATE_READY_NO_CLIENT";
+  internalPreviewOnly?: true;
+  customerContactEnabled?: false;
+  paymentLink?: null;
+  checkoutUrl?: null;
 };
 
-export type MonetizationRuntimeStatus = {
+export type MonetizationRuntimeStatus = MonetizationSafetyBoundary & {
   status: "MONETIZATION_RUNTIME_READY";
   payments: "NOT_CONNECTED";
   offers: "TEMPLATE_READY_NO_CLIENTS";
@@ -35,22 +47,24 @@ export type MonetizationRuntimeStatus = {
   counts: { offers: number; clients: number; revenue: number; ledgerPreviewEvents: number };
   opportunityPipeline?: { new: number; review: number; qualified: number; proposalDrafted: number; taskReady: number; evidenceReady: number };
   firstRevenuePath: string[];
+  ledgerPreviewReadiness?: { status: "LEDGER_P0_READY" | "LEDGER_P0_UNAVAILABLE"; previewEvents: number; receivedRevenue: 0; realRevenueClaimed: false };
 };
 
-export type MonetizationOffersResponse = {
+export type MonetizationOffersResponse = MonetizationSafetyBoundary & {
   registeredOffers: unknown[];
   templates: OfferTemplate[];
   checkoutReadiness: CheckoutReadiness;
 };
 
-const configuredApiBaseUrl = (import.meta.env.VITE_GXEON_API_BASE_URL as string | undefined)?.trim().replace(/\/$/, "") ?? "";
+import { apiUrl } from "./apiBase";
 
-function apiUrl(path: string): string {
-  return `${configuredApiBaseUrl}${path}`;
-}
 
 async function jsonGet<T>(path: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(apiUrl(path), { headers: { Accept: "application/json" }, signal });
+  const contentType = response.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) {
+    throw new Error(`MONETIZATION_RUNTIME_NON_JSON_RESPONSE_${response.status}`);
+  }
   const payload = (await response.json()) as { success: boolean; data: T; error?: string };
   if (!response.ok || !payload.success) {
     throw new Error(payload.error ?? `REQUEST_FAILED_${response.status}`);

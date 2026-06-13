@@ -1,85 +1,66 @@
-export type MonetizationStatus =
-  | "DRAFT"
-  | "READY_TO_SELL"
-  | "CHECKOUT_PENDING"
-  | "PAYMENT_PENDING"
-  | "PAID_CONFIRMED"
-  | "DELIVERY_PENDING"
-  | "LEDGER_READY";
+export type MonetizationMode = "PREVIEW_ONLY";
 
-export type PaymentProviderConnectionStatus = "NOT_CONNECTED" | "CONNECTED_READONLY" | "READY_FOR_TEST";
+export type PaymentProviderConnectionStatus = "NOT_CONNECTED";
 
-export type PaymentProviderStatus = {
+export type MonetizationSafetyBoundary = {
+  mode: MonetizationMode;
+  paymentProvidersConnected: false;
+  captureEnabled: false;
+  checkoutSessionCreationEnabled: false;
+  invoiceDisabled: true;
+  realRevenueClaimed: false;
+  approvalRequired: true;
+};
+
+export type PaymentProviderStatus = MonetizationSafetyBoundary & {
   provider: "mercado_pago" | "stripe";
   label: string;
   status: PaymentProviderConnectionStatus;
-  captureEnabled: false;
-  checkoutSessionCreationEnabled: false;
   nextStep: string;
 };
 
-export type CheckoutReadiness = {
+export type CheckoutReadiness = MonetizationSafetyBoundary & {
   status: "NOT_CONNECTED";
-  captureEnabled: false;
-  checkoutSessionCreationEnabled: false;
-  providers: PaymentProviderStatus[];
   boundary: string;
+  providers: PaymentProviderStatus[];
 };
 
-export type OfferTemplateId =
-  | "landing_page"
-  | "deploy_fix"
-  | "analytics_setup"
-  | "checkout_setup"
-  | "simple_dashboard"
-  | "automation_flow";
+export type OfferTemplateId = "repo_audit_basic" | "deploy_rescue" | "supabase_rls_audit" | "agent_ops_setup";
 
-export type OfferTemplate = {
+export type OfferTemplate = MonetizationSafetyBoundary & {
   id: OfferTemplateId;
   title: string;
   category: string;
-  priceRange: { min: number; max: number; currency: "BRL" | "USD" };
+  priceRange: { min: number; max: number; currency: "USD" };
   deliveryWindow: string;
   evidenceRequirements: string[];
   manualApprovalRequired: true;
   status: "TEMPLATE_READY_NO_CLIENT";
+  internalPreviewOnly: true;
+  customerContactEnabled: false;
+  paymentLink: null;
+  checkoutUrl: null;
 };
 
-export type Offer = {
-  id: string;
-  templateId: OfferTemplateId;
-  status: MonetizationStatus;
-  title: string;
-  createdAt: string;
-  approvedByOperatorAt: string | null;
-};
-
-export type Microtask = {
-  id: string;
-  offerId: string;
-  status: MonetizationStatus;
-  title: string;
-  requiredEvidence: string[];
-};
-
-export type LedgerPreviewEvent = {
-  id: string;
-  status: "EMPTY_REAL_DATA" | "READY_FOR_CONFIRMED_PAYMENT";
-  provider: PaymentProviderStatus["provider"] | null;
-  amount: number | null;
-  currency: "BRL" | "USD" | null;
-  source: "confirmed_payment_webhook" | null;
-  captureEnabled: false;
-  note: string;
-};
-
-export type MonetizationRuntimeStatus = {
+export type MonetizationRuntimeStatus = MonetizationSafetyBoundary & {
   status: "MONETIZATION_RUNTIME_READY";
   payments: "NOT_CONNECTED";
   offers: "TEMPLATE_READY_NO_CLIENTS";
   radar: "MANUAL_INTAKE_PREVIEW_READY";
   checkoutReadiness: CheckoutReadiness;
-  counts: { offers: 0; clients: 0; revenue: 0; ledgerPreviewEvents: 0 };
-  opportunityPipeline?: { new: number; review: number; qualified: number; proposalDrafted: number; taskReady: number; evidenceReady: number };
-  firstRevenuePath: string[];
+  counts: { offers: number; clients: 0; revenue: 0; ledgerPreviewEvents: number };
+  opportunityPipeline: { new: number; review: number; qualified: number; proposalDrafted: number; taskReady: number; evidenceReady: number };
+  firstRevenuePath: ["Opportunity", "Proposal", "Task", "Evidence", "Ledger Preview", "Manual Payment Review"];
+  ledgerPreviewReadiness: {
+    status: "LEDGER_P0_READY" | "LEDGER_P0_UNAVAILABLE";
+    previewEvents: number;
+    receivedRevenue: 0;
+    realRevenueClaimed: false;
+  };
+};
+
+export type MonetizationOffersResponse = MonetizationSafetyBoundary & {
+  registeredOffers: [];
+  templates: OfferTemplate[];
+  checkoutReadiness: CheckoutReadiness;
 };

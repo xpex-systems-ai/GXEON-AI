@@ -1,32 +1,19 @@
 import { Router, type IRouter } from "express";
-import { getCheckoutReadiness, getMonetizationRuntimeStatus, listLedgerPreviewEvents, listOfferTemplates, listRegisteredOffers } from "../monetization/offerRegistry";
+import { getMonetizationOffersResponse, getMonetizationRuntimeStatus } from "../monetization/monetizationRuntime";
 
 const router: IRouter = Router();
+
+router.use("/monetization", (_req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
 
 router.get("/monetization/status", (_req, res) => {
   res.json({ success: true, data: getMonetizationRuntimeStatus() });
 });
 
 router.get("/monetization/offers", (_req, res) => {
-  res.json({
-    success: true,
-    data: {
-      registeredOffers: listRegisteredOffers(),
-      templates: listOfferTemplates(),
-      checkoutReadiness: getCheckoutReadiness(),
-    },
-  });
-});
-
-router.get("/monetization/ledger-preview", (_req, res) => {
-  res.json({
-    success: true,
-    data: {
-      events: listLedgerPreviewEvents(),
-      readiness: getCheckoutReadiness(),
-      boundary: "Preview endpoint only. Payment capture and ledger posting are disabled in P0.",
-    },
-  });
+  res.json({ success: true, data: getMonetizationOffersResponse() });
 });
 
 export default router;
