@@ -30,6 +30,7 @@ import manualPaymentRouter from "./manualPayment";
 import clientOfferSendRouter from "./clientOfferSend";
 import manualProspectsRouter from "./manualProspects";
 import r100WarRoomRouter from "./r100WarRoom";
+import revenueCloseLoopRouter from "./revenueCloseLoop";
 
 const router: IRouter = Router();
 
@@ -53,6 +54,7 @@ router.use(manualPaymentRouter);
 router.use(clientOfferSendRouter);
 router.use(manualProspectsRouter);
 router.use(r100WarRoomRouter);
+router.use(revenueCloseLoopRouter);
 router.use(opportunitiesRouter);
 router.use(tasksRouter);
 router.use(web3TasksRouter);
