@@ -3,9 +3,10 @@ import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, CircleDollarSign, HandCoins, Route, ShieldCheck } from "lucide-react";
+import { ArrowRight, CircleDollarSign, HandCoins, Plug, Route, ShieldCheck } from "lucide-react";
 import { fetchMonetizationOffers, fetchMonetizationStatus, type MonetizationOffersResponse, type MonetizationRuntimeStatus } from "@/services/monetizationService";
 import { fetchWeb3PipelineLinks, fetchWeb3TaskPreviews } from "@/services/web3TaskRadarService";
+import { fetchConnectorBrainSummary, type ConnectorBrainSummary } from "@/services/realConnectorService";
 
 const fallbackPath = ["Opportunity", "Proposal", "Task", "Evidence", "Ledger Preview", "Manual Payment Review"];
 
@@ -14,14 +15,16 @@ export default function MonetizationBoardPage() {
   const [offers, setOffers] = useState<MonetizationOffersResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [web3Counts, setWeb3Counts] = useState({ previews: 0, qualifiedLinks: 0 });
+  const [connectorSummary, setConnectorSummary] = useState<ConnectorBrainSummary | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
-    Promise.all([fetchMonetizationStatus(controller.signal), fetchMonetizationOffers(controller.signal), fetchWeb3TaskPreviews(controller.signal), fetchWeb3PipelineLinks(controller.signal)])
-      .then(([runtimeStatus, offerData, web3Previews, web3Links]) => {
+    Promise.all([fetchMonetizationStatus(controller.signal), fetchMonetizationOffers(controller.signal), fetchWeb3TaskPreviews(controller.signal), fetchWeb3PipelineLinks(controller.signal), fetchConnectorBrainSummary(controller.signal)])
+      .then(([runtimeStatus, offerData, web3Previews, web3Links, connectors]) => {
         setStatus(runtimeStatus);
         setOffers(offerData);
         setWeb3Counts({ previews: web3Previews.count, qualifiedLinks: web3Links.links.filter((link) => link.status === "QUALIFIED_FOR_TASK_QUEUE").length });
+        setConnectorSummary(connectors);
         setError(null);
       })
       .catch((loadError) => {
@@ -66,11 +69,14 @@ export default function MonetizationBoardPage() {
             <Link href="/ops/web3-tasks"><Button variant="outline" className="border-emerald-300/30 text-emerald-100 hover:bg-emerald-400/10">Open Web3 Task Radar</Button></Link>
             <Link href="/ops/agent-economy"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open Agent Economy Radar</Button></Link>
             <Link href="/ops/ledger"><Button variant="outline" className="border-white/20 text-white hover:bg-white/10">Open ledger</Button></Link>
+            <Link href="/ops/connectors"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10"><Plug className="mr-2 h-4 w-4" />Open Connector Command Center</Button></Link>
           </div>
           {error && <p className="rounded-2xl border border-red-300/25 bg-red-500/10 p-3 text-sm text-red-100">Backend unavailable: {error}</p>}
         </div>
       </section>
 
+
+      <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">{Object.entries(connectorSummary?.monetizationReadiness ?? { paymentManualReady: false, marketplaceSetupReady: false, modelProviderSetupReady: false, walletReadOnlyReady: false }).map(([label, ready]) => (<Card key={label} className="border-cyan-300/20 bg-slate-950/75"><CardContent className="p-5"><p className="text-xs uppercase tracking-[0.25em] text-cyan-100">{label}</p><p className="mt-2 text-2xl font-black text-white">{ready ? "READY" : "SETUP"}</p><p className="text-xs text-slate-300">Readiness only; no checkout/payment buttons.</p></CardContent></Card>))}</section>
       <section className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
         {counters.map((counter) => (
           <Card key={counter.label} className="border-white/10 bg-slate-950/75 backdrop-blur-xl">

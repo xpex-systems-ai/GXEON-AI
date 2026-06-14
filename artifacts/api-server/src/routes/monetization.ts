@@ -1,5 +1,6 @@
 import { Router, type IRouter } from "express";
 import { getMonetizationOffersResponse, getMonetizationRuntimeStatus } from "../monetization/monetizationRuntime";
+import { buildConnectorBrainSummary } from "../connectors/connectorBrainSummary";
 
 const router: IRouter = Router();
 
@@ -9,7 +10,7 @@ router.use("/monetization", (_req, res, next) => {
 });
 
 router.get("/monetization/status", (_req, res) => {
-  res.json({ success: true, data: getMonetizationRuntimeStatus() });
+  res.json({ success: true, data: { ...getMonetizationRuntimeStatus(), connectorReadiness: buildConnectorBrainSummary() } });
 });
 
 router.get("/monetization/offers", (_req, res) => {

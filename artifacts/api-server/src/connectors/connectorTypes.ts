@@ -1,0 +1,10 @@
+export type ConnectorMode = "MANUAL_FIRST";
+export type ConnectorStatus = "DISCONNECTED" | "SETUP_REQUIRED" | "READY_TO_CONNECT" | "CONNECTED_READ_ONLY" | "CONNECTED_MANUAL" | "CONNECTED_PENDING_VERIFICATION" | "ERROR" | "PLANNED";
+export type ConnectorCategory = "CODE_AND_REPO" | "IDENTITY_AND_WORKSPACE" | "PAYMENT" | "MARKETPLACE" | "WEB3_WALLET" | "MODEL_ROUTER" | "MODEL_AND_DATASET_HUB" | "AI_PROVIDER_AND_MCP" | "AI_PROVIDER" | "DEPLOYMENT" | "DATABASE" | "TASK_AND_BOUNTY";
+export type ConnectorConnectionMode = string;
+export type ConnectorCapability = string;
+export type ConnectorSafetyBoundary = { manualApprovalRequired: true; secretsInFrontend: false; destructiveActionsDisabled: true; paymentsDisabled: true; walletSigningDisabled: true; externalAutomationDisabled: true };
+export type ConnectorRegistryItem = { id: string; label: string; category: ConnectorCategory; mode: ConnectorMode; connectionModes: ConnectorConnectionMode[]; capabilities: ConnectorCapability[]; blockedActions: string[]; requiredEnv: string[]; statusGoal: string; docsNotes: string[]; monetizationRelevance: string; providerUrl: string; safety: ConnectorSafetyBoundary };
+export type ConnectorStatusRecord = ConnectorRegistryItem & { status: ConnectorStatus; missingEnvVars: string[]; configuredEnvVars: string[]; safeSetupInstructions: string[]; nextManualAction: string; manualNote?: string; updatedAt: string; walletSafetyChecklist?: string[] };
+export type ConnectorLaunchAction = { type: "OAUTH_REDIRECT" | "SETUP_REQUIRED" | "MANUAL_INSTRUCTIONS" | "PROVIDER_PAGE" | "PLANNED"; connectorId: string; status: ConnectorStatus; authUrl?: string; providerUrl?: string; missingEnvVars: string[]; scopes: string[]; manualApprovalRequired: true; nextManualAction: string; warnings: string[] };
+export const defaultConnectorSafety: ConnectorSafetyBoundary = { manualApprovalRequired: true, secretsInFrontend: false, destructiveActionsDisabled: true, paymentsDisabled: true, walletSigningDisabled: true, externalAutomationDisabled: true };
