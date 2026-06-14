@@ -143,6 +143,7 @@ export default function TaskQueuePage() {
             <CardContent className="space-y-3">
               {(status?.boundaries ?? ["Internal P1 tasks only; no autonomous execution.", "No external contact, GitHub writes or payment action."]).map((item) => <div key={item} className="flex gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-3 text-sm text-slate-300"><Lock className="mt-0.5 h-4 w-4 shrink-0 text-blue-200" /><span>{item}</span></div>)}
               <Link href="/ops/opportunities"><div className="flex items-center justify-between rounded-2xl border border-cyan-300/20 bg-cyan-400/10 p-3 text-sm font-bold text-cyan-100 transition hover:border-cyan-300/40"><span>Create from Opportunity Inbox</span><ArrowRight className="h-4 w-4" /></div></Link>
+              <Link href="/ops/web3-tasks"><div className="flex items-center justify-between rounded-2xl border border-emerald-300/20 bg-emerald-400/10 p-3 text-sm font-bold text-emerald-100 transition hover:border-emerald-300/40"><span>Open Web3 Task Radar</span><ArrowRight className="h-4 w-4" /></div></Link>
             </CardContent>
           </Card>
         </div>
