@@ -7,6 +7,7 @@ import { getGitHubDemandExecutionBrainSummary } from "../radar/githubDemandExecu
 import { buildOperatorDeliveryWorkspaceBrainSummary } from "../deliveryWorkspace/operatorDeliveryWorkspaceBrainSummary";
 import { buildManualPaymentBrainSummary } from "../manualPayment/manualPaymentBrainSummary";
 import { buildClientOfferBrainSummary } from "../clientOffer/clientOfferBrainSummary";
+import { buildManualProspectBrainSummary } from "../prospect/manualProspectBrainSummary";
 
 const router: IRouter = Router();
 
@@ -16,7 +17,7 @@ router.use("/monetization", (_req, res, next) => {
 });
 
 router.get("/monetization/status", (_req, res) => {
-  res.json({ success: true, data: { ...getMonetizationRuntimeStatus(), connectorReadiness: buildConnectorBrainSummary(), githubDemand: buildGitHubDemandBrainSummary(), githubDemandConversion: buildGitHubDemandConversionBrainSummary(), githubDemandExecution: getGitHubDemandExecutionBrainSummary(), deliveryWorkspace: buildOperatorDeliveryWorkspaceBrainSummary(), manualPayment: buildManualPaymentBrainSummary(), clientOfferSend: buildClientOfferBrainSummary() } });
+  res.json({ success: true, data: { ...getMonetizationRuntimeStatus(), connectorReadiness: buildConnectorBrainSummary(), githubDemand: buildGitHubDemandBrainSummary(), githubDemandConversion: buildGitHubDemandConversionBrainSummary(), githubDemandExecution: getGitHubDemandExecutionBrainSummary(), deliveryWorkspace: buildOperatorDeliveryWorkspaceBrainSummary(), manualPayment: buildManualPaymentBrainSummary(), clientOfferSend: buildClientOfferBrainSummary(), manualProspects: buildManualProspectBrainSummary() } });
 });
 
 router.get("/monetization/offers", (_req, res) => {

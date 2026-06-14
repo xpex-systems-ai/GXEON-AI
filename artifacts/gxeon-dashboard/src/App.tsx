@@ -27,6 +27,7 @@ import GitHubDemandRadarPage from "@/pages/GitHubDemandRadarPage";
 import OperatorDeliveryWorkspacePage from "@/pages/OperatorDeliveryWorkspacePage";
 import ManualPaymentRequestPage from "@/pages/ManualPaymentRequestPage";
 import ClientOfferSendPage from "@/pages/ClientOfferSendPage";
+import ManualProspectPipelinePage from "@/pages/ManualProspectPipelinePage";
 import ConnectorGatewayPage from "@/pages/ConnectorGatewayPage";
 import ConnectorCommandCenterPage from "@/pages/ConnectorCommandCenterPage";
 import ConnectorDetailPage from "@/pages/ConnectorDetailPage";
@@ -102,6 +103,7 @@ function Router() {
             <Route path="/ops/delivery-workspace" component={OperatorDeliveryWorkspacePage} />
             <Route path="/ops/manual-payment" component={ManualPaymentRequestPage} />
             <Route path="/ops/client-offers" component={ClientOfferSendPage} />
+            <Route path="/ops/prospects" component={ManualProspectPipelinePage} />
             <Route path="/ops/connectors/github" component={GitHubReadonlyConnectorPage} />
             <Route path="/ops/connectors/vercel" component={VercelReadonlyConnectorPage} />
             <Route path="/ops/connectors/railway" component={RailwayReadonlyConnectorPage} />
