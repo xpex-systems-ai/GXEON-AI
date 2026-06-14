@@ -39,6 +39,7 @@ import RailwayReadonlyConnectorPage from "@/pages/RailwayReadonlyConnectorPage";
 import SupabaseReadonlyConnectorPage from "@/pages/SupabaseReadonlyConnectorPage";
 import Microsoft365ConnectorPage from "@/pages/Microsoft365ConnectorPage";
 import HealthPage from "@/pages/HealthPage";
+import OperatorAssistantPage from "@/pages/OperatorAssistantPage";
 
 const queryClient = new QueryClient();
 
@@ -88,6 +89,7 @@ function Router() {
         <DashboardLayout>
           <Switch>
             <Route path="/ops/r100-war-room" component={R100OperatorWarRoomPage} />
+            <Route path="/ops/operator-assistant" component={OperatorAssistantPage} />
             <Route path="/ops/revenue-close-loop" component={RevenueCloseLoopPage} />
             <Route path="/ops/brain" component={CommandBrainPage} />
             <Route path="/ops/revenue-sprint" component={RevenueSprintPage} />

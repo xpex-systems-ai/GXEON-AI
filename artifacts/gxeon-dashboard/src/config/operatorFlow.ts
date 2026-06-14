@@ -7,6 +7,7 @@ const safety = { manualOnly: true, copyOnly: true, previewOnly: true, safe: true
 const groups: OperatorFlowGroup[] = [
   { title: "R$100 Official Flow", purpose: "Fluxo principal para monetização manual segura.", items: [
     { step: 1, labelPt: "Sala R$100", labelEn: "R$100 War Room", href: "/ops/r100-war-room", icon: "HandCoins", status: "review", description: "Sala de guerra com próxima ação manual mais rápida.", officialR100Flow: true, ...safety },
+    { labelPt: "Agente Executor", labelEn: "Operator Assistant", href: "/ops/operator-assistant", icon: "BrainCircuit", status: "review", description: "Camada assistiva P1 que recomenda a próxima ação manual sem substituir etapas.", manualOnly: true, copyOnly: true, previewOnly: true, safe: true },
     { step: 2, labelPt: "Cérebro", labelEn: "Brain", href: "/ops/brain", icon: "BrainCircuit", status: "review", description: "Comando central de prioridade e sprint.", officialR100Flow: true, ...safety },
     { step: 3, labelPt: "Sprint de Receita", labelEn: "Revenue Sprint", href: "/ops/revenue-sprint", icon: "HandCoins", status: "review", description: "Define meta e rota manual para R$100.", officialR100Flow: true, ...safety },
     { step: 4, labelPt: "Perspectivas", labelEn: "Prospects", href: "/ops/prospects", icon: "Inbox", status: "review", description: "Cadastro manual de prospect fornecido pelo operador.", officialR100Flow: true, ...safety },

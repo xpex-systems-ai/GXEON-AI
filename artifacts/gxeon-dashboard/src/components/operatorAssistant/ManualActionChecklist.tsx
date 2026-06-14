@@ -1,0 +1,1 @@
+export function ManualActionChecklist({items=[]}:{items?:string[]}){return <section className="rounded-3xl border border-white/10 bg-white/[0.035] p-4"><h3 className="font-black text-white">Checklist manual do operador</h3><ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-stone-300">{items.map((i,idx)=><li key={idx}>{i}</li>)}</ol></section>}

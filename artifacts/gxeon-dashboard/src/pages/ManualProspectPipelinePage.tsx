@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { OperatorAssistantPanel } from "@/components/operatorAssistant/OperatorAssistantPanel";import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { ManualProspectCard } from "@/components/prospect/ManualProspectCard";
 import { CloseLoopCreateCta } from "@/components/revenue-close-loop/CloseLoopCreateCta";
