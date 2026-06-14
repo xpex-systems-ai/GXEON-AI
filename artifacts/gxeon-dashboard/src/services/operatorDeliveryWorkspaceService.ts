@@ -9,3 +9,4 @@ export const createEvidencePreviewFromWorkspace=(id:string)=>req<{actionResult:D
 export const createValidationPreviewFromWorkspace=(id:string)=>req<{actionResult:DeliveryWorkspaceActionResult;workspace:any}>(`/api/delivery-workspace/workspaces/${id}/validation-preview`,{method:"POST",body:JSON.stringify({})});
 export const createReleasePreviewFromWorkspace=(id:string)=>req<{actionResult:DeliveryWorkspaceActionResult;workspace:any}>(`/api/delivery-workspace/workspaces/${id}/release-preview`,{method:"POST",body:JSON.stringify({})});
 export const createLedgerPreviewFromWorkspace=(id:string)=>req<{actionResult:DeliveryWorkspaceActionResult;workspace:any}>(`/api/delivery-workspace/workspaces/${id}/ledger-preview`,{method:"POST",body:JSON.stringify({})});
+export const createManualPaymentRequestPreviewFromWorkspace=(id:string)=>req<any>(`/api/delivery-workspace/workspaces/${id}/manual-payment-request-preview`,{method:"POST",body:JSON.stringify({})});

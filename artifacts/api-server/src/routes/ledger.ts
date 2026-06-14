@@ -2,6 +2,7 @@ import { Router, type IRouter, type Response } from "express";
 import { createLedgerPreview, getLedgerPreviewById, getLedgerStatusSummary, listLedgerPreviews, updateLedgerPreviewState } from "../ledger/ledgerStore";
 import { ledgerSafetyBoundary } from "../ledger/ledgerBuilder";
 import type { LedgerCreateInput, LedgerStateUpdateInput } from "../ledger/ledgerTypes";
+import { buildManualPaymentBrainSummary } from "../manualPayment/manualPaymentBrainSummary";
 
 const router: IRouter = Router();
 
@@ -47,7 +48,7 @@ function parseStateUpdate(body: unknown): LedgerStateUpdateInput {
 
 router.get("/ledger/status", (_req, res) => {
   try {
-    res.json({ success: true, data: getLedgerStatusSummary() });
+    res.json({ success: true, data: { ...getLedgerStatusSummary(), manualPayment: buildManualPaymentBrainSummary() } });
   } catch (error) {
     safeError(res, error, "LEDGER_STATUS_FAILED");
   }

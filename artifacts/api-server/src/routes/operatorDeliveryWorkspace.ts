@@ -3,6 +3,7 @@ import { getExecutionPackById } from "../radar/githubDemandExecutionStore";
 import { createOperatorDeliveryWorkspace, getOperatorDeliveryWorkspaceById, listOperatorDeliveryWorkspaces, recordOperatorDeliveryWorkspaceAction, updateOperatorDeliveryWorkspaceStatus } from "../deliveryWorkspace/operatorDeliveryWorkspaceStore";
 import { deliveryWorkspaceSafetyFlags, type DeliveryWorkspaceActionType, type OperatorDeliveryWorkspaceStatus } from "../deliveryWorkspace/operatorDeliveryWorkspaceTypes";
 import { buildOperatorDeliveryWorkspaceBrainSummary } from "../deliveryWorkspace/operatorDeliveryWorkspaceBrainSummary";
+import { createManualPaymentRequestFromDeliveryWorkspace } from "../deliveryWorkspace/operatorDeliveryWorkspacePaymentBridge";
 const router: IRouter = Router();
 const error=(res:Response,e:unknown,code=400)=>res.status(code).json({success:false,data:deliveryWorkspaceSafetyFlags,error:e instanceof Error?e.message:"DELIVERY_WORKSPACE_REQUEST_FAILED"});
 const result=(ws:any, actionType:DeliveryWorkspaceActionType, status:OperatorDeliveryWorkspaceStatus, preview:Record<string,unknown>)=>({ actionType,status,workspaceId:ws.id,executionPackId:ws.executionPackId,mode:"PREVIEW_ONLY",safetyFlags:deliveryWorkspaceSafetyFlags,nextManualAction:ws.nextManualAction,preview });
@@ -16,4 +17,5 @@ router.post("/delivery-workspace/workspaces/:id/evidence-preview",action("EVIDEN
 router.post("/delivery-workspace/workspaces/:id/validation-preview",action("VALIDATION_PREVIEW","VALIDATION_PREVIEW_CREATED","validationChecklist"));
 router.post("/delivery-workspace/workspaces/:id/release-preview",action("RELEASE_PREVIEW","RELEASE_PREVIEW_CREATED","releaseChecklist"));
 router.post("/delivery-workspace/workspaces/:id/ledger-preview",action("LEDGER_PREVIEW","LEDGER_PREVIEW_CREATED","ledgerPreview"));
+router.post("/delivery-workspace/workspaces/:id/manual-payment-request-preview",(req,res)=>{const ar=createManualPaymentRequestFromDeliveryWorkspace(req.params.id); if(!ar) return error(res,new Error("OPERATOR_DELIVERY_WORKSPACE_NOT_FOUND"),404); return res.status(201).json({success:true,data:{...deliveryWorkspaceSafetyFlags,paymentProviderDisabled:true,realRevenueClaimed:false,paymentNotGuaranteed:true,actionResult:ar,request:ar.preview.request}});});
 export default router;

@@ -42,6 +42,7 @@ export default function MonetizationBoardPage() {
     { label: "Web3 previews", value: String(web3Counts.previews), hint: "manual imports only" },
     { label: "Qualified Web3", value: String(web3Counts.qualifiedLinks), hint: "pipeline links preview" },
     { label: "GitHub Exec Packs", value: String(status?.githubDemandExecution?.readyCount ?? 0), hint: "manual revenue source preview" },
+    { label: "Manual Payment Ready", value: String((status as any)?.manualPayment?.manualPaymentReadyCount ?? 0), hint: `preview total R$ ${(status as any)?.manualPayment?.manualPaymentTotalExpectedPreviewBrl ?? 0}` },
   ];
 
   const checkout = offers?.checkoutReadiness ?? status?.checkoutReadiness;
@@ -71,6 +72,7 @@ export default function MonetizationBoardPage() {
             <Link href="/ops/web3-tasks"><Button variant="outline" className="border-emerald-300/30 text-emerald-100 hover:bg-emerald-400/10">Open Web3 Task Radar</Button></Link>
             <Link href="/ops/agent-economy"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open Agent Economy Radar</Button></Link>
             <Link href="/ops/ledger"><Button variant="outline" className="border-white/20 text-white hover:bg-white/10">Open ledger</Button></Link>
+            <Link href="/ops/manual-payment"><Button variant="outline" className="border-amber-300/30 text-amber-100 hover:bg-amber-400/10">Open Manual Payment Center</Button></Link>
             <Link href="/ops/connectors"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10"><Plug className="mr-2 h-4 w-4" />Open Connector Command Center</Button></Link>
           </div>
           {error && <p className="rounded-2xl border border-red-300/25 bg-red-500/10 p-3 text-sm text-red-100">Backend unavailable: {error}</p>}
