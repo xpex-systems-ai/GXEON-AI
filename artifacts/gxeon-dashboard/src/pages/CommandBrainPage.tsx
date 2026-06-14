@@ -22,6 +22,7 @@ export default function CommandBrainPage() {
   const routes = sprint?.actionPlan ?? [];
   return <div className="space-y-6">
     <section className="relative overflow-hidden rounded-[2rem] border border-amber-300/20 bg-slate-950/90 p-6 shadow-2xl shadow-amber-950/20">
+      <Link href="/ops/r100-war-room" className="relative z-10 mb-4 inline-flex rounded-2xl border border-emerald-300/30 px-4 py-2 text-sm font-bold text-emerald-100">Open R$100 War Room</Link>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_12%,rgba(245,158,11,0.22),transparent_33%),radial-gradient(circle_at_15%_25%,rgba(34,211,238,0.14),transparent_30%)]" />
       <div className="relative space-y-5">
         <div className="flex flex-wrap gap-2">{["PREVIEW_ONLY", "MANUAL_FIRST", "REVENUE_SPRINT", "PIX_MANUAL", "NO_PROVIDER_API"].map((b) => <Badge key={b} className="border-amber-300/30 bg-amber-400/10 text-amber-100">{b}</Badge>)}</div>

@@ -1,0 +1,11 @@
+import { Router } from "express";
+import { buildR100WarRoomSummary } from "../revenueWarRoom/r100WarRoomBuilder";
+import { r100WarRoomSafetyFlags } from "../revenueWarRoom/r100WarRoomTypes";
+const router=Router();
+router.use("/r100-war-room",(_req,res,next)=>{res.setHeader("Cache-Control","no-store");next();});
+router.get("/r100-war-room/status",(_req,res)=>res.json({success:true,data:{status:"R100_OPERATOR_WAR_ROOM_P0_READY",...r100WarRoomSafetyFlags,safetyFlags:r100WarRoomSafetyFlags}}));
+router.get("/r100-war-room/summary",(_req,res)=>res.json({success:true,data:buildR100WarRoomSummary()}));
+router.get("/r100-war-room/actions",(_req,res)=>{const s=buildR100WarRoomSummary();res.json({success:true,data:{actions:s.actions,nextBestManualAction:s.nextBestManualAction,safetyFlags:r100WarRoomSafetyFlags,...r100WarRoomSafetyFlags}})});
+router.post("/r100-war-room/manual-action-preview",(req,res)=>{const s=buildR100WarRoomSummary();const selected=s.actions.find(a=>a.actionId===req.body?.actionId)||s.nextBestManualAction;res.json({success:true,data:{...r100WarRoomSafetyFlags,safetyFlags:r100WarRoomSafetyFlags,action:selected,preview:{copyInstruction:selected.copyInstruction,targetRoute:selected.targetRoute,blockedActions:selected.blockedActions}}})});
+router.post("/r100-war-room/focus-sprint-preview",(_req,res)=>{const s=buildR100WarRoomSummary();res.json({success:true,data:{...r100WarRoomSafetyFlags,safetyFlags:r100WarRoomSafetyFlags,checklist:["Escolher o próximo prospect/oferta", "Copiar mensagem preview", "Agir manualmente fora do GXEON", "Atualizar status manual", "Voltar à Sala R$100"],nextBestManualAction:s.nextBestManualAction,ledgerPreview:s.ledgerPreview}})});
+export default router;

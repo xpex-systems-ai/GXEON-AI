@@ -53,7 +53,8 @@ export default function MonetizationBoardPage() {
   return (
     <div className="space-y-6">
       <section className="relative overflow-hidden rounded-[2rem] border border-amber-400/20 bg-slate-950/85 p-6 shadow-2xl shadow-amber-950/25 backdrop-blur-xl">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_14%,rgba(245,158,11,0.22),transparent_34%),radial-gradient(circle_at_16%_24%,rgba(16,185,129,0.16),transparent_30%)]" />
+        <Link href="/ops/r100-war-room" className="relative z-10 mb-4 inline-flex rounded-2xl border border-emerald-300/30 px-4 py-2 text-sm font-bold text-emerald-100">Open R$100 War Room</Link>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_14%,rgba(245,158,11,0.22),transparent_34%),radial-gradient(circle_at_16%_24%,rgba(16,185,129,0.16),transparent_30%)]" />
         <div className="relative space-y-5">
           <div className="flex flex-wrap items-center gap-3">
             <Badge className="border-amber-300/40 bg-amber-400/10 text-amber-100">Monetization runtime P0</Badge>
