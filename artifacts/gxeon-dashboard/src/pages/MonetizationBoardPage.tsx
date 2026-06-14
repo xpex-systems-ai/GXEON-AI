@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, CircleDollarSign, HandCoins, Route, ShieldCheck } from "lucide-react";
 import { fetchMonetizationOffers, fetchMonetizationStatus, type MonetizationOffersResponse, type MonetizationRuntimeStatus } from "@/services/monetizationService";
+import { fetchWeb3PipelineLinks, fetchWeb3TaskPreviews } from "@/services/web3TaskRadarService";
 
 const fallbackPath = ["Opportunity", "Proposal", "Task", "Evidence", "Ledger Preview", "Manual Payment Review"];
 
@@ -12,13 +13,15 @@ export default function MonetizationBoardPage() {
   const [status, setStatus] = useState<MonetizationRuntimeStatus | null>(null);
   const [offers, setOffers] = useState<MonetizationOffersResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [web3Counts, setWeb3Counts] = useState({ previews: 0, qualifiedLinks: 0 });
 
   useEffect(() => {
     const controller = new AbortController();
-    Promise.all([fetchMonetizationStatus(controller.signal), fetchMonetizationOffers(controller.signal)])
-      .then(([runtimeStatus, offerData]) => {
+    Promise.all([fetchMonetizationStatus(controller.signal), fetchMonetizationOffers(controller.signal), fetchWeb3TaskPreviews(controller.signal), fetchWeb3PipelineLinks(controller.signal)])
+      .then(([runtimeStatus, offerData, web3Previews, web3Links]) => {
         setStatus(runtimeStatus);
         setOffers(offerData);
+        setWeb3Counts({ previews: web3Previews.count, qualifiedLinks: web3Links.links.filter((link) => link.status === "QUALIFIED_FOR_TASK_QUEUE").length });
         setError(null);
       })
       .catch((loadError) => {
@@ -33,6 +36,8 @@ export default function MonetizationBoardPage() {
     { label: "Clients", value: String(status?.counts.clients ?? 0), hint: "awaiting first approved customer" },
     { label: "Revenue", value: "R$ 0", hint: "requires externally confirmed payment" },
     { label: "Ledger preview", value: String(status?.counts.ledgerPreviewEvents ?? status?.ledgerPreviewReadiness?.previewEvents ?? 0), hint: "preview events only" },
+    { label: "Web3 previews", value: String(web3Counts.previews), hint: "manual imports only" },
+    { label: "Qualified Web3", value: String(web3Counts.qualifiedLinks), hint: "pipeline links preview" },
   ];
 
   const checkout = offers?.checkoutReadiness ?? status?.checkoutReadiness;
@@ -64,7 +69,7 @@ export default function MonetizationBoardPage() {
         </div>
       </section>
 
-      <section className="grid gap-3 md:grid-cols-4">
+      <section className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
         {counters.map((counter) => (
           <Card key={counter.label} className="border-white/10 bg-slate-950/75 backdrop-blur-xl">
             <CardContent className="p-5">
