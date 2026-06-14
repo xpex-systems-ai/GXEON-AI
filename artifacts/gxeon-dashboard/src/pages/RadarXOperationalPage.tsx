@@ -166,6 +166,7 @@ export default function RadarXOperationalPage() {
       <div className="flex flex-wrap gap-3 rounded-2xl border border-white/10 bg-slate-950/70 p-2">
         <Button type="button" onClick={() => setActiveTab("manual")} className={activeTab === "manual" ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "bg-transparent text-slate-200 hover:bg-white/10"}>Manual Intake</Button>
         <Button type="button" onClick={() => setActiveTab("github")} className={activeTab === "github" ? "bg-cyan-300 text-slate-950 hover:bg-cyan-200" : "bg-transparent text-slate-200 hover:bg-white/10"}>GitHub Opportunity Engine</Button>
+        <a href="/ops/github-demand"><Button type="button" className="bg-amber-300 text-slate-950 hover:bg-amber-200">GitHub Demand Radar</Button></a>
       </div>
 
       {activeTab === "manual" ? (

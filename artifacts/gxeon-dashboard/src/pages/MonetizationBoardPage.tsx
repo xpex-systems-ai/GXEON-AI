@@ -65,6 +65,7 @@ export default function MonetizationBoardPage() {
           <div className="flex flex-wrap gap-3">
             <Link href="/ops/brain"><Button className="bg-amber-300 text-slate-950 hover:bg-amber-200">Open Command Brain <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
             <Link href="/ops/radar-x"><Button variant="outline" className="border-amber-300/30 text-amber-100 hover:bg-amber-400/10">Open Radar X intake</Button></Link>
+            <Link href="/ops/github-demand"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open GitHub Demand Radar</Button></Link>
             <Link href="/ops/opportunities"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open Opportunity Inbox</Button></Link>
             <Link href="/ops/web3-tasks"><Button variant="outline" className="border-emerald-300/30 text-emerald-100 hover:bg-emerald-400/10">Open Web3 Task Radar</Button></Link>
             <Link href="/ops/agent-economy"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open Agent Economy Radar</Button></Link>

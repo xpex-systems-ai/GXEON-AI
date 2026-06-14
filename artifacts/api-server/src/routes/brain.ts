@@ -3,6 +3,7 @@ import { buildRevenueOfferPacks } from "../brain/minimumRevenueSprintPlanner";
 import { createMinimumRevenueSprint, getMinimumRevenueSprintById, listMinimumRevenueSprints, updateMinimumRevenueSprintStatus } from "../brain/minimumRevenueSprintStore";
 import { RevenueSprintStatus, previewSafetyFlags } from "../brain/commandBrainTypes";
 import { buildConnectorBrainSummary } from "../connectors/connectorBrainSummary";
+import { buildGitHubDemandBrainSummary } from "../radar/githubDemandBrainSummary";
 
 const router: IRouter = Router();
 const boundaries = ["PREVIEW_ONLY", "manualExecutionRequired", "paymentProviderApiDisabled", "externalContactAutomationDisabled", "realRevenueNotGuaranteed", "operatorApprovalRequired", "inMemoryOnly"];
@@ -17,7 +18,7 @@ const summary = () => {
   return { ...previewSafetyFlags, status: "COMMAND_BRAIN_REVENUE_SPRINT_P0_PREVIEW_READY" as const, sprintCount: sprints.length, activeSprintCount: sprints.filter((s) => ["PLANNED", "ACTIVE_MANUAL", "WAITING_PAYMENT_MANUAL", "SUBMISSION_PREPARED"].includes(s.status)).length, targetAmountBrl: 100, fastestRoute: "DIRECT_PIX_OFFER" as const, routes: ["DIRECT_PIX_OFFER", "WEB3_TASK_ATTEMPT", "AGENT_ECONOMY_AUDIT"], boundaries };
 };
 
-router.get("/brain/status", (_req, res) => res.json({ success: true, data: { ...summary(), layer: "GXEON Command Brain P0", route: "/ops/brain", secondaryRoute: "/ops/revenue-sprint", connectorReadiness: buildConnectorBrainSummary() } }));
+router.get("/brain/status", (_req, res) => res.json({ success: true, data: { ...summary(), layer: "GXEON Command Brain P0", route: "/ops/brain", secondaryRoute: "/ops/revenue-sprint", connectorReadiness: buildConnectorBrainSummary(), githubDemand: buildGitHubDemandBrainSummary() } }));
 router.get("/brain/revenue-sprint/status", (_req, res) => res.json({ success: true, data: summary() }));
 router.get("/brain/revenue-sprint/offer-packs", (_req, res) => res.json({ success: true, data: { ...previewSafetyFlags, offerPacks: buildRevenueOfferPacks(), count: buildRevenueOfferPacks().length, boundaries } }));
 router.get("/brain/revenue-sprint/sprints", (_req, res) => res.json({ success: true, data: { ...previewSafetyFlags, sprints: listMinimumRevenueSprints(), count: listMinimumRevenueSprints().length, boundaries } }));
