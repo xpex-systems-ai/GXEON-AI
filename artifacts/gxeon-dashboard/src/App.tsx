@@ -28,6 +28,7 @@ import OperatorDeliveryWorkspacePage from "@/pages/OperatorDeliveryWorkspacePage
 import ManualPaymentRequestPage from "@/pages/ManualPaymentRequestPage";
 import ClientOfferSendPage from "@/pages/ClientOfferSendPage";
 import ManualProspectPipelinePage from "@/pages/ManualProspectPipelinePage";
+import R100OperatorWarRoomPage from "@/pages/R100OperatorWarRoomPage";
 import ConnectorGatewayPage from "@/pages/ConnectorGatewayPage";
 import ConnectorCommandCenterPage from "@/pages/ConnectorCommandCenterPage";
 import ConnectorDetailPage from "@/pages/ConnectorDetailPage";
@@ -85,6 +86,7 @@ function Router() {
       <Route>
         <DashboardLayout>
           <Switch>
+            <Route path="/ops/r100-war-room" component={R100OperatorWarRoomPage} />
             <Route path="/ops/brain" component={CommandBrainPage} />
             <Route path="/ops/revenue-sprint" component={RevenueSprintPage} />
             <Route path="/ops/opportunities" component={OpportunityInboxPage} />
