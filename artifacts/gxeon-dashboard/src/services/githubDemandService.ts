@@ -27,3 +27,13 @@ export const fetchGitHubDemandConversionPackById=(id:string,signal?:AbortSignal)
 export const createOpportunityFromConversionPack=(id:string,operatorConfirmed:boolean)=>req<ConversionActionResponse<OpportunityActionResult>>(`/api/github-demand/conversion-packs/${id}/create-opportunity-preview`,{method:"POST",body:JSON.stringify({operatorConfirmed})});
 export const createTaskPreviewFromConversionPack=(id:string)=>req<ConversionActionResponse<TaskPreviewActionResult>>(`/api/github-demand/conversion-packs/${id}/create-task-preview`,{method:"POST",body:JSON.stringify({})});
 export const createBrainRevenueSprintPreviewFromConversionPack=(id:string)=>req<ConversionActionResponse<BrainSprintActionResult>>(`/api/github-demand/conversion-packs/${id}/brain-revenue-sprint-preview`,{method:"POST",body:JSON.stringify({})});
+export type ExecutionActionResult = { actionType:string; status:string; packId:string; mode:"PREVIEW_ONLY"; safetyFlags:Record<string,unknown>; nextManualAction:string; preview:Record<string,unknown> };
+export const generateGitHubDemandExecutionPack=(id:string)=>req<any>(`/api/github-demand/conversion-packs/${id}/execution-pack`,{method:"POST",body:JSON.stringify({})});
+export const fetchGitHubDemandExecutionPacks=(signal?:AbortSignal)=>req<any>("/api/github-demand/execution-packs",{signal},{executionPacks:[],count:0});
+export const fetchGitHubDemandExecutionPackById=(id:string,signal?:AbortSignal)=>req<any>(`/api/github-demand/execution-packs/${id}`,{signal});
+export const createTaskPreviewFromExecutionPack=(id:string)=>req<{actionResult:ExecutionActionResult}>(`/api/github-demand/execution-packs/${id}/task-preview`,{method:"POST",body:JSON.stringify({})});
+export const createBrokerPreviewFromExecutionPack=(id:string)=>req<{actionResult:ExecutionActionResult}>(`/api/github-demand/execution-packs/${id}/broker-preview`,{method:"POST",body:JSON.stringify({})});
+export const createExecutionCenterPreviewFromExecutionPack=(id:string)=>req<{actionResult:ExecutionActionResult}>(`/api/github-demand/execution-packs/${id}/execution-center-preview`,{method:"POST",body:JSON.stringify({})});
+export const createValidationPreviewFromExecutionPack=(id:string)=>req<{actionResult:ExecutionActionResult}>(`/api/github-demand/execution-packs/${id}/validation-preview`,{method:"POST",body:JSON.stringify({})});
+export const createReleasePreviewFromExecutionPack=(id:string)=>req<{actionResult:ExecutionActionResult}>(`/api/github-demand/execution-packs/${id}/release-preview`,{method:"POST",body:JSON.stringify({})});
+export const createLedgerPreviewFromExecutionPack=(id:string)=>req<{actionResult:ExecutionActionResult}>(`/api/github-demand/execution-packs/${id}/ledger-preview`,{method:"POST",body:JSON.stringify({})});
