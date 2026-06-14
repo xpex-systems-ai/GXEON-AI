@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { BrainCircuit, ClipboardList, HandCoins, Plug, ShieldCheck, Target } from "lucide-react";
 import { fetchCommandBrainStatus, fetchRevenueSprintOfferPacks, startMinimumRevenueSprint, type MinimumRevenueSprintRecord, type RevenueOfferPack, type RevenueSprintStatusResponse } from "@/services/commandBrainService";
 import { fetchConnectorBrainSummary, type ConnectorBrainSummary } from "@/services/realConnectorService";
+import { revenueCloseLoopService } from "@/services/revenueCloseLoopService";
 
 export default function CommandBrainPage() {
   const [status, setStatus] = useState<RevenueSprintStatusResponse | null>(null);
@@ -15,14 +16,15 @@ export default function CommandBrainPage() {
   const [sprint, setSprint] = useState<MinimumRevenueSprintRecord | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [connectorSummary, setConnectorSummary] = useState<ConnectorBrainSummary | null>(null);
+  const [closeLoopSummary, setCloseLoopSummary] = useState<any>({});
   const [form, setForm] = useState({ targetAmountBrl: "100", deadlineLabel: "tomorrow 9am", preferredPayoutMethod: "MERCADO_PAGO_PIX_MANUAL", mercadoPagoManualLink: "", pixKeyLabel: "", operatorNotes: "urgent debt payment; manual execution only; no payment provider API" });
-  useEffect(() => { const c = new AbortController(); Promise.all([fetchCommandBrainStatus(c.signal), fetchRevenueSprintOfferPacks(c.signal), fetchConnectorBrainSummary(c.signal)]).then(([s, packs, connectors]) => { setStatus(s); setOfferPacks(packs.offerPacks); setConnectorSummary(connectors); }).catch((e) => setError(e instanceof Error ? e.message : "COMMAND_BRAIN_LOAD_FAILED")); return () => c.abort(); }, []);
+  useEffect(() => { const c = new AbortController(); Promise.all([fetchCommandBrainStatus(c.signal), fetchRevenueSprintOfferPacks(c.signal), fetchConnectorBrainSummary(c.signal)]).then(([s, packs, connectors]) => { setStatus(s); setOfferPacks(packs.offerPacks); setConnectorSummary(connectors); }).catch((e) => setError(e instanceof Error ? e.message : "COMMAND_BRAIN_LOAD_FAILED")); revenueCloseLoopService.summary().then((r) => setCloseLoopSummary(r.data ?? {})); return () => c.abort(); }, []);
   async function submit(event: FormEvent) { event.preventDefault(); setError(null); try { const result = await startMinimumRevenueSprint({ ...form, targetAmountBrl: Number(form.targetAmountBrl) || 100, preferredPayoutMethod: "MERCADO_PAGO_PIX_MANUAL" }); setSprint(result.sprint); setOfferPacks(result.sprint.offerPacks); } catch (e) { setError(e instanceof Error ? e.message : "REVENUE_SPRINT_START_FAILED"); } }
   const activePacks = sprint?.offerPacks ?? offerPacks;
   const routes = sprint?.actionPlan ?? [];
   return <div className="space-y-6">
     <section className="relative overflow-hidden rounded-[2rem] border border-amber-300/20 bg-slate-950/90 p-6 shadow-2xl shadow-amber-950/20">
-      <Link href="/ops/r100-war-room" className="relative z-10 mb-4 inline-flex rounded-2xl border border-emerald-300/30 px-4 py-2 text-sm font-bold text-emerald-100">Open R$100 War Room</Link>
+      <div className="relative z-10 mb-4 flex flex-wrap gap-2"><Link href="/ops/r100-war-room" className="inline-flex rounded-2xl border border-emerald-300/30 px-4 py-2 text-sm font-bold text-emerald-100">Open R$100 War Room</Link><Link href={(closeLoopSummary.activeCloseLoops ?? 0) > 0 ? "/ops/revenue-close-loop" : "/ops/prospects"} className="inline-flex rounded-2xl bg-emerald-300 px-4 py-2 text-sm font-black text-slate-950">{(closeLoopSummary.activeCloseLoops ?? 0) > 0 ? "Continuar Fechamento R$100" : "Criar ciclo a partir de Prospect"}</Link><span className="rounded-2xl border border-emerald-300/20 px-4 py-2 text-xs font-bold text-emerald-100">Ativos {closeLoopSummary.activeCloseLoops ?? 0} · Preview R$ {closeLoopSummary.previewRevenueBrl ?? 0} · Confirmado R$ {closeLoopSummary.operatorConfirmedRevenueBrl ?? 0}</span></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_12%,rgba(245,158,11,0.22),transparent_33%),radial-gradient(circle_at_15%_25%,rgba(34,211,238,0.14),transparent_30%)]" />
       <div className="relative space-y-5">
         <div className="flex flex-wrap gap-2">{["PREVIEW_ONLY", "MANUAL_FIRST", "REVENUE_SPRINT", "PIX_MANUAL", "NO_PROVIDER_API"].map((b) => <Badge key={b} className="border-amber-300/30 bg-amber-400/10 text-amber-100">{b}</Badge>)}</div>
