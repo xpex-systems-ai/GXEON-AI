@@ -19,6 +19,8 @@ import FinancialLedgerPage from "@/pages/FinancialLedgerPage";
 import MonetizationBoardPage from "@/pages/MonetizationBoardPage";
 import Web3TaskRadarPage from "@/pages/Web3TaskRadarPage";
 import AgentEconomyRadarPage from "@/pages/AgentEconomyRadarPage";
+import CommandBrainPage from "@/pages/CommandBrainPage";
+import RevenueSprintPage from "@/pages/RevenueSprintPage";
 import AgentConectouPage from "@/pages/AgentConectouPage";
 import RadarXOperationalPage from "@/pages/RadarXOperationalPage";
 import ConnectorGatewayPage from "@/pages/ConnectorGatewayPage";
@@ -77,6 +79,8 @@ function Router() {
       <Route>
         <DashboardLayout>
           <Switch>
+            <Route path="/ops/brain" component={CommandBrainPage} />
+            <Route path="/ops/revenue-sprint" component={RevenueSprintPage} />
             <Route path="/ops/opportunities" component={OpportunityInboxPage} />
             <Route path="/ops/tasks" component={TaskQueuePage} />
             <Route path="/ops/broker" component={BrokerPage} />

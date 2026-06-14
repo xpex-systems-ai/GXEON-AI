@@ -22,6 +22,7 @@ import ledgerRouter from "./ledger";
 import tasksRouter from "./tasks";
 import web3TasksRouter from "./web3Tasks";
 import agentEconomyRouter from "./agentEconomy";
+import brainRouter from "./brain";
 
 const router: IRouter = Router();
 
@@ -42,6 +43,7 @@ router.use(opportunitiesRouter);
 router.use(tasksRouter);
 router.use(web3TasksRouter);
 router.use(agentEconomyRouter);
+router.use(brainRouter);
 router.use(agentsRouter);
 router.use(brokerRouter);
 router.use(executionRouter);
