@@ -2,6 +2,7 @@ import { Router, type IRouter } from "express";
 import { getMonetizationOffersResponse, getMonetizationRuntimeStatus } from "../monetization/monetizationRuntime";
 import { buildConnectorBrainSummary } from "../connectors/connectorBrainSummary";
 import { buildGitHubDemandBrainSummary } from "../radar/githubDemandBrainSummary";
+import { buildGitHubDemandConversionBrainSummary } from "../radar/githubDemandConversionBrainSummary";
 
 const router: IRouter = Router();
 
@@ -11,7 +12,7 @@ router.use("/monetization", (_req, res, next) => {
 });
 
 router.get("/monetization/status", (_req, res) => {
-  res.json({ success: true, data: { ...getMonetizationRuntimeStatus(), connectorReadiness: buildConnectorBrainSummary(), githubDemand: buildGitHubDemandBrainSummary() } });
+  res.json({ success: true, data: { ...getMonetizationRuntimeStatus(), connectorReadiness: buildConnectorBrainSummary(), githubDemand: buildGitHubDemandBrainSummary(), githubDemandConversion: buildGitHubDemandConversionBrainSummary() } });
 });
 
 router.get("/monetization/offers", (_req, res) => {

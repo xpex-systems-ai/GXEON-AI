@@ -12,3 +12,10 @@ export const createGitHubDemandPipelinePreview=(candidate:GitHubDemandCandidate)
 export const fetchGitHubDemandPipelinePreviews=(signal?:AbortSignal)=>req<{pipelinePreviews:GitHubDemandPipelinePreview[];count:number}>("/api/github-demand/pipeline-previews",{signal},{pipelinePreviews:[],count:0});
 export const generateGitHubDemandProposalPack=(id:string)=>req<any>(`/api/github-demand/pipeline-previews/${id}/proposal-pack`,{method:"POST",body:JSON.stringify({})});
 export const createOpportunityFromGitHubDemand=(id:string,operatorConfirmed:boolean)=>req<any>(`/api/github-demand/pipeline-previews/${id}/create-opportunity-preview`,{method:"POST",body:JSON.stringify({operatorConfirmed})});
+
+export const generateGitHubDemandConversionPack=(id:string)=>req<any>(`/api/github-demand/pipeline-previews/${id}/conversion-pack`,{method:"POST",body:JSON.stringify({})});
+export const fetchGitHubDemandConversionPacks=(signal?:AbortSignal)=>req<any>("/api/github-demand/conversion-packs",{signal},{conversionPacks:[],count:0});
+export const fetchGitHubDemandConversionPackById=(id:string,signal?:AbortSignal)=>req<any>(`/api/github-demand/conversion-packs/${id}`,{signal});
+export const createOpportunityFromConversionPack=(id:string,operatorConfirmed=false)=>req<any>(`/api/github-demand/conversion-packs/${id}/create-opportunity-preview`,{method:"POST",body:JSON.stringify({operatorConfirmed})});
+export const createTaskPreviewFromConversionPack=(id:string)=>req<any>(`/api/github-demand/conversion-packs/${id}/create-task-preview`,{method:"POST",body:JSON.stringify({})});
+export const createBrainRevenueSprintPreviewFromConversionPack=(id:string)=>req<any>(`/api/github-demand/conversion-packs/${id}/brain-revenue-sprint-preview`,{method:"POST",body:JSON.stringify({})});
