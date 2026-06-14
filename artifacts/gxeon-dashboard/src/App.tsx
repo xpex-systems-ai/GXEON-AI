@@ -24,6 +24,7 @@ import RevenueSprintPage from "@/pages/RevenueSprintPage";
 import AgentConectouPage from "@/pages/AgentConectouPage";
 import RadarXOperationalPage from "@/pages/RadarXOperationalPage";
 import GitHubDemandRadarPage from "@/pages/GitHubDemandRadarPage";
+import OperatorDeliveryWorkspacePage from "@/pages/OperatorDeliveryWorkspacePage";
 import ConnectorGatewayPage from "@/pages/ConnectorGatewayPage";
 import ConnectorCommandCenterPage from "@/pages/ConnectorCommandCenterPage";
 import ConnectorDetailPage from "@/pages/ConnectorDetailPage";
@@ -96,6 +97,7 @@ function Router() {
             <Route path="/ops/agent-conectou" component={AgentConectouPage} />
             <Route path="/ops/radar-x" component={RadarXOperationalPage} />
             <Route path="/ops/github-demand" component={GitHubDemandRadarPage} />
+            <Route path="/ops/delivery-workspace" component={OperatorDeliveryWorkspacePage} />
             <Route path="/ops/connectors/github" component={GitHubReadonlyConnectorPage} />
             <Route path="/ops/connectors/vercel" component={VercelReadonlyConnectorPage} />
             <Route path="/ops/connectors/railway" component={RailwayReadonlyConnectorPage} />

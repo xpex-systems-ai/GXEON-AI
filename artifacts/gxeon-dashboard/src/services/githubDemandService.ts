@@ -37,3 +37,5 @@ export const createExecutionCenterPreviewFromExecutionPack=(id:string)=>req<{act
 export const createValidationPreviewFromExecutionPack=(id:string)=>req<{actionResult:ExecutionActionResult}>(`/api/github-demand/execution-packs/${id}/validation-preview`,{method:"POST",body:JSON.stringify({})});
 export const createReleasePreviewFromExecutionPack=(id:string)=>req<{actionResult:ExecutionActionResult}>(`/api/github-demand/execution-packs/${id}/release-preview`,{method:"POST",body:JSON.stringify({})});
 export const createLedgerPreviewFromExecutionPack=(id:string)=>req<{actionResult:ExecutionActionResult}>(`/api/github-demand/execution-packs/${id}/ledger-preview`,{method:"POST",body:JSON.stringify({})});
+
+export const createDeliveryWorkspacePreviewFromExecutionPack=(id:string)=>req<any>(`/api/github-demand/execution-packs/${id}/delivery-workspace-preview`,{method:"POST",body:JSON.stringify({})});
