@@ -1,0 +1,15 @@
+import { apiUrl } from "./apiBase";
+async function json<T>(path:string, init?:RequestInit):Promise<T>{ const res=await fetch(apiUrl(`/api${path}`),{headers:{"Content-Type":"application/json",...(init?.headers??{})},...init}); if(!res.ok) throw new Error(await res.text()); return res.json(); }
+export type ManualProspectStatus="NEW_MANUAL"|"NEED_CLASSIFIED"|"OFFER_READY"|"MESSAGE_COPIED"|"SENT_MANUALLY"|"WAITING_RESPONSE_MANUAL"|"INTERESTED_MANUALLY"|"ACCEPTED_MANUALLY"|"DECLINED_MANUALLY"|"PAYMENT_PENDING_MANUAL"|"PAYMENT_PROOF_RECEIVED_MANUAL"|"DELIVERY_READY"|"ARCHIVED";
+export type ManualProspect={id:string;displayNameOrLabel:string;source:string;channel:string;needType:string;painSummary?:string;estimatedBudgetBrl:number;urgencyLabel:string;relationshipStrength:string;consentOrContextNote?:string;linkedOfferPackId?:string;linkedPaymentRequestId?:string;linkedDeliveryWorkspaceId?:string;status:ManualProspectStatus;score:{urgencyScore:number;budgetScore:number;relationshipScore:number;offerFitScore:number;totalScore:number;sprintFitLabel:"HIGH"|"MEDIUM"|"LOW";suggestedOfferType:string;safetyWarnings:string[]};nextManualAction:string;actionHistory:{actionType:string;status:string;timestamp:string;note?:string}[];autoSendDisabled:true;externalContactDisabled:true;paymentProviderDisabled:true;realRevenueClaimed:false;persistence:"IN_MEMORY_P0"};
+export type ManualProspectResponse={success:boolean;data:{prospect?:ManualProspect;prospects?:ManualProspect[];actionResult?:any;[key:string]:any}};
+export const fetchManualProspectStatus=()=>json<ManualProspectResponse>("/manual-prospects/status");
+export const fetchManualProspects=()=>json<ManualProspectResponse>("/manual-prospects/prospects");
+export const fetchManualProspectById=(id:string)=>json<ManualProspectResponse>(`/manual-prospects/prospects/${id}`);
+export const createManualProspect=(body:any)=>json<ManualProspectResponse>("/manual-prospects/prospects",{method:"POST",body:JSON.stringify(body)});
+export const updateManualProspectStatus=(id:string,status:ManualProspectStatus)=>json<ManualProspectResponse>(`/manual-prospects/prospects/${id}/state`,{method:"PATCH",body:JSON.stringify({status})});
+export const linkProspectToOfferPack=(id:string,offerPackId:string)=>json<ManualProspectResponse>(`/manual-prospects/prospects/${id}/link-offer-pack`,{method:"POST",body:JSON.stringify({offerPackId})});
+export const createOfferPackFromProspect=(id:string)=>json<ManualProspectResponse>(`/manual-prospects/prospects/${id}/create-offer-pack-preview`,{method:"POST"});
+export const createManualPaymentFromProspect=(id:string)=>json<ManualProspectResponse>(`/manual-prospects/prospects/${id}/create-manual-payment-preview`,{method:"POST"});
+export const createFollowUpPreviewFromProspect=(id:string)=>json<ManualProspectResponse>(`/manual-prospects/prospects/${id}/follow-up-preview`,{method:"POST"});
+export const createLedgerPreviewFromProspect=(id:string)=>json<ManualProspectResponse>(`/manual-prospects/prospects/${id}/ledger-preview`,{method:"POST"});

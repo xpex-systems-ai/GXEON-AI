@@ -10,6 +10,7 @@ const navGroups = [
       { label: "Revenue Sprint", href: "/ops/revenue-sprint", icon: HandCoins, status: "review" },
       { label: "Manual Payment", href: "/ops/manual-payment", icon: HandCoins, status: "review" },
       { label: "Client Offers", href: "/ops/client-offers", icon: HandCoins, status: "review" },
+      { label: "Prospects", href: "/ops/prospects", icon: Inbox, status: "review" },
       { label: "Inbox", href: "/ops/opportunities", icon: Inbox, status: "live" },
       { label: "Tasks", href: "/ops/tasks", icon: ListChecks, status: "live" },
       { label: "Broker P0", href: "/ops/broker", icon: Route, status: "review" },
