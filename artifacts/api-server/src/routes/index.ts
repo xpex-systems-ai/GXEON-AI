@@ -20,6 +20,7 @@ import validationRouter from "./validation";
 import releaseRouter from "./release";
 import ledgerRouter from "./ledger";
 import tasksRouter from "./tasks";
+import web3TasksRouter from "./web3Tasks";
 
 const router: IRouter = Router();
 
@@ -38,6 +39,7 @@ router.use(monetizationRouter);
 router.use(radarRouter);
 router.use(opportunitiesRouter);
 router.use(tasksRouter);
+router.use(web3TasksRouter);
 router.use(agentsRouter);
 router.use(brokerRouter);
 router.use(executionRouter);
