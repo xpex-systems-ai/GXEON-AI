@@ -41,6 +41,7 @@ export default function MonetizationBoardPage() {
     { label: "Ledger preview", value: String(status?.counts.ledgerPreviewEvents ?? status?.ledgerPreviewReadiness?.previewEvents ?? 0), hint: "preview events only" },
     { label: "Web3 previews", value: String(web3Counts.previews), hint: "manual imports only" },
     { label: "Qualified Web3", value: String(web3Counts.qualifiedLinks), hint: "pipeline links preview" },
+    { label: "GitHub Exec Packs", value: String(status?.githubDemandExecution?.readyCount ?? 0), hint: "manual revenue source preview" },
   ];
 
   const checkout = offers?.checkoutReadiness ?? status?.checkoutReadiness;
@@ -160,6 +161,8 @@ export default function MonetizationBoardPage() {
           </CardContent>
         </Card>
       </section>
+
+      <section className="rounded-[2rem] border border-cyan-300/20 bg-cyan-400/10 p-5"><div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs uppercase tracking-[0.35em] text-cyan-200/70">GitHub Demand execution readiness</p><h2 className="text-2xl font-bold text-white">{status?.githubDemandExecution?.readyCount ?? 0} manual revenue pack(s)</h2><p className="mt-1 text-sm text-cyan-50/80">Top route: {status?.githubDemandExecution?.topRouteForR100Sprint?.route ?? "No execution pack yet"}. No provider verification or revenue claim.</p></div><Link href="/ops/github-demand"><Button className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">Open GitHub Demand</Button></Link></div></section>
 
       <section className="rounded-[2rem] border border-amber-300/20 bg-amber-400/10 p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
