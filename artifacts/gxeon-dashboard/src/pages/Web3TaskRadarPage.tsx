@@ -1,4 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
+import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -62,6 +63,7 @@ export default function Web3TaskRadarPage() {
         </div>
         <div><p className="text-xs uppercase tracking-[0.45em] text-cyan-200/70">Safe monetization radar</p><h1 className="mt-2 text-4xl font-black text-white md:text-6xl">Web3 Task Radar P0</h1><p className="mt-3 max-w-3xl text-slate-300">Manual-first task hunting for bounties, quests and microtasks. GXEON creates internal previews only; it never connects wallets, claims rewards or submits external work.</p></div>
         <div className="flex flex-wrap gap-3"><Badge variant="outline" className="border-amber-300/40 p-3 text-amber-100"><Target className="mr-2 h-4 w-4" /> Target: find R$100 equivalent opportunities</Badge><Badge variant="outline" className="border-white/20 p-3 text-white">mode {status?.mode ?? "PREVIEW_ONLY"}</Badge><Badge variant="outline" className="border-emerald-300/30 p-3 text-emerald-100">pipeline links {status?.pipelineLinkCount ?? links.length}</Badge></div>
+        <div className="flex flex-wrap gap-3"><Link href="/ops/brain"><Button className="bg-amber-300 text-slate-950 hover:bg-amber-200">Open Command Brain</Button></Link></div>
         {error && <p className="rounded-2xl border border-red-300/25 bg-red-500/10 p-3 text-sm text-red-100">{error}</p>}
       </div>
     </section>

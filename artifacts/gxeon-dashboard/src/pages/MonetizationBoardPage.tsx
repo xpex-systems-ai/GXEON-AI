@@ -60,7 +60,8 @@ export default function MonetizationBoardPage() {
             <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">P0 exposes opportunity pipeline readiness, offer templates, checkout readiness and ledger preview boundaries. Revenue remains R$0, with realRevenueClaimed=false, until a future manual payment review stage is approved outside P0.</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <Link href="/ops/radar-x"><Button className="bg-amber-300 text-slate-950 hover:bg-amber-200">Open Radar X intake <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
+            <Link href="/ops/brain"><Button className="bg-amber-300 text-slate-950 hover:bg-amber-200">Open Command Brain <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
+            <Link href="/ops/radar-x"><Button variant="outline" className="border-amber-300/30 text-amber-100 hover:bg-amber-400/10">Open Radar X intake</Button></Link>
             <Link href="/ops/opportunities"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open Opportunity Inbox</Button></Link>
             <Link href="/ops/web3-tasks"><Button variant="outline" className="border-emerald-300/30 text-emerald-100 hover:bg-emerald-400/10">Open Web3 Task Radar</Button></Link>
             <Link href="/ops/agent-economy"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open Agent Economy Radar</Button></Link>
