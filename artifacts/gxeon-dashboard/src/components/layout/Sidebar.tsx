@@ -7,6 +7,7 @@ const navGroups = [
     title: "Operations",
     items: [
       { label: "Sala R$100", href: "/ops/r100-war-room", icon: HandCoins, status: "review" },
+      { label: "Fechamento R$100", href: "/ops/revenue-close-loop", icon: HandCoins, status: "review" },
       { label: "Brain", href: "/ops/brain", icon: BrainCircuit, status: "review" },
       { label: "Revenue Sprint", href: "/ops/revenue-sprint", icon: HandCoins, status: "review" },
       { label: "Manual Payment", href: "/ops/manual-payment", icon: HandCoins, status: "review" },
