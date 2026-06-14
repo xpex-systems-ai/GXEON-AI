@@ -10,3 +10,5 @@ export const createValidationPreviewFromWorkspace=(id:string)=>req<{actionResult
 export const createReleasePreviewFromWorkspace=(id:string)=>req<{actionResult:DeliveryWorkspaceActionResult;workspace:any}>(`/api/delivery-workspace/workspaces/${id}/release-preview`,{method:"POST",body:JSON.stringify({})});
 export const createLedgerPreviewFromWorkspace=(id:string)=>req<{actionResult:DeliveryWorkspaceActionResult;workspace:any}>(`/api/delivery-workspace/workspaces/${id}/ledger-preview`,{method:"POST",body:JSON.stringify({})});
 export const createManualPaymentRequestPreviewFromWorkspace=(id:string)=>req<any>(`/api/delivery-workspace/workspaces/${id}/manual-payment-request-preview`,{method:"POST",body:JSON.stringify({})});
+
+export const createClientOfferPackPreviewFromWorkspace=(id:string)=>req<any>(`/api/client-offer-send/from-delivery-workspace/${id}`,{method:"POST",body:JSON.stringify({})});

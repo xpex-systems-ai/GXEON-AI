@@ -27,6 +27,7 @@ import brainRouter from "./brain";
 import githubDemandRouter from "./githubDemand";
 import operatorDeliveryWorkspaceRouter from "./operatorDeliveryWorkspace";
 import manualPaymentRouter from "./manualPayment";
+import clientOfferSendRouter from "./clientOfferSend";
 
 const router: IRouter = Router();
 
@@ -47,6 +48,7 @@ router.use(radarRouter);
 router.use(githubDemandRouter);
 router.use(operatorDeliveryWorkspaceRouter);
 router.use(manualPaymentRouter);
+router.use(clientOfferSendRouter);
 router.use(opportunitiesRouter);
 router.use(tasksRouter);
 router.use(web3TasksRouter);

@@ -13,3 +13,5 @@ export const updateManualPaymentRequestState=(id:string,status:ManualPaymentRequ
 export const createProofChecklistPreview=(id:string)=>json<ManualPaymentResponse>(`/manual-payment/requests/${id}/proof-checklist-preview`,{method:"POST"});
 export const createReceiptDraftPreview=(id:string)=>json<ManualPaymentResponse>(`/manual-payment/requests/${id}/receipt-draft-preview`,{method:"POST"});
 export const createLedgerPreviewFromManualPaymentRequest=(id:string)=>json<ManualPaymentResponse>(`/manual-payment/requests/${id}/ledger-preview`,{method:"POST"});
+
+export const createClientOfferPreviewFromManualPaymentRequest=(id:string)=>json<ManualPaymentResponse>(`/manual-payment/requests/${id}/client-offer-preview`,{method:"POST"});
