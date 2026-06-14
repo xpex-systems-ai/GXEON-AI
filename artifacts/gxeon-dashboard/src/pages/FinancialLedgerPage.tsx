@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { OperatorAssistantPanel } from "@/components/operatorAssistant/OperatorAssistantPanel";import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
