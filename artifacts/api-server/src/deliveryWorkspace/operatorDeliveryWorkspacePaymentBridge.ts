@@ -1,0 +1,4 @@
+import { getOperatorDeliveryWorkspaceById } from "./operatorDeliveryWorkspaceStore";
+import { createManualPaymentRequest } from "../manualPayment/manualPaymentRequestStore";
+import { actionResult } from "../manualPayment/manualPaymentRequestBuilder";
+export function createManualPaymentRequestFromDeliveryWorkspace(id:string){ const ws=getOperatorDeliveryWorkspaceById(id); if(!ws) return undefined; const amount=Number((ws.ledgerPreview as any)?.expectedRevenueBrl ?? (ws.ledgerPreview as any)?.amountBrl ?? 100); const req=createManualPaymentRequest({sourceType:"DELIVERY_WORKSPACE",sourceId:ws.id,offerTitle:ws.sourceRepository.title || `Delivery workspace ${ws.id}`,amountBrl:amount,method:"PIX_MANUAL",notes:ws.ptBrDeliveryDraft}); return actionResult(req,{sourceWorkspaceId:ws.id,noProviderCall:true}); }

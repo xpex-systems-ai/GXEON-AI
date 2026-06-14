@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getFinancialLedgerSummary, getLedgerStatusCounts, realFinancialLedgerRecords } from "@/data/financial-ledger";
 import { formatCurrency, formatDate } from "@/lib/format";
@@ -73,7 +74,7 @@ export default function FinancialLedgerPage() {
             </div>
             <h1 className="mt-4 text-4xl font-black tracking-tight text-white md:text-6xl">Ledger</h1>
           </div>
-          <Badge variant="outline" className="w-fit border-emerald-300/30 text-emerald-100">Manual · no transactions · {loading ? "loading" : `${records.length} previews`}</Badge>
+          <div className="flex flex-wrap gap-2"><Badge variant="outline" className="w-fit border-emerald-300/30 text-emerald-100">Manual · no transactions · {loading ? "loading" : `${records.length} previews`}</Badge><Link href="/ops/manual-payment"><Button variant="outline" className="border-amber-300/30 text-amber-100">Manual Payment Center · {((status as any).manualPayment?.manualPaymentReadyCount ?? 0)} ready · R$ {((status as any).manualPayment?.manualPaymentTotalExpectedPreviewBrl ?? 0)} preview</Button></Link></div>
         </div>
       </section>
 
