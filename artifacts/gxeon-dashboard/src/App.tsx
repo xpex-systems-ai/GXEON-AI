@@ -18,6 +18,7 @@ import RevenueReleaseGatePage from "@/pages/RevenueReleaseGatePage";
 import FinancialLedgerPage from "@/pages/FinancialLedgerPage";
 import MonetizationBoardPage from "@/pages/MonetizationBoardPage";
 import Web3TaskRadarPage from "@/pages/Web3TaskRadarPage";
+import AgentEconomyRadarPage from "@/pages/AgentEconomyRadarPage";
 import AgentConectouPage from "@/pages/AgentConectouPage";
 import RadarXOperationalPage from "@/pages/RadarXOperationalPage";
 import ConnectorGatewayPage from "@/pages/ConnectorGatewayPage";
@@ -85,6 +86,7 @@ function Router() {
             <Route path="/ops/ledger" component={FinancialLedgerPage} />
             <Route path="/ops/monetization" component={MonetizationBoardPage} />
             <Route path="/ops/web3-tasks" component={Web3TaskRadarPage} />
+            <Route path="/ops/agent-economy" component={AgentEconomyRadarPage} />
             <Route path="/ops/agent-conectou" component={AgentConectouPage} />
             <Route path="/ops/radar-x" component={RadarXOperationalPage} />
             <Route path="/ops/connectors/github" component={GitHubReadonlyConnectorPage} />

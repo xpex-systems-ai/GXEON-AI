@@ -20,6 +20,7 @@ const bridgeLinks = [
   { label: "Opportunity Inbox", href: "/ops/opportunities" },
   { label: "Radar X", href: "/ops/radar-x" },
   { label: "Monetization Board", href: "/ops/monetization" },
+  { label: "Agent Economy Radar", href: "/ops/agent-economy" },
 ];
 
 type HomeCenterAgentsState = {

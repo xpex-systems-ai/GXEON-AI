@@ -21,6 +21,7 @@ const navGroups = [
     items: [
       { label: "Radar X", href: "/ops/radar-x", icon: Radar, status: "review" },
       { label: "Web3 Tasks", href: "/ops/web3-tasks", icon: Radar, status: "review" },
+      { label: "Agent Economy", href: "/ops/agent-economy", icon: Radar, status: "review" },
       { label: "Home Agents", href: "/ops/agent-conectou", icon: Plug, status: "review" },
       { label: "Proposals", href: "/marketplace", icon: TrendingUp, status: "live" },
     ],
