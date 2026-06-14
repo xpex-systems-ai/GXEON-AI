@@ -1,0 +1,14 @@
+import { apiUrl } from "./apiBase";
+export type ConnectorStatus = "DISCONNECTED"|"SETUP_REQUIRED"|"READY_TO_CONNECT"|"CONNECTED_READ_ONLY"|"CONNECTED_MANUAL"|"CONNECTED_PENDING_VERIFICATION"|"ERROR"|"PLANNED";
+export type ConnectorRecord={id:string;label:string;category:string;connectionModes:string[];capabilities:string[];blockedActions:string[];requiredEnv:string[];statusGoal:string;providerUrl:string;safety:{manualApprovalRequired:true;secretsInFrontend:false;destructiveActionsDisabled:true;paymentsDisabled:true;walletSigningDisabled:true;externalAutomationDisabled:true};status?:ConnectorStatus;missingEnvVars?:string[];safeSetupInstructions?:string[];nextManualAction?:string;walletSafetyChecklist?:string[]};
+export type ConnectorLaunchAction={type:string;connectorId:string;status:ConnectorStatus;authUrl?:string;providerUrl?:string;missingEnvVars:string[];scopes:string[];manualApprovalRequired:true;nextManualAction:string;warnings:string[]};
+export type ConnectorInstructions={connectorId:string;label:string;type:string;commands:string[];warnings:string[];nextManualAction:string;walletSafetyChecklist?:string[]};
+export type ConnectorBrainSummary={counts:{total:number;byStatus:Record<string,number>;byCategory:Record<string,number>};monetizationReadiness:Record<string,boolean>;topBlockers:{id:string;label:string;missingEnvVars:string[];nextManualAction:string}[];nextConnectorForR100Sprint:string;safetyBoundaries:string[]};
+async function request<T>(path:string,init?:RequestInit):Promise<T>{const res=await fetch(apiUrl(path),{...init,headers:{Accept:"application/json","Content-Type":"application/json",...(init?.headers??{})}}); const payload=await res.json() as {success:boolean;data:T;error?:string}; if(!res.ok||!payload.success) throw new Error(payload.error??`CONNECTOR_REQUEST_FAILED_${res.status}`); return payload.data;}
+export const fetchConnectorRegistry=(signal?:AbortSignal)=>request<{connectors:ConnectorRecord[]}>("/api/connectors/registry",{signal});
+export const fetchConnectorStatuses=(signal?:AbortSignal)=>request<{connectors:ConnectorRecord[]}>("/api/connectors/status",{signal});
+export const fetchConnectorStatus=(id:string,signal?:AbortSignal)=>request<ConnectorRecord>(`/api/connectors/${id}/status`,{signal});
+export const launchConnector=(id:string)=>request<ConnectorLaunchAction>(`/api/connectors/${id}/launch`,{method:"POST",body:JSON.stringify({})});
+export const fetchConnectorInstructions=(id:string)=>request<ConnectorInstructions>(`/api/connectors/${id}/instructions`);
+export const updateManualConnectorStatus=(id:string)=>request<ConnectorRecord>(`/api/connectors/${id}/manual-status`,{method:"POST",body:JSON.stringify({status:"CONNECTED_MANUAL",manualNote:"Operator marked manual P0 readiness; no secret stored."})});
+export const fetchConnectorBrainSummary=(signal?:AbortSignal)=>request<ConnectorBrainSummary>("/api/connectors/brain-summary",{signal});

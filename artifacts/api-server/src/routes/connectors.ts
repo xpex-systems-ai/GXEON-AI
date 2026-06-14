@@ -1,0 +1,17 @@
+import { Router, type IRouter } from "express";
+import { connectorRegistry, getConnectorRegistryItem } from "../connectors/connectorRegistry";
+import { listConnectorStatuses, getConnectorStatusById, updateManualConnectorStatus } from "../connectors/connectorStatusStore";
+import { buildOAuthLaunchAction } from "../connectors/oauthLaunchBuilder";
+import { buildConnectorInstructions } from "../connectors/cliInstructionBuilder";
+import { buildWalletSafety } from "../connectors/walletSafetyBuilder";
+import { buildConnectorBrainSummary } from "../connectors/connectorBrainSummary";
+const router: IRouter = Router();
+router.use("/connectors",(_req,res,next)=>{res.setHeader("Cache-Control","no-store");next();});
+router.get("/connectors/status",(_req,res)=>res.json({success:true,data:{connectors:listConnectorStatuses()}}));
+router.get("/connectors/registry",(_req,res)=>res.json({success:true,data:{connectors:connectorRegistry}}));
+router.get("/connectors/brain-summary",(_req,res)=>res.json({success:true,data:buildConnectorBrainSummary()}));
+router.get("/connectors/:id/status",(req,res)=>{const status=getConnectorStatusById(req.params.id); if(!status) return res.status(404).json({success:false,error:"CONNECTOR_NOT_FOUND"}); return res.json({success:true,data:status});});
+router.post("/connectors/:id/launch",(req,res)=>{ if(req.body && Object.keys(req.body).some((k)=>/secret|token|key|password/i.test(k))) return res.status(400).json({success:false,error:"RAW_SECRETS_NOT_ACCEPTED"}); if(!getConnectorRegistryItem(req.params.id)) return res.status(404).json({success:false,error:"CONNECTOR_NOT_FOUND"}); return res.json({success:true,data:buildOAuthLaunchAction(req.params.id)});});
+router.post("/connectors/:id/manual-status",(req,res)=>{ if(req.body && Object.keys(req.body).some((k)=>/secret|token|key|password/i.test(k))) return res.status(400).json({success:false,error:"RAW_SECRETS_NOT_ACCEPTED"}); const status=updateManualConnectorStatus(req.params.id,{status:req.body?.status,manualNote:req.body?.manualNote}); if(!status) return res.status(404).json({success:false,error:"CONNECTOR_NOT_FOUND"}); return res.json({success:true,data:status});});
+router.get("/connectors/:id/instructions",(req,res)=>{ if(!getConnectorRegistryItem(req.params.id)) return res.status(404).json({success:false,error:"CONNECTOR_NOT_FOUND"}); return res.json({success:true,data:{...buildConnectorInstructions(req.params.id),...(req.params.id==="metamask"||req.params.id==="walletconnect"?buildWalletSafety(req.params.id):{})}});});
+export default router;

@@ -24,6 +24,7 @@ import RevenueSprintPage from "@/pages/RevenueSprintPage";
 import AgentConectouPage from "@/pages/AgentConectouPage";
 import RadarXOperationalPage from "@/pages/RadarXOperationalPage";
 import ConnectorGatewayPage from "@/pages/ConnectorGatewayPage";
+import ConnectorCommandCenterPage from "@/pages/ConnectorCommandCenterPage";
 import ConnectorDetailPage from "@/pages/ConnectorDetailPage";
 import GitHubReadonlyConnectorPage from "@/pages/GitHubReadonlyConnectorPage";
 import VercelReadonlyConnectorPage from "@/pages/VercelReadonlyConnectorPage";
@@ -98,7 +99,7 @@ function Router() {
             <Route path="/ops/connectors/railway" component={RailwayReadonlyConnectorPage} />
             <Route path="/ops/connectors/supabase" component={SupabaseReadonlyConnectorPage} />
             <Route path="/ops/connectors/m365" component={Microsoft365ConnectorPage} />
-            <Route path="/ops/connectors" component={ConnectorGatewayPage} />
+            <Route path="/ops/connectors" component={ConnectorCommandCenterPage} />
             <Route path="/health" component={HealthPage} />
             <Route path="/ops/health" component={HealthPage} />
             {moduleRoutes.map(([path, moduleId]) => (
