@@ -43,6 +43,7 @@ export default function MonetizationBoardPage() {
     { label: "Qualified Web3", value: String(web3Counts.qualifiedLinks), hint: "pipeline links preview" },
     { label: "GitHub Exec Packs", value: String(status?.githubDemandExecution?.readyCount ?? 0), hint: "manual revenue source preview" },
     { label: "Manual Payment Ready", value: String((status as any)?.manualPayment?.manualPaymentReadyCount ?? 0), hint: `preview total R$ ${(status as any)?.manualPayment?.manualPaymentTotalExpectedPreviewBrl ?? 0}` },
+    { label: "Client Offers Ready", value: String((status as any)?.clientOfferSend?.clientOfferPacksReadyCount ?? 0), hint: `sent ${(status as any)?.clientOfferSend?.manualOfferSentCount ?? 0}; waiting ${(status as any)?.clientOfferSend?.waitingResponseManualCount ?? 0}` },
   ];
 
   const checkout = offers?.checkoutReadiness ?? status?.checkoutReadiness;
@@ -72,7 +73,7 @@ export default function MonetizationBoardPage() {
             <Link href="/ops/web3-tasks"><Button variant="outline" className="border-emerald-300/30 text-emerald-100 hover:bg-emerald-400/10">Open Web3 Task Radar</Button></Link>
             <Link href="/ops/agent-economy"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open Agent Economy Radar</Button></Link>
             <Link href="/ops/ledger"><Button variant="outline" className="border-white/20 text-white hover:bg-white/10">Open ledger</Button></Link>
-            <Link href="/ops/manual-payment"><Button variant="outline" className="border-amber-300/30 text-amber-100 hover:bg-amber-400/10">Open Manual Payment Center</Button></Link>
+            <Link href="/ops/manual-payment"><Button variant="outline" className="border-amber-300/30 text-amber-100 hover:bg-amber-400/10">Open Manual Payment Center</Button></Link><Link href="/ops/client-offers"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open Client Offers</Button></Link>
             <Link href="/ops/connectors"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10"><Plug className="mr-2 h-4 w-4" />Open Connector Command Center</Button></Link>
           </div>
           {error && <p className="rounded-2xl border border-red-300/25 bg-red-500/10 p-3 text-sm text-red-100">Backend unavailable: {error}</p>}
@@ -163,6 +164,8 @@ export default function MonetizationBoardPage() {
           </CardContent>
         </Card>
       </section>
+
+      <section className="rounded-[2rem] border border-emerald-300/20 bg-emerald-400/10 p-5"><div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs uppercase tracking-[0.35em] text-emerald-200/70">Manual offer pipeline</p><h2 className="text-2xl font-bold text-white">{(status as any)?.clientOfferSend?.clientOfferPacksReadyCount ?? 0} ready · {(status as any)?.clientOfferSend?.manualOfferSentCount ?? 0} sent · {(status as any)?.clientOfferSend?.waitingResponseManualCount ?? 0} waiting</h2><p className="mt-1 text-sm text-emerald-50/80">Top R$100 sprint pack: {(status as any)?.clientOfferSend?.topR100SprintPack?.title ?? "No client offer pack yet"}. Real revenue remains unclaimed.</p></div><Link href="/ops/client-offers"><Button className="bg-emerald-300 text-slate-950 hover:bg-emerald-200">Open Client Offers</Button></Link></div></section>
 
       <section className="rounded-[2rem] border border-cyan-300/20 bg-cyan-400/10 p-5"><div className="flex flex-wrap items-center justify-between gap-3"><div><p className="text-xs uppercase tracking-[0.35em] text-cyan-200/70">GitHub Demand execution readiness</p><h2 className="text-2xl font-bold text-white">{status?.githubDemandExecution?.readyCount ?? 0} manual revenue pack(s)</h2><p className="mt-1 text-sm text-cyan-50/80">Top route: {status?.githubDemandExecution?.topRouteForR100Sprint?.route ?? "No execution pack yet"}. No provider verification or revenue claim.</p></div><Link href="/ops/github-demand"><Button className="bg-cyan-300 text-slate-950 hover:bg-cyan-200">Open GitHub Demand</Button></Link></div></section>
 

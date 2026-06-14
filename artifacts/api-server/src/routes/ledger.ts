@@ -3,6 +3,7 @@ import { createLedgerPreview, getLedgerPreviewById, getLedgerStatusSummary, list
 import { ledgerSafetyBoundary } from "../ledger/ledgerBuilder";
 import type { LedgerCreateInput, LedgerStateUpdateInput } from "../ledger/ledgerTypes";
 import { buildManualPaymentBrainSummary } from "../manualPayment/manualPaymentBrainSummary";
+import { buildClientOfferBrainSummary } from "../clientOffer/clientOfferBrainSummary";
 
 const router: IRouter = Router();
 
@@ -48,7 +49,7 @@ function parseStateUpdate(body: unknown): LedgerStateUpdateInput {
 
 router.get("/ledger/status", (_req, res) => {
   try {
-    res.json({ success: true, data: { ...getLedgerStatusSummary(), manualPayment: buildManualPaymentBrainSummary() } });
+    res.json({ success: true, data: { ...getLedgerStatusSummary(), manualPayment: buildManualPaymentBrainSummary(), clientOfferSend: buildClientOfferBrainSummary(), realRevenueClaimed: false, providerVerified: false } });
   } catch (error) {
     safeError(res, error, "LEDGER_STATUS_FAILED");
   }
