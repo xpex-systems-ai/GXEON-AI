@@ -24,6 +24,7 @@ import tasksRouter from "./tasks";
 import web3TasksRouter from "./web3Tasks";
 import agentEconomyRouter from "./agentEconomy";
 import brainRouter from "./brain";
+import githubDemandRouter from "./githubDemand";
 
 const router: IRouter = Router();
 
@@ -41,6 +42,7 @@ router.use(supabaseConnectorRouter);
 router.use(microsoft365ConnectorRouter);
 router.use(monetizationRouter);
 router.use(radarRouter);
+router.use(githubDemandRouter);
 router.use(opportunitiesRouter);
 router.use(tasksRouter);
 router.use(web3TasksRouter);
