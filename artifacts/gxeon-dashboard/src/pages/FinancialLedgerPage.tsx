@@ -1,4 +1,4 @@
-import { OperatorHandoffBanner } from "@/components/operatorFlow/OperatorHandoffBanner";import { OperatorAssistantPanel } from "@/components/operatorAssistant/OperatorAssistantPanel";import { useEffect, useMemo, useState } from "react";
+import { OperatorHandoffBanner } from "@/components/operatorFlow/OperatorHandoffBanner";import { useOperatorHandoff } from "@/hooks/useOperatorHandoff";import { OperatorAssistantPanel } from "@/components/operatorAssistant/OperatorAssistantPanel";import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ function summarizeFallbackRecords() {
   return getFinancialLedgerSummary(realFinancialLedgerRecords);
 }
 
-export default function FinancialLedgerPage() {
+export default function FinancialLedgerPage() {const handoffState=useOperatorHandoff("/ops/ledger");
   const [status, setStatus] = useState<LedgerStatusSummary>(() => fallbackLedgerStatus());
   const [records, setRecords] = useState<LedgerPreviewRecord[]>([]);
   const [loading, setLoading] = useState(true);
