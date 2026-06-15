@@ -1,10 +1,12 @@
 import type { OperatorWorkflowEvent, OperatorWorkflowHandoff, OperatorWorkflowStatus } from "./operatorWorkflowTypes";
-const handoffs=new Map<string,OperatorWorkflowHandoff>(); let seq=1; let eventSeq=1;
-const open=new Set<OperatorWorkflowStatus>(["CREATED","ROUTE_OPENED","PREFILL_VIEWED","PREVIEW_CREATED","WAITING_MANUAL_RESPONSE"]);
-export const isOpenHandoff=(h:OperatorWorkflowHandoff)=>open.has(h.status);
-export const listOperatorWorkflowHandoffs=()=>[...handoffs.values()].sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt));
-export const getOperatorWorkflowHandoff=(id:string)=>handoffs.get(id);
-export function saveOperatorWorkflowHandoff(h:OperatorWorkflowHandoff){handoffs.set(h.id,h);return h;}
-export function nextOperatorWorkflowHandoffId(){return `ow_handoff_${String(seq++).padStart(6,"0")}`;}
-export function appendOperatorWorkflowEvent(handoffId:string,type:string,message:string,status?:OperatorWorkflowStatus){const h=handoffs.get(handoffId); if(!h)return undefined; const ev:OperatorWorkflowEvent={id:`ow_event_${String(eventSeq++).padStart(6,"0")}`,handoffId,at:new Date().toISOString(),type,message,status}; const updated={...h,status:status??h.status,updatedAt:ev.at,timeline:[...h.timeline,ev]}; handoffs.set(handoffId,updated); return updated;}
-export const operatorWorkflowStats=()=>{const all=listOperatorWorkflowHandoffs();return{handoffs:all.length,openHandoffs:all.filter(isOpenHandoff).length,manualCompleted:all.filter(h=>h.status==="MANUAL_ACTION_DONE_OUTSIDE_GXEON"||h.status==="OPERATOR_CONFIRMED").length,lastHandoff:all[0],nextOpenHandoff:all.find(isOpenHandoff)}};
+const handoffs:OperatorWorkflowHandoff[]=[];let seq=1;const isOpenHandoff=(h:OperatorWorkflowHandoff)=>h.status!=="ARCHIVED_MANUALLY"&&h.status!=="MANUAL_ACTION_DONE_OUTSIDE_GXEON"&&h.status!=="OPERATOR_CONFIRMED";
+export const nextOperatorWorkflowHandoffId=()=>`owh_${String(seq++).padStart(4,"0")}`;
+export const listOperatorWorkflowHandoffs=()=>[...handoffs].sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt));
+export const getOperatorWorkflowHandoff=(id:string)=>handoffs.find(h=>h.id===id);
+export const getActiveOperatorWorkflowHandoff=()=>listOperatorWorkflowHandoffs().find(isOpenHandoff);
+export const getLatestOpenHandoffForRoute=(targetRoute:string)=>listOperatorWorkflowHandoffs().find(h=>h.targetRoute===targetRoute&&isOpenHandoff(h));
+export const findEquivalentOpenHandoff=(sourceRoute:string,targetRoute:string,actionType:string)=>listOperatorWorkflowHandoffs().find(h=>h.sourceRoute===sourceRoute&&h.targetRoute===targetRoute&&h.actionType===actionType&&isOpenHandoff(h));
+export function markPreviousHandoffsSupersededForRoute(targetRoute:string,exceptId?:string){const now=new Date().toISOString();handoffs.forEach(h=>{if(h.id!==exceptId&&h.targetRoute===targetRoute&&isOpenHandoff(h)){h.status="ARCHIVED_MANUALLY";h.updatedAt=now;h.timeline.push({id:`${h.id}_${Date.now()}_superseded`,handoffId:h.id,at:now,type:"SUPERSEDED",message:"Handoff arquivado porque um novo handoff ativo foi criado para a mesma rota.",status:"ARCHIVED_MANUALLY"});}})}
+export function saveOperatorWorkflowHandoff(handoff:OperatorWorkflowHandoff){markPreviousHandoffsSupersededForRoute(handoff.targetRoute,handoff.id);handoffs.unshift(handoff);return handoff;}
+export function appendOperatorWorkflowEvent(id:string,type:string,message:string,status?:OperatorWorkflowStatus){const h=getOperatorWorkflowHandoff(id);if(!h)return undefined;const now=new Date().toISOString();const event:OperatorWorkflowEvent={id:`${id}_${Date.now()}_${type}`,handoffId:id,at:now,type,message,status};h.timeline.push(event);h.updatedAt=now;if(status)h.status=status;return h;}
+export const operatorWorkflowStats=()=>{const all=listOperatorWorkflowHandoffs();return{handoffs:all.length,openHandoffs:all.filter(isOpenHandoff).length,manualCompleted:all.filter(h=>h.status==="MANUAL_ACTION_DONE_OUTSIDE_GXEON"||h.status==="OPERATOR_CONFIRMED").length,lastHandoff:all[0],nextOpenHandoff:all.find(isOpenHandoff),activeHandoff:getActiveOperatorWorkflowHandoff()}};
