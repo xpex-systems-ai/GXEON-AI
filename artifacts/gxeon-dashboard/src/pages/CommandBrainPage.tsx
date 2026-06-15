@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { BrainCircuit, ClipboardList, HandCoins, Plug, ShieldCheck, Target } from "lucide-react";
 import { fetchCommandBrainStatus, fetchRevenueSprintOfferPacks, startMinimumRevenueSprint, type MinimumRevenueSprintRecord, type RevenueOfferPack, type RevenueSprintStatusResponse } from "@/services/commandBrainService";
 import { fetchConnectorBrainSummary, type ConnectorBrainSummary } from "@/services/realConnectorService";
-import { revenueCloseLoopService } from "@/services/revenueCloseLoopService";
+import { revenueCloseLoopService } from "@/services/revenueCloseLoopService";import { operatorWorkflowService,type OperatorWorkflowSummary } from "@/services/operatorWorkflowService";import { WorkflowSummaryCards } from "@/components/operatorFlow/WorkflowSummaryCards";
 
 export default function CommandBrainPage() {
   const [status, setStatus] = useState<RevenueSprintStatusResponse | null>(null);
@@ -16,9 +16,9 @@ export default function CommandBrainPage() {
   const [sprint, setSprint] = useState<MinimumRevenueSprintRecord | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [connectorSummary, setConnectorSummary] = useState<ConnectorBrainSummary | null>(null);
-  const [closeLoopSummary, setCloseLoopSummary] = useState<any>({});
+  const [closeLoopSummary, setCloseLoopSummary] = useState<any>({}); const [workflow,setWorkflow]=useState<OperatorWorkflowSummary|null>(null);
   const [form, setForm] = useState({ targetAmountBrl: "100", deadlineLabel: "tomorrow 9am", preferredPayoutMethod: "MERCADO_PAGO_PIX_MANUAL", mercadoPagoManualLink: "", pixKeyLabel: "", operatorNotes: "urgent debt payment; manual execution only; no payment provider API" });
-  useEffect(() => { const c = new AbortController(); Promise.all([fetchCommandBrainStatus(c.signal), fetchRevenueSprintOfferPacks(c.signal), fetchConnectorBrainSummary(c.signal)]).then(([s, packs, connectors]) => { setStatus(s); setOfferPacks(packs.offerPacks); setConnectorSummary(connectors); }).catch((e) => setError(e instanceof Error ? e.message : "COMMAND_BRAIN_LOAD_FAILED")); revenueCloseLoopService.summary().then((r) => setCloseLoopSummary(r.data ?? {})); return () => c.abort(); }, []);
+  useEffect(() => { const c = new AbortController(); Promise.all([fetchCommandBrainStatus(c.signal), fetchRevenueSprintOfferPacks(c.signal), fetchConnectorBrainSummary(c.signal)]).then(([s, packs, connectors]) => { setStatus(s); setOfferPacks(packs.offerPacks); setConnectorSummary(connectors); }).catch((e) => setError(e instanceof Error ? e.message : "COMMAND_BRAIN_LOAD_FAILED")); revenueCloseLoopService.summary().then((r) => setCloseLoopSummary(r.data ?? {})); operatorWorkflowService.summary().then(setWorkflow).catch(()=>{}); return () => c.abort(); }, []);
   async function submit(event: FormEvent) { event.preventDefault(); setError(null); try { const result = await startMinimumRevenueSprint({ ...form, targetAmountBrl: Number(form.targetAmountBrl) || 100, preferredPayoutMethod: "MERCADO_PAGO_PIX_MANUAL" }); setSprint(result.sprint); setOfferPacks(result.sprint.offerPacks); } catch (e) { setError(e instanceof Error ? e.message : "REVENUE_SPRINT_START_FAILED"); } }
   const activePacks = sprint?.offerPacks ?? offerPacks;
   const routes = sprint?.actionPlan ?? [];
