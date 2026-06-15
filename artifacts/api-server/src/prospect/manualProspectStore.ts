@@ -1,8 +1,13 @@
 import { buildManualProspect } from "./manualProspectBuilder";
 import { nextManualActionFor, scoreManualProspect } from "./manualProspectScoring";
 import type { ManualProspect, ManualProspectActionRecord, ManualProspectInput, ManualProspectStatus } from "./manualProspectTypes";
+import { r100DurableStateRegistry } from "../durableState/r100DurableStateRegistry";
 const prospects=new Map<string,ManualProspect>(); const byLabelSource=new Map<string,string>();
-const save=(p:ManualProspect)=>{prospects.set(p.id,p); byLabelSource.set(`${p.displayNameOrLabel.toLowerCase()}:${p.source}`,p.id); return p;};
+const rebuild=()=>{byLabelSource.clear(); prospects.forEach(p=>byLabelSource.set(`${p.displayNameOrLabel.toLowerCase()}:${p.source}`,p.id));};
+export function hydrateManualProspectsFromDurableState(){ prospects.clear(); r100DurableStateRegistry.loadCollection<ManualProspect>("manualProspects").forEach(p=>prospects.set(p.id,p)); rebuild(); }
+hydrateManualProspectsFromDurableState();
+const persist=()=>r100DurableStateRegistry.saveCollection("manualProspects",[...prospects.values()]);
+const save=(p:ManualProspect)=>{prospects.set(p.id,p); byLabelSource.set(`${p.displayNameOrLabel.toLowerCase()}:${p.source}`,p.id); persist(); return p;};
 export function createManualProspect(input:ManualProspectInput){ const key=`${input.displayNameOrLabel?.toLowerCase()}:${input.source??"OPERATOR_KNOWN_CONTACT"}`; const existing=byLabelSource.get(key); if(existing) return prospects.get(existing)!; return save(buildManualProspect(input)); }
 export const listManualProspects=()=>[...prospects.values()].sort((a,b)=>b.score.totalScore-a.score.totalScore || b.createdAt.localeCompare(a.createdAt));
 export const getManualProspectById=(id:string)=>prospects.get(id);
