@@ -2,11 +2,33 @@ import { apiUrl } from "./apiBase";
 import type { ReleaseGatePreviewRecord } from "./releaseGateService";
 
 export type LedgerMode = "PREVIEW_ONLY";
-export type LedgerStatus = "FORECAST" | "APPROVED_MANUAL" | "PENDING_PAYMENT_REVIEW" | "LOST" | "CANCELLED" | "ARCHIVED";
-export type LedgerRevenueClass = "EXPECTED_REVENUE" | "APPROVED_REVENUE" | "PENDING_REVENUE" | "LOST_REVENUE";
+export type LedgerStatus =
+  | "FORECAST"
+  | "APPROVED_MANUAL"
+  | "PENDING_PAYMENT_REVIEW"
+  | "LOST"
+  | "CANCELLED"
+  | "ARCHIVED";
+export type LedgerPreviewStatus =
+  | "PREVIEW_ONLY"
+  | "OPERATOR_CONFIRMED_MANUAL"
+  | "NEEDS_MANUAL_PROOF"
+  | "ARCHIVED_MANUAL";
+export type LedgerRevenueClass =
+  | "EXPECTED_REVENUE"
+  | "APPROVED_REVENUE"
+  | "PENDING_REVENUE"
+  | "LOST_REVENUE";
 
 export type LedgerSafetyBoundary = {
   mode: LedgerMode;
+  manualFirst: true;
+  providerApiDisabled: true;
+  paymentCaptureDisabled: true;
+  checkoutDisabled: true;
+  webhookDisabled: true;
+  externalContactDisabled: true;
+  githubWriteDisabled: true;
   paymentDisabled: true;
   invoiceDisabled: true;
   receiptDisabled: true;
@@ -62,6 +84,31 @@ export type LedgerPreviewRecord = LedgerSafetyBoundary & {
   updatedAt: string;
   created_at: string;
   updated_at: string;
+  source?: "REVENUE_CLOSE_LOOP";
+  closeLoopId?: string;
+  manualPaymentRequestId?: string | null;
+  prospectId?: string | null;
+  offerId?: string | null;
+  currency?: "BRL";
+  forecastRevenueBrl?: number;
+  operatorConfirmedRevenueBrl?: number;
+  providerVerifiedRevenueBrl?: 0;
+  providerVerified?: false;
+  paymentGuaranteed?: false;
+  previewStatus?: LedgerPreviewStatus;
+  manualProofRequired?: true;
+  manualProofStatus?:
+    | "NOT_ATTACHED"
+    | "OPERATOR_REVIEWED"
+    | "OPERATOR_CONFIRMED";
+  receiptType?: "NON_FISCAL_PREVIEW_ONLY";
+  notes?: string;
+  timeline?: Array<{
+    id: string;
+    timestamp: string;
+    type: string;
+    notes?: string;
+  }>;
 };
 
 export type LedgerStatusSummary = LedgerSafetyBoundary & {
@@ -69,6 +116,12 @@ export type LedgerStatusSummary = LedgerSafetyBoundary & {
   recordsInMemory: number;
   total_records: number;
   estimated_revenue_brl: number;
+  forecastRevenueBrl: number;
+  operatorConfirmedRevenueBrl: number;
+  providerVerifiedRevenueBrl: 0;
+  pendingRevenueBrl: number;
+  lostRevenueBrl: number;
+  ledgerPreviewCount: number;
   approved_revenue_brl: number;
   pending_revenue_brl: number;
   received_revenue_brl: 0;
@@ -97,6 +150,13 @@ export type LedgerCreateInput = {
 
 const safetyBoundary: LedgerSafetyBoundary = {
   mode: "PREVIEW_ONLY",
+  manualFirst: true,
+  providerApiDisabled: true,
+  paymentCaptureDisabled: true,
+  checkoutDisabled: true,
+  webhookDisabled: true,
+  externalContactDisabled: true,
+  githubWriteDisabled: true,
   paymentDisabled: true,
   invoiceDisabled: true,
   receiptDisabled: true,
@@ -115,6 +175,12 @@ export function fallbackLedgerStatus(): LedgerStatusSummary {
     recordsInMemory: 0,
     total_records: 0,
     estimated_revenue_brl: 0,
+    forecastRevenueBrl: 0,
+    operatorConfirmedRevenueBrl: 0,
+    providerVerifiedRevenueBrl: 0,
+    pendingRevenueBrl: 0,
+    lostRevenueBrl: 0,
+    ledgerPreviewCount: 0,
     approved_revenue_brl: 0,
     pending_revenue_brl: 0,
     received_revenue_brl: 0,
@@ -124,60 +190,110 @@ export function fallbackLedgerStatus(): LedgerStatusSummary {
     receipt_conversion_rate: 0,
     loss_rate: 0,
     average_accounting_readiness: 0,
-    allowedStatuses: ["FORECAST", "APPROVED_MANUAL", "PENDING_PAYMENT_REVIEW", "LOST", "CANCELLED", "ARCHIVED"],
-    allowedRevenueClasses: ["EXPECTED_REVENUE", "APPROVED_REVENUE", "PENDING_REVENUE", "LOST_REVENUE"],
-    boundaries: ["Backend unavailable: showing safe empty preview/manual state only."],
+    allowedStatuses: [
+      "FORECAST",
+      "APPROVED_MANUAL",
+      "PENDING_PAYMENT_REVIEW",
+      "LOST",
+      "CANCELLED",
+      "ARCHIVED",
+    ],
+    allowedRevenueClasses: [
+      "EXPECTED_REVENUE",
+      "APPROVED_REVENUE",
+      "PENDING_REVENUE",
+      "LOST_REVENUE",
+    ],
+    boundaries: [
+      "Backend unavailable: showing safe empty preview/manual state only.",
+    ],
     ...safetyBoundary,
   };
 }
 
-async function jsonRequest<T>(path: string, init?: RequestInit, signal?: AbortSignal): Promise<T> {
+async function jsonRequest<T>(
+  path: string,
+  init?: RequestInit,
+  signal?: AbortSignal,
+): Promise<T> {
   const response = await fetch(apiUrl(path), {
     ...init,
     signal,
     headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
   });
-  const payload = await response.json() as { success: boolean; data?: T; error?: string; message?: string };
-  if (!response.ok || !payload.success || !payload.data) throw new Error(payload.error ?? payload.message ?? "LEDGER_API_REQUEST_FAILED");
+  const payload = (await response.json()) as {
+    success: boolean;
+    data?: T;
+    error?: string;
+    message?: string;
+  };
+  if (!response.ok || !payload.success || !payload.data)
+    throw new Error(
+      payload.error ?? payload.message ?? "LEDGER_API_REQUEST_FAILED",
+    );
   return payload.data;
 }
 
-export async function fetchLedgerStatus(signal?: AbortSignal): Promise<LedgerStatusSummary> {
+export async function fetchLedgerStatus(
+  signal?: AbortSignal,
+): Promise<LedgerStatusSummary> {
   try {
-    return await jsonRequest<LedgerStatusSummary>("/api/ledger/status", undefined, signal);
+    return await jsonRequest<LedgerStatusSummary>(
+      "/api/ledger/status",
+      undefined,
+      signal,
+    );
   } catch {
     return fallbackLedgerStatus();
   }
 }
 
-export async function fetchLedgerPreviews(signal?: AbortSignal): Promise<LedgerPreviewRecord[]> {
+export async function fetchLedgerPreviews(
+  signal?: AbortSignal,
+): Promise<LedgerPreviewRecord[]> {
   try {
-    const data = await jsonRequest<LedgerStatusSummary & { ledgerPreviews: LedgerPreviewRecord[] }>("/api/ledger/previews", undefined, signal);
+    const data = await jsonRequest<
+      LedgerStatusSummary & { ledgerPreviews: LedgerPreviewRecord[] }
+    >("/api/ledger/previews", undefined, signal);
     return data.ledgerPreviews ?? [];
   } catch {
     return [];
   }
 }
 
-export async function fetchLedgerPreviewById(id: string, signal?: AbortSignal): Promise<LedgerPreviewRecord | null> {
+export async function fetchLedgerPreviewById(
+  id: string,
+  signal?: AbortSignal,
+): Promise<LedgerPreviewRecord | null> {
   try {
-    const data = await jsonRequest<{ ledgerPreview: LedgerPreviewRecord }>(`/api/ledger/previews/${id}`, undefined, signal);
+    const data = await jsonRequest<{ ledgerPreview: LedgerPreviewRecord }>(
+      `/api/ledger/previews/${id}`,
+      undefined,
+      signal,
+    );
     return data.ledgerPreview;
   } catch {
     return null;
   }
 }
 
-export async function createLedgerPreview(input: LedgerCreateInput | ReleaseGatePreviewRecord): Promise<LedgerPreviewRecord | null> {
+export async function createLedgerPreview(
+  input: LedgerCreateInput | ReleaseGatePreviewRecord,
+): Promise<LedgerPreviewRecord | null> {
   try {
-    const data = await jsonRequest<{ ledgerPreview: LedgerPreviewRecord }>("/api/ledger/previews", { method: "POST", body: JSON.stringify(input) });
+    const data = await jsonRequest<{ ledgerPreview: LedgerPreviewRecord }>(
+      "/api/ledger/previews",
+      { method: "POST", body: JSON.stringify(input) },
+    );
     return data.ledgerPreview;
   } catch {
     return null;
   }
 }
 
-export async function createLedgerPreviewFromRelease(release: ReleaseGatePreviewRecord): Promise<LedgerPreviewRecord | null> {
+export async function createLedgerPreviewFromRelease(
+  release: ReleaseGatePreviewRecord,
+): Promise<LedgerPreviewRecord | null> {
   return createLedgerPreview({
     title: release.title,
     releasePreviewId: release.id,
@@ -193,12 +309,49 @@ export async function createLedgerPreviewFromRelease(release: ReleaseGatePreview
   });
 }
 
-export async function updateLedgerPreviewState(id: string, status: LedgerStatus, nextManualAction?: string): Promise<LedgerPreviewRecord | null> {
+export async function syncLedgerPreviewFromCloseLoop(
+  closeLoopId: string,
+): Promise<LedgerPreviewRecord | null> {
   try {
-    const data = await jsonRequest<{ ledgerPreview: LedgerPreviewRecord }>(`/api/ledger/previews/${id}/state`, {
-      method: "PATCH",
-      body: JSON.stringify({ status, next_manual_action: nextManualAction }),
-    });
+    const data = await jsonRequest<{ ledgerPreview: LedgerPreviewRecord }>(
+      `/api/ledger/from-close-loop/${closeLoopId}`,
+      { method: "POST" },
+    );
+    return data.ledgerPreview;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateLedgerPreviewManualStatus(
+  id: string,
+  status: LedgerPreviewStatus,
+  notes?: string,
+): Promise<LedgerPreviewRecord | null> {
+  try {
+    const data = await jsonRequest<{ ledgerPreview: LedgerPreviewRecord }>(
+      `/api/ledger/previews/${id}/status`,
+      { method: "PATCH", body: JSON.stringify({ status, notes }) },
+    );
+    return data.ledgerPreview;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateLedgerPreviewState(
+  id: string,
+  status: LedgerStatus,
+  nextManualAction?: string,
+): Promise<LedgerPreviewRecord | null> {
+  try {
+    const data = await jsonRequest<{ ledgerPreview: LedgerPreviewRecord }>(
+      `/api/ledger/previews/${id}/state`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ status, next_manual_action: nextManualAction }),
+      },
+    );
     return data.ledgerPreview;
   } catch {
     return null;
