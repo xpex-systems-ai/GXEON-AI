@@ -1,10 +1,44 @@
 export type LedgerMode = "PREVIEW_ONLY";
 
-export type LedgerStatus = "FORECAST" | "APPROVED_MANUAL" | "PENDING_PAYMENT_REVIEW" | "LOST" | "CANCELLED" | "ARCHIVED";
-export type LedgerRevenueClass = "EXPECTED_REVENUE" | "APPROVED_REVENUE" | "PENDING_REVENUE" | "LOST_REVENUE";
+export type LedgerStatus =
+  | "FORECAST"
+  | "APPROVED_MANUAL"
+  | "PENDING_PAYMENT_REVIEW"
+  | "LOST"
+  | "CANCELLED"
+  | "ARCHIVED";
+export type LedgerPreviewStatus =
+  | "PREVIEW_ONLY"
+  | "OPERATOR_CONFIRMED_MANUAL"
+  | "NEEDS_MANUAL_PROOF"
+  | "ARCHIVED_MANUAL";
+export type LedgerManualProofStatus =
+  | "NOT_ATTACHED"
+  | "OPERATOR_REVIEWED"
+  | "OPERATOR_CONFIRMED";
+export type LinkedCloseLoopSource = "REVENUE_CLOSE_LOOP";
+export type LedgerTimelineEvent = {
+  id: string;
+  timestamp: string;
+  type: string;
+  notes?: string;
+  metadata?: Record<string, unknown>;
+};
+export type LedgerRevenueClass =
+  | "EXPECTED_REVENUE"
+  | "APPROVED_REVENUE"
+  | "PENDING_REVENUE"
+  | "LOST_REVENUE";
 
 export type LedgerSafetyBoundary = {
   mode: LedgerMode;
+  manualFirst: true;
+  providerApiDisabled: true;
+  paymentCaptureDisabled: true;
+  checkoutDisabled: true;
+  webhookDisabled: true;
+  externalContactDisabled: true;
+  githubWriteDisabled: true;
   paymentDisabled: true;
   invoiceDisabled: true;
   receiptDisabled: true;
@@ -94,6 +128,23 @@ export type LedgerPreviewRecord = LedgerSafetyBoundary & {
   updatedAt: string;
   created_at: string;
   updated_at: string;
+  source?: LinkedCloseLoopSource;
+  closeLoopId?: string;
+  manualPaymentRequestId?: string | null;
+  prospectId?: string | null;
+  offerId?: string | null;
+  currency?: "BRL";
+  forecastRevenueBrl?: number;
+  operatorConfirmedRevenueBrl?: number;
+  providerVerifiedRevenueBrl?: 0;
+  providerVerified?: false;
+  paymentGuaranteed?: false;
+  previewStatus?: LedgerPreviewStatus;
+  manualProofRequired?: true;
+  manualProofStatus?: LedgerManualProofStatus;
+  receiptType?: "NON_FISCAL_PREVIEW_ONLY";
+  notes?: string;
+  timeline?: LedgerTimelineEvent[];
 };
 
 export type LedgerStatusSummary = LedgerSafetyBoundary & {
@@ -101,6 +152,12 @@ export type LedgerStatusSummary = LedgerSafetyBoundary & {
   recordsInMemory: number;
   total_records: number;
   estimated_revenue_brl: number;
+  forecastRevenueBrl: number;
+  operatorConfirmedRevenueBrl: number;
+  providerVerifiedRevenueBrl: 0;
+  pendingRevenueBrl: number;
+  lostRevenueBrl: number;
+  ledgerPreviewCount: number;
   approved_revenue_brl: number;
   pending_revenue_brl: number;
   received_revenue_brl: 0;
