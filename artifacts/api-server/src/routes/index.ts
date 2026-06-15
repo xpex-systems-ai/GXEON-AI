@@ -33,6 +33,7 @@ import r100WarRoomRouter from "./r100WarRoom";
 import revenueCloseLoopRouter from "./revenueCloseLoop";
 import operatorAssistantRouter from "./operatorAssistant";
 import operatorWorkflowRouter from "./operatorWorkflow";
+import r100TruthRouter from "./r100Truth";
 
 const router: IRouter = Router();
 
@@ -59,6 +60,7 @@ router.use(r100WarRoomRouter);
 router.use(revenueCloseLoopRouter);
 router.use(operatorAssistantRouter);
 router.use(operatorWorkflowRouter);
+router.use(r100TruthRouter);
 router.use(opportunitiesRouter);
 router.use(tasksRouter);
 router.use(web3TasksRouter);

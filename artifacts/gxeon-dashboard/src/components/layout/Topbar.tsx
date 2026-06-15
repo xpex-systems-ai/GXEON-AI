@@ -2,17 +2,20 @@ import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Bell, CircleDot, Menu, Search, ShieldCheck, Zap } from "lucide-react";
+import { useR100TruthSummary } from "@/hooks/useR100TruthSummary";
 
 const headerTabs = ["Status", "Operator", "Revenue", "Tasks", "Connectors"];
-const kpis = [
-  { label: "Opportunities", value: "0" },
-  { label: "Tasks", value: "0" },
-  { label: "Executions", value: "0" },
-  { label: "Revenue", value: "R$0" },
-  { label: "Connectors", value: "5" },
+const fallbackKpis = [
+  { label: "Opportunities", value: "0", href: "/ops/prospects" },
+  { label: "Tasks", value: "0", href: "/ops/tasks" },
+  { label: "Executions", value: "0", href: "/ops/execution" },
+  { label: "Revenue", value: "R$0", qualifier: "manual", href: "/ops/ledger", title: "provider not verified" },
+  { label: "Connectors", value: "5", href: "/ops/connectors" },
 ];
 
 export function Topbar() {
+  const { summary } = useR100TruthSummary();
+  const kpis = summary?.topbarKpis?.length ? summary.topbarKpis : fallbackKpis;
   return (
     <header className="sticky top-0 z-30 border-b border-amber-300/10 bg-[#050505]/90 px-4 py-3 backdrop-blur-xl md:px-6">
       <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
@@ -37,10 +40,10 @@ export function Topbar() {
 
         <div className="flex flex-wrap items-center gap-2">
           {kpis.map((kpi) => (
-            <Link key={kpi.label} href={kpi.label === "Connectors" ? "/ops/connectors" : kpi.label === "Tasks" ? "/ops/tasks" : kpi.label === "Revenue" ? "/ops/ledger" : "/ops/opportunities"}>
-              <div className="rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 transition hover:-translate-y-0.5 hover:border-amber-300/30 hover:bg-amber-400/10">
+            <Link key={kpi.label} href={kpi.href}>
+              <div title={kpi.title ?? (kpi.label === "Revenue" ? summary.revenueSafetyLabel : undefined)} className="rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 transition hover:-translate-y-0.5 hover:border-amber-300/30 hover:bg-amber-400/10">
                 <p className="text-[10px] uppercase tracking-[0.22em] text-stone-500">{kpi.label}</p>
-                <p className="text-sm font-black text-white">{kpi.value}</p>
+                <p className="text-sm font-black text-white">{kpi.value}{kpi.qualifier ? <span className="ml-1 text-[10px] uppercase text-emerald-100">{kpi.qualifier}</span> : null}</p>{kpi.label === "Revenue" && summary.providerVerifiedRevenueBrl === 0 ? <p className="text-[9px] uppercase tracking-[0.16em] text-stone-500">provider not verified</p> : null}
               </div>
             </Link>
           ))}

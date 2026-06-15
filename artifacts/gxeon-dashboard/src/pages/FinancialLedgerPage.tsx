@@ -46,7 +46,7 @@ const metricCards = [
   },
   {
     key: "pending_revenue_brl",
-    label: "Pending",
+    label: "Pending review",
     icon: CircleDollarSign,
     tone: "border-amber-300/20 bg-amber-400/10 text-amber-100",
   },
@@ -158,7 +158,7 @@ export default function FinancialLedgerPage() {
             </div>
             <h1 className="mt-4 text-4xl font-black tracking-tight text-white md:text-6xl">
               Ledger
-            </h1>
+            </h1><p className="mt-3 max-w-3xl text-sm text-stone-300">Ledger is preview/accounting workspace; not fiscal receipt, not provider settlement.</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Badge
