@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { connectorGatewayProviders } from "@/data/connector-gateway";
@@ -76,7 +77,8 @@ export default function GxeonOSPage({ moduleId: _moduleId = "command_center" }: 
       </section>
 
 
-      <Card className="border-cyan-300/20 bg-cyan-400/10 text-white">
+      <Link href="/ops/r100-db-mirror">
+      <Card className="cursor-pointer border-cyan-300/20 bg-cyan-400/10 text-white transition hover:border-cyan-200/60 hover:bg-cyan-400/15">
         <CardContent className="p-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -91,9 +93,11 @@ export default function GxeonOSPage({ moduleId: _moduleId = "command_center" }: 
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             {["MANUAL_FIRST","PREVIEW_ONLY","DB_MIRROR","NO_PAYMENT_API","NO_PROVIDER_VERIFIED_REVENUE"].map((item) => <Badge key={item} variant="outline" className="border-white/15 text-stone-200">{item}</Badge>)}
+            <Button size="sm" className="bg-cyan-300 text-black hover:bg-cyan-200">Abrir Console do DB Mirror</Button>
           </div>
         </CardContent>
       </Card>
+      </Link>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {missionCards.map((card) => {

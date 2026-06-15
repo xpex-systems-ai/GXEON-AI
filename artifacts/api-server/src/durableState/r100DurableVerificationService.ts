@@ -4,7 +4,7 @@ import { listManualPaymentRequests } from "../manualPayment/manualPaymentRequest
 import { listOperatorWorkflowHandoffs } from "../operatorWorkflow/operatorWorkflowStore";
 import { listManualProspects } from "../prospect/manualProspectStore";
 import { listOperatorConfirmedRevenue, listRevenueCloseLoops } from "../revenueCloseLoop/revenueCloseLoopStore";
-import { getR100DatabaseMirrorStatus } from "./r100DatabaseMirrorService";
+import { getR100DatabaseMirrorStatusSync } from "./r100DatabaseMirrorService";
 import { r100DurableStateRegistry } from "./r100DurableStateRegistry";
 import { listR100DurabilityProbes } from "./r100DurabilityProbeStore";
 import type { R100DurabilityLevel, R100DurableCollectionCounts, R100DurableVerificationSafety, R100DurableVerificationSummary, R100OperatorTrustLevel } from "./r100DurableVerificationTypes";
@@ -71,7 +71,7 @@ export function buildR100DurableVerificationSummary(): R100DurableVerificationSu
   const status = r100DurableStateRegistry.getStatus();
   const level = durabilityLevel(status.healthy, status.fallbackUsed, status.persistenceMode);
   const counts = getR100CollectionCounts();
-  const dbMirror = getR100DatabaseMirrorStatus();
+  const dbMirror = getR100DatabaseMirrorStatusSync();
   const mirrorReady = dbMirror.status === "R100_DB_MIRROR_P2_READY";
   return {
     status: "R100_DURABLE_STATE_VERIFICATION_P1_READY",

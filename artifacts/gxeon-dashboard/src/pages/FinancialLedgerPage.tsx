@@ -17,6 +17,7 @@ import {
   createR100DatabaseMirrorProbe,
   exportR100SafeSnapshotToDatabaseMirror,
   fetchR100DatabaseMirrorSnapshot,
+  fetchR100DatabaseMirrorReadiness,
   fetchR100DatabaseMirrorStatus,
   fallbackR100DatabaseMirrorStatus,
 } from "@/services/r100DatabaseMirrorService";
@@ -108,6 +109,7 @@ export default function FinancialLedgerPage() {
         setStatus(runtimeStatus);
         setRecords(previews);
         const [mirrorStatus, mirrorSnapshot] = await Promise.all([fetchR100DatabaseMirrorStatus(controller.signal), fetchR100DatabaseMirrorSnapshot(controller.signal)]);
+        await fetchR100DatabaseMirrorReadiness(controller.signal);
         setDbMirror(mirrorStatus);
         setDbSnapshotAt(mirrorSnapshot.createdAt);
       } finally {
@@ -208,7 +210,7 @@ export default function FinancialLedgerPage() {
             <div>
               <p className="text-xs uppercase tracking-[0.25em] text-cyan-100">R$100 DB Mirror P2</p>
               <h2 className="mt-2 text-2xl font-black">Espelho seguro de banco</h2>
-              <p className="mt-2 text-sm text-stone-300">Readiness/mirror only; no payment API, invoice, checkout, or provider settlement.</p>
+              <p className="mt-2 text-sm text-stone-300">Readiness/mirror only; Ledger remains preview/accounting workspace, not fiscal receipt and not provider settlement.</p>
             </div>
             <Badge variant="outline" className="border-cyan-200/40 text-cyan-100">{dbMirror.status}</Badge>
           </div>
@@ -219,6 +221,7 @@ export default function FinancialLedgerPage() {
             {["MANUAL_FIRST","PREVIEW_ONLY","DB_MIRROR","NO_PAYMENT_API","NO_PROVIDER_VERIFIED_REVENUE"].map((item) => <Badge key={item} variant="outline" className="border-white/15 text-stone-200">{item}</Badge>)}
           </div>
           <div className="flex flex-wrap gap-2">
+            <Link href="/ops/r100-db-mirror"><Button variant="outline" className="border-cyan-300/30 text-cyan-100">Abrir Console do DB Mirror</Button></Link>
             <Button variant="outline" className="border-cyan-300/30 text-cyan-100" onClick={async () => { const result = await createR100DatabaseMirrorProbe(); setDbMirrorAction(result?.status ?? "Probe unavailable"); }}>Criar probe seguro de banco</Button>
             <Button variant="outline" className="border-emerald-300/30 text-emerald-100" onClick={async () => { const result = await exportR100SafeSnapshotToDatabaseMirror(); setDbMirrorAction(result?.status ?? "Snapshot unavailable"); }}>Exportar snapshot seguro</Button>
             {dbMirrorAction && <span className="self-center text-xs text-stone-300">{dbMirrorAction}</span>}
