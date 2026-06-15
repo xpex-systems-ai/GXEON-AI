@@ -7,14 +7,14 @@ const safety = { manualOnly: true, copyOnly: true, previewOnly: true, safe: true
 const groups: OperatorFlowGroup[] = [
   { title: "R$100 Official Flow", purpose: "Fluxo principal para monetização manual segura.", items: [
     { step: 1, labelPt: "Sala R$100", labelEn: "R$100 War Room", href: "/ops/r100-war-room", icon: "HandCoins", status: "review", description: "Sala de guerra com próxima ação manual mais rápida.", officialR100Flow: true, ...safety },
-    { labelPt: "Agente Executor", labelEn: "Operator Assistant", href: "/ops/operator-assistant", icon: "BrainCircuit", status: "review", description: "Camada assistiva P1 que recomenda a próxima ação manual sem substituir etapas.", manualOnly: true, copyOnly: true, previewOnly: true, safe: true },
     { step: 2, labelPt: "Cérebro", labelEn: "Brain", href: "/ops/brain", icon: "BrainCircuit", status: "review", description: "Comando central de prioridade e sprint.", officialR100Flow: true, ...safety },
-    { step: 3, labelPt: "Sprint de Receita", labelEn: "Revenue Sprint", href: "/ops/revenue-sprint", icon: "HandCoins", status: "review", description: "Define meta e rota manual para R$100.", officialR100Flow: true, ...safety },
-    { step: 4, labelPt: "Perspectivas", labelEn: "Prospects", href: "/ops/prospects", icon: "Inbox", status: "review", description: "Cadastro manual de prospect fornecido pelo operador.", officialR100Flow: true, ...safety },
-    { step: 5, labelPt: "Ofertas de Clientes", labelEn: "Client Offers", href: "/ops/client-offers", icon: "HandCoins", status: "review", description: "Cria oferta copiável, sem envio automático.", officialR100Flow: true, ...safety },
-    { step: 6, labelPt: "Pagamento Manual", labelEn: "Manual Payment", href: "/ops/manual-payment", icon: "HandCoins", status: "review", description: "Cria instrução Pix/Mercado Pago manual, sem API.", officialR100Flow: true, ...safety },
-    { step: 7, labelPt: "Fechamento R$100", labelEn: "R$100 Close Loop", href: "/ops/revenue-close-loop", icon: "HandCoins", status: "review", description: "Ciclo de fechamento: oferta, resposta, pagamento, prova e ledger.", officialR100Flow: true, ...safety },
-    { step: 8, labelPt: "Livro de Contas", labelEn: "Ledger", href: "/ops/ledger", icon: "Table2", status: "pending", description: "Prévia e receita confirmada manualmente pelo operador.", officialR100Flow: true, ...safety },
+    { step: 3, labelPt: "Agente Executor Manual", labelEn: "Operator Assistant", href: "/ops/operator-assistant", icon: "BrainCircuit", status: "review", description: "Camada P1/P2 que recomenda a próxima ação manual e cria handoff interno.", officialR100Flow: true, ...safety },
+    { step: 4, labelPt: "Sprint de Receita", labelEn: "Revenue Sprint", href: "/ops/revenue-sprint", icon: "HandCoins", status: "review", description: "Define meta e rota manual para R$100.", officialR100Flow: true, ...safety },
+    { step: 5, labelPt: "Perspectivas", labelEn: "Prospects", href: "/ops/prospects", icon: "Inbox", status: "review", description: "Cadastro manual de prospect fornecido pelo operador.", officialR100Flow: true, ...safety },
+    { step: 6, labelPt: "Ofertas de Clientes", labelEn: "Client Offers", href: "/ops/client-offers", icon: "HandCoins", status: "review", description: "Cria oferta copiável, sem envio automático.", officialR100Flow: true, ...safety },
+    { step: 7, labelPt: "Pagamento Manual", labelEn: "Manual Payment", href: "/ops/manual-payment", icon: "HandCoins", status: "review", description: "Cria instrução Pix/Mercado Pago manual, sem API.", officialR100Flow: true, ...safety },
+    { step: 8, labelPt: "Fechamento R$100", labelEn: "R$100 Close Loop", href: "/ops/revenue-close-loop", icon: "HandCoins", status: "review", description: "Ciclo de fechamento: oferta, resposta, pagamento, prova e ledger.", officialR100Flow: true, ...safety },
+    { step: 9, labelPt: "Livro de Contas", labelEn: "Ledger", href: "/ops/ledger", icon: "Table2", status: "pending", description: "Prévia e receita confirmada manualmente pelo operador.", officialR100Flow: true, ...safety },
   ]},
   { title: "Delivery Pipeline", purpose: "Fluxo para entregar serviço quando existir pacote de execução.", items: [
     { step: 9, labelPt: "Caixa de Entrada", labelEn: "Inbox", href: "/ops/opportunities", icon: "Inbox", status: "live", manualOnly: true, safe: true },
@@ -38,3 +38,6 @@ const r100 = groups[0].items;
 export const getNextOfficialStep = (href: string) => { const i = r100.findIndex(s => s.href === getOfficialStepByHref(href)?.href); return i >= 0 ? r100[i + 1] : undefined; };
 export const getPreviousOfficialStep = (href: string) => { const i = r100.findIndex(s => s.href === getOfficialStepByHref(href)?.href); return i > 0 ? r100[i - 1] : undefined; };
 export const getOfficialR100FlowSteps = () => r100;
+
+export const getOfficialStepByRoute = getOfficialStepByHref;
+export function getStepStatusFromWorkflowSummary(step:number,summary?:{currentStep?:number;nextStep?:number}){return step===summary?.currentStep?"CURRENT":step===summary?.nextStep?"NEXT":step<(summary?.currentStep??0)?"DONE":"PENDING";}
