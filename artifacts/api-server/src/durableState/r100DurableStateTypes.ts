@@ -36,7 +36,6 @@ export type R100DurableSafetyMetadata = {
   noScraping: true;
   providerVerifiedRevenueBrl: 0;
   realRevenueClaimedAutomatically: false;
-  providerVerifiedRevenueBrl: 0;
 };
 
 export type R100DurableAuditEvent = {
@@ -63,5 +62,4 @@ export const r100DurableSafety: R100DurableSafetyMetadata = {
   noScraping: true,
   providerVerifiedRevenueBrl: 0,
   realRevenueClaimedAutomatically: false,
-  providerVerifiedRevenueBrl: 0,
 };

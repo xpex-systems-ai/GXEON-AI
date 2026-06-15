@@ -162,7 +162,6 @@ export default function FinancialLedgerPage() {
               Ledger
             </h1><p className="mt-3 max-w-3xl text-sm text-stone-300">Ledger is preview/accounting workspace; not fiscal receipt, not provider settlement.</p>
             <p className="mt-2 text-xs uppercase tracking-[0.18em] text-stone-500">Persistence: {truthSummary.persistenceMode === "SERVER_LOCAL_JSON" ? "file-backed" : truthSummary.persistenceFallbackUsed ? "safe fallback" : "memory-only"} · no provider verification · <Link href="/ops/r100-state" className="text-cyan-200 underline-offset-4 hover:underline">verify R$100 memory</Link></p>
-            <p className="mt-2 text-xs uppercase tracking-[0.18em] text-stone-500">Persistence: {truthSummary.persistenceMode === "SERVER_LOCAL_JSON" ? "file-backed" : truthSummary.persistenceFallbackUsed ? "safe fallback" : "memory-only"} · no provider verification</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Badge
