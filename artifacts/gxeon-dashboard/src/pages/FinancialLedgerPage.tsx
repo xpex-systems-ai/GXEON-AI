@@ -1,5 +1,6 @@
 import { OperatorHandoffBanner } from "@/components/operatorFlow/OperatorHandoffBanner";
 import { useOperatorHandoff } from "@/hooks/useOperatorHandoff";
+import { useR100TruthSummary } from "@/hooks/useR100TruthSummary";
 import { OperatorAssistantPanel } from "@/components/operatorAssistant/OperatorAssistantPanel";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
@@ -79,6 +80,7 @@ function summarizeFallbackRecords() {
 
 export default function FinancialLedgerPage() {
   const handoffState = useOperatorHandoff("/ops/ledger");
+  const { summary: truthSummary } = useR100TruthSummary();
   const [status, setStatus] = useState<LedgerStatusSummary>(() =>
     fallbackLedgerStatus(),
   );
@@ -159,6 +161,7 @@ export default function FinancialLedgerPage() {
             <h1 className="mt-4 text-4xl font-black tracking-tight text-white md:text-6xl">
               Ledger
             </h1><p className="mt-3 max-w-3xl text-sm text-stone-300">Ledger is preview/accounting workspace; not fiscal receipt, not provider settlement.</p>
+            <p className="mt-2 text-xs uppercase tracking-[0.18em] text-stone-500">Persistence: {truthSummary.persistenceMode === "SERVER_LOCAL_JSON" ? "file-backed" : truthSummary.persistenceFallbackUsed ? "safe fallback" : "memory-only"} · no provider verification</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Badge
