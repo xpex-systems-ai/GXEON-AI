@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,6 +7,7 @@ import { connectorGatewayProviders } from "@/data/connector-gateway";
 import { getFinancialLedgerSummary } from "@/data/financial-ledger";
 import { getOpportunitySummary } from "@/data/opportunity-inbox";
 import { formatCurrency } from "@/lib/format";
+import { fetchR100DatabaseMirrorStatus, fallbackR100DatabaseMirrorStatus } from "@/services/r100DatabaseMirrorService";
 import { ArrowRight, BadgeCheck, BookOpenCheck, CircleDot, Inbox, ListChecks, LockKeyhole, Plug, ShieldCheck, Workflow, Zap } from "lucide-react";
 
 const connectorRoutes: Record<string, string> = {
@@ -38,6 +40,8 @@ export default function GxeonOSPage({ moduleId: _moduleId = "command_center" }: 
   const ledger = getFinancialLedgerSummary();
   const connectedCount = connectorGatewayProviders.filter((connector) => connector.status === "CONNECTED").length;
   const readyCount = connectorGatewayProviders.filter((connector) => connector.status === "READY").length;
+  const [dbMirror, setDbMirror] = useState(() => fallbackR100DatabaseMirrorStatus());
+  useEffect(() => { let alive = true; fetchR100DatabaseMirrorStatus().then((status) => { if (alive) setDbMirror(status); }); return () => { alive = false; }; }, []);
 
   const kpis = [
     { label: "Opportunities", value: opportunities.active },
@@ -70,6 +74,26 @@ export default function GxeonOSPage({ moduleId: _moduleId = "command_center" }: 
           </div>
         </div>
       </section>
+
+
+      <Card className="border-cyan-300/20 bg-cyan-400/10 text-white">
+        <CardContent className="p-5">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-cyan-100">R$100 DB Mirror P2</p>
+              <h3 className="mt-2 text-2xl font-black">Database readiness mirror</h3>
+              <p className="mt-2 text-sm text-stone-300">Manual-first, preview-only safe database mirror. It is not payment settlement and verifies no provider revenue.</p>
+            </div>
+            <Badge variant="outline" className="border-cyan-300/30 text-cyan-100">{dbMirror.status}</Badge>
+          </div>
+          <div className="mt-4 grid gap-2 text-xs text-stone-200 md:grid-cols-5">
+            {[`database configured: ${dbMirror.databaseConfigured ? "yes" : "no"}`, `mirror enabled: ${dbMirror.mirrorEnabled ? "yes" : "no"}`, `safe to write: ${dbMirror.safeToWrite ? "yes" : "no"}`, `latest snapshot: ${dbMirror.latestSnapshotAt ?? "none"}`, `snapshot count: ${dbMirror.snapshotCount}`].map((item) => <div key={item} className="rounded-2xl border border-white/10 bg-black/20 p-3">{item}</div>)}
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {["MANUAL_FIRST","PREVIEW_ONLY","DB_MIRROR","NO_PAYMENT_API","NO_PROVIDER_VERIFIED_REVENUE"].map((item) => <Badge key={item} variant="outline" className="border-white/15 text-stone-200">{item}</Badge>)}
+          </div>
+        </CardContent>
+      </Card>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {missionCards.map((card) => {

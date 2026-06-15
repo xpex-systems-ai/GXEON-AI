@@ -26,6 +26,8 @@ export type R100DurableVerificationSafety = {
   realRevenueClaimedAutomatically: false;
 };
 
+export type R100DurableVerificationDbMirror = { status: "R100_DB_MIRROR_P2_READY" | "R100_DB_MIRROR_DISABLED" | "R100_DB_NOT_CONFIGURED" | "R100_DB_MIRROR_UNHEALTHY"; databaseConfigured: boolean; mirrorEnabled: boolean; safeToWrite: boolean; safeToProceed: boolean; providerVerifiedRevenueBrl: 0; realRevenueClaimedAutomatically: false; latestSnapshotAt: string | null; snapshotCount: number; warnings: string[]; };
+
 export type R100DurableVerificationSummary = {
   status: "R100_DURABLE_STATE_VERIFICATION_P1_READY";
   mode: "MANUAL_FIRST";
@@ -43,6 +45,7 @@ export type R100DurableVerificationSummary = {
   warnings: string[];
   nextManualAction: string;
   safety: R100DurableVerificationSafety;
+  dbMirror?: R100DurableVerificationDbMirror;
 };
 
 export type R100DurabilityProbeRecord = R100DurableVerificationSafety & {
