@@ -4,6 +4,7 @@ import { listManualPaymentRequests } from "../manualPayment/manualPaymentRequest
 import { listOperatorWorkflowHandoffs } from "../operatorWorkflow/operatorWorkflowStore";
 import { listManualProspects } from "../prospect/manualProspectStore";
 import { listOperatorConfirmedRevenue, listRevenueCloseLoops } from "../revenueCloseLoop/revenueCloseLoopStore";
+import { getR100DatabaseMirrorStatus } from "./r100DatabaseMirrorService";
 import { r100DurableStateRegistry } from "./r100DurableStateRegistry";
 import { listR100DurabilityProbes } from "./r100DurabilityProbeStore";
 import type { R100DurabilityLevel, R100DurableCollectionCounts, R100DurableVerificationSafety, R100DurableVerificationSummary, R100OperatorTrustLevel } from "./r100DurableVerificationTypes";
@@ -70,6 +71,8 @@ export function buildR100DurableVerificationSummary(): R100DurableVerificationSu
   const status = r100DurableStateRegistry.getStatus();
   const level = durabilityLevel(status.healthy, status.fallbackUsed, status.persistenceMode);
   const counts = getR100CollectionCounts();
+  const dbMirror = getR100DatabaseMirrorStatus();
+  const mirrorReady = dbMirror.status === "R100_DB_MIRROR_P2_READY";
   return {
     status: "R100_DURABLE_STATE_VERIFICATION_P1_READY",
     mode: "MANUAL_FIRST",
@@ -77,15 +80,16 @@ export function buildR100DurableVerificationSummary(): R100DurableVerificationSu
     healthy: status.healthy,
     fallbackUsed: status.fallbackUsed,
     durabilityLevel: level,
-    operatorTrustLevel: trustLevel(level),
+    operatorTrustLevel: mirrorReady ? "HIGH" : trustLevel(level),
     safeToProceed: status.healthy,
-    needsDatabaseBeforeScale: true,
+    needsDatabaseBeforeScale: !mirrorReady,
     lastLoadedAt: status.lastLoadedAt,
     lastSavedAt: status.lastSavedAt,
     collectionCounts: counts,
     restoredCollections: status.restoredCollections,
-    warnings: warnings(level),
+    warnings: [...warnings(level), "Database mirror P2 is a safe readiness mirror only and is not payment settlement."],
     nextManualAction: level === "SERVER_LOCAL_JSON" ? "Run a safe probe, verify snapshot redaction, then continue the manual R$100 flow." : level === "MEMORY_ONLY" ? "Enable server-local JSON only if the runtime has durable storage; otherwise treat restart recovery as unavailable." : "Keep manual flow operational, export redacted snapshot for audit, and inspect adapter health before relying on recovery.",
     safety: r100DurableVerificationSafety,
+    dbMirror: { status: dbMirror.status, databaseConfigured: dbMirror.databaseConfigured, mirrorEnabled: dbMirror.mirrorEnabled, safeToWrite: dbMirror.safeToWrite, safeToProceed: dbMirror.safeToProceed, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false, latestSnapshotAt: dbMirror.latestSnapshotAt, snapshotCount: dbMirror.snapshotCount, warnings: dbMirror.warnings },
   };
 }
