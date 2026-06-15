@@ -1,0 +1,10 @@
+import { Router, type IRouter, type Response } from "express";
+import { buildR100FallbackSummary, buildR100TruthSummary, r100TruthSafetyFlags } from "../r100Truth/r100TruthAggregator";
+const router: IRouter = Router();
+const noStore=(res:Response)=>res.set("Cache-Control","no-store, max-age=0");
+const safe=(res:Response, fn:()=>unknown)=>{noStore(res); try{return res.json({success:true,data:fn()})}catch(error){return res.status(200).json({success:false,error:error instanceof Error?error.message:"R100_TRUTH_SAFE_FALLBACK",data:buildR100FallbackSummary()})}};
+router.get("/r100-truth/status",(_req,res)=>safe(res,()=>({status:"R100_TRUTH_SPINE_P1_READY",mode:"MANUAL_FIRST",previewOnly:true,providerVerifiedRevenueBrl:0,noPaymentProviderApi:true,noAutoSend:true,...r100TruthSafetyFlags})));
+router.get("/r100-truth/summary",(_req,res)=>safe(res,()=>buildR100TruthSummary()));
+router.get("/r100-truth/topbar",(_req,res)=>safe(res,()=>{const s=buildR100TruthSummary(); return {kpis:s.topbarKpis,safety:{providerVerifiedRevenueBrl:0,paymentProviderDisabled:true,realProviderSettlement:false},summary:s}}));
+router.get("/r100-truth/sidebar",(_req,res)=>safe(res,()=>{const s=buildR100TruthSummary(); return {steps:s.sidebarSteps,currentOfficialStep:s.currentOfficialStep,nextOfficialStep:s.nextOfficialStep,currentRoute:s.currentRoute,nextRoute:s.nextRoute,nextManualAction:s.nextManualAction,safety:r100TruthSafetyFlags,summary:s}}));
+export default router;
