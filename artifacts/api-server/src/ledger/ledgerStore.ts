@@ -12,6 +12,7 @@ import {
   getRevenueCloseLoopById,
 } from "../revenueCloseLoop/revenueCloseLoopStore";
 import type { RevenueCloseLoop } from "../revenueCloseLoop/revenueCloseLoopTypes";
+import { r100DurableStateRegistry } from "../durableState/r100DurableStateRegistry";
 
 export const allowedLedgerStatuses: LedgerStatus[] = [
   "FORECAST",
@@ -36,6 +37,12 @@ const manualPreviewStatuses: LedgerPreviewStatus[] = [
 ];
 const previews: LedgerPreviewRecord[] = [];
 let sequence = 0;
+export function hydrateLedgerPreviewsFromDurableState(): void {
+  previews.splice(0, previews.length, ...r100DurableStateRegistry.loadCollection<LedgerPreviewRecord>("ledgerPreviews"));
+  sequence = previews.reduce((max, preview) => Math.max(max, Number(preview.id.match(/(\d+)$/)?.[1] ?? 0)), 0);
+}
+hydrateLedgerPreviewsFromDurableState();
+function persistLedgerPreviews(): void { r100DurableStateRegistry.saveCollection("ledgerPreviews", previews.map(clone)); }
 
 function nextId(): string {
   sequence += 1;
@@ -171,6 +178,7 @@ export function createLedgerPreview(
   Object.values(input).forEach(assertNoForbidden);
   const record = buildLedgerPreview(input, nextId(), new Date().toISOString());
   previews.unshift(record);
+  persistLedgerPreviews();
   return clone(record);
 }
 
@@ -221,6 +229,7 @@ export function updateLedgerPreviewState(
   record.updatedAt = new Date().toISOString();
   record.updated_at = record.updatedAt;
   Object.assign(record, ledgerSafetyBoundary);
+  persistLedgerPreviews();
   return clone(record);
 }
 
@@ -237,6 +246,7 @@ export function createOrUpdateLedgerPreviewFromCloseLoop(
   if (existing) {
     const updated = decorateCloseLoopPreview(existing, loop);
     Object.assign(existing, updated);
+    persistLedgerPreviews();
     return clone(existing);
   }
   const base = buildLedgerPreview(
@@ -265,6 +275,7 @@ export function createOrUpdateLedgerPreviewFromCloseLoop(
   record.createdAt = base.createdAt;
   record.created_at = base.created_at;
   previews.unshift(record);
+  persistLedgerPreviews();
   return clone(record);
 }
 
@@ -305,6 +316,7 @@ export function updateLedgerPreviewManualStatus(
     realRevenueClaimed: false,
     providerVerifiedRevenueBrl: 0,
   });
+  persistLedgerPreviews();
   return clone(record);
 }
 
@@ -377,4 +389,5 @@ export function getLedgerStatusSummary(): LedgerStatusSummary {
 export function clearLedgerPreviewsForTests(): void {
   previews.splice(0, previews.length);
   sequence = 0;
+  persistLedgerPreviews();
 }

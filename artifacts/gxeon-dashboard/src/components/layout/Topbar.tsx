@@ -15,6 +15,7 @@ const fallbackKpis = [
 
 export function Topbar() {
   const { summary, refresh, lastUpdatedAt, safeFallbackUsed } = useR100TruthSummary();
+  const persistenceTitle = summary.persistenceMode === "SERVER_LOCAL_JSON" ? "file-backed" : summary.persistenceFallbackUsed ? "safe memory fallback" : "memory-only";
   const kpis = (summary?.topbarKpis?.length ? summary.topbarKpis : fallbackKpis).map((kpi) => kpi.label === "Revenue" && summary.operatorConfirmedRevenueBrl > 0 ? { ...kpi, value: summary.revenueDisplayValue || `R$${summary.operatorConfirmedRevenueBrl}` } : kpi);
   return (
     <header className="sticky top-0 z-30 border-b border-amber-300/10 bg-[#050505]/90 px-4 py-3 backdrop-blur-xl md:px-6">
@@ -51,7 +52,7 @@ export function Topbar() {
             <Search className="h-4 w-4 text-amber-200" />
             <span className="text-sm">⌘K</span>
           </div>
-          <Button type="button" onClick={() => refresh()} variant="outline" className="h-8 border-emerald-300/35 text-emerald-100" title={lastUpdatedAt ? `Truth synced ${lastUpdatedAt}` : "Refresh R$100 truth"}><ShieldCheck className="mr-1 h-3 w-3" /> {safeFallbackUsed ? "SAFE" : "Manual"}</Button>
+          <Button type="button" onClick={() => refresh()} variant="outline" className="h-8 border-emerald-300/35 text-emerald-100" title={lastUpdatedAt ? `Truth synced ${lastUpdatedAt} · persistence ${persistenceTitle}` : `Refresh R$100 truth · persistence ${persistenceTitle}`}><ShieldCheck className="mr-1 h-3 w-3" /> {safeFallbackUsed ? "SAFE" : "Manual"}</Button>
           <Button size="icon" variant="ghost" className="relative rounded-full border border-white/10 bg-white/[0.035] text-amber-100">
             <Bell className="h-4 w-4" />
             <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-amber-300" />

@@ -34,6 +34,7 @@ import revenueCloseLoopRouter from "./revenueCloseLoop";
 import operatorAssistantRouter from "./operatorAssistant";
 import operatorWorkflowRouter from "./operatorWorkflow";
 import r100TruthRouter from "./r100Truth";
+import r100DurableStateRouter from "./r100DurableState";
 
 const router: IRouter = Router();
 
@@ -61,6 +62,7 @@ router.use(revenueCloseLoopRouter);
 router.use(operatorAssistantRouter);
 router.use(operatorWorkflowRouter);
 router.use(r100TruthRouter);
+router.use(r100DurableStateRouter);
 router.use(opportunitiesRouter);
 router.use(tasksRouter);
 router.use(web3TasksRouter);
