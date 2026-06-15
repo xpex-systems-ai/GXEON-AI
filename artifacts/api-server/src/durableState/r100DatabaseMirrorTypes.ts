@@ -37,3 +37,27 @@ export type R100DatabaseMirrorWriteResult = {
   realRevenueClaimedAutomatically: false;
   safety: R100DatabaseMirrorStatus["safety"];
 };
+
+export type R100DatabaseMirrorReadiness = {
+  status: "R100_DB_MIRROR_SCHEMA_READINESS_P2";
+  mode: "MANUAL_FIRST";
+  databaseConfigured: boolean;
+  schemaReady: boolean;
+  snapshotsTableReady: boolean;
+  auditEventsTableReady: boolean;
+  mirrorEnabled: boolean;
+  safeToWrite: boolean;
+  nextManualAction: string;
+  warnings: string[];
+  safety: R100DatabaseMirrorStatus["safety"] & { manualFirst: true; previewOnly: true; dbMirrorOnly: true; notPaymentSettlement: true; providerVerifiedRevenueBrl: 0; realRevenueClaimedAutomatically: false };
+};
+
+export type R100DatabaseMirrorActivationPlan = {
+  status: "R100_DB_MIRROR_ACTIVATION_PLAN_P2";
+  mode: "MANUAL_FIRST";
+  currentReadiness: R100DatabaseMirrorReadiness;
+  checklist: string[];
+  rollback: string[];
+  warnings: string[];
+  safety: R100DatabaseMirrorReadiness["safety"];
+};
