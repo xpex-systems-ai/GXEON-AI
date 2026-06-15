@@ -6,6 +6,7 @@ export const r100CollectionNames = [
   "operatorConfirmedRevenue",
   "ledgerPreviews",
   "operatorWorkflowHandoffs",
+  "durabilityProbes",
 ] as const;
 
 export type R100DurableCollectionName = (typeof r100CollectionNames)[number];
@@ -31,6 +32,10 @@ export type R100DurableSafetyMetadata = {
   noPaymentProviderApi: true;
   noAutoSend: true;
   noGithubWrite: true;
+  noExternalContact: true;
+  noScraping: true;
+  providerVerifiedRevenueBrl: 0;
+  realRevenueClaimedAutomatically: false;
   providerVerifiedRevenueBrl: 0;
 };
 
@@ -54,5 +59,9 @@ export const r100DurableSafety: R100DurableSafetyMetadata = {
   noPaymentProviderApi: true,
   noAutoSend: true,
   noGithubWrite: true,
+  noExternalContact: true,
+  noScraping: true,
+  providerVerifiedRevenueBrl: 0,
+  realRevenueClaimedAutomatically: false,
   providerVerifiedRevenueBrl: 0,
 };
