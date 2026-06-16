@@ -3,12 +3,18 @@ import type { R100DatabaseMirrorReadiness } from "./r100DatabaseMirrorTypes";
 
 const mirrorEnabled = () => process.env.GXEON_R100_DB_MIRROR_ENABLED === "true";
 
-async function tableExists(tableName: string): Promise<boolean> {
-  const result = await getPool().query<{ exists: boolean }>(
-    "select exists (select 1 from information_schema.tables where table_schema = current_schema() and table_name = $1) as exists",
+const requiredColumnsByTable: Record<string, string[]> = {
+  r100_state_snapshots: ["id", "snapshot_id", "snapshot_mode", "source", "collection_counts", "collections", "metadata", "safety", "created_at"],
+  r100_state_audit_events: ["id", "event_id", "event_type", "source", "payload", "safety", "created_at"],
+};
+
+async function tableReady(tableName: keyof typeof requiredColumnsByTable): Promise<boolean> {
+  const result = await getPool().query<{ column_name: string }>(
+    "select column_name from information_schema.columns where table_schema = current_schema() and table_name = $1",
     [tableName],
   );
-  return Boolean(result.rows[0]?.exists);
+  const availableColumns = new Set(result.rows.map((row) => row.column_name));
+  return requiredColumnsByTable[tableName].every((column) => availableColumns.has(column));
 }
 
 export async function getR100DatabaseMirrorReadiness(): Promise<R100DatabaseMirrorReadiness> {
@@ -26,13 +32,13 @@ export async function getR100DatabaseMirrorReadiness(): Promise<R100DatabaseMirr
 
   try {
     const [snapshotsTableReady, auditEventsTableReady] = await Promise.all([
-      tableExists("r100_state_snapshots"),
-      tableExists("r100_state_audit_events"),
+      tableReady("r100_state_snapshots"),
+      tableReady("r100_state_audit_events"),
     ]);
     const schemaReady = snapshotsTableReady && auditEventsTableReady;
-    if (!schemaReady) warnings.push("R$100 DB mirror tables are missing; run the DB migration/push before enabling writes.");
+    if (!schemaReady) warnings.push("R$100 DB mirror tables or required columns are missing; run the DB migration/push before enabling writes.");
     if (!enabled) warnings.push("GXEON_R100_DB_MIRROR_ENABLED=true is required before guarded probe/snapshot writes.");
-    return build(databaseConfigured, snapshotsTableReady, auditEventsTableReady, enabled, warnings, schemaReady ? (enabled ? "Run the safe DB probe, then export a redacted snapshot and verify the dashboard latest snapshot." : "Set GXEON_R100_DB_MIRROR_ENABLED=true in the backend only, redeploy, then run the safe probe.") : "Run the database migration/push for r100_state_snapshots and r100_state_audit_events, then re-check readiness.");
+    return build(databaseConfigured, snapshotsTableReady, auditEventsTableReady, enabled, warnings, schemaReady ? (enabled ? "Run the safe DB probe, then export a redacted snapshot and verify the dashboard latest snapshot." : "Set GXEON_R100_DB_MIRROR_ENABLED=true in the backend only, redeploy, then run the safe probe.") : "Run `pnpm --filter @workspace/db run push` or apply `lib/db/drizzle/0001_r100_state_mirror.sql` to create r100_state_snapshots and r100_state_audit_events, then re-check readiness.");
   } catch {
     warnings.push("Database connection or metadata query failed; no write was attempted.");
     return build(databaseConfigured, false, false, enabled, warnings, "Verify the backend database connection and run the readiness check again.");
