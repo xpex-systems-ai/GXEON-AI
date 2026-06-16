@@ -55,9 +55,11 @@ export type R100DatabaseMirrorReadiness = {
 export type R100DatabaseMirrorActivationPlan = {
   status: "R100_DB_MIRROR_ACTIVATION_PLAN_P2";
   mode: "MANUAL_FIRST";
+  readinessStatus: R100DatabaseMirrorReadiness["status"];
   currentReadiness: R100DatabaseMirrorReadiness;
   checklist: string[];
   rollback: string[];
+  nextManualAction: string;
   warnings: string[];
   safety: R100DatabaseMirrorReadiness["safety"];
 };

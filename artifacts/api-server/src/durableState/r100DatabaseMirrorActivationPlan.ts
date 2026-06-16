@@ -4,6 +4,7 @@ export function buildR100DatabaseMirrorActivationPlan(readiness: R100DatabaseMir
   return {
     status: "R100_DB_MIRROR_ACTIVATION_PLAN_P2",
     mode: "MANUAL_FIRST",
+    readinessStatus: readiness.status,
     currentReadiness: readiness,
     checklist: [
       "Verify DATABASE_URL exists in the API server environment only; do not paste it into the frontend.",
@@ -15,7 +16,8 @@ export function buildR100DatabaseMirrorActivationPlan(readiness: R100DatabaseMir
       "Export the safe redacted snapshot with action EXPORT_SAFE_R100_SNAPSHOT_TO_DB_MIRROR.",
       "Verify the dashboard latest snapshot and snapshot count in /ops/r100-db-mirror.",
     ],
-    rollback: ["Remove GXEON_R100_DB_MIRROR_ENABLED or set it to false in the backend environment.", "Redeploy the API server and confirm safeToWrite=false."],
+    rollback: ["Remove GXEON_R100_DB_MIRROR_ENABLED or set it to false in the backend environment.", "Redeploy the API server and confirm safeToWrite=false.", "Keep r100_state_snapshots and r100_state_audit_events in place unless a manual migration rollback is explicitly approved."],
+    nextManualAction: readiness.nextManualAction,
     warnings: ["This is not payment settlement.", "No provider revenue is verified by this mirror.", "providerVerifiedRevenueBrl remains 0 and realRevenueClaimedAutomatically remains false."],
     safety: readiness.safety,
   };
