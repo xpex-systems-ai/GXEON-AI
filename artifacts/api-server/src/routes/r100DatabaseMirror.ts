@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { buildR100DatabaseMirrorActivationPlan } from "../durableState/r100DatabaseMirrorActivationPlan";
+import { buildR100DatabaseMirrorOperatorSummary } from "../durableState/r100DatabaseMirrorOperatorSummary";
 import { getR100DatabaseMirrorReadiness } from "../durableState/r100DatabaseMirrorReadinessService";
 import { getR100DatabaseMirrorSchemaDiagnostics } from "../durableState/r100DatabaseMirrorDiagnostics";
 import { applyR100DatabaseMirrorSchema, dryRunR100DatabaseMirrorSchema, RUN_R100_DB_MIRROR_ACTIVATION_SMOKE_TEST_ACTION, runR100DatabaseMirrorActivationSmokeTest } from "../durableState/r100DatabaseMirrorOperatorActivationRunner";
@@ -23,6 +24,11 @@ router.get("/r100-db/activation-plan", async (_req, res) => {
   noStore(res);
   const readiness = await getR100DatabaseMirrorReadiness();
   res.json({ success: true, data: buildR100DatabaseMirrorActivationPlan(readiness) });
+});
+
+router.get("/r100-db/operator-summary", async (_req, res) => {
+  noStore(res);
+  res.json({ success: true, data: await buildR100DatabaseMirrorOperatorSummary() });
 });
 
 
