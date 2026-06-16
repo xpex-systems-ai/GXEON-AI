@@ -63,3 +63,61 @@ export type R100DatabaseMirrorActivationPlan = {
   warnings: string[];
   safety: R100DatabaseMirrorReadiness["safety"];
 };
+
+export type R100DatabaseMirrorTableDiagnostics = {
+  tableName: "r100_state_snapshots" | "r100_state_audit_events";
+  exists: boolean;
+  requiredColumns: string[];
+  availableColumns: string[];
+  missingColumns: string[];
+  extraColumns: string[];
+  ready: boolean;
+};
+
+export type R100DatabaseMirrorSchemaDiagnostics = {
+  status: "R100_DB_MIRROR_SCHEMA_DIAGNOSTICS_P2";
+  mode: "MANUAL_FIRST";
+  databaseConfigured: boolean;
+  schemaReady: boolean;
+  mirrorEnabled: boolean;
+  schemaApplyEnabled: boolean;
+  safeToWrite: boolean;
+  tables: R100DatabaseMirrorTableDiagnostics[];
+  warnings: string[];
+  nextManualAction: string;
+  safety: R100DatabaseMirrorStatus["safety"];
+};
+
+export type R100DatabaseMirrorSchemaDryRun = {
+  status: "R100_DB_MIRROR_SCHEMA_DRY_RUN_P2";
+  mode: "MANUAL_FIRST";
+  wouldWrite: false;
+  schemaApplyEnabled: boolean;
+  requiredAction: "APPLY_R100_DB_MIRROR_SCHEMA_OPERATOR_APPROVED";
+  plan: Array<{ index: number; sqlPreview: string }>;
+  diagnostics: R100DatabaseMirrorSchemaDiagnostics;
+  nextManualAction: string;
+  safety: R100DatabaseMirrorStatus["safety"];
+};
+
+export type R100DatabaseMirrorSchemaApplyResult = {
+  status: "R100_DB_MIRROR_SCHEMA_APPLY_CONFIRMATION_REQUIRED" | "R100_DB_MIRROR_SCHEMA_APPLY_BLOCKED_BY_FLAG" | "R100_DB_MIRROR_SCHEMA_APPLY_BLOCKED_NO_DATABASE" | "R100_DB_MIRROR_SCHEMA_APPLIED_P2" | "R100_DB_MIRROR_SCHEMA_APPLY_FAILED_SAFE";
+  mode: "MANUAL_FIRST";
+  applied: boolean;
+  blocked: boolean;
+  diagnostics?: R100DatabaseMirrorSchemaDiagnostics;
+  nextManualAction: string;
+  safety: R100DatabaseMirrorStatus["safety"];
+};
+
+export type R100DatabaseMirrorActivationSmokeTest = {
+  status: "R100_DB_MIRROR_ACTIVATION_SMOKE_TEST_P2";
+  mode: "MANUAL_FIRST";
+  wroteToDatabase: false;
+  readiness: R100DatabaseMirrorReadiness;
+  diagnostics: R100DatabaseMirrorSchemaDiagnostics;
+  mirrorStatus: R100DatabaseMirrorStatus;
+  latestSnapshot: R100DatabaseMirrorSnapshot;
+  nextManualAction: string;
+  safety: R100DatabaseMirrorStatus["safety"];
+};
