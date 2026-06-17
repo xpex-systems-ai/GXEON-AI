@@ -36,6 +36,7 @@ import operatorWorkflowRouter from "./operatorWorkflow";
 import r100TruthRouter from "./r100Truth";
 import r100DurableStateRouter from "./r100DurableState";
 import r100DatabaseMirrorRouter from "./r100DatabaseMirror";
+import auditOsRouter from "./auditOs";
 
 const router: IRouter = Router();
 
@@ -65,6 +66,7 @@ router.use(operatorWorkflowRouter);
 router.use(r100TruthRouter);
 router.use(r100DurableStateRouter);
 router.use(r100DatabaseMirrorRouter);
+router.use(auditOsRouter);
 router.use(opportunitiesRouter);
 router.use(tasksRouter);
 router.use(web3TasksRouter);
