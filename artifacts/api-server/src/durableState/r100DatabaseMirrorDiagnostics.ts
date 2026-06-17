@@ -3,8 +3,8 @@ import { r100DatabaseMirrorSafety } from "./r100DatabaseMirrorService";
 import type { R100DatabaseMirrorSchemaDiagnostics, R100DatabaseMirrorTableDiagnostics } from "./r100DatabaseMirrorTypes";
 
 export const r100RequiredColumnsByTable = {
-  r100_state_snapshots: ["id", "snapshot_id", "snapshot_mode", "source", "collection_counts", "collections", "metadata", "safety", "created_at", "updated_at"],
-  r100_state_audit_events: ["id", "event_id", "event_type", "source", "payload", "safety", "created_at"],
+  r100_state_snapshots: ["id", "snapshot_id", "source", "status", "schema_version", "snapshot_mode", "safe_redacted", "operator_confirmed_revenue_brl", "provider_verified_revenue_brl", "forecast_revenue_brl", "pending_review_brl", "lost_brl", "prospects_count", "client_offers_count", "manual_payment_requests_count", "close_loops_count", "ledger_previews_count", "execution_packs_count", "delivery_workspaces_count", "safety_flags_json", "summary_json", "created_at"],
+  r100_state_audit_events: ["id", "event_id", "event_type", "status", "safe_redacted", "operator_action", "message", "metadata_json", "created_at"],
 } as const;
 
 const mirrorEnabled = () => process.env.GXEON_R100_DB_MIRROR_ENABLED === "true";
@@ -22,6 +22,14 @@ function buildTableDiagnostics(tableName: keyof typeof r100RequiredColumnsByTabl
 
 function blocked(databaseConfigured: boolean, tableDiagnostics: R100DatabaseMirrorTableDiagnostics[], warnings: string[], nextManualAction: string): R100DatabaseMirrorSchemaDiagnostics {
   const schemaReady = tableDiagnostics.every((table) => table.ready);
+  const missingTables = tableDiagnostics.filter((table) => !table.exists).map((table) => table.tableName);
+  const missingColumns = Object.fromEntries(tableDiagnostics.map((table) => [table.tableName, table.missingColumns]).filter(([, columns]) => (columns as string[]).length > 0));
+  const existingTables = tableDiagnostics.filter((table) => table.exists).map((table) => table.tableName);
+  const blockedReasons = [
+    ...(databaseConfigured ? [] : ["DATABASE_URL backend-only variable is not configured."]),
+    ...(schemaReady ? [] : ["Required protected mirror schema is missing."]),
+    ...(schemaApplyEnabled() ? [] : ["GXEON_R100_DB_SCHEMA_OPERATOR_APPLY_ENABLED is false/unset for schema apply."]),
+  ];
   return {
     status: "R100_DB_MIRROR_SCHEMA_DIAGNOSTICS_P2",
     mode: "MANUAL_FIRST",
@@ -29,7 +37,14 @@ function blocked(databaseConfigured: boolean, tableDiagnostics: R100DatabaseMirr
     schemaReady,
     mirrorEnabled: mirrorEnabled(),
     schemaApplyEnabled: schemaApplyEnabled(),
-    safeToWrite: databaseConfigured && schemaReady && mirrorEnabled(),
+    safeWriteEnabled: process.env.GXEON_R100_DB_SAFE_WRITE_ENABLED === "true",
+    safeToApply: databaseConfigured && !schemaReady && schemaApplyEnabled(),
+    missingTables,
+    missingColumns,
+    existingTables,
+    requiredFlags: ["DATABASE_URL", "GXEON_R100_DB_SCHEMA_OPERATOR_APPLY_ENABLED=true for apply-schema", "GXEON_R100_DB_MIRROR_ENABLED=true for probe/snapshot", "GXEON_R100_DB_SAFE_WRITE_ENABLED=true for probe/snapshot"],
+    blockedReasons,
+    safeToWrite: databaseConfigured && schemaReady && mirrorEnabled() && process.env.GXEON_R100_DB_SAFE_WRITE_ENABLED === "true",
     tables: tableDiagnostics,
     warnings,
     nextManualAction,

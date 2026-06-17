@@ -1,38 +1,31 @@
 # GXEON R$100 DB Mirror schema activation and safe snapshot P2 report
 
-## Implementation summary
+## Files changed
+- Backend DB schema contract, readiness, diagnostics, guarded schema runner and mirror service.
+- Drizzle SQL migration for the protected SAFE_REDACTED mirror schema.
+- R$100 DB Mirror activation and security documentation.
 
-- Added deterministic DB mirror migration SQL for `r100_state_snapshots` and `r100_state_audit_events`.
-- Hardened readiness to validate required table columns before `schemaReady=true`.
-- Kept writes guarded by explicit confirmation and by `databaseConfigured && schemaReady && mirrorEnabled`.
-- Preserved recursive redaction for manual payment link, Pix key label, email, phone, WhatsApp, private notes, notes, token, API key, secret, credential, database URL fields and `DATABASE_URL`.
-- Improved the operator console with an explicit missing-step message and disabled write buttons until `safeToWrite=true`.
-- Updated the runbook with activation, smoke tests and rollback.
+## Endpoints added or updated
+- `GET /api/r100-db/readiness`
+- `GET /api/r100-db/schema-diagnostics`
+- `POST /api/r100-db/schema-dry-run`
+- `POST /api/r100-db/apply-schema`
+- `POST /api/r100-db/activation-smoke-test`
+- `POST /api/r100-db/probe`
+- `POST /api/r100-db/export-safe-snapshot`
+- `GET /api/r100-db/latest-snapshot`
 
-## Schema/migration explanation
+## Safety rules enforced
+- Schema apply requires the exact operator action and backend apply flag.
+- Probe and snapshot writes require configured database, schema readiness, mirror flag and safe-write flag.
+- Snapshots store only SAFE_REDACTED operational metadata/counts and keep provider verified revenue at `0`.
 
-Use the existing Drizzle/PostgreSQL package. The schema definitions already exist in `lib/db/src/schema/r100OperationalState.ts`; the activation gap was the deterministic migration artifact. Apply it with either `pnpm --filter @workspace/db run push` or `psql "$DATABASE_URL" -f lib/db/drizzle/0001_r100_state_mirror.sql`.
-
-## Safety confirmation
-
-This mission did not add payment provider calls, checkout, invoices, webhook capture, autonomous jobs, scraping, external contact, frontend secrets or payment links. The DB mirror remains manual-first, preview-only and not payment settlement. `providerVerifiedRevenueBrl` remains `0`, and `realRevenueClaimedAutomatically` remains `false`.
-
-## Manual smoke tests to run after deploy
-
-```bash
-curl -s http://localhost:3000/api/r100-db/readiness
-curl -s http://localhost:3000/api/r100-db/activation-plan
-curl -s -X POST http://localhost:3000/api/r100-db/probe -H 'Content-Type: application/json' -d '{}'
-curl -s -X POST http://localhost:3000/api/r100-db/export-safe-snapshot -H 'Content-Type: application/json' -d '{}'
-curl -s -X POST http://localhost:3000/api/r100-db/probe -H 'Content-Type: application/json' -d '{"action":"CREATE_SAFE_R100_DB_MIRROR_PROBE"}'
-curl -s -X POST http://localhost:3000/api/r100-db/export-safe-snapshot -H 'Content-Type: application/json' -d '{"action":"EXPORT_SAFE_R100_SNAPSHOT_TO_DB_MIRROR"}'
-curl -s http://localhost:3000/api/r100-db/latest-snapshot
-```
+## Tests run
+- `pnpm --filter @workspace/api-server run build`
 
 ## Known limitations
+- Runtime schema application must be executed by the operator after backend env flags are set.
+- Existing DBs with older preview columns may need an explicitly approved non-destructive compatibility mission before production rollout.
 
-Runtime smoke tests require a deployed/local API server and a configured backend database. The automated test script is unavailable unless the workspace adds an `@workspace/api-server` `test` script.
-
-## Next recommended step
-
-After DB Mirror is green, run the guarded probe, export one safe redacted snapshot, verify `snapshotCount >= 1`, then consider read-only operational reporting from the mirror without making it a payment-settlement source.
+## Next recommended mission
+Run Railway deployment validation, execute the manual activation sequence, capture dashboard evidence and then decide whether a non-destructive compatibility migration is needed for any pre-existing preview tables.

@@ -15,6 +15,7 @@ const source = "R100_DURABLE_STATE_MIRROR_P2" as const;
 const redactKeys = new Set(["manualPaymentLink", "pixKeyLabel", "email", "phone", "whatsapp", "privateNotes", "notes", "token", "apiKey", "secret", "credential", "databaseUrl", "DATABASE_URL"]);
 
 const mirrorEnabled = () => process.env.GXEON_R100_DB_MIRROR_ENABLED === "true";
+const safeWriteEnabled = () => process.env.GXEON_R100_DB_SAFE_WRITE_ENABLED === "true";
 const nowId = (prefix: string) => `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
 
 export const r100DatabaseMirrorSafety = { ...r100DurableSafety, previewOnly: true, noSecrets: true, dbMirrorOnly: true, notPaymentSettlement: true } as const;
@@ -65,8 +66,10 @@ export function getR100DatabaseMirrorStatusSync(): R100DatabaseMirrorStatus {
     mode: "MANUAL_FIRST",
     databaseConfigured,
     mirrorEnabled: enabled,
-    safeToWrite: databaseConfigured && enabled,
-    safeToProceed: databaseConfigured && enabled,
+    schemaApplyEnabled: process.env.GXEON_R100_DB_SCHEMA_OPERATOR_APPLY_ENABLED === "true",
+    safeWriteEnabled: safeWriteEnabled(),
+    safeToWrite: databaseConfigured && enabled && safeWriteEnabled(),
+    safeToProceed: databaseConfigured && enabled && safeWriteEnabled(),
     providerVerifiedRevenueBrl: 0,
     realRevenueClaimedAutomatically: false,
     latestSnapshotAt: null,
@@ -101,6 +104,8 @@ export async function getR100DatabaseMirrorStatus(): Promise<R100DatabaseMirrorS
     mode: "MANUAL_FIRST",
     databaseConfigured: readiness.databaseConfigured,
     mirrorEnabled: readiness.mirrorEnabled,
+    schemaApplyEnabled: readiness.schemaApplyEnabled,
+    safeWriteEnabled: readiness.safeWriteEnabled,
     safeToWrite: readiness.safeToWrite,
     safeToProceed: readiness.safeToWrite,
     providerVerifiedRevenueBrl: 0,
@@ -119,7 +124,7 @@ export async function getLatestR100DatabaseMirrorSnapshot(): Promise<R100Databas
     const rows = await getDb().select().from(r100StateSnapshots).orderBy(desc(r100StateSnapshots.createdAt)).limit(1);
     const row = rows[0];
     if (!row) return { snapshotId: null, snapshotMode: "SAFE_REDACTED", source, collectionCounts: getR100MirrorCollectionCounts(), collections: {}, metadata: { empty: true }, createdAt: null, safety: r100DatabaseMirrorSafety };
-    return { snapshotId: row.snapshotId, snapshotMode: "SAFE_REDACTED", source, collectionCounts: row.collectionCounts as Record<R100DurableCollectionName, number>, collections: row.collections as Partial<Record<R100DurableCollectionName, unknown[]>>, metadata: row.metadata as Record<string, unknown>, createdAt: row.createdAt.toISOString(), safety: r100DatabaseMirrorSafety };
+    return { snapshotId: row.snapshotId, snapshotMode: "SAFE_REDACTED", source, collectionCounts: { manualProspects: row.prospectsCount, clientOfferSendPacks: row.clientOffersCount, manualPaymentRequests: row.manualPaymentRequestsCount, revenueCloseLoops: row.closeLoopsCount, operatorConfirmedRevenue: 0, ledgerPreviews: row.ledgerPreviewsCount, operatorWorkflowHandoffs: 0, durabilityProbes: 0 }, collections: {}, metadata: row.summaryJson as Record<string, unknown>, createdAt: row.createdAt.toISOString(), safety: r100DatabaseMirrorSafety };
   } catch {
     return { snapshotId: null, snapshotMode: "SAFE_REDACTED", source, collectionCounts: getR100MirrorCollectionCounts(), collections: {}, metadata: { fallback: "R100_DB_MIRROR_UNHEALTHY" }, createdAt: null, safety: r100DatabaseMirrorSafety };
   }
@@ -130,14 +135,16 @@ async function assertWritable() { const status = await getR100DatabaseMirrorStat
 export async function createR100DatabaseMirrorProbe(): Promise<R100DatabaseMirrorWriteResult> {
   await assertWritable();
   const eventId = nowId("r100_db_probe");
-  await getDb().insert(r100StateAuditEvents).values({ eventId, eventType: "CREATE_SAFE_R100_DB_MIRROR_PROBE", source: "R100_DB_MIRROR", payload: { harmlessProbe: true, businessRecordCreated: false }, safety: r100DatabaseMirrorSafety });
-  return { status: "R100_DB_MIRROR_PROBE_WRITTEN", eventId, wroteToDatabase: true, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false, safety: r100DatabaseMirrorSafety };
+  await getDb().insert(r100StateAuditEvents).values({ eventId, eventType: "CREATE_SAFE_R100_DB_MIRROR_PROBE", status: "SAFE_REDACTED", safeRedacted: true, operatorAction: "CREATE_SAFE_R100_DB_MIRROR_PROBE", message: "Safe R$100 DB mirror probe created; no business/payment record was created.", metadataJson: { harmlessProbe: true, businessRecordCreated: false, providerVerifiedRevenueBrl: 0 } });
+  return { status: "R100_DB_MIRROR_PROBE_WRITTEN", probeCreated: true, eventId, auditEventId: eventId, safeRedacted: true, message: "Safe probe audit event created.", wroteToDatabase: true, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false, safety: r100DatabaseMirrorSafety };
 }
 
 export async function exportSafeR100SnapshotToDatabaseMirror(): Promise<R100DatabaseMirrorWriteResult> {
   await assertWritable();
   const snapshotId = nowId("r100_safe_snapshot");
   const collections = Object.fromEntries(r100CollectionNames.map((name) => [name, redact(currentCollections()[name])]));
-  await getDb().insert(r100StateSnapshots).values({ snapshotId, snapshotMode: "SAFE_REDACTED", source, collectionCounts: getR100MirrorCollectionCounts(), collections, safety: r100DatabaseMirrorSafety, metadata: { manualFirst: true, previewOnly: true, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false } });
-  return { status: "R100_DB_MIRROR_SNAPSHOT_EXPORTED", snapshotId, wroteToDatabase: true, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false, safety: r100DatabaseMirrorSafety };
+  const counts = getR100MirrorCollectionCounts();
+  await getDb().insert(r100StateSnapshots).values({ snapshotId, source, status: "SAFE_REDACTED", schemaVersion: "R100_DB_MIRROR_P2_SAFE_SCHEMA_V1", snapshotMode: "SAFE_REDACTED", safeRedacted: true, operatorConfirmedRevenueBrl: "0", providerVerifiedRevenueBrl: "0", forecastRevenueBrl: "0", pendingReviewBrl: "0", lostBrl: "0", prospectsCount: counts.manualProspects, clientOffersCount: counts.clientOfferSendPacks, manualPaymentRequestsCount: counts.manualPaymentRequests, closeLoopsCount: counts.revenueCloseLoops, ledgerPreviewsCount: counts.ledgerPreviews, executionPacksCount: 0, deliveryWorkspacesCount: 0, safetyFlagsJson: r100DatabaseMirrorSafety, summaryJson: { manualFirst: true, previewOnly: true, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false, counts, collections } });
+  const status = await getR100DatabaseMirrorStatus();
+  return { status: "R100_DB_MIRROR_SNAPSHOT_EXPORTED", snapshotCreated: true, snapshotId, snapshotCount: status.snapshotCount, safeRedacted: true, operatorConfirmedRevenueBrl: 0, message: "SAFE_REDACTED snapshot exported to DB mirror.", wroteToDatabase: true, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false, safety: r100DatabaseMirrorSafety };
 }
