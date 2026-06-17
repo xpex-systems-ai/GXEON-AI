@@ -7,7 +7,12 @@ export type R100DatabaseMirrorStatus = {
   mode: "MANUAL_FIRST";
   databaseConfigured: boolean;
   mirrorEnabled: boolean;
+  schemaApplyEnabled: boolean;
+  safeWriteEnabled: boolean;
   safeToWrite: boolean;
+  activationStage?: string;
+  blockedReasons?: string[];
+  safeFlags?: Record<string, boolean | number | string>;
   safeToProceed: boolean;
   providerVerifiedRevenueBrl: 0;
   realRevenueClaimedAutomatically: false;
@@ -30,8 +35,15 @@ export type R100DatabaseMirrorSnapshot = {
 
 export type R100DatabaseMirrorWriteResult = {
   status: "R100_DB_MIRROR_PROBE_WRITTEN" | "R100_DB_MIRROR_SNAPSHOT_EXPORTED";
+  probeCreated?: boolean;
+  snapshotCreated?: boolean;
   eventId?: string;
+  auditEventId?: string;
   snapshotId?: string;
+  snapshotCount?: number;
+  safeRedacted?: true;
+  operatorConfirmedRevenueBrl?: number;
+  message?: string;
   wroteToDatabase: true;
   providerVerifiedRevenueBrl: 0;
   realRevenueClaimedAutomatically: false;
@@ -46,7 +58,12 @@ export type R100DatabaseMirrorReadiness = {
   snapshotsTableReady: boolean;
   auditEventsTableReady: boolean;
   mirrorEnabled: boolean;
+  schemaApplyEnabled: boolean;
+  safeWriteEnabled: boolean;
   safeToWrite: boolean;
+  activationStage?: string;
+  blockedReasons?: string[];
+  safeFlags?: Record<string, boolean | number | string>;
   nextManualAction: string;
   warnings: string[];
   safety: R100DatabaseMirrorStatus["safety"] & { manualFirst: true; previewOnly: true; dbMirrorOnly: true; notPaymentSettlement: true; providerVerifiedRevenueBrl: 0; realRevenueClaimedAutomatically: false };
@@ -81,6 +98,13 @@ export type R100DatabaseMirrorSchemaDiagnostics = {
   schemaReady: boolean;
   mirrorEnabled: boolean;
   schemaApplyEnabled: boolean;
+  safeWriteEnabled?: boolean;
+  safeToApply?: boolean;
+  missingTables?: string[];
+  missingColumns?: Record<string, string[]>;
+  existingTables?: string[];
+  requiredFlags?: string[];
+  blockedReasons?: string[];
   safeToWrite: boolean;
   tables: R100DatabaseMirrorTableDiagnostics[];
   warnings: string[];
@@ -105,6 +129,10 @@ export type R100DatabaseMirrorSchemaApplyResult = {
   mode: "MANUAL_FIRST";
   applied: boolean;
   blocked: boolean;
+  schemaReady?: boolean;
+  safeRedacted?: true;
+  auditEventId?: string;
+  message?: string;
   diagnostics?: R100DatabaseMirrorSchemaDiagnostics;
   nextManualAction: string;
   safety: R100DatabaseMirrorStatus["safety"];
@@ -114,6 +142,12 @@ export type R100DatabaseMirrorActivationSmokeTest = {
   status: "R100_DB_MIRROR_ACTIVATION_SMOKE_TEST_P2";
   mode: "MANUAL_FIRST";
   wroteToDatabase: false;
+  ok?: boolean;
+  databaseReachable?: boolean;
+  schemaReady?: boolean;
+  safeToWrite?: boolean;
+  message?: string;
+  safeFlags?: Record<string, boolean | number | string>;
   readiness: R100DatabaseMirrorReadiness;
   diagnostics: R100DatabaseMirrorSchemaDiagnostics;
   mirrorStatus: R100DatabaseMirrorStatus;
