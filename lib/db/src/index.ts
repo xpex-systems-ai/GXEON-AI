@@ -61,3 +61,4 @@ export const db = new Proxy({} as FinancialDatabase, {
 });
 
 export * from "./schema";
+export * from "./auditModules";

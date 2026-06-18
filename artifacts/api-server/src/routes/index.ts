@@ -37,6 +37,7 @@ import r100TruthRouter from "./r100Truth";
 import r100DurableStateRouter from "./r100DurableState";
 import r100DatabaseMirrorRouter from "./r100DatabaseMirror";
 import auditOsRouter from "./auditOs";
+import auditV1Router from "./auditV1";
 
 const router: IRouter = Router();
 
@@ -67,6 +68,7 @@ router.use(r100TruthRouter);
 router.use(r100DurableStateRouter);
 router.use(r100DatabaseMirrorRouter);
 router.use(auditOsRouter);
+router.use(auditV1Router);
 router.use(opportunitiesRouter);
 router.use(tasksRouter);
 router.use(web3TasksRouter);
