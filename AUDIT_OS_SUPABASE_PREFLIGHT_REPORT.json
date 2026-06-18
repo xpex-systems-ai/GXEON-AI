@@ -12,5 +12,13 @@
   "supabaseUrlMatchesOfficialWhenPresent": null,
   "gxeonAllowSchemaApply": false,
   "connectionTestStatus": "NOT_RUN_MISSING_DATABASE_URL",
-  "decision": "Do not apply schema from this environment. Use generated SQL manually only after operator supplies DATABASE_URL and GXEON_ALLOW_SCHEMA_APPLY=true or applies the reviewed SQL in Supabase SQL Editor."
+  "decision": "Do not apply schema from this environment. Use generated SQL manually only after operator supplies DATABASE_URL and GXEON_ALLOW_SCHEMA_APPLY=true or applies the reviewed SQL in Supabase SQL Editor.",
+  "latestVerification": {
+    "branch": "feature/audit-os-schema-apply-first-case",
+    "databaseUrlEnvNameObserved": false,
+    "directUrlEnvNameObserved": false,
+    "supabaseUrlEnvNameObserved": false,
+    "secretsPrinted": false,
+    "safeEnvironmentCommand": "env | cut -d= -f1 | sort | rg ^(DATABASE_URL|DIRECT_URL|SUPABASE_URL|GXEON_ALLOW_SCHEMA_APPLY|GXEON_AUDIT_WRITE_MODE|GXEON_AUDIT_ALLOW_DB_WRITES)$ || true"
+  }
 }
