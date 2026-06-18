@@ -1,0 +1,18 @@
+{
+  "system": "GXEON Audit OS",
+  "mission": "MISSION_002_AUDIT_OS_MISSION_CONTROL",
+  "mode": "read-only/degraded-safe",
+  "routes": [
+    { "method": "GET", "path": "/api/v1/audit/mission-control", "writes": false, "degradedSafe": true },
+    { "method": "GET", "path": "/api/v1/audit/cases/summary", "writes": false, "degradedSafe": true },
+    { "method": "GET", "path": "/api/v1/audit/findings/summary", "writes": false, "degradedSafe": true },
+    { "method": "GET", "path": "/api/v1/audit/reports/summary", "writes": false, "degradedSafe": true },
+    { "method": "GET", "path": "/api/v1/audit/connectors/status", "writes": false, "degradedSafe": true }
+  ],
+  "invariants": [
+    "No database writes are executed.",
+    "Missing DATABASE_URL returns an empty operational state, not fake success.",
+    "Connectors are reported as read-only, inactive, disabled, blocked, or setup-required.",
+    "Revenue totals remain zero unless backed by real persisted events in a future mission."
+  ]
+}
