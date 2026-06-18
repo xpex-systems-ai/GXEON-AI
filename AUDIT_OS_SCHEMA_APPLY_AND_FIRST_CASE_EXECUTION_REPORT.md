@@ -22,6 +22,7 @@
   "files_modified": [],
   "commands_run": [
     "git checkout -B feature/audit-os-schema-apply-first-case",
+    "env | cut -d= -f1 | sort | rg '^(DATABASE_URL|DIRECT_URL|SUPABASE_URL|GXEON_ALLOW_SCHEMA_APPLY|GXEON_AUDIT_WRITE_MODE|GXEON_AUDIT_ALLOW_DB_WRITES)$' || true",
     "sed -n '1,240p' lib/db/src/schema/audit.ts",
     "sed -n '1,160p' lib/db/src/schema/index.ts",
     "cat lib/db/drizzle.config.ts",
@@ -62,7 +63,7 @@
   "mission_control_revenue_confirmed": "R$0",
   "build_results": [
     { "command": "pnpm --filter @workspace/api-server run build", "status": "PASS" },
-    { "command": "PORT=3000 BASE_PATH=/ pnpm --filter @workspace/gxeon-dashboard run build", "status": "PASS_WITH_BUNDLE_SIZE_WARNING" }
+    { "command": "PORT=3000 BASE_PATH=/ pnpm --filter @workspace/gxeon-dashboard run build", "status": "PASS_WITH_SOURCEMAP_AND_BUNDLE_SIZE_WARNINGS" }
   ],
   "typecheck_results": [
     { "command": "pnpm run typecheck:libs", "status": "PASS" }
