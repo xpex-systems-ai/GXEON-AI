@@ -19,4 +19,7 @@ export const auditOsService = {
   findingsSummaryV1: () => request("/api/v1/audit/findings/summary"),
   reportsSummaryV1: () => request("/api/v1/audit/reports/summary"),
   connectorsStatusV1: () => request("/api/v1/audit/connectors/status"),
+  intakePreviewV1: (body: unknown) => request("/api/v1/audit/intake/preview", { method: "POST", body: JSON.stringify(body) }),
+  createCaseV1: (body: unknown) => request("/api/v1/audit/cases", { method: "POST", body: JSON.stringify(body) }),
+  casesV1: () => request("/api/v1/audit/cases"),
 };

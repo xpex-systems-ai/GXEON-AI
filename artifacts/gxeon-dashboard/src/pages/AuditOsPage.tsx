@@ -10,15 +10,24 @@ export default function AuditOsPage() {
   const [mission, setMission] = useState<any>(fallbackMission);
   const [schemaMap, setSchemaMap] = useState<any>();
   const [apiReachable, setApiReachable] = useState("checking");
+  const [showIntake, setShowIntake] = useState(false);
+  const [intake, setIntake] = useState({ assetName: "", assetUrl: "", assetType: "website", auditGoal: "", selectedModules: ["website_audit"], priority: "medium", source: "operator_manual", operatorNotes: "" });
+  const [preview, setPreview] = useState<any>();
+  const [caseList, setCaseList] = useState<any>();
+  const [intakeMessage, setIntakeMessage] = useState("");
   const apiDiagnostics = getApiBaseDiagnostics();
 
   useEffect(() => {
     auditOsService.missionControlV1().then((data) => { setMission(data); setApiReachable("reachable"); }).catch(() => { setMission(fallbackMission); setApiReachable("unreachable"); });
     auditOsService.schemaMapV1().then(setSchemaMap).catch(() => undefined);
+    auditOsService.casesV1().then(setCaseList).catch(() => setCaseList({ degradedSafe: true, count: 0, items: [] }));
   }, []);
 
   const health = mission.health ?? fallbackMission.health;
   const modules = mission.modules?.items ?? fallbackModules;
+  const writeMode = mission.intakeReadiness?.writeMode ?? mission.health?.intakeReadiness?.writeMode ?? "disabled";
+  const submitPreview = async () => { setIntakeMessage(""); try { const data = await auditOsService.intakePreviewV1(intake); setPreview(data.preview); } catch (error: any) { setIntakeMessage(error.message); } };
+  const submitCreate = async () => { setIntakeMessage(""); try { const data = await auditOsService.createCaseV1(intake); setPreview(data.preview); setIntakeMessage(data.message ?? "Preview generated; write may be disabled."); } catch (error: any) { setIntakeMessage(error.message); } };
 
   return <main className="min-h-screen space-y-6 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,.18),transparent_30%),radial-gradient(circle_at_top_right,rgba(34,211,238,.12),transparent_34%),#05060a] p-6 text-white">
     <section className="rounded-[2rem] border border-amber-300/25 bg-gradient-to-br from-amber-500/15 via-cyan-500/10 to-black/30 p-7 shadow-2xl shadow-cyan-950/30">
@@ -43,7 +52,7 @@ export default function AuditOsPage() {
     </section>
 
     <section className="grid gap-4 lg:grid-cols-3">
-      <Panel title="Audit Cases panel" summary={`${mission.cases?.count ?? 0} cases`} action={mission.cases?.nextSafeAction} />
+      <Panel title="Audit Cases panel" summary={`${caseList?.count ?? mission.cases?.count ?? 0} cases`} action={mission.cases?.nextSafeAction} />
       <Panel title="Evidence Vault preview" summary={`${mission.evidence?.count ?? 0} evidence records`} action="Store only approved, redacted references in a future intake mission." />
       <Panel title="Score Engine preview" summary={`${mission.scores?.count ?? 0} score snapshots`} action="Scores require real case evidence before any claim." />
       <Panel title="Findings board preview" summary={`${mission.findings?.count ?? 0} findings`} action="Findings stay empty until operator-reviewed evidence exists." />
@@ -52,6 +61,24 @@ export default function AuditOsPage() {
       <Panel title="Proposal Engine preview" summary={`${mission.proposals?.count ?? 0} proposals`} action="No customer-facing proposal is created here." />
       <Panel title="Revenue Preview panel" summary={`Estimated R$${mission.revenue?.totalEstimatedBrl ?? 0} · Confirmed R$${mission.revenue?.totalConfirmedBrl ?? 0}`} action="No fake revenue and no provider-verified claim." />
       <Panel title="Operator Review panel" summary={mission.operatorReview?.status ?? "waiting"} action={mission.operatorReview?.nextSafeAction} />
+    </section>
+
+    <section className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3"><div><h2 className="text-2xl font-black">Audit Case Intake</h2><p className="mt-1 text-sm text-emerald-100">Operator-only preview-first flow. Write mode: <b>{writeMode}</b>.</p></div><button onClick={() => setShowIntake(!showIntake)} className="rounded-2xl bg-amber-300 px-5 py-3 font-black text-black">Novo Audit Case</button></div>
+      <AuditWriteModeWarning writeMode={writeMode} />
+      {showIntake && <div className="mt-4 grid gap-3 lg:grid-cols-2">
+        <input className="rounded-xl bg-black/40 p-3" placeholder="Asset name" value={intake.assetName} onChange={(e) => setIntake({ ...intake, assetName: e.target.value })} />
+        <input className="rounded-xl bg-black/40 p-3" placeholder="URL or repository reference" value={intake.assetUrl} onChange={(e) => setIntake({ ...intake, assetUrl: e.target.value })} />
+        <select className="rounded-xl bg-black/40 p-3" value={intake.assetType} onChange={(e) => setIntake({ ...intake, assetType: e.target.value })}>{["website", "ecommerce", "landing_page", "github_repository", "codebase", "supabase_project", "deployment", "api_backend", "business_funnel", "content_page", "other"].map((type) => <option key={type}>{type}</option>)}</select>
+        <select className="rounded-xl bg-black/40 p-3" value={intake.priority} onChange={(e) => setIntake({ ...intake, priority: e.target.value })}>{["low", "medium", "high", "critical"].map((priority) => <option key={priority}>{priority}</option>)}</select>
+        <textarea className="rounded-xl bg-black/40 p-3 lg:col-span-2" placeholder="Audit goal" value={intake.auditGoal} onChange={(e) => setIntake({ ...intake, auditGoal: e.target.value })} />
+        <AuditModuleSelector modules={modules} selected={intake.selectedModules} onChange={(selectedModules: string[]) => setIntake({ ...intake, selectedModules })} />
+        <textarea className="rounded-xl bg-black/40 p-3 lg:col-span-2" placeholder="Operator notes (no secrets, passwords, tokens, DATABASE_URL, service_role)" value={intake.operatorNotes} onChange={(e) => setIntake({ ...intake, operatorNotes: e.target.value })} />
+        <div className="flex gap-3"><button onClick={submitPreview} className="rounded-2xl border border-cyan-200 px-5 py-3 font-black text-cyan-100">Preview</button><button onClick={submitCreate} className="rounded-2xl border border-amber-200 px-5 py-3 font-black text-amber-100">Save guarded</button></div>
+        {intakeMessage && <p className="rounded-xl bg-black/40 p-3 text-sm text-amber-100">{intakeMessage}</p>}
+      </div>}
+      {preview && <AuditCasePreviewCard preview={preview} />}
+      <AuditCaseListPanel list={caseList} />
     </section>
 
     <section className="rounded-3xl border border-amber-300/20 bg-amber-400/10 p-5"><h2 className="text-2xl font-black">Official Modules panel</h2><div className="mt-4 grid gap-3 md:grid-cols-3">{modules.map((m: any) => <article key={m.key} className="rounded-2xl border border-white/10 bg-black/35 p-4"><p className="text-xs font-black uppercase tracking-[0.2em] text-amber-200">{m.category} · weight {m.defaultWeight}</p><h3 className="mt-2 text-lg font-black capitalize">{m.name}</h3><p className="mt-2 text-sm text-stone-300">{m.description}</p><p className="mt-3 text-xs text-cyan-100">Evidence: {(m.recommendedEvidenceTypes ?? []).join(", ") || "operator_note"}</p></article>)}</div></section>
@@ -65,3 +92,8 @@ export default function AuditOsPage() {
 function Badge({ label, value, tone = "amber" }: { label: string; value: string; tone?: "amber" | "green" | "cyan" }) { const color = tone === "green" ? "text-emerald-100" : tone === "cyan" ? "text-cyan-100" : "text-amber-100"; return <div className="rounded-2xl border border-white/10 bg-black/35 p-3"><p className="text-xs uppercase tracking-[0.2em] text-stone-400">{label}</p><p className={`text-xl font-black ${color}`}>{value}</p></div>; }
 function Diagnostic({ title, value }: { title: string; value: string }) { return <article className="rounded-3xl border border-white/10 bg-white/[0.04] p-4"><p className="text-xs font-black uppercase tracking-[0.2em] text-stone-400">{title}</p><p className="mt-2 break-words text-sm font-bold text-stone-100">{value}</p></article>; }
 function Panel({ title, summary, action }: { title: string; summary: string; action?: string }) { return <article className="rounded-3xl border border-white/10 bg-white/[0.04] p-5"><h2 className="text-xl font-black text-white">{title}</h2><p className="mt-2 text-2xl font-black text-amber-100">{summary}</p><p className="mt-2 text-sm text-stone-300">{action}</p></article>; }
+
+function AuditWriteModeWarning({ writeMode }: { writeMode: string }) { return <p className="mt-3 rounded-2xl border border-amber-200/30 bg-black/30 p-3 text-sm text-amber-100">{writeMode === "enabled" ? "Writes still require GXEON_AUDIT_ALLOW_DB_WRITES=true and schema readiness." : "Writes are disabled. Preview is available and no case will be saved."}</p>; }
+function AuditModuleSelector({ modules, selected, onChange }: { modules: any[]; selected: string[]; onChange: (value: string[]) => void }) { return <div className="lg:col-span-2 grid gap-2 md:grid-cols-3">{modules.map((m) => <label key={m.key} className="rounded-xl bg-black/30 p-3 text-sm"><input type="checkbox" checked={selected.includes(m.key)} onChange={(e) => onChange(e.target.checked ? [...selected, m.key] : selected.filter((key) => key !== m.key))} /> <span className="font-bold text-cyan-100">{m.name}</span></label>)}</div>; }
+function AuditCasePreviewCard({ preview }: { preview: any }) { return <article className="mt-4 rounded-2xl border border-cyan-200/30 bg-black/35 p-4"><p className="text-xs uppercase tracking-[0.2em] text-cyan-100">Preview · not saved</p><h3 className="mt-2 text-xl font-black">{preview.caseTitle}</h3><p className="mt-2 text-sm text-stone-300">Status inicial: {preview.initialStatus} · Modules: {preview.selectedModules?.map((m: any) => m.key).join(", ")}</p><p className="mt-2 text-sm text-amber-100">{preview.nextSafeAction}</p></article>; }
+function AuditCaseListPanel({ list }: { list: any }) { return <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4"><h3 className="font-black">Audit Cases list</h3>{(list?.items?.length ?? 0) === 0 ? <p className="mt-2 text-sm text-stone-300">No audit cases found. Degraded-safe empty state is active.</p> : list.items.map((item: any) => <p key={item.id} className="mt-2 text-sm">{item.title}</p>)}</div>; }

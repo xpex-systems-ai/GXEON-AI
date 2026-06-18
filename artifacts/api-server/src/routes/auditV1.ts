@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { auditModuleCatalog } from "@workspace/db";
+import { buildAuditCasePreview, createAuditCase, getAuditCaseById, getAuditCaseTimeline, getAuditWriteMode, listAuditCases } from "../services/auditCaseService";
 
 const router = Router();
 const databaseConfigured = () => Boolean(process.env["DATABASE_URL"]);
@@ -42,7 +43,8 @@ function healthPayload() {
     databaseConfigured: databaseConfigured(),
     schemaRegistered: true,
     safeMode: true,
-    productionMutationEnabled: false,
+    productionMutationEnabled: getAuditWriteMode() === "enabled" && process.env.GXEON_AUDIT_ALLOW_DB_WRITES === "true",
+    intakeReadiness: { writeMode: getAuditWriteMode(), allowDbWrites: process.env.GXEON_AUDIT_ALLOW_DB_WRITES === "true", previewAvailable: true },
     generatedAt: generatedAt(),
   };
 }
@@ -59,7 +61,18 @@ router.get("/v1/audit/schema-map", noStore, (_req, res) => {
   res.json(schemaMap);
 });
 
-router.get("/v1/audit/cases/summary", noStore, (_req, res) => res.json(emptySummary("audit_cases")));
+router.get("/v1/audit/cases/summary", noStore, (_req, res) => res.json({ ...emptySummary("audit_cases"), writeMode: getAuditWriteMode(), nextSafeAction: getAuditWriteMode() === "enabled" ? "Create first Audit Case only with GXEON_AUDIT_ALLOW_DB_WRITES=true and schema ready." : "Create preview of first Audit Case; writes are disabled." }));
+router.post("/v1/audit/intake/preview", noStore, (req, res) => {
+  try { res.json({ system: "GXEON Audit OS", ok: true, preview: buildAuditCasePreview(req.body) }); }
+  catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, code: error.code ?? "INTAKE_VALIDATION_FAILED", message: error.message }); }
+});
+router.post("/v1/audit/cases", noStore, async (req, res) => {
+  try { const result = await createAuditCase(req.body); res.status(result.status).json(result.payload); }
+  catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, code: error.code ?? "AUDIT_CASE_CREATE_FAILED", message: error.message }); }
+});
+router.get("/v1/audit/cases", noStore, async (_req, res) => { res.json({ system: "GXEON Audit OS", ...(await listAuditCases()) }); });
+router.get("/v1/audit/cases/:caseId", noStore, async (req, res) => { const item = await getAuditCaseById(req.params.caseId); res.status(item ? 200 : 404).json({ system: "GXEON Audit OS", degradedSafe: !item, item }); });
+router.get("/v1/audit/cases/:caseId/timeline", noStore, (req, res) => res.json({ system: "GXEON Audit OS", ...getAuditCaseTimeline(req.params.caseId) }));
 router.get("/v1/audit/findings/summary", noStore, (_req, res) => res.json(emptySummary("audit_findings")));
 router.get("/v1/audit/reports/summary", noStore, (_req, res) => res.json(emptySummary("audit_reports")));
 
@@ -94,7 +107,8 @@ router.get("/v1/audit/mission-control", noStore, (_req, res) => {
     proposals: emptySummary("audit_proposals"),
     revenue: { ...emptySummary("audit_revenue_events"), totalEstimatedBrl: 0, totalConfirmedBrl: 0, providerVerifiedBrl: 0, note: "No revenue is claimed without real accepted/paid events." },
     connectors,
-    operatorReview: { required: true, status: "waiting-for-approved-intake", nextSafeAction: "Review readiness, then run MISSION_003_AUDIT_OS_INTAKE_AND_CASES." },
+    operatorReview: { required: true, status: getAuditWriteMode() === "enabled" ? "intake-write-guard-ready" : "preview-only", nextSafeAction: getAuditWriteMode() === "enabled" ? "Criar primeiro Audit Case after schema readiness check." : "Criar preview de Audit Case." },
+    intakeReadiness: { previewAvailable: true, writeMode: getAuditWriteMode(), allowDbWrites: process.env.GXEON_AUDIT_ALLOW_DB_WRITES === "true", databaseConfigured: databaseConfigured(), schemaRegistered: true },
   });
 });
 
