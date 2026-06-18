@@ -1,0 +1,379 @@
+{
+  "system": "GXEON Audit OS",
+  "safeMode": true,
+  "modules": [
+    {
+      "key": "website_audit",
+      "name": "Website Audit",
+      "description": "Audit public website clarity, trust, speed signals, CTA, and conversion blockers.",
+      "category": "web_presence",
+      "defaultWeight": 10,
+      "checklistItems": [
+        "Offer is clear above the fold",
+        "Primary CTA is visible",
+        "Trust signals are present",
+        "Mobile layout is readable"
+      ],
+      "riskSignals": [
+        "unclear_offer",
+        "missing_cta",
+        "low_trust",
+        "mobile_friction"
+      ],
+      "recommendedEvidenceTypes": [
+        "screenshot",
+        "url",
+        "operator_note"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "ecommerce_audit",
+      "name": "E-commerce Audit",
+      "description": "Evaluate product pages, checkout trust, shipping clarity, and purchase friction.",
+      "category": "commerce",
+      "defaultWeight": 10,
+      "checklistItems": [
+        "Product value is clear",
+        "Checkout path is short",
+        "Shipping/return policies are visible",
+        "Payment trust signals exist"
+      ],
+      "riskSignals": [
+        "cart_abandonment",
+        "hidden_costs",
+        "weak_product_copy",
+        "checkout_friction"
+      ],
+      "recommendedEvidenceTypes": [
+        "screenshot",
+        "url",
+        "operator_note"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "ux_checkout_audit",
+      "name": "UX Checkout Audit",
+      "description": "Focus on form friction, payment flow clarity, and conversion blockers.",
+      "category": "commerce",
+      "defaultWeight": 9,
+      "checklistItems": [
+        "Guest checkout is possible",
+        "Errors are readable",
+        "Steps are clear",
+        "Fields are minimized"
+      ],
+      "riskSignals": [
+        "form_friction",
+        "unclear_errors",
+        "forced_account",
+        "payment_dropoff"
+      ],
+      "recommendedEvidenceTypes": [
+        "screenshot",
+        "url"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "seo_basic_audit",
+      "name": "Basic SEO Audit",
+      "description": "Review essential search discoverability signals without crawler dependence.",
+      "category": "growth",
+      "defaultWeight": 7,
+      "checklistItems": [
+        "Page titles are descriptive",
+        "Meta descriptions exist",
+        "Headings are structured",
+        "Indexing assumptions are documented"
+      ],
+      "riskSignals": [
+        "missing_title",
+        "thin_content",
+        "poor_headings",
+        "unknown_indexing"
+      ],
+      "recommendedEvidenceTypes": [
+        "url",
+        "screenshot",
+        "operator_note"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "tracking_pixel_audit",
+      "name": "Tracking Pixel Audit",
+      "description": "Document tracking readiness and attribution risks without exposing secrets.",
+      "category": "analytics",
+      "defaultWeight": 8,
+      "checklistItems": [
+        "Pixel inventory is documented",
+        "Consent expectations are noted",
+        "Conversion events are mapped",
+        "No secrets are stored"
+      ],
+      "riskSignals": [
+        "missing_events",
+        "duplicate_pixels",
+        "unknown_consent",
+        "secret_exposure"
+      ],
+      "recommendedEvidenceTypes": [
+        "screenshot",
+        "operator_note",
+        "redacted_config"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "security_basic_audit",
+      "name": "Basic Security Audit",
+      "description": "Check safe baseline security posture from authorized evidence only.",
+      "category": "security",
+      "defaultWeight": 10,
+      "checklistItems": [
+        "HTTPS is present",
+        "Admin exposure is reviewed",
+        "Secrets are not visible",
+        "Dependency risk is noted"
+      ],
+      "riskSignals": [
+        "http_only",
+        "public_admin",
+        "exposed_secret",
+        "outdated_dependency"
+      ],
+      "recommendedEvidenceTypes": [
+        "url",
+        "screenshot",
+        "redacted_config"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "github_repository_audit",
+      "name": "GitHub Repository Audit",
+      "description": "Read-only repository hygiene review for structure, README, CI, and issue signals.",
+      "category": "code",
+      "defaultWeight": 9,
+      "checklistItems": [
+        "README explains setup",
+        "Scripts are documented",
+        "CI/build status is visible",
+        "Secrets are not committed"
+      ],
+      "riskSignals": [
+        "missing_readme",
+        "broken_ci",
+        "unclear_scripts",
+        "secret_risk"
+      ],
+      "recommendedEvidenceTypes": [
+        "url",
+        "repository_reference",
+        "operator_note"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "codebase_audit",
+      "name": "Codebase Audit",
+      "description": "Assess maintainability, build readiness, and critical file risks.",
+      "category": "code",
+      "defaultWeight": 10,
+      "checklistItems": [
+        "Build command is known",
+        "Typecheck path is known",
+        "Core modules are mapped",
+        "Risky files are listed"
+      ],
+      "riskSignals": [
+        "build_unknown",
+        "type_errors",
+        "large_untested_surface",
+        "missing_docs"
+      ],
+      "recommendedEvidenceTypes": [
+        "repository_reference",
+        "log_excerpt",
+        "operator_note"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "supabase_database_audit",
+      "name": "Supabase Database Audit",
+      "description": "Review Supabase binding, schema map, RLS/readiness notes without pushing migrations.",
+      "category": "database",
+      "defaultWeight": 10,
+      "checklistItems": [
+        "Project ref is confirmed",
+        "Schema source of truth is documented",
+        "RLS assumptions are listed",
+        "No db push is executed"
+      ],
+      "riskSignals": [
+        "project_mismatch",
+        "schema_drift",
+        "rls_unknown",
+        "unsafe_migration"
+      ],
+      "recommendedEvidenceTypes": [
+        "redacted_config",
+        "schema_reference",
+        "operator_note"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "deployment_audit",
+      "name": "Deployment Audit",
+      "description": "Evaluate production readiness, environment requirements, and release blockers.",
+      "category": "delivery",
+      "defaultWeight": 9,
+      "checklistItems": [
+        "Build command passes",
+        "Env vars are documented",
+        "Rollback path is known",
+        "Deployment target is confirmed"
+      ],
+      "riskSignals": [
+        "missing_env",
+        "build_failure",
+        "target_unknown",
+        "no_rollback"
+      ],
+      "recommendedEvidenceTypes": [
+        "log_excerpt",
+        "redacted_config",
+        "operator_note"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "api_backend_audit",
+      "name": "API Backend Audit",
+      "description": "Review route health, contracts, degraded-safe behavior, and data boundaries.",
+      "category": "backend",
+      "defaultWeight": 9,
+      "checklistItems": [
+        "Health route exists",
+        "Contracts are documented",
+        "DB-missing mode is safe",
+        "Writes are gated"
+      ],
+      "riskSignals": [
+        "no_health_route",
+        "contract_gap",
+        "db_required_boot",
+        "unguarded_write"
+      ],
+      "recommendedEvidenceTypes": [
+        "schema_reference",
+        "log_excerpt",
+        "operator_note"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "ai_automation_audit",
+      "name": "AI Automation Audit",
+      "description": "Review automation workflow safety, human approval gates, and connector write boundaries.",
+      "category": "automation",
+      "defaultWeight": 8,
+      "checklistItems": [
+        "Human approval gate exists",
+        "Write connectors are disabled",
+        "Prompt boundaries are stated",
+        "Audit trail is planned"
+      ],
+      "riskSignals": [
+        "auto_write",
+        "no_approval",
+        "unclear_prompt",
+        "missing_audit_trail"
+      ],
+      "recommendedEvidenceTypes": [
+        "operator_note",
+        "workflow_reference",
+        "screenshot"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "business_offer_audit",
+      "name": "Business Offer Audit",
+      "description": "Evaluate offer clarity, promise, pricing ladder, and manual sales readiness.",
+      "category": "business",
+      "defaultWeight": 9,
+      "checklistItems": [
+        "Pain is explicit",
+        "Promise is specific",
+        "Price ladder is safe",
+        "Manual close path is defined"
+      ],
+      "riskSignals": [
+        "vague_offer",
+        "unsupported_claim",
+        "pricing_gap",
+        "no_followup"
+      ],
+      "recommendedEvidenceTypes": [
+        "operator_note",
+        "screenshot"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "funnel_audit",
+      "name": "Funnel Audit",
+      "description": "Map lead capture, nurture, conversion, delivery, and retention gaps.",
+      "category": "growth",
+      "defaultWeight": 9,
+      "checklistItems": [
+        "Lead source is mapped",
+        "Conversion step is defined",
+        "Follow-up exists",
+        "Delivery promise is tracked"
+      ],
+      "riskSignals": [
+        "no_lead_capture",
+        "broken_followup",
+        "unclear_conversion",
+        "delivery_gap"
+      ],
+      "recommendedEvidenceTypes": [
+        "workflow_reference",
+        "screenshot",
+        "operator_note"
+      ],
+      "safeMode": true
+    },
+    {
+      "key": "content_landing_page_audit",
+      "name": "Content Landing Page Audit",
+      "description": "Review copy, content hierarchy, objections, proof, and CTA alignment.",
+      "category": "content",
+      "defaultWeight": 8,
+      "checklistItems": [
+        "Headline names the outcome",
+        "Objections are answered",
+        "Proof is visible",
+        "CTA matches intent"
+      ],
+      "riskSignals": [
+        "weak_headline",
+        "missing_proof",
+        "objections_unanswered",
+        "cta_mismatch"
+      ],
+      "recommendedEvidenceTypes": [
+        "screenshot",
+        "url",
+        "operator_note"
+      ],
+      "safeMode": true
+    }
+  ]
+}

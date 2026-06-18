@@ -1,0 +1,29 @@
+{
+  "system": "GXEON Audit OS",
+  "sourceOfTruth": "lib/db/src/schema/audit.ts",
+  "safeMode": true,
+  "productionMigrationsExecuted": false,
+  "enums": ["audit_case_status", "audit_asset_type", "audit_module_key", "audit_severity", "audit_evidence_type", "audit_report_type", "audit_task_status", "audit_proposal_status", "audit_revenue_status", "audit_connector_status"],
+  "tables": [
+    { "name": "audit_clients", "purpose": "Client/lead references without secrets." },
+    { "name": "audit_assets", "purpose": "Auditable assets such as websites, repositories, deployments, and databases." },
+    { "name": "audit_cases", "purpose": "Central audit work item; references audit_assets when possible." },
+    { "name": "audit_modules", "purpose": "Registered official modules and safe-mode metadata." },
+    { "name": "audit_checklists", "purpose": "Checklist items per module." },
+    { "name": "audit_findings", "purpose": "Findings linked to audit_cases." },
+    { "name": "audit_evidences", "purpose": "Evidence references linked to audit_cases or audit_findings; URLs are references only." },
+    { "name": "audit_scores", "purpose": "Case score snapshots." },
+    { "name": "audit_reports", "purpose": "Generated report payloads for a case." },
+    { "name": "audit_tasks", "purpose": "Execution tasks, optionally linked to findings." },
+    { "name": "audit_proposals", "purpose": "Manual proposal drafts optionally linked to cases/tasks." },
+    { "name": "audit_revenue_events", "purpose": "Separate estimated, proposed, accepted, paid, lost, refunded and cancelled revenue signals." },
+    { "name": "audit_connector_runs", "purpose": "Read-only/degraded connector run state." },
+    { "name": "audit_operator_notes", "purpose": "Operator-only notes and context." }
+  ],
+  "invariants": [
+    "No payment provider secrets stored.",
+    "Evidence URLs are stored as references only.",
+    "Schema is exported from lib/db/src/schema/index.ts.",
+    "No production migration or Supabase db push was executed."
+  ]
+}

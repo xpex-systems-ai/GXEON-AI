@@ -1,0 +1,11 @@
+{
+  "system": "GXEON Audit OS",
+  "routes": [
+    { "method": "GET", "path": "/api/v1/audit/health", "readOnly": true, "requiresDatabase": false },
+    { "method": "GET", "path": "/api/v1/audit/modules", "readOnly": true, "requiresDatabase": false },
+    { "method": "GET", "path": "/api/v1/audit/schema-map", "readOnly": true, "requiresDatabase": false }
+  ],
+  "contracts": "lib/api-zod/src/audit.ts",
+  "safeMode": true,
+  "writeRoutesDeferred": ["POST /api/v1/audit/cases", "POST /api/v1/audit/findings", "POST /api/v1/audit/evidences", "POST /api/v1/audit/reports"]
+}
