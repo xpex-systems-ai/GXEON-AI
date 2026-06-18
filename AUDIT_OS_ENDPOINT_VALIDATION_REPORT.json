@@ -1,0 +1,25 @@
+{
+  "mission": "MISSION_001_5_AUDIT_OS_RUNTIME_BINDING_STABILIZATION",
+  "generatedAtUtc": "2026-06-18T22:11:00Z",
+  "databaseUrlRequired": false,
+  "writeCommandsExecuted": false,
+  "local": {
+    "baseUrl": "http://127.0.0.1:3010",
+    "startCommand": "PORT=3010 pnpm --filter @workspace/api-server run start",
+    "results": [
+      { "method": "GET", "path": "/api/v1/audit/health", "status": 200, "json": true, "readOnly": true, "readiness": "degraded-safe", "databaseConfigured": false },
+      { "method": "GET", "path": "/api/v1/audit/modules", "status": 200, "json": true, "readOnly": true, "count": 15 },
+      { "method": "GET", "path": "/api/v1/audit/schema-map", "status": 200, "json": true, "readOnly": true, "safeMode": true, "productionMigrationsExecuted": false }
+    ]
+  },
+  "remote": {
+    "baseUrl": "https://gxeon-api-server-production.up.railway.app",
+    "reachableFromEnvironment": false,
+    "environmentLimitation": "HTTPS tunnel connection failed with 403 Forbidden from this execution environment before reaching Railway.",
+    "results": [
+      { "method": "GET", "path": "/api/v1/audit/health", "status": null, "json": false, "readOnly": true, "error": "Tunnel connection failed: 403 Forbidden" },
+      { "method": "GET", "path": "/api/v1/audit/modules", "status": null, "json": false, "readOnly": true, "error": "Tunnel connection failed: 403 Forbidden" },
+      { "method": "GET", "path": "/api/v1/audit/schema-map", "status": null, "json": false, "readOnly": true, "error": "Tunnel connection failed: 403 Forbidden" }
+    ]
+  }
+}

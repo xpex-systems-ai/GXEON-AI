@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { auditOsService } from "@/services/auditOsService";
+import { getApiBaseDiagnostics } from "@/services/apiBase";
 
 const requiredSections = ["Audit Cases placeholder", "Official modules", "Evidence-first rule", "Score engine preview", "Findings preview", "Report builder preview", "Proposal and revenue preview", "Connector status placeholder"];
 const fallbackModules = ["website_audit", "ecommerce_audit", "ux_checkout_audit", "seo_basic_audit", "tracking_pixel_audit", "security_basic_audit", "github_repository_audit", "codebase_audit", "supabase_database_audit", "deployment_audit", "api_backend_audit", "ai_automation_audit", "business_offer_audit", "funnel_audit", "content_landing_page_audit"].map((key) => ({ key, name: key.replaceAll("_", " "), description: "Static degraded-safe module placeholder.", category: "safe_mode", defaultWeight: 1, checklistItems: [], riskSignals: [], recommendedEvidenceTypes: [], safeMode: true }));
@@ -8,6 +9,7 @@ export default function AuditOsPage() {
   const [health, setHealth] = useState<any>();
   const [modules, setModules] = useState<any[]>(fallbackModules);
   const [schemaMap, setSchemaMap] = useState<any>();
+  const apiDiagnostics = getApiBaseDiagnostics();
 
   useEffect(() => {
     auditOsService.healthV1().then(setHealth).catch(() => setHealth({ readiness: "degraded-safe", databaseConfigured: false, schemaRegistered: true, safeMode: true }));
@@ -27,6 +29,13 @@ export default function AuditOsPage() {
         <Badge label="Readiness" value={health?.readiness ?? "degraded-safe"} />
       </div>
     </section>
+
+    {!apiDiagnostics.configured ? <section className="rounded-3xl border border-amber-300/30 bg-amber-500/10 p-5">
+      <p className="text-xs font-black uppercase tracking-[0.25em] text-amber-200">Runtime binding warning · {apiDiagnostics.warningCode}</p>
+      <h2 className="mt-2 text-2xl font-black text-amber-50">API base URL is not configured</h2>
+      <p className="mt-2 text-sm text-amber-50/90">Set <code className="rounded bg-black/30 px-1 py-0.5">VITE_GXEON_API_BASE_URL</code> to the Railway API origin. Audit OS remains degraded-safe and read-only using static fallbacks until the backend responds.</p>
+      <p className="mt-2 text-xs text-amber-100">Expected value: https://gxeon-api-server-production.up.railway.app</p>
+    </section> : null}
 
     <section className="grid gap-4 md:grid-cols-4">{requiredSections.map((section) => <article key={section} className="rounded-3xl border border-white/10 bg-white/[0.04] p-4"><h2 className="font-black text-cyan-100">{section}</h2><p className="mt-2 text-sm text-stone-300">Prepared for Mission Control activation; all actions remain read-only/manual-first in this mission.</p></article>)}</section>
 

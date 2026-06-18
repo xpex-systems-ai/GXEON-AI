@@ -1,6 +1,6 @@
 # Supabase CLI project binding for GXEON production.
 # This file intentionally contains only non-secret project metadata.
-project_id = "telxvphgrsvsnxvmjkce"
+project_id = "zphpeynirstwzrzgvbct"
 
 [api]
 enabled = true
