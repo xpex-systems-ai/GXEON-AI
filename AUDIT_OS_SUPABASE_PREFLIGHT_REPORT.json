@@ -1,0 +1,16 @@
+{
+  "status": "BLOCKED",
+  "checkedAt": "2026-06-18T00:00:00Z",
+  "officialProjectRef": "zphpeynirstwzrzgvbct",
+  "supabaseConfigProjectId": "zphpeynirstwzrzgvbct",
+  "projectMatches": true,
+  "databaseUrlPresent": false,
+  "databaseUrlPrinted": false,
+  "directUrlPresent": false,
+  "directUrlPrinted": false,
+  "supabaseUrlPresent": false,
+  "supabaseUrlMatchesOfficialWhenPresent": null,
+  "gxeonAllowSchemaApply": false,
+  "connectionTestStatus": "NOT_RUN_MISSING_DATABASE_URL",
+  "decision": "Do not apply schema from this environment. Use generated SQL manually only after operator supplies DATABASE_URL and GXEON_ALLOW_SCHEMA_APPLY=true or applies the reviewed SQL in Supabase SQL Editor."
+}

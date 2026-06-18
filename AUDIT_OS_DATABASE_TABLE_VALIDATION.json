@@ -1,0 +1,10 @@
+{
+  "status": "BLOCKED",
+  "reason": "DATABASE_URL is not present and GXEON_ALLOW_SCHEMA_APPLY is not true; no database table validation query was run.",
+  "expectedTables": ["audit_clients", "audit_assets", "audit_cases", "audit_modules", "audit_checklists", "audit_findings", "audit_evidences", "audit_scores", "audit_reports", "audit_tasks", "audit_proposals", "audit_revenue_events", "audit_connector_runs", "audit_operator_notes"],
+  "validatedTables": [],
+  "expectedEnums": ["audit_case_status", "audit_asset_type", "audit_module_key", "audit_severity", "audit_evidence_type", "audit_report_type", "audit_task_status", "audit_proposal_status", "audit_revenue_status", "audit_connector_status"],
+  "validatedEnums": [],
+  "financialTablesMutated": false,
+  "revenueOrPaymentCreated": false
+}

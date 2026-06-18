@@ -1,0 +1,17 @@
+{
+  "assetName": "GXEON-AI Repository",
+  "assetUrl": "https://github.com/xpex-systems-ai/GXEON-AI",
+  "assetType": "github_repository",
+  "auditGoal": "Auditar o próprio repositório GXEON-AI como primeiro caso interno do Audit OS, verificando estrutura, módulos, schema, deploy readiness e segurança operacional.",
+  "selectedModules": [
+    "github_repository_audit",
+    "codebase_audit",
+    "supabase_database_audit",
+    "deployment_audit",
+    "api_backend_audit",
+    "ai_automation_audit"
+  ],
+  "priority": "high",
+  "source": "operator_manual",
+  "operatorNotes": "Primeiro caso interno oficial do Audit OS. Não contém secrets. Não representa cliente externo. Não representa receita."
+}

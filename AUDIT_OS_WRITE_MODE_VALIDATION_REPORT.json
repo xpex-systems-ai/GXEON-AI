@@ -1,0 +1,12 @@
+{
+  "status": "BLOCKED",
+  "writeGuardStatus": "ENFORCED",
+  "secretGuardStatus": "ENFORCED",
+  "reason": "Write-mode validation requires a configured database and validated Audit OS schema. Stop gates blocked database writes in this environment.",
+  "checks": [
+    { "name": "GET /api/v1/audit/health", "status": "NOT_RUN_SCHEMA_BLOCKED" },
+    { "name": "POST /api/v1/audit/intake/preview", "status": "NOT_RUN_SCHEMA_BLOCKED" },
+    { "name": "POST /api/v1/audit/cases with flags", "status": "NOT_RUN_SCHEMA_BLOCKED" },
+    { "name": "POST /api/v1/audit/cases without flags returns WRITE_DISABLED", "status": "NOT_RUN_SCHEMA_BLOCKED" }
+  ]
+}
