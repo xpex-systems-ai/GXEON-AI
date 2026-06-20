@@ -1,0 +1,19 @@
+{
+  "status": "READY_FOR_AUTO_RUN_ENV_FLAG",
+  "auto_run_executed_in_codex_or_blocked_safely": "ENV_FLAG_REQUIRED",
+  "revenue_confirmed": 0,
+  "fake_client_created": false,
+  "fake_revenue_created": false,
+  "payment_calls": false,
+  "connector_writes": false,
+  "scraping_performed": false,
+  "secrets_logged": false,
+  "safety_checks": {
+    "env_flag_required": true,
+    "write_mode_enabled_required": true,
+    "allow_db_writes_true_required": true,
+    "schema_ready_required": true,
+    "startup_status_sanitized": true,
+    "public_runner_token_still_required": true
+  }
+}

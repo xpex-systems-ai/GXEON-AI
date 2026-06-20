@@ -1,5 +1,6 @@
 import app from "./app";
 import { logger } from "./lib/logger";
+import { maybeRunAuditMission006OnStartup } from "./services/auditMissionRunnerService";
 
 const rawPort = process.env["PORT"];
 
@@ -22,4 +23,22 @@ app.listen(port, (err) => {
   }
 
   logger.info({ port }, "Server listening");
+  void maybeRunAuditMission006OnStartup().then((status) => {
+    logger.info(
+      {
+        autoRunEnabled: status.autoRunEnabled,
+        lastRunStatus: status.lastRunStatus,
+        lastRunAt: status.lastRunAt,
+        caseId: status.caseId,
+        evidenceId: status.evidenceId,
+        scoreCount: status.scoreCount,
+        reportId: status.reportId,
+        revenueConfirmed: status.revenueConfirmed,
+        fakeClientCreated: status.fakeClientCreated,
+        fakeRevenueCreated: status.fakeRevenueCreated,
+        connectorWrites: status.connectorWrites,
+      },
+      "Mission 006 auto-run status",
+    );
+  });
 });

@@ -1,0 +1,29 @@
+{
+  "endpoint": "GET /api/v1/audit/missions/mission-006/status",
+  "authRequired": false,
+  "readOnly": true,
+  "sanitized": true,
+  "fields": [
+    "autoRunEnabled",
+    "lastRunStatus",
+    "lastRunAt",
+    "caseId",
+    "findingId",
+    "evidenceId",
+    "scoreCount",
+    "reportId",
+    "readyForProposal",
+    "revenueConfirmed",
+    "fakeClientCreated",
+    "fakeRevenueCreated",
+    "connectorWrites",
+    "nextSafeAction"
+  ],
+  "neverReturns": [
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "DATABASE_URL",
+    "Authorization",
+    "Bearer token",
+    "raw error stack"
+  ]
+}

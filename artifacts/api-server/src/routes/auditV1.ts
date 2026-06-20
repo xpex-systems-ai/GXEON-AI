@@ -27,6 +27,7 @@ import {
 import {
   auditScoreReportCounts,
   authorizeMissionRunner,
+  getMission006AutoRunStatus,
   runBaselineScoreReportMission,
 } from "../services/auditMissionRunnerService";
 
@@ -464,6 +465,14 @@ router.get("/v1/audit/reports/summary", noStore, (_req, res) =>
   res.json(emptySummary("audit_reports")),
 );
 
+router.get("/v1/audit/missions/mission-006/status", noStore, (_req, res) => {
+  res.json({
+    system: "GXEON Audit OS",
+    sanitized: true,
+    ...getMission006AutoRunStatus(),
+  });
+});
+
 router.post(
   "/v1/audit/missions/run-baseline-score-report",
   noStore,
@@ -611,8 +620,11 @@ router.get("/v1/audit/mission-control", noStore, async (_req, res) => {
               : "Criar preview de Audit Case.",
     },
     commercialProposalReadiness: {
-      status: scoreReportCounts.reportsCount > 0 ? "parcial" : "pendente",
-      label: "Pronto para Proposta Comercial: parcial",
+      status: scoreReportCounts.reportsCount > 0 ? "partial" : "pending",
+      label:
+        scoreReportCounts.reportsCount > 0
+          ? "Pronto para Proposta Comercial: parcial"
+          : "Relatório interno pendente",
       readyForProposal: false,
       nextMission: "MISSION_007_AUDIT_OS_PROPOSAL_AND_OFFER",
     },

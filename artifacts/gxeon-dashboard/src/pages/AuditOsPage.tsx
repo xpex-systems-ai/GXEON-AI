@@ -120,6 +120,7 @@ export default function AuditOsPage() {
   const [baselineResult, setBaselineResult] = useState<any>();
   const [missionRunnerToken, setMissionRunnerToken] = useState("");
   const [missionRunnerResult, setMissionRunnerResult] = useState<any>();
+  const [mission006Status, setMission006Status] = useState<any>();
   const apiDiagnostics = getApiBaseDiagnostics();
 
   useEffect(() => {
@@ -144,6 +145,10 @@ export default function AuditOsPage() {
     auditOsService
       .baselineStatusV1()
       .then(setBaselineStatus)
+      .catch(() => undefined);
+    auditOsService
+      .mission006StatusV1()
+      .then(setMission006Status)
       .catch(() => undefined);
   }, []);
 
@@ -314,8 +319,12 @@ export default function AuditOsPage() {
       setEvidenceFindingMessage(
         `${data.status ?? data.code} · scores ${(data.scoreIds ?? []).length} · reportId ${data.reportId ?? "none"}`,
       );
-      const missionControl = await auditOsService.missionControlV1();
+      const [missionControl, autoStatus] = await Promise.all([
+        auditOsService.missionControlV1(),
+        auditOsService.mission006StatusV1().catch(() => undefined),
+      ]);
       setMission(missionControl);
+      if (autoStatus) setMission006Status(autoStatus);
       await refreshEvidenceFindings();
     } catch (error: any) {
       const text = String(error.message ?? error);
@@ -716,6 +725,69 @@ export default function AuditOsPage() {
             {evidenceFindingMessage}
           </p>
         )}
+
+        <div className="mt-4 rounded-2xl border border-emerald-200/40 bg-emerald-500/10 p-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.25em] text-emerald-100">
+                Mission 006 Auto Runner
+              </p>
+              <h3 className="text-xl font-black text-white">
+                Status sanitizado do auto-runner
+              </h3>
+            </div>
+            <Badge
+              label="Auto-run"
+              value={mission006Status?.autoRunEnabled ? "enabled" : "disabled"}
+              tone={mission006Status?.autoRunEnabled ? "green" : "amber"}
+            />
+          </div>
+          <div className="mt-4 grid gap-3 md:grid-cols-4">
+            <Panel
+              title="Última execução"
+              summary={mission006Status?.lastRunStatus ?? "not checked"}
+              action={
+                mission006Status?.lastRunAt ?? mission006Status?.nextSafeAction
+              }
+            />
+            <Panel
+              title="Evidências / Scores"
+              summary={`${mission006Status?.evidenceId ? 1 : (mission.evidence?.count ?? 0)} evidência · ${mission006Status?.scoreCount ?? mission.scores?.count ?? 0} scores`}
+              action="Counts reais, sem duplicação intencional."
+            />
+            <Panel
+              title="Relatório interno"
+              summary={
+                mission006Status?.reportId
+                  ? "created/reused"
+                  : `${mission.reports?.count ?? 0} reports`
+              }
+              action={mission006Status?.reportId ?? "Aguardando relatório."}
+            />
+            <Panel
+              title="Ready for proposal"
+              summary={
+                mission006Status?.readyForProposal
+                  ? "ready for MISSION_007"
+                  : "pending internal report"
+              }
+              action={
+                mission006Status?.readyForProposal
+                  ? "Next mission: MISSION_007 Proposal + Offer"
+                  : mission006Status?.nextSafeAction
+              }
+            />
+          </div>
+          <p className="mt-3 text-sm text-emerald-100">
+            Safety: revenueConfirmed {mission006Status?.revenueConfirmed ?? 0} ·
+            fakeClientCreated{" "}
+            {String(mission006Status?.fakeClientCreated ?? false)} ·
+            fakeRevenueCreated{" "}
+            {String(mission006Status?.fakeRevenueCreated ?? false)} ·
+            connectorWrites {String(mission006Status?.connectorWrites ?? false)}
+            .
+          </p>
+        </div>
         <div className="mt-4 rounded-2xl border border-cyan-200/40 bg-cyan-500/10 p-4">
           <p className="font-black text-cyan-100">
             Pronto para Proposta Comercial: parcial

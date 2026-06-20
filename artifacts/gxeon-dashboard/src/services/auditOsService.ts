@@ -76,6 +76,8 @@ export const auditOsService = {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     }),
+  mission006StatusV1: () =>
+    request("/api/v1/audit/missions/mission-006/status"),
   runBaselineScoreReportV1: (token: string) =>
     request("/api/v1/audit/missions/run-baseline-score-report", {
       method: "POST",
