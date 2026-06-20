@@ -78,7 +78,7 @@ router.get("/v1/audit/schema-map", noStore, (_req, res) => {
 
 router.get("/v1/audit/schema-diagnostics", noStore, async (_req, res) => {
   const diagnostics = await getAuditSchemaDiagnostics();
-  res.status(diagnostics.databaseConfigured ? 200 : 503).json(diagnostics);
+  res.status(diagnostics.schemaReady ? 200 : 503).json(diagnostics);
 });
 
 router.get("/v1/audit/cases/summary", noStore, (_req, res) => res.json({ ...emptySummary("audit_cases"), writeMode: getAuditWriteMode(), nextSafeAction: getAuditWriteMode() === "enabled" ? "Create first Audit Case only with GXEON_AUDIT_ALLOW_DB_WRITES=true and schema ready." : "Create preview of first Audit Case; writes are disabled." }));

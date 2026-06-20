@@ -1,0 +1,14 @@
+{
+  "status": "READY_FOR_NO_TERMINAL_BOOTSTRAP",
+  "postgres_provider_supported": true,
+  "supabase_rest_provider_supported": true,
+  "no_terminal_bootstrap_panel_added": true,
+  "secrets_logged": false,
+  "bootstrap_still_token_protected": true,
+  "fake_client_created": false,
+  "fake_revenue_created": false,
+  "connector_writes": false,
+  "migrations_run": false,
+  "db_push_run": false,
+  "external_webhooks_called": false
+}

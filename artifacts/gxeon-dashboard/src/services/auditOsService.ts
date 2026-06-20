@@ -22,4 +22,6 @@ export const auditOsService = {
   intakePreviewV1: (body: unknown) => request("/api/v1/audit/intake/preview", { method: "POST", body: JSON.stringify(body) }),
   createCaseV1: (body: unknown) => request("/api/v1/audit/cases", { method: "POST", body: JSON.stringify(body) }),
   casesV1: () => request("/api/v1/audit/cases"),
+  schemaDiagnosticsV1: () => request("/api/v1/audit/schema-diagnostics"),
+  bootstrapFirstCaseV1: (token: string) => request("/api/v1/audit/bootstrap/first-case", { method: "POST", headers: { Authorization: `Bearer ${token}` } }),
 };

@@ -1,0 +1,9 @@
+{
+  "mission": "MISSION_004_12_AUDIT_OS_NO_TERMINAL_SUPABASE_REST_PROVIDER",
+  "endpoint": "GET /api/v1/audit/schema-diagnostics",
+  "providerMode": "auto | postgres | supabase_rest",
+  "activeProvider": "postgres | supabase_rest | null",
+  "safeFields": ["activeProvider", "providerMode", "postgresAvailable", "supabaseRestAvailable", "schemaReady", "foundTables", "missingTables", "code", "error.messageClass"],
+  "secretFieldsNeverReturned": ["DATABASE_URL", "SUPABASE_SERVICE_ROLE_KEY", "Authorization", "apikey", "password", "bootstrapToken"],
+  "safeCodes": ["AUDIT_TABLES_MISSING", "DATABASE_CONNECTION_FAILED", "PUBLIC_SCHEMA_NOT_VISIBLE", "AUDIT_SCHEMA_NOT_READY", "POSTGRES_AUTH_FAILED", "POSTGRES_HOST_NOT_FOUND", "SUPABASE_REST_AUTH_FAILED", "SUPABASE_REST_NOT_CONFIGURED", "SUPABASE_REST_ERROR"]
+}
