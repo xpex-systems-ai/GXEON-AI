@@ -1,0 +1,20 @@
+{
+  "status": "BLOCKED",
+  "generatedAt": "2026-06-20T14:20:33.010Z",
+  "firstCaseCreated": false,
+  "firstCaseId": null,
+  "payloadSource": "artifacts/audit-os-first-case-payload.json",
+  "previewAttempted": true,
+  "previewDidNotWrite": true,
+  "createAttempted": true,
+  "createHttpStatus": 503,
+  "createCode": "DATABASE_NOT_CONFIGURED",
+  "fakeClientCreated": false,
+  "fakeRevenueCreated": false,
+  "paymentCreated": false,
+  "externalConnectorCalled": false,
+  "revenueConfirmedZero": null,
+  "blockers": [
+    "DATABASE_URL missing prevented writing the first real internal case to Supabase."
+  ]
+}

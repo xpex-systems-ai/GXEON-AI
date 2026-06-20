@@ -1,0 +1,1 @@
+{"system":"GXEON Audit OS","readiness":"degraded-safe","databaseConfigured":false,"schemaRegistered":true,"safeMode":true,"productionMutationEnabled":true,"intakeReadiness":{"writeMode":"enabled","allowDbWrites":true,"previewAvailable":true},"generatedAt":"2026-06-20T14:19:42.495Z"}

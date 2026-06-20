@@ -1,0 +1,29 @@
+{
+  "status": "PARTIAL",
+  "generatedAt": "2026-06-20T14:20:33.010Z",
+  "build": "PASS: pnpm --filter @workspace/api-server run build",
+  "serverStartedWithControlledFlags": true,
+  "writeMode": "enabled",
+  "allowDbWrites": true,
+  "databaseConfigured": false,
+  "endpointsChecked": [
+    "GET /api/v1/audit/health",
+    "GET /api/v1/audit/mission-control",
+    "GET /api/v1/audit/cases",
+    "POST /api/v1/audit/intake/preview",
+    "POST /api/v1/audit/cases (expected blocked without DATABASE_URL)"
+  ],
+  "artifacts": [
+    "artifacts/audit-os-runtime/health.json",
+    "artifacts/audit-os-runtime/mission-control.json",
+    "artifacts/audit-os-runtime/cases.json",
+    "artifacts/audit-os-runtime/intake-preview.json",
+    "artifacts/audit-os-runtime/create-case-attempt.txt",
+    "artifacts/audit-os-runtime/secret-guard-preview.json"
+  ],
+  "secretGuardStatus": "ENFORCED",
+  "writeGuardStatus": "ENFORCED_BY_FLAGS_AND_DATABASE_CONFIG",
+  "blockers": [
+    "DATABASE_URL missing, so API stayed degraded-safe for DB-backed create/list operations."
+  ]
+}
