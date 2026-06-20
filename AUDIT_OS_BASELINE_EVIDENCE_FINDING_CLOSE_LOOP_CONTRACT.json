@@ -1,0 +1,32 @@
+{
+  "mission": "MISSION_005_5_AUDIT_OS_FIRST_BASELINE_EVIDENCE_FINDING_CLOSE_LOOP",
+  "system": "GXEON Audit OS",
+  "endpoints": {
+    "status": {
+      "method": "GET",
+      "path": "/api/v1/audit/baseline/status",
+      "auth": "none",
+      "mode": "read_only_sanitized",
+      "returns": ["caseConfirmed", "findingExists", "evidenceExists", "findingsCount", "evidencesCount", "readyForReports"]
+    },
+    "createBaseline": {
+      "method": "POST",
+      "path": "/api/v1/audit/baseline/first-evidence-finding",
+      "auth": "Authorization: Bearer GXEON_AUDIT_OPERATOR_TOKEN, with GXEON_AUDIT_BOOTSTRAP_TOKEN fallback only when operator token is absent",
+      "writeGuards": ["GXEON_AUDIT_WRITE_MODE=enabled", "GXEON_AUDIT_ALLOW_DB_WRITES=true"],
+      "idempotency": "reuses existing baseline rows with metadata.baseline=true and metadata.internal_case=true",
+      "successStatuses": ["CREATED", "ALREADY_EXISTS"]
+    }
+  },
+  "baselineFinding": {
+    "title": "Audit OS bootstrap concluído com provider Supabase REST",
+    "severity": "INFO",
+    "moduleKey": "supabase_database_audit",
+    "status": "OPEN"
+  },
+  "baselineEvidence": {
+    "type": "OPERATOR_NOTE",
+    "title": "Mission Control confirmou primeiro caso interno"
+  },
+  "forbiddenActions": ["create audit_clients", "create revenue events", "connector writes", "payment calls", "scraping", "external webhooks", "secret logging"]
+}
