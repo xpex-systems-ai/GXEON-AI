@@ -1,0 +1,40 @@
+{
+  "mission": "MISSION_006_1_AUDIT_OS_AUTO_RUNNER_AND_CI_STABILIZATION",
+  "autoRunner": "maybeRunAuditMission006OnStartup",
+  "trigger": "GXEON_AUDIT_AUTO_RUN_MISSION_006=true",
+  "requiredGuards": {
+    "GXEON_AUDIT_WRITE_MODE": "enabled",
+    "GXEON_AUDIT_ALLOW_DB_WRITES": "true",
+    "schemaReady": true
+  },
+  "internalStartupAuth": "environment_flag_only",
+  "publicHttpEndpointAuth": "bearer_token_required",
+  "startupDelayMsDefault": 1500,
+  "oncePerProcess": true,
+  "idempotency": {
+    "baselineFindingEvidence": "createFirstBaselineEvidenceFinding reuses the first internal baseline records",
+    "scores": "metadata.baseline=true and metadata.score_key=gxeon_internal_first_cycle_score per module_key",
+    "report": "metadata.baseline=true and metadata.report_key=gxeon_internal_first_cycle"
+  },
+  "allowedWrites": [
+    "baseline finding",
+    "baseline evidence",
+    "baseline scores",
+    "internal report"
+  ],
+  "forbiddenWrites": [
+    "client",
+    "revenue",
+    "payment",
+    "checkout",
+    "invoice",
+    "external webhook",
+    "connector run"
+  ],
+  "postSuccessRecommendation": [
+    "Set GXEON_AUDIT_AUTO_RUN_MISSION_006=false",
+    "Set GXEON_AUDIT_WRITE_MODE=preview_only",
+    "Set GXEON_AUDIT_ALLOW_DB_WRITES=false",
+    "Rotate or remove GXEON_AUDIT_MISSION_RUNNER_TOKEN if used"
+  ]
+}

@@ -310,6 +310,124 @@ export async function auditScoreReportCounts(caseId: string) {
   return { scoresCount: scores.length, reportsCount: reports.length };
 }
 
+export type Mission006AutoRunStatus = {
+  autoRunEnabled: boolean;
+  lastRunStatus: string;
+  lastRunAt: string | null;
+  caseId: string | null;
+  findingId: string | null;
+  evidenceId: string | null;
+  scoreCount: number;
+  reportId: string | null;
+  readyForProposal: boolean;
+  revenueConfirmed: 0;
+  fakeClientCreated: false;
+  fakeRevenueCreated: false;
+  connectorWrites: false;
+  nextSafeAction?: string;
+};
+
+let autoRunStarted = false;
+let autoRunStatus: Mission006AutoRunStatus = {
+  autoRunEnabled: process.env.GXEON_AUDIT_AUTO_RUN_MISSION_006 === "true",
+  lastRunStatus: "NOT_RUN",
+  lastRunAt: null,
+  caseId: null,
+  findingId: null,
+  evidenceId: null,
+  scoreCount: 0,
+  reportId: null,
+  readyForProposal: false,
+  revenueConfirmed: 0,
+  fakeClientCreated: false,
+  fakeRevenueCreated: false,
+  connectorWrites: false,
+  nextSafeAction:
+    "Set GXEON_AUDIT_AUTO_RUN_MISSION_006=true with write guards enabled to run Mission 006 once after startup.",
+};
+
+function sanitizeAutoRunStatus(
+  patch: Partial<Mission006AutoRunStatus>,
+): Mission006AutoRunStatus {
+  autoRunStatus = {
+    ...autoRunStatus,
+    ...patch,
+    autoRunEnabled: process.env.GXEON_AUDIT_AUTO_RUN_MISSION_006 === "true",
+    revenueConfirmed: 0,
+    fakeClientCreated: false,
+    fakeRevenueCreated: false,
+    connectorWrites: false,
+  };
+  return autoRunStatus;
+}
+
+export function getMission006AutoRunStatus(): Mission006AutoRunStatus {
+  return sanitizeAutoRunStatus({});
+}
+
+export async function maybeRunAuditMission006OnStartup(delayMs = 1500) {
+  if (autoRunStarted) return getMission006AutoRunStatus();
+  autoRunStarted = true;
+  if (process.env.GXEON_AUDIT_AUTO_RUN_MISSION_006 !== "true") {
+    return sanitizeAutoRunStatus({
+      lastRunStatus: "SKIPPED_ENV_FLAG_DISABLED",
+      nextSafeAction:
+        "Set GXEON_AUDIT_AUTO_RUN_MISSION_006=true only during the approved Mission 006 write window.",
+    });
+  }
+  sanitizeAutoRunStatus({
+    lastRunStatus: "SCHEDULED",
+    nextSafeAction: "Waiting for startup stabilization delay.",
+  });
+  await new Promise((resolve) => setTimeout(resolve, Math.max(0, delayMs)));
+  if (
+    getAuditWriteMode() !== "enabled" ||
+    process.env.GXEON_AUDIT_ALLOW_DB_WRITES !== "true"
+  ) {
+    return sanitizeAutoRunStatus({
+      lastRunStatus: "BLOCKED_WRITES_DISABLED",
+      lastRunAt: new Date().toISOString(),
+      nextSafeAction:
+        "Enable GXEON_AUDIT_WRITE_MODE=enabled and GXEON_AUDIT_ALLOW_DB_WRITES=true only for the approved auto-run window.",
+    });
+  }
+  const schema = await getAuditSchemaDiagnostics();
+  if (!schema.schemaReady) {
+    return sanitizeAutoRunStatus({
+      lastRunStatus: "BLOCKED_SCHEMA_NOT_READY",
+      lastRunAt: new Date().toISOString(),
+      nextSafeAction:
+        "Confirm active provider schemaReady=true before enabling the auto-run flag.",
+    });
+  }
+  try {
+    const result = await runBaselineScoreReportMission();
+    const payload = result.payload as any;
+    return sanitizeAutoRunStatus({
+      lastRunStatus: payload?.status ?? (payload?.ok ? "COMPLETED" : "BLOCKED"),
+      lastRunAt: new Date().toISOString(),
+      caseId: payload?.caseId ?? null,
+      findingId: payload?.findingId ?? null,
+      evidenceId: payload?.evidenceId ?? null,
+      scoreCount: Array.isArray(payload?.scoreIds)
+        ? payload.scoreIds.length
+        : (payload?.counts?.scoresCount ?? 0),
+      reportId: payload?.reportId ?? null,
+      readyForProposal: Boolean(payload?.reportId),
+      nextSafeAction: payload?.reportId
+        ? "Set GXEON_AUDIT_AUTO_RUN_MISSION_006=false, return writes to preview_only/false, then proceed to MISSION_007 Proposal + Offer."
+        : "Review sanitized Mission 006 status before retrying.",
+    });
+  } catch {
+    return sanitizeAutoRunStatus({
+      lastRunStatus: "BLOCKED_SAFE_FAILURE",
+      lastRunAt: new Date().toISOString(),
+      nextSafeAction:
+        "Review server health and sanitized diagnostics; no secrets were exposed.",
+    });
+  }
+}
+
 export async function runBaselineScoreReportMission() {
   const readiness = await validateAuditCaseWriteReadiness();
   if (!readiness.ok)
