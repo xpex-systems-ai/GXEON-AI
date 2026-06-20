@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { auditCaseIntakeRequestSchema, type AuditCaseIntakeRequest } from "@workspace/api-zod";
 import { auditAssets, auditCases, auditClients, auditModuleCatalog, auditOperatorNotes, getDb, isDatabaseConfigured } from "@workspace/db";
 
@@ -63,11 +63,19 @@ export async function validateAuditCaseWriteReadiness() {
   if (writeMode !== "enabled" || process.env.GXEON_AUDIT_ALLOW_DB_WRITES !== "true") return { ok: false as const, status: 409, code: "WRITE_DISABLED", message: "Audit writes are disabled by feature flags." };
   if (!isDatabaseConfigured()) return { ok: false as const, status: 503, code: "DATABASE_NOT_CONFIGURED", message: "DATABASE_URL is not configured in the backend environment." };
   try {
-    await getDb().execute(sql`select 1 from audit_cases limit 1`);
+    await validateAuditSchemaReadiness();
     return { ok: true as const };
   } catch {
     return { ok: false as const, status: 503, code: "AUDIT_SCHEMA_NOT_READY", message: "Audit schema is not accessible; no write was attempted." };
   }
+}
+
+export async function validateAuditSchemaReadiness() {
+  const db = getDb();
+  await db.execute(sql`select 1 from audit_assets limit 1`);
+  await db.execute(sql`select 1 from audit_cases limit 1`);
+  await db.execute(sql`select 1 from audit_operator_notes limit 1`);
+  return { ok: true as const };
 }
 
 export async function createAuditCase(body: unknown) {
@@ -80,6 +88,85 @@ export async function createAuditCase(body: unknown) {
   const caseRows = await db.insert(auditCases).values({ clientId: clientRows[0]?.id, assetId: assetRows[0]?.id, title: preview.caseTitle, status: "DRAFT", priority: normalizePriority(preview.intake.priority), metadata: { auditGoal: preview.intake.auditGoal, source: preview.intake.source, expectedDelivery: preview.intake.expectedDelivery, commercialIntent: preview.intake.commercialIntent ?? "none", selectedModules: preview.intake.selectedModules } }).returning({ id: auditCases.id });
   if (preview.intake.operatorNotes) await db.insert(auditOperatorNotes).values({ caseId: caseRows[0]?.id, note: preview.intake.operatorNotes, operatorReference: "internal_operator", metadata: { redactionRequired: false } });
   return { status: 201, payload: { system: "GXEON Audit OS", ok: true, code: "AUDIT_CASE_CREATED", message: "Audit case saved with guarded write flags enabled.", caseId: caseRows[0]?.id, preview } };
+}
+
+const firstInternalAuditCaseOperatorNotes = "Primeiro caso interno oficial do Audit OS. Não contém secrets. Não representa cliente externo. Não representa receita.";
+
+const firstInternalAuditCasePayload: AuditCaseIntakeRequest = {
+  assetName: "GXEON-AI Repository",
+  assetUrl: "https://github.com/xpex-systems-ai/GXEON-AI",
+  assetType: "github_repository",
+  auditGoal: "Auditar o próprio repositório GXEON-AI como primeiro caso interno do Audit OS, verificando estrutura, módulos, schema, deploy readiness e segurança operacional.",
+  selectedModules: ["github_repository_audit", "codebase_audit", "supabase_database_audit", "deployment_audit", "api_backend_audit", "ai_automation_audit"],
+  priority: "high",
+  source: "operator_manual",
+  operatorNotes: firstInternalAuditCaseOperatorNotes,
+};
+
+function firstCaseResponse(created: boolean, status: "CREATED" | "ALREADY_EXISTS" | "BLOCKED", caseId: string | null, extra: Record<string, unknown> = {}) {
+  return {
+    system: "GXEON Audit OS",
+    ok: status !== "BLOCKED",
+    created,
+    status,
+    caseId,
+    revenueConfirmed: 0,
+    fakeClientCreated: false,
+    connectorWrites: false,
+    safeMode: true,
+    ...extra,
+  };
+}
+
+export async function bootstrapFirstInternalAuditCase() {
+  const readiness = await validateAuditCaseWriteReadiness();
+  if (!readiness.ok) return { status: readiness.status, payload: firstCaseResponse(false, "BLOCKED", null, { code: readiness.code, message: readiness.message }) };
+
+  const db = getDb();
+  const existing = await db
+    .select({ id: auditCases.id, assetId: auditCases.assetId })
+    .from(auditCases)
+    .leftJoin(auditAssets, eq(auditCases.assetId, auditAssets.id))
+    .where(and(eq(auditAssets.referenceUrl, firstInternalAuditCasePayload.assetUrl), sql`${auditCases.metadata}->>'source' = ${firstInternalAuditCasePayload.source}`))
+    .limit(1);
+
+  if (existing[0]?.id) {
+    return { status: 200, payload: firstCaseResponse(false, "ALREADY_EXISTS", existing[0].id, { assetId: existing[0].assetId }) };
+  }
+
+  const preview = buildAuditCasePreview(firstInternalAuditCasePayload);
+  const assetRows = await db.insert(auditAssets).values({
+    type: toDbAssetType(preview.intake.assetType),
+    label: preview.intake.assetName,
+    referenceUrl: preview.intake.assetUrl,
+    metadata: {
+      internal_case: true,
+      bootstrap_source: "railway_protected_endpoint",
+      tags: preview.intake.tags ?? [],
+      selectedModules: preview.intake.selectedModules,
+      fakeClientCreated: false,
+    },
+  }).returning({ id: auditAssets.id });
+  const caseRows = await db.insert(auditCases).values({
+    assetId: assetRows[0]?.id,
+    title: preview.caseTitle,
+    status: "DRAFT",
+    priority: normalizePriority(preview.intake.priority),
+    metadata: {
+      auditGoal: preview.intake.auditGoal,
+      source: preview.intake.source,
+      selectedModules: preview.intake.selectedModules,
+      internal_case: true,
+      bootstrap_source: "railway_protected_endpoint",
+      revenueConfirmed: 0,
+      fakeClientCreated: false,
+      connectorWrites: false,
+    },
+  }).returning({ id: auditCases.id });
+  const caseId = caseRows[0]?.id;
+  if (!caseId) throw new Error("AUDIT_BOOTSTRAP_CASE_ID_MISSING");
+  await db.insert(auditOperatorNotes).values({ caseId, note: preview.intake.operatorNotes ?? firstInternalAuditCaseOperatorNotes, operatorReference: "internal_operator", metadata: { bootstrap_source: "railway_protected_endpoint", redactionRequired: false } });
+  return { status: 201, payload: firstCaseResponse(true, "CREATED", caseId, { assetId: assetRows[0]?.id }) };
 }
 
 export async function listAuditCases() {
