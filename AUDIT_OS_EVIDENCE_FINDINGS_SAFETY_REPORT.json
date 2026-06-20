@@ -1,0 +1,19 @@
+{
+  "status": "READY_FOR_FIRST_EVIDENCE_FINDING",
+  "manualFirst": true,
+  "previewFirst": true,
+  "noScraping": true,
+  "noPayment": true,
+  "noFakeClient": true,
+  "noFakeRevenue": true,
+  "noConnectorWrites": true,
+  "noExternalWebhooks": true,
+  "noSecretStorage": true,
+  "tokenPersistence": "in-memory only in Mission Control UI",
+  "secretRejection": ["title", "summary", "recommendation", "referenceUrl", "redactedText", "metadata"],
+  "postSuccessChecklist": [
+    "Set GXEON_AUDIT_WRITE_MODE=preview_only",
+    "Set GXEON_AUDIT_ALLOW_DB_WRITES=false",
+    "Rotate or remove temporary operator token"
+  ]
+}
