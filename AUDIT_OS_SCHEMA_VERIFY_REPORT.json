@@ -1,0 +1,56 @@
+{
+  "status": "BLOCKED",
+  "generatedAt": "2026-06-20T14:20:33.010Z",
+  "databaseUrlPresent": false,
+  "databaseUrlMasked": null,
+  "projectRef": "zphpeynirstwzrzgvbct",
+  "schemaMutationExecuted": false,
+  "queriesRun": [],
+  "queriesNotRun": [
+    "list_audit_tables",
+    "list_audit_enums",
+    "audit_case_count",
+    "audit_revenue_count_and_sum"
+  ],
+  "expectedTables": [
+    "audit_assets",
+    "audit_cases",
+    "audit_checklists",
+    "audit_clients",
+    "audit_connector_runs",
+    "audit_evidences",
+    "audit_findings",
+    "audit_modules",
+    "audit_operator_notes",
+    "audit_proposals",
+    "audit_reports",
+    "audit_revenue_events",
+    "audit_scores",
+    "audit_tasks"
+  ],
+  "auditTablesFound": [],
+  "expectedEnums": [
+    "audit_asset_type",
+    "audit_case_status",
+    "audit_connector_status",
+    "audit_evidence_type",
+    "audit_module_key",
+    "audit_proposal_status",
+    "audit_report_type",
+    "audit_revenue_status",
+    "audit_severity",
+    "audit_task_status"
+  ],
+  "auditEnumsFound": [],
+  "revenueBeforeFirstCase": null,
+  "successCriteria": {
+    "allExpectedAuditTablesFound": false,
+    "allExpectedAuditEnumsFound": false,
+    "querySucceedsWithoutExposingSecrets": false,
+    "revenueEventTotalRemainsZeroBeforeFirstCase": null,
+    "noSchemaMutationExecuted": true
+  },
+  "blockers": [
+    "DATABASE_URL is not configured in this execution environment; real Supabase SELECT validation cannot be performed without exposing or inventing credentials."
+  ]
+}
