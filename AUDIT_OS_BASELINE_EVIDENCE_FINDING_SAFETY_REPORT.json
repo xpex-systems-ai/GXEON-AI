@@ -1,0 +1,19 @@
+{
+  "status": "READY_FOR_OPERATOR_BASELINE_CLICK",
+  "first_case_confirmed": true,
+  "baseline_endpoint_added": true,
+  "baseline_status_endpoint_added": true,
+  "frontend_baseline_button_added": true,
+  "token_persistence": "memory_only",
+  "idempotent": true,
+  "findings_count_after_operator_action": "unknown_until_operator_click",
+  "evidences_count_after_operator_action": "unknown_until_operator_click",
+  "fake_client_created": false,
+  "fake_revenue_created": false,
+  "connector_writes": false,
+  "payment_calls": false,
+  "scraping_performed": false,
+  "secrets_logged": false,
+  "next_operator_action": "Open Audit OS Mission Control, paste GXEON_AUDIT_OPERATOR_TOKEN, click Criar baseline seguro, then close write window.",
+  "next_recommended_mission": "MISSION_006_AUDIT_OS_REPORTS_AND_SCORE"
+}

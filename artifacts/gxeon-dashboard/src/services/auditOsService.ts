@@ -30,4 +30,6 @@ export const auditOsService = {
   createEvidenceV1: (body: unknown, token: string) => request("/api/v1/audit/evidences", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify(body) }),
   caseFindingsV1: (caseId: string) => request(`/api/v1/audit/cases/${caseId}/findings`),
   caseEvidencesV1: (caseId: string) => request(`/api/v1/audit/cases/${caseId}/evidences`),
+  baselineStatusV1: () => request("/api/v1/audit/baseline/status"),
+  createBaselineEvidenceFindingV1: (token: string) => request("/api/v1/audit/baseline/first-evidence-finding", { method: "POST", headers: { Authorization: `Bearer ${token}` } }),
 };

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { auditModuleCatalog } from "@workspace/db";
 import { bootstrapFirstInternalAuditCase, buildAuditCasePreview, createAuditCase, getAuditCaseById, getAuditCaseTimeline, getAuditSchemaDiagnostics, getAuditWriteMode, listAuditCases } from "../services/auditCaseService";
-import { authorizeAuditOperator, buildEvidencePreview, buildFindingPreview, createEvidence, createFinding, getFinding, listEvidencesByCase, listEvidencesByFinding, listFindingsByCase } from "../services/auditEvidenceFindingService";
+import { authorizeAuditOperator, buildEvidencePreview, buildFindingPreview, createEvidence, createFinding, createFirstBaselineEvidenceFinding, getBaselineStatus, getFinding, listEvidencesByCase, listEvidencesByFinding, listFindingsByCase, auditEvidenceFindingCounts } from "../services/auditEvidenceFindingService";
 
 const router = Router();
 const databaseConfigured = () => Boolean(process.env["DATABASE_URL"]);
@@ -111,6 +111,8 @@ router.get("/v1/audit/cases", noStore, async (_req, res) => { res.json({ system:
 router.get("/v1/audit/cases/:caseId", noStore, async (req, res) => { const item = await getAuditCaseById(req.params.caseId); res.status(item ? 200 : 404).json({ system: "GXEON Audit OS", degradedSafe: !item, item }); });
 router.get("/v1/audit/cases/:caseId/timeline", noStore, (req, res) => res.json({ system: "GXEON Audit OS", ...getAuditCaseTimeline(req.params.caseId) }));
 router.get("/v1/audit/findings/summary", noStore, (_req, res) => res.json(emptySummary("audit_findings")));
+router.get("/v1/audit/baseline/status", noStore, async (_req, res) => { try { res.json(await getBaselineStatus()); } catch { res.status(503).json({ system: "GXEON Audit OS", ok: false, sanitized: true, code: "BASELINE_STATUS_UNAVAILABLE", message: "Rode diagnóstico primeiro.", caseConfirmed: false, findingExists: false, evidenceExists: false, findingsCount: 0, evidencesCount: 0, readyForReports: false }); } });
+router.post("/v1/audit/baseline/first-evidence-finding", noStore, async (req, res) => { const auth = authorizeAuditOperator(req.get("authorization")); if (!auth.ok) { res.status(auth.status).json({ system: "GXEON Audit OS", ok: false, status: "BLOCKED", code: auth.code, message: auth.message }); return; } try { const result = await createFirstBaselineEvidenceFinding(); res.status(result.status).json({ system: "GXEON Audit OS", ...result.payload }); } catch { res.status(503).json({ system: "GXEON Audit OS", ok: false, status: "BLOCKED", code: "BASELINE_CREATE_FAILED", message: "Rode diagnóstico primeiro." }); } });
 
 router.post("/v1/audit/findings/preview", noStore, (req, res) => {
   try { res.json({ system: "GXEON Audit OS", ok: true, preview: buildFindingPreview(req.body) }); }
@@ -152,7 +154,11 @@ router.get("/v1/audit/connectors/status", noStore, (_req, res) => {
 
 router.get("/v1/audit/mission-control", noStore, async (_req, res) => {
   const cases = { ...emptySummary("audit_cases"), ...(await listAuditCases()) };
-  const findings = emptySummary("audit_findings");
+  const firstCaseId = cases.items?.[0]?.id;
+  const counts = firstCaseId ? await auditEvidenceFindingCounts(firstCaseId).catch(() => ({ findingsCount: 0, evidencesCount: 0, provider: null })) : { findingsCount: 0, evidencesCount: 0, provider: null };
+  const baseline = await getBaselineStatus().catch(() => null);
+  const findings = { ...emptySummary("audit_findings"), count: counts.findingsCount, provider: counts.provider, nextSafeAction: counts.findingsCount > 0 && counts.evidencesCount > 0 ? "Avançar para MISSION_006 Reports + Score" : "Criar baseline seguro." };
+  const evidence = { ...emptySummary("audit_evidences"), count: counts.evidencesCount, provider: counts.provider, nextSafeAction: counts.findingsCount > 0 && counts.evidencesCount > 0 ? "Avançar para MISSION_006 Reports + Score" : "Criar baseline seguro." };
   const reports = emptySummary("audit_reports");
   const connectors = { status: "read-only", connectors: connectorCatalog };
   res.json({
@@ -162,7 +168,8 @@ router.get("/v1/audit/mission-control", noStore, async (_req, res) => {
     health: healthPayload(),
     modules: { count: auditModuleCatalog.length, items: auditModuleCatalog },
     cases,
-    evidence: emptySummary("audit_evidences"),
+    evidence,
+    baseline,
     scores: emptySummary("audit_scores"),
     findings,
     reports,
@@ -170,7 +177,7 @@ router.get("/v1/audit/mission-control", noStore, async (_req, res) => {
     proposals: emptySummary("audit_proposals"),
     revenue: { ...emptySummary("audit_revenue_events"), totalEstimatedBrl: 0, totalConfirmedBrl: 0, providerVerifiedBrl: 0, note: "No revenue is claimed without real accepted/paid events." },
     connectors,
-    operatorReview: { required: true, status: getAuditWriteMode() === "enabled" ? "intake-write-guard-ready" : "preview-only", nextSafeAction: getAuditWriteMode() === "enabled" ? "Criar primeiro Audit Case after schema readiness check." : "Criar preview de Audit Case." },
+    operatorReview: { required: true, status: getAuditWriteMode() === "enabled" ? "intake-write-guard-ready" : "preview-only", nextSafeAction: baseline?.readyForReports ? "Avançar para MISSION_006 Reports + Score" : getAuditWriteMode() === "enabled" ? "Criar baseline seguro após schema readiness check." : "Criar preview de Audit Case." },
     intakeReadiness: { previewAvailable: true, writeMode: getAuditWriteMode(), allowDbWrites: process.env.GXEON_AUDIT_ALLOW_DB_WRITES === "true", databaseConfigured: databaseConfigured(), schemaRegistered: true },
   });
 });

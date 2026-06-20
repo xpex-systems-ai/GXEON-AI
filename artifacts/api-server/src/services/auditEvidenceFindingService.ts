@@ -1,5 +1,5 @@
-import { eq } from "drizzle-orm";
-import { auditCases, auditEvidences, auditFindings, getDb, isDatabaseConfigured } from "@workspace/db";
+import { and, eq, sql } from "drizzle-orm";
+import { auditAssets, auditCases, auditEvidences, auditFindings, getDb, isDatabaseConfigured } from "@workspace/db";
 import { detectPotentialSecrets, getActiveAuditProviderDiagnostics, getAuditWriteMode, supabaseFetch, validateAuditCaseWriteReadiness } from "./auditCaseService";
 
 const severities = ["INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"] as const;
@@ -37,3 +37,95 @@ export async function getFinding(findingId: string) { const diagnostics = await 
 export async function listEvidencesByCase(caseId: string) { const diagnostics = await getActiveAuditProviderDiagnostics(); if (diagnostics.activeProvider === "supabase_rest") return { provider: "supabase_rest", items: await (await supabaseFetch(`audit_evidences?select=*&case_id=eq.${encodeURIComponent(caseId)}&order=created_at.desc`)).json() }; if (!isDatabaseConfigured()) return { provider: null, items: [] }; return { provider: "postgres", items: await getDb().select().from(auditEvidences).where(eq(auditEvidences.caseId, caseId)).limit(100) }; }
 export async function listEvidencesByFinding(findingId: string) { const diagnostics = await getActiveAuditProviderDiagnostics(); if (diagnostics.activeProvider === "supabase_rest") return { provider: "supabase_rest", items: await (await supabaseFetch(`audit_evidences?select=*&finding_id=eq.${encodeURIComponent(findingId)}&order=created_at.desc`)).json() }; if (!isDatabaseConfigured()) return { provider: null, items: [] }; return { provider: "postgres", items: await getDb().select().from(auditEvidences).where(eq(auditEvidences.findingId, findingId)).limit(100) }; }
 export async function auditEvidenceFindingCounts(caseId: string) { const [findings, evidences] = await Promise.all([listFindingsByCase(caseId), listEvidencesByCase(caseId)]); return { findingsCount: findings.items.length, evidencesCount: evidences.items.length, provider: findings.provider ?? evidences.provider }; }
+
+
+const firstInternalAuditCaseReferenceUrl = "https://github.com/xpex-systems-ai/GXEON-AI";
+const baselineFinding = {
+  title: "Audit OS bootstrap concluído com provider Supabase REST",
+  severity: "INFO" as const,
+  moduleKey: "supabase_database_audit",
+  summary: "Primeiro caso interno confirmado no Mission Control com provider Supabase REST, sem cliente falso, sem receita falsa e sem escrita em conectores externos.",
+  recommendation: "Manter fluxo manual-first, registrar evidências redigidas e avançar para score e relatório somente após revisão do operador.",
+  status: "OPEN",
+  metadata: { baseline: true, internal_case: true, source: "operator_manual", monetization_safe: true, fakeClientCreated: false, fakeRevenueCreated: false, connectorWrites: false },
+};
+const baselineEvidence = {
+  type: "OPERATOR_NOTE" as const,
+  title: "Mission Control confirmou primeiro caso interno",
+  redactedText: "Print/operator note: Mission Control mostra 1 caso interno GXEON-AI confirmado, provider Supabase REST pronto e receita confirmada R$0.",
+  metadata: { baseline: true, internal_case: true, referenceOnly: true, noScraping: true, noPayment: true, noConnectorWrite: true },
+};
+
+type InternalCaseRow = { id: string; asset_id?: string | null; assetId?: string | null; metadata?: Record<string, unknown> | null; title?: string | null };
+function isBaselineRow(row: any) { return row?.metadata?.baseline === true && row?.metadata?.internal_case === true; }
+function safeCounts(findings: any[], evidences: any[]) { return { findingsCount: findings.length, evidencesCount: evidences.length, findingExists: findings.length > 0, evidenceExists: evidences.length > 0, readyForReports: findings.length > 0 && evidences.length > 0 }; }
+
+export async function findFirstInternalAuditCase() {
+  const diagnostics = await getActiveAuditProviderDiagnostics();
+  if (diagnostics.activeProvider === "supabase_rest") {
+    const assets = await (await supabaseFetch(`audit_assets?select=id&reference_url=eq.${encodeURIComponent(firstInternalAuditCaseReferenceUrl)}&limit=1`)).json() as Array<{ id: string }>;
+    if (assets[0]?.id) {
+      const cases = await (await supabaseFetch(`audit_cases?select=id,asset_id,metadata,title&asset_id=eq.${assets[0].id}&order=created_at.asc&limit=1`)).json() as InternalCaseRow[];
+      if (cases[0]?.id) return { provider: "supabase_rest" as const, caseId: cases[0].id, case: cases[0] };
+    }
+    const cases = await (await supabaseFetch("audit_cases?select=id,asset_id,metadata,title&order=created_at.asc&limit=50")).json() as InternalCaseRow[];
+    const found = cases.find((item) => item.metadata?.internal_case === true || item.metadata?.source === "operator_manual");
+    return found?.id ? { provider: "supabase_rest" as const, caseId: found.id, case: found } : null;
+  }
+  if (!isDatabaseConfigured()) return null;
+  const byAsset = await getDb().select({ id: auditCases.id, assetId: auditCases.assetId, metadata: auditCases.metadata, title: auditCases.title }).from(auditCases).leftJoin(auditAssets, eq(auditCases.assetId, auditAssets.id)).where(eq(auditAssets.referenceUrl, firstInternalAuditCaseReferenceUrl)).limit(1);
+  if (byAsset[0]?.id) return { provider: "postgres" as const, caseId: byAsset[0].id, case: byAsset[0] };
+  const byMetadata = await getDb().select({ id: auditCases.id, assetId: auditCases.assetId, metadata: auditCases.metadata, title: auditCases.title }).from(auditCases).where(sql`${auditCases.metadata}->>'internal_case' = 'true' or ${auditCases.metadata}->>'source' = 'operator_manual'`).limit(1);
+  return byMetadata[0]?.id ? { provider: "postgres" as const, caseId: byMetadata[0].id, case: byMetadata[0] } : null;
+}
+
+async function baselineRows(caseId: string) {
+  const diagnostics = await getActiveAuditProviderDiagnostics();
+  if (diagnostics.activeProvider === "supabase_rest") {
+    const [findings, evidences] = await Promise.all([
+      (await supabaseFetch(`audit_findings?select=*&case_id=eq.${encodeURIComponent(caseId)}&order=created_at.asc&limit=100`)).json() as Promise<any[]>,
+      (await supabaseFetch(`audit_evidences?select=*&case_id=eq.${encodeURIComponent(caseId)}&order=created_at.asc&limit=100`)).json() as Promise<any[]>,
+    ]);
+    return { provider: "supabase_rest" as const, findings: findings.filter(isBaselineRow), evidences: evidences.filter(isBaselineRow) };
+  }
+  if (!isDatabaseConfigured()) return { provider: null, findings: [], evidences: [] };
+  const [findings, evidences] = await Promise.all([
+    getDb().select().from(auditFindings).where(and(eq(auditFindings.caseId, caseId), sql`${auditFindings.metadata}->>'baseline' = 'true'`, sql`${auditFindings.metadata}->>'internal_case' = 'true'`)).limit(100),
+    getDb().select().from(auditEvidences).where(and(eq(auditEvidences.caseId, caseId), sql`${auditEvidences.metadata}->>'baseline' = 'true'`, sql`${auditEvidences.metadata}->>'internal_case' = 'true'`)).limit(100),
+  ]);
+  return { provider: "postgres" as const, findings, evidences };
+}
+
+export async function getBaselineStatus() {
+  const firstCase = await findFirstInternalAuditCase();
+  if (!firstCase) return { system: "GXEON Audit OS", ok: true, sanitized: true, caseConfirmed: false, caseId: null, findingExists: false, evidenceExists: false, findingsCount: 0, evidencesCount: 0, readyForReports: false, revenueConfirmed: 0, fakeClientCreated: false, fakeRevenueCreated: false, connectorWrites: false, nextSafeAction: "Criar primeiro Audit Case interno antes da MISSION_006." };
+  const rows = await baselineRows(firstCase.caseId);
+  return { system: "GXEON Audit OS", ok: true, sanitized: true, provider: firstCase.provider, caseConfirmed: true, caseId: firstCase.caseId, ...safeCounts(rows.findings, rows.evidences), revenueConfirmed: 0, fakeClientCreated: false, fakeRevenueCreated: false, connectorWrites: false, nextSafeAction: rows.findings.length > 0 && rows.evidences.length > 0 ? "Avançar para MISSION_006 Reports + Score" : "Criar baseline seguro." };
+}
+
+export async function createFirstBaselineEvidenceFinding() {
+  const readiness = await validateAuditCaseWriteReadiness();
+  if (!readiness.ok) return { status: readiness.status, payload: { ok: false, status: "BLOCKED", code: readiness.code, message: readiness.message } };
+  const firstCase = await findFirstInternalAuditCase();
+  if (!firstCase) return { status: 404, payload: { ok: false, status: "BLOCKED", code: "FIRST_INTERNAL_CASE_NOT_FOUND", message: "First internal GXEON-AI Audit Case was not found. Do not create a new case here." } };
+  const existing = await baselineRows(firstCase.caseId);
+  let findingId = existing.findings[0]?.id;
+  let evidenceId = existing.evidences[0]?.id;
+  let findingCreated = false;
+  let evidenceCreated = false;
+  if (readiness.provider === "supabase_rest") {
+    if (!findingId) {
+      const rows = await (await supabaseFetch("audit_findings", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ case_id: firstCase.caseId, module_key: baselineFinding.moduleKey, title: baselineFinding.title, severity: baselineFinding.severity, summary: baselineFinding.summary, recommendation: baselineFinding.recommendation, status: baselineFinding.status, metadata: baselineFinding.metadata }) })).json() as Array<{ id: string }>;
+      findingId = rows[0]?.id; findingCreated = Boolean(findingId);
+    }
+    if (!evidenceId) {
+      const rows = await (await supabaseFetch("audit_evidences", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ case_id: firstCase.caseId, finding_id: findingId, type: baselineEvidence.type, title: baselineEvidence.title, redacted_text: baselineEvidence.redactedText, metadata: baselineEvidence.metadata }) })).json() as Array<{ id: string }>;
+      evidenceId = rows[0]?.id; evidenceCreated = Boolean(evidenceId);
+    }
+  } else {
+    const db = getDb();
+    if (!findingId) { const rows = await db.insert(auditFindings).values({ caseId: firstCase.caseId, moduleKey: baselineFinding.moduleKey as any, title: baselineFinding.title, severity: baselineFinding.severity, summary: baselineFinding.summary, recommendation: baselineFinding.recommendation, status: baselineFinding.status, metadata: baselineFinding.metadata }).returning({ id: auditFindings.id }); findingId = rows[0]?.id; findingCreated = Boolean(findingId); }
+    if (!evidenceId) { const rows = await db.insert(auditEvidences).values({ caseId: firstCase.caseId, findingId, type: baselineEvidence.type, title: baselineEvidence.title, redactedText: baselineEvidence.redactedText, metadata: baselineEvidence.metadata }).returning({ id: auditEvidences.id }); evidenceId = rows[0]?.id; evidenceCreated = Boolean(evidenceId); }
+  }
+  return { status: findingCreated || evidenceCreated ? 201 : 200, payload: { ok: true, status: findingCreated || evidenceCreated ? "CREATED" : "ALREADY_EXISTS", caseId: firstCase.caseId, findingId, evidenceId, findingCreated, evidenceCreated, revenueConfirmed: 0, fakeClientCreated: false, fakeRevenueCreated: false, connectorWrites: false, paymentCalls: false, scrapingPerformed: false, secretsLogged: false, nextSafeAction: "Avançar para MISSION_006 Reports + Score" } };
+}
