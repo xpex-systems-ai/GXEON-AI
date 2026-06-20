@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { auditModuleCatalog } from "@workspace/db";
-import { bootstrapFirstInternalAuditCase, buildAuditCasePreview, createAuditCase, getAuditCaseById, getAuditCaseTimeline, getAuditWriteMode, listAuditCases } from "../services/auditCaseService";
+import { bootstrapFirstInternalAuditCase, buildAuditCasePreview, createAuditCase, getAuditCaseById, getAuditCaseTimeline, getAuditSchemaDiagnostics, getAuditWriteMode, listAuditCases } from "../services/auditCaseService";
 
 const router = Router();
 const databaseConfigured = () => Boolean(process.env["DATABASE_URL"]);
@@ -74,6 +74,11 @@ router.get("/v1/audit/modules", noStore, (_req, res) => {
 
 router.get("/v1/audit/schema-map", noStore, (_req, res) => {
   res.json(schemaMap);
+});
+
+router.get("/v1/audit/schema-diagnostics", noStore, async (_req, res) => {
+  const diagnostics = await getAuditSchemaDiagnostics();
+  res.status(diagnostics.databaseConfigured ? 200 : 503).json(diagnostics);
 });
 
 router.get("/v1/audit/cases/summary", noStore, (_req, res) => res.json({ ...emptySummary("audit_cases"), writeMode: getAuditWriteMode(), nextSafeAction: getAuditWriteMode() === "enabled" ? "Create first Audit Case only with GXEON_AUDIT_ALLOW_DB_WRITES=true and schema ready." : "Create preview of first Audit Case; writes are disabled." }));

@@ -1,0 +1,26 @@
+{
+  "route": "GET /api/v1/audit/schema-diagnostics",
+  "method": "GET",
+  "auth": "none; response is sanitized and read-only",
+  "writes": false,
+  "externalServices": false,
+  "successStatus": 200,
+  "notConfiguredStatus": 503,
+  "responseFields": {
+    "system": "GXEON Audit OS",
+    "readOnly": true,
+    "safeMode": true,
+    "databaseConfigured": "boolean",
+    "expectedTables": ["audit_assets", "audit_cases", "audit_operator_notes"],
+    "foundTables": "string[]",
+    "missingTables": "string[]",
+    "foundEnums": "string[]",
+    "schemaReady": "boolean",
+    "currentSchema": "string | null",
+    "currentDatabase": "string | null",
+    "projectRefHintMasked": "string | null",
+    "code": "AUDIT_TABLES_MISSING | DATABASE_CONNECTION_FAILED | PUBLIC_SCHEMA_NOT_VISIBLE | AUDIT_SCHEMA_NOT_READY | null",
+    "error": "{ name?: string, code?: string, messageClass?: string } | null"
+  },
+  "forbiddenFields": ["DATABASE_URL", "password", "service_role", "GXEON_AUDIT_BOOTSTRAP_TOKEN", "rawStack", "connectionString"]
+}
