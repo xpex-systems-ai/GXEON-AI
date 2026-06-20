@@ -1,0 +1,37 @@
+{
+  "mission": "MISSION_004_11_OPERATOR_BOOTSTRAP_RETRY_AFTER_DATABASE_URL_FIX",
+  "checkedAt": "2026-06-20T16:49:14Z",
+  "readModels": {
+    "cases": {
+      "source": "GET https://gxeon-api-server-production.up.railway.app/api/v1/audit/cases",
+      "result": {
+        "system": "GXEON Audit OS",
+        "degradedSafe": true,
+        "databaseConfigured": true,
+        "count": 0,
+        "items": [],
+        "nextSafeAction": "Audit schema not ready; validate schema before enabling writes."
+      }
+    },
+    "missionControl": {
+      "source": "GET https://gxeon-api-server-production.up.railway.app/api/v1/audit/mission-control",
+      "resultSummary": {
+        "generatedAt": "2026-06-20T16:49:14.341Z",
+        "databaseConfigured": true,
+        "readiness": "read-only-ready",
+        "casesCount": 0,
+        "revenueTotalConfirmedBrl": 0,
+        "connectorStatus": "read-only",
+        "connectorWrites": false
+      }
+    }
+  },
+  "successCriteria": {
+    "firstCaseExists": false,
+    "missionControlCaseCountAtLeastOne": false,
+    "revenueRemainsZero": true,
+    "noFakeClientExists": true,
+    "connectorWritesFalse": true
+  },
+  "status": "SCHEMA_DIAGNOSTICS_FAILED"
+}

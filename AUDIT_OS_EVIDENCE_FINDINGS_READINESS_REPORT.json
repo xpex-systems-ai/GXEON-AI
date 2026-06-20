@@ -1,0 +1,41 @@
+{
+  "mission": "MISSION_005_AUDIT_OS_EVIDENCE_AND_FINDINGS",
+  "preparedBy": "MISSION_004_11_OPERATOR_BOOTSTRAP_RETRY_AFTER_DATABASE_URL_FIX",
+  "ready": false,
+  "blocker": "MISSION_004 first case is not confirmed because schema diagnostics failed.",
+  "schemaInspected": {
+    "sourceFiles": [
+      "lib/db/src/schema/audit.ts",
+      "lib/db/drizzle/0002_audit_os_schema.sql"
+    ],
+    "tables": {
+      "audit_findings": {
+        "requiredFields": ["case_id", "title", "severity", "summary"],
+        "optionalFields": ["module_key", "recommendation", "status", "metadata", "created_at", "updated_at"],
+        "foreignKeys": ["case_id -> audit_cases.id"],
+        "indexes": ["audit_findings_case_id_idx", "audit_findings_module_key_idx", "audit_findings_severity_idx"]
+      },
+      "audit_evidences": {
+        "requiredFields": ["type", "title"],
+        "optionalFields": ["case_id", "finding_id", "reference_url", "redacted_text", "captured_at", "metadata", "created_at", "updated_at"],
+        "foreignKeys": ["case_id -> audit_cases.id", "finding_id -> audit_findings.id"],
+        "indexes": ["audit_evidences_case_id_idx", "audit_evidences_finding_id_idx", "audit_evidences_type_idx"]
+      }
+    }
+  },
+  "requiredEndpoints": [
+    "POST /api/v1/audit/findings",
+    "GET /api/v1/audit/cases/:caseId/findings",
+    "POST /api/v1/audit/evidences",
+    "GET /api/v1/audit/cases/:caseId/evidences",
+    "GET /api/v1/audit/findings/:findingId/evidences"
+  ],
+  "safety": {
+    "createEvidenceNow": false,
+    "createFindingsNow": false,
+    "scrapingAllowed": false,
+    "connectorWrites": false,
+    "fakeClientCreated": false,
+    "fakeRevenueCreated": false
+  }
+}

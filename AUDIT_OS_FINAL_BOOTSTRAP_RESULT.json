@@ -1,0 +1,17 @@
+{
+  "mission": "MISSION_004_11_OPERATOR_BOOTSTRAP_RETRY_AFTER_DATABASE_URL_FIX",
+  "bootstrapAttempted": false,
+  "bootstrapStatus": "BLOCKED",
+  "reason": "Schema diagnostics returned schemaReady=false with sanitized DATABASE_ERROR/ENOTFOUND; secure bootstrap token also not available in the execution environment.",
+  "revenueConfirmed": 0,
+  "fakeClientCreated": false,
+  "connectorWrites": false,
+  "safeMode": true,
+  "commandsNotRunForSafety": [
+    "POST /api/v1/audit/bootstrap/first-case",
+    "migrations",
+    "db push",
+    "supabase db push",
+    "supabase:go-live"
+  ]
+}
