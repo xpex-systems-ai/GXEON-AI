@@ -1,0 +1,39 @@
+{
+  "mission": "MISSION_004_7_RAILWAY_DB_BOUND_FIRST_CASE_VERIFY",
+  "checkedAt": "2026-06-20T00:00:00Z",
+  "baseUrl": "https://gxeon-api-server-production.up.railway.app",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/api/v1/audit/health",
+      "attempted": true,
+      "result": "BLOCKED_NETWORK_CONNECT_TUNNEL_403",
+      "httpStatus": "000",
+      "secretPrinted": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/audit/mission-control",
+      "attempted": true,
+      "result": "BLOCKED_NETWORK_CONNECT_TUNNEL_403",
+      "httpStatus": "000",
+      "secretPrinted": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/audit/cases",
+      "attempted": true,
+      "result": "BLOCKED_NETWORK_CONNECT_TUNNEL_403",
+      "httpStatus": "000",
+      "secretPrinted": false
+    }
+  ],
+  "databaseConfiguredConfirmedByApi": false,
+  "safeModeConfirmedByApi": false,
+  "connectorWriteDisabledConfirmedByApi": false,
+  "notes": [
+    "Read-only API calls were attempted only after the local environment check.",
+    "The Codex network path returned curl error 56: CONNECT tunnel failed, response 403 before an upstream HTTP response body was received.",
+    "No POST request was executed."
+  ]
+}
