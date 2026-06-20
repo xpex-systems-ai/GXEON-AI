@@ -24,4 +24,10 @@ export const auditOsService = {
   casesV1: () => request("/api/v1/audit/cases"),
   schemaDiagnosticsV1: () => request("/api/v1/audit/schema-diagnostics"),
   bootstrapFirstCaseV1: (token: string) => request("/api/v1/audit/bootstrap/first-case", { method: "POST", headers: { Authorization: `Bearer ${token}` } }),
+  findingPreviewV1: (body: unknown) => request("/api/v1/audit/findings/preview", { method: "POST", body: JSON.stringify(body) }),
+  createFindingV1: (body: unknown, token: string) => request("/api/v1/audit/findings", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify(body) }),
+  evidencePreviewV1: (body: unknown) => request("/api/v1/audit/evidences/preview", { method: "POST", body: JSON.stringify(body) }),
+  createEvidenceV1: (body: unknown, token: string) => request("/api/v1/audit/evidences", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify(body) }),
+  caseFindingsV1: (caseId: string) => request(`/api/v1/audit/cases/${caseId}/findings`),
+  caseEvidencesV1: (caseId: string) => request(`/api/v1/audit/cases/${caseId}/evidences`),
 };

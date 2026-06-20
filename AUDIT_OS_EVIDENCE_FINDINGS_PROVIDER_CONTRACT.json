@@ -1,0 +1,25 @@
+{
+  "mission": "MISSION_005_AUDIT_OS_EVIDENCE_AND_FINDINGS",
+  "system": "GXEON Audit OS",
+  "activeProviderTarget": "supabase_rest",
+  "supportedProviders": ["supabase_rest", "postgres"],
+  "tables": ["audit_cases", "audit_findings", "audit_evidences", "audit_operator_notes"],
+  "endpoints": {
+    "findingsPreview": "POST /api/v1/audit/findings/preview",
+    "findingsCreate": "POST /api/v1/audit/findings",
+    "caseFindings": "GET /api/v1/audit/cases/:caseId/findings",
+    "findingDetail": "GET /api/v1/audit/findings/:findingId",
+    "evidencesPreview": "POST /api/v1/audit/evidences/preview",
+    "evidencesCreate": "POST /api/v1/audit/evidences",
+    "caseEvidences": "GET /api/v1/audit/cases/:caseId/evidences",
+    "findingEvidences": "GET /api/v1/audit/findings/:findingId/evidences"
+  },
+  "writeGuards": {
+    "operatorToken": "GXEON_AUDIT_OPERATOR_TOKEN with GXEON_AUDIT_BOOTSTRAP_TOKEN fallback",
+    "writeMode": "GXEON_AUDIT_WRITE_MODE=enabled",
+    "allowDbWrites": "GXEON_AUDIT_ALLOW_DB_WRITES=true"
+  },
+  "previewNoWrite": true,
+  "referenceOnlyEvidence": true,
+  "externalConnectorWrites": false
+}

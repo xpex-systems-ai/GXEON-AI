@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { auditModuleCatalog } from "@workspace/db";
 import { bootstrapFirstInternalAuditCase, buildAuditCasePreview, createAuditCase, getAuditCaseById, getAuditCaseTimeline, getAuditSchemaDiagnostics, getAuditWriteMode, listAuditCases } from "../services/auditCaseService";
+import { authorizeAuditOperator, buildEvidencePreview, buildFindingPreview, createEvidence, createFinding, getFinding, listEvidencesByCase, listEvidencesByFinding, listFindingsByCase } from "../services/auditEvidenceFindingService";
 
 const router = Router();
 const databaseConfigured = () => Boolean(process.env["DATABASE_URL"]);
@@ -110,6 +111,32 @@ router.get("/v1/audit/cases", noStore, async (_req, res) => { res.json({ system:
 router.get("/v1/audit/cases/:caseId", noStore, async (req, res) => { const item = await getAuditCaseById(req.params.caseId); res.status(item ? 200 : 404).json({ system: "GXEON Audit OS", degradedSafe: !item, item }); });
 router.get("/v1/audit/cases/:caseId/timeline", noStore, (req, res) => res.json({ system: "GXEON Audit OS", ...getAuditCaseTimeline(req.params.caseId) }));
 router.get("/v1/audit/findings/summary", noStore, (_req, res) => res.json(emptySummary("audit_findings")));
+
+router.post("/v1/audit/findings/preview", noStore, (req, res) => {
+  try { res.json({ system: "GXEON Audit OS", ok: true, preview: buildFindingPreview(req.body) }); }
+  catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, code: error.code ?? "FINDING_PREVIEW_FAILED", message: error.message }); }
+});
+router.post("/v1/audit/findings", noStore, async (req, res) => {
+  const auth = authorizeAuditOperator(req.get("authorization"));
+  if (!auth.ok) { res.status(auth.status).json({ system: "GXEON Audit OS", ok: false, code: auth.code, message: auth.message }); return; }
+  try { const result = await createFinding(req.body); res.status(result.status).json({ system: "GXEON Audit OS", ...result.payload }); }
+  catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, code: error.code ?? "AUDIT_FINDING_CREATE_FAILED", message: error.message }); }
+});
+router.post("/v1/audit/evidences/preview", noStore, (req, res) => {
+  try { res.json({ system: "GXEON Audit OS", ok: true, preview: buildEvidencePreview(req.body) }); }
+  catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, code: error.code ?? "EVIDENCE_PREVIEW_FAILED", message: error.message }); }
+});
+router.post("/v1/audit/evidences", noStore, async (req, res) => {
+  const auth = authorizeAuditOperator(req.get("authorization"));
+  if (!auth.ok) { res.status(auth.status).json({ system: "GXEON Audit OS", ok: false, code: auth.code, message: auth.message }); return; }
+  try { const result = await createEvidence(req.body); res.status(result.status).json({ system: "GXEON Audit OS", ...result.payload }); }
+  catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, code: error.code ?? "AUDIT_EVIDENCE_CREATE_FAILED", message: error.message }); }
+});
+router.get("/v1/audit/cases/:caseId/findings", noStore, async (req, res) => { const result = await listFindingsByCase(req.params.caseId); res.json({ system: "GXEON Audit OS", count: result.items.length, ...result }); });
+router.get("/v1/audit/findings/:findingId", noStore, async (req, res) => { const item = await getFinding(req.params.findingId); res.status(item ? 200 : 404).json({ system: "GXEON Audit OS", item }); });
+router.get("/v1/audit/cases/:caseId/evidences", noStore, async (req, res) => { const result = await listEvidencesByCase(req.params.caseId); res.json({ system: "GXEON Audit OS", count: result.items.length, ...result }); });
+router.get("/v1/audit/findings/:findingId/evidences", noStore, async (req, res) => { const result = await listEvidencesByFinding(req.params.findingId); res.json({ system: "GXEON Audit OS", count: result.items.length, ...result }); });
+
 router.get("/v1/audit/reports/summary", noStore, (_req, res) => res.json(emptySummary("audit_reports")));
 
 router.get("/v1/audit/connectors/status", noStore, (_req, res) => {
