@@ -15,6 +15,10 @@ export default function AuditOsPage() {
   const [preview, setPreview] = useState<any>();
   const [caseList, setCaseList] = useState<any>();
   const [intakeMessage, setIntakeMessage] = useState("");
+  const [bootstrapToken, setBootstrapToken] = useState("");
+  const [bootstrapDiagnostics, setBootstrapDiagnostics] = useState<any>();
+  const [bootstrapResult, setBootstrapResult] = useState<any>();
+  const [verifyResult, setVerifyResult] = useState<any>();
   const apiDiagnostics = getApiBaseDiagnostics();
 
   useEffect(() => {
@@ -28,6 +32,10 @@ export default function AuditOsPage() {
   const writeMode = mission.intakeReadiness?.writeMode ?? mission.health?.intakeReadiness?.writeMode ?? "disabled";
   const submitPreview = async () => { setIntakeMessage(""); try { const data = await auditOsService.intakePreviewV1(intake); setPreview(data.preview); } catch (error: any) { setIntakeMessage(error.message); } };
   const submitCreate = async () => { setIntakeMessage(""); try { const data = await auditOsService.createCaseV1(intake); setPreview(data.preview); setIntakeMessage(data.message ?? "Preview generated; write may be disabled."); } catch (error: any) { setIntakeMessage(error.message); } };
+  const runBootstrapDiagnostics = async () => { setBootstrapResult(undefined); const data = await auditOsService.schemaDiagnosticsV1(); setBootstrapDiagnostics(data); };
+  const runFirstCaseBootstrap = async () => { setBootstrapResult(undefined); const data = await auditOsService.bootstrapFirstCaseV1(bootstrapToken); setBootstrapResult(data); };
+  const verifyFirstCase = async () => { const [cases, missionControl] = await Promise.all([auditOsService.casesV1(), auditOsService.missionControlV1()]); setCaseList(cases); setMission(missionControl); setVerifyResult({ cases, missionControl }); };
+  const bootstrapAllowed = Boolean(bootstrapDiagnostics?.schemaReady || (bootstrapDiagnostics?.activeProvider === "supabase_rest" && (bootstrapDiagnostics?.missingTables?.length ?? 1) === 0));
 
   return <main className="min-h-screen space-y-6 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,.18),transparent_30%),radial-gradient(circle_at_top_right,rgba(34,211,238,.12),transparent_34%),#05060a] p-6 text-white">
     <section className="rounded-[2rem] border border-amber-300/25 bg-gradient-to-br from-amber-500/15 via-cyan-500/10 to-black/30 p-7 shadow-2xl shadow-cyan-950/30">
@@ -61,6 +69,21 @@ export default function AuditOsPage() {
       <Panel title="Proposal Engine preview" summary={`${mission.proposals?.count ?? 0} proposals`} action="No customer-facing proposal is created here." />
       <Panel title="Revenue Preview panel" summary={`Estimated R$${mission.revenue?.totalEstimatedBrl ?? 0} · Confirmed R$${mission.revenue?.totalConfirmedBrl ?? 0}`} action="No fake revenue and no provider-verified claim." />
       <Panel title="Operator Review panel" summary={mission.operatorReview?.status ?? "waiting"} action={mission.operatorReview?.nextSafeAction} />
+    </section>
+
+
+    <section className="rounded-3xl border border-cyan-300/25 bg-cyan-400/10 p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-black uppercase tracking-[0.25em] text-cyan-100">Operator-only · no terminal</p><h2 className="text-2xl font-black">Bootstrap sem terminal</h2><p className="mt-2 text-sm text-stone-200">Cole o token temporariamente apenas em memória. O painel não usa localStorage, sessionStorage, cookies nem imprime o token.</p></div><Badge label="Provider" value={bootstrapDiagnostics?.activeProvider ?? "not checked"} tone="cyan" /></div>
+      <input className="mt-4 w-full rounded-xl bg-black/40 p-3" type="password" autoComplete="off" placeholder="GXEON_AUDIT_BOOTSTRAP_TOKEN temporário" value={bootstrapToken} onChange={(e) => setBootstrapToken(e.target.value)} />
+      <div className="mt-4 flex flex-wrap gap-3">
+        <button onClick={runBootstrapDiagnostics} className="rounded-2xl border border-cyan-200 px-5 py-3 font-black text-cyan-100">1. Rodar diagnóstico</button>
+        <button disabled={!bootstrapAllowed || !bootstrapToken} onClick={runFirstCaseBootstrap} className="rounded-2xl border border-emerald-200 px-5 py-3 font-black text-emerald-100 disabled:cursor-not-allowed disabled:opacity-40">2. Criar primeiro caso</button>
+        <button onClick={verifyFirstCase} className="rounded-2xl border border-amber-200 px-5 py-3 font-black text-amber-100">3. Verificar caso</button>
+      </div>
+      {bootstrapDiagnostics && <div className="mt-4 rounded-2xl bg-black/30 p-4 text-sm"><p className="font-black text-cyan-100">schemaReady: {String(bootstrapDiagnostics.schemaReady)} · activeProvider: {bootstrapDiagnostics.activeProvider ?? "none"} · code: {bootstrapDiagnostics.code ?? "READY"}</p><p className="mt-2 text-emerald-100">foundTables: {(bootstrapDiagnostics.foundTables ?? []).join(", ") || "none"}</p><p className="text-amber-100">missingTables: {(bootstrapDiagnostics.missingTables ?? []).join(", ") || "none"}</p></div>}
+      {bootstrapResult && <div className={`mt-4 rounded-2xl p-4 text-sm ${bootstrapResult.status === "CREATED" || bootstrapResult.status === "ALREADY_EXISTS" ? "bg-emerald-500/15 text-emerald-100" : "bg-amber-500/15 text-amber-100"}`}><p className="font-black">{bootstrapResult.status} · {bootstrapResult.code ?? "READY"}</p><p>caseId: {bootstrapResult.caseId ?? "none"} · fakeClientCreated: {String(bootstrapResult.fakeClientCreated)} · connectorWrites: {String(bootstrapResult.connectorWrites)} · revenueConfirmed: {bootstrapResult.revenueConfirmed}</p>{bootstrapResult.status === "BLOCKED" && <p className="mt-2">Próxima ação: rode diagnóstico, confirme tabelas acessíveis e tente novamente com token válido.</p>}</div>}
+      {verifyResult && <p className="mt-4 rounded-2xl bg-black/30 p-4 text-sm text-emerald-100">Verificação concluída: {verifyResult.cases?.count ?? 0} casos retornados e Mission Control atualizado.</p>}
+      {(bootstrapResult?.status === "CREATED" || bootstrapResult?.status === "ALREADY_EXISTS") && <ul className="mt-4 list-disc pl-6 text-sm text-emerald-100"><li>Depois do sucesso: set GXEON_AUDIT_WRITE_MODE=preview_only.</li><li>Set GXEON_AUDIT_ALLOW_DB_WRITES=false.</li><li>Rotacionar ou remover GXEON_AUDIT_BOOTSTRAP_TOKEN.</li></ul>}
     </section>
 
     <section className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-5">
