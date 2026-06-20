@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { auditModuleCatalog } from "@workspace/db";
-import { buildAuditCasePreview, createAuditCase, getAuditCaseById, getAuditCaseTimeline, getAuditWriteMode, listAuditCases } from "../services/auditCaseService";
+import { bootstrapFirstInternalAuditCase, buildAuditCasePreview, createAuditCase, getAuditCaseById, getAuditCaseTimeline, getAuditWriteMode, listAuditCases } from "../services/auditCaseService";
 
 const router = Router();
 const databaseConfigured = () => Boolean(process.env["DATABASE_URL"]);
@@ -34,6 +34,21 @@ const schemaMap = {
   tables: ["audit_clients", "audit_assets", "audit_cases", "audit_modules", "audit_checklists", "audit_findings", "audit_evidences", "audit_scores", "audit_reports", "audit_tasks", "audit_proposals", "audit_revenue_events", "audit_connector_runs", "audit_operator_notes"].map((name) => ({ name, purpose: "See AUDIT_OS_SCHEMA_MAP.json for the full table contract." })),
   invariants: ["No payment provider secrets stored.", "Evidence URLs are stored as references only.", "No production migration or Supabase db push was executed."],
 };
+
+function validateBootstrapAuthorization(authorization: string | undefined) {
+  const expected = process.env.GXEON_AUDIT_BOOTSTRAP_TOKEN;
+  if (!expected) return { ok: false as const, status: 401, code: "BOOTSTRAP_TOKEN_REQUIRED", message: "Bootstrap token is not configured in the backend environment." };
+  if (!authorization?.startsWith("Bearer ")) return { ok: false as const, status: 401, code: "BOOTSTRAP_TOKEN_REQUIRED", message: "Authorization bearer token is required." };
+  const provided = authorization.slice("Bearer ".length).trim();
+  if (!provided) return { ok: false as const, status: 401, code: "BOOTSTRAP_TOKEN_REQUIRED", message: "Authorization bearer token is required." };
+  if (provided !== expected) return { ok: false as const, status: 403, code: "BOOTSTRAP_TOKEN_INVALID", message: "Bootstrap token is invalid." };
+  return { ok: true as const };
+}
+
+function blockedBootstrapPayload(code: string, message: string) {
+  return { system: "GXEON Audit OS", ok: false, created: false, status: "BLOCKED", code, message, caseId: null, revenueConfirmed: 0, fakeClientCreated: false, connectorWrites: false, safeMode: true };
+}
+
 const noStore = (_req: unknown, res: { setHeader(name: string, value: string): void }, next: () => void) => { res.setHeader("Cache-Control", "no-store"); next(); };
 
 function healthPayload() {
@@ -70,6 +85,22 @@ router.post("/v1/audit/cases", noStore, async (req, res) => {
   try { const result = await createAuditCase(req.body); res.status(result.status).json(result.payload); }
   catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, code: error.code ?? "AUDIT_CASE_CREATE_FAILED", message: error.message }); }
 });
+
+router.post("/v1/audit/bootstrap/first-case", noStore, async (req, res) => {
+  const auth = validateBootstrapAuthorization(req.get("authorization"));
+  if (!auth.ok) {
+    res.status(auth.status).json(blockedBootstrapPayload(auth.code, auth.message));
+    return;
+  }
+
+  try {
+    const result = await bootstrapFirstInternalAuditCase();
+    res.status(result.status).json(result.payload);
+  } catch {
+    res.status(503).json(blockedBootstrapPayload("AUDIT_BOOTSTRAP_FAILED", "Audit bootstrap failed safely before any external connector or payment write."));
+  }
+});
+
 router.get("/v1/audit/cases", noStore, async (_req, res) => { res.json({ system: "GXEON Audit OS", ...(await listAuditCases()) }); });
 router.get("/v1/audit/cases/:caseId", noStore, async (req, res) => { const item = await getAuditCaseById(req.params.caseId); res.status(item ? 200 : 404).json({ system: "GXEON Audit OS", degradedSafe: !item, item }); });
 router.get("/v1/audit/cases/:caseId/timeline", noStore, (req, res) => res.json({ system: "GXEON Audit OS", ...getAuditCaseTimeline(req.params.caseId) }));
@@ -87,8 +118,8 @@ router.get("/v1/audit/connectors/status", noStore, (_req, res) => {
   });
 });
 
-router.get("/v1/audit/mission-control", noStore, (_req, res) => {
-  const cases = emptySummary("audit_cases");
+router.get("/v1/audit/mission-control", noStore, async (_req, res) => {
+  const cases = { ...emptySummary("audit_cases"), ...(await listAuditCases()) };
   const findings = emptySummary("audit_findings");
   const reports = emptySummary("audit_reports");
   const connectors = { status: "read-only", connectors: connectorCatalog };

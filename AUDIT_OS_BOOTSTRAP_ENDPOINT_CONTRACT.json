@@ -1,0 +1,35 @@
+{
+  "system": "GXEON Audit OS",
+  "route": "POST /api/v1/audit/bootstrap/first-case",
+  "auth": {
+    "required": true,
+    "header": "Authorization: Bearer <GXEON_AUDIT_BOOTSTRAP_TOKEN>",
+    "missingResponse": { "httpStatus": 401, "code": "BOOTSTRAP_TOKEN_REQUIRED" },
+    "invalidResponse": { "httpStatus": 403, "code": "BOOTSTRAP_TOKEN_INVALID" },
+    "tokenLogging": false
+  },
+  "runtimeGuards": {
+    "GXEON_AUDIT_WRITE_MODE": "enabled",
+    "GXEON_AUDIT_ALLOW_DB_WRITES": "true",
+    "DATABASE_URL": "required_masked_never_returned",
+    "writeDisabledResponse": { "httpStatus": 409, "code": "WRITE_DISABLED" },
+    "databaseMissingResponse": { "httpStatus": 503, "code": "DATABASE_NOT_CONFIGURED" }
+  },
+  "idempotency": {
+    "lookup": {
+      "assetUrl": "https://github.com/xpex-systems-ai/GXEON-AI",
+      "caseMetadataSource": "operator_manual"
+    },
+    "existingResponseStatus": "ALREADY_EXISTS"
+  },
+  "responseContract": {
+    "created": "boolean",
+    "status": "CREATED | ALREADY_EXISTS | BLOCKED",
+    "caseId": "string_or_null",
+    "revenueConfirmed": 0,
+    "fakeClientCreated": false,
+    "connectorWrites": false,
+    "safeMode": true
+  },
+  "forbiddenSideEffects": ["migrations", "audit_clients_fake", "audit_revenue_events", "audit_proposals", "audit_findings", "payment_provider_calls", "external_webhooks", "frontend_token_exposure"]
+}
