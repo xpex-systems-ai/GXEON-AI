@@ -1,0 +1,10 @@
+{
+  "mission": "MISSION_006_SUPREME_BATCH_AUDIT_OS_BASELINE_SCORE_REPORT",
+  "table": "audit_reports",
+  "type": "INTERNAL_BRIEF",
+  "title": "Relatório Interno GXEON Audit OS — Primeiro Ciclo",
+  "generatedBy": "gxeon_audit_mission_runner",
+  "metadata": { "baseline": true, "report_key": "gxeon_internal_first_cycle" },
+  "sections": ["executive_summary", "case_context", "baseline_finding", "baseline_evidence", "initial_scores", "safety_posture", "monetization_readiness", "next_actions"],
+  "mustInclude": ["first_case_confirmed=true", "provider=supabase_rest", "fakeClientCreated=false", "fakeRevenueCreated=false", "connectorWrites=false", "revenueConfirmed=0", "noPaymentCalls=true", "noScraping=true", "readyForProposal=false until commercial proposal layer is added"]
+}
