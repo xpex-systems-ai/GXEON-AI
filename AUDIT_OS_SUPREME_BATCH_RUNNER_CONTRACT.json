@@ -1,0 +1,31 @@
+{
+  "mission": "MISSION_006_SUPREME_BATCH_AUDIT_OS_BASELINE_SCORE_REPORT",
+  "endpoint": "POST /api/v1/audit/missions/run-baseline-score-report",
+  "auth": {
+    "required": true,
+    "scheme": "Bearer",
+    "primaryEnv": "GXEON_AUDIT_MISSION_RUNNER_TOKEN",
+    "fallbackEnv": "GXEON_AUDIT_OPERATOR_TOKEN",
+    "logsAuthorizationHeader": false
+  },
+  "writeGuards": {
+    "GXEON_AUDIT_WRITE_MODE": "enabled",
+    "GXEON_AUDIT_ALLOW_DB_WRITES": "true",
+    "schemaReadyRequired": true,
+    "firstInternalCaseRequired": true
+  },
+  "idempotencyKeys": {
+    "findingEvidence": "metadata.baseline=true and metadata.internal_case=true",
+    "scores": "metadata.score_key=gxeon_internal_first_cycle_score",
+    "report": "metadata.report_key=gxeon_internal_first_cycle"
+  },
+  "safeInvariants": {
+    "revenueConfirmed": 0,
+    "fakeClientCreated": false,
+    "fakeRevenueCreated": false,
+    "paymentCalls": false,
+    "connectorWrites": false,
+    "scrapingPerformed": false,
+    "secretsLogged": false
+  }
+}

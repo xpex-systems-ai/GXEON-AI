@@ -1,0 +1,13 @@
+{
+  "mission": "MISSION_006_SUPREME_BATCH_AUDIT_OS_BASELINE_SCORE_REPORT",
+  "table": "audit_scores",
+  "baselineKey": "gxeon_internal_first_cycle_score",
+  "commercialFinalScore": false,
+  "operatorReviewed": false,
+  "scores": [
+    { "moduleKey": "supabase_database_audit", "score": "80.00", "maxScore": "100.00", "rationale": "Schema, provider and case persistence confirmed via Supabase REST; production write windows remain guarded." },
+    { "moduleKey": "github_repository_audit", "score": "70.00", "maxScore": "100.00", "rationale": "Repository audit case established; deeper code/repo evidence still requires operator-reviewed findings." },
+    { "moduleKey": "deployment_audit", "score": "75.00", "maxScore": "100.00", "rationale": "Railway/Vercel deploy path operational; score remains preliminary until report validation." },
+    { "moduleKey": "api_backend_audit", "score": "75.00", "maxScore": "100.00", "rationale": "Protected Audit OS endpoints exist and no-terminal flow works; additional endpoint hardening can improve score." }
+  ]
+}

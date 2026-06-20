@@ -1,0 +1,15 @@
+{
+  "mission": "MISSION_006_SUPREME_BATCH_AUDIT_OS_BASELINE_SCORE_REPORT",
+  "noFakeClient": true,
+  "noFakeRevenue": true,
+  "paymentCalls": false,
+  "externalWebhooks": false,
+  "connectorWrites": false,
+  "scrapingPerformed": false,
+  "unredactedSecretStorage": false,
+  "autoSend": false,
+  "checkout": false,
+  "invoice": false,
+  "revenueConfirmed": 0,
+  "secretsLogged": false
+}
