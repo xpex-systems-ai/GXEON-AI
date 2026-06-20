@@ -1,0 +1,36 @@
+{
+  "mission": "MISSION_004_11_OPERATOR_BOOTSTRAP_RETRY_AFTER_DATABASE_URL_FIX",
+  "checkedAt": "2026-06-20T16:49:14Z",
+  "source": "GET https://gxeon-api-server-production.up.railway.app/api/v1/audit/schema-diagnostics",
+  "result": {
+    "system": "GXEON Audit OS",
+    "readOnly": true,
+    "databaseConfigured": true,
+    "expectedTables": ["audit_assets", "audit_cases", "audit_operator_notes"],
+    "projectRefHintMasked": null,
+    "safeMode": true,
+    "schemaReady": false,
+    "foundTables": [],
+    "missingTables": ["audit_assets", "audit_cases", "audit_operator_notes"],
+    "foundEnums": [],
+    "currentSchema": null,
+    "currentDatabase": null,
+    "code": "AUDIT_TABLES_MISSING",
+    "error": { "name": "Error", "code": "ENOTFOUND", "messageClass": "DATABASE_ERROR" }
+  },
+  "successCriteria": {
+    "databaseConfigured": true,
+    "projectRefNoLongerTelxJkce": true,
+    "foundTablesIncludesAuditAssets": false,
+    "foundTablesIncludesAuditCases": false,
+    "foundTablesIncludesAuditOperatorNotes": false,
+    "missingTablesEmpty": false,
+    "schemaReady": false
+  },
+  "status": "SCHEMA_DIAGNOSTICS_FAILED",
+  "notes": [
+    "No secrets were printed or stored.",
+    "The API is deployed and reports databaseConfigured=true, but diagnostics fail with a sanitized DATABASE_ERROR/ENOTFOUND result.",
+    "Because schemaReady=false, bootstrap was not attempted. Do not run migrations from this execution. Operator should re-check Railway DATABASE_URL host/value and redeploy."
+  ]
+}
