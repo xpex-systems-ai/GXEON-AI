@@ -1,6 +1,6 @@
 import { and, eq, sql } from "drizzle-orm";
 import { auditCaseIntakeRequestSchema, type AuditCaseIntakeRequest } from "@workspace/api-zod";
-import { auditAssets, auditCases, auditClients, auditModuleCatalog, auditOperatorNotes, getDb, isDatabaseConfigured } from "@workspace/db";
+import { auditAssets, auditCases, auditClients, auditModuleCatalog, auditOperatorNotes, getDb, getPool, isDatabaseConfigured } from "@workspace/db";
 
 const writeModes = ["disabled", "preview_only", "enabled"] as const;
 type WriteMode = (typeof writeModes)[number];
@@ -58,6 +58,61 @@ export function buildAuditCasePreview(body: unknown) {
   };
 }
 
+const expectedAuditTables = ["audit_assets", "audit_cases", "audit_operator_notes"] as const;
+const publicAuditEnums = ["audit_case_status", "audit_asset_type", "audit_module_key", "audit_severity", "audit_evidence_type", "audit_report_type", "audit_task_status", "audit_proposal_status", "audit_revenue_status", "audit_connector_status"] as const;
+
+type AuditSchemaDiagnosticCode = "AUDIT_TABLES_MISSING" | "DATABASE_CONNECTION_FAILED" | "PUBLIC_SCHEMA_NOT_VISIBLE" | "AUDIT_SCHEMA_NOT_READY";
+
+function sanitizeDatabaseError(error: unknown) {
+  const candidate = error as { name?: unknown; code?: unknown; message?: unknown };
+  const code = typeof candidate?.code === "string" ? candidate.code : undefined;
+  const message = typeof candidate?.message === "string" ? candidate.message.toLowerCase() : "";
+  const messageClass = code === "42P01" ? "UNDEFINED_TABLE" : code === "42501" ? "INSUFFICIENT_PRIVILEGE" : message.includes("connect") || message.includes("timeout") ? "CONNECTION_ERROR" : "DATABASE_ERROR";
+  return { name: typeof candidate?.name === "string" ? candidate.name : "DatabaseError", code, messageClass };
+}
+
+function deriveProjectRefHintMasked() {
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) return null;
+  try {
+    const host = new URL(databaseUrl).hostname;
+    const match = host.match(/([a-z0-9]{20})\.supabase\.(?:co|com)$/i) ?? host.match(/db\.([a-z0-9]{20})\.supabase\.(?:co|com)$/i);
+    const ref = match?.[1];
+    return ref ? `${ref.slice(0, 4)}…${ref.slice(-4)}` : null;
+  } catch {
+    return null;
+  }
+}
+
+function classifyAuditSchemaProblem(foundTables: string[], error?: unknown): AuditSchemaDiagnosticCode {
+  const sanitized = error ? sanitizeDatabaseError(error) : null;
+  if (sanitized?.messageClass === "CONNECTION_ERROR") return "DATABASE_CONNECTION_FAILED";
+  if (sanitized?.code === "42P01") return "AUDIT_TABLES_MISSING";
+  if (sanitized?.code === "42501" || sanitized?.messageClass === "INSUFFICIENT_PRIVILEGE") return "PUBLIC_SCHEMA_NOT_VISIBLE";
+  if (expectedAuditTables.some((table) => !foundTables.includes(table))) return "AUDIT_TABLES_MISSING";
+  return "AUDIT_SCHEMA_NOT_READY";
+}
+
+export async function getAuditSchemaDiagnostics() {
+  const databaseConfigured = isDatabaseConfigured();
+  const base = { system: "GXEON Audit OS", readOnly: true, databaseConfigured, expectedTables: [...expectedAuditTables], projectRefHintMasked: deriveProjectRefHintMasked(), safeMode: true };
+  if (!databaseConfigured) return { ...base, schemaReady: false, foundTables: [], missingTables: [...expectedAuditTables], foundEnums: [], currentSchema: null, currentDatabase: null, code: "DATABASE_CONNECTION_FAILED" as AuditSchemaDiagnosticCode, error: null };
+  try {
+    const pool = getPool();
+    const [tablesResult, enumsResult, contextResult] = await Promise.all([
+      pool.query<{ table_name: string }>("select table_name from information_schema.tables where table_schema = 'public' and table_name like 'audit_%' order by table_name"),
+      pool.query<{ typname: string }>("select t.typname from pg_type t join pg_namespace n on n.oid = t.typnamespace where n.nspname = 'public' and t.typname like 'audit_%' order by t.typname"),
+      pool.query<{ current_schema: string; current_database: string }>("select current_schema() as current_schema, current_database() as current_database"),
+    ]);
+    const foundTables = tablesResult.rows.map((row) => row.table_name);
+    const missingTables = expectedAuditTables.filter((table) => !foundTables.includes(table));
+    const schemaReady = missingTables.length === 0;
+    return { ...base, schemaReady, foundTables, missingTables, foundEnums: enumsResult.rows.map((row) => row.typname).filter((name) => publicAuditEnums.includes(name as (typeof publicAuditEnums)[number])), currentSchema: contextResult.rows[0]?.current_schema ?? null, currentDatabase: contextResult.rows[0]?.current_database ?? null, code: schemaReady ? null : classifyAuditSchemaProblem(foundTables), error: null };
+  } catch (error) {
+    return { ...base, schemaReady: false, foundTables: [], missingTables: [...expectedAuditTables], foundEnums: [], currentSchema: null, currentDatabase: null, code: classifyAuditSchemaProblem([], error), error: sanitizeDatabaseError(error) };
+  }
+}
+
 export async function validateAuditCaseWriteReadiness() {
   const writeMode = getAuditWriteMode();
   if (writeMode !== "enabled" || process.env.GXEON_AUDIT_ALLOW_DB_WRITES !== "true") return { ok: false as const, status: 409, code: "WRITE_DISABLED", message: "Audit writes are disabled by feature flags." };
@@ -65,16 +120,17 @@ export async function validateAuditCaseWriteReadiness() {
   try {
     await validateAuditSchemaReadiness();
     return { ok: true as const };
-  } catch {
-    return { ok: false as const, status: 503, code: "AUDIT_SCHEMA_NOT_READY", message: "Audit schema is not accessible; no write was attempted." };
+  } catch (error) {
+    const diagnostics = await getAuditSchemaDiagnostics();
+    return { ok: false as const, status: 503, code: diagnostics.code ?? classifyAuditSchemaProblem([], error), message: "Audit schema is not accessible; no write was attempted.", diagnostics: { databaseConfigured: diagnostics.databaseConfigured, expectedTables: diagnostics.expectedTables, foundTables: diagnostics.foundTables, missingTables: diagnostics.missingTables, schemaReady: diagnostics.schemaReady, currentSchema: diagnostics.currentSchema, sqlState: diagnostics.error?.code, errorClass: diagnostics.error?.messageClass } };
   }
 }
 
 export async function validateAuditSchemaReadiness() {
   const db = getDb();
-  await db.execute(sql`select 1 from audit_assets limit 1`);
-  await db.execute(sql`select 1 from audit_cases limit 1`);
-  await db.execute(sql`select 1 from audit_operator_notes limit 1`);
+  await db.execute(sql`select 1 from public.audit_assets limit 1`);
+  await db.execute(sql`select 1 from public.audit_cases limit 1`);
+  await db.execute(sql`select 1 from public.audit_operator_notes limit 1`);
   return { ok: true as const };
 }
 
@@ -120,7 +176,7 @@ function firstCaseResponse(created: boolean, status: "CREATED" | "ALREADY_EXISTS
 
 export async function bootstrapFirstInternalAuditCase() {
   const readiness = await validateAuditCaseWriteReadiness();
-  if (!readiness.ok) return { status: readiness.status, payload: firstCaseResponse(false, "BLOCKED", null, { code: readiness.code, message: readiness.message }) };
+  if (!readiness.ok) return { status: readiness.status, payload: firstCaseResponse(false, "BLOCKED", null, { code: readiness.code, message: readiness.message, diagnostics: "diagnostics" in readiness ? readiness.diagnostics : undefined }) };
 
   const db = getDb();
   const existing = await db
