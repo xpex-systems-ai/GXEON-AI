@@ -1,0 +1,1 @@
+export const gxeonSafetyPolicy = { manualFirst: true, previewFirst: true, noFakeRevenue: true, noFakeClients: true, noSecretLogging: true, noPaymentCallsWithoutExplicitMission: true, noConnectorWritesWithoutExplicitActivation: true, noProductionWritesInStructureMissions: true } as const;
