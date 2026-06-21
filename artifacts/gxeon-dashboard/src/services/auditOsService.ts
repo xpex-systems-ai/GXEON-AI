@@ -85,15 +85,28 @@ export const auditOsService = {
     }),
   offerCatalogV1: () => request("/api/v1/audit/offers/catalog"),
   proposalStatusV1: () => request("/api/v1/audit/proposals/status"),
-  firstProposalDraftStatusV1: () => request("/api/v1/audit/proposals/first-draft/status"),
+  firstProposalDraftStatusV1: () =>
+    request("/api/v1/audit/proposals/first-draft/status"),
+  previewFirstProposalDraftRunV1: () =>
+    request("/api/v1/audit/proposals/first-draft/preview-run", {
+      method: "POST",
+    }),
   runFirstProposalDraftV1: (token: string) =>
     request("/api/v1/audit/proposals/first-draft/run", {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     }),
   proposalPreviewV1: (body: unknown) =>
-    request("/api/v1/audit/proposals/preview", { method: "POST", body: JSON.stringify(body) }),
+    request("/api/v1/audit/proposals/preview", {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
   createProposalV1: (body: unknown, token: string) =>
-    request("/api/v1/audit/proposals", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify(body) }),
-  caseProposalsV1: (caseId: string) => request(`/api/v1/audit/cases/${caseId}/proposals`),
+    request("/api/v1/audit/proposals", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(body),
+    }),
+  caseProposalsV1: (caseId: string) =>
+    request(`/api/v1/audit/cases/${caseId}/proposals`),
 };

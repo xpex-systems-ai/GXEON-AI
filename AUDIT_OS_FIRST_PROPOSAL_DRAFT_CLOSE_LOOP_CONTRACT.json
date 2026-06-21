@@ -1,0 +1,16 @@
+{
+  "mission": "MISSION_007_2_AUDIT_OS_FIRST_PROPOSAL_DRAFT_CLOSE_LOOP",
+  "endpoints": [
+    "GET /api/v1/audit/proposals/first-draft/status",
+    "POST /api/v1/audit/proposals/first-draft/preview-run",
+    "POST /api/v1/audit/proposals/first-draft/run"
+  ],
+  "defaultOfferKey": "technical_audit",
+  "defaultLanguage": "pt-BR",
+  "currency": "BRL",
+  "allowedProposalStatuses": ["DRAFT", "READY_FOR_OPERATOR_REVIEW"],
+  "idempotencyKey": "mission_007_2_first_proposal_draft_close_loop",
+  "legacyReuseKey": "mission_007_1_internal_first_proposal",
+  "forbidden": ["auto_send", "client_creation", "payment_provider_call", "checkout", "invoice", "revenue_event", "external_webhook", "connector_write"],
+  "confirmedRevenue": 0
+}
