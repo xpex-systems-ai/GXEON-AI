@@ -1,6 +1,7 @@
 import app from "./app";
 import { logger } from "./lib/logger";
 import { maybeRunAuditMission006OnStartup } from "./services/auditMissionRunnerService";
+import { maybeRunFirstProposalAutorunnerOnStartup } from "./services/auditFirstProposalAutorunnerService";
 
 const rawPort = process.env["PORT"];
 
@@ -40,5 +41,18 @@ app.listen(port, (err) => {
       },
       "Mission 006 auto-run status",
     );
+  });
+  void maybeRunFirstProposalAutorunnerOnStartup().then((status) => {
+    logger.info({
+      autoRunEnabled: status.autoRunEnabled,
+      status: status.status,
+      code: status.code,
+      proposalId: status.proposalId,
+      caseId: status.caseId,
+      offerKey: status.offerKey,
+      revenueConfirmed: status.confirmedRevenue,
+      autoSend: status.autoSend,
+      paymentCalls: status.paymentCalls,
+    }, "Mission 007.1 first proposal autorunner status");
   });
 });
