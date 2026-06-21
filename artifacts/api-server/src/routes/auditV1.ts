@@ -31,6 +31,18 @@ import {
   runBaselineScoreReportMission,
 } from "../services/auditMissionRunnerService";
 
+import { getAuditOffer, listAuditOffers } from "../services/auditOfferCatalogService";
+import {
+  authorizeAuditProposalOperator,
+  buildProposalPreview,
+  createProposal,
+  getProposal,
+  getProposalReadiness,
+  listProposalsByCase,
+  previewProposalStatus,
+  updateProposalStatus,
+} from "../services/auditProposalService";
+
 const router = Router();
 const databaseConfigured = () => Boolean(process.env["DATABASE_URL"]);
 const generatedAt = () => new Date().toISOString();
@@ -636,6 +648,49 @@ router.get("/v1/audit/mission-control", noStore, async (_req, res) => {
       schemaRegistered: true,
     },
   });
+});
+
+
+router.get("/v1/audit/offers/catalog", noStore, (_req, res) => {
+  res.json(listAuditOffers());
+});
+router.get("/v1/audit/offers/catalog/:offerKey", noStore, (req, res) => {
+  const offer = getAuditOffer(req.params.offerKey);
+  res.status(offer ? 200 : 404).json({
+    system: "GXEON Audit OS",
+    readOnly: true,
+    sanitized: true,
+    proofRequired: true,
+    paymentCalls: false,
+    autoSend: false,
+    offer: offer ?? null,
+  });
+});
+router.get("/v1/audit/proposals/status", noStore, async (_req, res) => {
+  res.json(await getProposalReadiness());
+});
+router.post("/v1/audit/proposals/preview", noStore, async (req, res) => {
+  try { res.json(await buildProposalPreview(req.body)); } catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, sanitized: true, code: error.code ?? "PROPOSAL_PREVIEW_FAILED", message: error.message }); }
+});
+router.post("/v1/audit/proposals", noStore, async (req, res) => {
+  const auth = authorizeAuditProposalOperator(req.get("authorization"));
+  if (!auth.ok) { res.status(auth.status).json({ system: "GXEON Audit OS", ok: false, sanitized: true, code: auth.code, message: auth.message }); return; }
+  try { const result = await createProposal(req.body); res.status(result.status).json({ system: "GXEON Audit OS", sanitized: true, ...result.payload }); } catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, sanitized: true, code: error.code ?? "PROPOSAL_CREATE_FAILED", message: error.message }); }
+});
+router.get("/v1/audit/cases/:caseId/proposals", noStore, async (req, res) => {
+  res.json(await listProposalsByCase(req.params.caseId));
+});
+router.get("/v1/audit/proposals/:proposalId", noStore, async (req, res) => {
+  const proposal = await getProposal(req.params.proposalId);
+  res.status(proposal ? 200 : 404).json({ system: "GXEON Audit OS", readOnly: true, sanitized: true, proposal });
+});
+router.post("/v1/audit/proposals/:proposalId/status/preview", noStore, (req, res) => {
+  try { res.json(previewProposalStatus(req.params.proposalId, req.body?.targetStatus)); } catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, sanitized: true, code: error.code ?? "PROPOSAL_STATUS_PREVIEW_FAILED", message: error.message }); }
+});
+router.patch("/v1/audit/proposals/:proposalId/status", noStore, async (req, res) => {
+  const auth = authorizeAuditProposalOperator(req.get("authorization"));
+  if (!auth.ok) { res.status(auth.status).json({ system: "GXEON Audit OS", ok: false, sanitized: true, code: auth.code, message: auth.message }); return; }
+  try { const result = await updateProposalStatus(req.params.proposalId, req.body?.targetStatus); res.status(result.status).json({ system: "GXEON Audit OS", sanitized: true, ...result.payload }); } catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, sanitized: true, code: error.code ?? "PROPOSAL_STATUS_UPDATE_FAILED", message: error.message }); }
 });
 
 export default router;
