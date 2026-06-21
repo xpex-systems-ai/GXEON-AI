@@ -19,12 +19,12 @@ GXEON OS is an AI-assisted execution operating system for digital operations, au
 
 ## CTA tracks
 
-| Track | Best fit | Action |
-| --- | --- | --- |
-| Audit OS pilot | Website, repo, funnel, API, deploy, or ops audit | Request a scoped audit conversation |
-| Implementation consulting | Teams that need AI-assisted operating workflows | Discuss a focused implementation sprint |
-| Technical collaboration | Devs and operators aligned with safety-first execution | Review docs and propose scoped contributions |
-| Partner/investor conversation | Strategic partners, angels, advisors | Review brief and schedule a qualified call |
+| Track                         | Best fit                                               | Action                                       |
+| ----------------------------- | ------------------------------------------------------ | -------------------------------------------- |
+| Audit OS pilot                | Website, repo, funnel, API, deploy, or ops audit       | Request a scoped audit conversation          |
+| Implementation consulting     | Teams that need AI-assisted operating workflows        | Discuss a focused implementation sprint      |
+| Technical collaboration       | Devs and operators aligned with safety-first execution | Review docs and propose scoped contributions |
+| Partner/investor conversation | Strategic partners, angels, advisors                   | Review brief and schedule a qualified call   |
 
 ## Launch pack index
 
@@ -38,7 +38,6 @@ GXEON OS is an AI-assisted execution operating system for digital operations, au
 - [`LINKEDIN_PROFILE_CHECKLIST.md`](LINKEDIN_PROFILE_CHECKLIST.md)
 - [`PUBLIC_RELEASE_CHECKLIST.md`](PUBLIC_RELEASE_CHECKLIST.md)
 
-
 ## Proposal + Offer Flow Connection
 
 Public launch interest, pilots and consulting conversations must become operator-reviewed Proposal + Offer drafts before any revenue claim. GXEON Audit OS now routes real audit cases, evidence, findings, scores and reports into manual proposal drafts only: no fake traction, no fake clients, no fake revenue, no auto-send and no payment provider call. Confirmed revenue requires future Revenue Ledger proof of real acceptance, agreed delivery and payment.
@@ -46,3 +45,7 @@ Public launch interest, pilots and consulting conversations must become operator
 ## Mission 007.1 — Internal first proposal DRAFT workflow
 
 The Proposal + Offer Engine is installed with an internal, proof-based first proposal DRAFT workflow. The workflow can create or reuse one operator-reviewed DRAFT for the first Audit Case, but it does not claim a sent proposal, accepted proposal, payment, invoice, checkout, or revenue. Confirmed revenue remains R$0 until real acceptance and payment proof are recorded in a future Revenue Ledger mission.
+
+## Mission 007.2 — Proposal safety note
+
+The launch hub may mention Proposal + Offer DRAFT readiness only as an internal manual-review workflow. Do not claim sent proposals, customers, payment, or revenue until future proof-backed Revenue Ledger records exist.

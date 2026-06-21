@@ -6,27 +6,31 @@ GXEON OS only reports metrics that are evidenced, versioned or explicitly labele
 
 ## Current Status Table
 
-| Metric / Claim | Status | Evidence rule |
-| --- | --- | --- |
-| Repository scaffold | Confirmed | Exists in version control |
-| Audit OS active product line | Confirmed | Product/module docs and code structure |
-| Brand kit | Confirmed | This repository |
-| Investor kit | Confirmed | This repository |
-| Media kit | Confirmed | This repository |
-| Confirmed revenue | Not claimed | Requires payment proof |
-| Confirmed customers | Not claimed | Requires customer agreement or approved public reference |
-| Confirmed investors | Not claimed | Requires investment documentation |
-| Production autonomous execution | Not claimed | Requires governance, approvals and safe runtime proof |
-| Connector write capabilities | Planned/guarded | Requires explicit mission and approved integration |
-| SaaS subscriptions | Future | Requires launched product and billing proof |
+| Metric / Claim                  | Status          | Evidence rule                                            |
+| ------------------------------- | --------------- | -------------------------------------------------------- |
+| Repository scaffold             | Confirmed       | Exists in version control                                |
+| Audit OS active product line    | Confirmed       | Product/module docs and code structure                   |
+| Brand kit                       | Confirmed       | This repository                                          |
+| Investor kit                    | Confirmed       | This repository                                          |
+| Media kit                       | Confirmed       | This repository                                          |
+| Confirmed revenue               | Not claimed     | Requires payment proof                                   |
+| Confirmed customers             | Not claimed     | Requires customer agreement or approved public reference |
+| Confirmed investors             | Not claimed     | Requires investment documentation                        |
+| Production autonomous execution | Not claimed     | Requires governance, approvals and safe runtime proof    |
+| Connector write capabilities    | Planned/guarded | Requires explicit mission and approved integration       |
+| SaaS subscriptions              | Future          | Requires launched product and billing proof              |
 
 ## Rules
 
-* Do not convert planned package prices into revenue.
-* Do not convert conversations into customers.
-* Do not convert interest into investors.
-* Do not convert future modules into current capabilities.
+- Do not convert planned package prices into revenue.
+- Do not convert conversations into customers.
+- Do not convert interest into investors.
+- Do not convert future modules into current capabilities.
 
 ## Mission 007.1 — Internal first proposal DRAFT workflow
 
 The Proposal + Offer Engine is installed with an internal, proof-based first proposal DRAFT workflow. The workflow can create or reuse one operator-reviewed DRAFT for the first Audit Case, but it does not claim a sent proposal, accepted proposal, payment, invoice, checkout, or revenue. Confirmed revenue remains R$0 until real acceptance and payment proof are recorded in a future Revenue Ledger mission.
+
+## Mission 007.2 — First proposal DRAFT close-loop
+
+The close-loop now has read-only status, no-write preview-run, and protected run endpoints for creating or reusing one safe internal DRAFT for the first Audit Case. This is still not sent, accepted, paid, invoiced, or revenue. Honest metrics may only show a proposal DRAFT after the runtime endpoint detects or creates it; confirmed revenue remains R$0 until real payment proof exists.
