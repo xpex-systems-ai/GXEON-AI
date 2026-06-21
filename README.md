@@ -6,7 +6,7 @@
 
 ## GXEON OS by Gxeon Systems AI — Execution intelligence for AI-powered digital operations
 
-![GXEON OS hero banner](public/assets/gxeon/brand/gxeon-os-hero.svg)
+
 
 **Conversation becomes command. Command becomes code. Code becomes system. System becomes product. Product becomes revenue with proof.**
 
