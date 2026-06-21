@@ -1,0 +1,19 @@
+flowchart TB
+    OS[GXEON OS<br/>Execution Intelligence Layer]
+    Audit[GXEON Audit OS<br/>Active]
+    Proposal[GXEON Proposal Engine<br/>Planned]
+    Ledger[GXEON Revenue Ledger<br/>Planned]
+    Portfolio[GXEON AI Portfolio<br/>Commercial Priority]
+    Consulting[GXEON Consulting OS<br/>Commercial Priority]
+    Hub[GXEON Connector Hub<br/>Planned Guarded Integrations]
+    Agents[GXEON Agent Economy<br/>Future]
+    Academy[GXEON Academy<br/>Planned]
+    Marketplace[GXEON Marketplace<br/>Future]
+    Labs[GXEON Labs<br/>Labs Only]
+
+    OS --> Audit --> Proposal --> Ledger --> Portfolio
+    OS --> Consulting --> Portfolio
+    OS --> Hub --> Agents
+    OS --> Academy
+    OS --> Marketplace
+    OS --> Labs
