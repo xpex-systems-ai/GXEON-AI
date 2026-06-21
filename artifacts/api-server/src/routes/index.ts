@@ -38,6 +38,7 @@ import r100DurableStateRouter from "./r100DurableState";
 import r100DatabaseMirrorRouter from "./r100DatabaseMirror";
 import auditOsRouter from "./auditOs";
 import auditV1Router from "./auditV1";
+import gxeonEcosystemRouter from "../modules/gxeon-os/ecosystemRoutes";
 
 const router: IRouter = Router();
 
@@ -69,6 +70,7 @@ router.use(r100DurableStateRouter);
 router.use(r100DatabaseMirrorRouter);
 router.use(auditOsRouter);
 router.use(auditV1Router);
+router.use(gxeonEcosystemRouter);
 router.use(opportunitiesRouter);
 router.use(tasksRouter);
 router.use(web3TasksRouter);
