@@ -42,6 +42,10 @@ import {
   previewProposalStatus,
   updateProposalStatus,
 } from "../services/auditProposalService";
+import {
+  createOrReuseFirstProposalDraft,
+  getFirstProposalDraftStatus,
+} from "../services/auditFirstProposalAutorunnerService";
 
 const router = Router();
 const databaseConfigured = () => Boolean(process.env["DATABASE_URL"]);
@@ -132,6 +136,18 @@ const schemaMap = {
     "No production migration or Supabase db push was executed.",
   ],
 };
+
+
+function validateFirstProposalRunnerAuthorization(authorization: string | undefined) {
+  const operator = process.env.GXEON_AUDIT_OPERATOR_TOKEN;
+  const mission = process.env.GXEON_AUDIT_MISSION_RUNNER_TOKEN;
+  if (!authorization?.startsWith("Bearer ")) return { ok: false as const, status: 401, code: "OPERATOR_TOKEN_REQUIRED", message: "Authorization: Bearer operator token is required." };
+  const provided = authorization.slice("Bearer ".length).trim();
+  if (!provided) return { ok: false as const, status: 401, code: "OPERATOR_TOKEN_REQUIRED", message: "Authorization: Bearer operator token is required." };
+  const expected = operator || mission;
+  if (!expected || provided !== expected) return { ok: false as const, status: 403, code: "OPERATOR_TOKEN_INVALID", message: "Operator token is invalid or not configured." };
+  return { ok: true as const };
+}
 
 function validateBootstrapAuthorization(authorization: string | undefined) {
   const expected = process.env.GXEON_AUDIT_BOOTSTRAP_TOKEN;
@@ -668,6 +684,23 @@ router.get("/v1/audit/offers/catalog/:offerKey", noStore, (req, res) => {
 });
 router.get("/v1/audit/proposals/status", noStore, async (_req, res) => {
   res.json(await getProposalReadiness());
+});
+router.get("/v1/audit/proposals/first-draft/status", noStore, async (_req, res) => {
+  try {
+    res.json(await getFirstProposalDraftStatus());
+  } catch {
+    res.status(503).json({ system: "GXEON Audit OS", ok: false, sanitized: true, code: "FIRST_PROPOSAL_STATUS_UNAVAILABLE", caseExists: false, proposalExists: false, proposalId: null, offerKey: null, proposalStatus: null, proposalCount: 0, readyForManualReview: false, readyForRevenueProof: false, confirmedRevenue: 0 });
+  }
+});
+router.post("/v1/audit/proposals/first-draft/run", noStore, async (req, res) => {
+  const auth = validateFirstProposalRunnerAuthorization(req.get("authorization"));
+  if (!auth.ok) { res.status(auth.status).json({ system: "GXEON Audit OS", ok: false, sanitized: true, status: "BLOCKED", code: auth.code, message: auth.message }); return; }
+  try {
+    const result = await createOrReuseFirstProposalDraft();
+    res.status(result.status).json(result.payload);
+  } catch {
+    res.status(503).json({ system: "GXEON Audit OS", ok: false, sanitized: true, status: "BLOCKED", code: "FIRST_PROPOSAL_RUN_FAILED", autoSend: false, paymentCalls: false, checkoutCreated: false, invoiceCreated: false, revenueEventCreated: false, fakeClientCreated: false, confirmedRevenue: 0 });
+  }
 });
 router.post("/v1/audit/proposals/preview", noStore, async (req, res) => {
   try { res.json(await buildProposalPreview(req.body)); } catch (error: any) { res.status(error.statusCode ?? 400).json({ system: "GXEON Audit OS", ok: false, sanitized: true, code: error.code ?? "PROPOSAL_PREVIEW_FAILED", message: error.message }); }

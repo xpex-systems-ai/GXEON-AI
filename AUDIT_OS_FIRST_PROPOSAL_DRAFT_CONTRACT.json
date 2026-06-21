@@ -1,0 +1,17 @@
+{
+  "idempotency_key": "mission_007_1_internal_first_proposal",
+  "metadata": {
+    "internal_first_proposal": true,
+    "source": "mission_007_1_autorunner",
+    "auto_send": false,
+    "payment_call": false,
+    "revenue_confirmed": false,
+    "requires_operator_review": true
+  },
+  "status": "DRAFT",
+  "allowed_languages": ["pt-BR", "en-US"],
+  "default_offer_key": "technical_audit",
+  "fallback_offer_key": "audit_express",
+  "manual_first": true,
+  "proof_required_for_revenue": true
+}

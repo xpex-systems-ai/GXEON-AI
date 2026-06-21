@@ -65,3 +65,7 @@ Use this showcase to start a focused conversation around Audit OS pilots, consul
 ## Proposal + Offer Flow Connection
 
 Public launch interest, pilots and consulting conversations must become operator-reviewed Proposal + Offer drafts before any revenue claim. GXEON Audit OS now routes real audit cases, evidence, findings, scores and reports into manual proposal drafts only: no fake traction, no fake clients, no fake revenue, no auto-send and no payment provider call. Confirmed revenue requires future Revenue Ledger proof of real acceptance, agreed delivery and payment.
+
+## Mission 007.1 — Internal first proposal DRAFT workflow
+
+The Proposal + Offer Engine is installed with an internal, proof-based first proposal DRAFT workflow. The workflow can create or reuse one operator-reviewed DRAFT for the first Audit Case, but it does not claim a sent proposal, accepted proposal, payment, invoice, checkout, or revenue. Confirmed revenue remains R$0 until real acceptance and payment proof are recorded in a future Revenue Ledger mission.

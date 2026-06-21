@@ -26,3 +26,7 @@ GXEON OS only reports metrics that are evidenced, versioned or explicitly labele
 * Do not convert conversations into customers.
 * Do not convert interest into investors.
 * Do not convert future modules into current capabilities.
+
+## Mission 007.1 — Internal first proposal DRAFT workflow
+
+The Proposal + Offer Engine is installed with an internal, proof-based first proposal DRAFT workflow. The workflow can create or reuse one operator-reviewed DRAFT for the first Audit Case, but it does not claim a sent proposal, accepted proposal, payment, invoice, checkout, or revenue. Confirmed revenue remains R$0 until real acceptance and payment proof are recorded in a future Revenue Ledger mission.

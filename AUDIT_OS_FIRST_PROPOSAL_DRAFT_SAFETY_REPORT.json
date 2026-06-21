@@ -1,0 +1,15 @@
+{
+  "mission": "MISSION_007_1_AUDIT_OS_FIRST_PROPOSAL_DRAFT_AUTORUNNER",
+  "status": "READY_FOR_OPERATOR_DRAFT_RUN",
+  "auto_send": false,
+  "payment_calls": false,
+  "checkout_created": false,
+  "invoice_created": false,
+  "revenue_event_created": false,
+  "fake_client_created": false,
+  "fake_revenue_created": false,
+  "connector_writes": false,
+  "secrets_logged": false,
+  "confirmed_revenue": 0,
+  "next_recommended_mission": "MISSION_008_REVENUE_LEDGER_AND_PAYMENT_PROOF"
+}

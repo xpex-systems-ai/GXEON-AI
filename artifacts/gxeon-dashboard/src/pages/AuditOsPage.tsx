@@ -123,7 +123,8 @@ export default function AuditOsPage() {
   const [mission006Status, setMission006Status] = useState<any>();
   const [offerCatalog, setOfferCatalog] = useState<any>();
   const [proposalStatus, setProposalStatus] = useState<any>();
-  const [selectedOfferKey, setSelectedOfferKey] = useState("audit_express");
+  const [firstProposalStatus, setFirstProposalStatus] = useState<any>();
+  const [selectedOfferKey, setSelectedOfferKey] = useState("technical_audit");
   const [proposalPreview, setProposalPreview] = useState<any>();
   const [proposalCopy, setProposalCopy] = useState("");
   const [proposalMessage, setProposalMessage] = useState("");
@@ -159,6 +160,7 @@ export default function AuditOsPage() {
       .catch(() => undefined);
     auditOsService.offerCatalogV1().then(setOfferCatalog).catch(() => undefined);
     auditOsService.proposalStatusV1().then(setProposalStatus).catch(() => undefined);
+    auditOsService.firstProposalDraftStatusV1().then(setFirstProposalStatus).catch(() => undefined);
   }, []);
 
   const health = mission.health ?? fallbackMission.health;
@@ -313,12 +315,14 @@ export default function AuditOsPage() {
     ((caseEvidenceFindings.findings?.count ?? 0) >= 1 &&
       (caseEvidenceFindings.evidences?.count ?? 0) >= 1);
   const refreshProposalEngine = async () => {
-    const [status, catalog] = await Promise.all([
+    const [status, catalog, firstDraft] = await Promise.all([
       auditOsService.proposalStatusV1().catch(() => undefined),
       auditOsService.offerCatalogV1().catch(() => undefined),
+      auditOsService.firstProposalDraftStatusV1().catch(() => undefined),
     ]);
     if (status) setProposalStatus(status);
     if (catalog) setOfferCatalog(catalog);
+    if (firstDraft) setFirstProposalStatus(firstDraft);
     if (selectedCaseId) setCaseProposals(await auditOsService.caseProposalsV1(selectedCaseId).catch(() => undefined));
   };
   const createProposalPreview = async () => {
@@ -335,6 +339,15 @@ export default function AuditOsPage() {
     try {
       const data = await auditOsService.createProposalV1({ caseId: selectedCaseId, offerKey: selectedOfferKey, title: proposalPreview?.proposal?.title ?? "Proposta GXEON", proposalCopy, scope: proposalPreview?.proposal?.scope ?? [], deliverables: proposalPreview?.proposal?.deliverables ?? [], priceTarget: proposalPreview?.proposal?.priceTarget ?? 0, currency: "BRL", language: "pt-BR", metadata: { mission: "MISSION_007_AUDIT_OS_PROPOSAL_AND_OFFER_ENGINE" } }, operatorToken);
       setProposalMessage(`${data.code ?? "OK"} · proposalId ${data.proposalId ?? "none"}`);
+      await refreshProposalEngine();
+    } catch (error: any) { setProposalMessage(error.message); }
+  };
+  const runFirstProposalDraft = async () => {
+    setProposalMessage("");
+    if (!operatorToken) { setProposalMessage("Cole GXEON_AUDIT_OPERATOR_TOKEN temporário apenas em memória."); return; }
+    try {
+      const data = await auditOsService.runFirstProposalDraftV1(operatorToken);
+      setProposalMessage(`${data.code ?? data.status ?? "OK"} · proposalId ${data.proposalId ?? "none"} · receita confirmada R$0`);
       await refreshProposalEngine();
     } catch (error: any) { setProposalMessage(error.message); }
   };
@@ -886,7 +899,7 @@ export default function AuditOsPage() {
           <Badge label="Ready" value={proposalStatus?.readyForProposal ? "proposal preview" : "preliminary"} tone={proposalStatus?.readyForProposal ? "green" : "amber"} />
         </div>
         <div className="mt-4 rounded-2xl border border-amber-200/40 bg-amber-500/10 p-4 text-sm text-amber-100">
-          Safety: autoSend=false · paymentCalls=false · revenueConfirmed=0 · proofRequired=true · operador revisa e envia manualmente fora do sistema.
+          Safety: autoSend=false · paymentCalls=false · revenueConfirmed=0 · proofRequired=true · operador revisa e envia manualmente fora do sistema. Proposta DRAFT criada não é receita. Envio ao cliente deve ser manual. Aceite manual e prova de pagamento entram na próxima missão. Receita confirmada permanece R$0 até prova real.
         </div>
         <div className="mt-4 grid gap-3 md:grid-cols-5">
           {(offerCatalog?.offers ?? []).map((offer: any) => (
@@ -897,25 +910,29 @@ export default function AuditOsPage() {
             </button>
           ))}
         </div>
-        <div className="mt-4 grid gap-3 md:grid-cols-6">
+        <div className="mt-4 grid gap-3 md:grid-cols-4 lg:grid-cols-8">
           <Panel title="Case" summary={proposalStatus?.caseExists ? "existe" : "pendente"} action={proposalStatus?.caseId ?? "Selecione/crie caso"} />
           <Panel title="Evidence" summary={`${proposalStatus?.evidencesCount ?? 0}`} action="referências seguras" />
           <Panel title="Findings" summary={`${proposalStatus?.findingsCount ?? 0}`} action="achados auditáveis" />
           <Panel title="Score" summary={`${proposalStatus?.scoreCount ?? 0}`} action="snapshots" />
           <Panel title="Report" summary={`${proposalStatus?.reportCount ?? 0}`} action="relatórios" />
-          <Panel title="Proposals" summary={`${proposalStatus?.proposalCount ?? caseProposals?.count ?? 0}`} action="DRAFT/manual" />
+          <Panel title="Proposals" summary={`${firstProposalStatus?.proposalCount ?? proposalStatus?.proposalCount ?? caseProposals?.count ?? 0}`} action="DRAFT/manual" />
+          <Panel title="First DRAFT" summary={firstProposalStatus?.proposalExists ? "existe" : "pendente"} action={firstProposalStatus?.proposalId ?? "sem proposta interna"} />
+          <Panel title="Manual review" summary={firstProposalStatus?.readyForManualReview ? "pronto" : "aguardando"} action={firstProposalStatus?.proposalStatus ?? "DRAFT required"} />
         </div>
         <div className="mt-4 flex flex-wrap gap-3">
           <button disabled={!selectedCaseId} onClick={createProposalPreview} className="rounded-2xl border border-cyan-200 px-5 py-3 font-black text-cyan-100 disabled:opacity-40">Criar prévia de proposta</button>
           <button disabled={!selectedCaseId || !proposalCopy || !operatorToken} onClick={saveProposalDraft} className="rounded-2xl border border-emerald-200 px-5 py-3 font-black text-emerald-100 disabled:opacity-40">Salvar proposta</button>
+          <button disabled={!operatorToken} onClick={runFirstProposalDraft} className="rounded-2xl border border-emerald-200 px-5 py-3 font-black text-emerald-100 disabled:opacity-40">Criar primeira proposta DRAFT segura</button>
           <button onClick={refreshProposalEngine} className="rounded-2xl border border-sky-200 px-5 py-3 font-black text-sky-100">Atualizar status</button>
         </div>
+        {firstProposalStatus && <div className="mt-4 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-stone-100">Primeira proposta: {firstProposalStatus.proposalExists ? "DRAFT existe" : "não criada"} · offerKey {firstProposalStatus.offerKey ?? "n/a"} · status {firstProposalStatus.proposalStatus ?? "n/a"} · readyForManualReview={String(Boolean(firstProposalStatus.readyForManualReview))} · readyForRevenueProof=false</div>}
         {proposalPreview && <textarea className="mt-4 min-h-64 w-full rounded-xl bg-black/40 p-3 font-mono text-sm" value={proposalCopy} onChange={(e) => setProposalCopy(e.target.value)} />}
         {proposalMessage && <p className="mt-4 rounded-2xl bg-black/30 p-4 text-sm text-amber-100">{proposalMessage}</p>}
         <div className="mt-4 grid gap-3 md:grid-cols-3">
           {(caseProposals?.items ?? []).map((proposal: any) => <Panel key={proposal.id} title={proposal.title ?? "Proposal"} summary={proposal.status ?? "DRAFT"} action={`R$${proposal.priceTarget ?? 0} · ${proposal.offerKey ?? "offer"}`} />)}
         </div>
-        {(proposalStatus?.proposalCount ?? caseProposals?.count ?? 0) > 0 && <div className="mt-4 rounded-2xl border border-emerald-200/40 bg-emerald-500/10 p-4 text-emerald-100"><p className="font-black">Next mission: MISSION_008_REVENUE_LEDGER_AND_PAYMENT_PROOF</p><p className="text-sm">Somente após draft, aceite manual real e prova de pagamento.</p></div>}
+        {(firstProposalStatus?.proposalExists || (proposalStatus?.proposalCount ?? caseProposals?.count ?? 0) > 0) && <div className="mt-4 rounded-2xl border border-emerald-200/40 bg-emerald-500/10 p-4 text-emerald-100"><p className="font-black">Next mission: MISSION_008_REVENUE_LEDGER_AND_PAYMENT_PROOF</p><p className="text-sm">Somente após draft, aceite manual real e prova de pagamento.</p></div>}
       </section>
 
       <section className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-5">
