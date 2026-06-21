@@ -82,5 +82,24 @@
       <circle cx="338" cy="228" r="2"/><circle cx="364" cy="237" r="2"/><circle cx="390" cy="246" r="2"/><circle cx="416" cy="255" r="2"/><circle cx="442" cy="264" r="2"/>
       <circle cx="460" cy="345" r="2"/><circle cx="486" cy="356" r="2"/><circle cx="512" cy="367" r="2"/><circle cx="538" cy="378" r="2"/>
     </g>
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="520" viewBox="0 0 1440 520" role="img" aria-label="GXEON OS Execution Intelligence hero banner">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#030712"/><stop offset="0.55" stop-color="#06111f"/><stop offset="1" stop-color="#0B1220"/></linearGradient>
+    <linearGradient id="line" x1="0" x2="1"><stop stop-color="#22d3ee"/><stop offset="0.6" stop-color="#7CFF6B"/><stop offset="1" stop-color="#F6C453"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1440" height="520" fill="url(#bg)"/>
+  <g opacity="0.18" stroke="#22d3ee"><path d="M0 80h1440M0 160h1440M0 240h1440M0 320h1440M0 400h1440M160 0v520M320 0v520M480 0v520M640 0v520M800 0v520M960 0v520M1120 0v520M1280 0v520"/></g>
+  <path d="M140 330 C330 170, 500 430, 700 260 S1050 100, 1300 260" fill="none" stroke="url(#line)" stroke-width="5" filter="url(#glow)"/>
+  <g transform="translate(110 112)">
+    <text x="0" y="0" fill="#F8FAFC" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="78" font-weight="800">GXEON OS</text>
+    <text x="2" y="62" fill="#22d3ee" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">Execution Intelligence</text>
+    <text x="2" y="112" fill="#CBD5E1" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24">Audit • Agents • Evidence • Monetization</text>
+    <text x="2" y="168" fill="#F6C453" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22">Manual-first • Preview-first • Proof-required</text>
+  </g>
+  <g transform="translate(1010 92)" fill="none" stroke="url(#line)" stroke-width="3" filter="url(#glow)">
+    <rect x="0" y="0" width="300" height="300" rx="34" opacity="0.75"/>
+    <path d="M58 150h184M150 58v184M82 82l136 136M218 82 82 218" opacity="0.8"/>
+    <circle cx="150" cy="150" r="48" fill="#06111f"/>
   </g>
 </svg>

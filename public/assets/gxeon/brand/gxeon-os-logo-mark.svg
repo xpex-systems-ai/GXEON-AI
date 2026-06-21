@@ -14,3 +14,10 @@
     <path d="M224 262h74l37 47-47 55Z" fill="#ffe8a3" opacity="0.92"/>
   </g>
 </svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="GXEON OS logo mark">
+  <defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#22d3ee"/><stop offset="0.55" stop-color="#7CFF6B"/><stop offset="1" stop-color="#F6C453"/></linearGradient></defs>
+  <rect width="512" height="512" rx="96" fill="#030712"/>
+  <path d="M106 256c0-82 66-148 148-148 50 0 94 24 121 62l-45 31c-17-24-44-38-76-38-51 0-93 42-93 93s42 93 93 93c40 0 74-25 87-60h-91v-54h154v27c0 83-64 142-150 142-82 0-148-66-148-148Z" fill="url(#g)"/>
+  <circle cx="383" cy="128" r="18" fill="#22d3ee"/>
+  <circle cx="128" cy="384" r="14" fill="#7CFF6B"/>
+</svg>

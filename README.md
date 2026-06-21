@@ -5,6 +5,9 @@
 ![Gxeon Systems AI official logo banner](public/assets/gxeon/brand/gxeon-systems-ai-official-logo.svg)
 
 ## GXEON OS by Gxeon Systems AI — Execution intelligence for AI-powered digital operations
+![GXEON OS hero banner](public/assets/gxeon/brand/gxeon-os-hero.svg)
+
+## Execution intelligence for AI-powered digital operations
 
 **Conversa vira comando. Comando vira código. Código vira sistema. Sistema vira produto. Produto vira receita com prova.**
 
@@ -23,6 +26,7 @@
 ## Executive Summary
 
 **GXEON OS**, by **Gxeon Systems AI**, is an operating layer for AI-assisted digital execution: it captures signals, organizes opportunities, prepares missions, generates code and documentation, validates evidence, supports proposals, and tracks monetization only when proof exists.
+**GXEON OS** is an operating layer for AI-assisted digital execution: it captures signals, organizes opportunities, prepares missions, generates code and documentation, validates evidence, supports proposals, and tracks monetization only when proof exists.
 
 The project is intentionally **manual-first**, **preview-first**, **safe-by-default**, and **evidence-led**. It does not claim confirmed revenue, customers, investors, autonomous production execution, or unrestricted connector writes unless those states are proven and documented.
 

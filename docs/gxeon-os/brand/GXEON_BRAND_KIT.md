@@ -7,6 +7,13 @@
 ## Positioning
 
 Gxeon Systems AI presents GXEON OS as a safety-first operating system for AI-assisted digital execution, audits, agents, evidence, proposals and proof-based monetization.
+## Official Name
+
+**GXEON OS**
+
+## Positioning
+
+GXEON OS is a safety-first operating system for AI-assisted digital execution, audits, agents, evidence, proposals and proof-based monetization.
 
 ## Taglines
 
