@@ -5,9 +5,10 @@
 ![Gxeon Systems AI official logo banner](public/assets/gxeon/brand/gxeon-systems-ai-official-logo.svg)
 
 ## GXEON OS by Gxeon Systems AI — Execution intelligence for AI-powered digital operations
+
 ![GXEON OS hero banner](public/assets/gxeon/brand/gxeon-os-hero.svg)
 
-## Execution intelligence for AI-powered digital operations
+**Conversation becomes command. Command becomes code. Code becomes system. System becomes product. Product becomes revenue with proof.**
 
 **Conversa vira comando. Comando vira código. Código vira sistema. Sistema vira produto. Produto vira receita com prova.**
 
@@ -26,19 +27,22 @@
 ## Executive Summary
 
 **GXEON OS**, by **Gxeon Systems AI**, is an operating layer for AI-assisted digital execution: it captures signals, organizes opportunities, prepares missions, generates code and documentation, validates evidence, supports proposals, and tracks monetization only when proof exists.
-**GXEON OS** is an operating layer for AI-assisted digital execution: it captures signals, organizes opportunities, prepares missions, generates code and documentation, validates evidence, supports proposals, and tracks monetization only when proof exists.
 
-The project is intentionally **manual-first**, **preview-first**, **safe-by-default**, and **evidence-led**. It does not claim confirmed revenue, customers, investors, autonomous production execution, or unrestricted connector writes unless those states are proven and documented.
+The project is intentionally **manual-first**, **preview-first**, **safe-by-default**, and **evidence-led**. It does not claim confirmed revenue, customers, investors, autonomous production execution, unrestricted connector writes, or payment automation unless those states are proven and documented.
 
 The current active product line is **GXEON Audit OS**, a workflow for auditing digital assets, collecting evidence, producing findings, and turning validated work into reports and proof-based offers.
+
+> **Current launch focus:** Audit OS pilots, implementation consulting, technical collaborators, and early partner conversations.
+>
+> **Start here:** [Public Launch Hub](docs/gxeon-os/public-launch/PUBLIC_LAUNCH_HUB.md) · [Investor Brief](docs/gxeon-os/investors/GXEON_INVESTOR_BRIEF.md) · [One Pager](docs/gxeon-os/investors/GXEON_ONE_PAGER.md) · [Portuguese README](docs/gxeon-os/README_PTBR.md)
 
 ---
 
 ## Why GXEON Exists
 
-AI can answer questions, but operators still need a controlled system that turns ideas into execution without losing safety, traceability, or commercial discipline. GXEON OS exists to connect the missing layer between conversation, code, deployment, evidence, proposals, and revenue validation.
+AI can answer questions, but operators still need a controlled system that turns ideas into execution without losing safety, traceability, or commercial discipline. GXEON OS connects the missing layer between conversation, code, deployment, evidence, proposals, and revenue validation.
 
-GXEON is built for founders, freelancers, agencies, technical operators, early SaaS teams, and collaborators who need an auditable command center instead of disconnected prompts, spreadsheets, and manual follow-up.
+GXEON is built for founders, freelancers, agencies, technical operators, early SaaS teams, investors, partners, and collaborators who need an auditable command center instead of disconnected prompts, spreadsheets, and manual follow-up.
 
 ---
 
@@ -67,7 +71,6 @@ flowchart TB
     Market[GXEON Marketplace: future]
     Academy[GXEON Academy: planned]
     Labs[GXEON Labs: experiments only]
-
     OS --> Audit --> Proposal --> Ledger --> Portfolio
     OS --> Consulting --> Portfolio
     OS --> Hub --> Agents
@@ -76,7 +79,7 @@ flowchart TB
     OS --> Labs
 ```
 
-The reusable source diagram lives at [`public/assets/gxeon/diagrams/gxeon-os-ecosystem-diagram.mmd`](public/assets/gxeon/diagrams/gxeon-os-ecosystem-diagram.mmd).
+Reusable source diagrams live in [`public/assets/gxeon/diagrams`](public/assets/gxeon/diagrams).
 
 ---
 
@@ -87,7 +90,7 @@ The reusable source diagram lives at [`public/assets/gxeon/diagrams/gxeon-os-eco
 | GXEON OS repository structure | Active scaffold | Monorepo folders, contracts, docs, modules |
 | GXEON Audit OS | Current active product line | Audit-oriented modules and documentation |
 | Safety posture | Active policy | Manual-first, preview-first, no-secrets rules |
-| Documentation system | Active | Brand, investor, portfolio, security and roadmap docs |
+| Documentation system | Active | Brand, investor, portfolio, security, launch and roadmap docs |
 | TypeScript workspace | Active | pnpm workspace with build/typecheck scripts |
 | Investor/portfolio kit | Active documentation asset | Docs and SVG assets in this repository |
 
@@ -133,10 +136,10 @@ Initial monetization is service-led and proof-based:
 
 | Offer | Starting target | Status |
 | --- | ---: | --- |
-| Auditoria Expressa GXEON | R$100 | Planned offer / proof-based |
-| Auditoria Técnica Completa | R$300 | Planned offer / proof-based |
-| Auditoria + Correções Assistidas | R$500+ | Planned offer / proof-based |
-| Setup IA Operacional | R$700+ | Commercial package planned |
+| GXEON Express Audit | R$100 | Planned offer / proof-based |
+| Complete Technical Audit | R$300 | Planned offer / proof-based |
+| Audit + Assisted Fixes | R$500+ | Planned offer / proof-based |
+| Operational AI Setup | R$700+ | Commercial package planned |
 | GXEON Consulting OS | R$1500+ | Commercial priority |
 
 These are initial package targets. They are not counted as revenue until real scope, customer agreement, delivery evidence, and payment proof exist.
@@ -180,19 +183,17 @@ flowchart TB
 
 ---
 
-## Safety and Trust
+## Public Launch Resources
 
-GXEON OS follows a strict operational honesty policy:
-
-* **Manual-first:** sensitive actions start with the operator.
-* **Preview-first:** the system prepares previews before execution.
-* **Read-only first:** connectors start with limited read or preview capability.
-* **Fail closed:** unsafe or missing configuration blocks execution.
-* **No fake revenue:** planned offers and forecasts are not revenue.
-* **No fake clients:** prospects, pilots, and templates are not customers.
-* **No fake investors:** interest is not represented as investment.
-* **No secrets in frontend:** service role keys, database URLs, and tokens must never be committed.
-* **No production writes without mission:** external writes require explicit scope and approval.
+| Resource | Link |
+| --- | --- |
+| Public Launch Hub | [`docs/gxeon-os/public-launch/PUBLIC_LAUNCH_HUB.md`](docs/gxeon-os/public-launch/PUBLIC_LAUNCH_HUB.md) |
+| Launch Sequence | [`docs/gxeon-os/public-launch/LAUNCH_SEQUENCE.md`](docs/gxeon-os/public-launch/LAUNCH_SEQUENCE.md) |
+| Platform Matrix | [`docs/gxeon-os/public-launch/PLATFORM_DISTRIBUTION_MATRIX.md`](docs/gxeon-os/public-launch/PLATFORM_DISTRIBUTION_MATRIX.md) |
+| 30-Day Calendar | [`docs/gxeon-os/public-launch/LAUNCH_CALENDAR_30_DAYS.md`](docs/gxeon-os/public-launch/LAUNCH_CALENDAR_30_DAYS.md) |
+| Social Launch Pack | [`docs/gxeon-os/social`](docs/gxeon-os/social) |
+| Metrics Plan | [`docs/gxeon-os/metrics/LAUNCH_METRICS_PLAN.md`](docs/gxeon-os/metrics/LAUNCH_METRICS_PLAN.md) |
+| SEO Pack | [`docs/gxeon-os/seo`](docs/gxeon-os/seo) |
 
 ---
 
@@ -205,8 +206,6 @@ GXEON OS follows a strict operational honesty policy:
 | One Pager | [`docs/gxeon-os/investors/GXEON_ONE_PAGER.md`](docs/gxeon-os/investors/GXEON_ONE_PAGER.md) |
 | Pitch Narrative | [`docs/gxeon-os/pitch/GXEON_PITCH_NARRATIVE.md`](docs/gxeon-os/pitch/GXEON_PITCH_NARRATIVE.md) |
 | Portfolio Showcase | [`docs/gxeon-os/portfolio/GXEON_AI_PORTFOLIO_SHOWCASE.md`](docs/gxeon-os/portfolio/GXEON_AI_PORTFOLIO_SHOWCASE.md) |
-| LinkedIn Kit | [`docs/gxeon-os/social/LINKEDIN_PROFILE_KIT.md`](docs/gxeon-os/social/LINKEDIN_PROFILE_KIT.md) |
-| Launch Posts | [`docs/gxeon-os/social/LINKEDIN_LAUNCH_POSTS.md`](docs/gxeon-os/social/LINKEDIN_LAUNCH_POSTS.md) |
 | Media Kit | [`docs/gxeon-os/media-kit/MEDIA_KIT.md`](docs/gxeon-os/media-kit/MEDIA_KIT.md) |
 | Honest Metrics | [`docs/gxeon-os/metrics/HONEST_METRICS.md`](docs/gxeon-os/metrics/HONEST_METRICS.md) |
 | Asset Registry | [`docs/gxeon-os/assets/ASSET_REGISTRY.md`](docs/gxeon-os/assets/ASSET_REGISTRY.md) |
@@ -225,7 +224,7 @@ scripts/                   Governance, validation and deployment helper scripts
 
 ---
 
-## APIs Read-Only do Ecossistema
+## Read-Only Ecosystem APIs
 
 ```http
 GET /api/v1/gxeon/ecosystem
@@ -238,9 +237,9 @@ These routes must not execute production writes, call payment providers, create 
 
 ---
 
-## Como Rodar Localmente
+## Running Locally
 
-> Ajuste os comandos conforme o workspace ativo. Não use credenciais reais em arquivos versionados.
+> Adjust commands to the active workspace. Do not use real credentials in versioned files.
 
 ```bash
 pnpm install
@@ -249,59 +248,46 @@ pnpm --filter @workspace/api-server run build
 PORT=3000 BASE_PATH=/ pnpm --filter @workspace/gxeon-dashboard run build
 ```
 
-### Variáveis de ambiente
-
-Crie arquivos locais ignorados pelo Git. Nunca commite `.env` real.
-
-```env
-NODE_ENV=development
-PORT=3000
-SUPABASE_URL=...
-SUPABASE_ANON_KEY=...
-GXEON_AUDIT_DB_PROVIDER=supabase_rest
-GXEON_AUDIT_WRITE_MODE=preview_only
-GXEON_AUDIT_ALLOW_DB_WRITES=false
-GXEON_AUDIT_OPERATOR_TOKEN=...
-GXEON_AUDIT_MISSION_RUNNER_TOKEN=...
-```
-
-### Regras de ambiente
-
-```text
-- Use valores reais apenas em provedores seguros.
-- Não cole segredos em issues, PRs ou README.
-- Não coloque chaves privilegiadas no frontend.
-- Não tire print de tela com token visível.
-```
+Environment examples and token-handling rules live in [`docs/gxeon-os/security/ENVIRONMENT_POLICY.md`](docs/gxeon-os/security/ENVIRONMENT_POLICY.md). The README intentionally keeps secret handling concise.
 
 ---
 
 ## Documentation Index
 
-| Documento | Função |
+| Document | Purpose |
 | --- | --- |
-| `docs/gxeon-os/GXEON_OS_MASTER_BLUEPRINT.md` | Blueprint mestre do ecossistema. |
-| `docs/gxeon-os/GXEON_ECOSYSTEM_MANIFEST.json` | Manifesto estruturado em JSON. |
-| `docs/gxeon-os/products/PRODUCT_INDEX.md` | Índice de produtos oficiais, labs e verticais. |
-| `docs/gxeon-os/roadmaps/ROADMAP_2026.md` | Roadmap oficial. |
-| `docs/gxeon-os/security/SAFETY_POLICY.md` | Política de segurança. |
-| `docs/gxeon-os/monetization/MONETIZATION_MAP.md` | Mapa de monetização. |
-| `docs/gxeon-os/architecture/GXEON_OS_ARCHITECTURE_MAP.md` | Arquitetura do sistema. |
-| `docs/gxeon-os/showcase/SHOWCASE_INDEX.md` | Índice de demos, screenshots seguros e provas públicas. |
+| `docs/gxeon-os/GXEON_OS_MASTER_BLUEPRINT.md` | Master blueprint for the ecosystem. |
+| `docs/gxeon-os/GXEON_ECOSYSTEM_MANIFEST.json` | Structured ecosystem manifest. |
+| `docs/gxeon-os/products/PRODUCT_INDEX.md` | Official product, lab, and vertical index. |
+| `docs/gxeon-os/roadmaps/ROADMAP_2026.md` | Official roadmap. |
+| `docs/gxeon-os/security/SAFETY_POLICY.md` | Safety policy. |
+| `docs/gxeon-os/security/ENVIRONMENT_POLICY.md` | Environment and token policy. |
+| `docs/gxeon-os/monetization/MONETIZATION_MAP.md` | Monetization map. |
+| `docs/gxeon-os/architecture/GXEON_OS_ARCHITECTURE_MAP.md` | System architecture. |
+| `docs/gxeon-os/showcase/SHOWCASE_INDEX.md` | Safe demos, screenshots, and public proof index. |
 
 ---
 
 ## For Investors / Partners
 
-GXEON OS is looking for strategic partners, early technical collaborators, pilot clients, and support to turn a safety-first execution operating system into scalable products. The best next step is to review the investor brief, one-pager, honest metrics document, and portfolio showcase before discussing pilots or partnerships.
+GXEON OS is looking for strategic partners, early technical collaborators, pilot clients, and support to turn a safety-first execution operating system into scalable products. Review the investor brief, one-pager, honest metrics document, portfolio showcase, and public launch hub before discussing pilots or partnerships.
 
 **CTA:** open a focused conversation around one of three tracks: Audit OS pilots, implementation consulting, or technical collaboration for the next product modules.
 
 ---
 
-## No-Secrets Policy
+## Safety and Trust
 
-Never commit real environment values, private URLs, tokens, database URLs, service role keys, payment credentials, customer data, or screenshots that expose secrets. Public documentation must use placeholders only.
+* **Manual-first:** sensitive actions start with the operator.
+* **Preview-first:** the system prepares previews before execution.
+* **Read-only first:** connectors start with limited read or preview capability.
+* **Fail closed:** unsafe or missing configuration blocks execution.
+* **No fake traction:** no fake visits, stars, forks, testimonials, leads, or engagement.
+* **No fake revenue:** planned offers and forecasts are not revenue.
+* **No fake clients:** prospects, pilots, and templates are not customers.
+* **No fake investors:** interest is not represented as investment.
+* **No secrets in frontend:** service role keys, database URLs, and tokens must never be committed.
+* **No production writes without mission:** external writes require explicit scope and approval.
 
 ---
 
@@ -313,12 +299,14 @@ This project is in active development. Some modules are active, some are planned
 
 ## License
 
-Project in development by **xpex-systems-ai**. Usage, distribution and commercial opening must follow the repository maintainer policy.
+Project in development by **xpex-systems-ai**. Usage, distribution, and commercial opening must follow the repository maintainer policy.
 
 <div align="center">
 
 ## GXEON OS
 
-**Capturar sinais. Organizar oportunidades. Executar com segurança. Validar com evidência. Monetizar com prova. Escalar com agentes.**
+**Capture signals. Organize opportunities. Execute safely. Validate with evidence. Monetize with proof. Scale with agents.**
+
+[Public Launch Hub](docs/gxeon-os/public-launch/PUBLIC_LAUNCH_HUB.md) · [Investor Brief](docs/gxeon-os/investors/GXEON_INVESTOR_BRIEF.md) · [Portuguese README](docs/gxeon-os/README_PTBR.md)
 
 </div>
