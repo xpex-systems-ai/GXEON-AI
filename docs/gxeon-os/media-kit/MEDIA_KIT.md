@@ -22,6 +22,7 @@ GXEON, GXEON OS, Audit OS, AI Operations, execution intelligence, AI agents, dig
 
 ## Official Assets
 
+* `public/assets/gxeon/brand/gxeon-systems-ai-official-logo.svg`
 * `public/assets/gxeon/brand/gxeon-os-hero.svg`
 * `public/assets/gxeon/brand/gxeon-os-logo-mark.svg`
 * `public/assets/gxeon/social/gxeon-linkedin-banner.svg`

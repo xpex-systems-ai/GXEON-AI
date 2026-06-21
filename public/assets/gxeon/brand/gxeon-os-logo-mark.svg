@@ -1,3 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Gxeon Systems AI official GX logo mark">
+  <defs>
+    <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fff8d6"/><stop offset="0.25" stop-color="#f8d889"/><stop offset="0.52" stop-color="#c9902d"/><stop offset="0.78" stop-color="#ffe8a3"/><stop offset="1" stop-color="#8b5b18"/></linearGradient>
+    <filter id="shadow"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000" flood-opacity="0.7"/></filter>
+    <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="512" height="512" rx="64" fill="#060606"/>
+  <circle cx="256" cy="256" r="208" fill="none" stroke="#6e4a16" stroke-width="5" opacity="0.75"/>
+  <circle cx="256" cy="256" r="176" fill="none" stroke="#c89132" stroke-width="4" opacity="0.55" stroke-dasharray="36 18"/>
+  <circle cx="256" cy="256" r="142" fill="none" stroke="#f8d889" stroke-width="3" opacity="0.35"/>
+  <g filter="url(#glow)">
+    <path d="M101 249 189 137h178l-42 55H217l-52 66 69 88-40 51Z" fill="url(#gold)" filter="url(#shadow)"/>
+    <path d="M207 325 370 137h99L306 325l99 122H302Z" fill="url(#gold)" filter="url(#shadow)"/>
+    <path d="M224 262h74l37 47-47 55Z" fill="#ffe8a3" opacity="0.92"/>
+  </g>
+</svg>
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="GXEON OS logo mark">
   <defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#22d3ee"/><stop offset="0.55" stop-color="#7CFF6B"/><stop offset="1" stop-color="#F6C453"/></linearGradient></defs>
   <rect width="512" height="512" rx="96" fill="#030712"/>

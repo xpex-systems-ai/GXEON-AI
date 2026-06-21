@@ -1,5 +1,12 @@
 # GXEON OS Brand Kit
 
+## Official Brand
+
+**Gxeon Systems AI** is the official institutional brand. **GXEON OS** is the operating-system product line under that brand.
+
+## Positioning
+
+Gxeon Systems AI presents GXEON OS as a safety-first operating system for AI-assisted digital execution, audits, agents, evidence, proposals and proof-based monetization.
 ## Official Name
 
 **GXEON OS**
@@ -31,6 +38,7 @@ Executive, technological, confident, honest, visionary, operational and free fro
 | Electric Cyan | `#22d3ee` | Primary highlights and system lines |
 | Neon Green | `#7CFF6B` | Execution, safety and success accents |
 | Soft White | `#F8FAFC` | Text |
+| Official Gold | `#F8D889` | Primary logo metal highlight |
 | Gold Accent | `#F6C453` | Monetization and proof markers |
 
 ## Visual Direction
@@ -56,6 +64,7 @@ Dark premium command center. AI operations, mission control, cybernetic but trus
 
 ## Asset Set
 
+* `public/assets/gxeon/brand/gxeon-systems-ai-official-logo.svg`
 * `public/assets/gxeon/brand/gxeon-os-hero.svg`
 * `public/assets/gxeon/brand/gxeon-os-logo-mark.svg`
 * `public/assets/gxeon/social/gxeon-linkedin-banner.svg`
