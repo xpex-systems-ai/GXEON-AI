@@ -4,7 +4,7 @@
 
 ## Sistema Operacional de Execução Inteligente, Auditoria, Agentes e Monetização Assistida
 
-**Capturar sinais. Organizar oportunidades. Executar com segurança. Validar com evidência. Monetizar com prova. Escalar com agentes.**
+**Capturar sinais. Organizar oportunidades. Executar com segurança. Validar com evidência. Monetiza com prova. Escalar com agentes.**
 
 <br />
 
