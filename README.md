@@ -1,205 +1,650 @@
 # GXEON OS
 
-## Sistema Operacional de Operações Digitais
+<div align="center">
 
-**Captura • Executa • Monetiza**
+## Sistema Operacional de Execução Inteligente, Auditoria, Agentes e Monetização Assistida
 
-_The operating system for digital operations, agent execution and monetized intelligence._
+**Capturar sinais. Organizar oportunidades. Executar com segurança. Validar com evidência. Monetizar com prova. Escalar com agentes.**
 
-![GitHub](https://img.shields.io/badge/GitHub-CONNECTED_READONLY-2ea44f)
-![Vercel](https://img.shields.io/badge/Vercel-CONNECTED_READONLY-000000)
-![Railway](https://img.shields.io/badge/Railway-PARTIAL_READONLY-6f42c1)
-![Supabase](https://img.shields.io/badge/Supabase-PARTIAL_READONLY-3ecf8e)
-![Microsoft%20365](https://img.shields.io/badge/Microsoft%20365-P0_READY_PENDING_ENV-0078d4)
-![Security](https://img.shields.io/badge/Security-read_only_first-blue)
-![Secrets](https://img.shields.io/badge/Secrets-backend_only-red)
+<br />
 
-GXEON OS é o **Sistema Operacional de Operações Digitais** para transformar sinais, tarefas, agentes, evidências e monetização em um fluxo único de comando. Este repositório é o centro institucional, técnico e operacional do GXEON: documenta arquitetura, conectores, segurança, memória, agentes e roadmap sem expor credenciais, prometer autonomia inexistente ou inflar status de produção.
+![Status](https://img.shields.io/badge/status-active_ecosystem-00d084)
+![Mode](https://img.shields.io/badge/mode-manual_first-blue)
+![Safety](https://img.shields.io/badge/safety-preview_first-purple)
+![Revenue](https://img.shields.io/badge/revenue-proof_required-gold)
+![Secrets](https://img.shields.io/badge/secrets-never_commit-red)
+![Architecture](https://img.shields.io/badge/architecture-monorepo-black)
+![Audit OS](https://img.shields.io/badge/product-Audit_OS_active-00aaff)
+![Codex Ready](https://img.shields.io/badge/execution-Codex_ready-111111)
 
----
-
-## Mission Control snapshot
-
-| Domínio | Estado atual | Papel operacional | Regra de segurança |
-| --- | --- | --- | --- |
-| GitHub | `CONNECTED_READONLY` | Código, PRs, Issues, ADRs | Fonte técnica de verdade; escrita via revisão humana. |
-| Vercel | `CONNECTED_READONLY` | Interface, Deploy, Frontend | Observabilidade e publicação controlada. |
-| Railway | `PARTIAL_READONLY` | Runtime, APIs, Workers, Logs | Parcial; não tratar como controle total. |
-| Supabase | `PARTIAL_READONLY` | Memória, Storage, Eventos, Evidências | Parcial; service credentials somente no backend. |
-| Microsoft 365 | `P0_READY_PENDING_ENV` | Email, Calendar, OneDrive, Documents | Conector P0 construído, pendente de ambiente aprovado. |
-| Home Center Agents | `BLUEPRINT_READY` | Casa dos agentes e missões | Agentes propositivos antes de execução aprovada. |
-| Security model | `READ_ONLY_FIRST` | Limites, auditoria e evidências | Sem segredos no frontend e fail closed. |
+</div>
 
 ---
 
-## O que é GXEON OS
+## Visão Geral
 
-GXEON OS é uma camada operacional para coordenar **operador humano + agentes de IA + infraestrutura conectada**. A proposta é capturar sinais operacionais, converter em tarefas, acionar agentes com permissões explícitas, anexar evidências, registrar decisões e preparar monetização com disciplina.
+**GXEON OS** é um sistema operacional privado para transformar ideias, sinais, tarefas, agentes, conectores, evidências, propostas e receita em um fluxo organizado, auditável e escalável.
 
-Não é apresentado como automação irrestrita. O estado atual prioriza leitura, auditoria, proposta e aprovação humana antes de qualquer ação destrutiva ou financeira.
+Ele não é apenas um dashboard.
 
----
+Ele é uma estrutura viva para construir, operar e monetizar sistemas digitais com apoio de IA, mantendo o operador humano no centro da decisão.
 
-## Core stack
-
-| Camada | Provedor | Significado no GXEON |
-| --- | --- | --- |
-| Engenharia | GitHub | Repositórios, código, issues, pull requests, ADRs e histórico técnico. |
-| Interface | Vercel | Dashboard, frontend, publicação e visualização do Mission Control. |
-| Execução | Railway | Serviços, APIs, workers, runtime e logs operacionais. |
-| Memória | Supabase | Eventos, evidências, storage, dados operacionais e trilhas de execução. |
-| Comunicação | Microsoft 365 | Documentos, email, calendário, apresentações e operação humana. |
-| Agentes | Home Center Agents | Papéis, missões, aprovações, evidências e execução governada. |
-
----
-
-## GXEON Digital Operations OS
-
-```mermaid
-flowchart LR
-  GitHub[GitHub\nCONNECTED_READONLY] --> OS[GXEON OS\nMission Control]
-  Vercel[Vercel\nCONNECTED_READONLY] --> OS
-  Railway[Railway\nPARTIAL_READONLY] --> OS
-  Supabase[Supabase\nPARTIAL_READONLY] --> OS
-  M365[Microsoft 365\nP0_READY_PENDING_ENV] --> OS
-  OS --> HCA[Home Center Agents\nBlueprint + Approval Gates]
-  HCA --> Evidence[Evidence + Ledger + Dashboard]
+```text
+Ideia → Missão → Código → Pull Request → Deploy → Evidência → Relatório → Proposta → Receita
 ```
 
----
-
-## Home Center Agents
-
-**Home Center Agents** é a casa operacional dos agentes do GXEON. Cada agente possui missão, escopo, conectores permitidos, limites de leitura/escrita, aprovação humana e exigência de evidência. A visão inclui Code Agent, Deploy Agent, Ops Agent, Revenue Agent, Finance Agent, Security Agent, Grok Auditor Agent e Operator Agent.
-
-A regra institucional é simples: agentes podem observar, explicar e propor; execução com impacto real exige aprovação, ambiente correto, rollback e prova anexada.
+O GXEON nasce como uma arquitetura **manual-first**, **preview-first**, **safe-by-default** e evolui para um ecossistema com agentes, conectores, memória operacional, automação assistida e produtos comerciais.
 
 ---
 
-## Knowledge Architecture
+## O Que Este Repositório Representa
+
+Este repositório é o **repositório-mãe oficial do ecossistema GXEON OS**.
+
+Ele concentra:
+
+* arquitetura do sistema operacional;
+* produto oficial **GXEON Audit OS**;
+* documentação estratégica;
+* contratos tipados;
+* políticas de segurança;
+* roadmap técnico;
+* módulos futuros;
+* laboratórios comerciais;
+* estrutura de agentes;
+* conectores;
+* camadas de monetização;
+* base para produtos SaaS, marketplace, consulting e academy.
+
+---
+
+## Princípio Fundador
+
+> **Nada executa sem consciência. Nada monetiza sem validação. Nada escala sem segurança.**
+
+O GXEON não automatiza no escuro.
+
+Ele prepara, recomenda, organiza, cria prévias, registra evidências e só avança quando existe controle, autorização e rastreabilidade.
+
+---
+
+## Ecossistema GXEON
 
 ```mermaid
 flowchart TB
-  GitHub[GitHub\nTechnical Source of Truth] --> Knowledge[GXEON Knowledge Architecture]
-  M365[Microsoft 365\nCorporate Document Layer] --> Knowledge
-  Supabase[Supabase\nOperational Memory] --> Knowledge
-  Knowledge --> OS[GXEON OS\nDashboard + Execution Layer]
-  OS --> Decisions[Decisions + Evidence + Roadmap]
+    OS[GXEON OS<br/>Sistema Operacional Principal]
+
+    Audit[GXEON Audit OS<br/>Auditoria + Evidências + Relatórios]
+    Proposal[GXEON Proposal Engine<br/>Propostas + Ofertas]
+    Ledger[GXEON Revenue Ledger<br/>Receita + Prova]
+    Agents[GXEON Agent Economy<br/>Agentes + Permissões]
+    Hub[GXEON Connector Hub<br/>Integrações Seguras]
+    Market[GXEON Marketplace<br/>Templates + Agentes + Fluxos]
+    Academy[GXEON Academy<br/>Cursos + Playbooks]
+    SaaS[GXEON SaaS<br/>Assinatura + Plataforma]
+    Consulting[GXEON Consulting OS<br/>Serviços + Implantação]
+    Portfolio[GXEON AI Portfolio<br/>Vitrine + Cases]
+    Store[GXEON Store Brasil<br/>Afiliados + Campanhas]
+    Web3[GXEON Web3 Tasks<br/>Bounties + Quests]
+
+    OS --> Audit
+    OS --> Proposal
+    OS --> Ledger
+    OS --> Agents
+    OS --> Hub
+    OS --> Market
+    OS --> Academy
+    OS --> SaaS
+    OS --> Consulting
+    OS --> Portfolio
+    OS --> Store
+    OS --> Web3
+
+    Audit --> Proposal
+    Proposal --> Ledger
+    Ledger --> Portfolio
+    Hub --> Agents
+    Agents --> Audit
+    Consulting --> Portfolio
+    Academy --> Market
 ```
 
-A arquitetura de conhecimento separa código, documentos corporativos, eventos operacionais, evidências e decisões. Essa separação evita confundir intenção com produção, proposta com execução e evidência com segredo.
+---
+
+## Produtos e Módulos
+
+| Produto / Módulo          | Estado               | Função                                                                     |
+| ------------------------- | -------------------- | -------------------------------------------------------------------------- |
+| **GXEON OS**              | Core                 | Sistema operacional mestre do ecossistema.                                 |
+| **GXEON Audit OS**        | Ativo                | Auditoria de sites, sistemas, GitHub, deploys, Supabase, APIs e funis.     |
+| **GXEON Proposal Engine** | Próximo              | Transforma relatórios e achados em propostas comerciais.                   |
+| **GXEON Revenue Ledger**  | Planejado            | Controla receita prevista, proposta, aceita, confirmada e verificada.      |
+| **GXEON Agent Economy**   | Futuro               | Economia de agentes com missões, permissões e resultados.                  |
+| **GXEON Marketplace**     | Futuro               | Loja de templates, agentes, fluxos, playbooks e automações.                |
+| **GXEON Academy**         | Planejado            | Cursos, tutoriais, documentação e treinamentos.                            |
+| **GXEON Connector Hub**   | Planejado            | Central segura para GitHub, Supabase, Railway, Vercel e outros conectores. |
+| **GXEON SaaS**            | Futuro               | Produto por assinatura para operadores, freelancers e agências.            |
+| **GXEON Consulting OS**   | Prioridade comercial | Serviços de implantação, auditoria e automação com IA.                     |
+| **GXEON AI Portfolio**    | Prioridade comercial | Portfólio vivo de sistemas, cases, prints, demos e entregas.               |
+| **GXEON Store Brasil**    | Laboratório          | Vertical de afiliados, Copa, Mercado Livre e campanhas comerciais.         |
+| **GXEON Web3 Tasks**      | Laboratório          | Radar de bounties, quests, testnets, airdrops e recompensas Web3.          |
 
 ---
 
-## Connector Topology
+## Produto Oficial Atual: GXEON Audit OS
 
-| Provider | Status | Papel | Boundary |
-| --- | --- | --- | --- |
-| GitHub | `CONNECTED_READONLY` | Engenharia, código, PRs, issues e ADRs | Leitura conectada; escrita somente por fluxo aprovado. |
-| Vercel | `CONNECTED_READONLY` | Interface, dashboard, frontend e publicação | Leitura conectada; deploy tratado como operação controlada. |
-| Railway | `PARTIAL_READONLY` | Runtime, serviços, workers, APIs e logs | Parcial; não declarar cobertura total. |
-| Supabase | `PARTIAL_READONLY` | Memória, eventos, storage, evidências e dados | Parcial; credenciais sensíveis ficam no backend. |
-| Microsoft 365 | `P0_READY_PENDING_ENV` | Documentos, email, calendário e apresentações | Pronto em P0, pendente de variáveis de ambiente aprovadas. |
+O **GXEON Audit OS** é a primeira linha de produto real do ecossistema.
 
----
+Ele foi criado para transformar qualquer ativo digital em um caso de auditoria com evidências, achados, pontuação, relatório, proposta e potencial receita.
 
-## Operational Pipeline
+### Ele pode auditar
+
+* sites;
+* landing pages;
+* e-commerces;
+* repositórios GitHub;
+* deploys Railway/Vercel;
+* bancos Supabase;
+* APIs;
+* fluxos de IA;
+* funis;
+* checkout;
+* SEO técnico;
+* segurança básica;
+* automações;
+* presença digital.
+
+### Fluxo operacional
 
 ```mermaid
 flowchart LR
-  Radar[Radar X] --> Tasks[Tasks]
-  Tasks --> Agents[Agents]
-  Agents --> Execution[Execution]
-  Execution --> Evidence[Evidence]
-  Evidence --> Ledger[Ledger]
-  Ledger --> Dashboard[Dashboard]
+    Case[Audit Case] --> Evidence[Evidências]
+    Evidence --> Findings[Achados]
+    Findings --> Score[Score]
+    Score --> Report[Relatório]
+    Report --> Proposal[Proposta]
+    Proposal --> Revenue[Receita Confirmada]
 ```
 
-1. **Radar X** captura sinais, oportunidades, riscos e demandas.
-2. **Tasks** convertem sinais em trabalho priorizado.
-3. **Agents** analisam, propõem e executam apenas quando autorizados.
-4. **Execution** registra atividade controlada.
-5. **Evidence** comprova resultado sem expor segredo.
-6. **Ledger** organiza valor, custos, entregas e aprendizado.
-7. **Dashboard** mostra estado operacional para decisão humana.
+### Regra de ouro
+
+```text
+Sem evidência, não há relatório.
+Sem relatório, não há proposta.
+Sem proposta aceita, não há receita.
+Sem prova, não há monetização.
+```
 
 ---
 
-## Security Principles
+## Arquitetura Técnica
 
-- **No secrets in frontend:** credenciais nunca entram em código cliente, markdown público, screenshots ou logs commitados.
-- **Backend-only credentials:** tokens, chaves e segredos vivem em provedores aprovados e rotas server-side.
-- **Read-only first:** conectores começam como leitura antes de qualquer capacidade mutável.
-- **Fail closed:** ausência de configuração segura bloqueia execução em vez de degradar permissões.
-- **Human approval gates:** ações destrutivas, financeiras, deploys e escritas externas exigem aprovação.
-- **Evidence and audit trail:** toda execução relevante deve gerar evidência segura e rastreável.
+```mermaid
+flowchart TB
+    Operator[Operador Humano] --> GX[GXEON Mission Control]
+
+    GX --> Dashboard[Frontend Dashboard]
+    GX --> API[API Server]
+    GX --> Docs[Docs + Manifests]
+    GX --> Contracts[Typed Contracts]
+
+    API --> Audit[Audit OS Services]
+    API --> Proposal[Proposal Engine]
+    API --> Ledger[Revenue Ledger]
+    API --> Connectors[Connector Hub]
+    API --> Agents[Agent Runtime]
+
+    Audit --> Supabase[(Supabase / Postgres)]
+    Ledger --> Supabase
+    Proposal --> Supabase
+
+    Connectors --> GitHub[GitHub]
+    Connectors --> Railway[Railway]
+    Connectors --> Vercel[Vercel]
+    Connectors --> External[External APIs]
+
+    Docs --> Roadmap[Roadmap]
+    Docs --> Safety[Safety Policy]
+    Docs --> Products[Product Index]
+```
 
 ---
 
-## Current Status
+## Stack Principal
 
-| Área | Estado | Observação honesta |
-| --- | --- | --- |
-| Repository presentation | `P0_UPGRADED` | Este repositório agora possui documentação institucional e operacional. |
-| Connectors | `MIXED_READONLY` | GitHub e Vercel conectados em leitura; Railway e Supabase parciais; Microsoft 365 pendente de ambiente. |
-| Home Center Agents | `BLUEPRINT` | Blueprint e roadmap documentados; não tratados como runtime autônomo final. |
-| Monetization path | `DESIGNED` | Caminho documentado; receita deve ser registrada somente com evidência real. |
-| Security model | `DOCUMENTED` | Políticas de backend-only, leitura primeiro e aprovação humana formalizadas. |
+| Camada                  | Tecnologia / Provedor     | Papel                                                           |
+| ----------------------- | ------------------------- | --------------------------------------------------------------- |
+| Versionamento           | GitHub                    | Código, PRs, issues, histórico e fonte técnica de verdade.      |
+| Execução de código      | Codex                     | Executor técnico, geração de branches, PRs, builds e correções. |
+| Arquitetura / Auditoria | GX / ChatGPT              | Planejamento, auditoria, estratégia e missão operacional.       |
+| Backend                 | API Server                | Rotas, serviços, contratos e lógica do sistema.                 |
+| Frontend                | GXEON Dashboard           | Mission Control, painéis, módulos e operação visual.            |
+| Deploy Backend          | Railway                   | Runtime da API e serviços.                                      |
+| Deploy Frontend         | Vercel / Netlify          | Publicação e previews.                                          |
+| Banco / Memória         | Supabase / Postgres       | Casos, evidências, relatórios, ledger e estado operacional.     |
+| Documentação            | Markdown + JSON contracts | Memória institucional e técnica.                                |
+| Segurança               | Safety Policy + Guards    | Preview-first, manual-first, no secrets, no fake revenue.       |
+
+---
+
+## Estrutura do Repositório
+
+```text
+.
+├── artifacts/
+│   ├── api-server/
+│   │   └── src/modules/
+│   │       ├── gxeon-os/
+│   │       ├── audit-os/
+│   │       ├── proposal-engine/
+│   │       ├── revenue-ledger/
+│   │       ├── connector-hub/
+│   │       ├── agent-economy/
+│   │       ├── marketplace/
+│   │       ├── academy/
+│   │       ├── consulting-os/
+│   │       ├── ai-portfolio/
+│   │       └── labs/
+│   │
+│   └── gxeon-dashboard/
+│       └── src/modules/
+│           ├── gxeon-os/
+│           ├── audit-os/
+│           ├── proposal-engine/
+│           ├── revenue-ledger/
+│           ├── connector-hub/
+│           ├── agent-economy/
+│           ├── marketplace/
+│           ├── academy/
+│           ├── consulting-os/
+│           ├── ai-portfolio/
+│           └── labs/
+│
+├── docs/
+│   └── gxeon-os/
+│       ├── manifests/
+│       ├── products/
+│       ├── modules/
+│       ├── agents/
+│       ├── connectors/
+│       ├── monetization/
+│       ├── security/
+│       ├── roadmaps/
+│       ├── architecture/
+│       ├── portfolio/
+│       └── labs/
+│
+├── packages/
+│   ├── gxeon-contracts/
+│   ├── gxeon-core/
+│   ├── gxeon-agents/
+│   ├── gxeon-connectors/
+│   ├── gxeon-monetization/
+│   ├── gxeon-products/
+│   ├── gxeon-security/
+│   ├── gxeon-observability/
+│   └── gxeon-shared/
+│
+└── README.md
+```
+
+---
+
+## APIs Read-only do Ecossistema
+
+O módulo GXEON OS expõe endpoints seguros e estáticos para o ecossistema:
+
+```http
+GET /api/v1/gxeon/ecosystem
+GET /api/v1/gxeon/products
+GET /api/v1/gxeon/roadmap
+GET /api/v1/gxeon/safety-policy
+```
+
+Essas rotas não executam escrita em produção, não chamam provedores externos e não retornam segredos.
+
+---
+
+## Contratos Oficiais
+
+O repositório possui contratos para organizar o ecossistema:
+
+```text
+packages/gxeon-contracts/src/ecosystemManifest.ts
+packages/gxeon-contracts/src/safetyPolicy.ts
+docs/gxeon-os/GXEON_ECOSYSTEM_MANIFEST.json
+docs/gxeon-os/security/SAFETY_POLICY.md
+docs/gxeon-os/products/PRODUCT_INDEX.md
+```
+
+Esses contratos definem:
+
+* produtos oficiais;
+* laboratórios;
+* módulos futuros;
+* status operacional;
+* estágios de monetização;
+* políticas de segurança;
+* dependências;
+* próximas missões.
+
+---
+
+## Política de Segurança
+
+O GXEON segue uma política de segurança rígida.
+
+### Princípios
+
+* **Manual-first:** toda ação sensível começa com o operador.
+* **Preview-first:** o sistema cria prévias antes de executar.
+* **Read-only first:** conectores começam em leitura.
+* **Fail closed:** se não houver configuração segura, a ação é bloqueada.
+* **No fake revenue:** receita falsa é proibida.
+* **No fake clients:** clientes fictícios não entram como clientes reais.
+* **No secrets in frontend:** segredos nunca vão para o cliente.
+* **No connector writes without mission:** conectores só escrevem com missão explícita.
+* **Evidence-first:** toda entrega relevante precisa de prova.
+
+### Proibido
+
+```text
+- Commitar tokens.
+- Expor DATABASE_URL.
+- Expor service_role.
+- Criar receita falsa.
+- Criar clientes falsos.
+- Chamar pagamento sem missão.
+- Fazer scraping sem escopo.
+- Escrever em conectores externos sem autorização.
+- Tratar previsão como receita confirmada.
+```
+
+---
+
+## Monetização
+
+O GXEON monetiza por etapas.
+
+```mermaid
+flowchart LR
+    Audit[Auditoria] --> Report[Relatório]
+    Report --> Proposal[Proposta]
+    Proposal --> Offer[Oferta]
+    Offer --> Payment[Pagamento Manual ou Integrado]
+    Payment --> Ledger[Revenue Ledger]
+    Ledger --> Portfolio[Portfólio]
+    Portfolio --> Scale[Escala]
+```
+
+### Primeiras ofertas comerciais
+
+| Oferta               | Entrega                                   | Ticket inicial |
+| -------------------- | ----------------------------------------- | -------------- |
+| Auditoria Expressa   | Diagnóstico simples + evidências + resumo | R$100          |
+| Auditoria Técnica    | Achados + score + relatório completo      | R$300          |
+| Auditoria + Correção | Relatório + plano + ajustes assistidos    | R$500+         |
+| Setup IA Operacional | Organização de automação, deploy e painel | R$700+         |
+| Consulting OS        | Implantação estratégica com IA            | R$1500+        |
+
+### Regra financeira
+
+```text
+Receita só é confirmada quando houver prova manual ou integração segura aprovada.
+```
 
 ---
 
 ## Roadmap
 
-| Fase | Nome | Resultado esperado |
-| --- | --- | --- |
-| P0 | Foundation | Repositório, arquitetura, segurança, conectores e narrativa alinhados. |
-| P1 | Connector completion | Completar conectores parciais sem violar limites de segurança. |
-| P2 | Memory and evidence | Consolidar memória operacional, evidências e decisões. |
-| P3 | Home Center Agents | Ativar agentes de leitura/proposta com gates humanos. |
-| P4 | Monetization | Conectar ofertas, checkout readiness, webhook e ledger real. |
-| P5 | Agent Economy | Evoluir agentes para economia governada por permissões, auditoria e valor comprovado. |
+| Fase | Nome                         | Resultado                                                                       |
+| ---- | ---------------------------- | ------------------------------------------------------------------------------- |
+| P0   | Foundation                   | Repositório, documentação, safety policy, contracts e estrutura do ecossistema. |
+| P1   | Audit OS                     | Casos, evidências, achados, score e relatórios.                                 |
+| P2   | Proposal Engine              | Relatório vira proposta comercial.                                              |
+| P3   | Revenue Ledger               | Receita prevista, aceita, confirmada e verificada.                              |
+| P4   | AI Portfolio + Consulting OS | Vitrine comercial e pacotes de serviço.                                         |
+| P5   | Academy                      | Conteúdo, cursos, playbooks e treinamento.                                      |
+| P6   | Connector Hub                | Integrações seguras com escopo limitado.                                        |
+| P7   | Marketplace                  | Templates, agentes, automações e fluxos vendáveis.                              |
+| P8   | SaaS                         | Produto por assinatura.                                                         |
+| P9   | Agent Economy                | Economia governada de agentes e execução assistida.                             |
 
 ---
 
-## Documentation Index
+## Fluxo de Execução Oficial
 
-| Documento | Finalidade |
-| --- | --- |
-| [Docs hub](docs/README.md) | Índice central da documentação GXEON OS. |
-| [Manifesto](docs/manifesto/GXEON_MANIFESTO.md) | Missão, visão e princípios. |
-| [System Architecture](docs/architecture/GXEON_SYSTEM_ARCHITECTURE.md) | Camadas, fluxos e diagrama técnico. |
-| [Knowledge Architecture](docs/architecture/GXEON_KNOWLEDGE_ARCHITECTURE.md) | Árvore de conhecimento e fontes de verdade. |
-| [Company Memory Map](docs/architecture/GXEON_COMPANY_MEMORY_MAP.md) | Onde cada memória corporativa vive. |
-| [Connector Topology](docs/architecture/GXEON_CONNECTOR_TOPOLOGY.md) | Mapa de conectores, status e limites. |
-| [Home Center Agents Blueprint](docs/agents/HOME_CENTER_AGENTS_BLUEPRINT.md) | Casa dos agentes, papéis e permissões. |
-| [Home Center Agents Roadmap](docs/agents/HOME_CENTER_AGENTS_ROADMAP.md) | Fases de ativação governada. |
-| [Connectors Overview](docs/connectors/GXEON_CONNECTORS_OVERVIEW.md) | Visão operacional dos conectores. |
-| [Operational Playbook](docs/operations/GXEON_OPERATIONAL_PLAYBOOK.md) | Workflow do operador e validação. |
-| [Security Model](docs/security/GXEON_SECURITY_MODEL.md) | Políticas de segurança e ações proibidas. |
-| [Monetization Path](docs/monetization/GXEON_MONETIZATION_PATH.md) | Caminho Radar X até ledger e entrega. |
-| [Master Roadmap](docs/roadmap/GXEON_MASTER_ROADMAP.md) | P0-P5 e status atual. |
-| [Brand System](docs/brand/GXEON_BRAND_SYSTEM.md) | Voz, termos oficiais e tom. |
-| [Assets](docs/assets/README.md) | Estrutura de placeholders visuais. |
+Toda evolução do GXEON segue este ciclo:
 
----
+```text
+1. Diagnóstico
+2. Auditoria
+3. JSON de missão
+4. Execução no Codex
+5. Pull Request
+6. Build / Typecheck / Testes
+7. Merge
+8. Deploy
+9. Print / Prova
+10. Auditoria do resultado
+11. Próximo JSON
+```
 
-## Operator Workflow
+Nada deve ser feito no escuro.
 
-1. Abrir Mission Control e identificar sinais em Radar X.
-2. Converter sinal em task com objetivo, owner, risco e critério de aceite.
-3. Atribuir agente apenas com escopo e conector permitidos.
-4. Exigir evidência segura antes de marcar execução como concluída.
-5. Registrar decisão, impacto e rollback quando houver mudança operacional.
-6. Atualizar ledger apenas com fatos verificáveis, nunca com promessa ou estimativa não rotulada.
+Cada PR precisa ter:
 
----
-
-## No-secrets policy
-
-Este repositório não deve conter tokens, chaves privadas, client secrets, service role keys, arquivos de ambiente reais, URLs privadas ou screenshots com credenciais. Exemplos e templates devem usar nomes genéricos, sem valores reais. Qualquer credencial pertence ao backend, a um provedor de secrets ou a um ambiente local ignorado pelo Git.
+* motivação;
+* descrição;
+* segurança;
+* testes;
+* limitações;
+* próximos passos;
+* relatório de execução.
 
 ---
 
-## Manifesto final
+## Papel dos Agentes
 
-> GXEON OS não é apenas um painel. É uma disciplina operacional: capturar o que importa, executar com controle, monetizar com evidência e governar cada decisão como memória viva da empresa.
+Os agentes do GXEON não nascem com poder total.
+
+Eles evoluem por camadas:
+
+```text
+Observa → Recomenda → Prepara → Executa com aprovação → Registra evidência → Aprende
+```
+
+### Agentes planejados
+
+| Agente           | Função                                        |
+| ---------------- | --------------------------------------------- |
+| Scout Agent      | Encontrar sinais, oportunidades e demandas.   |
+| Analyst Agent    | Avaliar risco, valor, prioridade e esforço.   |
+| Audit Agent      | Auditar ativos digitais.                      |
+| Evidence Agent   | Organizar provas, prints, links e validações. |
+| Proposal Agent   | Criar propostas, mensagens e ofertas.         |
+| Revenue Agent    | Acompanhar previsões e receita confirmada.    |
+| Deploy Agent     | Apoiar deploys e rollback com segurança.      |
+| Security Agent   | Bloquear riscos, segredos e ações inseguras.  |
+| Operator Copilot | Guiar o operador na próxima ação segura.      |
+
+---
+
+## Connector Hub
+
+O Connector Hub organiza integrações por status e permissão.
+
+| Status          | Significado                                     |
+| --------------- | ----------------------------------------------- |
+| `disabled`      | Conector desativado.                            |
+| `read_only`     | Pode ler estado, mas não escreve.               |
+| `preview_only`  | Pode gerar simulação ou proposta.               |
+| `write_guarded` | Pode escrever apenas com autorização explícita. |
+| `blocked`       | Bloqueado por segurança, env ausente ou risco.  |
+
+### Conectores planejados
+
+* GitHub;
+* Railway;
+* Vercel;
+* Supabase;
+* Mercado Pago;
+* Mercado Livre;
+* Google;
+* Microsoft 365;
+* OpenAI;
+* OpenRouter;
+* Hugging Face;
+* Anthropic;
+* Meta;
+* WalletConnect;
+* Webhooks internos.
+
+---
+
+## Como Rodar Localmente
+
+> Ajuste os comandos conforme o workspace ativo. Não use credenciais reais em arquivos versionados.
+
+```bash
+pnpm install
+pnpm run typecheck:libs
+pnpm --filter @workspace/api-server run build
+PORT=3000 BASE_PATH=/ pnpm --filter @workspace/gxeon-dashboard run build
+```
+
+### Variáveis de ambiente
+
+Crie arquivos locais ignorados pelo Git. Nunca commite `.env` real.
+
+```env
+# API
+NODE_ENV=development
+PORT=3000
+
+# Supabase / DB
+SUPABASE_URL=...
+SUPABASE_SERVICE_ROLE_KEY=...
+GXEON_AUDIT_DB_PROVIDER=supabase_rest
+
+# Audit OS guarded writes
+GXEON_AUDIT_WRITE_MODE=preview_only
+GXEON_AUDIT_ALLOW_DB_WRITES=false
+
+# Tokens temporários de operador
+GXEON_AUDIT_OPERATOR_TOKEN=...
+GXEON_AUDIT_MISSION_RUNNER_TOKEN=...
+```
+
+### Regras de ambiente
+
+```text
+- Use valores reais apenas em provedores seguros.
+- Não cole segredos em issues, PRs ou README.
+- Não coloque service_role no frontend.
+- Não tire print de tela com token visível.
+```
+
+---
+
+## Status Atual
+
+| Área                          | Estado           |
+| ----------------------------- | ---------------- |
+| GXEON OS repository structure | Scaffold criado  |
+| GXEON Audit OS                | Produto ativo    |
+| Evidence + Findings           | Instalado        |
+| Score + Report runner         | Em estabilização |
+| Proposal Engine               | Próximo módulo   |
+| Revenue Ledger                | Planejado        |
+| Ecosystem docs                | Criado           |
+| Safety policy                 | Criada           |
+| Product index                 | Criado           |
+| Connector Hub                 | Planejado        |
+| SaaS                          | Futuro           |
+| Marketplace                   | Futuro           |
+| Agent Economy                 | Futuro           |
+
+---
+
+## Documentação Principal
+
+| Documento                                                 | Função                                         |
+| --------------------------------------------------------- | ---------------------------------------------- |
+| `docs/gxeon-os/GXEON_OS_MASTER_BLUEPRINT.md`              | Blueprint mestre do ecossistema.               |
+| `docs/gxeon-os/GXEON_ECOSYSTEM_MANIFEST.json`             | Manifesto estruturado em JSON.                 |
+| `docs/gxeon-os/products/PRODUCT_INDEX.md`                 | Índice de produtos oficiais, labs e verticais. |
+| `docs/gxeon-os/roadmaps/ROADMAP_2026.md`                  | Roadmap oficial.                               |
+| `docs/gxeon-os/security/SAFETY_POLICY.md`                 | Política de segurança.                         |
+| `docs/gxeon-os/monetization/MONETIZATION_MAP.md`          | Mapa de monetização.                           |
+| `docs/gxeon-os/architecture/GXEON_OS_ARCHITECTURE_MAP.md` | Arquitetura do sistema.                        |
+
+---
+
+## Manifesto
+
+> GXEON OS é o QG operacional para transformar intenção em execução e execução em receita.
+
+Ele não nasceu para ser apenas uma ferramenta.
+
+Ele nasceu para ser uma estrutura viva:
+
+* um cérebro operacional;
+* uma fábrica de agentes;
+* um radar de oportunidades;
+* um pipeline de entrega;
+* um livro de contas;
+* um centro de comando;
+* um ecossistema.
+
+```text
+GXEON OS — captar, organizar, executar, validar, monetizar e escalar com segurança.
+```
+
+---
+
+## Aviso de Honestidade Operacional
+
+Este projeto está em evolução ativa.
+
+Alguns módulos são oficiais e ativos. Outros são planejados, futuros ou laboratórios. O repositório não deve apresentar capacidades futuras como se já estivessem em produção.
+
+O GXEON não promete:
+
+* dinheiro garantido;
+* execução totalmente autônoma sem aprovação;
+* scraping irrestrito;
+* pagamentos automáticos sem integração aprovada;
+* receita confirmada sem prova;
+* conectores com escrita sem escopo seguro.
+
+O GXEON promete:
+
+* organização;
+* clareza;
+* arquitetura;
+* prévias;
+* segurança;
+* rastreabilidade;
+* evidência;
+* evolução modular;
+* execução assistida;
+* caminho real para monetização.
+
+---
+
+## Licença
+
+Projeto em desenvolvimento por **xpex-systems-ai**.
+
+Uso, distribuição e abertura comercial devem seguir a política definida pelo mantenedor do repositório.
+
+---
+
+<div align="center">
+
+## GXEON OS
+
+**Conversa vira comando. Comando vira código. Código vira sistema. Sistema vira produto. Produto vira receita com prova.**
+
+</div>
