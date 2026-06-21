@@ -37,3 +37,8 @@ GXEON OS is an AI-assisted execution operating system for digital operations, au
 - [`GITHUB_REPO_PROFILE_CHECKLIST.md`](GITHUB_REPO_PROFILE_CHECKLIST.md)
 - [`LINKEDIN_PROFILE_CHECKLIST.md`](LINKEDIN_PROFILE_CHECKLIST.md)
 - [`PUBLIC_RELEASE_CHECKLIST.md`](PUBLIC_RELEASE_CHECKLIST.md)
+
+
+## Proposal + Offer Flow Connection
+
+Public launch interest, pilots and consulting conversations must become operator-reviewed Proposal + Offer drafts before any revenue claim. GXEON Audit OS now routes real audit cases, evidence, findings, scores and reports into manual proposal drafts only: no fake traction, no fake clients, no fake revenue, no auto-send and no payment provider call. Confirmed revenue requires future Revenue Ledger proof of real acceptance, agreed delivery and payment.

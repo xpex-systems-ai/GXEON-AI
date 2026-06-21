@@ -121,6 +121,13 @@ export default function AuditOsPage() {
   const [missionRunnerToken, setMissionRunnerToken] = useState("");
   const [missionRunnerResult, setMissionRunnerResult] = useState<any>();
   const [mission006Status, setMission006Status] = useState<any>();
+  const [offerCatalog, setOfferCatalog] = useState<any>();
+  const [proposalStatus, setProposalStatus] = useState<any>();
+  const [selectedOfferKey, setSelectedOfferKey] = useState("audit_express");
+  const [proposalPreview, setProposalPreview] = useState<any>();
+  const [proposalCopy, setProposalCopy] = useState("");
+  const [proposalMessage, setProposalMessage] = useState("");
+  const [caseProposals, setCaseProposals] = useState<any>();
   const apiDiagnostics = getApiBaseDiagnostics();
 
   useEffect(() => {
@@ -150,6 +157,8 @@ export default function AuditOsPage() {
       .mission006StatusV1()
       .then(setMission006Status)
       .catch(() => undefined);
+    auditOsService.offerCatalogV1().then(setOfferCatalog).catch(() => undefined);
+    auditOsService.proposalStatusV1().then(setProposalStatus).catch(() => undefined);
   }, []);
 
   const health = mission.health ?? fallbackMission.health;
@@ -303,6 +312,32 @@ export default function AuditOsPage() {
     baselineStatus?.readyForReports ||
     ((caseEvidenceFindings.findings?.count ?? 0) >= 1 &&
       (caseEvidenceFindings.evidences?.count ?? 0) >= 1);
+  const refreshProposalEngine = async () => {
+    const [status, catalog] = await Promise.all([
+      auditOsService.proposalStatusV1().catch(() => undefined),
+      auditOsService.offerCatalogV1().catch(() => undefined),
+    ]);
+    if (status) setProposalStatus(status);
+    if (catalog) setOfferCatalog(catalog);
+    if (selectedCaseId) setCaseProposals(await auditOsService.caseProposalsV1(selectedCaseId).catch(() => undefined));
+  };
+  const createProposalPreview = async () => {
+    setProposalMessage("");
+    try {
+      const data = await auditOsService.proposalPreviewV1({ caseId: selectedCaseId, offerKey: selectedOfferKey, language: "pt-BR", assetName: selectedCase?.title });
+      setProposalPreview(data);
+      setProposalCopy(data.proposal?.proposalCopy ?? "");
+    } catch (error: any) { setProposalMessage(error.message); }
+  };
+  const saveProposalDraft = async () => {
+    setProposalMessage("");
+    if (!operatorToken) { setProposalMessage("Cole GXEON_AUDIT_OPERATOR_TOKEN temporário em memória."); return; }
+    try {
+      const data = await auditOsService.createProposalV1({ caseId: selectedCaseId, offerKey: selectedOfferKey, title: proposalPreview?.proposal?.title ?? "Proposta GXEON", proposalCopy, scope: proposalPreview?.proposal?.scope ?? [], deliverables: proposalPreview?.proposal?.deliverables ?? [], priceTarget: proposalPreview?.proposal?.priceTarget ?? 0, currency: "BRL", language: "pt-BR", metadata: { mission: "MISSION_007_AUDIT_OS_PROPOSAL_AND_OFFER_ENGINE" } }, operatorToken);
+      setProposalMessage(`${data.code ?? "OK"} · proposalId ${data.proposalId ?? "none"}`);
+      await refreshProposalEngine();
+    } catch (error: any) { setProposalMessage(error.message); }
+  };
   const runBaselineScoreReport = async () => {
     setEvidenceFindingMessage("");
     setMissionRunnerResult(undefined);
@@ -839,6 +874,48 @@ export default function AuditOsPage() {
             </li>
           </ul>
         )}
+      </section>
+
+      <section className="rounded-3xl border border-sky-300/25 bg-sky-400/10 p-5">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.25em] text-sky-100">Manual-first · copy-ready · proof required</p>
+            <h2 className="text-2xl font-black">Proposal + Offer Engine</h2>
+            <p className="mt-2 text-sm text-stone-200">Sem auto-send, sem pagamento, sem claim de receita e sem aceite falso. O token de operador fica apenas em memória.</p>
+          </div>
+          <Badge label="Ready" value={proposalStatus?.readyForProposal ? "proposal preview" : "preliminary"} tone={proposalStatus?.readyForProposal ? "green" : "amber"} />
+        </div>
+        <div className="mt-4 rounded-2xl border border-amber-200/40 bg-amber-500/10 p-4 text-sm text-amber-100">
+          Safety: autoSend=false · paymentCalls=false · revenueConfirmed=0 · proofRequired=true · operador revisa e envia manualmente fora do sistema.
+        </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-5">
+          {(offerCatalog?.offers ?? []).map((offer: any) => (
+            <button key={offer.key} onClick={() => setSelectedOfferKey(offer.key)} className={`rounded-2xl border p-4 text-left ${selectedOfferKey === offer.key ? "border-sky-200 bg-sky-500/20" : "border-white/10 bg-black/25"}`}>
+              <p className="text-xs font-black uppercase text-sky-100">{offer.priceLabel}</p>
+              <h3 className="mt-2 font-black">{offer.namePtBr}</h3>
+              <p className="mt-2 text-xs text-stone-300">Preço alvo inicial, não receita.</p>
+            </button>
+          ))}
+        </div>
+        <div className="mt-4 grid gap-3 md:grid-cols-6">
+          <Panel title="Case" summary={proposalStatus?.caseExists ? "existe" : "pendente"} action={proposalStatus?.caseId ?? "Selecione/crie caso"} />
+          <Panel title="Evidence" summary={`${proposalStatus?.evidencesCount ?? 0}`} action="referências seguras" />
+          <Panel title="Findings" summary={`${proposalStatus?.findingsCount ?? 0}`} action="achados auditáveis" />
+          <Panel title="Score" summary={`${proposalStatus?.scoreCount ?? 0}`} action="snapshots" />
+          <Panel title="Report" summary={`${proposalStatus?.reportCount ?? 0}`} action="relatórios" />
+          <Panel title="Proposals" summary={`${proposalStatus?.proposalCount ?? caseProposals?.count ?? 0}`} action="DRAFT/manual" />
+        </div>
+        <div className="mt-4 flex flex-wrap gap-3">
+          <button disabled={!selectedCaseId} onClick={createProposalPreview} className="rounded-2xl border border-cyan-200 px-5 py-3 font-black text-cyan-100 disabled:opacity-40">Criar prévia de proposta</button>
+          <button disabled={!selectedCaseId || !proposalCopy || !operatorToken} onClick={saveProposalDraft} className="rounded-2xl border border-emerald-200 px-5 py-3 font-black text-emerald-100 disabled:opacity-40">Salvar proposta</button>
+          <button onClick={refreshProposalEngine} className="rounded-2xl border border-sky-200 px-5 py-3 font-black text-sky-100">Atualizar status</button>
+        </div>
+        {proposalPreview && <textarea className="mt-4 min-h-64 w-full rounded-xl bg-black/40 p-3 font-mono text-sm" value={proposalCopy} onChange={(e) => setProposalCopy(e.target.value)} />}
+        {proposalMessage && <p className="mt-4 rounded-2xl bg-black/30 p-4 text-sm text-amber-100">{proposalMessage}</p>}
+        <div className="mt-4 grid gap-3 md:grid-cols-3">
+          {(caseProposals?.items ?? []).map((proposal: any) => <Panel key={proposal.id} title={proposal.title ?? "Proposal"} summary={proposal.status ?? "DRAFT"} action={`R$${proposal.priceTarget ?? 0} · ${proposal.offerKey ?? "offer"}`} />)}
+        </div>
+        {(proposalStatus?.proposalCount ?? caseProposals?.count ?? 0) > 0 && <div className="mt-4 rounded-2xl border border-emerald-200/40 bg-emerald-500/10 p-4 text-emerald-100"><p className="font-black">Next mission: MISSION_008_REVENUE_LEDGER_AND_PAYMENT_PROOF</p><p className="text-sm">Somente após draft, aceite manual real e prova de pagamento.</p></div>}
       </section>
 
       <section className="rounded-3xl border border-emerald-300/20 bg-emerald-400/10 p-5">

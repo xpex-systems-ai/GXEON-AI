@@ -1,0 +1,1 @@
+{"payment_calls":false,"checkout_created":false,"invoice_created":false,"revenue_event_created":false,"fake_client_created":false,"fake_revenue_created":false,"connector_writes":false,"auto_send":false,"secret_like_input_rejected":true,"operator_token_storage":"in_memory_only"}

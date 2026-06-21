@@ -60,3 +60,8 @@ Prices are initial package targets and must be confirmed with real scope and cus
 ## Contact / Next Step
 
 Use this showcase to start a focused conversation around Audit OS pilots, consulting setup or technical collaboration.
+
+
+## Proposal + Offer Flow Connection
+
+Public launch interest, pilots and consulting conversations must become operator-reviewed Proposal + Offer drafts before any revenue claim. GXEON Audit OS now routes real audit cases, evidence, findings, scores and reports into manual proposal drafts only: no fake traction, no fake clients, no fake revenue, no auto-send and no payment provider call. Confirmed revenue requires future Revenue Ledger proof of real acceptance, agreed delivery and payment.

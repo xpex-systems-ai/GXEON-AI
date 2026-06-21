@@ -45,3 +45,8 @@ GXEON OS is looking for strategic partners, early technical collaborators, pilot
 | Secret exposure | No-secrets policy and placeholder-only public docs |
 | Connector abuse | Read-only first, guarded writes and fail-closed behavior |
 | Product sprawl | Audit OS as active product; future modules clearly labeled |
+
+
+## Proposal + Offer Flow Connection
+
+Public launch interest, pilots and consulting conversations must become operator-reviewed Proposal + Offer drafts before any revenue claim. GXEON Audit OS now routes real audit cases, evidence, findings, scores and reports into manual proposal drafts only: no fake traction, no fake clients, no fake revenue, no auto-send and no payment provider call. Confirmed revenue requires future Revenue Ledger proof of real acceptance, agreed delivery and payment.

@@ -83,4 +83,11 @@ export const auditOsService = {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` },
     }),
+  offerCatalogV1: () => request("/api/v1/audit/offers/catalog"),
+  proposalStatusV1: () => request("/api/v1/audit/proposals/status"),
+  proposalPreviewV1: (body: unknown) =>
+    request("/api/v1/audit/proposals/preview", { method: "POST", body: JSON.stringify(body) }),
+  createProposalV1: (body: unknown, token: string) =>
+    request("/api/v1/audit/proposals", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: JSON.stringify(body) }),
+  caseProposalsV1: (caseId: string) => request(`/api/v1/audit/cases/${caseId}/proposals`),
 };
