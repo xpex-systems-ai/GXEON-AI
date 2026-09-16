@@ -1,8 +1,9 @@
 export function formatCurrency(amount: number): string {
+  const safeAmount = Number.isFinite(amount) ? amount : 0;
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-  }).format(amount);
+  }).format(safeAmount);
 }
 
 export function formatDate(date: string | Date): string {
@@ -16,8 +17,9 @@ export function formatDate(date: string | Date): string {
 }
 
 export function formatPercent(value: number): string {
+  const safeValue = Number.isFinite(value) ? value : 0;
   return new Intl.NumberFormat('pt-BR', {
     style: 'percent',
     minimumFractionDigits: 1,
-  }).format(value / 100);
+  }).format(safeValue / 100);
 }
