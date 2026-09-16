@@ -1,0 +1,45 @@
+name: GXEON EDGE-01 Android
+
+on:
+  push:
+    branches:
+      - feat/gxeon-edge-01-installable
+    paths:
+      - 'apps/gxeon-edge-01/**'
+      - '.github/workflows/gxeon-edge-01-android.yml'
+  pull_request:
+    paths:
+      - 'apps/gxeon-edge-01/**'
+      - '.github/workflows/gxeon-edge-01-android.yml'
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/gxeon-edge-01
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Build debug APK
+        run: gradle :app:assembleDebug --stacktrace
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: gxeon-edge-01-debug-apk
+          path: apps/gxeon-edge-01/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
