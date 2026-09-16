@@ -120,7 +120,5 @@ export type GitHubOpportunityPreview = GitHubOpportunityRuntimeBoundaries & {
     skippedInvalidCandidates: number;
     repositoryMetadataFailures: number;
   };
-  category: GitHubOpportunityCategory | null;
-  maxCandidates: 10;
   candidates: ScoredGitHubOpportunityCandidate[];
 };
