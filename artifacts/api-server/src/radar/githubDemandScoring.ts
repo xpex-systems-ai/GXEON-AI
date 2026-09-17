@@ -19,6 +19,20 @@ const docs = ["documentation", "readme", "example", "template", "docs"];
 const easy = ["good first issue", "help wanted", "small", "simple", "docs", "readme", "example", "typo", "quick"];
 const hard = ["architecture", "rewrite", "refactor all", "security incident", "production down", "large", "complex"];
 const sensitive = ["wallet", "private key", "seed phrase", "medical", "hipaa", "bank", "payment capture", "credential"];
+const unpaidSignals = [
+  "there is no bounty",
+  "no bounty attached",
+  "not a cash bounty",
+  "participation is voluntary and unpaid",
+  "voluntary and unpaid",
+  "no monetary reward",
+  "no cash bounty",
+  "unpaid contribution",
+  "unpaid open source",
+  "no bounty, token allocation",
+  "no bounty or reward",
+];
+const honeypotSignals = ["honeypot", "unbacked bait", "unbacked pinky-promise", "no escrow", "fake bounty"];
 
 export function inferGitHubDemandCategory(input: {
   title?: string;
@@ -71,6 +85,7 @@ export function scoreGitHubDemandCandidate(
     bodyExcerpt?: string | null;
     labels?: string[];
     repository?: {
+      fullName?: string;
       description?: string | null;
       stargazersCount?: number;
       updatedAt?: string | null;
@@ -86,6 +101,7 @@ export function scoreGitHubDemandCandidate(
   monetizationRoute: GitHubDemandMonetizationRoute;
 } {
   const labels = (candidate.labels ?? []).map((label) => label.toLowerCase());
+  const repoName = (candidate.repository?.fullName ?? "").toLowerCase();
   const text = `${candidate.title} ${candidate.bodyExcerpt ?? ""} ${labels.join(" ")} ${candidate.repository?.description ?? ""}`.toLowerCase();
   const category = inferGitHubDemandCategory({
     title: candidate.title,
@@ -108,6 +124,14 @@ export function scoreGitHubDemandCandidate(
   const overdue = labels.some((label) => label === "overdue");
   const needsReproduction = labels.some((label) => label.includes("needs reproduction")) || has(text, ["reproducible in staging?: needs reproduction", "reproducible in production?: needs reproduction"]);
   const multipleAssigneesReview = (candidate.assigneeCount ?? candidate.assignees?.length ?? 0) > 1;
+  const explicitlyUnpaid = has(text, unpaidSignals);
+  const honeypot = has(text, honeypotSignals);
+  const aggregatorOrMirror =
+    repoName.includes("bountyscout") ||
+    repoName.includes("bounty-plaza") ||
+    has(candidate.title.toLowerCase(), ["bounty alert", "micro bounty alert"]) ||
+    has(text, ["active bounty scan results", "scan time:"]);
+  const unverifiedRewardSource = aggregatorOrMirror;
 
   const blockedReasons: string[] = [];
   if (skipPayment) blockedReasons.push("skip-payment");
@@ -118,6 +142,10 @@ export function scoreGitHubDemandCandidate(
   if (overdue) blockedReasons.push("overdue");
   if (needsReproduction) blockedReasons.push("needs-reproduction");
   if (multipleAssigneesReview) blockedReasons.push("multiple-assignees-review-required");
+  if (explicitlyUnpaid) blockedReasons.push("explicitly-unpaid");
+  if (honeypot) blockedReasons.push("honeypot-signal");
+  if (aggregatorOrMirror) blockedReasons.push("aggregator-or-mirror");
+  if (unverifiedRewardSource) blockedReasons.push("unverified-reward-source");
   const eligibilityBlocked = blockedReasons.length > 0;
 
   const riskFlags: GitHubDemandRiskFlag[] = [];
@@ -136,8 +164,12 @@ export function scoreGitHubDemandCandidate(
   if (overdue) riskFlags.push("OVERDUE");
   if (needsReproduction) riskFlags.push("NEEDS_REPRODUCTION");
   if (multipleAssigneesReview) riskFlags.push("MULTIPLE_ASSIGNEES_REVIEW_REQUIRED");
+  if (explicitlyUnpaid) riskFlags.push("EXPLICITLY_UNPAID");
+  if (aggregatorOrMirror) riskFlags.push("AGGREGATOR_OR_MIRROR");
+  if (honeypot) riskFlags.push("HONEYPOT_SIGNAL");
+  if (unverifiedRewardSource) riskFlags.push("UNVERIFIED_REWARD_SOURCE");
 
-  const bountyConfidenceScore = clamp(budgetHits * 28 + (category === "EXPLICIT_BOUNTY" ? 25 : 0));
+  const bountyConfidenceScore = explicitlyUnpaid || honeypot || aggregatorOrMirror ? 0 : clamp(budgetHits * 28 + (category === "EXPLICIT_BOUNTY" ? 25 : 0));
   const serviceLeadScore = clamp(serviceHits * 10 + (route !== "SKIP_OR_WATCH" ? 20 : 0));
   const urgencyScore = clamp((has(text, ["urgent", "asap", "broken", "failing", "production"]) ? 65 : 30) + (stale ? -20 : 0));
   const executionEaseScore = clamp(45 + easyHits * 12 - hardHits * 18);
@@ -173,6 +205,9 @@ export function scoreGitHubDemandCandidate(
   ];
   if (candidate.assigneeCount !== undefined) evidence.push(`${candidate.assigneeCount} current assignee(s) reported by GitHub search metadata.`);
   if (candidate.issueOwner) evidence.push(`Issue owner marker detected: @${candidate.issueOwner}.`);
+  if (aggregatorOrMirror) evidence.push("Discovery source looks like an aggregator or mirror; original issue and reward terms must be verified before any execution.");
+  if (explicitlyUnpaid) evidence.push("Source text explicitly says the work is unpaid or has no bounty; monetization is blocked.");
+  if (honeypot) evidence.push("Honeypot/unbacked-bounty language detected; candidate is blocked.");
   if (eligibilityBlocked) evidence.push(`Eligibility gate blocked new-work execution: ${blockedReasons.join(", ")}.`);
 
   return {
