@@ -1,11 +1,128 @@
 export type GitHubDemandMode = "PREVIEW_ONLY";
 export const githubDemandMode: GitHubDemandMode = "PREVIEW_ONLY";
-export type GitHubDemandCategory = "EXPLICIT_BOUNTY"|"PAID_WORK_HINT"|"AGENT_INTEGRATION_NEED"|"MCP_CONNECTOR_NEED"|"DATA_API_NEED"|"DEPLOY_CI_RESCUE"|"SUPABASE_RLS_OR_DATABASE"|"DOCS_TEMPLATE_REQUEST"|"BUG_FIX_LOW_COMPLEXITY"|"OPEN_SOURCE_UNPAID"|"WATCHLIST_ONLY";
-export type GitHubDemandMonetizationRoute = "BOUNTY_ATTEMPT"|"MANUAL_SERVICE_OFFER"|"REPO_AUDIT_OFFER"|"DEPLOY_RESCUE_OFFER"|"AGENT_MCP_INTEGRATION_OFFER"|"DATA_API_CONNECTOR_OFFER"|"DOCS_TEMPLATE_OFFER"|"SKIP_OR_WATCH";
-export type GitHubDemandRiskFlag = "NO_BUDGET_SIGNAL"|"POSSIBLE_UNPAID_OPEN_SOURCE"|"UNCLEAR_REQUIREMENTS"|"STALE_ISSUE"|"HIGH_COMPLEXITY"|"SENSITIVE_DOMAIN"|"MAINTAINER_INTENT_UNCLEAR"|"EXTERNAL_CONTACT_REQUIRED"|"LIKELY_SPAM_RISK"|"AI_SLOP_RISK";
-export type GitHubDemandRecommendedAction = "CREATE_OPPORTUNITY_PREVIEW"|"DRAFT_MANUAL_PROPOSAL"|"RESEARCH_REPO"|"WATCHLIST"|"SKIP";
-export const githubDemandBoundary = { mode: githubDemandMode, manualReviewRequired: true as const, externalContactDisabled: true as const, githubWriteDisabled: true as const, rewardNotGuaranteed: true as const, noAutoPr: true as const, noAutoComment: true as const, noAutoContact: true as const, paymentDisabled: true as const, persistence: "IN_MEMORY_P0" as const };
-export type GitHubDemandQueryPack = { id:string; label:string; query:string; categoryHint:GitHubDemandCategory; monetizationRouteHint:GitHubDemandMonetizationRoute; riskNotes:string[]; operatorUseCase:string; maxPreviewCandidates:number; noScraping:true; noExternalWrites:true };
-export type GitHubDemandCandidate = typeof githubDemandBoundary & { id:string; source:"github_public_issue_search"; title:string; url:string; apiUrl:string; state:string; labels:string[]; createdAt:string|null; updatedAt:string|null; bodyExcerpt:string|null; repository:{ fullName:string; url:string; description:string|null; stargazersCount:number; openIssuesCount:number; pushedAt:string|null; updatedAt:string|null; language:string|null }; category:GitHubDemandCategory; monetizationRoute:GitHubDemandMonetizationRoute; score:GitHubDemandScore; evidence:string[]; riskFlags:GitHubDemandRiskFlag[]; recommendedAction:GitHubDemandRecommendedAction; };
-export type GitHubDemandScore = { demandScore:number; bountyConfidenceScore:number; serviceLeadScore:number; urgencyScore:number; executionEaseScore:number; gxeonFitScore:number; riskScore:number; scoringExplanation:string[] };
-export type GitHubDemandPipelinePreview = typeof githubDemandBoundary & { id:string; status:"PIPELINE_PREVIEW_CREATED"|"OPPORTUNITY_PREVIEW_CREATED"|"WATCHLIST"; candidate:GitHubDemandCandidate; createdAt:string; updatedAt:string; pipeline:string[]; nextManualAction:string; proposalPackReady:boolean; opportunityPreviewId?:string; taskPreviewRoute?:string; taskCreationRoute?:string };
+
+export type GitHubDemandCategory =
+  | "EXPLICIT_BOUNTY"
+  | "PAID_WORK_HINT"
+  | "AGENT_INTEGRATION_NEED"
+  | "MCP_CONNECTOR_NEED"
+  | "DATA_API_NEED"
+  | "DEPLOY_CI_RESCUE"
+  | "SUPABASE_RLS_OR_DATABASE"
+  | "DOCS_TEMPLATE_REQUEST"
+  | "BUG_FIX_LOW_COMPLEXITY"
+  | "OPEN_SOURCE_UNPAID"
+  | "WATCHLIST_ONLY";
+
+export type GitHubDemandMonetizationRoute =
+  | "BOUNTY_ATTEMPT"
+  | "MANUAL_SERVICE_OFFER"
+  | "REPO_AUDIT_OFFER"
+  | "DEPLOY_RESCUE_OFFER"
+  | "AGENT_MCP_INTEGRATION_OFFER"
+  | "DATA_API_CONNECTOR_OFFER"
+  | "DOCS_TEMPLATE_OFFER"
+  | "SKIP_OR_WATCH";
+
+export type GitHubDemandRiskFlag =
+  | "NO_BUDGET_SIGNAL"
+  | "POSSIBLE_UNPAID_OPEN_SOURCE"
+  | "UNCLEAR_REQUIREMENTS"
+  | "STALE_ISSUE"
+  | "HIGH_COMPLEXITY"
+  | "SENSITIVE_DOMAIN"
+  | "MAINTAINER_INTENT_UNCLEAR"
+  | "EXTERNAL_CONTACT_REQUIRED"
+  | "LIKELY_SPAM_RISK"
+  | "AI_SLOP_RISK"
+  | "SKIP_PAYMENT"
+  | "ON_HOLD"
+  | "ALREADY_IN_REVIEW"
+  | "PAYMENT_PENDING";
+
+export type GitHubDemandRecommendedAction =
+  | "CREATE_OPPORTUNITY_PREVIEW"
+  | "DRAFT_MANUAL_PROPOSAL"
+  | "RESEARCH_REPO"
+  | "WATCHLIST"
+  | "SKIP";
+
+export const githubDemandBoundary = {
+  mode: githubDemandMode,
+  manualReviewRequired: true as const,
+  externalContactDisabled: true as const,
+  githubWriteDisabled: true as const,
+  rewardNotGuaranteed: true as const,
+  noAutoPr: true as const,
+  noAutoComment: true as const,
+  noAutoContact: true as const,
+  paymentDisabled: true as const,
+  persistence: "IN_MEMORY_P0" as const,
+};
+
+export type GitHubDemandQueryPack = {
+  id: string;
+  label: string;
+  query: string;
+  categoryHint: GitHubDemandCategory;
+  monetizationRouteHint: GitHubDemandMonetizationRoute;
+  riskNotes: string[];
+  operatorUseCase: string;
+  maxPreviewCandidates: number;
+  noScraping: true;
+  noExternalWrites: true;
+};
+
+export type GitHubDemandCandidate = typeof githubDemandBoundary & {
+  id: string;
+  source: "github_public_issue_search";
+  title: string;
+  url: string;
+  apiUrl: string;
+  state: string;
+  labels: string[];
+  createdAt: string | null;
+  updatedAt: string | null;
+  bodyExcerpt: string | null;
+  repository: {
+    fullName: string;
+    url: string;
+    description: string | null;
+    stargazersCount: number;
+    openIssuesCount: number;
+    pushedAt: string | null;
+    updatedAt: string | null;
+    language: string | null;
+  };
+  category: GitHubDemandCategory;
+  monetizationRoute: GitHubDemandMonetizationRoute;
+  score: GitHubDemandScore;
+  evidence: string[];
+  riskFlags: GitHubDemandRiskFlag[];
+  recommendedAction: GitHubDemandRecommendedAction;
+};
+
+export type GitHubDemandScore = {
+  demandScore: number;
+  bountyConfidenceScore: number;
+  serviceLeadScore: number;
+  urgencyScore: number;
+  executionEaseScore: number;
+  gxeonFitScore: number;
+  riskScore: number;
+  scoringExplanation: string[];
+};
+
+export type GitHubDemandPipelinePreview = typeof githubDemandBoundary & {
+  id: string;
+  status: "PIPELINE_PREVIEW_CREATED" | "OPPORTUNITY_PREVIEW_CREATED" | "WATCHLIST";
+  candidate: GitHubDemandCandidate;
+  createdAt: string;
+  updatedAt: string;
+  pipeline: string[];
+  nextManualAction: string;
+  proposalPackReady: boolean;
+  opportunityPreviewId?: string;
+  taskPreviewRoute?: string;
+  taskCreationRoute?: string;
+};
