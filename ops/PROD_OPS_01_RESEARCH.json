@@ -1,0 +1,35 @@
+{
+  "mission": "PROD-OPS-01",
+  "researchedAt": "2026-09-17T03:40:00Z",
+  "target": {
+    "repository": "Expensify/App",
+    "issue": 96140,
+    "url": "https://github.com/Expensify/App/issues/96140",
+    "title": "[$250] Remove `Onyx.connect()` for the key: `ONYXKEYS.SESSION` in `src/libs/actions/ClearReportActionErrors.ts`",
+    "state": "open",
+    "externalLabel": true,
+    "helpWantedLabel": true,
+    "skipPaymentLabel": true,
+    "maintainerStatus": "ON_HOLD",
+    "maintainerStatusEvidenceDate": "2026-09-13"
+  },
+  "assessment": {
+    "gxeonPipelineStatus": "WATCH_HOLD",
+    "advertisedReward": "$250",
+    "rewardGuaranteed": false,
+    "reason": "The issue is open and externally visible, but a repository member explicitly marked it On HOLD. The issue also carries Skip Payment. Do not perform external work or contact while this status remains.",
+    "titleBodyMismatch": "The title says ONYXKEYS.SESSION, but the issue body and current source identify ONYXKEYS.COLLECTION.REPORT; current source also contains a second REPORT_ACTIONS subscription.",
+    "technicalScope": [
+      "Remove the module-level report collection subscription from ClearReportActionErrors.ts.",
+      "Preserve synchronous parent/child error-clearing recursion.",
+      "Use parameter threading/reactive caller data or another maintainer-approved migration pattern.",
+      "Add or update unit coverage first, then functional/QA coverage as required by the issue."
+    ]
+  },
+  "safety": {
+    "githubWriteToTarget": false,
+    "externalContact": false,
+    "paymentProviderCalls": false
+  },
+  "nextAction": "SCAN_NEXT_ELIGIBLE_OPPORTUNITY"
+}
