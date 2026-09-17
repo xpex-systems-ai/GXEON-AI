@@ -1,0 +1,90 @@
+name: GXEON PROD-OPS-01 Preview
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/prod-ops-01.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  execute-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Execute GXEON preview-only opportunity pipeline
+        shell: bash
+        env:
+          GXEON_API_BASE: https://workspaceapi-server-production-33c3.up.railway.app
+        run: |
+          set -euo pipefail
+          base="$GXEON_API_BASE"
+
+          echo "Checking GXEON production API..."
+          curl --fail-with-body -sS "$base/api/healthz" >/dev/null
+
+          post() {
+            local path="$1"
+            local body="$2"
+            curl --fail-with-body -sS \
+              -X POST "$base$path" \
+              -H 'content-type: application/json' \
+              --data "$body"
+          }
+
+          search_body='{"query":"repo:Expensify/App \\"ClearReportActionErrors.ts\\" \\"Onyx.connect\\"","limit":10,"category":"EXPLICIT_BOUNTY"}'
+          search="$(post '/api/github-demand/search-preview' "$search_body")"
+          candidate="$(printf '%s' "$search" | jq -c '.data.candidates[] | select(.url == "https://github.com/Expensify/App/issues/96140")' | head -n1)"
+          test -n "$candidate" || { echo "TARGET_96140_NOT_FOUND"; printf '%s\n' "$search"; exit 2; }
+
+          pipeline_body="$(jq -cn --argjson candidate "$candidate" '{candidate:$candidate}')"
+          pipeline="$(post '/api/github-demand/pipeline-preview' "$pipeline_body")"
+          pipeline_id="$(printf '%s' "$pipeline" | jq -r '.data.pipelinePreview.id')"
+
+          opportunity="$(post "/api/github-demand/pipeline-previews/$pipeline_id/create-opportunity-preview" '{"operatorConfirmed":true}')"
+          conversion="$(post "/api/github-demand/pipeline-previews/$pipeline_id/conversion-pack" '{}')"
+          conversion_id="$(printf '%s' "$conversion" | jq -r '.data.conversionPack.id')"
+
+          execution="$(post "/api/github-demand/conversion-packs/$conversion_id/execution-pack" '{}')"
+          execution_id="$(printf '%s' "$execution" | jq -r '.data.executionPack.id')"
+
+          task="$(post "/api/github-demand/execution-packs/$execution_id/task-preview" '{}')"
+          workspace="$(post "/api/github-demand/execution-packs/$execution_id/delivery-workspace-preview" '{}')"
+
+          result="$(jq -cn \
+            --argjson candidate "$candidate" \
+            --argjson opportunity "$opportunity" \
+            --argjson conversion "$conversion" \
+            --argjson execution "$execution" \
+            --argjson task "$task" \
+            --argjson workspace "$workspace" \
+            '{
+              mission:"PROD-OPS-01",
+              mode:"PREVIEW_ONLY",
+              candidate:{
+                title:$candidate.title,
+                url:$candidate.url,
+                category:$candidate.category,
+                monetizationRoute:$candidate.monetizationRoute,
+                score:$candidate.score,
+                riskFlags:$candidate.riskFlags,
+                recommendedAction:$candidate.recommendedAction
+              },
+              pipelinePreviewId:($conversion.data.conversionPack.pipelinePreviewId // null),
+              opportunityPreviewId:($opportunity.data.actionResult.opportunity.id // $opportunity.data.opportunity.id // null),
+              conversionPackId:$conversion.data.conversionPack.id,
+              executionPackId:$execution.data.executionPack.id,
+              taskPreviewId:($task.data.actionResult.previewIds.taskPreviewId // $task.data.actionResult.taskPreview.id // $task.data.actionResult.previewId // null),
+              workspaceId:($workspace.data.workspace.id // $workspace.data.actionResult.workspaceId // null),
+              safety:{
+                githubWriteDisabled:$execution.data.executionPack.githubWriteDisabled,
+                externalContactDisabled:$execution.data.executionPack.externalContactDisabled,
+                paymentProviderDisabled:$execution.data.executionPack.paymentProviderDisabled,
+                rewardNotGuaranteed:$execution.data.executionPack.rewardNotGuaranteed
+              }
+            }')"
+
+          echo "PROD_OPS_01_RESULT=$result"
