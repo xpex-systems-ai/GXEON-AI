@@ -1,6 +1,7 @@
 {
   "mission": "PROD-OPS-01",
   "createdAt": "2026-09-17T03:22:00Z",
+  "updatedAt": "2026-09-17T03:26:00Z",
   "target": {
     "source": "GitHub public issue",
     "repository": "Expensify/App",
@@ -16,5 +17,6 @@
     "paymentProviderDisabled": true,
     "rewardNotGuaranteed": true
   },
-  "purpose": "Trigger the production API deployment that seeds the first real GitHub Demand opportunity into GXEON's internal preview pipeline. No external action is performed."
+  "deploymentState": "RECOVERY_REDEPLOY_REQUESTED",
+  "purpose": "Restore the production API service and continue PROD-OPS-01 using GXEON's internal preview pipeline only. No external action is performed."
 }
