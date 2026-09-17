@@ -11,8 +11,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
 import android.provider.Settings
-import androidx.activity.ComponentActivity
+import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,29 +22,57 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import java.text.DateFormat
 import java.util.Date
 import java.util.Locale
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { MaterialTheme { Surface(Modifier.fillMaxSize()) { EdgeDashboard(this) } } }
     }
+
+    fun verifyOperator(reason: String, onApproved: () -> Unit) {
+        val authenticators = BiometricManager.Authenticators.BIOMETRIC_STRONG or
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL
+        val capability = BiometricManager.from(this).canAuthenticate(authenticators)
+        if (capability != BiometricManager.BIOMETRIC_SUCCESS) {
+            audit(this, "Operação protegida bloqueada: autenticação do dispositivo indisponível")
+            Toast.makeText(this, "Configure biometria ou bloqueio de tela para autorizar esta ação.", Toast.LENGTH_LONG).show()
+            return
+        }
+        val prompt = BiometricPrompt(this, ContextCompat.getMainExecutor(this),
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    audit(this@MainActivity, "Operador verificado: $reason")
+                    onApproved()
+                }
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    audit(this@MainActivity, "Autorização cancelada/bloqueada: $reason")
+                }
+            })
+        val info = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Verificar operador GXEON")
+            .setSubtitle(reason)
+            .setAllowedAuthenticators(authenticators)
+            .build()
+        prompt.authenticate(info)
+    }
 }
 
 data class DeviceSnapshot(
-    val model: String,
-    val androidVersion: String,
-    val ramUsedPercent: Int,
-    val storageUsedPercent: Int,
-    val batteryPercent: Int,
-    val sensorCount: Int,
-    val apps: List<AppEntry>,
-    val capturedAt: Long = System.currentTimeMillis()
+    val model: String, val androidVersion: String, val ramUsedPercent: Int,
+    val storageUsedPercent: Int, val batteryPercent: Int, val sensorCount: Int,
+    val apps: List<AppEntry>, val capturedAt: Long = System.currentTimeMillis()
 )
 data class AppEntry(val label: String, val packageName: String)
-data class SystemNode(val name: String, val role: String, val state: String)
+data class SystemNode(val name: String, val role: String, val integration: String)
+data class IntegrationNode(val name: String, val capability: String, val state: String)
 
 private fun Context.snapshot(): DeviceSnapshot {
     val am = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
@@ -81,16 +111,18 @@ private fun audit(context: Context, event: String) {
 }
 
 @Composable
-fun EdgeDashboard(context: Context) {
+fun EdgeDashboard(activity: MainActivity) {
+    val context: Context = activity
     var state by remember { mutableStateOf(context.snapshot()) }
     var section by remember { mutableStateOf("COMMAND") }
     var auditText by remember { mutableStateOf(context.getSharedPreferences("gxeon_edge_audit", Context.MODE_PRIVATE).getString("events", "") ?: "") }
-    fun refresh() { state = context.snapshot(); audit(context, "Device Agent atualizou telemetria"); auditText = context.getSharedPreferences("gxeon_edge_audit", Context.MODE_PRIVATE).getString("events", "") ?: "" }
+    fun reloadAudit() { auditText = context.getSharedPreferences("gxeon_edge_audit", Context.MODE_PRIVATE).getString("events", "") ?: "" }
+    fun refresh() { state = context.snapshot(); audit(context, "Device Agent atualizou telemetria"); reloadAudit() }
 
     LazyColumn(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
             Text("GXEON EDGE-01", style = MaterialTheme.typography.headlineMedium)
-            Text("Command Node V0.2 • ${state.model} • Android ${state.androidVersion}")
+            Text("Command Node V0.3 • ${state.model} • Android ${state.androidVersion}")
             Text("Última leitura: ${DateFormat.getTimeInstance(DateFormat.MEDIUM).format(Date(state.capturedAt))}", style = MaterialTheme.typography.bodySmall)
         }
         item {
@@ -102,9 +134,10 @@ fun EdgeDashboard(context: Context) {
         }
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                listOf("COMMAND", "DEVICE", "SYSTEMS").forEach { name ->
-                    if (section == name) Button({ section = name }, Modifier.weight(1f)) { Text(name) }
-                    else OutlinedButton({ section = name }, Modifier.weight(1f)) { Text(name) }
+                listOf("COMMAND" to "COMANDO", "DEVICE" to "DEVICE", "SYSTEMS" to "SISTEMAS").forEach { (key, label) ->
+                    val button: @Composable () -> Unit = { Text(label, maxLines = 1, fontSize = 11.sp) }
+                    if (section == key) Button({ section = key }, Modifier.weight(1f), content = button)
+                    else OutlinedButton({ section = key }, Modifier.weight(1f), content = button)
                 }
             }
         }
@@ -121,35 +154,40 @@ fun EdgeDashboard(context: Context) {
                 item { Text("App Commander", style = MaterialTheme.typography.titleLarge) }
                 items(state.apps.take(60)) { app ->
                     Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(12.dp)) {
-                        Text(app.label, style = MaterialTheme.typography.titleSmall); Text(app.packageName, style = MaterialTheme.typography.bodySmall)
+                        Text(app.label, style = MaterialTheme.typography.titleSmall)
+                        Text(app.packageName, style = MaterialTheme.typography.bodySmall)
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            OutlinedButton(onClick = { context.packageManager.getLaunchIntentForPackage(app.packageName)?.let { context.startActivity(it); audit(context, "Abriu ${app.label}") } }) { Text("Abrir") }
                             OutlinedButton(onClick = {
-                                context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${app.packageName}")))
-                                audit(context, "Abriu gerenciamento de ${app.label}")
+                                context.packageManager.getLaunchIntentForPackage(app.packageName)?.let { context.startActivity(it); audit(context, "Abriu ${app.label}") }
+                            }) { Text("Abrir") }
+                            Button(onClick = {
+                                activity.verifyOperator("Gerenciar ${app.label}") {
+                                    context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${app.packageName}")))
+                                    audit(context, "Acesso protegido ao gerenciamento de ${app.label}")
+                                    reloadAudit()
+                                }
                             }) { Text("Gerenciar") }
                         }
                     }}
                 }
             }
-            "SYSTEMS" -> {
-                item { SystemsCommand() }
-            }
+            "SYSTEMS" -> item { SystemsCommand(context) { reloadAudit() } }
             else -> {
                 item {
                     Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("GX Commander", style = MaterialTheme.typography.titleMedium)
                         Text("Detectar → recomendar → aprovar → executar → registrar")
                         Button(onClick = { refresh() }) { Text("Executar diagnóstico local") }
-                        OutlinedButton(onClick = { context.startActivity(Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)); audit(context, "Abriu controles de armazenamento") }) { Text("Controles de armazenamento") }
-                        OutlinedButton(onClick = { context.startActivity(Intent(Settings.ACTION_SETTINGS)); audit(context, "Abriu plano de controle Android") }) { Text("Plano de controle Android") }
+                        OutlinedButton(onClick = { context.startActivity(Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)); audit(context, "Abriu controles de armazenamento"); reloadAudit() }) { Text("Controles de armazenamento") }
+                        OutlinedButton(onClick = { context.startActivity(Intent(Settings.ACTION_SETTINGS)); audit(context, "Abriu plano de controle Android"); reloadAudit() }) { Text("Plano de controle Android") }
                     }}
                 }
+                item { IntegrationHub() }
                 item {
                     Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp)) {
                         Text("Módulos GXEON", style = MaterialTheme.typography.titleMedium)
                         Text("DEVICE • SYSTEMS • SOCIAL • VISION • VOICE • BUSINESS • DEV • ACADEMY")
-                        Text("Device e Systems iniciados na V0.2. Demais módulos permanecem bloqueados até integração segura.", style = MaterialTheme.typography.bodySmall)
+                        Text("Device, Security, Integration Hub e Systems estão na base V0.3. Integrações externas continuam bloqueadas até autenticação real.", style = MaterialTheme.typography.bodySmall)
                     }}
                 }
                 item {
@@ -164,7 +202,26 @@ fun EdgeDashboard(context: Context) {
 }
 
 @Composable
-private fun SystemsCommand() {
+private fun IntegrationHub() {
+    val integrations = listOf(
+        IntegrationNode("Android Control Plane", "telemetria e configurações autorizadas", "LOCAL ATIVO"),
+        IntegrationNode("GX Systems Registry", "catálogo dos sistemas do ecossistema", "LOCAL ATIVO"),
+        IntegrationNode("GX Watchtower", "health/version/build/eventos", "AGUARDANDO ENDPOINTS"),
+        IntegrationNode("GitHub Bridge", "repos, Actions, PRs e releases", "AGUARDANDO AUTH SEGURA"),
+        IntegrationNode("Social Command", "conteúdo, aprovação e publicação oficial", "BLOQUEADO ATÉ CONECTOR")
+    )
+    Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text("GXEON Integration Hub", style = MaterialTheme.typography.titleMedium)
+        integrations.forEach { node ->
+            Text("${node.name} — ${node.state}", style = MaterialTheme.typography.titleSmall)
+            Text(node.capability, style = MaterialTheme.typography.bodySmall)
+        }
+        Text("Nenhum token privado é armazenado no APK.", style = MaterialTheme.typography.bodySmall)
+    }}
+}
+
+@Composable
+private fun SystemsCommand(context: Context, onAuditChanged: () -> Unit) {
     val systems = listOf(
         SystemNode("XPeX Academy", "Educação / operação", "Registry ready"),
         SystemNode("Senara", "Aplicativo do ecossistema", "Registry ready"),
@@ -172,9 +229,16 @@ private fun SystemsCommand() {
     )
     Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text("GX Systems Command", style = MaterialTheme.typography.titleMedium)
-        Text("Registro local inicial. Status remoto só será marcado online após integração real.")
-        systems.forEach { node -> Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(12.dp)) { Text(node.name, style = MaterialTheme.typography.titleSmall); Text(node.role); Text(node.state, style = MaterialTheme.typography.bodySmall) } } }
-        Text("Próxima camada: Integration Hub + Watchtower + health/version/build por sistema.", style = MaterialTheme.typography.bodySmall)
+        Text("Watchtower seguro: nenhum sistema será marcado online sem telemetria real.")
+        systems.forEach { node ->
+            Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(node.name, style = MaterialTheme.typography.titleSmall)
+                Text(node.role)
+                Text(node.integration, style = MaterialTheme.typography.bodySmall)
+                OutlinedButton(onClick = { audit(context, "Watchtower solicitou verificação de ${node.name}; endpoint ainda não configurado"); onAuditChanged() }) { Text("Registrar verificação") }
+            }}
+        }
+        Text("Próximo passo de integração: cadastrar endpoints autenticados de health/version/build por sistema.", style = MaterialTheme.typography.bodySmall)
     }}
 }
 
