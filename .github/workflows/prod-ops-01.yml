@@ -35,7 +35,8 @@ jobs:
               --data "$body"
           }
 
-          search_body='{"query":"repo:Expensify/App \\"ClearReportActionErrors.ts\\" \\"Onyx.connect\\"","limit":10,"category":"EXPLICIT_BOUNTY"}'
+          query='repo:Expensify/App ClearReportActionErrors Onyx.connect'
+          search_body="$(jq -cn --arg query "$query" '{query:$query,limit:10,category:"EXPLICIT_BOUNTY"}')"
           search="$(post '/api/github-demand/search-preview' "$search_body")"
           candidate="$(printf '%s' "$search" | jq -c '.data.candidates[] | select(.url == "https://github.com/Expensify/App/issues/96140")' | head -n1)"
           test -n "$candidate" || { echo "TARGET_96140_NOT_FOUND"; printf '%s\n' "$search"; exit 2; }
