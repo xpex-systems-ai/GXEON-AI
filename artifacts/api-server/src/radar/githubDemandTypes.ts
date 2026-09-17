@@ -38,7 +38,11 @@ export type GitHubDemandRiskFlag =
   | "SKIP_PAYMENT"
   | "ON_HOLD"
   | "ALREADY_IN_REVIEW"
-  | "PAYMENT_PENDING";
+  | "PAYMENT_PENDING"
+  | "NOT_A_PRIORITY"
+  | "OVERDUE"
+  | "NEEDS_REPRODUCTION"
+  | "MULTIPLE_ASSIGNEES_REVIEW_REQUIRED";
 
 export type GitHubDemandRecommendedAction =
   | "CREATE_OPPORTUNITY_PREVIEW"
@@ -81,6 +85,10 @@ export type GitHubDemandCandidate = typeof githubDemandBoundary & {
   apiUrl: string;
   state: string;
   labels: string[];
+  assignees: string[];
+  assigneeCount: number;
+  issueOwner: string | null;
+  additionalAssignees: string[];
   createdAt: string | null;
   updatedAt: string | null;
   bodyExcerpt: string | null;
