@@ -1,0 +1,20 @@
+{
+  "mission": "PROD-OPS-01",
+  "createdAt": "2026-09-17T03:22:00Z",
+  "target": {
+    "source": "GitHub public issue",
+    "repository": "Expensify/App",
+    "issue": 96140,
+    "url": "https://github.com/Expensify/App/issues/96140",
+    "advertisedReward": "$250"
+  },
+  "mode": "PREVIEW_ONLY",
+  "operatorAuthorized": true,
+  "safety": {
+    "githubWriteDisabled": true,
+    "externalContactDisabled": true,
+    "paymentProviderDisabled": true,
+    "rewardNotGuaranteed": true
+  },
+  "purpose": "Trigger the production API deployment that seeds the first real GitHub Demand opportunity into GXEON's internal preview pipeline. No external action is performed."
+}
