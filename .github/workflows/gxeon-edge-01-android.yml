@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - feat/gxeon-edge-01-apk
+      - feat/gxeon-edge-01-v0.3-control-layer
     paths:
       - 'apps/gxeon-edge-01/**'
       - '.github/workflows/gxeon-edge-01-android.yml'
@@ -34,6 +35,12 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
+
+      - name: Restore stable EDGE debug signing key
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: gxeon-edge-01-debug-keystore-v1
 
       - name: Build debug APK
         run: gradle :app:assembleDebug --stacktrace
