@@ -1,11 +1,204 @@
-import { getGitHubConnectorConfig } from "../connectors/github/githubConnectorConfig"; import { getGitHubDemandQueryPack, GITHUB_DEMAND_MAX_CANDIDATES } from "./githubDemandQueryPacks"; import { githubDemandBoundary, type GitHubDemandCandidate, type GitHubDemandCategory } from "./githubDemandTypes"; import { scoreGitHubDemandCandidate } from "./githubDemandScoring";
-const API="https://api.github.com"; const UA="GXEON-GitHub-Demand-Bounty-Radar-P0";
-type Item={id:number;number:number;title:string;html_url:string;url:string;repository_url:string;state?:string;labels?:Array<string|{name?:string|null}>;created_at?:string|null;updated_at?:string|null;body?:string|null;pull_request?:unknown}; type Repo={full_name?:string;html_url?:string;description?:string|null;stargazers_count?:number;open_issues_count?:number;pushed_at?:string|null;updated_at?:string|null;language?:string|null};
-export class GitHubDemandClientError extends Error{constructor(public code:string,public statusCode:number,message:string){super(message);}}
-const token=()=>process.env.GITHUB_TOKEN?.trim()||process.env.GITHUB_READONLY_TOKEN?.trim()||getGitHubConnectorConfig().token||null; const clean=(v:unknown,m=500)=>typeof v==="string"?v.replace(/[\u0000-\u001f\u007f]/g," ").replace(/\s+/g," ").trim().slice(0,m):""; const safe=(v:unknown)=>{try{if(typeof v!=="string")return"";const u=new URL(v);return u.protocol==="https:"&&(u.hostname==="github.com"||u.hostname==="api.github.com")?u.toString():""}catch{return""}}; const headers=(t:string|null)=>({Accept:"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28","User-Agent":UA,...(t?{["Author"+"ization"]:`Bearer ${t}`}:{})});
-async function get<T>(path:string,t:string|null,params?:Record<string,string|number>):Promise<T>{const u=new URL(API+path); if(params) Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,String(v))); let r:Response; try{r=await fetch(u,{headers:headers(t)})}catch{throw new GitHubDemandClientError("NETWORK_ERROR",502,"GitHub REST API unreachable for read-only preview.")} if(!r.ok){const limited=r.status===403&&r.headers.get("x-ratelimit-remaining")==="0"; throw new GitHubDemandClientError(limited?"RATE_LIMITED":`GITHUB_${r.status}`,limited?429:r.status,"GitHub read-only issues search failed closed.")} return r.json() as Promise<T>}
-const full=(repoUrl:string)=>{const s=safe(repoUrl); const i=s.indexOf("/repos/"); return i>=0?s.slice(i+7).split(/[?#]/)[0]:null}; async function repo(repoUrl:string,t:string|null):Promise<Repo>{const f=full(repoUrl); if(!f)return{}; const [o,r]=f.split("/"); try{return await get<Repo>(`/repos/${encodeURIComponent(o)}/${encodeURIComponent(r)}`,t)}catch{return {full_name:f,html_url:`https://github.com/${f}`,stargazers_count:0,open_issues_count:0}}}
-function labels(i:Item){return (i.labels??[]).map(l=>clean(typeof l==="string"?l:l.name,80)).filter(Boolean).slice(0,12)}
-export function getGitHubDemandStatus(){return {status:"GITHUB_DEMAND_BOUNTY_RADAR_P0_READY",...githubDemandBoundary,maxCandidates:GITHUB_DEMAND_MAX_CANDIDATES,safeSources:["GitHub REST /search/issues","public repository metadata"],authenticated:Boolean(token()),routes:{status:"/api/github-demand/status",searchPreview:"/api/github-demand/search-preview"}}}
-export async function searchGitHubDemandPreview(input:{queryPackId?:string;query?:string;limit?:number;category?:GitHubDemandCategory}){const pack=getGitHubDemandQueryPack(input.queryPackId); const query=clean(input.query||pack?.query,260); if(!query||query.length<3) throw new GitHubDemandClientError("INVALID_QUERY",400,"GitHub Demand search requires a query pack or manual query."); const t=token(); const limit=Math.max(1,Math.min(Number(input.limit)||pack?.maxPreviewCandidates||5,t?GITHUB_DEMAND_MAX_CANDIDATES:5)); const normalizedQuery=`${query} type:issue state:open archived:false`; const search=await get<{total_count:number;incomplete_results:boolean;items:Item[]}>("/search/issues",t,{q:normalizedQuery,sort:"updated",order:"desc",per_page:limit}); const candidates:GitHubDemandCandidate[]=[]; let skippedPullRequests=0,skippedInvalidCandidates=0; for(const item of search.items.slice(0,limit)){ if(item.pull_request){skippedPullRequests++; continue;} const r=await repo(item.repository_url,t); const base={id:`ghd_${item.id}`,source:"github_public_issue_search" as const,title:clean(item.title,220),url:safe(item.html_url),apiUrl:safe(item.url),state:item.state||"unknown",labels:labels(item),createdAt:item.created_at??null,updatedAt:item.updated_at??null,bodyExcerpt:clean(item.body,800)||null,repository:{fullName:clean(r.full_name??full(item.repository_url)??"unknown/unknown",160),url:safe(r.html_url)||`https://github.com/${full(item.repository_url)??""}`,description:clean(r.description,300)||null,stargazersCount:Math.max(0,r.stargazers_count??0),openIssuesCount:Math.max(0,r.open_issues_count??0),pushedAt:r.pushed_at??null,updatedAt:r.updated_at??null,language:clean(r.language,80)||null}}; if(!base.title||!base.url){skippedInvalidCandidates++; continue;} const scored=scoreGitHubDemandCandidate({...base,category:pack?.categoryHint??input.category}); candidates.push({...githubDemandBoundary,...base,category:scored.category,monetizationRoute:pack?.monetizationRouteHint??scored.monetizationRoute,score:scored.score,evidence:scored.evidence,riskFlags:scored.riskFlags,recommendedAction:scored.recommendedAction}); }
- return {status:"GITHUB_DEMAND_SEARCH_PREVIEW_READY",...githubDemandBoundary,query,normalizedQuery,queryPack:pack,authenticated:Boolean(t),effectiveLimit:limit,totalCount:search.total_count,incompleteResults:search.incomplete_results,diagnostics:{provider:"github_rest_api",searchEndpoint:"/search/issues",authMode:t?"backend_read_token":"public_unauthenticated",skippedPullRequests,skippedInvalidCandidates},candidates};}
+import { getGitHubConnectorConfig } from "../connectors/github/githubConnectorConfig";
+import { getGitHubDemandQueryPack, GITHUB_DEMAND_MAX_CANDIDATES } from "./githubDemandQueryPacks";
+import { githubDemandBoundary, type GitHubDemandCandidate, type GitHubDemandCategory } from "./githubDemandTypes";
+import { scoreGitHubDemandCandidate } from "./githubDemandScoring";
+
+const API = "https://api.github.com";
+const UA = "GXEON-GitHub-Demand-Bounty-Radar-P0";
+
+type Item = {
+  id: number;
+  number: number;
+  title: string;
+  html_url: string;
+  url: string;
+  repository_url: string;
+  state?: string;
+  labels?: Array<string | { name?: string | null }>;
+  assignees?: Array<{ login?: string | null }>;
+  created_at?: string | null;
+  updated_at?: string | null;
+  body?: string | null;
+  pull_request?: unknown;
+};
+type Repo = {
+  full_name?: string;
+  html_url?: string;
+  description?: string | null;
+  stargazers_count?: number;
+  open_issues_count?: number;
+  pushed_at?: string | null;
+  updated_at?: string | null;
+  language?: string | null;
+};
+
+export class GitHubDemandClientError extends Error {
+  constructor(public code: string, public statusCode: number, message: string) {
+    super(message);
+  }
+}
+
+const token = () => process.env.GITHUB_TOKEN?.trim() || process.env.GITHUB_READONLY_TOKEN?.trim() || getGitHubConnectorConfig().token || null;
+const clean = (v: unknown, m = 500) =>
+  typeof v === "string" ? v.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, m) : "";
+const safe = (v: unknown) => {
+  try {
+    if (typeof v !== "string") return "";
+    const u = new URL(v);
+    return u.protocol === "https:" && (u.hostname === "github.com" || u.hostname === "api.github.com") ? u.toString() : "";
+  } catch {
+    return "";
+  }
+};
+const headers = (t: string | null) => ({
+  Accept: "application/vnd.github+json",
+  "X-GitHub-Api-Version": "2022-11-28",
+  "User-Agent": UA,
+  ...(t ? { ["Author" + "ization"]: `Bearer ${t}` } : {}),
+});
+
+async function get<T>(path: string, t: string | null, params?: Record<string, string | number>): Promise<T> {
+  const u = new URL(API + path);
+  if (params) Object.entries(params).forEach(([k, v]) => u.searchParams.set(k, String(v)));
+  let r: Response;
+  try {
+    r = await fetch(u, { headers: headers(t) });
+  } catch {
+    throw new GitHubDemandClientError("NETWORK_ERROR", 502, "GitHub REST API unreachable for read-only preview.");
+  }
+  if (!r.ok) {
+    const limited = r.status === 403 && r.headers.get("x-ratelimit-remaining") === "0";
+    throw new GitHubDemandClientError(limited ? "RATE_LIMITED" : `GITHUB_${r.status}`, limited ? 429 : r.status, "GitHub read-only issues search failed closed.");
+  }
+  return r.json() as Promise<T>;
+}
+
+const full = (repoUrl: string) => {
+  const s = safe(repoUrl);
+  const i = s.indexOf("/repos/");
+  return i >= 0 ? s.slice(i + 7).split(/[?#]/)[0] : null;
+};
+async function repo(repoUrl: string, t: string | null): Promise<Repo> {
+  const f = full(repoUrl);
+  if (!f) return {};
+  const [o, r] = f.split("/");
+  try {
+    return await get<Repo>(`/repos/${encodeURIComponent(o)}/${encodeURIComponent(r)}`, t);
+  } catch {
+    return { full_name: f, html_url: `https://github.com/${f}`, stargazers_count: 0, open_issues_count: 0 };
+  }
+}
+
+function labels(i: Item) {
+  return (i.labels ?? []).map((l) => clean(typeof l === "string" ? l : l.name, 80)).filter(Boolean).slice(0, 20);
+}
+function assignees(i: Item) {
+  return (i.assignees ?? []).map((a) => clean(a.login, 80)).filter(Boolean).slice(0, 20);
+}
+function issueOwner(body?: string | null) {
+  if (!body) return null;
+  const m = body.match(/Current Issue Owner:\s*@([A-Za-z0-9-]+)/i);
+  return m?.[1] ? clean(m[1], 80) : null;
+}
+
+export function getGitHubDemandStatus() {
+  return {
+    status: "GITHUB_DEMAND_BOUNTY_RADAR_P0_READY",
+    ...githubDemandBoundary,
+    maxCandidates: GITHUB_DEMAND_MAX_CANDIDATES,
+    safeSources: ["GitHub REST /search/issues", "public repository metadata"],
+    eligibilitySignals: ["labels", "assignees", "Issue Owner marker", "reproduction state"],
+    authenticated: Boolean(token()),
+    routes: { status: "/api/github-demand/status", searchPreview: "/api/github-demand/search-preview" },
+  };
+}
+
+export async function searchGitHubDemandPreview(input: { queryPackId?: string; query?: string; limit?: number; category?: GitHubDemandCategory }) {
+  const pack = getGitHubDemandQueryPack(input.queryPackId);
+  const query = clean(input.query || pack?.query, 260);
+  if (!query || query.length < 3) throw new GitHubDemandClientError("INVALID_QUERY", 400, "GitHub Demand search requires a query pack or manual query.");
+  const t = token();
+  const limit = Math.max(1, Math.min(Number(input.limit) || pack?.maxPreviewCandidates || 5, t ? GITHUB_DEMAND_MAX_CANDIDATES : 5));
+  const normalizedQuery = `${query} type:issue state:open archived:false`;
+  const search = await get<{ total_count: number; incomplete_results: boolean; items: Item[] }>("/search/issues", t, {
+    q: normalizedQuery,
+    sort: "updated",
+    order: "desc",
+    per_page: limit,
+  });
+  const candidates: GitHubDemandCandidate[] = [];
+  let skippedPullRequests = 0;
+  let skippedInvalidCandidates = 0;
+  for (const item of search.items.slice(0, limit)) {
+    if (item.pull_request) {
+      skippedPullRequests++;
+      continue;
+    }
+    const r = await repo(item.repository_url, t);
+    const currentAssignees = assignees(item);
+    const currentIssueOwner = issueOwner(item.body);
+    const additionalAssignees = currentIssueOwner
+      ? currentAssignees.filter((login) => login.toLowerCase() !== currentIssueOwner.toLowerCase())
+      : currentAssignees.slice();
+    const base = {
+      id: `ghd_${item.id}`,
+      source: "github_public_issue_search" as const,
+      title: clean(item.title, 220),
+      url: safe(item.html_url),
+      apiUrl: safe(item.url),
+      state: item.state || "unknown",
+      labels: labels(item),
+      assignees: currentAssignees,
+      assigneeCount: currentAssignees.length,
+      issueOwner: currentIssueOwner,
+      additionalAssignees,
+      createdAt: item.created_at ?? null,
+      updatedAt: item.updated_at ?? null,
+      bodyExcerpt: clean(item.body, 1200) || null,
+      repository: {
+        fullName: clean(r.full_name ?? full(item.repository_url) ?? "unknown/unknown", 160),
+        url: safe(r.html_url) || `https://github.com/${full(item.repository_url) ?? ""}`,
+        description: clean(r.description, 300) || null,
+        stargazersCount: Math.max(0, r.stargazers_count ?? 0),
+        openIssuesCount: Math.max(0, r.open_issues_count ?? 0),
+        pushedAt: r.pushed_at ?? null,
+        updatedAt: r.updated_at ?? null,
+        language: clean(r.language, 80) || null,
+      },
+    };
+    if (!base.title || !base.url) {
+      skippedInvalidCandidates++;
+      continue;
+    }
+    const scored = scoreGitHubDemandCandidate({ ...base, category: pack?.categoryHint ?? input.category });
+    candidates.push({
+      ...githubDemandBoundary,
+      ...base,
+      category: scored.category,
+      monetizationRoute: pack?.monetizationRouteHint ?? scored.monetizationRoute,
+      score: scored.score,
+      evidence: scored.evidence,
+      riskFlags: scored.riskFlags,
+      recommendedAction: scored.recommendedAction,
+    });
+  }
+  return {
+    status: "GITHUB_DEMAND_SEARCH_PREVIEW_READY",
+    ...githubDemandBoundary,
+    query,
+    normalizedQuery,
+    queryPack: pack,
+    authenticated: Boolean(t),
+    effectiveLimit: limit,
+    totalCount: search.total_count,
+    incompleteResults: search.incomplete_results,
+    diagnostics: {
+      provider: "github_rest_api",
+      searchEndpoint: "/search/issues",
+      authMode: t ? "backend_read_token" : "public_unauthenticated",
+      skippedPullRequests,
+      skippedInvalidCandidates,
+    },
+    candidates,
+  };
+}
