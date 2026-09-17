@@ -1,0 +1,47 @@
+{
+  "mission": "PROD-OPS-01",
+  "completedAt": "2026-09-17T03:33:11Z",
+  "mode": "PREVIEW_ONLY",
+  "workflowRunId": 35178589464,
+  "target": {
+    "repository": "Expensify/App",
+    "issue": 96140,
+    "url": "https://github.com/Expensify/App/issues/96140",
+    "title": "[$250] Remove `Onyx.connect()` for the key: `ONYXKEYS.SESSION` in `src/libs/actions/ClearReportActionErrors.ts`",
+    "advertisedReward": "$250",
+    "rewardGuaranteed": false
+  },
+  "classification": {
+    "category": "EXPLICIT_BOUNTY",
+    "monetizationRoute": "BOUNTY_ATTEMPT",
+    "recommendedAction": "RESEARCH_REPO",
+    "riskFlags": [],
+    "score": {
+      "demandScore": 41,
+      "bountyConfidenceScore": 53,
+      "serviceLeadScore": 20,
+      "urgencyScore": 30,
+      "executionEaseScore": 57,
+      "gxeonFitScore": 35,
+      "riskScore": 10
+    }
+  },
+  "internalIds": {
+    "pipelinePreviewId": "ghd_pipe_mu4z5k4m_oe5nvr",
+    "opportunityPreviewId": "opp_mu4z5k9a_kro4lm3",
+    "conversionPackId": "ghd_conversion_ghd_4887305086_mu4z5kcu",
+    "executionPackId": "ghd_execution_ghd_conversion_ghd_4887305086_mu4z5kcu_mu4z5kgi",
+    "workspaceId": "odw_ghd_execution_ghd_conversion_ghd_4887305086_mu4z5kcu_mu4z5kgi_1789615991499"
+  },
+  "taskPreview": {
+    "created": true,
+    "note": "The task-preview action completed successfully. This route returns a copy-only preview without a standalone task ID."
+  },
+  "safety": {
+    "githubWriteDisabled": true,
+    "externalContactDisabled": true,
+    "paymentProviderDisabled": true,
+    "rewardNotGuaranteed": true
+  },
+  "nextAction": "RESEARCH_REPO"
+}
