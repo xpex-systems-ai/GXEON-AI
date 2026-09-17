@@ -104,7 +104,21 @@ export function scoreGitHubDemandCandidate(
   const onHold = labels.some((label) => label === "hold" || label.startsWith("hold ") || label.includes("on hold")) || has(text, ["[hold", "on hold"]);
   const alreadyInReview = labels.some((label) => label === "reviewing" || label.includes("pr in review"));
   const paymentPending = has(candidate.title.toLowerCase(), ["due for payment", "payment due"]);
-  const blockedByLifecycle = skipPayment || onHold || alreadyInReview || paymentPending;
+  const notPriority = labels.some((label) => label === "not a priority" || label === "not priority");
+  const overdue = labels.some((label) => label === "overdue");
+  const needsReproduction = labels.some((label) => label.includes("needs reproduction")) || has(text, ["reproducible in staging?: needs reproduction", "reproducible in production?: needs reproduction"]);
+  const multipleAssigneesReview = (candidate.assigneeCount ?? candidate.assignees?.length ?? 0) > 1;
+
+  const blockedReasons: string[] = [];
+  if (skipPayment) blockedReasons.push("skip-payment");
+  if (onHold) blockedReasons.push("hold");
+  if (alreadyInReview) blockedReasons.push("reviewing");
+  if (paymentPending) blockedReasons.push("payment-pending");
+  if (notPriority) blockedReasons.push("not-a-priority");
+  if (overdue) blockedReasons.push("overdue");
+  if (needsReproduction) blockedReasons.push("needs-reproduction");
+  if (multipleAssigneesReview) blockedReasons.push("multiple-assignees-review-required");
+  const eligibilityBlocked = blockedReasons.length > 0;
 
   const riskFlags: GitHubDemandRiskFlag[] = [];
   if (!budgetHits) riskFlags.push("NO_BUDGET_SIGNAL", "POSSIBLE_UNPAID_OPEN_SOURCE");
@@ -118,14 +132,18 @@ export function scoreGitHubDemandCandidate(
   if (onHold) riskFlags.push("ON_HOLD");
   if (alreadyInReview) riskFlags.push("ALREADY_IN_REVIEW");
   if (paymentPending) riskFlags.push("PAYMENT_PENDING");
+  if (notPriority) riskFlags.push("NOT_A_PRIORITY");
+  if (overdue) riskFlags.push("OVERDUE");
+  if (needsReproduction) riskFlags.push("NEEDS_REPRODUCTION");
+  if (multipleAssigneesReview) riskFlags.push("MULTIPLE_ASSIGNEES_REVIEW_REQUIRED");
 
   const bountyConfidenceScore = clamp(budgetHits * 28 + (category === "EXPLICIT_BOUNTY" ? 25 : 0));
   const serviceLeadScore = clamp(serviceHits * 10 + (route !== "SKIP_OR_WATCH" ? 20 : 0));
   const urgencyScore = clamp((has(text, ["urgent", "asap", "broken", "failing", "production"]) ? 65 : 30) + (stale ? -20 : 0));
   const executionEaseScore = clamp(45 + easyHits * 12 - hardHits * 18);
   const gxeonFitScore = clamp(35 + serviceHits * 8 + (has(text, ["mcp", "supabase", "github actions", "vercel", "railway", "api", "webhook"]) ? 20 : 0));
-  const riskScore = blockedByLifecycle ? 100 : clamp(10 + riskFlags.length * 12 + hardHits * 15 + (has(text, sensitive) ? 25 : 0));
-  const demandScore = blockedByLifecycle
+  const riskScore = eligibilityBlocked ? 100 : clamp(10 + riskFlags.length * 12 + hardHits * 15 + (has(text, sensitive) ? 25 : 0));
+  const demandScore = eligibilityBlocked
     ? 0
     : clamp(
         bountyConfidenceScore * 0.22 +
@@ -136,7 +154,7 @@ export function scoreGitHubDemandCandidate(
           (100 - riskScore) * 0.06,
       );
 
-  const recommendedAction: GitHubDemandRecommendedAction = blockedByLifecycle
+  const recommendedAction: GitHubDemandRecommendedAction = eligibilityBlocked
     ? "SKIP"
     : riskScore >= 75
       ? "SKIP"
@@ -153,7 +171,9 @@ export function scoreGitHubDemandCandidate(
     `${serviceHits} GXEON service-fit signal(s) detected.`,
     `${riskFlags.length} risk flag(s) require manual review.`,
   ];
-  if (blockedByLifecycle) evidence.push("Lifecycle gate detected (hold, skip-payment, reviewing, or payment-pending); candidate is blocked from new-work execution.");
+  if (candidate.assigneeCount !== undefined) evidence.push(`${candidate.assigneeCount} current assignee(s) reported by GitHub search metadata.`);
+  if (candidate.issueOwner) evidence.push(`Issue owner marker detected: @${candidate.issueOwner}.`);
+  if (eligibilityBlocked) evidence.push(`Eligibility gate blocked new-work execution: ${blockedReasons.join(", ")}.`);
 
   return {
     score: {
