@@ -42,7 +42,7 @@ export type ClawlancerSnapshot = {
     authenticatedOperationsReady: boolean;
     secretExposure: false;
   };
-  authenticatedReadError: string | null;
+  agent: { id: string; name: string; walletAddress: string | null; active: boolean; paused: boolean; reputationTier: string | null; transactionCount: number | null; totalEarnedUsdc: number; bio: string | null };\n  authenticatedReadError: string | null;
   target: ClawlancerOpportunity | null;
   opportunities: ClawlancerOpportunity[];
   transactions: ClawlancerTransaction[];
