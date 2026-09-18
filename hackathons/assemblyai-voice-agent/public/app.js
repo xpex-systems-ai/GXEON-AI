@@ -31,6 +31,42 @@ function floatTo16BitPCM(input) {
   return output;
 }
 
+function renderResult(body) {
+  if (!body?.radar) {
+    resultEl.textContent = JSON.stringify(body, null, 2);
+    return;
+  }
+
+  const radar = body.radar;
+  const sourceLines = radar.sources.map((s) => {
+    const count = s.openCount === null || s.openCount === undefined ? "?" : s.openCount;
+    return `• ${s.source}: ${count} open · ${s.evidence}`;
+  });
+
+  const taskLines = radar.qualifying.length
+    ? radar.qualifying.map((t, i) =>
+        `${i + 1}. [${t.source}] ${t.title}${t.reward ? ` · reward: ${t.reward} ${t.currency || ""}` : ""}`
+      )
+    : ["Nenhuma task zero-upfront qualificada encontrada nesta varredura."];
+
+  resultEl.textContent = [
+    "GXEON QUANTUM RADAR",
+    `Scanned: ${radar.scannedAt}`,
+    `Sources: ${radar.sourceCount}`,
+    `Tasks found: ${radar.tasksFound}`,
+    `Qualifying: ${radar.qualifyingCount}`,
+    "",
+    "LIVE SOURCES",
+    ...sourceLines,
+    "",
+    "QUALIFIED OPPORTUNITIES",
+    ...taskLines,
+    "",
+    "EVIDENCE",
+    JSON.stringify(body.evidence, null, 2)
+  ].join("\n");
+}
+
 async function startVoice() {
   startBtn.disabled = true;
   setStatus("solicitando token");
@@ -39,9 +75,7 @@ async function startVoice() {
   const tokenResponse = await fetch("/api/assembly-token", { cache: "no-store" });
   const tokenBody = await tokenResponse.json();
 
-  if (!tokenResponse.ok) {
-    throw new Error(tokenBody.error || "Falha ao obter token da AssemblyAI");
-  }
+  if (!tokenResponse.ok) throw new Error(tokenBody.error || "Falha ao obter token da AssemblyAI");
 
   const token = tokenBody.token;
   if (!token) throw new Error("Token temporário não retornado.");
@@ -78,13 +112,11 @@ async function startVoice() {
 
     source.connect(processor);
     processor.connect(audioContext.destination);
-
     stopBtn.disabled = false;
   });
 
   socket.addEventListener("message", (event) => {
     const message = JSON.parse(event.data);
-
     if (message.type === "Turn") {
       const text = message.transcript || "";
       if (message.end_of_turn) {
@@ -97,10 +129,7 @@ async function startVoice() {
     }
   });
 
-  socket.addEventListener("error", () => {
-    setStatus("erro de streaming");
-  });
-
+  socket.addEventListener("error", () => setStatus("erro de streaming"));
   socket.addEventListener("close", () => {
     if (!finalTranscript) setStatus("conexão encerrada");
   });
@@ -108,7 +137,6 @@ async function startVoice() {
 
 async function stopVoice() {
   stopBtn.disabled = true;
-
   if (processor) processor.disconnect();
   if (source) source.disconnect();
   if (mediaStream) mediaStream.getTracks().forEach((track) => track.stop());
@@ -129,7 +157,7 @@ async function executeMission() {
 
   executeBtn.disabled = true;
   activate("parse");
-  setStatus("estruturando missão");
+  setStatus("executando missão");
 
   const response = await fetch("/api/mission", {
     method: "POST",
@@ -138,14 +166,14 @@ async function executeMission() {
   });
 
   const body = await response.json();
-  if (!response.ok) throw new Error(body.error || "Falha ao estruturar missão.");
+  if (!response.ok) throw new Error(body.error || "Falha ao executar missão.");
 
   activate("gate");
-  await new Promise((resolve) => setTimeout(resolve, 250));
+  await new Promise((resolve) => setTimeout(resolve, 180));
   activate("evidence");
 
-  resultEl.textContent = JSON.stringify(body, null, 2);
-  setStatus(body.execution?.status || "pronto");
+  renderResult(body);
+  setStatus(body.execution?.status || "concluído");
   executeBtn.disabled = false;
 }
 
