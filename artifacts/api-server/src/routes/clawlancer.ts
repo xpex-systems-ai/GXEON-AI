@@ -3,6 +3,7 @@ import {
   claimClawlancerBounty,
   deliverClawlancerTransaction,
   getClawlancerConfiguration,
+  getClawlancerAgentPublicProfile,
   getClawlancerPlatformInfo,
   getClawlancerWalletBalance,
   listClawlancerBounties,
@@ -47,7 +48,7 @@ router.get("/clawlancer/status", async (_req, res) => {
           description: info.description ?? null,
           stats: info.stats ?? null,
         },
-        opportunityCount: opportunities.length,
+        agent,\n        opportunityCount: opportunities.length,
         gxeonWelcomeTarget: opportunities.find((item) => item.gxeonWelcomeTarget) ?? null,
         boundaries: [
           "Provider secret remains backend-only",
@@ -65,7 +66,7 @@ router.get("/clawlancer/status", async (_req, res) => {
 
 router.get("/clawlancer/opportunities", async (_req, res) => {
   try {
-    const opportunities = await listClawlancerBounties();
+    const [agent, opportunities] = await Promise.all([getClawlancerAgentPublicProfile(), listClawlancerBounties()]);
     res.json({
       success: true,
       data: {
