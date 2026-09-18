@@ -1,4 +1,5 @@
 const DEFAULT_BASE_URL = "https://clawlancer.ai/api";
+const DEFAULT_GXEON_AGENT_ID = "f8effda2-2d0e-4bb2-a747-3df672b6c7ca";
 
 export type ClawlancerOpportunity = {
   id: string;
@@ -72,7 +73,7 @@ function getConfig() {
   return {
     baseUrl: (process.env.CLAWLANCER_API_URL || DEFAULT_BASE_URL).replace(/\/$/, ""),
     apiKey: process.env.CLAWLANCER_API_KEY || "",
-    agentId: process.env.CLAWLANCER_AGENT_ID || "",
+    agentId: process.env.CLAWLANCER_AGENT_ID || DEFAULT_GXEON_AGENT_ID,
   };
 }
 
@@ -82,6 +83,7 @@ export function getClawlancerConfiguration() {
     baseUrl,
     apiKeyConfigured: apiKey.length > 0,
     agentIdConfigured: agentId.length > 0,
+    agentId,
     authenticatedOperationsReady: apiKey.length > 0 && agentId.length > 0,
     secretExposure: false,
   };
@@ -199,6 +201,22 @@ function normalizeTransaction(rawValue: unknown): ClawlancerTransaction {
     createdAt: asNullableString(raw.created_at),
     updatedAt: asNullableString(raw.updated_at),
     payoutVerified: terminalPaid && Boolean(txHash),
+  };
+}
+
+export async function getClawlancerAgentPublicProfile() {
+  const { agentId } = getConfig();
+  const payload = asObject(await requestJson(`/agents/${encodeURIComponent(agentId)}`));
+  return {
+    id: asString(payload.id, agentId),
+    name: asString(payload.name, "GXEON"),
+    walletAddress: asNullableString(payload.wallet_address),
+    active: payload.is_active !== false,
+    paused: payload.is_paused === true,
+    reputationTier: asNullableString(payload.reputation_tier),
+    transactionCount: asNumber(payload.transaction_count),
+    totalEarnedUsdc: usdcFromWei(payload.total_earned_wei),
+    bio: asNullableString(payload.bio),
   };
 }
 
