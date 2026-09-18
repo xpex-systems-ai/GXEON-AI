@@ -1,9 +1,9 @@
-import { Router, type IRouter, type Response } from "express";
+import { Router, type IRouter, type Request, type Response } from "express";
 import {
   claimClawlancerBounty,
   deliverClawlancerTransaction,
-  getClawlancerConfiguration,
   getClawlancerAgentPublicProfile,
+  getClawlancerConfiguration,
   getClawlancerPlatformInfo,
   getClawlancerWalletBalance,
   listClawlancerBounties,
@@ -22,7 +22,7 @@ function safeError(res: Response, error: unknown, status = 502) {
   res.status(status).json({ success: false, error: message, message });
 }
 
-function operatorApproved(req: { headers: Record<string, unknown>; body?: unknown }) {
+function operatorApproved(req: Request) {
   const approval = req.headers["x-gxeon-operator-approval"];
   const body = req.body && typeof req.body === "object" ? req.body as Record<string, unknown> : {};
   return approval === "approved" && body.confirm === true;
@@ -30,11 +30,13 @@ function operatorApproved(req: { headers: Record<string, unknown>; body?: unknow
 
 router.get("/clawlancer/status", async (_req, res) => {
   try {
-    const [info, opportunities] = await Promise.all([
+    const [info, agent, opportunities] = await Promise.all([
       getClawlancerPlatformInfo(),
+      getClawlancerAgentPublicProfile(),
       listClawlancerBounties(),
     ]);
     const config = getClawlancerConfiguration();
+
     res.json({
       success: true,
       data: {
@@ -48,7 +50,8 @@ router.get("/clawlancer/status", async (_req, res) => {
           description: info.description ?? null,
           stats: info.stats ?? null,
         },
-        agent,\n        opportunityCount: opportunities.length,
+        agent,
+        opportunityCount: opportunities.length,
         gxeonWelcomeTarget: opportunities.find((item) => item.gxeonWelcomeTarget) ?? null,
         boundaries: [
           "Provider secret remains backend-only",
@@ -66,7 +69,7 @@ router.get("/clawlancer/status", async (_req, res) => {
 
 router.get("/clawlancer/opportunities", async (_req, res) => {
   try {
-    const [agent, opportunities] = await Promise.all([getClawlancerAgentPublicProfile(), listClawlancerBounties()]);
+    const opportunities = await listClawlancerBounties();
     res.json({
       success: true,
       data: {
@@ -85,7 +88,10 @@ router.get("/clawlancer/opportunities", async (_req, res) => {
 router.get("/clawlancer/snapshot", async (_req, res) => {
   try {
     const config = getClawlancerConfiguration();
-    const opportunities = await listClawlancerBounties();
+    const [agent, opportunities] = await Promise.all([
+      getClawlancerAgentPublicProfile(),
+      listClawlancerBounties(),
+    ]);
     let transactions: Awaited<ReturnType<typeof listClawlancerTransactions>> = [];
     let wallet: Awaited<ReturnType<typeof getClawlancerWalletBalance>> | null = null;
     let authenticatedReadError: string | null = null;
@@ -113,6 +119,7 @@ router.get("/clawlancer/snapshot", async (_req, res) => {
         settlementAsset: "USDC",
         mode: config.authenticatedOperationsReady ? "LIVE" : "LIVE_PUBLIC_READONLY",
         configuration: config,
+        agent,
         authenticatedReadError,
         target: opportunities.find((item) => item.gxeonWelcomeTarget) ?? null,
         opportunities,
@@ -138,6 +145,7 @@ router.post("/clawlancer/listings/:id/claim", async (req, res) => {
       message: "Send X-GXEON-Operator-Approval: approved and body { confirm: true } to claim.",
     });
   }
+
   try {
     const result = await claimClawlancerBounty(req.params.id);
     return res.status(201).json({
@@ -163,8 +171,10 @@ router.post("/clawlancer/transactions/:id/deliver", async (req, res) => {
       message: "Send X-GXEON-Operator-Approval: approved and body { confirm: true, deliverable: string } to deliver.",
     });
   }
+
   const body = req.body && typeof req.body === "object" ? req.body as Record<string, unknown> : {};
   const deliverable = typeof body.deliverable === "string" ? body.deliverable : "";
+
   try {
     const result = await deliverClawlancerTransaction(req.params.id, deliverable);
     return res.status(201).json({
