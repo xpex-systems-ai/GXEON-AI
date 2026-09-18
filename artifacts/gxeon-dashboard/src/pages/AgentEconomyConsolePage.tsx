@@ -120,7 +120,7 @@ export default function AgentEconomyConsolePage() {
         <Metric title="Live opportunities" value={String(snapshot?.opportunities.length ?? 0)} icon={<Radar className="h-4 w-4" />} />
         <Metric title="Verified revenue" value={`${(snapshot?.revenue.verifiedUsdc ?? 0).toFixed(2)} USDC`} icon={<CircleDollarSign className="h-4 w-4" />} />
         <Metric title="Verified payouts" value={String(snapshot?.revenue.verifiedCount ?? 0)} icon={<CheckCircle2 className="h-4 w-4" />} />
-        <Metric title="Wallet balance" value={snapshot?.wallet ? `${snapshot.wallet.usdcBalance.toFixed(6)} USDC` : "AUTH LOCKED"} icon={<LockKeyhole className="h-4 w-4" />} />
+        <Metric title="GXEON wallet" value={snapshot?.wallet ? `${snapshot.wallet.usdcBalance.toFixed(6)} USDC` : (snapshot?.agent.walletAddress ? `${snapshot.agent.walletAddress.slice(0, 8)}…${snapshot.agent.walletAddress.slice(-6)}` : "LOADING")} icon={<LockKeyhole className="h-4 w-4" />} />
       </section>
 
       <section className="grid gap-6 xl:grid-cols-[1fr_1fr]">
