@@ -1,4 +1,5 @@
 import { Router, type IRouter, type Request, type Response } from "express";
+import { governanceAuth } from "../middlewares/governanceAuth";
 import {
   claimClawlancerBounty,
   deliverClawlancerTransaction,
@@ -57,7 +58,7 @@ router.get("/clawlancer/status", async (_req, res) => {
           "Provider secret remains backend-only",
           "No private key or seed phrase accepted",
           "No wallet withdrawal endpoint in GXEON",
-          "Claim and delivery require explicit operator approval header plus confirm=true",
+          "Claim and delivery require governance authentication plus explicit operator confirmation",
           "Revenue remains unverified until settlement evidence exists",
         ],
       },
@@ -137,7 +138,7 @@ router.get("/clawlancer/snapshot", async (_req, res) => {
   }
 });
 
-router.post("/clawlancer/listings/:id/claim", async (req, res) => {
+router.post("/clawlancer/listings/:id/claim", governanceAuth, async (req, res) => {
   if (!operatorApproved(req)) {
     return res.status(409).json({
       success: false,
@@ -163,7 +164,7 @@ router.post("/clawlancer/listings/:id/claim", async (req, res) => {
   }
 });
 
-router.post("/clawlancer/transactions/:id/deliver", async (req, res) => {
+router.post("/clawlancer/transactions/:id/deliver", governanceAuth, async (req, res) => {
   if (!operatorApproved(req)) {
     return res.status(409).json({
       success: false,
