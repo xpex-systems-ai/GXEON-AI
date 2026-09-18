@@ -167,20 +167,89 @@ async function scanLoopuman() {
   }
 }
 
+
+async function scanExecutionMarket() {
+  try {
+    const r = await fetchJson("https://api.execution.market/api/v1/tasks?status=published&limit=20&offset=0");
+    const rows = Array.isArray(r.json) ? r.json
+      : Array.isArray(r.json?.tasks) ? r.json.tasks
+      : Array.isArray(r.json?.data) ? r.json.data
+      : [];
+    const tasks = rows
+      .filter((t) => ["published", "open", "available"].includes(String(t?.status || "").toLowerCase()) || !t?.status)
+      .slice(0, 10)
+      .map((t) => ({
+        source: "Execution Market",
+        id: String(t?.id ?? ""),
+        title: t?.title ?? t?.instructions?.slice?.(0, 80) ?? "Execution Market task",
+        reward: t?.bounty_usd ?? t?.reward ?? null,
+        currency: "USDC",
+        url: t?.id ? `https://execution.market/tasks/${t.id}` : "https://execution.market/",
+        status: t?.status ?? "published",
+        zeroUpfront: true,
+        gaslessWorker: true
+      }));
+    return {
+      source: "Execution Market",
+      endpoint: "https://api.execution.market/api/v1/tasks?status=published",
+      ok: r.ok,
+      openCount: tasks.length,
+      tasks,
+      constraints: ["worker payout is gasless", "some jobs may require physical presence or human evidence"],
+      evidence: r.ok ? "public_api" : `http_${r.status}`
+    };
+  } catch (error) {
+    return { source: "Execution Market", ok: false, openCount: null, tasks: [], evidence: error.name || "error" };
+  }
+}
+
+async function scanTheColony() {
+  try {
+    const r = await fetchJson("https://thecolony.ai/marketplace");
+    const text = r.text || "";
+    const tasks = [];
+    const paradise = /Paid Task: Build Agent Tools for paradise \+ cryptgregresearch\.org[\s\S]{0,700}?Reward:\s*5000 sats/i.test(text);
+    if (paradise) {
+      tasks.push({
+        source: "The Colony",
+        id: "paradise-cryptgregresearch",
+        title: "Build Agent Tools for paradise + cryptgregresearch.org",
+        reward: 5000,
+        currency: "sats",
+        url: "https://thecolony.ai/marketplace",
+        status: "bidding",
+        zeroUpfront: true
+      });
+    }
+    return {
+      source: "The Colony",
+      endpoint: "https://thecolony.ai/marketplace",
+      ok: r.ok,
+      openCount: tasks.length,
+      tasks,
+      evidence: r.ok ? "public_marketplace" : `http_${r.status}`
+    };
+  } catch (error) {
+    return { source: "The Colony", ok: false, openCount: null, tasks: [], evidence: error.name || "error" };
+  }
+}
+
 async function runRadar() {
   const startedAt = new Date().toISOString();
   const sources = await Promise.all([
     scanTaskBounty(),
     scanClawEarn(),
     scanAgentHire(),
-    scanLoopuman()
+    scanLoopuman(),
+    scanExecutionMarket(),
+    scanTheColony()
   ]);
 
   const tasks = sources.flatMap((s) => s.tasks || []);
   const qualifying = tasks.filter((t) => {
     const source = String(t.source || "").toLowerCase();
     if (source.includes("claw earn")) return false;
-    return true;
+    return t.zeroUpfront !== false;
   });
 
   return {
