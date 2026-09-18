@@ -19,6 +19,7 @@ import FinancialLedgerPage from "@/pages/FinancialLedgerPage";
 import MonetizationBoardPage from "@/pages/MonetizationBoardPage";
 import Web3TaskRadarPage from "@/pages/Web3TaskRadarPage";
 import AgentEconomyRadarPage from "@/pages/AgentEconomyRadarPage";
+import AgentEconomyConsolePage from "@/pages/AgentEconomyConsolePage";
 import CommandBrainPage from "@/pages/CommandBrainPage";
 import RevenueSprintPage from "@/pages/RevenueSprintPage";
 import AgentConectouPage from "@/pages/AgentConectouPage";
@@ -109,6 +110,7 @@ function Router() {
             <Route path="/ops/ledger" component={FinancialLedgerPage} />
             <Route path="/ops/monetization" component={MonetizationBoardPage} />
             <Route path="/ops/web3-tasks" component={Web3TaskRadarPage} />
+            <Route path="/ops/agent-economy-console" component={AgentEconomyConsolePage} />
             <Route path="/ops/agent-economy" component={AgentEconomyRadarPage} />
             <Route path="/ops/agent-conectou" component={AgentConectouPage} />
             <Route path="/ops/radar-x" component={RadarXOperationalPage} />
