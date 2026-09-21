@@ -1,0 +1,25 @@
+name: GXEON Video Factory
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'video-factory/**'
+      - '.github/workflows/gxeon-video-factory.yml'
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - run: python video-factory/render.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gxeon-bottube-bounty-446
+          path: dist/*.mp4
+          retention-days: 7
