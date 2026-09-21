@@ -1,6 +1,6 @@
 import os, subprocess, textwrap
 from PIL import Image, ImageDraw, ImageFont
-W,H,FPS,DUR=720,720,24,18
+W,H,FPS,DUR=720,720,24,7.8
 videos=[
 ("01-proof-antiquity","PROOF OF ANTIQUITY",["RustChain explores a different mining idea.","Hardware identity and history can matter.","Useful participation over raw GPU power."],"GXEON AI • RUSTCHAIN"),
 ("02-vintage-hardware","VINTAGE HARDWARE",["Old computers are not automatically obsolete.","Attested hardware can become network infrastructure.","Vintage hardware. New utility."],"GXEON AI • NEW UTILITY"),
@@ -14,7 +14,8 @@ reg="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 def f(path,size,bold=False): return ImageFont.truetype(font if bold else reg,size)
 for slug,title,lines,end in videos:
     d=f"frames/{slug}"; os.makedirs(d,exist_ok=True)
-    total=FPS*DUR
+    total=int(FPS*DUR)
+    segment=max(DUR/len(lines),0.1)
     for n in range(total):
         t=n/FPS; im=Image.new("RGB",(W,H),(6,12,25)); dr=ImageDraw.Draw(im)
         for y in range(0,H,48): dr.line((0,y,W,y),fill=(12,34,58),width=1)
@@ -22,7 +23,7 @@ for slug,title,lines,end in videos:
         dr.rounded_rectangle((36,34,684,686),28,outline=(0,212,255),width=2)
         dr.text((60,62),"GXEON // VIDEO FACTORY",font=f("",20,True),fill=(0,212,255))
         dr.text((60,130),title,font=f("",42,True),fill="white")
-        idx=min(int(t//4),len(lines)-1)
+        idx=min(int(t//segment),len(lines)-1)
         y=270
         for i,line in enumerate(lines):
             fill=(255,122,0) if i==idx else (135,150,170)
