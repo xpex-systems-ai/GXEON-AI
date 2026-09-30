@@ -12,8 +12,8 @@ android {
         applicationId = "ai.gxeon.edge"
         minSdk = 29
         targetSdk = 36
-        versionCode = 3
-        versionName = "0.3.0"
+        versionCode = 4
+        versionName = "0.4.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
@@ -47,5 +47,6 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.4.2")
     implementation("androidx.camera:camera-view:1.4.2")
     implementation("androidx.work:work-runtime-ktx:2.10.3")
+    implementation("androidx.exifinterface:exifinterface:1.3.7")
     debugImplementation("androidx.compose.ui:ui-tooling")
 }
