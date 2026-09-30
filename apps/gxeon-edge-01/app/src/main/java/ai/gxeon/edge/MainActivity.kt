@@ -69,6 +69,8 @@ data class AppEntry(val label: String, val packageName: String)
 data class SystemNode(val name: String, val role: String, val integration: String)
 data class IntegrationNode(val name: String, val capability: String, val state: String)
 data class VaultContact(val key: String, val name: String, val phones: String, val emails: String, val removed: Boolean, val lastSeen: Long)
+data class TrustedPeer(val id: String, val displayName: String, val fingerprint: String, val approved: Boolean)
+data class SecureMessage(val id: String, val peerId: String, val direction: String, val ciphertext: String, val createdAt: Long)
 data class PhotoEntry(
     val id: Long,
     val uri: Uri,
@@ -257,6 +259,65 @@ private fun Context.loadContactsVault(): List<VaultContact> {
     }.toList()
 }
 
+
+private fun Context.secureMessengerIdentity(): String {
+    val prefs = getSharedPreferences("gx_secure_messenger", Context.MODE_PRIVATE)
+    prefs.getString("identity", null)?.let { return it }
+    val bytes = ByteArray(32).also { java.security.SecureRandom().nextBytes(it) }
+    val identity = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP)
+    prefs.edit().putString("identity", identity).apply()
+    return identity
+}
+
+private fun Context.secureMessengerFingerprint(): String {
+    val digest = java.security.MessageDigest.getInstance("SHA-256").digest(secureMessengerIdentity().toByteArray())
+    return digest.take(12).joinToString(":") { "%02X".format(it) }
+}
+
+private fun Context.loadTrustedPeers(): List<TrustedPeer> {
+    val raw = getSharedPreferences("gx_secure_messenger", Context.MODE_PRIVATE).getString("peers", "") ?: ""
+    return raw.lineSequence().filter { it.isNotBlank() }.mapNotNull { line ->
+        val p = line.split("|")
+        if (p.size == 4) TrustedPeer(p[0], p[1], p[2], p[3] == "1") else null
+    }.toList()
+}
+
+private fun Context.addTrustedPeer(name: String): List<TrustedPeer> {
+    val clean = name.trim()
+    if (clean.isBlank()) return loadTrustedPeers()
+    val prefs = getSharedPreferences("gx_secure_messenger", Context.MODE_PRIVATE)
+    val peers = loadTrustedPeers().toMutableList()
+    val seed = ByteArray(32).also { java.security.SecureRandom().nextBytes(it) }
+    val id = java.util.UUID.randomUUID().toString()
+    val fp = java.security.MessageDigest.getInstance("SHA-256").digest(seed).take(8).joinToString(":") { "%02X".format(it) }
+    peers += TrustedPeer(id, clean, fp, true)
+    prefs.edit().putString("peers", peers.joinToString("\n") { listOf(it.id, it.displayName.replace("|", ""), it.fingerprint, if (it.approved) "1" else "0").joinToString("|") }).apply()
+    return peers
+}
+
+private fun Context.storeLocalSecureMessage(peer: TrustedPeer, plaintext: String): List<SecureMessage> {
+    val prefs = getSharedPreferences("gx_secure_messenger", Context.MODE_PRIVATE)
+    val identity = secureMessengerIdentity()
+    val key = java.security.MessageDigest.getInstance("SHA-256").digest((identity + peer.id).toByteArray())
+    val cipher = javax.crypto.Cipher.getInstance("AES/GCM/NoPadding")
+    val secret = javax.crypto.spec.SecretKeySpec(key, "AES")
+    cipher.init(javax.crypto.Cipher.ENCRYPT_MODE, secret)
+    val encrypted = cipher.doFinal(plaintext.toByteArray(Charsets.UTF_8))
+    val packed = android.util.Base64.encodeToString(cipher.iv + encrypted, android.util.Base64.NO_WRAP)
+    val line = listOf(java.util.UUID.randomUUID().toString(), peer.id, "OUT", packed, System.currentTimeMillis().toString()).joinToString("|")
+    val old = prefs.getString("messages", "") ?: ""
+    prefs.edit().putString("messages", (line + "\n" + old).lineSequence().take(100).joinToString("\n")).apply()
+    return loadLocalSecureMessages()
+}
+
+private fun Context.loadLocalSecureMessages(): List<SecureMessage> {
+    val raw = getSharedPreferences("gx_secure_messenger", Context.MODE_PRIVATE).getString("messages", "") ?: ""
+    return raw.lineSequence().filter { it.isNotBlank() }.mapNotNull { line ->
+        val p = line.split("|")
+        if (p.size == 5) SecureMessage(p[0], p[1], p[2], p[3], p[4].toLongOrNull() ?: 0L) else null
+    }.toList()
+}
+
 private fun healthAdvice(s: DeviceSnapshot): List<String> = buildList {
     if (s.storageUsedPercent >= 85) add("Armazenamento alto: revise arquivos grandes e apps sem uso.") else add("Armazenamento dentro da faixa operacional definida pelo EDGE.")
     if (s.ramUsedPercent >= 85) add("Memória sob pressão: identifique apps pesados antes de fechar processos.") else add("Memória sem pressão crítica no momento da leitura.")
@@ -278,6 +339,11 @@ fun EdgeDashboard(activity: MainActivity) {
     var photoScanStatus by remember { mutableStateOf("Ainda não analisado") }
     var vaultContacts by remember { mutableStateOf(context.loadContactsVault()) }
     var contactsStatus by remember { mutableStateOf("Vault ainda não sincronizado") }
+    var trustedPeers by remember { mutableStateOf(context.loadTrustedPeers()) }
+    var secureMessages by remember { mutableStateOf(context.loadLocalSecureMessages()) }
+    var peerName by remember { mutableStateOf("") }
+    var messageDraft by remember { mutableStateOf("") }
+    var selectedPeerId by remember { mutableStateOf<String?>(null) }
     val permissionLauncher = androidx.activity.compose.rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) {
             photos = context.loadPhotos()
@@ -322,11 +388,11 @@ fun EdgeDashboard(activity: MainActivity) {
     }
 
     LazyColumn(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { Text("GXEON EDGE-01", style = MaterialTheme.typography.headlineMedium); Text("Command Node V0.5 • ${state.model} • Android ${state.androidVersion}"); Text("Última leitura: ${DateFormat.getTimeInstance(DateFormat.MEDIUM).format(Date(state.capturedAt))}", style = MaterialTheme.typography.bodySmall) }
+        item { Text("GXEON EDGE-01", style = MaterialTheme.typography.headlineMedium); Text("Command Node V0.6 • ${state.model} • Android ${state.androidVersion}"); Text("Última leitura: ${DateFormat.getTimeInstance(DateFormat.MEDIUM).format(Date(state.capturedAt))}", style = MaterialTheme.typography.bodySmall) }
         item { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { MetricCard("RAM", "${state.ramUsedPercent}%", Modifier.weight(1f)); MetricCard("Storage", "${state.storageUsedPercent}%", Modifier.weight(1f)); MetricCard("Battery", "${state.batteryPercent}%", Modifier.weight(1f)) } }
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                listOf("COMMAND" to "CMD", "DEVICE" to "DEVICE", "PHOTOS" to "FOTOS", "CONTACTS" to "CONTATOS", "SYSTEMS" to "SIST.").forEach { (key, label) ->
+                listOf("COMMAND" to "CMD", "DEVICE" to "DEVICE", "PHOTOS" to "FOTOS", "CONTACTS" to "CONT.", "MESSENGER" to "CHAT", "SYSTEMS" to "SIST.").forEach { (key, label) ->
                     if (section == key) Button(onClick = { section = key }, modifier = Modifier.weight(1f)) { Text(label, maxLines = 1, fontSize = 10.sp) }
                     else OutlinedButton(onClick = { section = key }, modifier = Modifier.weight(1f)) { Text(label, maxLines = 1, fontSize = 10.sp) }
                 }
@@ -394,11 +460,64 @@ fun EdgeDashboard(activity: MainActivity) {
                     }
                 }
             }
+            "MESSENGER" -> {
+                item {
+                    Card(Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text("GX Secure Messenger", style = MaterialTheme.typography.titleMedium)
+                            Text("Rede privada por convite. V0.6 estabelece identidade local, lista de confiança, biometria e cofre cifrado no aparelho.")
+                            Text("Sua impressão: " + context.secureMessengerFingerprint(), style = MaterialTheme.typography.bodySmall)
+                            Text("Transporte entre aparelhos: ainda não conectado. Nenhuma mensagem é anunciada como entregue sem relay E2EE real.", style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+                }
+                item {
+                    OutlinedTextField(value = peerName, onValueChange = { peerName = it }, label = { Text("Pessoa de confiança") }, modifier = Modifier.fillMaxWidth())
+                    Button(onClick = {
+                        activity.verifyOperator("Adicionar pessoa à rede de confiança") {
+                            trustedPeers = context.addTrustedPeer(peerName)
+                            peerName = ""
+                            audit(context, "Secure Messenger: pessoa adicionada à rede de confiança local")
+                            reloadAudit()
+                        }
+                    }) { Text("Adicionar com biometria") }
+                }
+                items(trustedPeers) { peer ->
+                    Card(Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                            Text(peer.displayName, style = MaterialTheme.typography.titleSmall)
+                            Text("CONFIÁVEL • fingerprint " + peer.fingerprint, style = MaterialTheme.typography.bodySmall)
+                            OutlinedButton(onClick = { selectedPeerId = peer.id }) { Text("Abrir conversa") }
+                        }
+                    }
+                }
+                if (selectedPeerId != null) {
+                    val peer = trustedPeers.firstOrNull { it.id == selectedPeerId }
+                    if (peer != null) item {
+                        Card(Modifier.fillMaxWidth()) {
+                            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Text("Conversa protegida • " + peer.displayName, style = MaterialTheme.typography.titleMedium)
+                                OutlinedTextField(value = messageDraft, onValueChange = { messageDraft = it }, label = { Text("Mensagem") }, modifier = Modifier.fillMaxWidth())
+                                Button(onClick = {
+                                    val draft = messageDraft.trim()
+                                    if (draft.isNotBlank()) activity.verifyOperator("Cifrar mensagem para " + peer.displayName) {
+                                        secureMessages = context.storeLocalSecureMessage(peer, draft)
+                                        messageDraft = ""
+                                        audit(context, "Secure Messenger: mensagem cifrada localmente; envio externo pendente")
+                                        reloadAudit()
+                                    }
+                                }) { Text("Cifrar no cofre") }
+                                Text("Mensagens cifradas locais desta conversa: " + secureMessages.count { it.peerId == peer.id }, style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
+                    }
+                }
+            }
             "SYSTEMS" -> item { SystemsCommand(context) { reloadAudit() } }
             else -> {
                 item { Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { Text("GX Commander", style = MaterialTheme.typography.titleMedium); Text("Detectar → recomendar → aprovar → executar → registrar"); Button(onClick = { refresh() }) { Text("Executar diagnóstico local") }; OutlinedButton(onClick = { context.startActivity(Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)); audit(context, "Abriu controles de armazenamento"); reloadAudit() }) { Text("Controles de armazenamento") }; OutlinedButton(onClick = { context.startActivity(Intent(Settings.ACTION_SETTINGS)); audit(context, "Abriu plano de controle Android"); reloadAudit() }) { Text("Plano de controle Android") } } } }
                 item { IntegrationHub() }
-                item { Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp)) { Text("Módulos GXEON", style = MaterialTheme.typography.titleMedium); Text("DEVICE • PHOTOS • CONTACTS • SYSTEMS • SOCIAL • VISION • VOICE • BUSINESS • DEV • ACADEMY"); Text("Photo Qualifier V0.4 classifica fotos locais. Contacts Vault V0.5 preserva localmente contatos previamente sincronizados mesmo quando depois são removidos da agenda.", style = MaterialTheme.typography.bodySmall) } } }
+                item { Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp)) { Text("Módulos GXEON", style = MaterialTheme.typography.titleMedium); Text("DEVICE • PHOTOS • CONTACTS • MESSENGER • SYSTEMS • SOCIAL • VISION • VOICE • BUSINESS • DEV • ACADEMY"); Text("Photo Qualifier V0.4 classifica fotos locais. Contacts Vault V0.5 preserva contatos sincronizados. Secure Messenger V0.6 adiciona identidade privada, rede de confiança e cofre local cifrado; transporte E2EE entre aparelhos só será marcado ativo após backend criptográfico real.", style = MaterialTheme.typography.bodySmall) } } }
                 item { Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp)) { Text("Audit Ledger", style = MaterialTheme.typography.titleMedium); Text(if (auditText.isBlank()) "Nenhuma ação registrada ainda." else auditText, style = MaterialTheme.typography.bodySmall) } } }
             }
         }
@@ -406,7 +525,7 @@ fun EdgeDashboard(activity: MainActivity) {
 }
 
 @Composable private fun IntegrationHub() {
-    val integrations = listOf(IntegrationNode("Android Control Plane", "telemetria e configurações autorizadas", "LOCAL ATIVO"), IntegrationNode("GX Photo Qualifier", "inventário e classificação técnica de fotos locais", "LOCAL ATIVO"), IntegrationNode("GX Contacts Vault", "snapshot local de contatos e preservação de removidos", "LOCAL ATIVO"), IntegrationNode("GX Systems Registry", "catálogo dos sistemas do ecossistema", "LOCAL ATIVO"), IntegrationNode("GX Watchtower", "health/version/build/eventos", "AGUARDANDO ENDPOINTS"), IntegrationNode("GitHub Bridge", "repos, Actions, PRs e releases", "AGUARDANDO AUTH SEGURA"), IntegrationNode("Social Command", "conteúdo, aprovação e publicação oficial", "BLOQUEADO ATÉ CONECTOR"))
+    val integrations = listOf(IntegrationNode("Android Control Plane", "telemetria e configurações autorizadas", "LOCAL ATIVO"), IntegrationNode("GX Photo Qualifier", "inventário e classificação técnica de fotos locais", "LOCAL ATIVO"), IntegrationNode("GX Contacts Vault", "snapshot local de contatos e preservação de removidos", "LOCAL ATIVO"), IntegrationNode("GX Secure Messenger", "identidade, confiança, biometria e cofre cifrado local", "FOUNDATION LOCAL"), IntegrationNode("GX Systems Registry", "catálogo dos sistemas do ecossistema", "LOCAL ATIVO"), IntegrationNode("GX Watchtower", "health/version/build/eventos", "AGUARDANDO ENDPOINTS"), IntegrationNode("GitHub Bridge", "repos, Actions, PRs e releases", "AGUARDANDO AUTH SEGURA"), IntegrationNode("Social Command", "conteúdo, aprovação e publicação oficial", "BLOQUEADO ATÉ CONECTOR"))
     Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { Text("GXEON Integration Hub", style = MaterialTheme.typography.titleMedium); integrations.forEach { node -> Text("${node.name} — ${node.state}", style = MaterialTheme.typography.titleSmall); Text(node.capability, style = MaterialTheme.typography.bodySmall) }; Text("Nenhum token privado é armazenado no APK.", style = MaterialTheme.typography.bodySmall) } }
 }
 
