@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.StatFs
 import android.provider.MediaStore
+import android.provider.ContactsContract
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -67,6 +68,7 @@ data class DeviceSnapshot(val model: String, val androidVersion: String, val ram
 data class AppEntry(val label: String, val packageName: String)
 data class SystemNode(val name: String, val role: String, val integration: String)
 data class IntegrationNode(val name: String, val capability: String, val state: String)
+data class VaultContact(val key: String, val name: String, val phones: String, val emails: String, val removed: Boolean, val lastSeen: Long)
 data class PhotoEntry(
     val id: Long,
     val uri: Uri,
@@ -186,6 +188,75 @@ private fun qualifyPhoto(width: Int, height: Int, sizeBytes: Long, dateTaken: Lo
     return Triple(score, tier, reasons)
 }
 
+
+private fun Context.syncContactsVault(): List<VaultContact> {
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) return loadContactsVault()
+    val current = linkedMapOf<String, VaultContact>()
+    val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+    val projection = arrayOf(
+        ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
+        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+        ContactsContract.CommonDataKinds.Phone.NUMBER
+    )
+    contentResolver.query(uri, projection, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC")?.use { cursor ->
+        val idCol = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.CONTACT_ID)
+        val nameCol = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+        val phoneCol = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)
+        while (cursor.moveToNext()) {
+            val id = cursor.getLong(idCol).toString()
+            val name = cursor.getString(nameCol) ?: "Sem nome"
+            val phone = cursor.getString(phoneCol) ?: ""
+            val old = current[id]
+            val phones = ((old?.phones?.split(" • ") ?: emptyList()) + phone).filter { it.isNotBlank() }.distinct().joinToString(" • ")
+            current[id] = VaultContact(id, name, phones, "", false, System.currentTimeMillis())
+        }
+    }
+    val emailsById = mutableMapOf<String, MutableList<String>>()
+    contentResolver.query(
+        ContactsContract.CommonDataKinds.Email.CONTENT_URI,
+        arrayOf(ContactsContract.CommonDataKinds.Email.CONTACT_ID, ContactsContract.CommonDataKinds.Email.ADDRESS),
+        null, null, null
+    )?.use { cursor ->
+        val idCol = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.CONTACT_ID)
+        val emailCol = cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Email.ADDRESS)
+        while (cursor.moveToNext()) {
+            val id = cursor.getLong(idCol).toString()
+            val email = cursor.getString(emailCol) ?: ""
+            if (email.isNotBlank()) emailsById.getOrPut(id) { mutableListOf() }.add(email)
+        }
+    }
+    current.keys.toList().forEach { id ->
+        val v = current.getValue(id)
+        current[id] = v.copy(emails = emailsById[id]?.distinct()?.joinToString(" • ") ?: "")
+    }
+    val previous = loadContactsVault().associateBy { it.key }
+    val merged = linkedMapOf<String, VaultContact>()
+    previous.values.forEach { old ->
+        merged[old.key] = current[old.key] ?: old.copy(removed = true)
+    }
+    current.values.forEach { now -> merged[now.key] = now.copy(removed = false) }
+    saveContactsVault(merged.values.toList())
+    return merged.values.sortedWith(compareBy<VaultContact> { !it.removed }.thenBy { it.name.lowercase(Locale.getDefault()) })
+}
+
+private fun Context.saveContactsVault(items: List<VaultContact>) {
+    val encoded = items.joinToString("\n") {
+        listOf(it.key, it.name, it.phones, it.emails, if (it.removed) "1" else "0", it.lastSeen.toString())
+            .joinToString("\t") { field -> android.util.Base64.encodeToString(field.toByteArray(), android.util.Base64.NO_WRAP) }
+    }
+    getSharedPreferences("gxeon_contacts_vault", Context.MODE_PRIVATE).edit().putString("contacts", encoded).apply()
+}
+
+private fun Context.loadContactsVault(): List<VaultContact> {
+    val raw = getSharedPreferences("gxeon_contacts_vault", Context.MODE_PRIVATE).getString("contacts", "") ?: ""
+    return raw.lineSequence().filter { it.isNotBlank() }.mapNotNull { line ->
+        runCatching {
+            val p = line.split("\t").map { String(android.util.Base64.decode(it, android.util.Base64.NO_WRAP)) }
+            VaultContact(p[0], p[1], p[2], p[3], p[4] == "1", p[5].toLong())
+        }.getOrNull()
+    }.toList()
+}
+
 private fun healthAdvice(s: DeviceSnapshot): List<String> = buildList {
     if (s.storageUsedPercent >= 85) add("Armazenamento alto: revise arquivos grandes e apps sem uso.") else add("Armazenamento dentro da faixa operacional definida pelo EDGE.")
     if (s.ramUsedPercent >= 85) add("Memória sob pressão: identifique apps pesados antes de fechar processos.") else add("Memória sem pressão crítica no momento da leitura.")
@@ -205,6 +276,8 @@ fun EdgeDashboard(activity: MainActivity) {
     var state by remember { mutableStateOf(context.snapshot()) }; var section by remember { mutableStateOf("COMMAND") }
     var photos by remember { mutableStateOf<List<PhotoEntry>>(emptyList()) }
     var photoScanStatus by remember { mutableStateOf("Ainda não analisado") }
+    var vaultContacts by remember { mutableStateOf(context.loadContactsVault()) }
+    var contactsStatus by remember { mutableStateOf("Vault ainda não sincronizado") }
     val permissionLauncher = androidx.activity.compose.rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
         if (granted) {
             photos = context.loadPhotos()
@@ -213,6 +286,25 @@ fun EdgeDashboard(activity: MainActivity) {
         } else {
             photoScanStatus = "Permissão de fotos negada"
             audit(context, "Photo Qualifier sem permissão de leitura de imagens")
+        }
+    }
+    val contactsPermissionLauncher = androidx.activity.compose.rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        if (granted) {
+            vaultContacts = context.syncContactsVault()
+            contactsStatus = vaultContacts.size.toString() + " contatos protegidos no Vault"
+            audit(context, "GX Contacts Vault sincronizado")
+        } else {
+            contactsStatus = "Permissão de contatos negada"
+            audit(context, "GX Contacts Vault sem permissão de leitura")
+        }
+    }
+    fun syncContacts() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            contactsPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+        } else {
+            vaultContacts = context.syncContactsVault()
+            contactsStatus = vaultContacts.size.toString() + " contatos protegidos no Vault"
+            audit(context, "GX Contacts Vault sincronizado; removidos preservados")
         }
     }
     var auditText by remember { mutableStateOf(context.getSharedPreferences("gxeon_edge_audit", Context.MODE_PRIVATE).getString("events", "") ?: "") }
@@ -230,11 +322,11 @@ fun EdgeDashboard(activity: MainActivity) {
     }
 
     LazyColumn(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { Text("GXEON EDGE-01", style = MaterialTheme.typography.headlineMedium); Text("Command Node V0.4 • ${state.model} • Android ${state.androidVersion}"); Text("Última leitura: ${DateFormat.getTimeInstance(DateFormat.MEDIUM).format(Date(state.capturedAt))}", style = MaterialTheme.typography.bodySmall) }
+        item { Text("GXEON EDGE-01", style = MaterialTheme.typography.headlineMedium); Text("Command Node V0.5 • ${state.model} • Android ${state.androidVersion}"); Text("Última leitura: ${DateFormat.getTimeInstance(DateFormat.MEDIUM).format(Date(state.capturedAt))}", style = MaterialTheme.typography.bodySmall) }
         item { Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) { MetricCard("RAM", "${state.ramUsedPercent}%", Modifier.weight(1f)); MetricCard("Storage", "${state.storageUsedPercent}%", Modifier.weight(1f)); MetricCard("Battery", "${state.batteryPercent}%", Modifier.weight(1f)) } }
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                listOf("COMMAND" to "COMANDO", "DEVICE" to "DEVICE", "PHOTOS" to "FOTOS", "SYSTEMS" to "SISTEMAS").forEach { (key, label) ->
+                listOf("COMMAND" to "CMD", "DEVICE" to "DEVICE", "PHOTOS" to "FOTOS", "CONTACTS" to "CONTATOS", "SYSTEMS" to "SIST.").forEach { (key, label) ->
                     if (section == key) Button(onClick = { section = key }, modifier = Modifier.weight(1f)) { Text(label, maxLines = 1, fontSize = 10.sp) }
                     else OutlinedButton(onClick = { section = key }, modifier = Modifier.weight(1f)) { Text(label, maxLines = 1, fontSize = 10.sp) }
                 }
@@ -279,11 +371,34 @@ fun EdgeDashboard(activity: MainActivity) {
                     }
                 }
             }
+            "CONTACTS" -> {
+                item {
+                    Card(Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text("GX Contacts Vault", style = MaterialTheme.typography.titleMedium)
+                            Text("Mantém uma cópia local dos contatos já sincronizados. Se um deles sumir da agenda, o GXEON preserva nome, telefone e e-mail disponível como REMOVIDO.")
+                            Button(onClick = { syncContacts(); reloadAudit() }) { Text("Sincronizar e proteger contatos") }
+                            Text(contactsStatus, style = MaterialTheme.typography.bodySmall)
+                            Text("Ativos: " + vaultContacts.count { !it.removed } + " • Removidos preservados: " + vaultContacts.count { it.removed })
+                        }
+                    }
+                }
+                items(vaultContacts) { contact ->
+                    Card(Modifier.fillMaxWidth()) {
+                        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                            Text((if (contact.removed) "REMOVIDO • " else "ATIVO • ") + contact.name, style = MaterialTheme.typography.titleSmall)
+                            if (contact.phones.isNotBlank()) Text("Telefone: " + contact.phones)
+                            Text("E-mail: " + if (contact.emails.isBlank()) "não cadastrado" else contact.emails, style = MaterialTheme.typography.bodySmall)
+                            if (contact.removed) Text("Preservado no GX Vault após desaparecer da agenda.", style = MaterialTheme.typography.bodySmall)
+                        }
+                    }
+                }
+            }
             "SYSTEMS" -> item { SystemsCommand(context) { reloadAudit() } }
             else -> {
                 item { Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { Text("GX Commander", style = MaterialTheme.typography.titleMedium); Text("Detectar → recomendar → aprovar → executar → registrar"); Button(onClick = { refresh() }) { Text("Executar diagnóstico local") }; OutlinedButton(onClick = { context.startActivity(Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS)); audit(context, "Abriu controles de armazenamento"); reloadAudit() }) { Text("Controles de armazenamento") }; OutlinedButton(onClick = { context.startActivity(Intent(Settings.ACTION_SETTINGS)); audit(context, "Abriu plano de controle Android"); reloadAudit() }) { Text("Plano de controle Android") } } } }
                 item { IntegrationHub() }
-                item { Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp)) { Text("Módulos GXEON", style = MaterialTheme.typography.titleMedium); Text("DEVICE • PHOTOS • SYSTEMS • SOCIAL • VISION • VOICE • BUSINESS • DEV • ACADEMY"); Text("Photo Qualifier V0.4 classifica fotos locais por qualidade técnica com leitura autorizada do MediaStore. Não usa reconhecimento facial nem envia imagens para a nuvem.", style = MaterialTheme.typography.bodySmall) } } }
+                item { Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp)) { Text("Módulos GXEON", style = MaterialTheme.typography.titleMedium); Text("DEVICE • PHOTOS • CONTACTS • SYSTEMS • SOCIAL • VISION • VOICE • BUSINESS • DEV • ACADEMY"); Text("Photo Qualifier V0.4 classifica fotos locais. Contacts Vault V0.5 preserva localmente contatos previamente sincronizados mesmo quando depois são removidos da agenda.", style = MaterialTheme.typography.bodySmall) } } }
                 item { Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp)) { Text("Audit Ledger", style = MaterialTheme.typography.titleMedium); Text(if (auditText.isBlank()) "Nenhuma ação registrada ainda." else auditText, style = MaterialTheme.typography.bodySmall) } } }
             }
         }
@@ -291,7 +406,7 @@ fun EdgeDashboard(activity: MainActivity) {
 }
 
 @Composable private fun IntegrationHub() {
-    val integrations = listOf(IntegrationNode("Android Control Plane", "telemetria e configurações autorizadas", "LOCAL ATIVO"), IntegrationNode("GX Photo Qualifier", "inventário e classificação técnica de fotos locais", "LOCAL ATIVO"), IntegrationNode("GX Systems Registry", "catálogo dos sistemas do ecossistema", "LOCAL ATIVO"), IntegrationNode("GX Watchtower", "health/version/build/eventos", "AGUARDANDO ENDPOINTS"), IntegrationNode("GitHub Bridge", "repos, Actions, PRs e releases", "AGUARDANDO AUTH SEGURA"), IntegrationNode("Social Command", "conteúdo, aprovação e publicação oficial", "BLOQUEADO ATÉ CONECTOR"))
+    val integrations = listOf(IntegrationNode("Android Control Plane", "telemetria e configurações autorizadas", "LOCAL ATIVO"), IntegrationNode("GX Photo Qualifier", "inventário e classificação técnica de fotos locais", "LOCAL ATIVO"), IntegrationNode("GX Contacts Vault", "snapshot local de contatos e preservação de removidos", "LOCAL ATIVO"), IntegrationNode("GX Systems Registry", "catálogo dos sistemas do ecossistema", "LOCAL ATIVO"), IntegrationNode("GX Watchtower", "health/version/build/eventos", "AGUARDANDO ENDPOINTS"), IntegrationNode("GitHub Bridge", "repos, Actions, PRs e releases", "AGUARDANDO AUTH SEGURA"), IntegrationNode("Social Command", "conteúdo, aprovação e publicação oficial", "BLOQUEADO ATÉ CONECTOR"))
     Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { Text("GXEON Integration Hub", style = MaterialTheme.typography.titleMedium); integrations.forEach { node -> Text("${node.name} — ${node.state}", style = MaterialTheme.typography.titleSmall); Text(node.capability, style = MaterialTheme.typography.bodySmall) }; Text("Nenhum token privado é armazenado no APK.", style = MaterialTheme.typography.bodySmall) } }
 }
 
