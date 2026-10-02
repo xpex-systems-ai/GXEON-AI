@@ -56,17 +56,18 @@ jobs:
     needs: [autonomous-recovery-validation, dashboard-availability-validation]
     steps:
       - uses: actions/checkout@v4
-      - run: mkdir -p artifacts
-      - run: |
-          echo '{"status":"ok"}' > artifacts/runtime-sync-report.json
-          echo '{"status":"ok"}' > artifacts/runtime-governance-report.json
-          echo '{"deployment":"HEALTHY"}' > artifacts/deployment-integrity-report.json
-          echo '{"production_runtime":"ACTIVE"}' > artifacts/production-runtime-report.json
-          echo '{"status":"ACTIVE"}' > artifacts/runtime-snapshot-report.json
-          echo '{"railway_runtime":"ACTIVE"}' > artifacts/railway-runtime-report.json
-          echo '{"providers":"CONNECTED"}' > artifacts/provider-health-report.json
-          echo '{"radar":"ACTIVE"}' > artifacts/radar-runtime-report.json
-          echo '{"websocket":"ONLINE"}' > artifacts/websocket-runtime-report.json
+      - name: Create non-claiming CI evidence artifacts
+        run: |
+          mkdir -p artifacts
+          echo '{"status":"CI_VALIDATED_BUILD_ONLY","production_claim":false}' > artifacts/runtime-sync-report.json
+          echo '{"status":"CI_VALIDATED_BUILD_ONLY","production_claim":false}' > artifacts/runtime-governance-report.json
+          echo '{"deployment":"NOT_VERIFIED_BY_CI","production_claim":false}' > artifacts/deployment-integrity-report.json
+          echo '{"production_runtime":"NOT_VERIFIED_BY_CI","production_claim":false}' > artifacts/production-runtime-report.json
+          echo '{"status":"CI_SNAPSHOT_ONLY","production_claim":false}' > artifacts/runtime-snapshot-report.json
+          echo '{"railway_runtime":"CONFIG_VALIDATED_ONLY","production_claim":false}' > artifacts/railway-runtime-report.json
+          echo '{"providers":"UNVERIFIED_IN_CI","production_claim":false,"reason":"production provider secrets are intentionally absent from CI"}' > artifacts/provider-health-report.json
+          echo '{"radar":"CODE_PATH_VALIDATED_ONLY","production_claim":false}' > artifacts/radar-runtime-report.json
+          echo '{"websocket":"NOT_VERIFIED_BY_CI","production_claim":false}' > artifacts/websocket-runtime-report.json
       - uses: actions/upload-artifact@v4
         with:
           name: gxeon-runtime-sync-artifacts
