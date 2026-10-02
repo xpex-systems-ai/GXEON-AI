@@ -1,0 +1,100 @@
+{
+  "report": "SUPABASE_CONNECTIVITY_REPORT",
+  "mission": "RUNTIME_ESCAPE_VALIDATION",
+  "priority": "CRITICAL",
+  "mode": "DIAGNOSTIC_ONLY",
+  "generatedAt": "2026-06-04T12:59:24.593Z",
+  "target": {
+    "host": "db.zphpeynirstwzrzgvbct.supabase.co",
+    "supabaseUrl": "https://zphpeynirstwzrzgvbct.supabase.co",
+    "projectId": "zphpeynirstwzrzgvbct"
+  },
+  "environment": {
+    "configured": {
+      "DATABASE_URL": false,
+      "DIRECT_URL": false,
+      "SUPABASE_URL": false,
+      "SUPABASE_ANON_KEY": false,
+      "SUPABASE_SERVICE_ROLE_KEY": false
+    },
+    "secretsMasked": true,
+    "missing": [
+      "DATABASE_URL",
+      "DIRECT_URL",
+      "SUPABASE_URL",
+      "SUPABASE_ANON_KEY",
+      "SUPABASE_SERVICE_ROLE_KEY"
+    ]
+  },
+  "runtimeEscape": {
+    "requested": true,
+    "achieved": false,
+    "reason": "No external runtime escape facility is available from this container; diagnostics were executed from the current execution runtime only."
+  },
+  "network": {
+    "resolver": {
+      "source": "/etc/resolv.conf",
+      "nameserver": "172.30.5.163"
+    },
+    "nslookup": {
+      "command": "nslookup db.zphpeynirstwzrzgvbct.supabase.co",
+      "status": "FAILED",
+      "evidence": ";; communications error to 172.30.5.163#53: connection refused\n;; communications error to 172.30.5.163#53: connection refused\n;; communications error to 172.30.5.163#53: connection refused\n;; no servers could be reached"
+    },
+    "dig": {
+      "command": "dig db.zphpeynirstwzrzgvbct.supabase.co",
+      "status": "FAILED",
+      "evidence": ";; communications error to 172.30.5.163#53: connection refused\n;; communications error to 172.30.5.163#53: connection refused\n;; communications error to 172.30.5.163#53: connection refused\n\n; <<>> DiG 9.18.39-0ubuntu0.24.04.3-Ubuntu <<>> db.zphpeynirstwzrzgvbct.supabase.co\n;; global options: +cmd\n;; no servers could be reached"
+    },
+    "hostLookup": {
+      "command": "host db.zphpeynirstwzrzgvbct.supabase.co",
+      "status": "FAILED",
+      "evidence": ";; communications error to 172.30.5.163#53: timed out\n;; communications error to 172.30.5.163#53: connection refused\n;; no servers could be reached"
+    },
+    "ping": {
+      "command": "ping -c 4 db.zphpeynirstwzrzgvbct.supabase.co",
+      "status": "FAILED",
+      "evidence": "ping: db.zphpeynirstwzrzgvbct.supabase.co: Temporary failure in name resolution"
+    },
+    "curlSupabaseUrlFromEnv": {
+      "command": "curl -I $SUPABASE_URL",
+      "status": "FAILED",
+      "evidence": "curl: (3) URL rejected: Malformed input to a URL function"
+    },
+    "curlSupabaseUrlExplicit": {
+      "command": "curl -I https://zphpeynirstwzrzgvbct.supabase.co",
+      "status": "FAILED",
+      "httpStatusObserved": 403,
+      "evidence": "% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\ncurl: (56) CONNECT tunnel failed, response 403\nHTTP/1.1 403 Forbidden\ncontent-length: 9\ncontent-type: text/plain\ndate: Thu, 04 Jun 2026 12:57:06 GMT\nserver: envoy\nconnection: close"
+    }
+  },
+  "supabaseRest": {
+    "anonKey": {
+      "command": "REST /rest/v1/ using SUPABASE_ANON_KEY",
+      "status": "SKIPPED",
+      "reason": "SUPABASE_URL or SUPABASE_ANON_KEY is not configured in the execution environment."
+    },
+    "serviceRoleKey": {
+      "command": "REST /rest/v1/ using SUPABASE_SERVICE_ROLE_KEY",
+      "status": "SKIPPED",
+      "reason": "SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is not configured in the execution environment."
+    },
+    "apiResponse": {
+      "status": "FAILED",
+      "reason": "Direct project URL HEAD request through proxy returned CONNECT tunnel failed, response 403."
+    },
+    "keyAuthenticationValidated": false
+  },
+  "rootCause": {
+    "exactFailurePoint": "DNS resolver and proxy egress in the execution environment before Supabase/PostgreSQL application authentication.",
+    "primary": "DNS resolver 172.30.5.163 refused/timed out queries; db.zphpeynirstwzrzgvbct.supabase.co cannot resolve from this runtime.",
+    "secondary": "HTTPS CONNECT through configured proxy returned 403 for the Supabase project URL."
+  },
+  "finalStatus": "BLOCKED",
+  "successCriteria": {
+    "dns_resolution": false,
+    "tcp_5432": false,
+    "tcp_6543": false,
+    "postgres_connection": false
+  }
+}
