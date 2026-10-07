@@ -8,11 +8,11 @@ android {
     namespace = "ai.gxeon.edge"
     compileSdk = 36
     defaultConfig {
-        applicationId = "ai.gxeon.edge"
+        applicationId = "ai.gxeon.agentfi.mobile"
         minSdk = 29
         targetSdk = 36
-        versionCode = 6
-        versionName = "1.0.0-agentfi"
+        versionCode = 7
+        versionName = "1.0.1-official"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
     }
