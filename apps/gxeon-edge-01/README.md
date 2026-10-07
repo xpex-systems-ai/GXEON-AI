@@ -1,6 +1,6 @@
 # GXEON EDGE-01
 
-Android Command Node for the GXEON ecosystem.
+Android Command Node for the GXEON ecosystem.\n\nCurrent shell: GXEON Wallet + Agent Economy OS gateway (`https://gxeon-wallet-command-center.vercel.app/`).
 
 ## V0.1 implemented
 - Native Android app in Kotlin + Jetpack Compose
