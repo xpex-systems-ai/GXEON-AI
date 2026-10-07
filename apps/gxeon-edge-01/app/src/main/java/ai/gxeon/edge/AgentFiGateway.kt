@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.browser.customtabs.CustomTabsIntent
 
 object AgentFiGateway {
-    const val COMMAND_URL = "https://gxeon-wallet-command-center.vercel.app/agentfi?native=1"
+    const val COMMAND_URL = "https://gxeon-wallet-command-center.vercel.app/"
     fun open(context: Context) {
         val uri = Uri.parse(COMMAND_URL)
         runCatching {
