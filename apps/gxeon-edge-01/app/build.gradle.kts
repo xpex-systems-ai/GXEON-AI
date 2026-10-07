@@ -11,8 +11,8 @@ android {
         applicationId = "ai.gxeon.agentfi.mobile"
         minSdk = 29
         targetSdk = 36
-        versionCode = 7
-        versionName = "1.0.1-official"
+        versionCode = 8
+        versionName = "1.1.0-agentfi"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
     }
