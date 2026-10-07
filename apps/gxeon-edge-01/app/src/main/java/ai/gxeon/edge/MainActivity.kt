@@ -40,7 +40,7 @@ import kotlin.math.roundToInt
 class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MaterialTheme { Surface(Modifier.fillMaxSize()) { EdgeDashboard(this) } } }
+        setContent { MaterialTheme { Surface(Modifier.fillMaxSize()) { AgentFiMobileHome(this) } } }
     }
 
     fun verifyOperator(reason: String, onApproved: () -> Unit) {
@@ -61,6 +61,69 @@ class MainActivity : FragmentActivity() {
         })
         val info = BiometricPrompt.PromptInfo.Builder().setTitle("Verificar operador GXEON").setSubtitle(reason).setAllowedAuthenticators(authenticators).build()
         prompt.authenticate(info)
+    }
+}
+
+@Composable
+fun AgentFiMobileHome(activity: MainActivity) {
+    val context: Context = activity
+    var localTools by remember { mutableStateOf(false) }
+    if (localTools) {
+        Column(Modifier.fillMaxSize()) {
+            OutlinedButton(
+                onClick = { localTools = false },
+                modifier = Modifier.padding(12.dp)
+            ) { Text("← GXEON AgentFi") }
+            Box(Modifier.fillMaxSize()) { EdgeDashboard(activity) }
+        }
+        return
+    }
+    LazyColumn(
+        Modifier.fillMaxSize().padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        item {
+            Text("GXEON AgentFi OS", style = MaterialTheme.typography.headlineMedium)
+            Text("XPeX Systems AI • Private Operator Console")
+            Text("AGENTS • WORK • MONEY • TREASURY • APPROVALS", style = MaterialTheme.typography.bodySmall)
+        }
+        item {
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Text("COMMAND CENTER", style = MaterialTheme.typography.titleLarge)
+                    Text("Operate the complete GXEON control plane from your phone. Financial signing stays isolated and protected.")
+                    Button(
+                        onClick = {
+                            activity.verifyOperator("Abrir GXEON AgentFi Command Center") {
+                                AgentFiGateway.open(context)
+                                audit(context, "AgentFi Command Center aberto após verificação do operador")
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) { Text("ABRIR SISTEMA COMPLETO") }
+                }
+            }
+        }
+        item {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                MetricCard("MODE", "PRIVATE", Modifier.weight(1f))
+                MetricCard("SIGNING", "ISOLATED", Modifier.weight(1f))
+            }
+        }
+        item {
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("OPERAÇÃO", style = MaterialTheme.typography.titleMedium)
+                    Text("Command Center • Agent Economy • Task Market • Money Truth • Wallets • Treasury • Security")
+                    OutlinedButton(onClick = { localTools = true }, modifier = Modifier.fillMaxWidth()) {
+                        Text("FERRAMENTAS LOCAIS DO DISPOSITIVO")
+                    }
+                }
+            }
+        }
+        item {
+            Text("Evidence First • O executor não aprova sua própria entrega.", style = MaterialTheme.typography.bodySmall)
+        }
     }
 }
 
