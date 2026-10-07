@@ -1,0 +1,42 @@
+name: GXEON Mobile APK
+
+on:
+  pull_request:
+    paths:
+      - 'apps/gxeon-edge-01/**'
+      - '.github/workflows/gxeon-mobile-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/gxeon-edge-01
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Install Android SDK 36
+        run: |
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+      - name: Build debug APK
+        run: gradle :app:assembleDebug --no-daemon
+      - name: Hash APK
+        run: sha256sum app/build/outputs/apk/debug/app-debug.apk | tee app/build/outputs/apk/debug/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GXEON-Mobile-debug-apk
+          path: |
+            apps/gxeon-edge-01/app/build/outputs/apk/debug/app-debug.apk
+            apps/gxeon-edge-01/app/build/outputs/apk/debug/SHA256SUMS.txt
+          if-no-files-found: error
