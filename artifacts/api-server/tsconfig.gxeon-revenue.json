@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "incremental": false,
+    "composite": false
+  },
+  "include": [
+    "src/gxeonEvidenceCore.ts",
+    "src/gxeonEvidenceRouter.ts",
+    "src/radar/gxeonBazaarClassifier.ts",
+    "src/tests/gxeonRevenueEngineSmoke.ts"
+  ],
+  "references": []
+}
