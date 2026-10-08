@@ -66,7 +66,7 @@ export type R100DatabaseMirrorReadiness = {
   safeFlags?: Record<string, boolean | number | string>;
   nextManualAction: string;
   warnings: string[];
-  safety: R100DatabaseMirrorStatus["safety"] & { manualFirst: true; previewOnly: true; dbMirrorOnly: true; notPaymentSettlement: true; providerVerifiedRevenueBrl: 0; realRevenueClaimedAutomatically: false; noCheckout: true; noInvoice: true; noWebhookPaymentCapture: true; };
+  safety: R100DatabaseMirrorStatus["safety"] & { manualFirst: true; previewOnly: true; dbMirrorOnly: true; notPaymentSettlement: true; providerVerifiedRevenueBrl: 0; realRevenueClaimedAutomatically: false; noCheckout: true; noInvoice: true; noWebhookPaymentCapture: true; noGithubRuntimeWrite: true; noScraping: true; noExternalContact: true; noAutoSend: true; };
 };
 
 export type R100DatabaseMirrorActivationPlan = {
