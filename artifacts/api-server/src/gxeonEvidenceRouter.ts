@@ -5,6 +5,7 @@
  */
 import { Router, type IRouter } from "express";
 import { createEvidenceReceipt, EvidenceInputError, EVIDENCE_CANONICALIZATION, EVIDENCE_MAX_BYTES } from "./gxeonEvidenceCore";
+import { gxeonEvidenceOpenApi } from "./gxeonEvidenceOpenApi";
 
 export const gxeonEvidenceRouter: IRouter = Router();
 const PRICE_MICRO_USDC = "10000"; // 0.01 USDC in 6 decimal atomic units
@@ -34,6 +35,10 @@ gxeonEvidenceRouter.get("/evidence/manifest", (_req, res) => {
     preview: { free: true, bestEffortPerProcessRateLimit: MAX_PREVIEWS_PER_WINDOW },
     attestsTruth: false,
   });
+});
+
+gxeonEvidenceRouter.get("/evidence/openapi", (_req, res) => {
+  res.type("application/json").json(gxeonEvidenceOpenApi);
 });
 
 gxeonEvidenceRouter.post("/evidence/preview", (req, res) => {
