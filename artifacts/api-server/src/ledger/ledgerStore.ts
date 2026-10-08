@@ -103,6 +103,7 @@ function decorateCloseLoopPreview(
   const existingTimeline = record.timeline ?? [];
   return {
     ...record,
+    ...ledgerSafetyBoundary,
     source: "REVENUE_CLOSE_LOOP",
     closeLoopId: loop.id,
     manualPaymentRequestId: loop.paymentRequestId ?? null,
@@ -159,7 +160,6 @@ function decorateCloseLoopPreview(
         ],
     updatedAt: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    ...ledgerSafetyBoundary,
   };
 }
 

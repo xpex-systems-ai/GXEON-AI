@@ -63,6 +63,6 @@ function build(databaseConfigured: boolean, snapshotsTableReady: boolean, auditE
     safeToWrite: databaseConfigured && schemaReady && enabled && safeWriteEnabled(),
     nextManualAction,
     warnings,
-    safety: { manualFirst: true, previewOnly: true, noPaymentProviderApi: true, noCheckout: true, noInvoice: true, noWebhookPaymentCapture: true, noAutoSend: true, noExternalContact: true, noGithubRuntimeWrite: true, noScraping: true, noSecrets: true, dbMirrorOnly: true, notPaymentSettlement: true, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false },
+    safety: { manualFirst: true, previewOnly: true, noPaymentProviderApi: true, noCheckout: true, noInvoice: true, noWebhookPaymentCapture: true, noAutoSend: true, noExternalContact: true, noGithubRuntimeWrite: true, noGithubWrite: true, noScraping: true, noSecrets: true, dbMirrorOnly: true, notPaymentSettlement: true, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false },
   };
 }

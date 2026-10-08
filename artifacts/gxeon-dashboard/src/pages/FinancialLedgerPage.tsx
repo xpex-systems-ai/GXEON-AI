@@ -232,7 +232,12 @@ export default function FinancialLedgerPage() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {metricCards.map((metric) => {
           const Icon = metric.icon;
-          const value = summary[metric.key];
+          // A static fallback preview cannot imply operator/provider-confirmed revenue.
+          const value = metric.key === "operatorConfirmedRevenueBrl"
+            ? ("operatorConfirmedRevenueBrl" in summary ? summary.operatorConfirmedRevenueBrl : 0)
+            : metric.key === "providerVerifiedRevenueBrl"
+              ? ("providerVerifiedRevenueBrl" in summary ? summary.providerVerifiedRevenueBrl : 0)
+              : summary[metric.key];
           return (
             <Card
               key={metric.label}
@@ -248,7 +253,7 @@ export default function FinancialLedgerPage() {
                   {metric.label}
                 </p>
                 <p className="mt-2 text-3xl font-black">
-                  {formatCurrency(value)}
+                  {formatCurrency(typeof value === "number" && Number.isFinite(value) ? value : 0)}
                 </p>
               </CardContent>
             </Card>
