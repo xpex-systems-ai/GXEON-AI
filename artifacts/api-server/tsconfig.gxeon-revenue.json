@@ -8,6 +8,7 @@
   "include": [
     "src/gxeonEvidenceCore.ts",
     "src/gxeonEvidenceRouter.ts",
+    "src/gxeonEvidenceOpenApi.ts",
     "src/radar/gxeonBazaarClassifier.ts",
     "src/tests/gxeonRevenueEngineSmoke.ts"
   ],
