@@ -57,6 +57,17 @@ test("manifest does not advertise paid execution or RFC 8785", async () => {
   assert.equal(body.price.network, "eip155:8453");
 });
 
+test("OpenAPI advertises no functional x402 payment or truth attestation", async () => {
+  const r = await fetch(uri("/evidence/openapi"));
+  assert.equal(r.status, 200);
+  const spec = await r.json() as Record<string, any>;
+  assert.equal(spec.openapi, "3.1.0");
+  assert.equal(spec["x-gxeon-status"].paymentMiddleware, "NOT_CONFIGURED");
+  assert.equal(spec["x-gxeon-status"].walletOwnershipVerified, false);
+  assert.equal(spec.paths["/api/gxeon/evidence/verify"].post.responses["402"].description,
+    "PAYMENT_INTEGRATION_NOT_CONFIGURED");
+});
+
 test("HTTP preview produces digest; paid endpoint stays fail closed", async () => {
   const p = await fetch(uri("/evidence/preview"), {
     method: "POST", headers: { "Content-Type": "application/json" },
