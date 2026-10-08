@@ -68,6 +68,7 @@ export default function MonetizationBoardPage() {
             <p className="mt-4 max-w-3xl text-base text-slate-300 md:text-lg">P0 exposes opportunity pipeline readiness, offer templates, checkout readiness and ledger preview boundaries. Revenue remains R$0, with realRevenueClaimed=false, until a future manual payment review stage is approved outside P0.</p>
           </div>
           <div className="flex flex-wrap gap-3">
+            <Link href="/ops/x402-revenue-engine"><Button className="border border-cyan-300/50 bg-cyan-300/10 text-cyan-100 hover:bg-cyan-300/20">GXEON Revenue Engine · x402 <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
             <Link href="/ops/brain"><Button className="bg-amber-300 text-slate-950 hover:bg-amber-200">Open Command Brain <ArrowRight className="ml-2 h-4 w-4" /></Button></Link>
             <Link href="/ops/radar-x"><Button variant="outline" className="border-amber-300/30 text-amber-100 hover:bg-amber-400/10">Open Radar X intake</Button></Link>
             <Link href="/ops/github-demand"><Button variant="outline" className="border-cyan-300/30 text-cyan-100 hover:bg-cyan-400/10">Open GitHub Demand Radar</Button></Link>

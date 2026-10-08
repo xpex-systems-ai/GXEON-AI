@@ -1,0 +1,46 @@
+name: GXEON Revenue Engine Focused Verification
+
+on:
+  pull_request:
+    paths:
+      - 'artifacts/api-server/src/gxeonEvidenceCore.ts'
+      - 'artifacts/api-server/src/gxeonEvidenceRouter.ts'
+      - 'artifacts/api-server/src/gxeonEvidenceOpenApi.ts'
+      - 'artifacts/api-server/src/radar/gxeonBazaarClassifier.ts'
+      - 'artifacts/api-server/src/routes/radar.ts'
+      - 'artifacts/api-server/src/tests/gxeonRevenueEngineSmoke.ts'
+      - 'artifacts/api-server/tsconfig.gxeon-revenue.json'
+      - 'gxeon_opportunity_intelligence.py'
+      - 'test_gxeon_opportunity_intelligence.py'
+      - 'artifacts/gxeon-dashboard/src/pages/X402RevenueEnginePage.tsx'
+      - 'artifacts/gxeon-dashboard/src/App.tsx'
+      - '.github/workflows/gxeon-revenue-engine-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  revenue-engine:
+    name: Evidence + Bazaar read-only HTTP smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Python Bazaar classifier regression
+        run: python -m unittest -v test_gxeon_opportunity_intelligence.py
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install frozen workspace
+        run: pnpm install --frozen-lockfile
+      - name: Typecheck new revenue engine independently of pre-existing monorepo errors
+        run: pnpm --filter @workspace/api-server exec tsc -p tsconfig.gxeon-revenue.json --noEmit
+      - name: Isolated Express router and seller classification tests
+        run: pnpm --filter @workspace/scripts exec tsx ../artifacts/api-server/src/tests/gxeonRevenueEngineSmoke.ts

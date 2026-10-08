@@ -17,6 +17,7 @@ import DeliveryValidationPage from "@/pages/DeliveryValidationPage";
 import RevenueReleaseGatePage from "@/pages/RevenueReleaseGatePage";
 import FinancialLedgerPage from "@/pages/FinancialLedgerPage";
 import MonetizationBoardPage from "@/pages/MonetizationBoardPage";
+import X402RevenueEnginePage from "@/pages/X402RevenueEnginePage";
 import Web3TaskRadarPage from "@/pages/Web3TaskRadarPage";
 import AgentEconomyRadarPage from "@/pages/AgentEconomyRadarPage";
 import AgentEconomyConsolePage from "@/pages/AgentEconomyConsolePage";
@@ -109,6 +110,7 @@ function Router() {
             <Route path="/ops/release" component={RevenueReleaseGatePage} />
             <Route path="/ops/ledger" component={FinancialLedgerPage} />
             <Route path="/ops/monetization" component={MonetizationBoardPage} />
+            <Route path="/ops/x402-revenue-engine" component={X402RevenueEnginePage} />
             <Route path="/ops/web3-tasks" component={Web3TaskRadarPage} />
             <Route path="/ops/agent-economy-console" component={AgentEconomyConsolePage} />
             <Route path="/ops/agent-economy" component={AgentEconomyRadarPage} />
