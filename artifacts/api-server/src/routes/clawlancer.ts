@@ -147,6 +147,7 @@ router.post("/clawlancer/listings/:id/claim", governanceAuth, async (req, res) =
     });
   }
 
+  if (typeof req.params.id !== "string") return res.status(400).json({ success: false, error: "INVALID_LISTING_ID" });
   try {
     const result = await claimClawlancerBounty(req.params.id);
     return res.status(201).json({
@@ -176,6 +177,7 @@ router.post("/clawlancer/transactions/:id/deliver", governanceAuth, async (req, 
   const body = req.body && typeof req.body === "object" ? req.body as Record<string, unknown> : {};
   const deliverable = typeof body.deliverable === "string" ? body.deliverable : "";
 
+  if (typeof req.params.id !== "string") return res.status(400).json({ success: false, error: "INVALID_TRANSACTION_ID" });
   try {
     const result = await deliverClawlancerTransaction(req.params.id, deliverable);
     return res.status(201).json({
