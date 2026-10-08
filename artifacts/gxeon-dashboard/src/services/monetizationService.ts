@@ -47,6 +47,7 @@ export type MonetizationRuntimeStatus = MonetizationSafetyBoundary & {
   counts: { offers: number; clients: number; revenue: number; ledgerPreviewEvents: number };
   opportunityPipeline?: { new: number; review: number; qualified: number; proposalDrafted: number; taskReady: number; evidenceReady: number };
   firstRevenuePath: string[];
+  githubDemandExecution?: { readyCount: number; topRouteForR100Sprint?: { route: string } | null };
   ledgerPreviewReadiness?: { status: "LEDGER_P0_READY" | "LEDGER_P0_UNAVAILABLE"; previewEvents: number; receivedRevenue: 0; realRevenueClaimed: false };
 };
 
