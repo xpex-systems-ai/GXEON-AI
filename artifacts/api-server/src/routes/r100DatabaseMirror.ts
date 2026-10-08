@@ -76,7 +76,7 @@ router.post("/r100-db/export-safe-snapshot", async (req, res) => {
   try {
     return res.json({ success: true, data: await exportSafeR100SnapshotToDatabaseMirror() });
   } catch (error) {
-    res.status(503).json({ success: false, error: error instanceof Error ? error.message : "R100_DB_MIRROR_UNHEALTHY", data: { status: await getR100DatabaseMirrorStatus(), readiness: await getR100DatabaseMirrorReadiness() } });
+    return res.status(503).json({ success: false, error: error instanceof Error ? error.message : "R100_DB_MIRROR_UNHEALTHY", data: { status: await getR100DatabaseMirrorStatus(), readiness: await getR100DatabaseMirrorReadiness() } });
   }
 });
 
