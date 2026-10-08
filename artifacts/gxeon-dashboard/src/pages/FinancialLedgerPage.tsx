@@ -253,7 +253,7 @@ export default function FinancialLedgerPage() {
                   {metric.label}
                 </p>
                 <p className="mt-2 text-3xl font-black">
-                  {formatCurrency(value)}
+                  {formatCurrency(typeof value === "number" && Number.isFinite(value) ? value : 0)}
                 </p>
               </CardContent>
             </Card>
