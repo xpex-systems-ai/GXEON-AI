@@ -584,7 +584,9 @@ router.get("/v1/audit/connectors/status", noStore, (_req, res) => {
 
 router.get("/v1/audit/mission-control", noStore, async (_req, res) => {
   const cases = { ...emptySummary("audit_cases"), ...(await listAuditCases()) };
-  const firstCaseId = cases.items?.[0]?.id;
+  const firstCase: unknown = Array.isArray(cases.items) ? cases.items[0] : undefined;
+  const firstCaseId = firstCase && typeof firstCase === "object"
+    && "id" in firstCase && typeof firstCase.id === "string" ? firstCase.id : undefined;
   const counts = firstCaseId
     ? await auditEvidenceFindingCounts(firstCaseId).catch(() => ({
         findingsCount: 0,
