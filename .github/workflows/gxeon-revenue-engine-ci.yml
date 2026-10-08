@@ -5,6 +5,7 @@ on:
     paths:
       - 'artifacts/api-server/src/gxeonEvidenceCore.ts'
       - 'artifacts/api-server/src/gxeonEvidenceRouter.ts'
+      - 'artifacts/api-server/src/gxeonEvidenceOpenApi.ts'
       - 'artifacts/api-server/src/radar/gxeonBazaarClassifier.ts'
       - 'artifacts/api-server/src/routes/radar.ts'
       - 'artifacts/api-server/src/tests/gxeonRevenueEngineSmoke.ts'
