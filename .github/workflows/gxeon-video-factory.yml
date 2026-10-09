@@ -5,6 +5,10 @@ on:
     paths:
       - 'video-factory/**'
       - '.github/workflows/gxeon-video-factory.yml'
+  pull_request:
+    paths:
+      - 'video-factory/**'
+      - '.github/workflows/gxeon-video-factory.yml'
 jobs:
   render:
     runs-on: ubuntu-latest
