@@ -1,107 +1,135 @@
 {
   "report": "DATABASE_HEALTH_REPORT",
-  "mission": "SUPABASE_REAL_ACTIVATION",
-  "generatedAt": "2026-06-04T12:21:40.532Z",
-  "status": "FAILED",
-  "healthStatus": "DEGRADED",
-  "databaseConnection": "FAIL",
-  "directConnection": "FAIL",
-  "schemaValidation": "FAIL",
-  "crudValidation": "FAIL",
-  "rollbackValidation": "FAIL",
-  "apiValidation": "FAIL",
-  "supabaseOnline": true,
-  "supabaseProjectId": "zphpeynirstwzrzgvbct",
-  "databaseLatencyMs": null,
-  "tableCounts": null,
+  "mission": "EXTERNAL_RUNTIME_VALIDATION",
+  "priority": "CRITICAL",
+  "mode": "REAL_EXECUTION",
+  "generatedAt": "2026-06-04T13:09:26.562Z",
+  "finalStatus": "BLOCKED",
+  "noFalsePositive": true,
+  "objective": "Execute real validation outside the current sandbox using an external environment with Supabase access.",
+  "status": "BLOCKED",
+  "healthStatus": "BLOCKED",
   "environment": {
-    "configured": {
-      "DATABASE_URL": true,
-      "DIRECT_URL": true,
-      "SUPABASE_URL": true,
-      "SUPABASE_ANON_KEY": true,
-      "SUPABASE_SERVICE_ROLE_KEY": true
+    "requiredExternalRuntime": [
+      "Replit",
+      "Vercel",
+      "Railway",
+      "Render",
+      "VM Linux",
+      "GitHub Actions"
+    ],
+    "externalRuntimeSelected": null,
+    "externalRuntimeAvailable": false,
+    "externalRuntimes": [
+      {
+        "name": "Replit",
+        "cli": "replit",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "Vercel",
+        "cli": "vercel",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "Railway",
+        "cli": "railway",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "Render",
+        "cli": "render",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "VM Linux",
+        "cli": "ssh",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE",
+        "reason": "No remote host, SSH target, or credentials were provided."
+      },
+      {
+        "name": "GitHub Actions",
+        "cli": "gh",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      }
+    ],
+    "supabaseEnvironmentConfigured": {
+      "DATABASE_URL": false,
+      "DIRECT_URL": false,
+      "SUPABASE_URL": false,
+      "SUPABASE_ANON_KEY": false,
+      "SUPABASE_SERVICE_ROLE_KEY": false
     },
-    "missing": [],
-    "masked": {
-      "DATABASE_URL": "postgresql://***:***@db.zphpeynirstwzrzgvbct.supabase.co:5432/postgres",
-      "DIRECT_URL": "postgresql://***:***@db.zphpeynirstwzrzgvbct.supabase.co:5432/postgres",
-      "SUPABASE_URL": "https://zphpeynirstwzrzgvbct.supabase.co",
-      "SUPABASE_ANON_KEY": "eyJhbGciOiJI***z0bnOg",
-      "SUPABASE_SERVICE_ROLE_KEY": "eyJhbGciOiJI***WELIOI"
-    },
-    "suppliedServiceRoleJwtRole": "service_role",
-    "directUrlContainsPasswordPlaceholder": false,
-    "databaseUrlNormalizedToPostgresConnectionString": true
+    "missingSupabaseEnvironment": [
+      "DATABASE_URL",
+      "DIRECT_URL",
+      "SUPABASE_URL",
+      "SUPABASE_ANON_KEY",
+      "SUPABASE_SERVICE_ROLE_KEY"
+    ],
+    "secretsMasked": true
   },
-  "drizzlePush": {
-    "status": "FAILED",
-    "exitCode": 1
-  },
-  "supabaseRest": {
-    "status": "FAILED",
-    "projectId": "zphpeynirstwzrzgvbct",
-    "anon": {
-      "label": "anon",
-      "ok": false,
-      "status": null,
-      "latencyMs": 5536.93,
-      "error": "fetch failed"
+  "gates": {
+    "dns": {
+      "status": "BLOCKED",
+      "reason": "No available external runtime was authenticated/provisioned for execution."
     },
-    "serviceRole": {
-      "label": "service_role",
-      "ok": false,
-      "status": null,
-      "latencyMs": 13.78,
-      "error": "fetch failed"
+    "tcp": {
+      "status": "BLOCKED",
+      "reason": "DNS/TCP validation must run from an external runtime; none is available."
+    },
+    "tls": {
+      "status": "BLOCKED",
+      "reason": "TLS validation must run from an external runtime; none is available."
+    },
+    "postgres": {
+      "status": "BLOCKED",
+      "reason": "DATABASE_URL/DIRECT_URL are absent and no external runtime is available."
+    },
+    "drizzle": {
+      "status": "BLOCKED",
+      "reason": "Drizzle push intentionally not executed without external runtime and database credentials."
+    },
+    "schema": {
+      "status": "BLOCKED",
+      "reason": "Schema validation requires PostgreSQL connectivity."
+    },
+    "crud": {
+      "status": "BLOCKED",
+      "reason": "Diagnostic cannot create real rows without external runtime/database access."
+    },
+    "rollback": {
+      "status": "BLOCKED",
+      "reason": "Rollback validation requires PostgreSQL connectivity."
+    },
+    "api": {
+      "status": "BLOCKED",
+      "reason": "Financial endpoint validation against external runtime was not possible."
     }
   },
-  "endpoints": {
-    "status": "FAILED",
-    "baseUrl": "http://127.0.0.1:3010/api",
-    "passed": false,
-    "results": [
-      {
-        "endpoint": "/v1/runtime/database",
-        "httpStatus": 503,
-        "healthy": false,
-        "latencyMs": 5152.76,
-        "databaseReachable": false,
-        "status": "degraded"
-      },
-      {
-        "endpoint": "/v1/financial/health",
-        "httpStatus": 503,
-        "healthy": false,
-        "latencyMs": 5261.58,
-        "databaseReachable": false,
-        "status": "degraded"
-      },
-      {
-        "endpoint": "/v1/financial/wallets",
-        "httpStatus": 503,
-        "healthy": false,
-        "latencyMs": 5005.46,
-        "databaseReachable": false,
-        "status": "degraded"
-      },
-      {
-        "endpoint": "/v1/financial/transactions",
-        "httpStatus": 503,
-        "healthy": false,
-        "latencyMs": 5010.63,
-        "databaseReachable": false,
-        "status": "degraded"
-      }
-    ]
-  },
-  "failureReason": "getaddrinfo EAI_AGAIN db.zphpeynirstwzrzgvbct.supabase.co",
+  "operationalScore": 0,
   "successCriteria": {
-    "database_connection": "FAIL",
-    "schema_validation": "FAIL",
-    "crud_validation": "FAIL",
-    "rollback_validation": "FAIL",
-    "api_validation": "FAIL",
-    "health_status": "DEGRADED"
-  }
+    "DNS": "BLOCKED",
+    "TCP": "BLOCKED",
+    "TLS": "BLOCKED",
+    "POSTGRES": "BLOCKED",
+    "DRIZZLE": "BLOCKED",
+    "CRUD": "BLOCKED",
+    "ROLLBACK": "BLOCKED",
+    "API": "BLOCKED"
+  },
+  "exactFailurePoint": "Preflight: no required external execution runtime or credentials are available in this environment.",
+  "rootCause": "The requested REAL_EXECUTION outside the sandbox cannot be started because no external runtime CLI/token/remote host is available and Supabase environment variables are absent. No Supabase success or failure can be asserted from an external environment."
 }

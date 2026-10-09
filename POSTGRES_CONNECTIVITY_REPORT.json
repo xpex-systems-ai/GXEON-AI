@@ -1,19 +1,106 @@
 {
   "report": "POSTGRES_CONNECTIVITY_REPORT",
-  "mission": "NETWORK_CONNECTIVITY_AUDIT",
+  "mission": "EXTERNAL_RUNTIME_VALIDATION",
   "priority": "CRITICAL",
-  "mode": "DIAGNOSTIC_ONLY",
-  "generatedAt": "2026-06-04T12:47:27.118Z",
-  "command": "psql $DATABASE_URL -c 'SELECT NOW();'",
-  "databaseUrlConfiguredInEnvironment": false,
-  "psqlInstalled": false,
-  "status": "NOT_RUN",
-  "postgres_connection": false,
-  "evidence": "timeout: failed to run command ‘psql’: No such file or directory",
-  "blocker": "psql is not installed in this container. Database host resolution also failed in DNS/TCP diagnostics, so a PostgreSQL session cannot be established from this environment.",
-  "relatedFailures": {
-    "dns_resolution": false,
-    "tcp_5432": false,
-    "tcp_6543": false
-  }
+  "mode": "REAL_EXECUTION",
+  "generatedAt": "2026-06-04T13:09:26.562Z",
+  "finalStatus": "BLOCKED",
+  "noFalsePositive": true,
+  "status": "BLOCKED",
+  "environment": {
+    "DATABASE_URL_configured": false,
+    "DIRECT_URL_configured": false,
+    "secretsMasked": true
+  },
+  "externalRuntime": {
+    "required": true,
+    "available": false,
+    "selected": null,
+    "candidates": [
+      {
+        "name": "Replit",
+        "cli": "replit",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "Vercel",
+        "cli": "vercel",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "Railway",
+        "cli": "railway",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "Render",
+        "cli": "render",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      },
+      {
+        "name": "VM Linux",
+        "cli": "ssh",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE",
+        "reason": "No remote host, SSH target, or credentials were provided."
+      },
+      {
+        "name": "GitHub Actions",
+        "cli": "gh",
+        "installed": false,
+        "authConfigured": false,
+        "status": "UNAVAILABLE"
+      }
+    ]
+  },
+  "checks": {
+    "dnsResolution": {
+      "status": "BLOCKED",
+      "command": "external runtime DNS validation",
+      "reason": "No external runtime available."
+    },
+    "tcp5432": {
+      "status": "BLOCKED",
+      "command": "external runtime TCP 5432 validation",
+      "reason": "No external runtime available."
+    },
+    "tcp6543": {
+      "status": "BLOCKED",
+      "command": "external runtime TCP 6543 validation",
+      "reason": "No external runtime available."
+    },
+    "tlsHandshake": {
+      "status": "BLOCKED",
+      "command": "external runtime openssl PostgreSQL handshake",
+      "reason": "No external runtime available."
+    },
+    "databaseUrlSelectNow": {
+      "status": "BLOCKED",
+      "command": "psql $DATABASE_URL -c 'SELECT NOW();'",
+      "reason": "DATABASE_URL is missing and psql/external runtime are unavailable."
+    },
+    "directUrlSelectNow": {
+      "status": "BLOCKED",
+      "command": "psql $DIRECT_URL -c 'SELECT NOW();'",
+      "reason": "DIRECT_URL is missing and psql/external runtime are unavailable."
+    },
+    "latency": {
+      "status": "BLOCKED",
+      "samplesMs": [],
+      "averageMs": null,
+      "reason": "No PostgreSQL socket could be opened from an external runtime."
+    }
+  },
+  "postgresConnection": false,
+  "exactFailurePoint": "External runtime preflight before DNS/TCP/PostgreSQL commands.",
+  "rootCause": "The requested REAL_EXECUTION outside the sandbox cannot be started because no external runtime CLI/token/remote host is available and Supabase environment variables are absent. No Supabase success or failure can be asserted from an external environment."
 }
