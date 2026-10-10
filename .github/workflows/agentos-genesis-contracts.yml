@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - "artifacts/api-server/src/agentos/**"
+      - "artifacts/api-server/src/routes/agentosGenesis.ts"
+      - "artifacts/api-server/src/routes/index.ts"
       - "scripts/tests/agentos-genesis-contracts.test.mjs"
       - "scripts/agentos-genesis-demo.mjs"
       - "docs/agentos/**"
