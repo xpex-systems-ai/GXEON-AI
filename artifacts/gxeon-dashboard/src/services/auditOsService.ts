@@ -1,12 +1,15 @@
 import { apiUrl } from "./apiBase";
+import { buildAuditOsHeaders, parseAuditOsResponse } from "./auditOsTransport";
 
 async function request<T = any>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(apiUrl(path), {
-    headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
-    ...init,
-  });
-  if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  const headers = buildAuditOsHeaders(init?.headers, init?.body !== undefined);
+  let response: Response;
+  try {
+    response = await fetch(apiUrl(path), { ...init, headers });
+  } catch {
+    throw new Error("AUDIT_OS_NETWORK_UNAVAILABLE");
+  }
+  return parseAuditOsResponse<T>(response);
 }
 
 export const auditOsService = {
