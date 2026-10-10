@@ -26,3 +26,5 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Run typecheck
         run: pnpm run typecheck
+      - name: Audit OS transport contract tests
+        run: node --experimental-strip-types --test scripts/tests/audit-os-transport.test.mjs
