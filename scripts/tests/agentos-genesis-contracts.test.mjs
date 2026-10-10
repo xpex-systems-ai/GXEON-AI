@@ -120,3 +120,14 @@ test("source kernel contains no agent credential, network, payment or provider i
     assert.doesNotMatch(source, forbidden);
   }
 });
+
+test("AgentOS API exposes fixed-fixture read-only routes, never execution or payment endpoints", () => {
+  const routes = readFileSync(new URL("../../artifacts/api-server/src/routes/agentosGenesis.ts", import.meta.url), "utf8");
+  const index = readFileSync(new URL("../../artifacts/api-server/src/routes/index.ts", import.meta.url), "utf8");
+  assert.match(routes, /router\.get\("\/agentos\/genesis\/status"/);
+  assert.match(routes, /router\.get\("\/agentos\/genesis\/synthetic-demo"/);
+  assert.doesNotMatch(routes, /router\.(post|put|patch|delete)\(/);
+  assert.match(routes, /missionExecutionAvailable: false/);
+  assert.match(routes, /actualExternalActions: 0/);
+  assert.match(index, /router\.use\(agentosGenesisRouter\)/);
+});
