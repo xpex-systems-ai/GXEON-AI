@@ -52,7 +52,7 @@ router.post("/r100-db/apply-schema", async (req, res) => {
 router.post("/r100-db/activation-smoke-test", async (req, res) => {
   noStore(res);
   if (!isConfirmed(req.body, RUN_R100_DB_MIRROR_ACTIVATION_SMOKE_TEST_ACTION)) return res.status(400).json({ success: false, error: "RUN_R100_DB_MIRROR_ACTIVATION_SMOKE_TEST_CONFIRMATION_REQUIRED" });
-  res.json({ success: true, data: await runR100DatabaseMirrorActivationSmokeTest() });
+  return res.json({ success: true, data: await runR100DatabaseMirrorActivationSmokeTest() });
 });
 
 router.get("/r100-db/latest-snapshot", async (_req, res) => {
@@ -64,9 +64,9 @@ router.post("/r100-db/probe", async (req, res) => {
   noStore(res);
   if (!isConfirmed(req.body, "CREATE_SAFE_R100_DB_MIRROR_PROBE")) return res.status(400).json({ success: false, error: "CREATE_SAFE_R100_DB_MIRROR_PROBE_CONFIRMATION_REQUIRED" });
   try {
-    res.json({ success: true, data: await createR100DatabaseMirrorProbe() });
+    return res.json({ success: true, data: await createR100DatabaseMirrorProbe() });
   } catch (error) {
-    res.status(503).json({ success: false, error: error instanceof Error ? error.message : "R100_DB_MIRROR_UNHEALTHY", data: { status: await getR100DatabaseMirrorStatus(), readiness: await getR100DatabaseMirrorReadiness() } });
+    return res.status(503).json({ success: false, error: error instanceof Error ? error.message : "R100_DB_MIRROR_UNHEALTHY", data: { status: await getR100DatabaseMirrorStatus(), readiness: await getR100DatabaseMirrorReadiness() } });
   }
 });
 
@@ -74,9 +74,9 @@ router.post("/r100-db/export-safe-snapshot", async (req, res) => {
   noStore(res);
   if (!isConfirmed(req.body, "EXPORT_SAFE_R100_SNAPSHOT_TO_DB_MIRROR")) return res.status(400).json({ success: false, error: "EXPORT_SAFE_R100_SNAPSHOT_TO_DB_MIRROR_CONFIRMATION_REQUIRED" });
   try {
-    res.json({ success: true, data: await exportSafeR100SnapshotToDatabaseMirror() });
+    return res.json({ success: true, data: await exportSafeR100SnapshotToDatabaseMirror() });
   } catch (error) {
-    res.status(503).json({ success: false, error: error instanceof Error ? error.message : "R100_DB_MIRROR_UNHEALTHY", data: { status: await getR100DatabaseMirrorStatus(), readiness: await getR100DatabaseMirrorReadiness() } });
+    return res.status(503).json({ success: false, error: error instanceof Error ? error.message : "R100_DB_MIRROR_UNHEALTHY", data: { status: await getR100DatabaseMirrorStatus(), readiness: await getR100DatabaseMirrorReadiness() } });
   }
 });
 

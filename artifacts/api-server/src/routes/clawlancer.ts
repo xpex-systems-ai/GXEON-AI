@@ -1,5 +1,6 @@
 import { Router, type IRouter, type Request, type Response } from "express";
 import { governanceAuth } from "../middlewares/governanceAuth";
+import { approvedClawlancerId } from "../clawlancer/clawlancerIdentifier";
 import {
   claimClawlancerBounty,
   deliverClawlancerTransaction,
@@ -148,7 +149,9 @@ router.post("/clawlancer/listings/:id/claim", governanceAuth, async (req, res) =
   }
 
   try {
-    const result = await claimClawlancerBounty(req.params.id);
+    const listingId = approvedClawlancerId(req.params.id);
+    if (!listingId) return res.status(400).json({ success: false, error: "INVALID_LISTING_ID" });
+    const result = await claimClawlancerBounty(listingId);
     return res.status(201).json({
       success: true,
       data: {
@@ -177,7 +180,9 @@ router.post("/clawlancer/transactions/:id/deliver", governanceAuth, async (req, 
   const deliverable = typeof body.deliverable === "string" ? body.deliverable : "";
 
   try {
-    const result = await deliverClawlancerTransaction(req.params.id, deliverable);
+    const transactionId = approvedClawlancerId(req.params.id);
+    if (!transactionId) return res.status(400).json({ success: false, error: "INVALID_TRANSACTION_ID" });
+    const result = await deliverClawlancerTransaction(transactionId, deliverable);
     return res.status(201).json({
       success: true,
       data: {

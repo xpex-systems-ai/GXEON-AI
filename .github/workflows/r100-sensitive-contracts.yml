@@ -1,0 +1,24 @@
+name: GXEON R100 Sensitive Contract Safety
+on:
+  pull_request:
+    paths:
+      - "artifacts/api-server/src/durableState/r100*"
+      - "artifacts/api-server/src/routes/r100*"
+      - "artifacts/api-server/src/routes/manualPayment.ts"
+      - "artifacts/api-server/src/routes/clawlancer.ts"
+      - "artifacts/api-server/src/clawlancer/clawlancerIdentifier.ts"
+      - "artifacts/api-server/src/ledger/ledgerStore.ts"
+      - "artifacts/api-server/src/revenueWarRoom/r100WarRoomTypes.ts"
+      - "scripts/tests/r100-sensitive-safety-contracts.test.mjs"
+      - ".github/workflows/r100-sensitive-contracts.yml"
+  workflow_dispatch:
+jobs:
+  sensitive-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Verify safe manual-only contracts
+        run: node --experimental-strip-types --test scripts/tests/r100-sensitive-safety-contracts.test.mjs

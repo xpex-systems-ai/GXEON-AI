@@ -13,7 +13,7 @@ const schemaApplyEnabled = () => process.env.GXEON_R100_DB_SCHEMA_OPERATOR_APPLY
 function buildTableDiagnostics(tableName: keyof typeof r100RequiredColumnsByTable, availableColumns: string[]): R100DatabaseMirrorTableDiagnostics {
   const requiredColumns = [...r100RequiredColumnsByTable[tableName]];
   const available = [...availableColumns].sort();
-  const required = new Set(requiredColumns);
+  const required = new Set<string>(requiredColumns);
   const availableSet = new Set(available);
   const missingColumns = requiredColumns.filter((column) => !availableSet.has(column));
   const extraColumns = available.filter((column) => !required.has(column));

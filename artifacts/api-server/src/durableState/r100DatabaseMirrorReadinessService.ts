@@ -1,5 +1,6 @@
 import { isDatabaseConfigured, getPool } from "@workspace/db";
 import type { R100DatabaseMirrorReadiness } from "./r100DatabaseMirrorTypes";
+import { r100DurableSafety } from "./r100DurableStateTypes";
 
 const mirrorEnabled = () => process.env.GXEON_R100_DB_MIRROR_ENABLED === "true";
 const schemaApplyEnabled = () => process.env.GXEON_R100_DB_SCHEMA_OPERATOR_APPLY_ENABLED === "true";
@@ -63,6 +64,6 @@ function build(databaseConfigured: boolean, snapshotsTableReady: boolean, auditE
     safeToWrite: databaseConfigured && schemaReady && enabled && safeWriteEnabled(),
     nextManualAction,
     warnings,
-    safety: { manualFirst: true, previewOnly: true, noPaymentProviderApi: true, noCheckout: true, noInvoice: true, noWebhookPaymentCapture: true, noAutoSend: true, noExternalContact: true, noGithubRuntimeWrite: true, noScraping: true, noSecrets: true, dbMirrorOnly: true, notPaymentSettlement: true, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false },
+    safety: { ...r100DurableSafety, manualFirst: true, previewOnly: true, noPaymentProviderApi: true, noCheckout: true, noInvoice: true, noWebhookPaymentCapture: true, noAutoSend: true, noExternalContact: true, noGithubRuntimeWrite: true, noScraping: true, noSecrets: true, dbMirrorOnly: true, notPaymentSettlement: true, providerVerifiedRevenueBrl: 0, realRevenueClaimedAutomatically: false },
   };
 }

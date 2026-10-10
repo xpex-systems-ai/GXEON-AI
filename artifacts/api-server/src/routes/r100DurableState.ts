@@ -98,7 +98,7 @@ router.post("/r100-state/probe", (req, res) => {
     return res.status(400).json({ success: false, error: "CREATE_SAFE_R100_DURABILITY_PROBE_CONFIRMATION_REQUIRED" });
   }
 
-  res.json({ success: true, data: createR100DurabilityProbe() });
+  return res.json({ success: true, data: createR100DurabilityProbe() });
 });
 
 router.post("/r100-state/reload", (req, res) => {
@@ -117,7 +117,7 @@ router.post("/r100-state/reload", (req, res) => {
     type: "MANUAL_RELOAD",
     metadata: { noExternalCalls: true, noAutoRun: true },
   });
-  res.json({
+  return res.json({
     success: true,
     data: {
       reloaded: true,
