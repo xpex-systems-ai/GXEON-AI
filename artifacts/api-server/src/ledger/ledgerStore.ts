@@ -114,7 +114,6 @@ function decorateCloseLoopPreview(
     providerVerifiedRevenueBrl: 0,
     providerVerified: false,
     paymentGuaranteed: false,
-    realRevenueClaimed: false,
     previewStatus,
     manualProofRequired: true,
     manualProofStatus:
