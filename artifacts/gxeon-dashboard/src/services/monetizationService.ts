@@ -46,6 +46,18 @@ export type MonetizationRuntimeStatus = MonetizationSafetyBoundary & {
   checkoutReadiness: CheckoutReadiness;
   counts: { offers: number; clients: number; revenue: number; ledgerPreviewEvents: number };
   opportunityPipeline?: { new: number; review: number; qualified: number; proposalDrafted: number; taskReady: number; evidenceReady: number };
+  /** Optional because older P0 runtimes do not expose the execution preview summary. */
+  githubDemandExecution?: {
+    mode: "PREVIEW_ONLY";
+    readyCount: number;
+    topRouteForR100Sprint: { route: string } | null;
+    manualRevenueSource: true;
+    revenueReceived: false;
+    providerVerified: false;
+    githubWriteDisabled: true;
+    externalContactDisabled: true;
+    paymentProviderDisabled: true;
+  };
   firstRevenuePath: string[];
   ledgerPreviewReadiness?: { status: "LEDGER_P0_READY" | "LEDGER_P0_UNAVAILABLE"; previewEvents: number; receivedRevenue: 0; realRevenueClaimed: false };
 };
