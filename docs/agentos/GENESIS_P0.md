@@ -22,6 +22,14 @@ node --experimental-strip-types --test scripts/tests/agentos-genesis-contracts.t
 node --experimental-strip-types scripts/agentos-genesis-demo.mjs
 ```
 
+## Read-only API integration (not deployed)
+
+The draft routes are wired to the existing Express GXEON router:
+- `GET /api/agentos/genesis/status` — explicit synthetic-only readiness and disabled-action flags.
+- `GET /api/agentos/genesis/synthetic-demo` — deterministic fixed-fixture mission journal. No POST/execute/approve endpoints.
+
+**These routes exist only in draft source until approved and deployed.** Any future accessible endpoint remains synthetic-only; no customer task or model/tool execution is created.
+
 ## Guaranteed kernel boundaries
 - Only risk R0/R1 and `fixture://` references accepted.
 - No network, provider access, filesystem mutation, GitHub writes, emails, invoices, payments, wallet signing, production deploys or actual customer actions.
