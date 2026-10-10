@@ -13,6 +13,7 @@ import {
   realFinancialLedgerRecords,
 } from "@/data/financial-ledger";
 import { formatCurrency, formatDate } from "@/lib/format";
+import { ledgerMetricValues } from "@/lib/ledgerMetricValues";
 import {
   createR100DatabaseMirrorProbe,
   exportR100SafeSnapshotToDatabaseMirror,
@@ -123,6 +124,7 @@ export default function FinancialLedgerPage() {
   const fallbackSummary = summarizeFallbackRecords();
   const summary =
     records.length > 0 || status.recordsInMemory > 0 ? status : fallbackSummary;
+  const metricValues = ledgerMetricValues(summary);
   const statusCounts = useMemo(() => {
     if (records.length > 0 || status.recordsInMemory > 0) {
       return status.allowedStatuses.map((ledgerStatus) => ({
@@ -232,7 +234,7 @@ export default function FinancialLedgerPage() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {metricCards.map((metric) => {
           const Icon = metric.icon;
-          const value = summary[metric.key];
+          const value = metricValues[metric.key];
           return (
             <Card
               key={metric.label}
