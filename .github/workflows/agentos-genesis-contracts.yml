@@ -1,0 +1,22 @@
+name: GXEON AgentOS Genesis Safety
+on:
+  pull_request:
+    paths:
+      - "artifacts/api-server/src/agentos/**"
+      - "scripts/tests/agentos-genesis-contracts.test.mjs"
+      - "scripts/agentos-genesis-demo.mjs"
+      - "docs/agentos/**"
+      - ".github/workflows/agentos-genesis-contracts.yml"
+  workflow_dispatch:
+jobs:
+  agentos-genesis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Validate independent verifier and immutable safety gates
+        run: node --experimental-strip-types --test scripts/tests/agentos-genesis-contracts.test.mjs
+      - name: Run synthetic mission demo and check human approval boundary
+        run: node --experimental-strip-types scripts/agentos-genesis-demo.mjs
