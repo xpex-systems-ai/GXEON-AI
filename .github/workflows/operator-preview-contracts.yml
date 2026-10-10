@@ -1,0 +1,22 @@
+name: GXEON Operator Preview Safety Contracts
+
+on:
+  pull_request:
+    paths:
+      - "artifacts/api-server/src/routes/clientOfferSend.ts"
+      - "artifacts/api-server/src/routes/operatorWorkflow.ts"
+      - "artifacts/api-server/src/clientOffer/clientOfferWorkspaceTitle.ts"
+      - "scripts/tests/operator-preview-contracts.test.mjs"
+      - ".github/workflows/operator-preview-contracts.yml"
+  workflow_dispatch:
+
+jobs:
+  operator-preview-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Check preview-only and manual-first contracts
+        run: node --experimental-strip-types --test scripts/tests/operator-preview-contracts.test.mjs
