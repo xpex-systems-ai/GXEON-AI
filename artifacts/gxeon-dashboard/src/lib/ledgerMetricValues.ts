@@ -18,7 +18,8 @@ export function ledgerMetricValues(summary: BaseLedgerMetricSummary) {
     estimated_revenue_brl: summary.estimated_revenue_brl,
     operatorConfirmedRevenueBrl: summary.operatorConfirmedRevenueBrl ?? 0,
     pending_revenue_brl: summary.pending_revenue_brl,
-    providerVerifiedRevenueBrl: summary.providerVerifiedRevenueBrl ?? 0,
+    // P0 has no provider settlement integration: never infer verified revenue.
+    providerVerifiedRevenueBrl: 0 as const,
     lost_revenue_brl: summary.lost_revenue_brl,
   };
 }
