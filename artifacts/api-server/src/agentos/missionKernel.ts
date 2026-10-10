@@ -128,7 +128,7 @@ export function verifyGenesisChain(mission: GenesisMission): boolean {
     ) return false;
     previousDigest = event.digest;
   }
-  const last = mission.events.at(-1);
+  const last: GenesisEvent | undefined = mission.events.at(-1) as GenesisEvent | undefined;
   const stateByAction: Record<GenesisAction, GenesisStatus> = {
     MISSION_CREATED: "CREATED",
     OBSERVATION_RECORDED: "AUDITED",
