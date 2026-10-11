@@ -26,6 +26,13 @@ async function main(){
   if(config.enabled!==true || config.isolatedEnvironment!=="synthetic-only"){
     throw new Error("GXEON15_DISABLED_OR_NOT_ISOLATED");
   }
+  // The earlier US$0.01 planning authorization is NOT final consent to
+  // make a paid request. This phrase must be provided by the operator only
+  // after separate project spending, key isolation and reviewer checks.
+  // This self-attestation is NOT a cryptographic proof of those checks.
+  if(input.GXEON15_FINAL_PAID_GO!=="I_CONFIRM_ONE_PAID_SYNTHETIC_CALL_NOW"){
+    throw new Error("GXEON15_FINAL_USER_GO_REQUIRED");
+  }
   // Config values are never printed, especially OPENAI_API_KEY.
   const report=await createApprovedOneShotSandbox(config).run(controller.signal);
   process.stdout.write(JSON.stringify({
@@ -48,6 +55,7 @@ async function main(){
 main().catch(e=>{
   const codes=[
     "GXEON15_DISABLED_OR_NOT_ISOLATED",
+    "GXEON15_FINAL_USER_GO_REQUIRED",
     "GXEON15_APPROVAL_OR_BUDGET_REQUIRED",
     "GXEON15_PRICE_ATTESTATION_EXPIRED",
     "GXEON15_PROVIDER_HTTP_FAILURE",

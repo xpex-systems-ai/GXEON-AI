@@ -1,0 +1,25 @@
+name: GXEON16 Project Billing Preflight
+on:
+  pull_request:
+    paths:
+      - "artifacts/api-server/src/agentos/projectBillingPreflight.ts"
+      - "scripts/gxeon16-billing-preflight.mjs"
+      - "scripts/agentos-real-model-once.mjs"
+      - "scripts/tests/gxeon16-project-billing-preflight.test.mjs"
+      - "docs/agentos/GXEON16_PROJECT_BILLING_PREFLIGHT.md"
+      - ".github/workflows/gxeon16-billing-preflight.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  synthetic-only-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Exercise fake-admin GET contracts with NO real API key
+        run: node --experimental-strip-types --test scripts/tests/gxeon16-project-billing-preflight.test.mjs
+      - name: Verify CLI fails closed without any admin credentials
+        run: node --experimental-strip-types scripts/gxeon16-billing-preflight.mjs
