@@ -10,7 +10,7 @@ import {
   draftGenesisCorrection,
   verifyGenesisDraft,
   verifyGenesisChain,
-} from "./missionKernel";
+} from "./missionKernel.ts";
 
 export type CommandOwnership = "PROPRIETARY" | "FORK" | "EXTERNAL" | "UNKNOWN";
 export type CommandMaturity = "DISCOVERED" | "PROTOTYPE" | "SYSTEM" | "PRODUCT" | "PRODUCTION";
