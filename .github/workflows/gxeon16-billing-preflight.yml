@@ -4,6 +4,7 @@ on:
     paths:
       - "artifacts/api-server/src/agentos/projectBillingPreflight.ts"
       - "scripts/gxeon16-billing-preflight.mjs"
+      - "scripts/agentos-real-model-once.mjs"
       - "scripts/tests/gxeon16-project-billing-preflight.test.mjs"
       - "docs/agentos/GXEON16_PROJECT_BILLING_PREFLIGHT.md"
       - ".github/workflows/gxeon16-billing-preflight.yml"
