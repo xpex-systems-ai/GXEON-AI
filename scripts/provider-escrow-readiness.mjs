@@ -64,9 +64,12 @@ export function inspectBasedAgentsPayload(payload, opts={minUsdc:PROVIDER_POLICY
     if(task?.status!=="open"||task?.claimable!==true||task?.claimed_by_agent_id)
       return rejected("basedagents",id,title,"NOT_CURRENTLY_OPEN_CLAIMABLE");
     if(suspicious(title,task.description))return rejected("basedagents",id,title,"TEST_OR_CONDITIONAL_REVENUE_TASK");
-    const amount=atomicUsdc(task?.bounty?.amount_atomic??task?.bounty_amount);
+    const amount=atomicUsdc(task?.bounty?.amount_atomic);
     if(amount===null||amount<opts.minUsdc)
       return rejected("basedagents",id,title,"BELOW_MIN_REWARD_OR_NO_CASH",{amountUsdc:amount});
+    const topLevelAmount=atomicUsdc(task?.bounty_amount);
+    if(topLevelAmount===null||topLevelAmount!==amount)
+      return rejected("basedagents",id,title,"BOUNTY_AMOUNT_FIELDS_INCONSISTENT",{amountUsdc:amount});
     if(task?.bounty?.token!=="USDC" || task?.bounty?.network!==USDC_NETWORK)
       return rejected("basedagents",id,title,"WRONG_TOKEN_OR_NETWORK");
     if(task?.escrow?.status!=="funded"||task?.payment_verified!==1||!SECURE_TX.test(task?.escrow?.deposit_tx_hash??""))
