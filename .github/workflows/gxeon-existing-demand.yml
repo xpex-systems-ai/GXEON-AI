@@ -4,6 +4,8 @@ on:
     paths:
       - "scripts/demand-intelligence.mjs"
       - "scripts/provider-escrow-readiness.mjs"
+      - "scripts/payout-proof-gate.mjs"
+      - "scripts/tests/payout-proof-gate.test.mjs"
       - "scripts/gxeon-provider-truth.mjs"
       - "scripts/tests/provider-escrow-readiness.test.mjs"
       - "scripts/gxeon-demand-scan.mjs"
@@ -25,6 +27,8 @@ jobs:
         run: node --test scripts/tests/gxeon-demand-intelligence.test.mjs
       - name: Validate 21 provider funding and payout gates without any network
         run: node --test scripts/tests/provider-escrow-readiness.test.mjs
+      - name: Verify 9 independent Base USDC payout-proof rejection gates
+        run: node --test scripts/tests/payout-proof-gate.test.mjs
       - name: Verify demand CLI never uses network unless explicitly enabled
         run: |
           node scripts/gxeon-demand-scan.mjs
