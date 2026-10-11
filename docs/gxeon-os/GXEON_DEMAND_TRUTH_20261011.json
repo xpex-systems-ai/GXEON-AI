@@ -1,0 +1,80 @@
+{
+  "schema_version": "gxeon-demand-truth-snapshot/1",
+  "snapshot_utc": "2026-10-11T21:28:34Z",
+  "executed_mode": "READ_ONLY_CANONICAL_EXTERNAL_APIS",
+  "sources": [
+    {
+      "provider": "BaseBounty",
+      "url": "https://www.basebounty.app/api/v1/bounties?status=open",
+      "network": "eip155:8453",
+      "open_count": 0,
+      "amount_usdc_verified_ready": 0,
+      "determination": "NO_OPEN_TASKS"
+    },
+    {
+      "provider": "BasedAgents",
+      "url": "https://api.basedagents.ai/v1/tasks?status=open",
+      "observed_open_records": 20,
+      "provider_funded_test_tasks": 1,
+      "high_value_commercial_funded_ready": 0,
+      "blocked_examples": [
+        {
+          "title": "Test hire (please ignore)",
+          "task_id": "task_ILI16I1DYjTOabbUBRvV9",
+          "advertised_usdc": 1,
+          "deposit_tx_hash": "0x21cc40895706a82b087093276a3064cb914d7c4e0fdaf067560e27fcaf29bd03",
+          "independent_chain_transfer_observed": true,
+          "commercially_eligible": false,
+          "reason": "Poster states explicitly that the test will be cancelled; funds exist but should never be claimed."
+        }
+      ],
+      "determination": "NO_VERIFIED_LEGITIMATE_COMMERCIAL_BOUNTY_ABOVE_FLOOR"
+    },
+    {
+      "provider": "ProjectRoom",
+      "url": "https://room.trydemigod.com/api/project-offers",
+      "observed_published_offers": 11,
+      "paid_offer_advertisements": 4,
+      "advertised_rewards_usdc": [
+        200,
+        100,
+        100,
+        100
+      ],
+      "funding_rails_configured": 0,
+      "determination": "CASH_OFFERS_PUBLISHED_PAYMENT_NOT_CONFIGURED"
+    }
+  ],
+  "public_chain_proof": {
+    "chain": "Base",
+    "chain_id": 8453,
+    "token": "USDC",
+    "token_address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    "tx_hash": "0x21cc40895706a82b087093276a3064cb914d7c4e0fdaf067560e27fcaf29bd03",
+    "source": "https://base.blockscout.com/api/v2/transactions/0x21cc40895706a82b087093276a3064cb914d7c4e0fdaf067560e27fcaf29bd03/token-transfers",
+    "amount_atomic": "1000000",
+    "confirmed_recipient": "0x0440383B02A10BE0Dea587c5b5Fbb622dBf4719D",
+    "verified_deposit_only": true,
+    "task_is_excluded_test": true
+  },
+  "operator_gate": {
+    "minimum_target_usdc": 100,
+    "claimed_external_tasks": 0,
+    "approved_external_tasks": 0,
+    "accepted_deliveries": 0,
+    "confirmed_earnings_usdc": 0,
+    "payments_to_user_wallet_verified": 0,
+    "requires_verified_canonical_funding": true,
+    "requires_independent_scope_and_approval": true,
+    "requires_payout_wallet_validation": true,
+    "needs_unmerged_pr_review": true,
+    "status": "NO_VERIFIED_CLAIM_READY_TASKS"
+  },
+  "limitations": [
+    "Read-only point-in-time observations. New tasks may appear or disappear.",
+    "One independently corroborated onchain deposit belongs to explicit test bounty; not a commercial opportunity.",
+    "GitHub CI explorer smoke encountered an external HTTP availability error, while direct public page extraction independently returned a successful transaction and transfer.",
+    "Provider escrow claims are not independent onchain proofs until corroborated.",
+    "GXEON-AI monorepo typecheck and build are failing on existing unrelated backend TypeScript errors; draft source not production deployed."
+  ]
+}
