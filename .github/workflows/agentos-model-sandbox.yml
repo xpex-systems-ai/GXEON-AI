@@ -1,0 +1,23 @@
+name: GXEON AgentOS Model Sandbox
+on:
+  pull_request:
+    paths:
+      - "artifacts/api-server/src/agentos/modelSandbox.ts"
+      - "artifacts/api-server/src/routes/agentosGenesis.ts"
+      - "scripts/tests/agentos-model-sandbox.test.mjs"
+      - "scripts/agentos-model-sandbox-demo.mjs"
+      - "docs/agentos/MODEL_SANDBOX_P2.md"
+      - ".github/workflows/agentos-model-sandbox.yml"
+  workflow_dispatch:
+jobs:
+  model-sandbox:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Verify strict offline model-output and security contracts
+        run: node --experimental-strip-types --test scripts/tests/agentos-model-sandbox.test.mjs
+      - name: Execute bounded model-shaped simulation
+        run: node --experimental-strip-types scripts/agentos-model-sandbox-demo.mjs
