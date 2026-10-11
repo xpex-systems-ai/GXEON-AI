@@ -162,11 +162,11 @@ function usageFromResponse(raw: any): ProviderUsage | null {
 }
 export function estimateObservedCostUsd(usage: ProviderUsage): number {
   const g=REAL_SANDBOX_GUARD;
-  return Number((
+  return Number(((
     (usage.inputTokens - usage.cachedInputTokens) * g.priceInputPerMillionUsd +
     usage.cachedInputTokens * g.priceCachedInputPerMillionUsd +
     usage.outputTokens * g.priceOutputPerMillionUsd
-  ).toFixed(9) / 1_000_000);
+  ) / 1_000_000).toFixed(9));
 }
 function getStructuredText(raw: any): string | null {
   if(raw?.status !== "completed" || !Array.isArray(raw.output)) return null;
@@ -249,9 +249,9 @@ export function createApprovedOneShotSandbox(
       if(text){try{proposed=JSON.parse(text);}catch{proposed=null;}}
       const independent=analyzeCommandSystems(readSystemsCommandFixture(FIXTURE_GRANT));
       const evidenceMatches=sha({source,observed})===sha({source:readSystemsCommandFixture(FIXTURE_GRANT),observed:independent});
-      const accepted=!!usage && !!estimatedCostUsd!==false &&
-        estimatedCostUsd!==null && estimatedCostUsd<=config.approvedCapUsd &&
-        !!text && evidenceMatches && validateProposal(proposed,independent);
+      const accepted=usage !== null && estimatedCostUsd !== null &&
+        estimatedCostUsd <= config.approvedCapUsd &&
+        text !== null && evidenceMatches && validateProposal(proposed,independent);
       mission=draftGenesisCorrection(mission,engineer,"fixture://drafts/provider-suggestion");
       mission=verifyGenesisDraft(mission,verifier,accepted
         ?"fixture://proof/provider-proposal-reviewed"
