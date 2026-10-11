@@ -64,7 +64,7 @@ async function readPublicReceipt(url,fetchImpl){
   if(!response.ok)throw new Error("GXEON_PAYOUT_EXPLORER_UNAVAILABLE");
   const data=await response.text();
   if(Buffer.byteLength(data,"utf8")>400000)throw new Error("GXEON_PAYOUT_RESPONSE_TOO_LARGE");
-  try{return JSON.parse(data);}catch{throw new Error("GXEON_PAYOUT_EXPLORER_JSON_INVALID");}
+  try{return JSON.parse(data);}catch{throw new Error("GXEON_PAYOUT_BAD_EXPLORER_JSON");}
 }
 
 /** Only a real explorer GET can mint a trusted in-memory transfer proof. */
