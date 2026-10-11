@@ -52,3 +52,6 @@ jobs:
         run: |
           node scripts/gxeon-demand-scan.mjs --live-read
           node scripts/gxeon-provider-truth.mjs --live-read
+      - name: Independently inspect the KNOWN INELIGIBLE test deposit (public Base chain only)
+        continue-on-error: true
+        run: node scripts/gxeon-chain-proof.mjs --live-read --task-id=task_ILI16I1DYjTOabbUBRvV9
