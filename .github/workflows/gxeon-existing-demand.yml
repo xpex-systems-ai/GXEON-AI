@@ -6,6 +6,8 @@ on:
       - "scripts/provider-escrow-readiness.mjs"
       - "scripts/payout-proof-gate.mjs"
       - "scripts/base-usdc-escrow-chain.mjs"
+      - "scripts/base-usdc-payout-chain.mjs"
+      - "scripts/tests/base-usdc-payout-chain.test.mjs"
       - "scripts/gxeon-chain-proof.mjs"
       - "scripts/tests/base-usdc-escrow-chain.test.mjs"
       - "scripts/tests/payout-proof-gate.test.mjs"
@@ -39,6 +41,8 @@ jobs:
         run: node --test scripts/tests/payout-proof-gate.test.mjs
       - name: Verify 15 Base USDC escrow tests including zero-network exclusion preflight
         run: node --test scripts/tests/base-usdc-escrow-chain.test.mjs
+      - name: Verify 11 independent Base USDC payment receipts before revenue recognition
+        run: node --test scripts/tests/base-usdc-payout-chain.test.mjs
       - name: Verify demand CLI never uses network unless explicitly enabled
         run: |
           node scripts/gxeon-demand-scan.mjs
