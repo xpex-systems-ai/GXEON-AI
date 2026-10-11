@@ -107,6 +107,7 @@ export async function verifyProjectBillingBeforePaidCall(
   query.append("bucket_width","1d");
   query.append("limit","31");
   query.append("project_ids[]",config.projectId);
+  query.append("group_by[]","project_id");
   const url=GXEON17_READINESS.allowedCostEndpoint+"?"+query.toString();
   const response=await fetchImpl(url,{
     method:"GET",redirect:"error",
