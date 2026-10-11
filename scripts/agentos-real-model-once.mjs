@@ -7,6 +7,7 @@ import {
   createApprovedOneShotSandbox,
   calculatePreflightReservationUsd,
 } from "../artifacts/api-server/src/agentos/realModelSandbox.ts";
+import { verifyProjectBillingBeforePaidCall } from "../artifacts/api-server/src/agentos/unifiedBillingGate.ts";
 
 const input=process.env;
 const config={
@@ -34,6 +35,23 @@ async function main(){
     throw new Error("GXEON15_FINAL_USER_GO_REQUIRED");
   }
   // Config values are never printed, especially OPENAI_API_KEY.
+  // Independently read the project's effective hard limit AND reported
+  // month-to-date costs before exposing the billed Responses API transport.
+  // The admin key is NEVER reused as the ordinary project API key.
+  const preflight=await verifyProjectBillingBeforePaidCall({
+    enabled:input.GXEON16_ADMIN_READ_ENABLED==="true",
+    projectId:config.projectId,
+    environment:config.isolatedEnvironment,
+    explicitReadCheck:input.GXEON16_ADMIN_READ_INTENT ?? "",
+    operatorFinalGo:input.GXEON15_FINAL_PAID_GO ?? "",
+    approvedCapUsd:config.approvedCapUsd,
+    adminKey:input.GXEON16_OPENAI_ADMIN_KEY ?? "",
+  });
+  // Cost aggregation and provider spend-limit enforcement may lag. This is
+  // not a mathematical billing guarantee; operator accepts this residual risk.
+  if(preflight.status!=="PROVIDER_READ_CHECKS_MATCHED_NOT_FINANCIAL_GUARANTEE"){
+    throw new Error("GXEON17_BILLING_PREFLIGHT_BLOCKED");
+  }
   const report=await createApprovedOneShotSandbox(config).run(controller.signal);
   process.stdout.write(JSON.stringify({
     mission:"GXEON15_REAL_SANDBOX",
@@ -56,6 +74,11 @@ main().catch(e=>{
   const codes=[
     "GXEON15_DISABLED_OR_NOT_ISOLATED",
     "GXEON15_FINAL_USER_GO_REQUIRED",
+    "GXEON17_BILLING_PREFLIGHT_BLOCKED",
+    "GXEON17_FINAL_APPROVAL_AND_READ_CREDENTIALS_REQUIRED",
+    "GXEON17_HARD_LIMIT_NOT_ENFORCING",
+    "GXEON17_COSTS_UNVERIFIED",
+    "GXEON17_PROVIDER_COSTS_READ_FAILED",
     "GXEON15_APPROVAL_OR_BUDGET_REQUIRED",
     "GXEON15_PRICE_ATTESTATION_EXPIRED",
     "GXEON15_PROVIDER_HTTP_FAILURE",
