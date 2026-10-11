@@ -16,6 +16,10 @@ on:
       - "docs/gxeon-os/EXISTING_DEMAND_ADAPTER.md"
       - ".github/workflows/gxeon-existing-demand.yml"
   workflow_dispatch:
+  # Once merged to the DEFAULT branch, audit public demand four times/day.
+  # Read-only GETs, no wallet, no claim, no PR/issue write and no paid APIs.
+  schedule:
+    - cron: "41 */6 * * *"
 permissions:
   contents: read
 jobs:
