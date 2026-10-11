@@ -91,17 +91,17 @@ export function readSystemsCommandFixture(grant: typeof FIXTURE_GRANT): readonly
 }
 export function analyzeCommandSystems(systems: readonly ReadOnlyCommandSystem[]): readonly ReadOnlyFinding[] {
   if (!Array.isArray(systems) || systems.length > 10 ||
-      systems.some(s => !/^SYN-[A-Z]+-\d{3}$/.test(s.systemCode) ||
+      systems.some((s: ReadOnlyCommandSystem) => !/^SYN-[A-Z]+-\d{3}$/.test(s.systemCode) ||
         !/^synthetic-[a-z-]+$/.test(s.canonicalSlug) ||
         !["PROPRIETARY", "FORK", "EXTERNAL", "UNKNOWN"].includes(s.ownershipClass) ||
         !["DISCOVERED", "PROTOTYPE", "SYSTEM", "PRODUCT", "PRODUCTION"].includes(s.maturity) ||
         !Array.isArray(s.evidence) ||
-        s.evidence.some(e => !/^SYN-EV-[A-Z]+$/.test(e.evidenceId) ||
+        s.evidence.some((e: ReadOnlyCommandSystem["evidence"][number]) => !/^SYN-EV-[A-Z]+$/.test(e.evidenceId) ||
           !["UNVERIFIED", "DISCOVERED", "CORROBORATED", "VERIFIED", "REJECTED"].includes(e.verificationStatus))
       )) throw new Error("AGENTOS_SYNTHETIC_CATALOG_ONLY");
   const findings: ReadOnlyFinding[] = [];
   for (const system of systems) {
-    const evidenceVerified = system.evidence.some(ev => ev.verificationStatus === "VERIFIED");
+    const evidenceVerified = system.evidence.some((ev: ReadOnlyCommandSystem["evidence"][number]) => ev.verificationStatus === "VERIFIED");
     if (system.ownershipClass === "UNKNOWN") {
       findings.push({systemCode: system.systemCode, code: "UNKNOWN_OWNERSHIP", severity: "REVIEW"});
     }
