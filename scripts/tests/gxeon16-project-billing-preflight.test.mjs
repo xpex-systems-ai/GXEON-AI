@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { readFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
 import {
   BILLING_PREFLIGHT_POLICY,
   GXEON16_READ_INTENT,
@@ -132,4 +133,34 @@ test("admin read cannot be confused with a paid Responses API request",()=>{
   assert.doesNotMatch(src,/method: "POST"|method:"POST"|\/v1\/responses|createApprovedOneShotSandbox\(/);
   assert.equal(BILLING_PREFLIGHT_POLICY.noPaidInference,true);
   assert.equal(BILLING_PREFLIGHT_POLICY.noProviderWrites,true);
+});
+
+test("paid GXEON15 CLI requires fresh final consent beyond the prior capped authorization",()=>{
+  const src=readFileSync(new URL("../../scripts/agentos-real-model-once.mjs",import.meta.url),"utf8");
+  const gate='input.GXEON15_FINAL_PAID_GO!=="I_CONFIRM_ONE_PAID_SYNTHETIC_CALL_NOW"';
+  assert.ok(src.includes(gate));
+  assert.ok(src.indexOf(gate)<src.indexOf("createApprovedOneShotSandbox(config).run("));
+  for(const flag of ["","yes","I_APPROVE_ONE_PAID_GXEON15_SANDBOX_CALL"]){
+    const run=spawnSync(process.execPath,[
+      "--experimental-strip-types","scripts/agentos-real-model-once.mjs"
+    ],{
+      cwd:process.cwd(),
+      encoding:"utf8",
+      timeout:5000,
+      env:{
+        ...process.env,
+        GXEON15_ENABLE_REAL_MODEL:"true",
+        GXEON15_ENVIRONMENT:"synthetic-only",
+        GXEON15_FINAL_PAID_GO:flag,
+        GXEON15_APPROVAL_ACK:"I_APPROVE_ONE_PAID_GXEON15_SANDBOX_CALL",
+        GXEON15_APPROVED_CAP_USD:"0.01",
+        GXEON15_OPENAI_PROJECT_ID:"proj_GXEON16FixtureProject",
+        GXEON15_PRICING_REVIEWED_AT:"2026-10-10T22:00:00Z",
+        OPENAI_API_KEY:"not-a-valid-key",
+      },
+    });
+    assert.equal(run.status,1);
+    assert.match(run.stderr,/GXEON15_FINAL_USER_GO_REQUIRED/);
+    assert.doesNotMatch(run.stderr,/not-a-valid-key/);
+  }
 });
