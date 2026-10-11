@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Test 14 local provider contracts without networking
+      - name: Test 17 local provider contracts including live-scan honeypot regressions
         run: node --test scripts/tests/gxeon-demand-intelligence.test.mjs
       - name: Verify demand CLI never uses network unless explicitly enabled
         run: node scripts/gxeon-demand-scan.mjs
