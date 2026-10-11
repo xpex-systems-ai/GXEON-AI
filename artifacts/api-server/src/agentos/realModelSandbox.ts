@@ -26,6 +26,7 @@ export const REAL_SANDBOX_GUARD = Object.freeze({
   maxOutputTokens: 256,
   maxResponseBytes: 32768,
   maxCallsPerProcess: 1,
+  maximumOperatorAuthorizationUsd: 0.01,
   noRetries: true,
   noTools: true,
   noPersistentProviderStorage: true,
@@ -46,6 +47,7 @@ export interface RealSandboxApproval {
   explicitApproval: string;
   approvedCapUsd: number;
   priceReviewedAt: string;
+  projectId: string;
   apiKey: string;
 }
 export interface ProviderUsage {
@@ -92,7 +94,9 @@ function requireApprovedConfig(config: RealSandboxApproval, nowMs: number): void
     config.explicitApproval !== approvalPhrase ||
     typeof config.apiKey !== "string" || !/^sk-[^\s]{16,}$/.test(config.apiKey) ||
     !safeNumber(config.approvedCapUsd) || config.approvedCapUsd <= 0 ||
-    config.approvedCapUsd > 0.05 || config.approvedCapUsd < calculatePreflightReservationUsd()) {
+    config.approvedCapUsd > REAL_SANDBOX_GUARD.maximumOperatorAuthorizationUsd ||
+    !/^proj_[A-Za-z0-9_-]{6,120}$/.test(config.projectId) ||
+    config.approvedCapUsd < calculatePreflightReservationUsd()) {
     throw new Error("GXEON15_APPROVAL_OR_BUDGET_REQUIRED");
   }
   const verifiedAt = Date.parse(config.priceReviewedAt);
@@ -233,6 +237,7 @@ export function createApprovedOneShotSandbox(
         headers:{
           Authorization:"Bearer "+config.apiKey,
           "Content-Type":"application/json",
+          "OpenAI-Project":config.projectId,
         },
         body:serialized,
       });
