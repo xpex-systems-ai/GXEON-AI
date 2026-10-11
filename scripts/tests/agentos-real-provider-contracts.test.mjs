@@ -14,6 +14,7 @@ const valid=()=>({
  explicitApproval:GXEON15_APPROVAL_INSTRUCTION,
  approvedCapUsd:0.01,
  priceReviewedAt:new Date(NOW).toISOString(),
+ projectId:"proj_GXEON15Fixture001",
  apiKey:"sk-test_XXXXXXXXXXXXXXXXXXXXXXXX",
 });
 const proposals=[
@@ -53,6 +54,8 @@ test("explicit one-shot approval text and isolated-environment scope required",a
   c=>{c.isolatedEnvironment="production"},
   c=>{c.apiKey="not-a-key"},
   c=>{c.apiKey=""},
+  c=>{c.projectId=""},
+  c=>{c.projectId="project-live-wrong-format"},
  ]) {
   const c=valid();change(c);const t=fake();
   await assert.rejects(createApprovedOneShotSandbox(c,t.fetcher,()=>NOW).run(),/GXEON15_APPROVAL_OR_BUDGET_REQUIRED/);
@@ -60,13 +63,14 @@ test("explicit one-shot approval text and isolated-environment scope required",a
  }
 });
 test("approved cost must exceed conservative reservation but cannot exceed pilot cap",async()=>{
- for(const cap of [0,1e-8,0.0003,0.06,NaN,-1]) {
+ for(const cap of [0,1e-8,0.0003,0.010001,0.06,NaN,-1]) {
   const c=valid();c.approvedCapUsd=cap;const t=fake();
   await assert.rejects(createApprovedOneShotSandbox(c,t.fetcher,()=>NOW).run(),/GXEON15_APPROVAL_OR_BUDGET_REQUIRED/);
   assert.equal(t.calls,0);
  }
  assert.ok(calculatePreflightReservationUsd()>0);
  assert.ok(calculatePreflightReservationUsd()<0.01);
+ assert.equal(REAL_SANDBOX_GUARD.maximumOperatorAuthorizationUsd,0.01);
 });
 test("reconfirmation of provider token pricing expires after 24 hours or future timestamps",async()=>{
  for(const when of [NOW-86400001,NOW+1,Date.parse("2025-10-10"),NaN]) {
@@ -96,6 +100,7 @@ test("approved one shot uses exact fixed endpoint and never redirects",async()=>
   assert.equal(opt.method,"POST");
   assert.equal(opt.redirect,"error");
   assert.equal(opt.headers.Authorization,"Bearer "+valid().apiKey);
+  assert.equal(opt.headers["OpenAI-Project"],valid().projectId);
   headers=opt.headers;
   const body=JSON.parse(opt.body);
   assert.deepEqual(body.tools,[]);
