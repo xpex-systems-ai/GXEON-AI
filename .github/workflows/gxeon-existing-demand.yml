@@ -37,7 +37,7 @@ jobs:
         run: node --test scripts/tests/provider-escrow-readiness.test.mjs
       - name: Verify 9 independent Base USDC payout-proof rejection gates
         run: node --test scripts/tests/payout-proof-gate.test.mjs
-      - name: Verify 10 independent Base USDC escrow deposit tests without network
+      - name: Verify 15 Base USDC escrow tests including zero-network exclusion preflight
         run: node --test scripts/tests/base-usdc-escrow-chain.test.mjs
       - name: Verify demand CLI never uses network unless explicitly enabled
         run: |
