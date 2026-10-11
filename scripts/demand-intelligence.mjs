@@ -73,6 +73,7 @@ export function normalizeDemandIssue(issue, now=new Date()){
   if(SCAM_FARM_REPOS.some(prefix=>repo.toLowerCase().startsWith(prefix)))return null;
   // Aggregator mirrors are not the maintainer/escrow source of truth.
   // Do not rank a copied issue as an independently funded bounty.
+  const title=String(issue.title??"").slice(0,220).trim();
   const bodyForMirrorCheck=String(issue.body??"").slice(0,5000);
   if(/(?:^|\n)\s*#{1,5}\s*(?:原始链接|source url|original issue|source issue)\s*(?:\n|:)/im.test(bodyForMirrorCheck))return null;
   if(/(?:honeypot|AI agent trap|stop burning your human.s API tokens)/i.test(title+" "+bodyForMirrorCheck))return null;
@@ -82,7 +83,6 @@ export function normalizeDemandIssue(issue, now=new Date()){
   if(typeof issue.updated_at!=="string" || !Number.isFinite(Date.parse(issue.updated_at)))return null;
   const days=(now.getTime()-Date.parse(issue.updated_at))/86400000;
   if(days<-2 || days>90)return null;
-  const title=String(issue.title??"").slice(0,220).trim();
   const body=String(issue.body??"").slice(0,3000);
   const combined=(title+" "+body).toLowerCase();
   const skillTags=["mcp","typescript","javascript","node","api","agent","security","github action","integration"].filter(x=>combined.includes(x));
