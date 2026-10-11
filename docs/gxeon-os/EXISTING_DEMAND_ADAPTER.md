@@ -23,7 +23,7 @@ Public GitHub Bounty Issues (read only)
 
 - `scripts/demand-intelligence.mjs` — strict read-only GitHub API adapter with price/currency honesty and source guards.
 - `scripts/gxeon-demand-scan.mjs` — operator CLI; disabled from network by default.
-- `scripts/tests/gxeon-demand-intelligence.test.mjs` — 14 negative and positive mock-fetch tests.
+- `scripts/tests/gxeon-demand-intelligence.test.mjs` — 17 negative and positive mock-fetch tests.
 - `.github/workflows/gxeon-existing-demand.yml` — offline safety CI and optional best-effort read-only live-source smoke.
 
 ### Run
@@ -74,3 +74,9 @@ These examples demonstrate **existing demands** and their risks, not authenticat
 ## Why this is not an automated worker factory yet
 
 The GXEON 12–17 AgentOS stack remains draft/unmerged. This source adapter can work independently with public demand information; it does not require a provider-paid inference or expose a model key, and can be consumed by Systems Command once a reviewed ingestion contract exists. **We are integrating demand, not selling a new XPeX service.**
+
+## First real-source smoke: protective findings (2026-10-11 UTC)
+
+The first CI public GitHub search succeeded but found multiple deceptive records from `zhangjiayang6835-cyber/bounty-plaza`. One falsely advertised a `$500` CSS memory-leak task whose source is an explicit agent honeypot. Another mirrored a title advertising `$400` although the original bounty text claimed just `$1 USDC`. These are NOT tasks to pursue, and NO financial value was recognized.
+
+New checks reject the `bounty-plaza` mirror source, other explicit GitHub mirror patterns, honeypot language, and inconsistent amounts across title and body. The system must only produce unverified opportunities after passing these filters; **an issue claiming a high bounty is never payment proof**.
