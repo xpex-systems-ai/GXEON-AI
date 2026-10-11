@@ -37,16 +37,20 @@ export function advertisedBountyUsd(issue){
     /\b(?:Reward|Payout|Worker price)\s*[:—–-]?\s*\$\s*(\d{2,6}(?:\.\d{1,2})?)\b/i,
     /\$\s*(\d{2,6}(?:\.\d{1,2})?)\s*(?:USDC|USD)\b/i
   ];
-  // Prefer title if a value is explicitly described as a bounty.
+  // Cross-check all explicitly advertised reward claims: a mirror with
+  // "$400" in a title and "$1 USDC" in the source description is INVALID.
+  // Never pick the larger number or default to a payout currency.
+  const candidates=[];
   for (const text of [title,body]) for (const p of patterns){
     const match=p.exec(text);
     if(match){
       const amount=Number(match[1]);
       if(!Number.isFinite(amount)||amount>100000||amount<1)return null;
-      return refund(amount);
+      candidates.push(refund(amount));
     }
   }
-  return null;
+  if(!candidates.length || new Set(candidates).size!==1)return null;
+  return candidates[0];
 }
 export function canonicalBountyIssueUrl(raw){
   if(typeof raw!=="string")return null;
