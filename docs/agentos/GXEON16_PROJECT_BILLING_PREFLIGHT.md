@@ -68,6 +68,7 @@ No inference request, account/project mutation, credential import into the repos
 3. Configure protected short-lived project key and isolated server-side one-shot environment.
 4. Independent review of draft PR stack #436 → #438 → #439 → #440 → #442 → #443 → #444 → #446 → #447 → this PR.
 5. Run authenticated provider hard-limit GET with separate admin permission or inspect provider dashboard, retaining **redacted** proof and current timestamp.
-6. Confirm user GO/NO-GO again **before** any real Responses API request. A hard limit can overshoot, so do not proceed if zero chance of exceeding US$0.01 is required.
+6. Confirm user GO/NO-GO again **before** any real Responses API request.
+   - The operator-only CLI now requires `GXEON15_FINAL_PAID_GO=I_CONFIRM_ONE_PAID_SYNTHETIC_CALL_NOW` **in addition** to the earlier US$0.01 authorization phrase. This is only an explicit manual attestation; it cannot itself prove provider spending limits or authorization authenticity. Never put this value in a persistent CI/deploy secret or auto-enable it. A hard limit can overshoot, so do not proceed if zero chance of exceeding US$0.01 is required.
 
 **Evidence First — executor does not approve its own delivery.**
