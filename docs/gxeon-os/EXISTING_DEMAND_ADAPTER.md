@@ -101,7 +101,7 @@ The fake funded BasedAgents record has a real-looking **deposit transaction hash
 1. `scripts/provider-escrow-readiness.mjs`: validates three canonical public JSON provider schemas and economic claim state. Threshold defaults to **100 USDC**. Suspicious test hires and pay-to-earn/paid-cycle offers fail closed. A task with `escrow.status=funded` and provider-declared deposit tx is **PROVISIONAL ONLY**; the matching onchain transfer and owner authorization must be independently verified.
 2. `scripts/gxeon-provider-truth.mjs`: CLI with network disabled by default. `--live-read` performs only three unauthenticated GETs and prints a JSON report. `claimReady`, `independentlyVerifiedEscrow`, and `confirmedRevenueUsdc` remain zero until separate verification.
 3. `scripts/payout-proof-gate.mjs`: pure, conservative reconciliation of an **accepted and settled** BasedAgents task with an independently verified Base USDC ERC-20 transfer from the recorded escrow wallet to the operator's **authorized recipient**, including chain ID, token contract, exact USDC atomic units, tx hash and at least 12 confirmations. It does NOT fetch the chain itself and cannot assert ownership or transfer receipt if those inputs come from an untrusted party.
-4. `scripts/tests/provider-escrow-readiness.test.mjs` and `scripts/tests/payout-proof-gate.test.mjs`: synthetic/mock positive and negative cases. Passing tests **do not prove money received** or an external provider account is authenticated.
+4. `scripts/tests/provider-escrow-readiness.test.mjs`, `scripts/tests/base-usdc-escrow-chain.test.mjs` and `scripts/tests/payout-proof-gate.test.mjs`: synthetic/mock positive and negative cases. Passing tests **do not prove money received** or an external provider account is authenticated.
 
 The independently authenticated chain reader must be used to populate `chainTransfer`; **do not set `verifiedByIndependentChainReader=true` yourself** or interpret the flag as cryptographic verification. During this mission the Blockscout connector returned **HTTP 402, PRO API credits exhausted**, so direct explorer corroboration was **not available**. Do not top up, sign or buy access automatically.
 
@@ -112,6 +112,7 @@ node scripts/gxeon-demand-scan.mjs                 # default 0 network
 node scripts/gxeon-provider-truth.mjs               # default 0 network
 node scripts/gxeon-demand-scan.mjs --live-read     # GitHub public issues
 node scripts/gxeon-provider-truth.mjs --live-read   # BasedAgents, BaseBounty, Project Room
+node scripts/gxeon-chain-proof.mjs --live-read --task-id=task_ILI16I1DYjTOabbUBRvV9  # test escrow only, NOT claimable commercial work
 node --test scripts/tests/gxeon-demand-intelligence.test.mjs
 node --test scripts/tests/provider-escrow-readiness.test.mjs
 node --test scripts/tests/payout-proof-gate.test.mjs
@@ -126,3 +127,27 @@ node --test scripts/tests/payout-proof-gate.test.mjs
 - The core GXEON OS Typecheck/Build on main currently reports unrelated API server TypeScript errors (e.g. `r100Truth.ts` and audit services). This PR does not claim production release readiness until those baseline errors are fixed in separate review.
 
 **No task was claimed, submitted, paid or released. No customer contacted. No money spent or earned.** The deliverable is an **existing-demand-to-provider-truth-to-payout-proof pipeline** in a draft PR.
+
+## Independent no-key onchain confirmation — safe example
+
+The public explorer APIs are readable without the Blockscout PRO MCP key:
+- `GET https://base.blockscout.com/api/v2/transactions/{txHash}`
+- `GET https://base.blockscout.com/api/v2/transactions/{txHash}/token-transfers`
+
+**Observed public, confirmed Base USDC deposit** (2026-10-11):
+- BasedAgents task ID: `task_ILI16I1DYjTOabbUBRvV9`
+- Title: **Test hire (please ignore)**; task description explicitly says *"This task will be cancelled."*
+- Provider states escrow funded, amount 1,000,000 atomic units, 1 USDC, Base network.
+- Public Base transaction: [0x21cc4089…af29bd03](https://base.blockscout.com/tx/0x21cc40895706a82b087093276a3064cb914d7c4e0fdaf067560e27fcaf29bd03)
+- Public explorer reported transaction `status:"ok"`, `result:"success"`, 171712 confirmations when checked.
+- ERC-20 transfer found: 1,000,000 USDC atomic units, 6 decimals, from the poster wallet `0x16d4479a4dfbdd6231b5ce686d2eedd04809e7e8` to the BasedAgents escrow wallet `0x0440383B02A10BE0Dea587c5b5Fbb622dBf4719D` using canonical Base USDC token `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`.
+
+This **proves a real deposited USDC transaction**. It **does not** establish a legitimate paid job, because the poster told workers to ignore it. The verifier specifically returns `FUNDED_BUT_INELIGIBLE_TEST`; it never claims, submits, signs or records income. The tool's first-party Blockscout PRO connector was credit-exhausted, so the corroboration used the **public explorer endpoints** rather than paid PRO access. Fresh confirmation counts and task availability can change.
+
+Additions:
+- `scripts/base-usdc-escrow-chain.mjs`: strict proof comparison against transaction status, >=12 confirmations, exact transfer USDC/chain, poster wallet, escrow wallet, and atomic amount. Rejects paginated/incomplete ERC-20 transfer reads.
+- `scripts/gxeon-chain-proof.mjs`: no-network default; explicit `--live-read --task-id=...` performs only public GETs for this canonical task plus chain receipt.
+- `scripts/tests/base-usdc-escrow-chain.test.mjs`: 10 fake HTTP and proof-gate tests, no network required.
+- `scripts/payout-proof-gate.mjs`: separate acceptance-and-**payout** proof, comparing a final released Base USDC transfer to the operator's approved wallet.
+
+**Use the 4-way safeguard:** (a) published task is legitimate and currently available; (b) actual funded escrow transaction independently matches; (c) worker identity, required permissions and clear acceptance criteria authorized; (d) payout transfer finally settles to our verified wallet. The stage (b) passed for a known test task but fails (a): it is **not a commercial opportunity**.
