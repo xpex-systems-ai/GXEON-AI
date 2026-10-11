@@ -101,3 +101,12 @@ test("source worker contains no provider network, storage or payment transport",
   const text = readFileSync(new URL("../../artifacts/api-server/src/agentos/readOnlyWorker.ts", import.meta.url), "utf8");
   for(const forbidden of [/\bfetch\(/, /\baxios\b/, /\bexecSync\(/, /\bspawn\(/, /\bwriteFile\(/, /stripe\.com/, /mercadopago\.com/, /\.query\(/]) assert.doesNotMatch(text,forbidden);
 });
+
+test("public demonstration API offers only fixed synthetic GET route and never takes caller input", () => {
+  const text = readFileSync(new URL("../../artifacts/api-server/src/routes/agentosGenesis.ts", import.meta.url), "utf8");
+  assert.match(text, /router\.get\("\/agentos\/genesis\/read-only-worker-demo"/);
+  assert.match(text, /runReadOnlyAgentFixture\(\)/);
+  assert.match(text, /liveSystemsCommandConnection: false/);
+  assert.match(text, /modelExecutionEnabled: false/);
+  assert.doesNotMatch(text, /router\.(post|put|patch|delete)\(/);
+});
