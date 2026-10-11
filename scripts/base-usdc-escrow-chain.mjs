@@ -4,6 +4,7 @@
  * A proven funded TEST task is still not a legitimate commercial opportunity.
  */
 import {BASE_USDC_ADDRESS} from "./payout-proof-gate.mjs";
+import {inspectBasedAgentsPayload} from "./provider-escrow-readiness.mjs";
 const VALID_HASH=/^0x[a-fA-F0-9]{64}$/;
 const VALID_ADDRESS=/^0x[a-fA-F0-9]{40}$/;
 const EXPLORER="https://base.blockscout.com/api/v2/transactions/";
@@ -63,4 +64,22 @@ export async function verifyBaseEscrowDeposit(task,{fetchImpl=fetch}={}){
  const base=EXPLORER+tx;
  const [receipt,tokenTransfers]=await Promise.all([safeJson(base,fetchImpl),safeJson(base+"/token-transfers",fetchImpl)]);
  return assessBaseEscrowDeposit(task,receipt,tokenTransfers);
+}
+
+/**
+ * Preflight before even using an external explorer. This is a critical
+ * separation between "not worth doing" and a network outage.
+ * An ineligible task NEVER triggers a chain read or a claim.
+ */
+export async function verifyEligibleBaseEscrowDeposit(task,{fetchImpl=fetch}={}){
+  const [gate]=inspectBasedAgentsPayload({ok:true,tasks:[task]});
+  if(gate.status!=="PROVIDER_ESCROW_REPORTED"){
+    return Object.freeze({
+      independentlyVerified:false,
+      status:"INELIGIBLE_NO_EXPLORER_CALL",
+      reason:gate.reason??"NOT_PROVISIONALLY_ELIGIBLE",
+      claimReady:false,paymentReceived:false,explorerReads:0,
+    });
+  }
+  return verifyBaseEscrowDeposit(task,{fetchImpl});
 }
