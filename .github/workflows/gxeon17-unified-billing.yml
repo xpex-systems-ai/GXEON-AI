@@ -1,0 +1,30 @@
+name: GXEON17 Unified Billing Release Gates
+on:
+  pull_request:
+    paths:
+      - "artifacts/api-server/src/agentos/unifiedBillingGate.ts"
+      - "scripts/agentos-real-model-once.mjs"
+      - "scripts/tests/gxeon17-unified-billing-release.test.mjs"
+      - "docs/agentos/GXEON17_BILLING_RELEASE_GATES.md"
+      - ".github/workflows/gxeon17-unified-billing.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-billing-preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Run 11 fake-admin integration and negative safety tests
+        run: node --experimental-strip-types --test scripts/tests/gxeon17-unified-billing-release.test.mjs
+      - name: Confirm no paid CLI execution is allowed in CI
+        run: |
+          if node --experimental-strip-types scripts/agentos-real-model-once.mjs; then
+            echo "FAIL: should reject default-disabled paid operator CLI"
+            exit 1
+          else
+            echo "PASS: paid operator CLI remains disabled"
+          fi
