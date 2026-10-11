@@ -1,5 +1,6 @@
 import { Router, type IRouter } from "express";
 import { runReadOnlyAgentFixture } from "../agentos/readOnlyWorker";
+import { evaluateOfflineModelProposal } from "../agentos/modelSandbox";
 import {
   GENESIS_SAFETY,
   createGenesisMission,
@@ -88,6 +89,32 @@ router.get("/agentos/genesis/read-only-worker-demo", (_req, res) => {
         executionDisabled: true,
       },
       error: "READONLY_FIXTURE_DEMO_FAILED",
+    });
+  }
+});
+
+/**
+ * Fixed GET-only offline model simulator. No input or remote model invocation.
+ * Deliberately NOT a production agent endpoint.
+ */
+router.get("/agentos/genesis/model-sandbox-demo", (_req, res) => {
+  try {
+    const report = evaluateOfflineModelProposal();
+    return res.json({
+      success: true,
+      data: {
+        mode: "OFFLINE_MOCK_ONLY",
+        realModelEnabled: false,
+        liveSystemsCommandConnection: false,
+        modelProviderCalls: 0,
+        report,
+      },
+    });
+  } catch {
+    return res.status(500).json({
+      success: false,
+      error: "AGENTOS_MODEL_SANDBOX_DEMO_FAILED",
+      data: { mode: "OFFLINE_MOCK_ONLY", realModelEnabled: false, executionDisabled: true },
     });
   }
 });
