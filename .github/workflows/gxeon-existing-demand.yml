@@ -14,6 +14,7 @@ on:
       - "scripts/gxeon-demand-scan.mjs"
       - "scripts/tests/gxeon-demand-intelligence.test.mjs"
       - "docs/gxeon-os/EXISTING_DEMAND_ADAPTER.md"
+      - "docs/gxeon-os/GXEON_DEMAND_TRUTH_20261011.json"
       - ".github/workflows/gxeon-existing-demand.yml"
   workflow_dispatch:
   # Once merged to the DEFAULT branch, audit public demand four times/day.
