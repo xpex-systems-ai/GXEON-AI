@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {assessBaseEscrowDeposit,verifyBaseEscrowDeposit} from "../base-usdc-escrow-chain.mjs";
+import {assessBaseEscrowDeposit,verifyBaseEscrowDeposit,verifyEligibleBaseEscrowDeposit} from "../base-usdc-escrow-chain.mjs";
 import {BASE_USDC_ADDRESS} from "../payout-proof-gate.mjs";
 const txHash="0x"+"c".repeat(64);
 const payer="0x"+"a".repeat(40),escrow="0x"+"b".repeat(40);
@@ -86,4 +86,51 @@ test("unparsable explorer JSON never yields proof",async()=>{
  await assert.rejects(verifyBaseEscrowDeposit(task(),{
   fetchImpl:async()=>new Response("not json",{status:200})
  }),/GXEON_CHAIN_JSON_INVALID/);
+});
+
+test("public funded test hire is preflight-blocked without one explorer GET",async()=>{
+ let requests=0;
+ const v=task({task_id:"task_TestHireKnown",title:"Test hire (please ignore)",
+   description:"Checking the paid flow. This task will be cancelled."});
+ const result=await verifyEligibleBaseEscrowDeposit(v,{fetchImpl:async()=>{requests++;throw Error("must not reach explorer");}});
+ assert.equal(result.status,"INELIGIBLE_NO_EXPLORER_CALL");
+ assert.equal(result.reason,"TEST_OR_CONDITIONAL_REVENUE_TASK");
+ assert.equal(result.claimReady,false);assert.equal(result.explorerReads,0);
+ assert.equal(requests,0);
+});
+test("small bounty excluded before independent chain lookup",async()=>{
+ let requests=0;
+ const v=task({task_id:"task_TooSmall0000",bounty_amount:"1000000",
+   bounty:{amount_atomic:"1000000",token:"USDC",network:"eip155:8453"}});
+ const result=await verifyEligibleBaseEscrowDeposit(v,{fetchImpl:async()=>{requests++;throw Error("unexpected network");}});
+ assert.equal(result.reason,"BELOW_MIN_REWARD_OR_NO_CASH");
+ assert.equal(requests,0);
+});
+test("conflicting reward fields blocked without chain lookup",async()=>{
+ let requests=0;
+ const v=task({task_id:"task_BadDouble0000",bounty_amount:"120000000"});
+ const result=await verifyEligibleBaseEscrowDeposit(v,{fetchImpl:async()=>{requests++;throw Error("unexpected network");}});
+ assert.equal(result.reason,"BOUNTY_AMOUNT_FIELDS_INCONSISTENT");
+ assert.equal(requests,0);
+});
+test("no funded escrow goes no farther than provider evaluation",async()=>{
+ let requests=0;
+ const v=task({task_id:"task_NoFunds00000",escrow:null,payment_verified:0});
+ const result=await verifyEligibleBaseEscrowDeposit(v,{fetchImpl:async()=>{requests++;throw Error("unexpected network");}});
+ assert.equal(result.reason,"ESCROW_NOT_PROVEN_IN_PROVIDER_RECORD");
+ assert.equal(requests,0);
+});
+test("eligible provider-only candidate runs exactly two public chain GETs but never claims",async()=>{
+ const urls=[];
+ const v=task({task_id:"task_Eligible0000"});
+ const result=await verifyEligibleBaseEscrowDeposit(v,{fetchImpl:async(url,init)=>{
+   urls.push(url);
+   assert.equal(init.method,"GET");
+   if(url.endsWith("/token-transfers"))return new Response(JSON.stringify(transfers()),{status:200});
+   return new Response(JSON.stringify(receipt()),{status:200});
+ }});
+ assert.equal(urls.length,2);
+ assert.equal(result.status,"PROVIDER_ESCROW_AND_CHAIN_MATCH");
+ assert.equal(result.claimReady,false);
+ assert.equal(result.paymentReceived,false);
 });
