@@ -15,6 +15,7 @@ const config={
   explicitApproval:input.GXEON15_APPROVAL_ACK ?? "",
   approvedCapUsd:Number(input.GXEON15_APPROVED_CAP_USD ?? "0"),
   priceReviewedAt:input.GXEON15_PRICING_REVIEWED_AT ?? "",
+  projectId:input.GXEON15_OPENAI_PROJECT_ID ?? "",
   apiKey:input.OPENAI_API_KEY ?? "",
 };
 const controller=new AbortController();
