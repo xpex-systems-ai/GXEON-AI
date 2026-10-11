@@ -161,3 +161,30 @@ To avoid unnecessary external requests, `verifyEligibleBaseEscrowDeposit` now fi
 Five additional fake-provider tests assert zero network for blocked tasks and two read-only explorer GETs for a synthetic conditionally eligible task. This is a **source integration / test contract**, not verified live money, and does not make a task claimed or paid.
 
 Known baseline limitations remain: core monorepo Build/Typecheck errors in unrelated API server modules and PR #450 unmerged, so the 6-hour CI schedule in this workflow is NOT active on main until merge.
+
+## End-to-end payout reconciliation — GXEON follow-up (2026-10-11)
+
+The missing read-only **provider acceptance → Base USDC payout receipt → beneficiary proof** adapter has been added:
+
+- `scripts/base-usdc-payout-chain.mjs`: operator-authorized read-only `verifyBasedAgentsPayoutOnChain()` checks provider's `verified` task, `settled` payment and `released` escrow before making network requests, then fetches exactly two public Blockscout `GET`s for the **release** transaction and ERC20 transfers.
+- `scripts/tests/base-usdc-payout-chain.test.mjs`: 11 tests cover matching, source escrow wallet, authorized recipient, exact token contract and atomic amount, minimum 12 confirmations, rejecting paginated/overflow reports, wrongly assigned agent, forged release hashes, HTTP 402/429 and secret-free network calls. Passes are **synthetic** and not proof of real user earnings.
+- Only a verified transfer from the provider escrow wallet to the approved owner wallet with a signed-off provider settlement can become `revenueBookable:true`. A completed GitHub issue, submitted PR, escrow **deposit**, or a user-supplied `verifiedByIndependentChainReader` flag cannot on its own count as revenue.
+- The helper `verifyBasedAgentsPayout` remains a **pure contract validator**; use the network-bound `verifyBasedAgentsPayoutOnChain()` for any future receipt claim so independent evidence is fetched and checked by the same operation.
+- This read-only proof verifies a *transfer*, **not wallet custody**, withdrawals, fiat settlement or merchant revenue accounting. Receipt uniqueness and payout ownership still require protected operator confirmation and operational ledger deduplication.
+
+### Exact CI evidence
+
+At commit `e2ea1790440c4e96e28481cd45a18b4254243399`:
+- [Existing Demand Integration workflow #38179061104](https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/38179061104): 17/17 GitHub bounty intake, 22/22 provider escrow, 9/9 pure payout, 15/15 funded deposit, 11/11 network-bound final payout integration — **74/74 targeted PASS**.
+- Live external-source audit: 31 provider tasks/offers examined, **0 independently verified, claim-ready tasks**, **0 claimed**, **0 verified receipts**. Known test hire is rejected BEFORE explorer call, so no paid chain credits are wasted.
+- [Monorepo Health #38179061222](https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/38179061222): SUCCESS.
+- Full Typecheck/Build remain blocked by existing unrelated API server TypeScript errors. Files `src/routes/operatorWorkflow.ts`, `src/routes/r100Truth.ts`, `src/services/auditProposalService.ts` have identical content SHA on `main` and this branch. Existing blocking issue: [#437](https://github.com/xpex-systems-ai/GXEON-AI/issues/437).
+
+### External escrow example corroborated in this run
+
+Using separate public Blockscout HTTP reads (not the exhausted PRO connector), the transfer for **the intentionally excluded test task** matched:
+- 1,000,000 atomic USDC, canonical Base contract, sender `0x16d4479a4dfbdd6231b5ce686d2eedd04809e7e8`, escrow recipient `0x0440383B02A10BE0Dea587c5b5Fbb622dBf4719D`, tx `0x21cc40895706a82b087093276a3064cb914d7c4e0fdaf067560e27fcaf29bd03`.
+- Confirmations were above 12 and the transaction succeeded.
+- This is evidence of **someone else's escrow deposit to a test task**, NOT XPeX income or a bounty that should be claimed.
+
+The GXEON workflow does **not** authorize claims or payments, does **not** connect private wallets, and is unmerged. The 6-hour scan schedule defined in this branch is **inactive on the default branch until independently reviewed and merged**.
