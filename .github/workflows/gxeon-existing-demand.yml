@@ -1,0 +1,35 @@
+name: GXEON Existing Demand Integration
+on:
+  pull_request:
+    paths:
+      - "scripts/demand-intelligence.mjs"
+      - "scripts/gxeon-demand-scan.mjs"
+      - "scripts/tests/gxeon-demand-intelligence.test.mjs"
+      - "docs/gxeon-os/EXISTING_DEMAND_ADAPTER.md"
+      - ".github/workflows/gxeon-existing-demand.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  security-and-ingestion-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Test 14 local provider contracts without networking
+        run: node --test scripts/tests/gxeon-demand-intelligence.test.mjs
+      - name: Verify demand CLI never uses network unless explicitly enabled
+        run: node scripts/gxeon-demand-scan.mjs
+  read-only-real-source-smoke:
+    needs: security-and-ingestion-contract
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Read real public GitHub issues (best effort; rate limits may apply)
+        run: node scripts/gxeon-demand-scan.mjs --live-read
