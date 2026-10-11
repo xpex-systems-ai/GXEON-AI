@@ -188,3 +188,13 @@ Using separate public Blockscout HTTP reads (not the exhausted PRO connector), t
 - This is evidence of **someone else's escrow deposit to a test task**, NOT XPeX income or a bounty that should be claimed.
 
 The GXEON workflow does **not** authorize claims or payments, does **not** connect private wallets, and is unmerged. The 6-hour scan schedule defined in this branch is **inactive on the default branch until independently reviewed and merged**.
+
+### Hardened proof of actual income (2026-10-11 follow-up)
+
+An ordinary JSON object containing `verifiedByIndependentChainReader:true` is **NOT** an acceptable attestation that the user has received USDC. The previous pure-value guard could be fed such a fabricated object; it is now fail-closed.
+
+`scripts/payout-proof-gate.mjs` has `readVerifiedBaseUsdcPayout({transactionHash,from,to,amountAtomic})`: two allowlisted public Base Blockscout read-only GETs for the transaction and ERC-20 event log, requiring a successful tx, at least 12 confirmations, exactly one matching canonical USDC token transfer from the stored escrow wallet to the operator-approved recipient, and correct six-decimal atomic units.
+
+The validator internally brands its returned immutable proof using a non-exported `WeakSet`. The payout booking function `verifyBasedAgentsPayout` now *rejects arbitrary caller-supplied JSON*, even when its self-declared `verifiedByIndependentChainReader` field is true. A branded proof is **in-memory only**; after a restart or serialization it must be independently verified again.
+
+This is code tested using simulated provider/explorer data, **not actual received money**. Blockscout connectivity may still be unavailable or require paid credits. On HTTP errors, do NOT synthesize an accepted receipt or infer payout; record provider unavailability and retry later through a permitted independent explorer. No explorer GET is made for a known ineligible bounty.
