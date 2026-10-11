@@ -10,7 +10,7 @@ const QUERY = Object.freeze([
   'is:issue is:open label:bounty "API"',
 ]);
 const SCAM_FARM_REPOS = Object.freeze([
-  "unsafelabs/", "securebananalabs/", "clankernation/",
+  "unsafelabs/", "securebananalabs/", "clankernation/", "zhangjiayang6835-cyber/bounty-plaza", "senthemodder/claude-honeypot",
 ]);
 export const DEMAND_POLICY = Object.freeze({
   version:"GXEON_EXISTING_DEMAND_V1",
@@ -67,6 +67,11 @@ export function normalizeDemandIssue(issue, now=new Date()){
   const path=new URL(url).pathname;
   const repo=path.split("/").slice(1,3).join("/");
   if(SCAM_FARM_REPOS.some(prefix=>repo.toLowerCase().startsWith(prefix)))return null;
+  // Aggregator mirrors are not the maintainer/escrow source of truth.
+  // Do not rank a copied issue as an independently funded bounty.
+  const bodyForMirrorCheck=String(issue.body??"").slice(0,5000);
+  if(/(?:^|\n)\s*#{1,5}\s*(?:原始链接|source url|original issue|source issue)\s*(?:\n|:)/im.test(bodyForMirrorCheck))return null;
+  if(/(?:honeypot|AI agent trap|stop burning your human.s API tokens)/i.test(title+" "+bodyForMirrorCheck))return null;
   const count=Number.isInteger(issue.comments)&&issue.comments>=0?issue.comments:null;
   // Comments do not equal actual claimants, but excessive competition is a warning.
   if(count===null || count>DEMAND_POLICY.maximumCommentCount)return null;
