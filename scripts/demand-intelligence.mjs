@@ -32,10 +32,10 @@ export function advertisedBountyUsd(issue){
   const title=typeof issue.title==="string"?issue.title:"";
   const body=typeof issue.body==="string"?issue.body.slice(0,12000):"";
   const patterns=[
-    /\[\s*BOUNTY\s*\$\s*(\d{2,6}(?:\.\d{1,2})?)\s*\]/i,
-    /\bBOUNTY\s*[:—–-]?\s*\$\s*(\d{2,6}(?:\.\d{1,2})?)\b/i,
-    /\b(?:Reward|Payout|Worker price)\s*[:—–-]?\s*\$\s*(\d{2,6}(?:\.\d{1,2})?)\b/i,
-    /\$\s*(\d{2,6}(?:\.\d{1,2})?)\s*(?:USDC|USD)\b/i
+    /\[\s*BOUNTY\s*\$\s*(\d{1,6}(?:\.\d{1,2})?)\s*\]/i,
+    /\bBOUNTY\s*[:—–-]?\s*\$\s*(\d{1,6}(?:\.\d{1,2})?)\b/i,
+    /\b(?:Reward|Payout|Worker price)\s*[:—–-]?\s*\$\s*(\d{1,6}(?:\.\d{1,2})?)\b/i,
+    /\$\s*(\d{1,6}(?:\.\d{1,2})?)\s*(?:USDC|USD)\b/i
   ];
   // Cross-check all explicitly advertised reward claims: a mirror with
   // "$400" in a title and "$1 USDC" in the source description is INVALID.
