@@ -151,3 +151,13 @@ Additions:
 - `scripts/payout-proof-gate.mjs`: separate acceptance-and-**payout** proof, comparing a final released Base USDC transfer to the operator's approved wallet.
 
 **Use the 4-way safeguard:** (a) published task is legitimate and currently available; (b) actual funded escrow transaction independently matches; (c) worker identity, required permissions and clear acceptance criteria authorized; (d) payout transfer finally settles to our verified wallet. The stage (b) passed for a known test task but fails (a): it is **not a commercial opportunity**.
+
+### Chain-proof read preflight (2026-10-11 follow-up)
+
+The earlier live GitHub Actions step `gxeon-chain-proof.mjs --live-read --task-id=task_ILI16I1DYjTOabbUBRvV9` attempted an explorer read for a known ineligible fake/test task and received `GXEON_CHAIN_HTTP_UNAVAILABLE`. This is a provider HTTP failure, **not evidence that escrow is unfunded**. Its failure had been masked by `continue-on-error: true` in a best-effort job.
+
+To avoid unnecessary external requests, `verifyEligibleBaseEscrowDeposit` now first checks task status, creator intent, min 100 USDC, on-platform escrow flag and consistent reward fields using the same canonical BasedAgents validation. It returns `INELIGIBLE_NO_EXPLORER_CALL` without any explorer GET for test hires, payout-on-revenue tasks, no escrow, inconsistent amounts or subfloor bounties. Only conditionally eligible, **still untrusted** provider records proceed to independent explorer reads.
+
+Five additional fake-provider tests assert zero network for blocked tasks and two read-only explorer GETs for a synthetic conditionally eligible task. This is a **source integration / test contract**, not verified live money, and does not make a task claimed or paid.
+
+Known baseline limitations remain: core monorepo Build/Typecheck errors in unrelated API server modules and PR #450 unmerged, so the 6-hour CI schedule in this workflow is NOT active on main until merge.
