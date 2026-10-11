@@ -1,4 +1,5 @@
 import { Router, type IRouter } from "express";
+import { runReadOnlyAgentFixture } from "../agentos/readOnlyWorker";
 import {
   GENESIS_SAFETY,
   createGenesisMission,
@@ -58,6 +59,37 @@ router.get("/agentos/genesis/synthetic-demo", (_req, res) => {
       mission,
     },
   });
+});
+
+/**
+ * Fixed synthetic Systems Command-shaped inventory — no user input, no remote
+ * provider, no authentication bypass, no writes and no model inference.
+ */
+router.get("/agentos/genesis/read-only-worker-demo", (_req, res) => {
+  try {
+    return res.json({
+      success: true,
+      data: {
+        mode: "SYNTHETIC_READONLY_P1",
+        runtimeScope: "IN_PROCESS_FIXTURE_ONLY",
+        requiresHumanApproval: true,
+        modelExecutionEnabled: false,
+        liveSystemsCommandConnection: false,
+        result: runReadOnlyAgentFixture(),
+      },
+    });
+  } catch {
+    return res.status(500).json({
+      success: false,
+      data: {
+        mode: "SYNTHETIC_READONLY_P1",
+        modelExecutionEnabled: false,
+        liveSystemsCommandConnection: false,
+        executionDisabled: true,
+      },
+      error: "READONLY_FIXTURE_DEMO_FAILED",
+    });
+  }
 });
 
 export default router;
