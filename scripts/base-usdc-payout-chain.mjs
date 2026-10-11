@@ -5,7 +5,7 @@
  * Never signs, claims, mutates a wallet, or declares earnings based on
  * advertised rewards or a provider transaction hash alone.
  */
-import {BASE_USDC_ADDRESS,verifyBasedAgentsPayout} from "./payout-proof-gate.mjs";
+import {BASE_USDC_ADDRESS,verifyBasedAgentsPayout,readVerifiedBaseUsdcPayout} from "./payout-proof-gate.mjs";
 const TX=/^0x[0-9a-fA-F]{64}$/;
 const ADDRESS=/^0x[0-9a-fA-F]{40}$/;
 const EXPLORER="https://base.blockscout.com/api/v2/transactions/";
@@ -45,18 +45,10 @@ export function inspectBasePayoutEvidence(task, receipt, transfers, authorizedRe
     uint(event?.total?.value)===amount
   );
   if(matches.length!==1)return blocked("EXACT_USDC_TRANSFER_NOT_UNIQUELY_PROVEN");
-  // The reader provenance boolean exists only INSIDE this adapter, after
-  // matching independently fetched live data; never accept it from a caller.
-  return verifyBasedAgentsPayout({
-    task,authorizedRecipientAgentId,authorizedRecipientWallet,
-    chainTransfer:{
-      verifiedByIndependentChainReader:true,success:true,chainId:8453,
-      confirmations:receipt.confirmations,transactionHash:receipt.hash,
-      tokenAddress:matches[0].token.address_hash,
-      to:matches[0].to.hash,from:matches[0].from.hash,
-      amountAtomic:matches[0].total.value,
-    },
-  });
+  // This function only examines caller-supplied JSON. It MUST NOT return
+  // verified revenue, even for a perfectly shaped fake receipt.
+  return blocked("MATCHED_FIELDS_NOT_INDEPENDENTLY_READ");
+
 }
 async function readExplorerJson(url,fetchImpl){
   if(!/^https:\/\/base\.blockscout\.com\/api\/v2\/transactions\/0x[a-fA-F0-9]{64}(?:\/token-transfers)?$/.test(url))
@@ -81,9 +73,23 @@ export async function verifyBasedAgentsPayoutOnChain({
      !TX.test(task.payment_tx_hash??"")||
      !same(task.payment_tx_hash,task.escrow?.release_tx_hash))
     return blocked("PROVIDER_SETTLEMENT_OR_AUTHORIZATION_REQUIRED");
-  const base=EXPLORER+task.payment_tx_hash;
-  const [receipt,transfers]=await Promise.all([
-    readExplorerJson(base,fetchImpl),readExplorerJson(base+"/token-transfers",fetchImpl)
-  ]);
-  return inspectBasePayoutEvidence(task,receipt,transfers,authorizedRecipientAgentId,authorizedRecipientWallet);
+  // Provider reward itself must be coherent before touching network.
+  const amount=uint(task.bounty?.amount_atomic);
+  if(amount===null||amount<=0n||amount!==uint(task.bounty_amount)||
+     task.bounty?.network!=="eip155:8453"||task.bounty?.token!=="USDC"||
+     !ADDRESS.test(task.escrow?.wallet??""))
+    return blocked("REWARD_TOKEN_OR_VALUE_UNVERIFIED");
+  // Uses same hardened in-memory proof mint as GXEON payout-proof-gate.
+  // Avoid second independent-claim implementation whose provenance is an
+  // arbitrary caller-supplied boolean.
+  const proof=await readVerifiedBaseUsdcPayout({
+    transactionHash:task.payment_tx_hash,
+    from:task.escrow.wallet,
+    to:authorizedRecipientWallet,
+    amountAtomic:task.bounty.amount_atomic,
+    fetchImpl,
+  });
+  return verifyBasedAgentsPayout({
+    task,authorizedRecipientAgentId,authorizedRecipientWallet,chainTransfer:proof
+  });
 }
