@@ -1,0 +1,30 @@
+name: GXEON AgentOS Real Provider Gate
+on:
+  pull_request:
+    paths:
+      - "artifacts/api-server/src/agentos/realModelSandbox.ts"
+      - "scripts/tests/agentos-real-provider-contracts.test.mjs"
+      - "scripts/agentos-real-model-once.mjs"
+      - "docs/agentos/REAL_MODEL_SANDBOX_P3.md"
+      - ".github/workflows/agentos-real-provider-gate.yml"
+  workflow_dispatch:
+jobs:
+  fake-provider-safety:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Test gated transport with injected local fake provider only
+        run: node --experimental-strip-types --test scripts/tests/agentos-real-provider-contracts.test.mjs
+      - name: Verify operator CLI refuses to run without approval or paid call
+        run: |
+          if node --experimental-strip-types scripts/agentos-real-model-once.mjs; then
+            echo "FAIL: unauthorised CLI unexpectedly succeeded"
+            exit 1
+          else
+            echo "PASS: no real API call without operator opt-in"
+          fi
