@@ -159,3 +159,9 @@ test("no wallet, signing, claim or payment mutation mode enabled",()=>{
  assert.equal(PROVIDER_POLICY.escrowNeedsIndependentChainVerification,true);
  assert.equal(PROVIDER_POLICY.noRevenueClaims,true);
 });
+
+test("mismatched nested and top-level reward cannot be claimed as funded",()=>{
+ const [a]=inspectBasedAgentsPayload({ok:true,tasks:[basedTask({bounty_amount:"1000000"})]});
+ assert.equal(a.reason,"BOUNTY_AMOUNT_FIELDS_INCONSISTENT");
+ assert.equal(a.qualified,false);
+});
