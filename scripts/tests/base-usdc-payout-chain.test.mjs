@@ -16,9 +16,11 @@ const transfer=()=>({transaction_hash:tx,from:{hash:escrow},to:{hash:wallet},
 const transfers=(patch={})=>({items:[transfer()],next_page_params:null,...patch});
 const verify=(t=task(),rc=txReceipt(),ts=transfers(),user=agent,beneficiary=wallet)=>
  inspectBasePayoutEvidence(t,rc,ts,user,beneficiary);
-test("accepted payout is verified only by exact independent Base USDC token transfer",()=>{
- const r=verify();assert.equal(r.verifiedReceived,true);assert.equal(r.revenueBookable,true);
- assert.equal(r.amountReceivedUsdc,150);assert.equal(r.withdrawn,false);
+test("caller-supplied matching JSON still cannot book earnings without independent GET",()=>{
+ const r=verify();
+ assert.equal(r.verifiedReceived,false);
+ assert.equal(r.revenueBookable,false);
+ assert.equal(r.reason,"MATCHED_FIELDS_NOT_INDEPENDENTLY_READ");
 });
 test("settlement not yet accepted or released can never count as earning",()=>{
  for(const patch of [
