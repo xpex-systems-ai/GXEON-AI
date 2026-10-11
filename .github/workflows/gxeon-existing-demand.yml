@@ -1,0 +1,66 @@
+name: GXEON Existing Demand Integration
+on:
+  pull_request:
+    paths:
+      - "scripts/demand-intelligence.mjs"
+      - "scripts/provider-escrow-readiness.mjs"
+      - "scripts/payout-proof-gate.mjs"
+      - "scripts/base-usdc-escrow-chain.mjs"
+      - "scripts/base-usdc-payout-chain.mjs"
+      - "scripts/tests/base-usdc-payout-chain.test.mjs"
+      - "scripts/gxeon-chain-proof.mjs"
+      - "scripts/tests/base-usdc-escrow-chain.test.mjs"
+      - "scripts/tests/payout-proof-gate.test.mjs"
+      - "scripts/gxeon-provider-truth.mjs"
+      - "scripts/tests/provider-escrow-readiness.test.mjs"
+      - "scripts/gxeon-demand-scan.mjs"
+      - "scripts/tests/gxeon-demand-intelligence.test.mjs"
+      - "docs/gxeon-os/EXISTING_DEMAND_ADAPTER.md"
+      - "docs/gxeon-os/GXEON_DEMAND_TRUTH_20261011.json"
+      - ".github/workflows/gxeon-existing-demand.yml"
+  workflow_dispatch:
+  # Once merged to the DEFAULT branch, audit public demand four times/day.
+  # Read-only GETs, no wallet, no claim, no PR/issue write and no paid APIs.
+  schedule:
+    - cron: "41 */6 * * *"
+permissions:
+  contents: read
+jobs:
+  security-and-ingestion-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Test 17 local provider contracts including live-scan honeypot regressions
+        run: node --test scripts/tests/gxeon-demand-intelligence.test.mjs
+      - name: Validate 21 provider funding and payout gates without any network
+        run: node --test scripts/tests/provider-escrow-readiness.test.mjs
+      - name: Verify 15 payout authenticity tests (forged flags cannot mint receipts)
+        run: node --test scripts/tests/payout-proof-gate.test.mjs
+      - name: Verify 15 Base USDC escrow tests including zero-network exclusion preflight
+        run: node --test scripts/tests/base-usdc-escrow-chain.test.mjs
+      - name: Verify 11 independent Base USDC payment receipts before revenue recognition
+        run: node --test scripts/tests/base-usdc-payout-chain.test.mjs
+      - name: Verify demand CLI never uses network unless explicitly enabled
+        run: |
+          node scripts/gxeon-demand-scan.mjs
+          node scripts/gxeon-provider-truth.mjs
+          node scripts/gxeon-chain-proof.mjs
+  read-only-real-source-smoke:
+    needs: security-and-ingestion-contract
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Read real public GitHub issues (best effort; rate limits may apply)
+        run: |
+          node scripts/gxeon-demand-scan.mjs --live-read
+          node scripts/gxeon-provider-truth.mjs --live-read
+      - name: Independently inspect the KNOWN INELIGIBLE test deposit (public Base chain only)
+        continue-on-error: true
+        run: node scripts/gxeon-chain-proof.mjs --live-read --task-id=task_ILI16I1DYjTOabbUBRvV9
