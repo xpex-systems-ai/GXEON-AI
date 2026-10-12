@@ -45,6 +45,7 @@ import R100DurableStatePage from "@/pages/R100DurableStatePage";
 import R100DatabaseMirrorConsolePage from "@/pages/R100DatabaseMirrorConsolePage";
 import AuditOsPage from "@/pages/AuditOsPage";
 import PaidWorkCommandCenterPage from "@/pages/PaidWorkCommandCenterPage";
+import PaidWorkShell from "@/components/layout/PaidWorkShell";
 
 const queryClient = new QueryClient();
 
@@ -88,6 +89,7 @@ function Router() {
     <Switch>
       {/* Standalone diagnostic page — no layout wrapper, matches original */}
       <Route path="/test" component={TestPage} />
+      <Route path="/ops/paid-work">{() => <PaidWorkShell><PaidWorkCommandCenterPage /></PaidWorkShell>}</Route>
 
       {/* All other routes wrapped in dashboard layout */}
       <Route>
@@ -116,7 +118,6 @@ function Router() {
             <Route path="/ops/agent-conectou" component={AgentConectouPage} />
             <Route path="/ops/radar-x" component={RadarXOperationalPage} />
             <Route path="/ops/github-demand" component={GitHubDemandRadarPage} />
-            <Route path="/ops/paid-work" component={PaidWorkCommandCenterPage} />
             <Route path="/ops/delivery-workspace" component={OperatorDeliveryWorkspacePage} />
             <Route path="/ops/manual-payment" component={ManualPaymentRequestPage} />
             <Route path="/ops/client-offers" component={ClientOfferSendPage} />
