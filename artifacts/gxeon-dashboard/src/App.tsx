@@ -44,6 +44,7 @@ import OperatorAssistantPage from "@/pages/OperatorAssistantPage";
 import R100DurableStatePage from "@/pages/R100DurableStatePage";
 import R100DatabaseMirrorConsolePage from "@/pages/R100DatabaseMirrorConsolePage";
 import AuditOsPage from "@/pages/AuditOsPage";
+import PaidWorkCommandCenterPage from "@/pages/PaidWorkCommandCenterPage";
 
 const queryClient = new QueryClient();
 
@@ -115,6 +116,7 @@ function Router() {
             <Route path="/ops/agent-conectou" component={AgentConectouPage} />
             <Route path="/ops/radar-x" component={RadarXOperationalPage} />
             <Route path="/ops/github-demand" component={GitHubDemandRadarPage} />
+            <Route path="/ops/paid-work" component={PaidWorkCommandCenterPage} />
             <Route path="/ops/delivery-workspace" component={OperatorDeliveryWorkspacePage} />
             <Route path="/ops/manual-payment" component={ManualPaymentRequestPage} />
             <Route path="/ops/client-offers" component={ClientOfferSendPage} />

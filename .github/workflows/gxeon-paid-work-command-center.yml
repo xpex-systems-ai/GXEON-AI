@@ -1,0 +1,44 @@
+name: GXEON Paid Work Command Center
+
+on:
+  pull_request:
+    paths:
+      - "artifacts/gxeon-dashboard/src/App.tsx"
+      - "artifacts/gxeon-dashboard/src/pages/PaidWorkCommandCenterPage.tsx"
+      - "artifacts/gxeon-dashboard/src/services/paidWorkRadarService.ts"
+      - ".github/workflows/gxeon-paid-work-command-center.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dashboard-quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Dashboard typecheck
+        run: pnpm --filter @workspace/gxeon-dashboard run typecheck
+      - name: Dashboard build
+        run: pnpm --filter @workspace/gxeon-dashboard run build
+
+  demand-safety-regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Existing demand contract tests
+        run: |
+          node --test scripts/tests/gxeon-demand-intelligence.test.mjs
+          node --test scripts/tests/provider-escrow-readiness.test.mjs
+          node --test scripts/tests/payout-proof-gate.test.mjs
+          node --test scripts/tests/base-usdc-escrow-chain.test.mjs
+          node --test scripts/tests/base-usdc-payout-chain.test.mjs
