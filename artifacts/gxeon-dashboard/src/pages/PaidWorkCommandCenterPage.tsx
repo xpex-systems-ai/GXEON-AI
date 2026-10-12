@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
-import { Activity, ExternalLink, Radar, RefreshCw, ShieldCheck, WalletCards } from "lucide-react";
+import { Activity, ExternalLink, Radar, RefreshCw, ShieldCheck, WalletCards, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -65,15 +65,15 @@ export default function PaidWorkCommandCenterPage() {
     </section>
 
     <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {[
-        ["Open records", totals.open, Radar],
-        ["Advertised", usd(totals.advertised), Activity],
-        ["Funded signals", totals.funded, ShieldCheck],
-        ["Claim-ready", totals.claimReady, WalletCards],
-      ].map(([label, value, Icon]) => <Card key={String(label)} className="border-white/10 bg-slate-950/80">
+      {([
+        { label: "Open records", value: totals.open, Icon: Radar },
+        { label: "Advertised", value: usd(totals.advertised), Icon: Activity },
+        { label: "Funded signals", value: totals.funded, Icon: ShieldCheck },
+        { label: "Claim-ready", value: totals.claimReady, Icon: WalletCards },
+      ] satisfies Array<{ label: string; value: string | number; Icon: LucideIcon }>).map(({ label, value, Icon }) => <Card key={label} className="border-white/10 bg-slate-950/80">
         <CardContent className="p-5">
           <Icon className="h-5 w-5 text-amber-200" />
-          <p className="mt-3 text-xs uppercase tracking-[0.25em] text-slate-500">{String(label)}</p>
+          <p className="mt-3 text-xs uppercase tracking-[0.25em] text-slate-500">{label}</p>
           <p className="mt-1 text-3xl font-black text-white">{String(value)}</p>
         </CardContent>
       </Card>)}

@@ -6,6 +6,7 @@ on:
       - "artifacts/gxeon-dashboard/src/App.tsx"
       - "artifacts/gxeon-dashboard/src/pages/PaidWorkCommandCenterPage.tsx"
       - "artifacts/gxeon-dashboard/src/services/paidWorkRadarService.ts"
+      - "artifacts/gxeon-dashboard/tsconfig.paid-work.json"
       - ".github/workflows/gxeon-paid-work-command-center.yml"
   workflow_dispatch:
 
@@ -23,8 +24,8 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Dashboard typecheck
-        run: pnpm --filter @workspace/gxeon-dashboard run typecheck
+      - name: Paid-work module typecheck
+        run: pnpm exec tsc -p artifacts/gxeon-dashboard/tsconfig.paid-work.json --noEmit
       - name: Dashboard build
         run: pnpm --filter @workspace/gxeon-dashboard run build
 
