@@ -1,5 +1,6 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import pg from "pg";
+export type { PoolClient } from "pg";
 import * as schema from "./schema";
 
 const { Pool } = pg;
@@ -26,7 +27,7 @@ export function isDatabaseConfigured(): boolean {
 
 export function getPool(): FinancialPool {
   if (!poolSingleton) {
-    poolSingleton = new Pool({ connectionString: assertDatabaseUrl() });
+    poolSingleton = new Pool({ connectionString: assertDatabaseUrl(), connectionTimeoutMillis: 5000 });
   }
   return poolSingleton;
 }

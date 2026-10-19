@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/pages/AuditWorkflowPage.tsx",
+    "src/services/auditTransport.ts"
+  ]
+}

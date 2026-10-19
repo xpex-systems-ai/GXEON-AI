@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { auditModuleCatalog } from "@workspace/db";
+import { auditModuleCatalog, getPool } from "@workspace/db";
+import { auditAccess } from "../middlewares/auditAccess";
 import {
   bootstrapFirstInternalAuditCase,
   buildAuditCasePreview,
@@ -52,6 +53,23 @@ import {
 } from "../services/auditFirstProposalAutorunnerService";
 
 const router = Router();
+// Catalog/health remain public. Cases, diagnostics and reports require an audit role.
+router.use("/v1/audit", (req, res, next) => {
+  const publicReads = ["/health", "/modules", "/schema-map", "/offers/catalog"];
+  if (req.method === "GET" && publicReads.includes(req.path)) { next(); return; }
+  // These existing paths enforce their own narrower bootstrap/mission credentials.
+  if (req.method === "POST" && ["/bootstrap/first-case", "/missions/run-baseline-score-report"].includes(req.path)) { next(); return; }
+  auditAccess(req.method === "GET" ? "read" : "operator")(req, res, next);
+});
+router.use("/v1/audit", async (req, res, next) => {
+  // Legacy mutation paths must not change a reviewed GX-01 case through a second API.
+  const id = req.body?.caseId;
+  if (req.method !== "GET" && typeof id === "string" && /^[0-9a-f-]{36}$/i.test(id) && process.env.DATABASE_URL) {
+    const result = await getPool().query("SELECT id FROM audit_cases WHERE id=$1 AND metadata->>'workflow'='gx01-v1'", [id]);
+    if (result.rows.length) { res.status(409).json({ ok: false, code: "WORKFLOW_ROUTE_REQUIRED", message: "Use the GX-01 workflow routes for this case." }); return; }
+  }
+  next();
+});
 const databaseConfigured = () => Boolean(process.env["DATABASE_URL"]);
 const generatedAt = () => new Date().toISOString();
 
@@ -294,7 +312,7 @@ router.post("/v1/audit/intake/preview", noStore, (req, res) => {
       system: "GXEON Audit OS",
       ok: false,
       code: error.code ?? "INTAKE_VALIDATION_FAILED",
-      message: error.message,
+      message: "Audit request could not be completed. Check input, flags and provider readiness.",
     });
   }
 });
@@ -307,7 +325,7 @@ router.post("/v1/audit/cases", noStore, async (req, res) => {
       system: "GXEON Audit OS",
       ok: false,
       code: error.code ?? "AUDIT_CASE_CREATE_FAILED",
-      message: error.message,
+      message: "Audit request could not be completed. Check input, flags and provider readiness.",
     });
   }
 });
@@ -417,7 +435,7 @@ router.post("/v1/audit/findings/preview", noStore, (req, res) => {
       system: "GXEON Audit OS",
       ok: false,
       code: error.code ?? "FINDING_PREVIEW_FAILED",
-      message: error.message,
+      message: "Audit request could not be completed. Check input, flags and provider readiness.",
     });
   }
 });
@@ -442,7 +460,7 @@ router.post("/v1/audit/findings", noStore, async (req, res) => {
       system: "GXEON Audit OS",
       ok: false,
       code: error.code ?? "AUDIT_FINDING_CREATE_FAILED",
-      message: error.message,
+      message: "Audit request could not be completed. Check input, flags and provider readiness.",
     });
   }
 });
@@ -458,7 +476,7 @@ router.post("/v1/audit/evidences/preview", noStore, (req, res) => {
       system: "GXEON Audit OS",
       ok: false,
       code: error.code ?? "EVIDENCE_PREVIEW_FAILED",
-      message: error.message,
+      message: "Audit request could not be completed. Check input, flags and provider readiness.",
     });
   }
 });
@@ -483,7 +501,7 @@ router.post("/v1/audit/evidences", noStore, async (req, res) => {
       system: "GXEON Audit OS",
       ok: false,
       code: error.code ?? "AUDIT_EVIDENCE_CREATE_FAILED",
-      message: error.message,
+      message: "Audit request could not be completed. Check input, flags and provider readiness.",
     });
   }
 });
@@ -811,7 +829,7 @@ router.post("/v1/audit/proposals/preview", noStore, async (req, res) => {
         ok: false,
         sanitized: true,
         code: error.code ?? "PROPOSAL_PREVIEW_FAILED",
-        message: error.message,
+        message: "Audit request could not be completed. Check input, flags and provider readiness.",
       });
   }
 });
@@ -842,7 +860,7 @@ router.post("/v1/audit/proposals", noStore, async (req, res) => {
         ok: false,
         sanitized: true,
         code: error.code ?? "PROPOSAL_CREATE_FAILED",
-        message: error.message,
+        message: "Audit request could not be completed. Check input, flags and provider readiness.",
       });
   }
 });
@@ -876,7 +894,7 @@ router.post(
           ok: false,
           sanitized: true,
           code: error.code ?? "PROPOSAL_STATUS_PREVIEW_FAILED",
-          message: error.message,
+          message: "Audit request could not be completed. Check input, flags and provider readiness.",
         });
     }
   },
@@ -914,7 +932,7 @@ router.patch(
           ok: false,
           sanitized: true,
           code: error.code ?? "PROPOSAL_STATUS_UPDATE_FAILED",
-          message: error.message,
+          message: "Audit request could not be completed. Check input, flags and provider readiness.",
         });
     }
   },

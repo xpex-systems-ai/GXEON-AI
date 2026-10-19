@@ -44,6 +44,7 @@ import OperatorAssistantPage from "@/pages/OperatorAssistantPage";
 import R100DurableStatePage from "@/pages/R100DurableStatePage";
 import R100DatabaseMirrorConsolePage from "@/pages/R100DatabaseMirrorConsolePage";
 import AuditOsPage from "@/pages/AuditOsPage";
+import AuditWorkflowPage from "@/pages/AuditWorkflowPage";
 
 const queryClient = new QueryClient();
 
@@ -92,8 +93,9 @@ function Router() {
       <Route>
         <DashboardLayout>
           <Switch>
+            <Route path="/ops/audit-os/workflow" component={AuditWorkflowPage} />
+            <Route path="/audit-os" component={AuditWorkflowPage} />
             <Route path="/ops/audit-os" component={AuditOsPage} />
-            <Route path="/audit-os" component={AuditOsPage} />
             <Route path="/ops/r100-war-room" component={R100OperatorWarRoomPage} />
             <Route path="/ops/r100-state" component={R100DurableStatePage} />
             <Route path="/ops/r100-db-mirror" component={R100DatabaseMirrorConsolePage} />

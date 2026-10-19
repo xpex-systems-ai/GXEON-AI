@@ -1,0 +1,49 @@
+name: Audit OS V1
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  audit-flow:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: gx01_test
+          POSTGRES_USER: gx01_test
+          POSTGRES_PASSWORD: local-test-only
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U gx01_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run typecheck:libs
+      # Full workspace typecheck/build remain mandatory in their existing workflows.
+      # These focused checks let integration evidence run despite documented baseline failures.
+      - run: pnpm --filter @workspace/api-server exec tsc -p tsconfig.audit-v1.json --noEmit
+      - run: pnpm --filter @workspace/gxeon-dashboard exec tsc -p tsconfig.audit-v1.json --noEmit
+      - name: Unit and file-backed persistence tests
+        run: pnpm --filter @workspace/api-server run test:audit
+      - name: PostgreSQL HTTP integration flow
+        run: pnpm --filter @workspace/api-server run test:audit
+        env:
+          TEST_AUDIT_DATABASE_URL: postgresql://gx01_test:local-test-only@localhost:5432/gx01_test
+          GXEON_AUDIT_TEST_EVIDENCE_DIR: ${{ runner.temp }}/gx01-evidence
+      - name: Upload test evidence (explicitly test data)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gx01-test-evidence
+          path: ${{ runner.temp }}/gx01-evidence
