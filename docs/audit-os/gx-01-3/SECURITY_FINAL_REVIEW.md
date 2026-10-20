@@ -1,6 +1,6 @@
 # GX-01.3 — inspeção final de segurança
 
-Estado: correção de bypass comprovado e 14 grupos de staging nativo aprovados; regressão final Linux no novo HEAD em fechamento. A decisão global permanece BLOCKED até os gates e a revisão humana. Não há certificação SOC 2, ISO 27001 ou homologação SaaS multiempresa.
+Estado: correção de bypass comprovado, 14 grupos de staging nativo e Linux Compose aprovados. Os quatro workflows passaram no HEAD de implementação e636ece15888777665cdd0260a503fb9dd6846f8; evidência em evidence/ci-validation.json. A decisão global permanece BLOCKED até os gates e a revisão humana. Não há certificação SOC 2, ISO 27001 ou homologação SaaS multiempresa.
 
 ## Vulnerabilidade demonstrada e corrigida
 

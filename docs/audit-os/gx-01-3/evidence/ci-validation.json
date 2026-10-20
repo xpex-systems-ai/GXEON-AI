@@ -1,0 +1,79 @@
+{
+  "branchHead": "e636ece15888777665cdd0260a503fb9dd6846f8",
+  "checkoutMerge": "53d23ed9b9a1e22d7391af01ef6b66fefbdcefb3",
+  "sourceDirty": false,
+  "note": "pull_request Actions checkout is the integration merge. Branch and checkout identities are preserved separately. A later documentation-only delivery commit is rechecked before final response.",
+  "runs": [
+    {
+      "id": 39487694893,
+      "name": "GXEON Typecheck",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39487694893"
+    },
+    {
+      "id": 39487695077,
+      "name": "GXEON Monorepo Health",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39487695077"
+    },
+    {
+      "id": 39487694886,
+      "name": "Audit OS V1",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39487694886"
+    },
+    {
+      "id": 39487694906,
+      "name": "GXEON Build",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39487694906"
+    }
+  ],
+  "jobs": [
+    {
+      "id": 118852307671,
+      "name": "audit-flow",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 118852308066,
+      "name": "isolated-staging",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "tests": {
+    "pglite": {
+      "pass": 11,
+      "fail": 0
+    },
+    "postgres17": {
+      "pass": 12,
+      "fail": 0
+    },
+    "staging": {
+      "pass": 14,
+      "fail": 0
+    },
+    "lint": {
+      "files": 19,
+      "errors": 0
+    }
+  },
+  "artifact": {
+    "id": 12294197529,
+    "sha256": "d5d0d1d33d32b33b3a145f64bb4546c7c2963f080cdb604e1a031067a625fa93",
+    "downloadedViaGitHubApi": true,
+    "digestVerified": true,
+    "files": [
+      "ci-acceptance.json",
+      "ci-api-report.json"
+    ],
+    "browserDownload": false
+  }
+}
