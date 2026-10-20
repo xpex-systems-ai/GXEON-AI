@@ -1,0 +1,990 @@
+{
+  "scope": "Entire workspace, pnpm audit --json; counts are reported occurrences, not exploit count",
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 5,
+      "moderate": 25,
+      "high": 61,
+      "critical": 0
+    },
+    "dependencies": 1180,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1180
+  },
+  "advisoryEntries": 88,
+  "advisories": [
+    {
+      "module": "postcss",
+      "severity": "moderate",
+      "title": "PostCSS has XSS via Unescaped </style> in its CSS Stringify Output",
+      "url": "https://github.com/advisories/GHSA-qx2v-qp2m-jg93",
+      "vulnerable": "<8.5.10",
+      "patched": ">=8.5.10",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>postcss"
+      ]
+    },
+    {
+      "module": "uuid",
+      "severity": "moderate",
+      "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+      "vulnerable": "<11.1.1",
+      "patched": ">=11.1.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>uuid",
+        "artifacts__gxeon-dashboard-mobile>@expo/ngrok>uuid"
+      ]
+    },
+    {
+      "module": "esbuild",
+      "severity": "low",
+      "title": "esbuild allows arbitrary file read when running the development server on Windows",
+      "url": "https://github.com/advisories/GHSA-g7r4-m6w7-qqqr",
+      "vulnerable": ">=0.27.3 <0.28.1",
+      "patched": ">=0.28.1",
+      "paths": [
+        "artifacts__api-server>esbuild"
+      ]
+    },
+    {
+      "module": "vite",
+      "severity": "moderate",
+      "title": "launch-editor: NTLMv2 hash disclosure via UNC path handling on Windows",
+      "url": "https://github.com/advisories/GHSA-v6wh-96g9-6wx3",
+      "vulnerable": ">=7.0.0 <=7.3.4",
+      "patched": ">=7.3.5",
+      "paths": [
+        "artifacts__gxeon-dashboard>vite"
+      ]
+    },
+    {
+      "module": "markdown-it",
+      "severity": "moderate",
+      "title": "markdown-it: Quadratic complexity DoS in smartquotes rule via replaceAt string operations",
+      "url": "https://github.com/advisories/GHSA-6v5v-wf23-fmfq",
+      "vulnerable": "<=14.1.1",
+      "patched": ">=14.2.0",
+      "paths": [
+        "lib__api-spec>orval>typedoc>markdown-it"
+      ]
+    },
+    {
+      "module": "undici",
+      "severity": "moderate",
+      "title": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+      "url": "https://github.com/advisories/GHSA-p88m-4jfj-68fv",
+      "vulnerable": "<6.27.0",
+      "patched": ">=6.27.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ]
+    },
+    {
+      "module": "undici",
+      "severity": "high",
+      "title": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+      "url": "https://github.com/advisories/GHSA-vxpw-j846-p89q",
+      "vulnerable": "<6.27.0",
+      "patched": ">=6.27.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ]
+    },
+    {
+      "module": "undici",
+      "severity": "low",
+      "title": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+      "url": "https://github.com/advisories/GHSA-g8m3-5g58-fq7m",
+      "vulnerable": "<6.27.0",
+      "patched": ">=6.27.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ]
+    },
+    {
+      "module": "linkify-it",
+      "severity": "high",
+      "title": "LinkifyIt#match scan loop has quadratic algorithmic complexity",
+      "url": "https://github.com/advisories/GHSA-22p9-wv53-3rq4",
+      "vulnerable": "<=5.0.0",
+      "patched": ">=5.0.1",
+      "paths": [
+        "lib__api-spec>orval>typedoc>markdown-it>linkify-it"
+      ]
+    },
+    {
+      "module": "js-yaml",
+      "severity": "moderate",
+      "title": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+      "url": "https://github.com/advisories/GHSA-h67p-54hq-rp68",
+      "vulnerable": "<3.15.0",
+      "patched": ">=3.15.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ]
+    },
+    {
+      "module": "ws",
+      "severity": "high",
+      "title": "ws: Memory exhaustion DoS from tiny fragments and data chunks",
+      "url": "https://github.com/advisories/GHSA-96hv-2xvq-fx4p",
+      "vulnerable": ">=8.0.0 <8.21.0",
+      "patched": ">=8.21.0",
+      "paths": [
+        ".>ws"
+      ]
+    },
+    {
+      "module": "ws",
+      "severity": "high",
+      "title": "ws: Memory exhaustion DoS from tiny fragments and data chunks",
+      "url": "https://github.com/advisories/GHSA-96hv-2xvq-fx4p",
+      "vulnerable": ">=7.0.0 <7.5.11",
+      "patched": ">=7.5.11",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>ws"
+      ]
+    },
+    {
+      "module": "ws",
+      "severity": "high",
+      "title": "ws: Memory exhaustion DoS from tiny fragments and data chunks",
+      "url": "https://github.com/advisories/GHSA-96hv-2xvq-fx4p",
+      "vulnerable": ">=6.0.0 <6.2.4",
+      "patched": ">=6.2.4",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@react-native/dev-middleware>ws"
+      ]
+    },
+    {
+      "module": "vite",
+      "severity": "high",
+      "title": "vite: `server.fs.deny` bypass on Windows alternate paths",
+      "url": "https://github.com/advisories/GHSA-fx2h-pf6j-xcff",
+      "vulnerable": ">=7.0.0 <=7.3.4",
+      "patched": ">=7.3.5",
+      "paths": [
+        "artifacts__gxeon-dashboard>vite"
+      ]
+    },
+    {
+      "module": "@babel/core",
+      "severity": "low",
+      "title": "@babel/core: Arbitrary File Read via sourceMappingURL Comment",
+      "url": "https://github.com/advisories/GHSA-4x5r-pxfx-6jf8",
+      "vulnerable": "<=7.29.0",
+      "patched": ">=7.29.6",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@babel/core"
+      ]
+    },
+    {
+      "module": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+      "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
+      "vulnerable": ">=2.0.0 <2.1.2",
+      "patched": ">=2.1.2",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ]
+    },
+    {
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+      "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+      "vulnerable": ">=4.0.0 <4.3.0",
+      "patched": ">=4.3.0",
+      "paths": [
+        "lib__api-spec>orval>js-yaml"
+      ]
+    },
+    {
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+      "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+      "vulnerable": ">=3.0.0 <3.15.0",
+      "patched": ">=3.15.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ]
+    },
+    {
+      "module": "linkify-it",
+      "severity": "high",
+      "title": "linkify-it: Quadratic-complexity DoS via the `mailto:` validator scan-loop on attacker text",
+      "url": "https://github.com/advisories/GHSA-v245-v573-v5vm",
+      "vulnerable": "<=5.0.1",
+      "patched": ">=5.0.2",
+      "paths": [
+        "lib__api-spec>orval>typedoc>markdown-it>linkify-it"
+      ]
+    },
+    {
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to host confusion via literal backslash authority delimiter",
+      "url": "https://github.com/advisories/GHSA-v2hh-gcrm-f6hx",
+      "vulnerable": ">=3.0.0 <=3.1.3",
+      "patched": ">=3.1.4",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ]
+    },
+    {
+      "module": "postcss",
+      "severity": "high",
+      "title": "PostCSS: Arbitrary file read and information disclosure via attacker-controlled sourceMappingURL in CSS comments",
+      "url": "https://github.com/advisories/GHSA-6g55-p6wh-862q",
+      "vulnerable": "<=8.5.11",
+      "patched": ">=8.5.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>postcss"
+      ]
+    },
+    {
+      "module": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+      "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+      "vulnerable": ">=2.0.0 <2.1.3",
+      "patched": ">=2.1.3",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ]
+    },
+    {
+      "module": "postcss",
+      "severity": "moderate",
+      "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+      "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+      "vulnerable": "<=8.5.22",
+      "patched": ">=8.5.23",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>postcss",
+        "artifacts__gxeon-dashboard>vite>postcss"
+      ]
+    },
+    {
+      "module": "undici",
+      "severity": "moderate",
+      "title": "undici vulnerable to downstream response desynchronization via retry interceptor",
+      "url": "https://github.com/advisories/GHSA-8xcm-r25x-g524",
+      "vulnerable": "<6.28.0",
+      "patched": ">=6.28.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ]
+    },
+    {
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to host confusion via backslash authority introducer",
+      "url": "https://github.com/advisories/GHSA-7p8r-x3mc-p8w7",
+      "vulnerable": ">=3.0.0 <3.1.5",
+      "patched": ">=3.1.5",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ]
+    },
+    {
+      "module": "undici",
+      "severity": "moderate",
+      "title": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+      "url": "https://github.com/advisories/GHSA-m8rv-5g2x-5cg5",
+      "vulnerable": "<6.28.0",
+      "patched": ">=6.28.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ]
+    },
+    {
+      "module": "undici",
+      "severity": "moderate",
+      "title": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+      "url": "https://github.com/advisories/GHSA-v3r7-h72x-cjcm",
+      "vulnerable": "<6.28.0",
+      "patched": ">=6.28.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ]
+    },
+    {
+      "module": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+      "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+      "vulnerable": ">=2.0.0 <2.1.4",
+      "patched": ">=2.1.4",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ]
+    },
+    {
+      "module": "undici",
+      "severity": "low",
+      "title": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+      "url": "https://github.com/advisories/GHSA-35p6-xmwp-9g52",
+      "vulnerable": "<6.27.0",
+      "patched": ">=6.27.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ]
+    },
+    {
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
+      "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+      "vulnerable": ">=3.0.0 <3.15.1",
+      "patched": ">=3.15.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ]
+    },
+    {
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
+      "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+      "vulnerable": ">=4.0.0 <4.3.1",
+      "patched": ">=4.3.1",
+      "paths": [
+        "lib__api-spec>orval>js-yaml"
+      ]
+    },
+    {
+      "module": "nanoid",
+      "severity": "high",
+      "title": "nanoid: non-secure generators can loop indefinitely with negative size",
+      "url": "https://github.com/advisories/GHSA-28wg-ghj8-5hjv",
+      "vulnerable": "<3.3.16",
+      "patched": ">=3.3.16",
+      "paths": [
+        "artifacts__gxeon-dashboard>vite>postcss>nanoid"
+      ]
+    },
+    {
+      "module": "nanoid",
+      "severity": "high",
+      "title": "nanoid: custom generators can loop indefinitely when size is zero",
+      "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+      "vulnerable": "<3.3.18",
+      "patched": ">=3.3.18",
+      "paths": [
+        "artifacts__gxeon-dashboard>vite>postcss>nanoid"
+      ]
+    },
+    {
+      "module": "postcss",
+      "severity": "high",
+      "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+      "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
+      "vulnerable": "<=8.5.17",
+      "patched": ">=8.5.18",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>postcss",
+        "artifacts__gxeon-dashboard>vite>postcss"
+      ]
+    },
+    {
+      "module": "tar",
+      "severity": "high",
+      "title": "node-tar: Uncontrolled recursion in mapHas/filesFilter allows uncatchable stack-overflow DoS via crafted long-path tar with member selection",
+      "url": "https://github.com/advisories/GHSA-r292-9mhp-454m",
+      "vulnerable": "<=7.5.20",
+      "patched": ">=7.5.21",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>tar"
+      ]
+    },
+    {
+      "module": "decode-uri-component",
+      "severity": "moderate",
+      "title": "decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input",
+      "url": "https://github.com/advisories/GHSA-vcc3-ghjq-m6fr",
+      "vulnerable": "<=0.4.2",
+      "patched": ">=0.5.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>expo-router>query-string>decode-uri-component"
+      ]
+    },
+    {
+      "module": "browserslist",
+      "severity": "high",
+      "title": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+      "url": "https://github.com/advisories/GHSA-c83g-rgw3-j3cx",
+      "vulnerable": "<=4.28.6",
+      "patched": ">=4.28.7",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@babel/core>@babel/helper-compilation-targets>browserslist"
+      ]
+    },
+    {
+      "module": "browserslist",
+      "severity": "high",
+      "title": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+      "url": "https://github.com/advisories/GHSA-73wf-gq98-2v4g",
+      "vulnerable": "<=4.28.6",
+      "patched": ">=4.28.7",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@babel/core>@babel/helper-compilation-targets>browserslist"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "moderate",
+      "title": "xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization",
+      "url": "https://github.com/advisories/GHSA-6gmq-8vp8-gcm6",
+      "vulnerable": ">=0.9.0 <=0.9.11",
+      "patched": ">=0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "moderate",
+      "title": "xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization",
+      "url": "https://github.com/advisories/GHSA-6gmq-8vp8-gcm6",
+      "vulnerable": ">=0.7.0 <=0.8.14",
+      "patched": ">=0.8.15",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to server-side request forgery via malformed IPv6 normalization",
+      "url": "https://github.com/advisories/GHSA-f65p-4m7j-42xc",
+      "vulnerable": ">=3.0.0 <3.1.6",
+      "patched": ">=3.1.6",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ]
+    },
+    {
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to server-side request forgery via repeated hostname percent-decoding",
+      "url": "https://github.com/advisories/GHSA-fph4-wmhf-6fwf",
+      "vulnerable": ">=3.1.2 <3.1.6",
+      "patched": ">=3.1.6",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ]
+    },
+    {
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to host confusion via percent-encoded scheme normalization",
+      "url": "https://github.com/advisories/GHSA-jqff-g426-hqxp",
+      "vulnerable": ">=3.0.0 <3.1.6",
+      "patched": ">=3.1.6",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: HTML raw-text closing-tag case mismatch causes output amplification",
+      "url": "https://github.com/advisories/GHSA-6mj3-qw4j-hgrw",
+      "vulnerable": ">=0.9.0-beta.1 <=0.9.11",
+      "patched": ">=0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "baseline-browser-mapping",
+      "severity": "moderate",
+      "title": "baseline-browser-mapping process termination on invalid input causes denial of service",
+      "url": "https://github.com/advisories/GHSA-w5vr-8v7q-w6rv",
+      "vulnerable": ">=2.0.0 <2.11.0",
+      "patched": ">=2.11.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@babel/core>@babel/helper-compilation-targets>browserslist>baseline-browser-mapping"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom PI grammar regex ReDoS: quadratic backtracking on unterminated processing instructions",
+      "url": "https://github.com/advisories/GHSA-g53g-w8rj-fmg7",
+      "vulnerable": ">=0.9.0-beta.9 <=0.9.10",
+      "patched": ">=0.9.11",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Element name injection via createElement() bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-w2rr-34g9-rvrj",
+      "vulnerable": ">=0.7.0 <=0.8.13",
+      "patched": ">=0.8.14",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Element name injection via createElement() bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-w2rr-34g9-rvrj",
+      "vulnerable": ">=0.9.0 <=0.9.10",
+      "patched": ">=0.9.11",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Attribute name injection via setAttribute() bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-4w3w-2rp5-g8jm",
+      "vulnerable": ">=0.7.0 <=0.8.13",
+      "patched": ">=0.8.14",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Attribute name injection via setAttribute() bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-4w3w-2rp5-g8jm",
+      "vulnerable": ">=0.9.0 <=0.9.10",
+      "patched": ">=0.9.11",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Processing Instruction Target Injection Bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-c7q8-3ch8-vqpv",
+      "vulnerable": ">=0.9.0 <=0.9.11",
+      "patched": ">=0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Processing Instruction Target Injection Bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-c7q8-3ch8-vqpv",
+      "vulnerable": ">=0.7.0 <=0.8.14",
+      "patched": ">=0.8.15",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: DocType `name` Injection Bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-27p8-2357-5qqv",
+      "vulnerable": ">=0.9.0 <=0.9.11",
+      "patched": ">=0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: DocType `name` Injection Bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-27p8-2357-5qqv",
+      "vulnerable": ">=0.7.0 <=0.8.14",
+      "patched": ">=0.8.15",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Creation-time XML Name/QName validation is bypassable via an embedded line terminator, allowing injection on the default serialization path",
+      "url": "https://github.com/advisories/GHSA-3px3-54cx-rmw9",
+      "vulnerable": ">=0.9.0 <=0.9.11",
+      "patched": ">=0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: requireWellFormed DocType publicId/systemId validation is bypassable via an embedded line terminator",
+      "url": "https://github.com/advisories/GHSA-vr34-hp96-76pp",
+      "vulnerable": ">=0.9.10 <=0.9.11",
+      "patched": ">=0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "moderate",
+      "title": "xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content",
+      "url": "https://github.com/advisories/GHSA-6h8r-xr42-gp59",
+      "vulnerable": ">=0.9.0 <=0.9.11",
+      "patched": ">=0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "moderate",
+      "title": "xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content",
+      "url": "https://github.com/advisories/GHSA-6h8r-xr42-gp59",
+      "vulnerable": ">=0.7.0 <=0.8.14",
+      "patched": ">=0.8.15",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-time attribute deduplication",
+      "url": "https://github.com/advisories/GHSA-8344-3jmq-59r6",
+      "vulnerable": ">=0.9.0 <=0.9.11",
+      "patched": ">=0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-time attribute deduplication",
+      "url": "https://github.com/advisories/GHSA-8344-3jmq-59r6",
+      "vulnerable": ">=0.7.0 <=0.8.14",
+      "patched": ">=0.8.15",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: End-tag Whitespace-Trim Regex ReDoS — quadratic backtracking in the 0.8.x end-tag parser",
+      "url": "https://github.com/advisories/GHSA-x4fp-j954-r2f4",
+      "vulnerable": ">=0.7.0 <=0.8.14",
+      "patched": ">=0.8.15",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-memory consumption",
+      "url": "https://github.com/advisories/GHSA-965w-775f-mr7g",
+      "vulnerable": ">=0.9.0 <=0.9.11",
+      "patched": ">=0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-memory consumption",
+      "url": "https://github.com/advisories/GHSA-965w-775f-mr7g",
+      "vulnerable": ">=0.7.0 <=0.8.14",
+      "patched": ">=0.8.15",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge",
+      "url": "https://github.com/advisories/GHSA-93r5-fhx6-vmg9",
+      "vulnerable": ">=0.9.0 <=0.9.11",
+      "patched": ">=0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge",
+      "url": "https://github.com/advisories/GHSA-93r5-fhx6-vmg9",
+      "vulnerable": ">=0.7.0 <=0.8.14",
+      "patched": ">=0.8.15",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ]
+    },
+    {
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+      "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+      "vulnerable": ">=3.0.0 <3.15.2",
+      "patched": ">=3.15.2",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ]
+    },
+    {
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+      "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+      "vulnerable": ">=4.0.0 <4.3.2",
+      "patched": ">=4.3.2",
+      "paths": [
+        "lib__api-spec>orval>js-yaml"
+      ]
+    },
+    {
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to host confusion via failed IDN canonicalization",
+      "url": "https://github.com/advisories/GHSA-4c8g-83qw-93j6",
+      "vulnerable": ">=3.0.0 <3.1.3",
+      "patched": ">=3.1.3",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ]
+    },
+    {
+      "module": "image-size",
+      "severity": "high",
+      "title": "image-size: JXL and HEIF parsers allow denial of service through infinite loops",
+      "url": "https://github.com/advisories/GHSA-5p2g-fcmc-qvqq",
+      "vulnerable": ">=1.2.0 <=2.0.2",
+      "patched": ">=2.0.3",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>image-size"
+      ]
+    },
+    {
+      "module": "image-size",
+      "severity": "high",
+      "title": "image-size: ICNS parser allows denial of service through an infinite loop",
+      "url": "https://github.com/advisories/GHSA-w3rx-r6r6-pgpr",
+      "vulnerable": ">=0.6.3 <=2.0.2",
+      "patched": ">=2.0.3",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>image-size"
+      ]
+    },
+    {
+      "module": "undici",
+      "severity": "moderate",
+      "title": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+      "url": "https://github.com/advisories/GHSA-3wwx-pv8p-q78v",
+      "vulnerable": ">=6.25.0 <6.28.1",
+      "patched": ">=6.28.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ]
+    },
+    {
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to authority injection via an unvalidated port in serialize",
+      "url": "https://github.com/advisories/GHSA-qw65-cvwx-89v3",
+      "vulnerable": ">=3.0.0 <3.1.7",
+      "patched": ">=3.1.7",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ]
+    },
+    {
+      "module": "markdown-it",
+      "severity": "moderate",
+      "title": "markdown-it linkify: true has two quadratic paths, so a few hundred KB of markdown blocks the event loop for tens of seconds",
+      "url": "https://github.com/advisories/GHSA-253c-mchw-3w2r",
+      "vulnerable": "<14.3.1",
+      "patched": ">=14.3.1",
+      "paths": [
+        "lib__api-spec>orval>typedoc>markdown-it"
+      ]
+    },
+    {
+      "module": "undici",
+      "severity": "low",
+      "title": "undici vulnerable to downstream response splitting via retry interceptor",
+      "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+      "vulnerable": "<6.28.1",
+      "patched": ">=6.28.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ]
+    },
+    {
+      "module": "undici",
+      "severity": "high",
+      "title": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+      "url": "https://github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+      "vulnerable": ">=6.7.0 <6.28.1",
+      "patched": ">=6.28.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ]
+    },
+    {
+      "module": "fast-uri",
+      "severity": "moderate",
+      "title": "fast-uri vulnerable to inconsistent host case normalization via percent-encoded octets",
+      "url": "https://github.com/advisories/GHSA-hrr3-gc8f-f4qj",
+      "vulnerable": ">=3.0.0 <3.1.8",
+      "patched": ">=3.1.8",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ]
+    },
+    {
+      "module": "brace-expansion",
+      "severity": "moderate",
+      "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+      "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+      "vulnerable": ">=2.0.0 <2.1.7",
+      "patched": ">=2.1.7",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ]
+    },
+    {
+      "module": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+      "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+      "vulnerable": ">=2.0.0 <2.1.6",
+      "patched": ">=2.1.6",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ]
+    },
+    {
+      "module": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+      "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+      "vulnerable": ">=2.0.0 <2.1.5",
+      "patched": ">=2.1.5",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ]
+    },
+    {
+      "module": "node-forge",
+      "severity": "high",
+      "title": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+      "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+      "vulnerable": "<=1.4.0",
+      "patched": "<0.0.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>node-forge"
+      ]
+    },
+    {
+      "module": "http-cache-semantics",
+      "severity": "high",
+      "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+      "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+      "vulnerable": "<=4.2.0",
+      "patched": "<0.0.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/ngrok>got>cacheable-request>http-cache-semantics"
+      ]
+    },
+    {
+      "module": "braces",
+      "severity": "high",
+      "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+      "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "vulnerable": "<=3.0.3",
+      "patched": "<0.0.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro-file-map>micromatch>braces"
+      ]
+    },
+    {
+      "module": "sprintf-js",
+      "severity": "moderate",
+      "title": "sprintf-js vulnerable to denial of service through unbounded precision specifiers",
+      "url": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "vulnerable": "<=1.1.3",
+      "patched": "<0.0.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js"
+      ]
+    },
+    {
+      "module": "source-map-js",
+      "severity": "high",
+      "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+      "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+      "vulnerable": ">=1.0.0 <1.2.2",
+      "patched": ">=1.2.2",
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/vite>@tailwindcss/node>source-map-js"
+      ]
+    },
+    {
+      "module": "compression",
+      "severity": "high",
+      "title": "compression vulnerable to Denial of Service via memory leak on premature response close",
+      "url": "https://github.com/advisories/GHSA-vc2v-76pw-4v95",
+      "vulnerable": "<1.8.2",
+      "patched": ">=1.8.2",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>compression"
+      ]
+    },
+    {
+      "module": "postcss-selector-parser",
+      "severity": "moderate",
+      "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+      "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+      "vulnerable": "<7.1.6",
+      "patched": ">=7.1.6",
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/typography>postcss-selector-parser"
+      ]
+    },
+    {
+      "module": "fast-copy",
+      "severity": "moderate",
+      "title": "fast-copy: Stack exhaustion in fast-copy when copying deeply-nested values",
+      "url": "https://github.com/advisories/GHSA-jggr-w7fw-pc2j",
+      "vulnerable": ">=4.0.0 <4.1.0",
+      "patched": ">=4.1.0",
+      "paths": [
+        "artifacts__api-server>pino-pretty>fast-copy"
+      ]
+    },
+    {
+      "module": "markdown-it",
+      "severity": "high",
+      "title": "markdown-it: Quadratic complexity in smartquotes with unmatched closing quotes",
+      "url": "https://github.com/advisories/GHSA-r7fv-28h4-cvq7",
+      "vulnerable": "<14.3.2",
+      "patched": ">=14.3.2",
+      "paths": [
+        "lib__api-spec>orval>typedoc>markdown-it"
+      ]
+    }
+  ]
+}

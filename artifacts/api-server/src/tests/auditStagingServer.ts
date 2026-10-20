@@ -45,6 +45,7 @@ stage.post("/__stage/stop", async (req, res) => {
 stage.use((req, res, next) => {
   const allowed = req.path === "/api/healthz" ||
     req.path === "/api/v1/audit/baseline/first-evidence-finding" ||
+    req.path === "/api/v1/audit/baseline/status" ||
     req.path.startsWith("/api/v1/audit/workflow/") ||
     /^\/api\/v1\/audit\/(?:cases|findings|evidences|health|modules|schema-diagnostics|mission-control)(?:\/|$)/.test(req.path);
   if (!allowed) { res.status(404).json({ ok: false, code: "STAGING_SCOPE_ONLY" }); return; }

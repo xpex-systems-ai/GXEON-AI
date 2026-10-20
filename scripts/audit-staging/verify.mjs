@@ -134,7 +134,12 @@ try {
     await approve(collision);
     await expect(`${base}/${collision}/finalize`, "POST", {}, "operator", 200);
     const original = await counts();
-    await expect("/api/v1/audit/baseline/first-evidence-finding", "POST", {}, "operator", 404, "FIRST_INTERNAL_CASE_NOT_FOUND");
+    const baseline = await expect("/api/v1/audit/baseline/status", "GET", undefined, "operator", 200);
+    assert.equal(baseline.data.caseConfirmed, false, "The legacy selector must exclude GX cases");
+    // This restricted role intentionally sees only GX tables, so the broader
+    // legacy write-readiness inventory also blocks the mutation before writing.
+    // The PostgreSQL admin-role regression separately requires 404 from selection.
+    await expect("/api/v1/audit/baseline/first-evidence-finding", "POST", {}, "operator", 503, "AUDIT_TABLES_MISSING");
     assert.deepEqual(await counts(), original);
   });
   await check("injected intake failure rolls back the entire transaction", async () => {

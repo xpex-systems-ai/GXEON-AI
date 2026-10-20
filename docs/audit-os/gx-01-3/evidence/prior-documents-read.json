@@ -1,0 +1,50 @@
+{
+  "directory": "docs/audit-os/gx-01-2",
+  "documents": [
+    {
+      "name": "ACCEPTANCE_MATRIX.md",
+      "bytes": 1809,
+      "sha256": "ecdfaa1960e7ba616be1873ebdc10ae6669c15fcfbe2317cbd70556994c3921b"
+    },
+    {
+      "name": "CHANGED_FILES.md",
+      "bytes": 1668,
+      "sha256": "8a49e787f36fe21db36572b3448cea5341ef28a34d16731067363c937ef82ded"
+    },
+    {
+      "name": "CI_EXTERNAL_STATUS.md",
+      "bytes": 30962,
+      "sha256": "38d4a7ed1b0985646abc6a99b3d845fb82760cb21c63258798f7c803f653e8f0"
+    },
+    {
+      "name": "CI_SOURCE_HEAD.md",
+      "bytes": 30108,
+      "sha256": "2657a24f6ca9ca0975e77feb9217ff93ae128c5e2980311caaa65b168d765f83"
+    },
+    {
+      "name": "DOWNLOAD_VALIDATION.md",
+      "bytes": 2614,
+      "sha256": "3c5090ebb3acca049b1e17a7d031e7b222021bfd5b05374497f0758754cdd32f"
+    },
+    {
+      "name": "FINAL_REPORT.md",
+      "bytes": 7120,
+      "sha256": "2f3c2238ee22c83a98acd2eb4da9ff451545c84f97d8c85f9c7ac18709e6e1c6"
+    },
+    {
+      "name": "INITIAL_SNAPSHOT.md",
+      "bytes": 3277,
+      "sha256": "8b6b2743035ef9d12940c2c9d5d3c32488d58d27dce66cc6013b6a22a02d9658"
+    },
+    {
+      "name": "SECURITY_REVIEW.md",
+      "bytes": 4734,
+      "sha256": "5cbda938d12b38f2c1e9a24f55262c5919e2932cfd7a763209dd2963e3c2a711"
+    },
+    {
+      "name": "STAGING_VALIDATION.md",
+      "bytes": 5965,
+      "sha256": "e34c3d7b50f3761a0bf7fc80440f154c904cd9831957d1e60424933d34b942b3"
+    }
+  ]
+}

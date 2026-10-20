@@ -1,0 +1,50 @@
+{
+  "testData": true,
+  "issue": "Legacy inferred case lookup selected governed closed case by asset reference without body.caseId",
+  "referenceServiceCode": "52e9c69b9b12215265c7bbb90d6371531663ec6f",
+  "red": {
+    "engine": "PostgreSQL 17.11 gx01_test, admin test role",
+    "expected": 404,
+    "actual": 201,
+    "total": 12,
+    "pass": 10,
+    "fail": 2,
+    "note": "Parent and child failures counted separately; new test added before service fix"
+  },
+  "green": {
+    "engine": "PostgreSQL 17.11 gx01_test",
+    "pass": 12,
+    "fail": 0,
+    "expected": 404,
+    "countsUnchanged": true
+  },
+  "restrictedStaging": {
+    "groups": 14,
+    "pass": 14,
+    "legacyDiscovery": {
+      "status": 200,
+      "caseConfirmed": false
+    },
+    "legacyWrite": {
+      "status": 503,
+      "code": "AUDIT_TABLES_MISSING",
+      "countsUnchanged": true
+    },
+    "note": "Minimum role sees only GX tables. No privilege expansion. Native admin regression separately proves the selector guard."
+  },
+  "localLimits": {
+    "fullTypecheck": "FAIL exit 134, heap exhausted; earlier shell lookup failure also recorded",
+    "powershell": "System.OutOfMemoryException on a separate attempt",
+    "mobileWindows": "Not rerun in GX-01.3; earlier Metro fetch limitation is historical, not approval",
+    "browser": "Both supported runtimes fail before initialization; gate E pending"
+  },
+  "result": {
+    "caseId": "813d28ef-fd99-4cc8-ae0c-cf9654f2485d",
+    "reportId": "882a245a-cd13-4228-adf3-882aacfae710",
+    "sha256": "9066235d0dce51f9d487562085666c233ceb5141e6500e3f71725b85146286c7",
+    "evidenceCount": 1,
+    "findingCount": 2,
+    "status": "CLOSED",
+    "testData": true
+  }
+}
