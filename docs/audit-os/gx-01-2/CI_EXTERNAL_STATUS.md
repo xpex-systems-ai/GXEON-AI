@@ -1,5 +1,7 @@
 # GX-01.2 — inventário e checks externos
 
+Este é o snapshot inicial. [Snapshot do commit de implementação 4fe2e08](CI_SOURCE_HEAD.md), com 42 statuses e 28 check runs, está separado para não substituir evidência histórica. Regras de main: resposta []; proteção clássica: HTTP 404, conclusão de obrigatoriedade depende do administrador. Nenhuma regra foi alterada.
+
 Snapshot inicial completo em `25931726ca4c264d918248ac1ee52a2dbd6e20f6`: 42 commit statuses e 27 check runs, sem deduplicar tipos diferentes. Cada linha possui origem, escopo, evidência, classificação e ação no JSON adjacente. Os nomes genéricos não autorizam inferir qual conta ou aplicação executam.
 
 As quatro falhas Vercel em xpex-neural foram consultadas em modo somente leitura; todas retornam `STATIC_BUILD_NO_OUT_DIR`. O log do projeto api-server-sxv4 confirma build de frontend concluído em dist/public, seguido da cobrança de public. Isso é configuração de deploy, não falha no typecheck. O escopo junior-senas-projects-4226acc3 retorna 403 por ausência de concessão ao time. Nenhum CLI Vercel foi encontrado neste ambiente; não há fallback autenticado disponível.

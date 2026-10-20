@@ -41,4 +41,4 @@ Manter somente dados sintéticos até a revisão. Depois da aprovação e do pra
 
 ## Evidência
 
-O runner grava .gx012/evidence/acceptance.json com sourceCommit, sourceDirty, IDs, horários, 13 resultados e chamadas sem Authorization/body/segredos. O snapshot sanitizado correspondente será versionado em evidence/. O CI publica apenas .gx012/evidence, nunca a configuração ou logs completos.
+O runner grava .gx012/evidence/acceptance.json com sourceCommit, sourceDirty, IDs, horários, 13 resultados e chamadas sem Authorization/body/segredos. Os snapshots sanitizados estão em evidence/acceptance.json (nativo) e ci-acceptance.json (Docker, PostgreSQL 17.11); ambos com sourceDirty=false e 13 PASS. O job isolated-staging do workflow 39479943572 passou após corrigir a rede. O CI publica apenas .gx012/evidence, nunca a configuração ou logs completos. O checkout CI é o merge de integração da PR, mapeado ao HEAD da implementação em ci-source-head.json.

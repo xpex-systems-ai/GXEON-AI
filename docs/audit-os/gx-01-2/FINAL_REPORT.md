@@ -25,14 +25,25 @@ Decisão: BLOCKED por evidências insuficientes do download e pendências de ace
 | test:audit com PostgreSQL 17 | 11/11 PASS |
 | verify:audit-staging | 13 grupos PASS local nativo; repetição vinculada ao commit no snapshot |
 | Monorepo Health | comando executado com exit 0; é radar documental, não certificação |
-| build completo | Em fechamento; primeira tentativa encontrou spawn pnpm ENOENT mobile no Windows, correção aplicada |
+| build completo | PASS Linux CI; Windows API/dashboard/mockup PASS, mobile falha em fetch do Metro após correção de spawn. Não declarar build completo Windows aprovado |
 | navegador/arquivo baixado | PENDENTE, runtime indisponível; não contornada política |
 
-O SHA de origem testado e o indicador sourceDirty ficam em evidence/acceptance.json. O HEAD entregue deve ser obtido com git rev-parse HEAD e conferido com a PR; snapshots antigos têm seu próprio SHA e não certificam outro commit. Os resultados de Actions do novo HEAD serão anexados antes da entrega final.
+O SHA nativo testado é `39c0cfe9141cb8aafaf28ea9770ef76932812a6b`, sourceDirty=false, em evidence/acceptance.json. O último commit de implementação é `4fe2e08e9033ad00722b6b22f37a175bf19e15fd`; depois dele este pacote acrescenta somente documentação e evidências. Actions pull_request executou checkout do merge de integração `245eee31ca53cfffba143c8bc54d5a4d444f2c46`, sourceDirty=false, associado ao HEAD 4fe2e08 no artefato do workflow. Isso está explicitamente preservado em evidence/ci-source-head.json e ci-acceptance.json; não substituir esse SHA pelo da branch.
+
+| CI no commit de implementação | Resultado |
+| --- | --- |
+| [Typecheck](https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39479943578) | PASS |
+| [Build completo Linux](https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39479943766) | PASS |
+| [Audit OS V1](https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39479943572) | PASS: 11 PGlite, 11 PostgreSQL 17, lint, tipos e 13 grupos Compose |
+| [Monorepo Health](https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39479943503) | PASS |
+
+O ZIP de staging foi recuperado pela API GitHub, teve digest SHA-256 conferido e continha somente acceptance.json e api-report.json. O relatório do CI foi validado offline; o local foi comparado também ao SQL e à API. Isso não prova download pela UI. Caso local `0f1f0a5b-5894-4275-a044-a02259a1caec`, relatório `3aed17f5-c895-414a-a39e-751d3bb05e96`, hash `eb79aad852b91f17ccc7671a86100ca43e540001a34bca827ce7ce932e863a69`.
+
+O HEAD documental entregue deve ser obtido com git rev-parse HEAD e conferido com a PR; seus Actions e inventário finais são verificados separadamente na entrega/descrição da PR. Snapshots identificam seus próprios SHAs e não certificam outro commit por inferência.
 
 ## Externos e ações humanas
 
-CI_EXTERNAL_STATUS.md e seus JSONs registram todos os resultados recuperados. Quatro Vercel xpex-neural falham por public ausente após build; o proprietário deve confirmar aplicativo/root/output/runtime corretos. Outros projetos retornam account blocked ou não permitem leitura do escopo. As duas falhas Netlify não têm log acessível nesta sessão. Não desativar checks e não presumir irrelevância. Regras de main retornaram lista vazia; proteção clássica retornou HTTP 404, que sozinho não prova ausência de regra ou concede poder administrativo. Mantenedor deve confirmar o conjunto obrigatório.
+CI_EXTERNAL_STATUS.md registra 42 statuses e 27 check runs iniciais; CI_SOURCE_HEAD.md registra 42 statuses e 28 check runs do commit de implementação. O snapshot deste último tinha 29 failures, 12 successes e 1 pending nos commit statuses. Quatro Vercel xpex-neural iniciais falham por public ausente após build; no commit de implementação duas dessas configurações ainda retornam esse erro e duas passam a informar bloqueio de conta. O proprietário deve confirmar aplicativo/root/output/runtime corretos. Outros projetos retornam account blocked ou não permitem leitura do escopo. As duas falhas Netlify não têm log acessível nesta sessão. Não desativar checks e não presumir irrelevância. Regras de main retornaram lista vazia; proteção clássica retornou HTTP 404, que sozinho não prova ausência de regra ou concede poder administrativo. Mantenedor deve confirmar o conjunto obrigatório.
 
 O revisor humano deve executar DOWNLOAD_VALIDATION.md e confirmar arquivo, identidade e integridade, definir quais projetos externos compõem o produto, resolver/justificar seus bloqueios e revisar o diff. Credenciais do staging não podem ser anexadas. Os dados são sintéticos e a revisão automatizada com dois tokens é somente fixture.
 
@@ -51,6 +62,6 @@ Não há nova migração de produção, ativação de escrita produtiva, publica
 - [x] Inventário completo inicial de externos, com causas ou bloqueios explícitos.
 - [ ] Bloqueios externos relevantes resolvidos/justificados pelo proprietário.
 - [ ] Download real inspecionado e assinado por revisor.
-- [ ] Todos os checks de engenharia confirmados no HEAD final.
+- [x] Quatro workflows de engenharia confirmados no commit de implementação; novo HEAD documental rechecado na entrega.
 - [ ] Revisão humana independente.
 - [x] Sem merge e sem produção.
