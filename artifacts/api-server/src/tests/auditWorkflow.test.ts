@@ -263,6 +263,7 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and 
     method = "GET",
     body?: unknown,
     role = "operator",
+    extraHeaders: Record<string, string> = {},
   ) {
     const token =
       role === "operator"
@@ -273,6 +274,7 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and 
     const res = await fetch(`${origin}/api${route}`, {
       method,
       headers: {
+        ...extraHeaders,
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
@@ -280,7 +282,7 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and 
     });
     calls.push({
       method,
-      path: route,
+      path: route.split("?")[0],
       status: res.status,
       contentType: res.headers.get("content-type"),
     });
@@ -328,6 +330,10 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and 
           (await request("/v1/audit/health", "GET", undefined, "")).data,
         );
         assert.equal((await request("/v1/audit/not-a-route")).status, 404);
+        assert.equal(app.get("trust proxy"), false);
+        assert.equal((await request(`${base}?access_token=test-only-operator-credential`, "POST", intake, "", {
+          "X-Forwarded-For": "127.0.0.1", "X-Original-Authorization": "Bearer test-only-operator-credential", "X-Audit-Role": "operator",
+        })).status, 401, "Forwarded identity, role headers and query credentials do not grant access");
       },
     );
     const created = await request(base, "POST", intake);
@@ -514,6 +520,20 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and 
         }
       },
     );
+    if (testUrl) await t.test("legacy baseline discovery cannot select a CLOSED GX case with the same asset reference", async () => {
+      const created = await request(base, "POST", { ...intake, requestId: randomUUID(), assetReference: "https://github.com/xpex-systems-ai/GXEON-AI" });
+      const collisionId = created.data.caseId as string;
+      assert.equal((await request(`${base}/${collisionId}/run`, "POST", {})).status, 200);
+      assert.equal((await request(`${base}/${collisionId}/review`, "POST", {
+        decision: "approve", humanReviewed: true, reviewReference: "TEST DATA - credential fixture",
+      }, "reviewer")).status, 200);
+      assert.equal((await request(`${base}/${collisionId}/finalize`, "POST", {})).status, 200);
+      const before = await sql("SELECT (SELECT count(*)::int FROM audit_findings) AS findings, (SELECT count(*)::int FROM audit_evidences) AS evidences");
+      const legacy = await request("/v1/audit/baseline/first-evidence-finding", "POST", {});
+      assert.equal(legacy.status, 404, "Legacy discovery must exclude GX cases even without body.caseId");
+      assert.equal(legacy.data.code, "FIRST_INTERNAL_CASE_NOT_FOUND");
+      assert.deepEqual((await sql("SELECT (SELECT count(*)::int FROM audit_findings) AS findings, (SELECT count(*)::int FROM audit_evidences) AS evidences")).rows, before.rows);
+    });
     await t.test(
       "tampered evidence is blocked; failed intake rolls back assets and cases",
       async () => {

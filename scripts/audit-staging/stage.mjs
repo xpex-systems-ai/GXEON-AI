@@ -12,7 +12,8 @@ function command(executable, args, env = process.env) {
   return result.stdout;
 }
 async function waitFor(check, name) {
-  for (let n = 0; n < 60; n++) { try { const value = await check(); if (value) return value; } catch { /* readiness only */ } await sleep(500); }
+  // Cold TypeScript imports can exceed 30s on constrained Windows hosts.
+  for (let n = 0; n < 240; n++) { try { const value = await check(); if (value) return value; } catch { /* readiness only */ } await sleep(500); }
   throw new Error("STAGING_NOT_READY: " + name);
 }
 function native(config, name, args) {

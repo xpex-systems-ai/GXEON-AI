@@ -16,7 +16,7 @@ const checks = [];
 const directory = path.join(stateDir, "evidence");
 await mkdir(directory, { recursive: true });
 const payload = () => ({
-  requestId: randomUUID(), assetName: "GX-01.2 TEST DATA",
+  requestId: randomUUID(), assetName: "GX-01.3 TEST DATA",
   assetReference: "test-fixture/vercel.json", authorizationReference: "test-fixture/authorized-scope",
   authorized: true, testData: true, checks: ["vercel_api_routing", "vercel_security_headers"],
   artifact: { name: "vercel.json", content: JSON.stringify({ rewrites: [{ source: "/(.*)", destination: "/index.html" }] }) },
@@ -128,6 +128,15 @@ try {
       await assert.rejects(query(config, sql), (error) => error.code === "42501");
     }
   });
+  await check("legacy inferred baseline cannot mutate a closed GX case by asset reference", async () => {
+    const collision = (await expect(base, "POST", { ...payload(), assetReference: "https://github.com/xpex-systems-ai/GXEON-AI" }, "operator", 201)).data.caseId;
+    await expect(`${base}/${collision}/run`, "POST", {}, "operator", 200);
+    await approve(collision);
+    await expect(`${base}/${collision}/finalize`, "POST", {}, "operator", 200);
+    const original = await counts();
+    await expect("/api/v1/audit/baseline/first-evidence-finding", "POST", {}, "operator", 404, "FIRST_INTERNAL_CASE_NOT_FOUND");
+    assert.deepEqual(await counts(), original);
+  });
   await check("injected intake failure rolls back the entire transaction", async () => {
     const original = await counts();
     await query(config, "ALTER TABLE audit_evidences ADD CONSTRAINT gx012_staging_failure CHECK (title <> 'Submitted vercel.json') NOT VALID", [], true);
@@ -191,7 +200,7 @@ try {
     }
   });
   const evidence = {
-    version: "gx01.2", testData: true, generatedAt: new Date().toISOString(),
+    version: "gx01.3", testData: true, generatedAt: new Date().toISOString(),
     sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { cwd: repoRoot, encoding: "utf8" }).trim(),
     sourceDirty: Boolean(execFileSync("git", ["status", "--porcelain"], { cwd: repoRoot, encoding: "utf8" }).trim()),
     mode: config.mode, databaseVersion: before.database.version, appRole: before.database.role,

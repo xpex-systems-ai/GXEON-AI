@@ -1,0 +1,88 @@
+{
+  "readOnly": true,
+  "scope": "xpex-neural",
+  "note": "Connector filters project settings: absent build/output/root fields are UNVERIFIED, not null defaults. Names are not unique across teams.",
+  "projects": [
+    {
+      "scope": "xpex-neural",
+      "id": "prj_UBNjAlz7cWsPvNDILUk66440E7nn",
+      "name": "gxeon-ai-gxeon-dashboard",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": "vite",
+      "nodeVersion": "24.x",
+      "repository": {}
+    },
+    {
+      "scope": "xpex-neural",
+      "id": "prj_RYR5u33XB5nE0UkSwyAGKSQft1gZ",
+      "name": "gxeon-ail",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "repository": {}
+    },
+    {
+      "scope": "xpex-neural",
+      "id": "prj_tQcb12xWLeTTY6h7Vhw6w4yp5frg",
+      "name": "ai-ia",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "repository": {}
+    },
+    {
+      "scope": "xpex-neural",
+      "id": "prj_jpULAotL78AU5SlOd5GcyBTI8UWO",
+      "name": "gxeon-ai-api-server",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "repository": {}
+    },
+    {
+      "scope": "xpex-neural",
+      "id": "prj_hODQYobRkk4O6rpZkGZgNkFrNwA4",
+      "name": "gxeon-ai-ia",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "repository": {}
+    },
+    {
+      "scope": "xpex-neural",
+      "id": "prj_EMDNZwGOLK3bdtOHcVecT84xp4Dp",
+      "name": "gxeon-ai01",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "repository": {}
+    },
+    {
+      "scope": "xpex-neural",
+      "id": "prj_wu5d2rPcPUhdhIQ01P0Y4BddaJT2",
+      "name": "gxeon-ai",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "repository": {}
+    },
+    {
+      "scope": "xpex-neural",
+      "id": "prj_AqiT3Idishevz42J1s9E5LZ3SA85",
+      "name": "gxeon-ai-api-server-sxv4",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "repository": {}
+    },
+    {
+      "scope": "xpex-neural",
+      "id": "prj_mo5cvJX4AXuPNsYXtQO3zYARLsLh",
+      "name": "gxeon-ai-mockup-sandbox",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": "vite",
+      "nodeVersion": "24.x",
+      "repository": {}
+    }
+  ]
+}
