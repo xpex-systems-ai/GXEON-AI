@@ -1,0 +1,1016 @@
+{
+  "queriedAt": "2026-10-20T20:27:44.226Z",
+  "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+  "readOnly": true,
+  "vercel": [
+    {
+      "provider": "Vercel",
+      "id": "prj_UBNjAlz7cWsPvNDILUk66440E7nn",
+      "name": "gxeon-ai-gxeon-dashboard",
+      "scope": "xpex-neural",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "project": {
+        "framework": "vite",
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_Gq2SbzbtR3zghnszV5dKexExiHin",
+          "url": "gxeon-ai-gxeon-dashboard-gokhe2ejs-xpex-neural.vercel.app",
+          "createdAt": 1792526663917,
+          "readyState": "ERROR",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "gxeon-ai-gxeon-dashboard-fawn.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [
+        {
+          "name": "SUPABASE_URL",
+          "target": [
+            "production",
+            "preview"
+          ],
+          "type": "sensitive"
+        },
+        {
+          "name": "SUPABASE_ANON_KEY",
+          "target": [
+            "production",
+            "preview"
+          ],
+          "type": "sensitive"
+        },
+        {
+          "name": "SUPABASE_SERVICE_ROLE_KEY",
+          "target": [
+            "production",
+            "preview"
+          ],
+          "type": "sensitive"
+        },
+        {
+          "name": "DATABASE_URL",
+          "target": [
+            "production",
+            "preview"
+          ],
+          "type": "sensitive"
+        },
+        {
+          "name": "DIRECT_URL",
+          "target": [
+            "production",
+            "preview"
+          ],
+          "type": "sensitive"
+        }
+      ],
+      "hiddenProductionEnvCount": 0
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_RYR5u33XB5nE0UkSwyAGKSQft1gZ",
+      "name": "gxeon-ail",
+      "scope": "xpex-neural",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "project": {
+        "framework": null,
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_CZoXrAxzTXHCQEX9EXZn3UwCyPqX",
+          "url": "gxeon-cj19y6yr9-xpex-neural.vercel.app",
+          "createdAt": 1792526664252,
+          "readyState": "READY",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "gxeon-ail.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [],
+      "hiddenProductionEnvCount": 0
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_tQcb12xWLeTTY6h7Vhw6w4yp5frg",
+      "name": "ai-ia",
+      "scope": "xpex-neural",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "project": {
+        "framework": null,
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_61taXHM6U1nkb1eWd7TyWTmAmKnc",
+          "url": "ai-l1pamtmxx-xpex-neural.vercel.app",
+          "createdAt": 1792526664598,
+          "readyState": "READY",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "ai-ia-ten.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [],
+      "hiddenProductionEnvCount": 0
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_jpULAotL78AU5SlOd5GcyBTI8UWO",
+      "name": "gxeon-ai-api-server",
+      "scope": "xpex-neural",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "project": {
+        "framework": null,
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_H9wtd4bZp9sWpsvajqXb68svPUo8",
+          "url": "gxeon-ai-api-server-n7lrpmacs-xpex-neural.vercel.app",
+          "createdAt": 1792526665494,
+          "readyState": "READY",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "gxeon-ai-api-server.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [],
+      "hiddenProductionEnvCount": 0
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_hODQYobRkk4O6rpZkGZgNkFrNwA4",
+      "name": "gxeon-ai-ia",
+      "scope": "xpex-neural",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "project": {
+        "framework": null,
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_CiNG9qSLXBSF9NNMdJ9UmshjVajU",
+          "url": "gxeon-ai-glg123jbf-xpex-neural.vercel.app",
+          "createdAt": 1792526665602,
+          "readyState": "READY",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "gxeon-ai-ia.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [],
+      "hiddenProductionEnvCount": 0
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_EMDNZwGOLK3bdtOHcVecT84xp4Dp",
+      "name": "gxeon-ai01",
+      "scope": "xpex-neural",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "project": {
+        "framework": null,
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_3P4JLkdyZ88tpC2NFhNpwcMs9Ka6",
+          "url": "gxeon-ai01-dwnsahn2j-xpex-neural.vercel.app",
+          "createdAt": 1792526665879,
+          "readyState": "READY",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "gxeon-ai01.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [],
+      "hiddenProductionEnvCount": 0
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_wu5d2rPcPUhdhIQ01P0Y4BddaJT2",
+      "name": "gxeon-ai",
+      "scope": "xpex-neural",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "project": {
+        "framework": null,
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_BvNYSHu181iQGniMGvyuH8Gre4PH",
+          "url": "gxeon-qp24a095x-xpex-neural.vercel.app",
+          "createdAt": 1792526666615,
+          "readyState": "ERROR",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "gxeon-ai-gamma.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [],
+      "hiddenProductionEnvCount": 0
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_AqiT3Idishevz42J1s9E5LZ3SA85",
+      "name": "gxeon-ai-api-server-sxv4",
+      "scope": "xpex-neural",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "project": {
+        "framework": null,
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_CydWaSM3HEa4GTbhkzjcb6BpSV9d",
+          "url": "gxeon-ai-api-server-sxv4-rnh1bumd7-xpex-neural.vercel.app",
+          "createdAt": 1792526664931,
+          "readyState": "ERROR",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "gxeon-ai-api-server-sxv4.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [
+        {
+          "name": "PORT",
+          "target": [
+            "production",
+            "preview"
+          ],
+          "type": "sensitive"
+        },
+        {
+          "name": "BASE_PATH",
+          "target": [
+            "production",
+            "preview"
+          ],
+          "type": "sensitive"
+        }
+      ],
+      "hiddenProductionEnvCount": 0
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_mo5cvJX4AXuPNsYXtQO3zYARLsLh",
+      "name": "gxeon-ai-mockup-sandbox",
+      "scope": "xpex-neural",
+      "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "project": {
+        "framework": "vite",
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_53NvDuUD8tnmx2x9jKjvGo8oiLSZ",
+          "url": "gxeon-ai-mockup-sandbox-k0k2wc3tw-xpex-neural.vercel.app",
+          "createdAt": 1792526664019,
+          "readyState": "ERROR",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "gxeon-ai-mockup-sandbox.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [],
+      "hiddenProductionEnvCount": 0
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_STlhUAtwut0oWBsWD5PjmCFLhjBq",
+      "name": "gxeon-ai-api-server-611a",
+      "scope": "junior-senas-projects-4226acc3",
+      "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+      "project": {
+        "error": 403
+      },
+      "domainError": 403,
+      "envError": 403
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_F3OFtryPk4YmYwXc3zEJkbZTRZkv",
+      "name": "gxeon-ai-aoo",
+      "scope": "junior-senas-projects-4226acc3",
+      "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+      "project": {
+        "error": 403
+      },
+      "domainError": 403,
+      "envError": 403
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_R2ILQClNw9Zk8XCbj0EalzflwtVO",
+      "name": "gxeon-ai-api-server",
+      "scope": "junior-senas-projects-4226acc3",
+      "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+      "project": {
+        "error": 403
+      },
+      "domainError": 403,
+      "envError": 403
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_kssB4fuFxooxei5CYvt091ihp77z",
+      "name": "gxeon-ai-a",
+      "scope": "junior-senas-projects-4226acc3",
+      "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+      "project": {
+        "error": 403
+      },
+      "domainError": 403,
+      "envError": 403
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_u4vHMlTnqVXLaJwnpTEn8T0JMOmD",
+      "name": "gxeo",
+      "scope": "junior-senas-projects-4226acc3",
+      "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+      "project": {
+        "error": 403
+      },
+      "domainError": 403,
+      "envError": 403
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_owdXFSlvK1GBrWVuYCqeHpTlYjP4",
+      "name": "gxeon-audit-os",
+      "scope": "gxeon",
+      "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB",
+      "project": {
+        "framework": null,
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_AC6EAYJbi2nNzsZgpAfmfDZooMfD",
+          "url": "gxeon-audit-ks940ib3d-gxeon.vercel.app",
+          "createdAt": 1792526665069,
+          "readyState": "READY",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "gxeon-audit-os.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [
+        {
+          "name": "SUPABASE_SERVICE_ROLE_KE",
+          "target": [
+            "preview",
+            "production"
+          ],
+          "type": "sensitive"
+        },
+        {
+          "name": "SUPABASE_PUBLISHABLE_KEY",
+          "target": [
+            "preview",
+            "production"
+          ],
+          "type": "sensitive"
+        },
+        {
+          "name": "SUPABASE_ANON_KEY",
+          "target": [
+            "preview",
+            "production"
+          ],
+          "type": "sensitive"
+        },
+        {
+          "name": "SUPABASE_URL",
+          "target": [
+            "production",
+            "preview"
+          ],
+          "type": "sensitive"
+        },
+        {
+          "name": "VITE_GXEON_API_BASE_URL",
+          "target": [
+            "preview",
+            "production"
+          ],
+          "type": "sensitive"
+        }
+      ],
+      "hiddenProductionEnvCount": 0
+    },
+    {
+      "provider": "Vercel",
+      "id": "prj_xnxV5ZVur0Sv7f1uvZHADP358nHf",
+      "name": "gxeon-ai-api-server",
+      "scope": "gxeon",
+      "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB",
+      "project": {
+        "framework": "express",
+        "nodeVersion": "24.x",
+        "live": false,
+        "latestDeployment": {
+          "id": "dpl_CavDzJ1SuAgoRhBYom7A8KnZq6kQ",
+          "url": "gxeon-ai-api-server-5cg59ky83-gxeon.vercel.app",
+          "createdAt": 1792526664419,
+          "readyState": "ERROR",
+          "target": null
+        }
+      },
+      "domains": [
+        {
+          "name": "gxeon-ai-api-server-two.vercel.app",
+          "verified": true,
+          "redirect": null,
+          "gitBranch": null
+        }
+      ],
+      "envNames": [],
+      "hiddenProductionEnvCount": 0
+    }
+  ],
+  "deployments": [
+    {
+      "projectId": "prj_UBNjAlz7cWsPvNDILUk66440E7nn",
+      "scope": "xpex-neural",
+      "deployments": [
+        {
+          "id": "dpl_Gq2SbzbtR3zghnszV5dKexExiHin",
+          "name": "gxeon-ai-gxeon-dashboard",
+          "url": "gxeon-ai-gxeon-dashboard-gokhe2ejs-xpex-neural.vercel.app",
+          "state": "ERROR",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai-gxeon-dashboard/Gq2SbzbtR3zghnszV5dKexExiHin"
+        }
+      ]
+    },
+    {
+      "projectId": "prj_RYR5u33XB5nE0UkSwyAGKSQft1gZ",
+      "scope": "xpex-neural",
+      "deployments": [
+        {
+          "id": "dpl_CZoXrAxzTXHCQEX9EXZn3UwCyPqX",
+          "name": "gxeon-ail",
+          "url": "gxeon-cj19y6yr9-xpex-neural.vercel.app",
+          "state": "READY",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ail/CZoXrAxzTXHCQEX9EXZn3UwCyPqX"
+        }
+      ]
+    },
+    {
+      "projectId": "prj_tQcb12xWLeTTY6h7Vhw6w4yp5frg",
+      "scope": "xpex-neural",
+      "deployments": [
+        {
+          "id": "dpl_61taXHM6U1nkb1eWd7TyWTmAmKnc",
+          "name": "ai-ia",
+          "url": "ai-l1pamtmxx-xpex-neural.vercel.app",
+          "state": "READY",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/xpex-neural/ai-ia/61taXHM6U1nkb1eWd7TyWTmAmKnc"
+        }
+      ]
+    },
+    {
+      "projectId": "prj_jpULAotL78AU5SlOd5GcyBTI8UWO",
+      "scope": "xpex-neural",
+      "deployments": [
+        {
+          "id": "dpl_H9wtd4bZp9sWpsvajqXb68svPUo8",
+          "name": "gxeon-ai-api-server",
+          "url": "gxeon-ai-api-server-n7lrpmacs-xpex-neural.vercel.app",
+          "state": "READY",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai-api-server/H9wtd4bZp9sWpsvajqXb68svPUo8"
+        }
+      ]
+    },
+    {
+      "projectId": "prj_hODQYobRkk4O6rpZkGZgNkFrNwA4",
+      "scope": "xpex-neural",
+      "deployments": [
+        {
+          "id": "dpl_CiNG9qSLXBSF9NNMdJ9UmshjVajU",
+          "name": "gxeon-ai-ia",
+          "url": "gxeon-ai-glg123jbf-xpex-neural.vercel.app",
+          "state": "READY",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai-ia/CiNG9qSLXBSF9NNMdJ9UmshjVajU"
+        }
+      ]
+    },
+    {
+      "projectId": "prj_EMDNZwGOLK3bdtOHcVecT84xp4Dp",
+      "scope": "xpex-neural",
+      "deployments": [
+        {
+          "id": "dpl_3P4JLkdyZ88tpC2NFhNpwcMs9Ka6",
+          "name": "gxeon-ai01",
+          "url": "gxeon-ai01-dwnsahn2j-xpex-neural.vercel.app",
+          "state": "READY",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai01/3P4JLkdyZ88tpC2NFhNpwcMs9Ka6"
+        }
+      ]
+    },
+    {
+      "projectId": "prj_wu5d2rPcPUhdhIQ01P0Y4BddaJT2",
+      "scope": "xpex-neural",
+      "deployments": [
+        {
+          "id": "dpl_BvNYSHu181iQGniMGvyuH8Gre4PH",
+          "name": "gxeon-ai",
+          "url": "gxeon-qp24a095x-xpex-neural.vercel.app",
+          "state": "ERROR",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai/BvNYSHu181iQGniMGvyuH8Gre4PH"
+        }
+      ]
+    },
+    {
+      "projectId": "prj_AqiT3Idishevz42J1s9E5LZ3SA85",
+      "scope": "xpex-neural",
+      "deployments": [
+        {
+          "id": "dpl_CydWaSM3HEa4GTbhkzjcb6BpSV9d",
+          "name": "gxeon-ai-api-server-sxv4",
+          "url": "gxeon-ai-api-server-sxv4-rnh1bumd7-xpex-neural.vercel.app",
+          "state": "ERROR",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai-api-server-sxv4/CydWaSM3HEa4GTbhkzjcb6BpSV9d"
+        }
+      ]
+    },
+    {
+      "projectId": "prj_mo5cvJX4AXuPNsYXtQO3zYARLsLh",
+      "scope": "xpex-neural",
+      "deployments": [
+        {
+          "id": "dpl_53NvDuUD8tnmx2x9jKjvGo8oiLSZ",
+          "name": "gxeon-ai-mockup-sandbox",
+          "url": "gxeon-ai-mockup-sandbox-k0k2wc3tw-xpex-neural.vercel.app",
+          "state": "ERROR",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai-mockup-sandbox/53NvDuUD8tnmx2x9jKjvGo8oiLSZ"
+        }
+      ]
+    },
+    {
+      "projectId": "prj_owdXFSlvK1GBrWVuYCqeHpTlYjP4",
+      "scope": "gxeon",
+      "deployments": [
+        {
+          "id": "dpl_AC6EAYJbi2nNzsZgpAfmfDZooMfD",
+          "name": "gxeon-audit-os",
+          "url": "gxeon-audit-ks940ib3d-gxeon.vercel.app",
+          "state": "READY",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/gxeon/gxeon-audit-os/AC6EAYJbi2nNzsZgpAfmfDZooMfD"
+        }
+      ]
+    },
+    {
+      "projectId": "prj_xnxV5ZVur0Sv7f1uvZHADP358nHf",
+      "scope": "gxeon",
+      "deployments": [
+        {
+          "id": "dpl_CavDzJ1SuAgoRhBYom7A8KnZq6kQ",
+          "name": "gxeon-ai-api-server",
+          "url": "gxeon-ai-api-server-5cg59ky83-gxeon.vercel.app",
+          "state": "ERROR",
+          "sha": "7687bf248cfc6034af198926a2b07d045ca9b715",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "inspectorUrl": "https://vercel.com/gxeon/gxeon-ai-api-server/CavDzJ1SuAgoRhBYom7A8KnZq6kQ"
+        }
+      ]
+    }
+  ],
+  "railway": [
+    {
+      "provider": "Railway",
+      "projectId": "e09ea6c9-a436-4a80-b524-8b3cedc7e87c",
+      "environmentId": "2a719a3a-0312-452b-916c-d48eb595ee79",
+      "serviceId": "0446e80c-1012-4e83-9ac7-dfd547b5b36c",
+      "service": {
+        "id": "0446e80c-1012-4e83-9ac7-dfd547b5b36c",
+        "name": "gxeon-plugin-api",
+        "state": "live"
+      },
+      "environment": {
+        "id": "2a719a3a-0312-452b-916c-d48eb595ee79",
+        "name": "production"
+      },
+      "config": {
+        "source": {
+          "repo": "xpex-systems-ai/xpex-systems-command",
+          "branch": "feat/gxeon-buyer-radar-20261014",
+          "rootDirectory": "/buyer-radar",
+          "checkSuites": false
+        },
+        "build": {
+          "builder": "RAILPACK",
+          "buildCommand": "",
+          "buildEnvironment": "V3"
+        },
+        "deploy": {
+          "startCommand": "node command-v06.js",
+          "preDeployCommand": [
+            "npm test && node --test testnet-402.test.js"
+          ],
+          "healthcheckPath": "/health",
+          "healthcheckTimeout": 120,
+          "restartPolicyMaxRetries": 5,
+          "useLegacyStacker": false,
+          "ipv6EgressEnabled": false,
+          "runtime": "V2",
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1
+            }
+          }
+        }
+      },
+      "domains": {
+        "serviceDomains": [
+          {
+            "id": "02758246-3776-4899-89f6-182ee1e2d101",
+            "domain": "gxeon-plugin-api-production.up.railway.app",
+            "targetPort": null
+          }
+        ],
+        "customDomains": []
+      },
+      "variableNames": [
+        "GXEON_AUDIT_ALLOWED_HOSTS",
+        "GXEON_COMMERCE_BASE_URL",
+        "GXEON_FACILITATOR_MAINNET_URL",
+        "GXEON_MAINNET_APPROVED",
+        "GXEON_PAYMENT_ASSET",
+        "GXEON_PAYMENT_MODE",
+        "GXEON_PAYMENT_NETWORK",
+        "GXEON_PRICE_USDC",
+        "GXEON_RECEIVER_ADDRESS",
+        "NEXT_TELEMETRY_DISABLED",
+        "RADAR_PASSWORD",
+        "SESSION_SECRET",
+        "XPEX_ENVIRONMENT"
+      ],
+      "latestDeployment": {
+        "id": "e8325708-201d-4d46-b7b0-c449aaf140f0",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-16T22:00:30.509Z",
+        "url": null
+      },
+      "volumeCount": 0,
+      "staged": null
+    },
+    {
+      "provider": "Railway",
+      "projectId": "4437bfad-2670-4ade-923f-25d02d59ea5b",
+      "environmentId": "4297607c-5825-467a-aae5-3c1332abf73c",
+      "serviceId": "3f83d5a8-a96c-4ea2-b3a2-54e7cd9fb35d",
+      "service": {
+        "id": "3f83d5a8-a96c-4ea2-b3a2-54e7cd9fb35d",
+        "name": "gxeon-agent-gateway",
+        "state": "live"
+      },
+      "environment": {
+        "id": "4297607c-5825-467a-aae5-3c1332abf73c",
+        "name": "production"
+      },
+      "config": {
+        "source": {
+          "repo": "xpex-systems-ai/XPeX-Plugin-Factory-",
+          "branch": "main",
+          "commitSha": "7d12743510019e3b378c0404c3f745db80f40ada"
+        },
+        "build": {
+          "builder": "RAILPACK",
+          "buildEnvironment": "V3"
+        },
+        "deploy": {
+          "healthcheckPath": "/health",
+          "healthcheckTimeout": 30,
+          "useLegacyStacker": false,
+          "ipv6EgressEnabled": false,
+          "runtime": "V2",
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1
+            }
+          }
+        }
+      },
+      "domains": {
+        "serviceDomains": [
+          {
+            "id": "b7e1b0b3-c963-4117-80fd-4572498ad19f",
+            "domain": "gxeon-agent-gateway-production.up.railway.app",
+            "targetPort": null
+          },
+          {
+            "id": "8212650e-19c5-43b4-8efc-93c6e2da2a82",
+            "domain": "xpex-plugin-factory-production.up.railway.app",
+            "targetPort": null
+          }
+        ],
+        "customDomains": []
+      },
+      "variableNames": [
+        "NEXT_TELEMETRY_DISABLED",
+        "STRIPE_WEBHOOK_SECRET",
+        "XPEX_FACTORY_ENV",
+        "XPEX_FACTORY_PUBLIC_URL",
+        "XPEX_X402_ENABLED",
+        "XPEX_X402_NETWORK",
+        "XPEX_X402_SELLER_ADDRESS"
+      ],
+      "latestDeployment": {
+        "id": "20b15638-e776-420e-82ef-d9ab5ed80d15",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-02T21:37:19.873Z",
+        "url": null
+      },
+      "volumeCount": 0,
+      "staged": null
+    },
+    {
+      "provider": "Railway",
+      "projectId": "4437bfad-2670-4ade-923f-25d02d59ea5b",
+      "environmentId": "4297607c-5825-467a-aae5-3c1332abf73c",
+      "serviceId": "fef6c7b0-436d-45f6-8aeb-e1ebd4d28c0b",
+      "service": {
+        "id": "fef6c7b0-436d-45f6-8aeb-e1ebd4d28c0b",
+        "name": "gxeon-monetization-staging",
+        "state": "live"
+      },
+      "environment": {
+        "id": "4297607c-5825-467a-aae5-3c1332abf73c",
+        "name": "production"
+      },
+      "config": {
+        "source": {
+          "repo": "xpex-systems-ai/xpex-systems-command"
+        },
+        "build": {
+          "builder": "RAILPACK",
+          "buildCommand": "pnpm prisma generate && pnpm build",
+          "buildEnvironment": "V3"
+        },
+        "deploy": {
+          "startCommand": "pnpm start",
+          "preDeployCommand": [
+            "pnpm prisma migrate deploy && node scripts/staging-verify.mjs"
+          ],
+          "healthcheckPath": "/api/health",
+          "healthcheckTimeout": 120,
+          "restartPolicyMaxRetries": 3,
+          "useLegacyStacker": false,
+          "ipv6EgressEnabled": false,
+          "runtime": "V2",
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1
+            }
+          }
+        }
+      },
+      "domains": {
+        "serviceDomains": [
+          {
+            "id": "93a371fb-6d88-431d-b481-83e4f57b4266",
+            "domain": "gxeon-monetization-staging-production.up.railway.app",
+            "targetPort": 8080
+          }
+        ],
+        "customDomains": []
+      },
+      "variableNames": [
+        "DATABASE_URL",
+        "GXEON_CLIENT_KEYS_JSON",
+        "GXEON_PUBLIC_BASE_URL",
+        "GXEON_URL_VERIFY_PRICE_USD_MICRO_PER_URL",
+        "INTERNAL_API_KEY",
+        "OAUTH_STATE_SECRET",
+        "XPEX_ENVIRONMENT"
+      ],
+      "latestDeployment": {
+        "id": "6cb2b499-c5c3-4387-b0bd-05f707dddc07",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-02T03:44:53.878Z",
+        "url": null
+      },
+      "volumeCount": 0,
+      "staged": null
+    },
+    {
+      "provider": "Railway",
+      "projectId": "4437bfad-2670-4ade-923f-25d02d59ea5b",
+      "environmentId": "4297607c-5825-467a-aae5-3c1332abf73c",
+      "serviceId": "d73d7cdb-24aa-4c3c-8d0f-f182ee0a03df",
+      "service": {
+        "id": "d73d7cdb-24aa-4c3c-8d0f-f182ee0a03df",
+        "name": "xpex-systems-command-staging-web",
+        "state": "live"
+      },
+      "environment": {
+        "id": "4297607c-5825-467a-aae5-3c1332abf73c",
+        "name": "production"
+      },
+      "config": {
+        "source": {
+          "repo": "xpex-systems-ai/xpex-systems-command",
+          "branch": "feat/gxeon-community-network-20261009",
+          "commitSha": "def62b7c6ff64722697d62219f2fd214bce41eca"
+        },
+        "build": {
+          "builder": "RAILPACK",
+          "buildCommand": "pnpm prisma generate && pnpm build",
+          "buildEnvironment": "V3"
+        },
+        "deploy": {
+          "startCommand": "pnpm start",
+          "preDeployCommand": [
+            "pnpm prisma migrate deploy && node scripts/staging-verify.mjs"
+          ],
+          "healthcheckPath": "/api/health",
+          "healthcheckTimeout": 120,
+          "restartPolicyMaxRetries": 3,
+          "useLegacyStacker": false,
+          "ipv6EgressEnabled": false,
+          "runtime": "V2",
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1
+            }
+          }
+        }
+      },
+      "domains": {
+        "serviceDomains": [
+          {
+            "id": "f49cdcfa-b180-45f0-9b4d-87be3e3c2e1d",
+            "domain": "xpex-systems-command-staging-web-production.up.railway.app",
+            "targetPort": 8080
+          }
+        ],
+        "customDomains": []
+      },
+      "variableNames": [
+        "DATABASE_URL",
+        "GITHUB_AUDIT_IMPORT",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "GOOGLE_REDIRECT_URI",
+        "INTERNAL_API_KEY",
+        "LOVABLE_ACCOUNT_02_IMPORT",
+        "LOVABLE_ACCOUNT_02_RECONCILIATION_IMPORT",
+        "LOVABLE_AUDIT_IMPORT",
+        "LOVABLE_CLASSIFICATION_IMPORT",
+        "LOVABLE_CLASSIFICATION_V1_1_IMPORT",
+        "LOVABLE_CLASSIFICATION_V1_2_IMPORT",
+        "OAUTH_STATE_SECRET",
+        "OAUTH_TOKEN_ENCRYPTION_KEY",
+        "RECONCILIATION_V1_IMPORT",
+        "VERCEL_ACCOUNT_01_IMPORT",
+        "XPEX_BOOTSTRAP_SECRET",
+        "XPEX_ENVIRONMENT"
+      ],
+      "latestDeployment": {
+        "id": "6aaba6b8-3090-40b5-ac9b-67ff76c3b7d8",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-09T04:12:44.684Z",
+        "url": null
+      },
+      "volumeCount": 0,
+      "staged": null
+    },
+    {
+      "provider": "Railway",
+      "projectId": "4437bfad-2670-4ade-923f-25d02d59ea5b",
+      "environmentId": "4297607c-5825-467a-aae5-3c1332abf73c",
+      "serviceId": "c735d478-25e2-4ed4-8967-9a4483169b19",
+      "service": {
+        "id": "c735d478-25e2-4ed4-8967-9a4483169b19",
+        "name": "postgres-17",
+        "state": "live"
+      },
+      "environment": {
+        "id": "4297607c-5825-467a-aae5-3c1332abf73c",
+        "name": "production"
+      },
+      "config": {
+        "source": {
+          "image": "ghcr.io/railwayapp-templates/postgres-ssl:17"
+        },
+        "build": {
+          "builder": "RAILPACK",
+          "buildEnvironment": "V3"
+        },
+        "deploy": {
+          "useLegacyStacker": false,
+          "ipv6EgressEnabled": false,
+          "runtime": "V2",
+          "multiRegionConfig": {
+            "sfo": {
+              "numReplicas": 1,
+              "stackerAssignment": null
+            }
+          },
+          "requiredMountPath": "/var/lib/postgresql/data"
+        }
+      },
+      "domains": {
+        "serviceDomains": [],
+        "customDomains": []
+      },
+      "variableNames": [
+        "DATABASE_PUBLIC_URL",
+        "DATABASE_URL",
+        "PGDATA",
+        "PGDATABASE",
+        "PGHOST",
+        "PGPASSWORD",
+        "PGPORT",
+        "PGUSER",
+        "POSTGRES_DB",
+        "POSTGRES_PASSWORD",
+        "POSTGRES_USER",
+        "RAILWAY_DEPLOYMENT_DRAINING_SECONDS",
+        "SSL_CERT_DAYS"
+      ],
+      "latestDeployment": {
+        "id": "adc08314-fb1f-430e-8849-f3ff1c11e43d",
+        "status": "SUCCESS",
+        "createdAt": "2026-10-02T01:03:38.436Z",
+        "url": null
+      },
+      "volumeCount": 1,
+      "staged": null
+    }
+  ]
+}

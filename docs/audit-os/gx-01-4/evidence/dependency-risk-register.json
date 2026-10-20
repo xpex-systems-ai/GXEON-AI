@@ -1,0 +1,2816 @@
+{
+  "generatedAt": "2026-10-20T20:43:09.197Z",
+  "scope": "Metadata counts differ from advisory-version row counts; paths in raw compressed audit snapshots are complete. Probable reachability is inference, not exploit proof.",
+  "baselineHistorical": {
+    "info": 0,
+    "low": 5,
+    "moderate": 25,
+    "high": 61,
+    "critical": 0
+  },
+  "before": {
+    "info": 0,
+    "low": 5,
+    "moderate": 24,
+    "high": 60,
+    "critical": 0
+  },
+  "after": {
+    "info": 0,
+    "low": 4,
+    "moderate": 18,
+    "high": 51,
+    "critical": 0
+  },
+  "historicalRecords": 91,
+  "beforeRecords": 92,
+  "afterRecords": 74,
+  "rows": [
+    {
+      "id": 1117015,
+      "module": "postcss",
+      "severity": "moderate",
+      "title": "PostCSS has XSS via Unescaped </style> in its CSS Stringify Output",
+      "url": "https://github.com/advisories/GHSA-qx2v-qp2m-jg93",
+      "patched": ">=8.5.10",
+      "version": "8.4.49",
+      "dev": true,
+      "optional": false,
+      "pathCount": 57,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>postcss",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>@expo/metro-config>postcss"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1119441,
+      "module": "uuid",
+      "severity": "moderate",
+      "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+      "patched": ">=11.1.1",
+      "version": "7.0.3",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>uuid",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>uuid"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Possível breaking change de major/linha 0.x; revisão específica",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1119441,
+      "module": "uuid",
+      "severity": "moderate",
+      "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+      "patched": ">=11.1.1",
+      "version": "3.4.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 1,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/ngrok>uuid"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Possível breaking change de major/linha 0.x; revisão específica",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1120680,
+      "module": "esbuild",
+      "severity": "low",
+      "title": "esbuild allows arbitrary file read when running the development server on Windows",
+      "url": "https://github.com/advisories/GHSA-g7r4-m6w7-qqqr",
+      "patched": ">=0.28.1",
+      "version": "0.27.3",
+      "dev": true,
+      "optional": false,
+      "pathCount": 35,
+      "roots": [
+        "artifacts__api-server",
+        "artifacts__gxeon-dashboard",
+        "artifacts__mockup-sandbox",
+        "lib__api-spec",
+        "lib__db",
+        "scripts"
+      ],
+      "paths": [
+        "artifacts__api-server>esbuild",
+        "artifacts__api-server>esbuild-plugin-pino>esbuild",
+        "artifacts__api-server>tsx>esbuild"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling GX-01",
+      "reach": "Build/dev server e tsx; não expor servidor de desenvolvimento. O audit não prova exploit do bundle GX.",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1120785,
+      "module": "vite",
+      "severity": "moderate",
+      "title": "launch-editor: NTLMv2 hash disclosure via UNC path handling on Windows",
+      "url": "https://github.com/advisories/GHSA-v6wh-96g9-6wx3",
+      "patched": ">=7.3.5",
+      "version": "7.3.3",
+      "dev": true,
+      "optional": false,
+      "pathCount": 6,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__mockup-sandbox"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/vite>vite",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>vite",
+        "artifacts__gxeon-dashboard>vite"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1120820,
+      "module": "markdown-it",
+      "severity": "moderate",
+      "title": "markdown-it: Quadratic complexity DoS in smartquotes rule via replaceAt string operations",
+      "url": "https://github.com/advisories/GHSA-6v5v-wf23-fmfq",
+      "patched": ">=14.2.0",
+      "version": "14.1.1",
+      "dev": true,
+      "optional": false,
+      "pathCount": 20,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@orval/angular>@orval/core>typedoc>markdown-it",
+        "lib__api-spec>orval>@orval/axios>@orval/core>typedoc>markdown-it"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1121242,
+      "module": "undici",
+      "severity": "moderate",
+      "title": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+      "url": "https://github.com/advisories/GHSA-p88m-4jfj-68fv",
+      "patched": ">=6.27.0",
+      "version": "6.25.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>undici",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>undici"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1121245,
+      "module": "undici",
+      "severity": "high",
+      "title": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+      "url": "https://github.com/advisories/GHSA-vxpw-j846-p89q",
+      "patched": ">=6.27.0",
+      "version": "6.25.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>undici",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>undici"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1121255,
+      "module": "undici",
+      "severity": "low",
+      "title": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+      "url": "https://github.com/advisories/GHSA-g8m3-5g58-fq7m",
+      "patched": ">=6.27.0",
+      "version": "6.25.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>undici",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>undici"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1121797,
+      "module": "linkify-it",
+      "severity": "high",
+      "title": "LinkifyIt#match scan loop has quadratic algorithmic complexity",
+      "url": "https://github.com/advisories/GHSA-22p9-wv53-3rq4",
+      "patched": ">=5.0.1",
+      "version": "5.0.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 20,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@orval/angular>@orval/core>typedoc>markdown-it>linkify-it",
+        "lib__api-spec>orval>@orval/axios>@orval/core>typedoc>markdown-it>linkify-it"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1121859,
+      "module": "js-yaml",
+      "severity": "moderate",
+      "title": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+      "url": "https://github.com/advisories/GHSA-h67p-54hq-rp68",
+      "patched": ">=3.15.0",
+      "version": "3.14.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1123259,
+      "module": "ws",
+      "severity": "high",
+      "title": "ws: Memory exhaustion DoS from tiny fragments and data chunks",
+      "url": "https://github.com/advisories/GHSA-96hv-2xvq-fx4p",
+      "patched": ">=8.21.0",
+      "version": "8.20.1",
+      "dev": false,
+      "optional": false,
+      "pathCount": 31,
+      "roots": [
+        ".",
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        ".>ws",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>ws"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling mobile/Expo",
+      "reach": "Dependência direta na raiz e Expo; busca no código GX não identificou chamada WebSocket no fluxo auditado, sem garantia global",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1123260,
+      "module": "ws",
+      "severity": "high",
+      "title": "ws: Memory exhaustion DoS from tiny fragments and data chunks",
+      "url": "https://github.com/advisories/GHSA-96hv-2xvq-fx4p",
+      "patched": ">=7.5.11",
+      "version": "7.5.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>ws",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro-config>metro>ws"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "Expo/devtools; WebSocket de ferramentas pode ser exposto; não excluir risco por estar em mobile.",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1123261,
+      "module": "ws",
+      "severity": "high",
+      "title": "ws: Memory exhaustion DoS from tiny fragments and data chunks",
+      "url": "https://github.com/advisories/GHSA-96hv-2xvq-fx4p",
+      "patched": ">=6.2.4",
+      "version": "6.2.3",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>@react-native/dev-middleware>ws",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>@react-native/community-cli-plugin>@react-native/dev-middleware>ws"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "Expo/devtools; WebSocket de ferramentas pode ser exposto; não excluir risco por estar em mobile.",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1123526,
+      "module": "vite",
+      "severity": "high",
+      "title": "vite: `server.fs.deny` bypass on Windows alternate paths",
+      "url": "https://github.com/advisories/GHSA-fx2h-pf6j-xcff",
+      "patched": ">=7.3.5",
+      "version": "7.3.3",
+      "dev": true,
+      "optional": false,
+      "pathCount": 6,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__mockup-sandbox"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/vite>vite",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>vite",
+        "artifacts__gxeon-dashboard>vite"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1123528,
+      "module": "@babel/core",
+      "severity": "low",
+      "title": "@babel/core: Arbitrary File Read via sourceMappingURL Comment",
+      "url": "https://github.com/advisories/GHSA-4x5r-pxfx-6jf8",
+      "patched": ">=7.29.6",
+      "version": "7.29.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/core",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/plugin-transform-react-jsx-self>@babel/core",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/plugin-transform-react-jsx-source>@babel/core"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1123896,
+      "module": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+      "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
+      "patched": ">=2.1.2",
+      "version": "2.1.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>minimatch>brace-expansion",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>minimatch>brace-expansion"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1123911,
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+      "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+      "patched": ">=4.3.0",
+      "version": "4.2.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 1,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>js-yaml"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1123912,
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+      "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+      "patched": ">=3.15.0",
+      "version": "3.14.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1124012,
+      "module": "linkify-it",
+      "severity": "high",
+      "title": "linkify-it: Quadratic-complexity DoS via the `mailto:` validator scan-loop on attacker text",
+      "url": "https://github.com/advisories/GHSA-v245-v573-v5vm",
+      "patched": ">=5.0.2",
+      "version": "5.0.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 20,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@orval/angular>@orval/core>typedoc>markdown-it>linkify-it",
+        "lib__api-spec>orval>@orval/axios>@orval/core>typedoc>markdown-it>linkify-it"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1124064,
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to host confusion via literal backslash authority delimiter",
+      "url": "https://github.com/advisories/GHSA-v2hh-gcrm-f6hx",
+      "patched": ">=3.1.4",
+      "version": "3.1.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 3,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri",
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv-draft-04>ajv>fast-uri"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1124252,
+      "module": "postcss",
+      "severity": "high",
+      "title": "PostCSS: Arbitrary file read and information disclosure via attacker-controlled sourceMappingURL in CSS comments",
+      "url": "https://github.com/advisories/GHSA-6g55-p6wh-862q",
+      "patched": ">=8.5.12",
+      "version": "8.4.49",
+      "dev": true,
+      "optional": false,
+      "pathCount": 57,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>postcss",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>@expo/metro-config>postcss"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1130589,
+      "module": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+      "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+      "patched": ">=2.1.3",
+      "version": "2.1.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>minimatch>brace-expansion",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>minimatch>brace-expansion"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1130709,
+      "module": "postcss",
+      "severity": "moderate",
+      "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+      "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+      "patched": ">=8.5.23",
+      "version": "8.4.49",
+      "dev": true,
+      "optional": false,
+      "pathCount": 57,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>postcss",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>@expo/metro-config>postcss"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1130709,
+      "module": "postcss",
+      "severity": "moderate",
+      "title": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+      "url": "https://github.com/advisories/GHSA-fxqj-rqcc-2cmp",
+      "patched": ">=8.5.23",
+      "version": "8.5.14",
+      "dev": true,
+      "optional": false,
+      "pathCount": 6,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__mockup-sandbox"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/vite>vite>postcss",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>vite>postcss",
+        "artifacts__gxeon-dashboard>vite>postcss"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1130716,
+      "module": "undici",
+      "severity": "moderate",
+      "title": "undici vulnerable to downstream response desynchronization via retry interceptor",
+      "url": "https://github.com/advisories/GHSA-8xcm-r25x-g524",
+      "patched": ">=6.28.0",
+      "version": "6.25.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>undici",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>undici"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1130720,
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to host confusion via backslash authority introducer",
+      "url": "https://github.com/advisories/GHSA-7p8r-x3mc-p8w7",
+      "patched": ">=3.1.5",
+      "version": "3.1.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 3,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri",
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv-draft-04>ajv>fast-uri"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1130727,
+      "module": "undici",
+      "severity": "moderate",
+      "title": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+      "url": "https://github.com/advisories/GHSA-m8rv-5g2x-5cg5",
+      "patched": ">=6.28.0",
+      "version": "6.25.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>undici",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>undici"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1130732,
+      "module": "undici",
+      "severity": "moderate",
+      "title": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+      "url": "https://github.com/advisories/GHSA-v3r7-h72x-cjcm",
+      "patched": ">=6.28.0",
+      "version": "6.25.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>undici",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>undici"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1130736,
+      "module": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+      "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+      "patched": ">=2.1.4",
+      "version": "2.1.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>minimatch>brace-expansion",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>minimatch>brace-expansion"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1137243,
+      "module": "undici",
+      "severity": "low",
+      "title": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+      "url": "https://github.com/advisories/GHSA-35p6-xmwp-9g52",
+      "patched": ">=6.27.0",
+      "version": "6.25.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>undici",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>undici"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1138114,
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
+      "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+      "patched": ">=3.15.1",
+      "version": "3.14.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1138115,
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
+      "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+      "patched": ">=4.3.1",
+      "version": "4.2.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 1,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>js-yaml"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1138811,
+      "module": "nanoid",
+      "severity": "high",
+      "title": "nanoid: non-secure generators can loop indefinitely with negative size",
+      "url": "https://github.com/advisories/GHSA-28wg-ghj8-5hjv",
+      "patched": ">=3.3.16",
+      "version": "3.3.12",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/vite>vite>postcss>nanoid",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>vite>postcss>nanoid",
+        "artifacts__gxeon-dashboard>vite>postcss>nanoid"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1139427,
+      "module": "nanoid",
+      "severity": "high",
+      "title": "nanoid: custom generators can loop indefinitely when size is zero",
+      "url": "https://github.com/advisories/GHSA-2v37-7h3g-55p8",
+      "patched": ">=3.3.18",
+      "version": "3.3.12",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/vite>vite>postcss>nanoid",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>vite>postcss>nanoid",
+        "artifacts__gxeon-dashboard>vite>postcss>nanoid"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1139510,
+      "module": "postcss",
+      "severity": "high",
+      "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+      "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
+      "patched": ">=8.5.18",
+      "version": "8.4.49",
+      "dev": true,
+      "optional": false,
+      "pathCount": 57,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>postcss",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>@expo/metro-config>postcss"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1139510,
+      "module": "postcss",
+      "severity": "high",
+      "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+      "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
+      "patched": ">=8.5.18",
+      "version": "8.5.14",
+      "dev": true,
+      "optional": false,
+      "pathCount": 6,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__mockup-sandbox"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/vite>vite>postcss",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>vite>postcss",
+        "artifacts__gxeon-dashboard>vite>postcss"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1145647,
+      "module": "tar",
+      "severity": "high",
+      "title": "node-tar: Uncontrolled recursion in mapHas/filesFilter allows uncatchable stack-overflow DoS via crafted long-path tar with member selection",
+      "url": "https://github.com/advisories/GHSA-r292-9mhp-454m",
+      "patched": ">=7.5.21",
+      "version": "7.5.19",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>tar",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>tar"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1147955,
+      "module": "decode-uri-component",
+      "severity": "moderate",
+      "title": "decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input",
+      "url": "https://github.com/advisories/GHSA-vcc3-ghjq-m6fr",
+      "patched": ">=0.5.0",
+      "version": "0.2.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@react-navigation/bottom-tabs>@react-navigation/elements>@react-navigation/native>@react-navigation/core>query-string>decode-uri-component",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@react-navigation/bottom-tabs>@react-navigation/native>@react-navigation/core>query-string>decode-uri-component"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1153171,
+      "module": "browserslist",
+      "severity": "high",
+      "title": "Browserslist: Unbounded memory growth (no cache eviction) via distinct query results, leading to eventual OOM",
+      "url": "https://github.com/advisories/GHSA-c83g-rgw3-j3cx",
+      "patched": ">=4.28.7",
+      "version": "4.28.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/core>@babel/helper-compilation-targets>browserslist",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/plugin-transform-react-jsx-self>@babel/core>@babel/helper-compilation-targets>browserslist",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/plugin-transform-react-jsx-source>@babel/core>@babel/helper-compilation-targets>browserslist"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1153172,
+      "module": "browserslist",
+      "severity": "high",
+      "title": "Browserslist: Uncaught crash / prototype write via untrusted browserslist-stats.json custom stats (normalizeStats)",
+      "url": "https://github.com/advisories/GHSA-73wf-gq98-2v4g",
+      "patched": ">=4.28.7",
+      "version": "4.28.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/core>@babel/helper-compilation-targets>browserslist",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/plugin-transform-react-jsx-self>@babel/core>@babel/helper-compilation-targets>browserslist",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/plugin-transform-react-jsx-source>@babel/core>@babel/helper-compilation-targets>browserslist"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1158517,
+      "module": "@xmldom/xmldom",
+      "severity": "moderate",
+      "title": "xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization",
+      "url": "https://github.com/advisories/GHSA-6gmq-8vp8-gcm6",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1158518,
+      "module": "@xmldom/xmldom",
+      "severity": "moderate",
+      "title": "xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization",
+      "url": "https://github.com/advisories/GHSA-6gmq-8vp8-gcm6",
+      "patched": ">=0.8.15",
+      "version": "0.8.13",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>@expo/plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>@expo/plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1158524,
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to server-side request forgery via malformed IPv6 normalization",
+      "url": "https://github.com/advisories/GHSA-f65p-4m7j-42xc",
+      "patched": ">=3.1.6",
+      "version": "3.1.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 3,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri",
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv-draft-04>ajv>fast-uri"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1158527,
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to server-side request forgery via repeated hostname percent-decoding",
+      "url": "https://github.com/advisories/GHSA-fph4-wmhf-6fwf",
+      "patched": ">=3.1.6",
+      "version": "3.1.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 3,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri",
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv-draft-04>ajv>fast-uri"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1158530,
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to host confusion via percent-encoded scheme normalization",
+      "url": "https://github.com/advisories/GHSA-jqff-g426-hqxp",
+      "patched": ">=3.1.6",
+      "version": "3.1.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 3,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri",
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv-draft-04>ajv>fast-uri"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193671,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: HTML raw-text closing-tag case mismatch causes output amplification",
+      "url": "https://github.com/advisories/GHSA-6mj3-qw4j-hgrw",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193686,
+      "module": "baseline-browser-mapping",
+      "severity": "moderate",
+      "title": "baseline-browser-mapping process termination on invalid input causes denial of service",
+      "url": "https://github.com/advisories/GHSA-w5vr-8v7q-w6rv",
+      "patched": ">=2.11.0",
+      "version": "2.10.28",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/core>@babel/helper-compilation-targets>browserslist>baseline-browser-mapping",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/plugin-transform-react-jsx-self>@babel/core>@babel/helper-compilation-targets>browserslist>baseline-browser-mapping",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>@babel/plugin-transform-react-jsx-source>@babel/core>@babel/helper-compilation-targets>browserslist>baseline-browser-mapping"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1193687,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom PI grammar regex ReDoS: quadratic backtracking on unterminated processing instructions",
+      "url": "https://github.com/advisories/GHSA-g53g-w8rj-fmg7",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193689,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Element name injection via createElement() bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-w2rr-34g9-rvrj",
+      "patched": ">=0.8.15",
+      "version": "0.8.13",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>@expo/plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>@expo/plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193690,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Element name injection via createElement() bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-w2rr-34g9-rvrj",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193692,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Attribute name injection via setAttribute() bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-4w3w-2rp5-g8jm",
+      "patched": ">=0.8.15",
+      "version": "0.8.13",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>@expo/plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>@expo/plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193693,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Attribute name injection via setAttribute() bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-4w3w-2rp5-g8jm",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193695,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Processing Instruction Target Injection Bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-c7q8-3ch8-vqpv",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193696,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Processing Instruction Target Injection Bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-c7q8-3ch8-vqpv",
+      "patched": ">=0.8.15",
+      "version": "0.8.13",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>@expo/plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>@expo/plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193699,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: DocType `name` Injection Bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-27p8-2357-5qqv",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193700,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: DocType `name` Injection Bypasses requireWellFormed",
+      "url": "https://github.com/advisories/GHSA-27p8-2357-5qqv",
+      "patched": ">=0.8.15",
+      "version": "0.8.13",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>@expo/plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>@expo/plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193701,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Creation-time XML Name/QName validation is bypassable via an embedded line terminator, allowing injection on the default serialization path",
+      "url": "https://github.com/advisories/GHSA-3px3-54cx-rmw9",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193702,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: requireWellFormed DocType publicId/systemId validation is bypassable via an embedded line terminator",
+      "url": "https://github.com/advisories/GHSA-vr34-hp96-76pp",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193704,
+      "module": "@xmldom/xmldom",
+      "severity": "moderate",
+      "title": "xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content",
+      "url": "https://github.com/advisories/GHSA-6h8r-xr42-gp59",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1193705,
+      "module": "@xmldom/xmldom",
+      "severity": "moderate",
+      "title": "xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content",
+      "url": "https://github.com/advisories/GHSA-6h8r-xr42-gp59",
+      "patched": ">=0.8.15",
+      "version": "0.8.13",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>@expo/plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>@expo/plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1193707,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-time attribute deduplication",
+      "url": "https://github.com/advisories/GHSA-8344-3jmq-59r6",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193708,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-time attribute deduplication",
+      "url": "https://github.com/advisories/GHSA-8344-3jmq-59r6",
+      "patched": ">=0.8.15",
+      "version": "0.8.13",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>@expo/plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>@expo/plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193709,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: End-tag Whitespace-Trim Regex ReDoS — quadratic backtracking in the 0.8.x end-tag parser",
+      "url": "https://github.com/advisories/GHSA-x4fp-j954-r2f4",
+      "patched": ">=0.8.15",
+      "version": "0.8.13",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>@expo/plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>@expo/plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193711,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-memory consumption",
+      "url": "https://github.com/advisories/GHSA-965w-775f-mr7g",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193712,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-memory consumption",
+      "url": "https://github.com/advisories/GHSA-965w-775f-mr7g",
+      "patched": ">=0.8.15",
+      "version": "0.8.13",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>@expo/plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>@expo/plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193714,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge",
+      "url": "https://github.com/advisories/GHSA-93r5-fhx6-vmg9",
+      "patched": ">=0.9.12",
+      "version": "0.9.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193715,
+      "module": "@xmldom/xmldom",
+      "severity": "high",
+      "title": "xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge",
+      "url": "https://github.com/advisories/GHSA-93r5-fhx6-vmg9",
+      "patched": ">=0.8.15",
+      "version": "0.8.13",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>@expo/config-plugins>@expo/plist>@xmldom/xmldom",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>@expo/plist>@xmldom/xmldom"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193726,
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+      "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+      "patched": ">=3.15.2",
+      "version": "3.14.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1193727,
+      "module": "js-yaml",
+      "severity": "high",
+      "title": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+      "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+      "patched": ">=4.3.2",
+      "version": "4.2.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 1,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>js-yaml"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1204921,
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to host confusion via failed IDN canonicalization",
+      "url": "https://github.com/advisories/GHSA-4c8g-83qw-93j6",
+      "patched": ">=3.1.3",
+      "version": "3.1.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 3,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri",
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv-draft-04>ajv>fast-uri"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1239765,
+      "module": "image-size",
+      "severity": "high",
+      "title": "image-size: JXL and HEIF parsers allow denial of service through infinite loops",
+      "url": "https://github.com/advisories/GHSA-5p2g-fcmc-qvqq",
+      "patched": ">=2.0.3",
+      "version": "1.2.1",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>image-size",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro-config>metro>image-size"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Possível breaking change de major/linha 0.x; revisão específica",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1239766,
+      "module": "image-size",
+      "severity": "high",
+      "title": "image-size: ICNS parser allows denial of service through an infinite loop",
+      "url": "https://github.com/advisories/GHSA-w3rx-r6r6-pgpr",
+      "patched": ">=2.0.3",
+      "version": "1.2.1",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>image-size",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro-config>metro>image-size"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Possível breaking change de major/linha 0.x; revisão específica",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1239934,
+      "module": "undici",
+      "severity": "moderate",
+      "title": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+      "url": "https://github.com/advisories/GHSA-3wwx-pv8p-q78v",
+      "patched": ">=6.28.1",
+      "version": "6.25.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>undici",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>undici"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1239943,
+      "module": "fast-uri",
+      "severity": "high",
+      "title": "fast-uri vulnerable to authority injection via an unvalidated port in serialize",
+      "url": "https://github.com/advisories/GHSA-qw65-cvwx-89v3",
+      "patched": ">=3.1.7",
+      "version": "3.1.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 3,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri",
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv-draft-04>ajv>fast-uri"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1239989,
+      "module": "markdown-it",
+      "severity": "moderate",
+      "title": "markdown-it linkify: true has two quadratic paths, so a few hundred KB of markdown blocks the event loop for tens of seconds",
+      "url": "https://github.com/advisories/GHSA-253c-mchw-3w2r",
+      "patched": ">=14.3.1",
+      "version": "14.1.1",
+      "dev": true,
+      "optional": false,
+      "pathCount": 20,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@orval/angular>@orval/core>typedoc>markdown-it",
+        "lib__api-spec>orval>@orval/axios>@orval/core>typedoc>markdown-it"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1240039,
+      "module": "undici",
+      "severity": "low",
+      "title": "undici vulnerable to downstream response splitting via retry interceptor",
+      "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+      "patched": ">=6.28.1",
+      "version": "6.25.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>undici",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>undici"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1240042,
+      "module": "undici",
+      "severity": "high",
+      "title": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+      "url": "https://github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+      "patched": ">=6.28.1",
+      "version": "6.25.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>undici",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>undici"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1240091,
+      "module": "fast-uri",
+      "severity": "moderate",
+      "title": "fast-uri vulnerable to inconsistent host case normalization via percent-encoded octets",
+      "url": "https://github.com/advisories/GHSA-hrr3-gc8f-f4qj",
+      "patched": ">=3.1.8",
+      "version": "3.1.2",
+      "dev": true,
+      "optional": false,
+      "pathCount": 3,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri",
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv-draft-04>ajv>fast-uri"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1240101,
+      "module": "brace-expansion",
+      "severity": "moderate",
+      "title": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+      "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+      "patched": ">=2.1.7",
+      "version": "2.1.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>minimatch>brace-expansion",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>minimatch>brace-expansion"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1240105,
+      "module": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+      "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+      "patched": ">=2.1.6",
+      "version": "2.1.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>minimatch>brace-expansion",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>minimatch>brace-expansion"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1240109,
+      "module": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+      "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+      "patched": ">=2.1.5",
+      "version": "2.1.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>minimatch>brace-expansion",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>minimatch>brace-expansion"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1240912,
+      "module": "node-forge",
+      "severity": "high",
+      "title": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+      "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+      "patched": null,
+      "version": "1.4.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 60,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/code-signing-certificates>node-forge",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>@expo/code-signing-certificates>node-forge"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Sem correção anunciada",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1240991,
+      "module": "http-cache-semantics",
+      "severity": "high",
+      "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+      "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+      "patched": ">=4.3.0",
+      "version": "4.2.0",
+      "dev": true,
+      "optional": false,
+      "pathCount": 1,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/ngrok>got>cacheable-request>http-cache-semantics"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1240992,
+      "module": "braces",
+      "severity": "high",
+      "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+      "url": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "patched": null,
+      "version": "3.0.3",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>metro-file-map>micromatch>braces",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro-config>metro>metro-file-map>micromatch>braces"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Sem correção anunciada",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1241202,
+      "module": "sprintf-js",
+      "severity": "moderate",
+      "title": "sprintf-js vulnerable to denial of service through unbounded precision specifiers",
+      "url": "https://github.com/advisories/GHSA-hp3w-g68c-fv3c",
+      "patched": null,
+      "version": "1.0.3",
+      "dev": true,
+      "optional": false,
+      "pathCount": 100,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>babel-jest>@jest/transform>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>expo-router>@expo/metro-runtime>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml>argparse>sprintf-js"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Sem correção anunciada",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-11-03",
+      "accepted": false
+    },
+    {
+      "id": 1241209,
+      "module": "source-map-js",
+      "severity": "high",
+      "title": "source-map-js allows event-loop denial of service through indexed source-map section offsets",
+      "url": "https://github.com/advisories/GHSA-68fv-2mgg-jv7q",
+      "patched": ">=1.2.2",
+      "version": "1.2.1",
+      "dev": true,
+      "optional": false,
+      "pathCount": 65,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__gxeon-dashboard-mobile",
+        "artifacts__mockup-sandbox"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/vite>@tailwindcss/node>source-map-js",
+        "artifacts__gxeon-dashboard>@tailwindcss/vite>vite>postcss>source-map-js",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>vite>postcss>source-map-js"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1241221,
+      "module": "compression",
+      "severity": "high",
+      "title": "compression vulnerable to Denial of Service via memory leak on premature response close",
+      "url": "https://github.com/advisories/GHSA-vc2v-76pw-4v95",
+      "patched": ">=1.8.2",
+      "version": "1.8.1",
+      "dev": true,
+      "optional": false,
+      "pathCount": 30,
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro-config>expo>@expo/cli>compression",
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/prebuild-config>expo>@expo/cli>compression"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling mobile/Expo",
+      "reach": "CLI/Metro, parsers e servidores de desenvolvimento; pode ser alcançável nesse fluxo, não foi homologado como seguro",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não expor Metro/túneis; usar fixtures confiáveis, CI isolado; validar atualização Expo/parsers em ambiente mobile antes de adotar",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1241232,
+      "module": "postcss-selector-parser",
+      "severity": "moderate",
+      "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+      "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+      "patched": ">=7.1.6",
+      "version": "6.0.10",
+      "dev": true,
+      "optional": false,
+      "pathCount": 1,
+      "roots": [
+        "artifacts__gxeon-dashboard"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/typography>postcss-selector-parser"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Possível breaking change de major/linha 0.x; revisão específica",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1241257,
+      "module": "fast-copy",
+      "severity": "moderate",
+      "title": "fast-copy: Stack exhaustion in fast-copy when copying deeply-nested values",
+      "url": "https://github.com/advisories/GHSA-jggr-w7fw-pc2j",
+      "patched": ">=4.1.0",
+      "version": "4.0.3",
+      "dev": true,
+      "optional": false,
+      "pathCount": 2,
+      "roots": [
+        "artifacts__api-server"
+      ],
+      "paths": [
+        "artifacts__api-server>esbuild-plugin-pino>pino-pretty>fast-copy",
+        "artifacts__api-server>pino-pretty>fast-copy"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "pino-pretty da API; logger habilita transport fora de NODE_ENV=production. Atualizado sem assumir que devDependency nunca é empacotada.",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    },
+    {
+      "id": 1242600,
+      "module": "markdown-it",
+      "severity": "high",
+      "title": "markdown-it: Quadratic complexity in smartquotes with unmatched closing quotes",
+      "url": "https://github.com/advisories/GHSA-r7fv-28h4-cvq7",
+      "patched": ">=14.3.2",
+      "version": "14.1.1",
+      "dev": true,
+      "optional": false,
+      "pathCount": 20,
+      "roots": [
+        "lib__api-spec"
+      ],
+      "paths": [
+        "lib__api-spec>orval>@orval/angular>@orval/core>typedoc>markdown-it",
+        "lib__api-spec>orval>@orval/axios>@orval/core>typedoc>markdown-it"
+      ],
+      "historicalGX013": true,
+      "observedBefore": true,
+      "observedAfter": true,
+      "status": "ABERTO",
+      "use": "Desenvolvimento/codegen",
+      "reach": "Parsing/geração de OpenAPI confiável do repo; entrada externa não autorizada",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Não gerar de specs externas; isolar CI sem segredos; atualizar toolchain e comparar geração em diretório isolado após revisão",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-27",
+      "accepted": false
+    },
+    {
+      "id": 1242623,
+      "module": "vite",
+      "severity": "moderate",
+      "title": "launch-editor: escapeCmdArgs() omits % escaping on Windows",
+      "url": "https://github.com/advisories/GHSA-698v-4r3x-3vcv",
+      "patched": ">=7.3.7",
+      "version": "7.3.3",
+      "dev": true,
+      "optional": false,
+      "pathCount": 6,
+      "roots": [
+        "artifacts__gxeon-dashboard",
+        "artifacts__mockup-sandbox"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/vite>vite",
+        "artifacts__gxeon-dashboard>@vitejs/plugin-react>vite",
+        "artifacts__gxeon-dashboard>vite"
+      ],
+      "historicalGX013": false,
+      "observedBefore": true,
+      "observedAfter": false,
+      "status": "VERSÃO VULNERÁVEL AUSENTE APÓS PATCH",
+      "use": "Tooling GX-01",
+      "reach": "Entrada de build controlada; alcance por requisição do Audit OS não demonstrado",
+      "breaking": "Mesma major disponível; semver não elimina necessidade de regressão",
+      "mitigation": "Restringir inputs/build e loopback; corrigir compatíveis e validar regressão; migração restante em PR revisada",
+      "owner": "Engenharia a designar por xpex-systems-ai; responsável proposto, não aceite",
+      "suggestedDeadline": "2026-10-22",
+      "accepted": false
+    }
+  ]
+}
