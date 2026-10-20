@@ -1,5 +1,7 @@
 # GX-01 — validação executada
 
+**Snapshot histórico da primeira implementação.** Para o estado atualizado após estabilização dos 68 + 10 diagnósticos, CI completo e demonstração visual, consultar a [validação do handoff mestre V1.0](VALIDACAO_MASTER_V1.md). As falhas registradas abaixo pertencem à execução inicial e foram preservadas para rastreabilidade.
+
 Data: 2026-10-19. Base comparada: dbc29fff9a2c55487f85a83db597f41c493af7a8 (main). Resultado de liberação: BLOCKED. A PR é uma entrega técnica em rascunho para revisão, não aprovação de produção ou fechamento comercial.
 
 | Check / comando | Resultado observado |

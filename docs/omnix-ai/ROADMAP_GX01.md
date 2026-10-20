@@ -2,6 +2,8 @@
 
 **Data:** 2026-10-19. **Estado:** planejamento proposto, sem compromisso de prazo, preço ou contratação. Este roadmap organiza a evolução do núcleo existente; não declara capacidades futuras como entregues.
 
+**Atualização pelo handoff V1.0:** a sequência oficial GX-01–GX-07, o plano por PR e a arquitetura incremental estão no [plano incremental](PLANO_INCREMENTAL_V1.md). A tabela de ponto de partida abaixo preserva o snapshot do primeiro commit; o estado atualizado de testes fica na [validação GX-01](../audit-os/gx-01/VALIDATION.md). Falhas históricas não devem ser tomadas como resultado do commit atual.
+
 ## Ponto de partida comprovado
 
 Referência técnica: [PR #456](https://github.com/xpex-systems-ai/GXEON-AI/pull/456), commit de código `8c9f21aae23b6474d1efdc2d30f61a77b63140c6`.

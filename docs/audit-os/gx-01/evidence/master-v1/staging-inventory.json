@@ -1,0 +1,55 @@
+{
+  "readOnly": true,
+  "project": "xpex-systems-command-staging",
+  "environment": {
+    "id": "4297607c-5825-467a-aae5-3c1332abf73c",
+    "name": "production",
+    "isEphemeral": false
+  },
+  "stagedChanges": false,
+  "services": [
+    {
+      "name": "xpex-systems-command-staging-web",
+      "source": {
+        "image": null,
+        "repo": "xpex-systems-ai/xpex-systems-command",
+        "branch": "feat/gxeon-community-network-20261009"
+      },
+      "status": "SUCCESS",
+      "deployId": "6aaba6b8-3090-40b5-ac9b-67ff76c3b7d8"
+    },
+    {
+      "name": "gxeon-agent-gateway",
+      "source": {
+        "image": null,
+        "repo": "xpex-systems-ai/XPeX-Plugin-Factory-",
+        "branch": "main"
+      },
+      "status": "SUCCESS",
+      "deployId": "20b15638-e776-420e-82ef-d9ab5ed80d15"
+    },
+    {
+      "name": "gxeon-monetization-staging",
+      "source": {
+        "image": null,
+        "repo": "xpex-systems-ai/xpex-systems-command",
+        "branch": null
+      },
+      "status": "SUCCESS",
+      "deployId": "6cb2b499-c5c3-4387-b0bd-05f707dddc07"
+    },
+    {
+      "name": "postgres-17",
+      "source": {
+        "image": "ghcr.io/railwayapp-templates/postgres-ssl:17",
+        "repo": null,
+        "branch": null
+      },
+      "status": "SUCCESS",
+      "deployId": "adc08314-fb1f-430e-8849-f3ff1c11e43d"
+    }
+  ],
+  "auditBackendForGxeonAiFound": false,
+  "remoteDatabaseAccessed": false,
+  "configurationChanged": false
+}

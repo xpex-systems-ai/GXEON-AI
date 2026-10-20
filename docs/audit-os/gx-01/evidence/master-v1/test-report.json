@@ -1,0 +1,101 @@
+{
+  "ok": true,
+  "caseId": "37d01516-3ee5-4c35-954b-451507c5460d",
+  "reportId": "042a4be7-f271-4ea8-a963-2024c6f04838",
+  "sha256": "9c72984d3768bc383933da38ed8358f5cbb074c503536ca42dea51e60ef3cc70",
+  "report": {
+    "version": "gx01-v1",
+    "caseId": "37d01516-3ee5-4c35-954b-451507c5460d",
+    "title": "[TEST DATA] GX-01 TEST DATA",
+    "testData": true,
+    "finalStatus": "CLOSED",
+    "scope": {
+      "requestId": "60c43c65-eb1c-478e-a58e-5fc7c4612711",
+      "assetName": "GX-01 TEST DATA",
+      "assetReference": "test-fixture/vercel.json",
+      "authorizationReference": "test-fixture/authorized-scope",
+      "authorized": true,
+      "testData": true,
+      "checks": ["vercel_api_routing", "vercel_security_headers"]
+    },
+    "evidence": [
+      {
+        "id": "eea5a204-b59b-44d5-a1a9-803d065c0cf0",
+        "sha256": "969331b09ff030aeed5964d515f9003c300aa48cfbfc9a79ebf4c568f77e5d1e",
+        "capturedAt": "2026-10-20T01:34:26.825Z",
+        "source": "operator_submitted_artifact",
+        "content": "{\"rewrites\":[{\"source\":\"/(.*)\",\"destination\":\"/index.html\"}]}"
+      }
+    ],
+    "findings": [
+      {
+        "id": "03d141fb-e2d8-4f8a-bb0a-01dde5a9ca71",
+        "title": "vercel_security_headers",
+        "summary": "Global nonempty header declarations absent from supplied config: content-security-policy, x-content-type-options. Runtime headers were not measured.",
+        "recommendation": "Review header policies and measure the approved deployment separately; static absence alone is not proof of runtime vulnerability.",
+        "evidenceIds": ["eea5a204-b59b-44d5-a1a9-803d065c0cf0"]
+      },
+      {
+        "id": "0b445ee9-f119-41a5-ab30-078fac6c1407",
+        "title": "vercel_api_routing",
+        "summary": "An unconditional SPA catch-all precedes any recognized API rewrite in the submitted configuration.",
+        "recommendation": "Exclude /api and /api/* from the SPA fallback; configure only a separately verified backend origin.",
+        "evidenceIds": ["eea5a204-b59b-44d5-a1a9-803d065c0cf0"]
+      }
+    ],
+    "limitations": [
+      "Static inspection of operator-submitted vercel.json only.",
+      "No deployed route, runtime header, external asset ownership or remote provider was verified.",
+      "Review records a separate credential holder's human-review attestation; identity is not independently verified.",
+      "No payments, network scans or external connector writes."
+    ],
+    "generatedAt": "2026-10-20T01:34:28.481Z",
+    "events": [
+      {
+        "at": "2026-10-20T01:34:28.100Z",
+        "role": "operator",
+        "state": "DRAFT"
+      },
+      {
+        "at": "2026-10-20T01:34:28.290Z",
+        "role": "operator",
+        "state": "IN_REVIEW"
+      },
+      {
+        "at": "2026-10-20T01:34:28.404Z",
+        "role": "reviewer",
+        "state": "IN_REVIEW"
+      },
+      {
+        "at": "2026-10-20T01:34:28.449Z",
+        "role": "reviewer",
+        "state": "READY_FOR_REPORT"
+      },
+      {
+        "at": "2026-10-20T01:34:28.476Z",
+        "role": "operator",
+        "state": "CLOSED"
+      }
+    ],
+    "review": {
+      "role": "reviewer",
+      "decision": "approve",
+      "reference": "test-fixture/approved",
+      "reviewedAt": "2026-10-20T01:34:28.444Z"
+    },
+    "results": [
+      {
+        "checkId": "vercel_api_routing",
+        "outcome": "observed",
+        "summary": "An unconditional SPA catch-all precedes any recognized API rewrite in the submitted configuration.",
+        "recommendation": "Exclude /api and /api/* from the SPA fallback; configure only a separately verified backend origin."
+      },
+      {
+        "checkId": "vercel_security_headers",
+        "outcome": "observed",
+        "summary": "Global nonempty header declarations absent from supplied config: content-security-policy, x-content-type-options. Runtime headers were not measured.",
+        "recommendation": "Review header policies and measure the approved deployment separately; static absence alone is not proof of runtime vulnerability."
+      }
+    ]
+  }
+}

@@ -84,7 +84,10 @@ export default function AuditWorkflowPage() {
   }
   const validId = z.string().uuid().safeParse(caseId).success;
   return (
-    <main className="mx-auto max-w-5xl space-y-6 p-6 text-slate-100">
+    <main
+      translate="no"
+      className="mx-auto max-w-5xl space-y-6 p-6 text-slate-100"
+    >
       <header>
         <a href="/ops/audit-os" className="text-cyan-300 underline">
           Audit OS
