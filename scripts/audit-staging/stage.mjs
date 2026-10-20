@@ -30,7 +30,13 @@ export async function startDatabase(config) {
     const status = spawnSync(path.join(config.pgBin, "pg_ctl" + extension), ["-D", data, "status"], { windowsHide: true });
     if (status.status !== 0) native(config, "pg_ctl", ["-D", data, "-l", path.join(stateDir, "database.log"), "-o", "-h 127.0.0.1 -p 55432 -c shared_buffers=32MB -c max_connections=20 -c log_min_error_statement=panic", "-w", "start"]);
   }
-  await waitFor(() => query(config, "SELECT 1", [], true, config.mode === "native" ? "postgres" : config.database), "PostgreSQL");
+  let lastCode = "UNKNOWN";
+  try {
+    await waitFor(async () => {
+      try { return await query(config, "SELECT 1", [], true, config.mode === "native" ? "postgres" : config.database); }
+      catch (error) { lastCode = /^[A-Z0-9_]+$/.test(error.code ?? "") ? error.code : "UNKNOWN"; return false; }
+    }, "PostgreSQL");
+  } catch { throw new Error("STAGING_DATABASE_UNAVAILABLE: " + lastCode); }
 }
 export async function stopDatabase(config) {
   if (config.mode === "docker") command("docker", ["compose", "-f", compose, "stop", "postgres"]);
@@ -91,9 +97,12 @@ export async function startApps(config, writeEnabled = true) {
 }
 export async function stopApps(config) {
   for (const port of [5174, 3479]) {
-    const response = await fetch(`http://127.0.0.1:${port}/__stage/stop`, {
-      method: "POST", headers: { "x-gx-stage-control": config.controlToken }, signal: AbortSignal.timeout(5000),
-    });
+    let response;
+    try {
+      response = await fetch(`http://127.0.0.1:${port}/__stage/stop`, {
+        method: "POST", headers: { "x-gx-stage-control": config.controlToken }, signal: AbortSignal.timeout(5000),
+      });
+    } catch (error) { if (error.cause?.code === "ECONNREFUSED") continue; throw new Error("STAGING_SHUTDOWN_FAILED"); }
     if (!response.ok) throw new Error("STAGING_SHUTDOWN_DENIED");
   }
   await sleep(500);
@@ -116,7 +125,7 @@ async function main() {
   if (action === "up") await startApps(config);
   if (action === "status") console.log(JSON.stringify(await apiHealth(config)));
   if (action === "restart") await restart(config);
-  if (action === "stop") { await stopApps(config); await stopDatabase(config); }
+  if (action === "stop") { try { await stopApps(config); } finally { await stopDatabase(config); } }
   if (action === "test-db") {
     if (!(await query(config, "SELECT 1 FROM pg_database WHERE datname='gx01_test'", [], true)).rows.length) await query(config, "CREATE DATABASE gx01_test OWNER gx01_stage_admin", [], true);
     // Private local connection file; value is never printed or committed.

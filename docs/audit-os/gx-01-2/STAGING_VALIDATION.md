@@ -4,7 +4,7 @@ O harness compõe o frontend React/Vite compilado e a API Express existentes com
 
 ## Reproduzir
 
-Requisitos: Node 24, pnpm 10.28.1, Git, Docker com Compose e portas locais livres 55432, 3479 e 5174. O Compose contém somente PostgreSQL; os dois aplicativos Node rodam no host. Rede do banco é interna e a porta publicada fica em 127.0.0.1. O volume persiste entre reinícios.
+Requisitos: Node 24, pnpm 10.28.1, Git, Docker com Compose e portas locais livres 55432, 3479 e 5174. O Compose contém somente PostgreSQL; os dois aplicativos Node rodam no host. A rede bridge permite o acesso do host à porta publicada exclusivamente em 127.0.0.1. Não há endpoint público; o volume persiste entre reinícios. O primeiro job revelou que internal=true impedia esta ligação publicada; a configuração foi corrigida e deve ser comprovada pelo novo job, sem presumir equivalência da prova nativa.
 
 ```sh
 pnpm install --frozen-lockfile

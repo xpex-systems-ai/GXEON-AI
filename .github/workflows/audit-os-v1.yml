@@ -78,3 +78,6 @@ jobs:
       - name: Stop staging without deleting the persistent volume
         if: always()
         run: pnpm run stage:audit stop
+      - name: Database startup diagnostics (test instance only)
+        if: failure()
+        run: docker compose -f scripts/audit-staging/compose.yaml logs --tail 60 postgres

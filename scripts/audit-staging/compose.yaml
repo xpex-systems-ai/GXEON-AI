@@ -26,4 +26,4 @@ volumes:
   gx012_data:
 networks:
   isolated:
-    internal: true
+    driver: bridge
