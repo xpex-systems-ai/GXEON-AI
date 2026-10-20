@@ -2812,5 +2812,25 @@
       "suggestedDeadline": "2026-10-22",
       "accepted": false
     }
-  ]
+  ],
+  "canonicalToolValidation": {
+    "tool": "pnpm@10.28.1",
+    "exit": 1,
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 4,
+        "moderate": 19,
+        "high": 51,
+        "critical": 0
+      },
+      "dependencies": 1184,
+      "devDependencies": 0,
+      "optionalDependencies": 0,
+      "totalDependencies": 1184
+    },
+    "advisoryEntries": 73,
+    "sha256": "a2b2f336940cf3b55075cfb2d620fe8d9b81c20c089e0a294e2dc9c508b37c58",
+    "raw": "dependency-after-pnpm10.json.gz"
+  }
 }

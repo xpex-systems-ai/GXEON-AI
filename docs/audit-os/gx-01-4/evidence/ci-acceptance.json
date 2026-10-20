@@ -1,0 +1,444 @@
+{
+  "version": "gx01.3",
+  "testData": true,
+  "generatedAt": "2026-10-20T20:46:04.013Z",
+  "sourceCommit": "b9b5febdfcf6cb9c93625741f459112ee137d4ed",
+  "sourceDirty": false,
+  "mode": "docker",
+  "databaseVersion": 170011,
+  "appRole": "gx01_app",
+  "transport": "built frontend loopback HTTP proxy -> existing Express API -> isolated PostgreSQL 17",
+  "reviewFixture": "Automated credential fixture; no human approval claimed",
+  "browserDownloadVerified": false,
+  "before": {
+    "apiPid": 3022,
+    "databaseStartedAt": "2026-10-20 20:45:47.706543+00"
+  },
+  "after": {
+    "apiPid": 3556,
+    "databaseStartedAt": "2026-10-20 20:45:59.474876+00"
+  },
+  "result": {
+    "caseId": "b4229963-c74e-414a-9ff7-1a84812dc6a3",
+    "reportId": "fd63bcae-cb85-4d9d-b3bf-f9ef69f50e2d",
+    "sha256": "9705d2621daf04394700231f8e59be5871af17f46c07506d423efc85a7b64b10",
+    "evidenceCount": 1,
+    "findingCount": 2,
+    "status": "CLOSED",
+    "testData": true
+  },
+  "checks": [
+    {
+      "name": "built frontend, proxy, PostgreSQL 17 and restricted role",
+      "status": "PASS"
+    },
+    {
+      "name": "authentication, roles, consent, validation and test-data fence",
+      "status": "PASS"
+    },
+    {
+      "name": "concurrent intake is idempotent and conflicting scope is rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "checks are bounded, concurrent runs do not duplicate evidence or findings",
+      "status": "PASS"
+    },
+    {
+      "name": "review gate and concurrent finalization produce one traceable report",
+      "status": "PASS"
+    },
+    {
+      "name": "alternative legacy UUID encodings cannot mutate a closed workflow",
+      "status": "PASS"
+    },
+    {
+      "name": "application DB role cannot update evidence, delete records or create tables",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy inferred baseline cannot mutate a closed GX case by asset reference",
+      "status": "PASS"
+    },
+    {
+      "name": "injected intake failure rolls back the entire transaction",
+      "status": "PASS"
+    },
+    {
+      "name": "unknown evidence references and stale reviews cannot be finalized",
+      "status": "PASS"
+    },
+    {
+      "name": "export rejects tampering, invalid references and changed embedded evidence",
+      "status": "PASS"
+    },
+    {
+      "name": "write-disabled mode refuses mutations while retaining report reads",
+      "status": "PASS"
+    },
+    {
+      "name": "API and database restart retain closed status, IDs, references and hashes",
+      "status": "PASS"
+    },
+    {
+      "name": "logs and public frontend bundle do not contain staging credentials",
+      "status": "PASS"
+    }
+  ],
+  "calls": [
+    {
+      "method": "GET",
+      "route": "/api/healthz",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/health",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/stripe/not-executed",
+      "status": 404,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 401,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 403,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 403,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 400,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 400,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 400,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/workflow/cases/invalid-id",
+      "status": 400,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 201,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 201,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 201,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/finalize",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/run",
+      "status": 403,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/run",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/run",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/report",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/review",
+      "status": 403,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/review",
+      "status": 400,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/review",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/finalize",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/review",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/finalize",
+      "status": 403,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/finalize",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/finalize",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/report",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/findings",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/evidences",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/findings",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/evidences",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/findings",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/evidences",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/findings",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/evidences",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/findings",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/evidences",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/review",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 201,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/dbd52f84-e845-456e-a14b-db7de6e1269f/run",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/dbd52f84-e845-456e-a14b-db7de6e1269f/review",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/dbd52f84-e845-456e-a14b-db7de6e1269f/finalize",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/baseline/status",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/baseline/first-evidence-finding",
+      "status": 503,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 503,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 201,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/47827dcb-40c6-4dd7-991c-33ef7d5bbfd8/run",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/47827dcb-40c6-4dd7-991c-33ef7d5bbfd8/review",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/47827dcb-40c6-4dd7-991c-33ef7d5bbfd8/finalize",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases/47827dcb-40c6-4dd7-991c-33ef7d5bbfd8/finalize",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/report",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/report",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/report",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "POST",
+      "route": "/api/v1/audit/workflow/cases",
+      "status": 409,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/report",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3/report",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    },
+    {
+      "method": "GET",
+      "route": "/api/v1/audit/workflow/cases/b4229963-c74e-414a-9ff7-1a84812dc6a3",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8"
+    }
+  ]
+}

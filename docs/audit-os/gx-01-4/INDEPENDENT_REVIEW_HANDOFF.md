@@ -4,9 +4,9 @@
 
 ## Identidade e diff
 
-Referência inicial exata: 7687bf248cfc6034af198926a2b07d045ca9b715. Base observada: dbc29fff9a2c55487f85a83db597f41c493af7a8. Branch codex/gxeon-audit-os-v1-gx01. O SHA candidato validado e o HEAD documental final serão registrados na entrega e na descrição da PR. Conferir que não surgiram commits depois da revisão.
+Referência inicial exata: 7687bf248cfc6034af198926a2b07d045ca9b715. Base observada: dbc29fff9a2c55487f85a83db597f41c493af7a8. Branch codex/gxeon-audit-os-v1-gx01. SHA candidato validado: **d20e38db9dd8812d3aa7657846b738137bbfe48d**. Checkout de integração CI: **b9b5febdfcf6cb9c93625741f459112ee137d4ed**. O HEAD documental final é rechecado e registrado na descrição da PR, sem transportar este PASS. Conferir que não surgiram commits depois da revisão.
 
-Diff integral atual: [Files changed](https://github.com/xpex-systems-ai/GXEON-AI/pull/456/files). Para reprodução em checkout com espaço: git fetch origin codex/gxeon-audit-os-v1-gx01; git diff --binary dbc29fff9a2c55487f85a83db597f41c493af7a8 SHA_EXATO_REVISADO. O pacote final incluirá artefato de diff integral vinculado ao SHA candidato; um diff histórico não aprova documentação posterior.
+Diff integral atual: [Files changed](https://github.com/xpex-systems-ai/GXEON-AI/pull/456/files). Para reprodução em checkout com espaço: git fetch origin codex/gxeon-audit-os-v1-gx01; git diff --binary dbc29fff9a2c55487f85a83db597f41c493af7a8 SHA_EXATO_REVISADO. [Diff integral textual do candidato, comprimido](evidence/full-pr-d20e38d.diff.gz), SHA-256 0ee5de4a2b0c1d6b0910632ebce1d2ec1bdb91655791fdc433e5c7aa7826d7f7. Inclui todas as mudanças textuais da PR; o formato GitHub indica binários separadamente, disponíveis como blobs no pacote. O comando git diff --binary acima produz também os payloads binários. um diff histórico não aprova documentação posterior.
 
 Escopo GX-01.4: nove atualizações de dependências compatíveis e documentação/evidências. Não muda rotas, schema, auth ou capacidades comerciais. O código anterior mantém análise estática de vercel.json sanitizado, escopo autorizado, evidência, achados, revisão por papéis e relatório CLOSED. Correções legadas demonstradas: UUID equivalente e descoberta por ativo de caso fechado não podem mutar fluxo GX. Não há execução universal, tenancy ou identidade nominal comprovada.
 
@@ -26,9 +26,9 @@ Escopo GX-01.4: nove atualizações de dependências compatíveis e documentaç�
 
 ## Evidências e testes
 
-Resultados técnicos históricos do SHA inicial foram reconsultados, sem aprovar o novo código. Regressão do novo SHA será registrada em FINAL_DELIVERY e evidence/ci-validation.json. Exigir Typecheck global, Build Linux completo, Monorepo Health e Audit OS V1: instalação frozen, lint, PGlite, PostgreSQL 17, staging 14 grupos, negativos de auth, integridade, restart e export API.
+Resultados técnicos históricos do SHA inicial foram reconsultados, sem aprovar o novo código. Regressão do candidato aprovada: Typecheck 39494661263, Build 39494661161, Audit OS 39494661242 e Health 39494661182. [Evidência](evidence/ci-validation.json) e [relatório sintético](evidence/ci-api-report.json) vinculados ao checkout limpo. Exigir Typecheck global, Build Linux completo, Monorepo Health e Audit OS V1: instalação frozen, lint, PGlite, PostgreSQL 17, staging 14 grupos, negativos de auth, integridade, restart e export API.
 
-[Registro de dependências](DEPENDENCY_RISK_REGISTER.md): histórico 91, antes atual 89, depois 73; 51 altas remanescentes sem aceite. [Infraestrutura](CANONICAL_INFRASTRUCTURE_MATRIX.md): 49 linhas, com serviços Railway separados de projetos/sites. [Proposta](INFRASTRUCTURE_DECISION_PROPOSAL.md): B dedicado recomendado sob aprovação. [Checks](EXTERNAL_CHECKS_FINAL_MATRIX.md): 29 falhas no snapshot inicial, causas separadas de relevância.
+[Registro de dependências](DEPENDENCY_RISK_REGISTER.md): histórico 91; comparativo pnpm11 89→73; revalidação canônica pnpm10 **74 ocorrências em 73 advisories**, com 51 altas sem aceite. [Infraestrutura](CANONICAL_INFRASTRUCTURE_MATRIX.md): 49 linhas, com serviços Railway separados de projetos/sites. [Proposta](INFRASTRUCTURE_DECISION_PROPOSAL.md): B dedicado recomendado sob aprovação. [Checks](EXTERNAL_CHECKS_FINAL_MATRIX.md): 29 falhas no snapshot inicial, causas separadas de relevância.
 
 Persistência e relatório do novo SHA devem vir do staging Linux com sourceDirty=false, IDs/hash/contagem preservados após restart API+banco. JSON da API/artefato GitHub não é download real. [Download](DOWNLOAD_FINAL_VERIFICATION.md) continua BLOCKED e contém roteiro exato.
 

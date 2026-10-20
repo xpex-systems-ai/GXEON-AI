@@ -1,0 +1,12 @@
+{
+  "head": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+  "base": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "bytes": 1587630,
+  "compressedBytes": 265617,
+  "sha256": "0ee5de4a2b0c1d6b0910632ebce1d2ec1bdb91655791fdc433e5c7aa7826d7f7",
+  "secretPatternHits": 0,
+  "encoding": "gzip-base64",
+  "format": "GitHub complete textual PR diff, gzip. Binary files indicated, their blobs are included separately.",
+  "scope": "Base through candidate d20e38d; final documentation diff remains visible in PR.",
+  "secretScan": "Selected credential patterns only, zero matches; not a historical DLP certification."
+}

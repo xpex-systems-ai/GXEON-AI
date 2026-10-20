@@ -1,0 +1,76 @@
+{
+  "branchHead": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+  "checkoutMerge": "b9b5febdfcf6cb9c93625741f459112ee137d4ed",
+  "sourceDirty": false,
+  "runs": [
+    {
+      "id": 39494661182,
+      "name": "GXEON Monorepo Health",
+      "status": "completed",
+      "conclusion": "success",
+      "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661182"
+    },
+    {
+      "id": 39494661263,
+      "name": "GXEON Typecheck",
+      "status": "completed",
+      "conclusion": "success",
+      "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661263"
+    },
+    {
+      "id": 39494661242,
+      "name": "Audit OS V1",
+      "status": "completed",
+      "conclusion": "success",
+      "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661242"
+    },
+    {
+      "id": 39494661161,
+      "name": "GXEON Build",
+      "status": "completed",
+      "conclusion": "success",
+      "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661161"
+    }
+  ],
+  "tests": {
+    "pglite": {
+      "pass": 11,
+      "fail": 0
+    },
+    "postgres17": {
+      "pass": 12,
+      "fail": 0
+    },
+    "staging": {
+      "pass": 14,
+      "fail": 0
+    },
+    "lint": {
+      "files": 19,
+      "errors": 0
+    }
+  },
+  "artifact": {
+    "id": 12297211464,
+    "head": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+    "digest": "sha256:eb307b4830715a5018a52319d89fa33099856ce11e058711ad9813144ec210d1",
+    "digestVerified": true,
+    "downloadedViaGitHubApi": true,
+    "browserDownload": false
+  },
+  "offlineReportVerification": {
+    "caseId": "b4229963-c74e-414a-9ff7-1a84812dc6a3",
+    "reportId": "fd63bcae-cb85-4d9d-b3bf-f9ef69f50e2d",
+    "sha256": "9705d2621daf04394700231f8e59be5871af17f46c07506d423efc85a7b64b10",
+    "evidenceCount": 1,
+    "findingCount": 2,
+    "status": "CLOSED",
+    "testData": true
+  },
+  "validationScope": "Candidate implementation SHA; final documentation HEAD must be independently checked in final PR delivery.",
+  "browserDownloadVerified": false
+}

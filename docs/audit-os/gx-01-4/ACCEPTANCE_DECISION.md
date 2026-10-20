@@ -6,11 +6,11 @@
 | --- | --- | --- |
 | A — inventário canônico | Entregue, sem designação oficial | 49 linhas; fonte por provider+scope+ID; backend compatível não comprovado |
 | B — decisão infraestrutura | Proposta entregue, decisão pendente | B dedicado recomendado, sem criar recursos, DNS, migração ou reconfiguração |
-| C — dependências | Risco residual aberto | 89→73 nesta fase; 51 altas, 18 moderadas e 4 baixas; zero críticas não implica ausência de risco |
+| C — dependências | Risco residual aberto | pnpm10: 74 ocorrências em 73 advisories; 51 altas, 19 moderadas e 4 baixas; zero críticas não implica ausência de risco |
 | D — download real | BLOCKED | Navegador não inicializa; roteiro manual, nenhum arquivo recebido homologado |
 | E — checks externos | BLOCKED | 29/42 falhas no SHA inicial; causas/relevância/autorizações abertas |
 | F — revisão independente | BLOCKED | Não designada; formulário em branco, nenhum review simulado |
-| G — regressão novo HEAD | Em execução | A entrega deve consultar workflows/logs do SHA atual; não reutilizar PASS inicial |
+| G — regressão novo HEAD | PASS candidato; HEAD documental rechecado na entrega | d20e38db9dd8812d3aa7657846b738137bbfe48d: quatro workflows, 11 PGlite, 12 PostgreSQL e 14 staging; evidence/ci-validation.json |
 | Windows/mobile local | Limitação explícita | Instalação frozen passou; disco 0 bytes impede restante, histórico heap/Metro preservado |
 
 READY FOR HUMAN REVIEW só cabe quando a engenharia estiver concluída e as lacunas impeditivas tratadas. O pacote pode ser examinado agora, mas alto risco sem aceite, download não comprovado e operação externa indefinida justificam manter BLOCKED. READY FOR FINAL APPROVAL não foi alcançado.

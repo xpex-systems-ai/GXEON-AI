@@ -1,12 +1,14 @@
 # GX-01.4 — registro de riscos de dependências
 
-**BLOCKED para aceite de risco; audit exit 1.** Responsável decisor: xpex-systems-ai, que deve designar responsáveis técnicos e revisor independente. Nenhum risco alto foi aceito automaticamente.
+**BLOCKED para aceite de risco; audit exit 1. Resultado canônico pnpm 10.28.1: 74 ocorrências (51 altas, 19 moderadas, 4 baixas, 0 críticas), 73 advisories.** Responsável decisor: xpex-systems-ai, que deve designar responsáveis técnicos e revisor independente. Nenhum risco alto foi aceito automaticamente.
 
 ## Contagens e método
 
+A revalidação com a versão exigida pelo repositório, pnpm 10.28.1, reporta 74 ocorrências e 73 advisories, correspondendo a 74 registros advisory/versão abertos. O comparativo antes/depois abaixo foi produzido pelo pnpm global 11.25.0; esse CLI reporta 73 ocorrências no mesmo conjunto final de advisories e classifica contagens de dependências de forma diferente. Não misturar esses totais nem atribuir a diferença de um item a outra correção. Resultado canônico e JSON completo: [pnpm10](evidence/pnpm10-audit-validation.json), [audit bruto comprimido](evidence/dependency-after-pnpm10.json.gz).
+
 - GX-01.3: 91 ocorrências reportadas, 88 entradas, 91 registros advisory/versão.
 - GX-01.4 antes de alterações: 89 ocorrências (60 altas, 24 moderadas, 5 baixas), 89 entradas, 92 registros advisory/versão.
-- Após nove atualizações compatíveis: 73 ocorrências (51 altas, 18 moderadas, 4 baixas), 73 entradas, 74 registros advisory/versão; zero críticos em ambos snapshots atuais.
+- Comparativo pnpm11 após nove atualizações compatíveis: 73 ocorrências (51 altas, 18 moderadas, 4 baixas), 73 entradas, 74 registros advisory/versão; zero críticos em ambos snapshots atuais.
 
 A diferença 91→89 antecede o patch e corresponde à mudança do feed. A redução atribuível à resolução comparada nesta fase é 89→73. Contagem de ocorrências do metadata não é soma de versões ou caminhos nem contagem de exploits. Identidade do registro: URL do advisory + versão instalada. Há 92 registros na união histórica/antes/depois; todos os 91 registros históricos são mapeados. Advisory ausente no feed não foi declarado corrigido pelo código.
 

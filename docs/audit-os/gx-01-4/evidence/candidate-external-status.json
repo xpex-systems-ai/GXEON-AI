@@ -1,0 +1,499 @@
+{
+  "head": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+  "generatedAt": "2026-10-20T20:50:46.446Z",
+  "draft": true,
+  "merged": false,
+  "runs": [
+    {
+      "id": 39494661182,
+      "name": "GXEON Monorepo Health",
+      "status": "completed",
+      "conclusion": "success",
+      "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661182"
+    },
+    {
+      "id": 39494661263,
+      "name": "GXEON Typecheck",
+      "status": "completed",
+      "conclusion": "success",
+      "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661263"
+    },
+    {
+      "id": 39494661242,
+      "name": "Audit OS V1",
+      "status": "completed",
+      "conclusion": "success",
+      "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661242"
+    },
+    {
+      "id": 39494661161,
+      "name": "GXEON Build",
+      "status": "completed",
+      "conclusion": "success",
+      "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661161"
+    }
+  ],
+  "statusCounts": {
+    "success": 9,
+    "failure": 29,
+    "pending": 4
+  },
+  "statuses": [
+    {
+      "context": "Vercel – gxeon-ai-api-server-sxv4",
+      "state": "pending",
+      "description": "Vercel is deploying your app",
+      "target_url": "https://vercel.com/xpex-neural/gxeon-ai-api-server-sxv4/6B8C8tT6rX14Dxs9BjHfeMuCyvdg"
+    },
+    {
+      "context": "Vercel – gxeon-ai01",
+      "state": "pending",
+      "description": "Vercel is deploying your app",
+      "target_url": "https://vercel.com/xpex-neural/gxeon-ai01/E6pJLApLbijtEsSGevVPiRtLuxXk"
+    },
+    {
+      "context": "Vercel – ai-ia",
+      "state": "pending",
+      "description": "Vercel is deploying your app",
+      "target_url": "https://vercel.com/xpex-neural/ai-ia/7xYPqrSUoQt4dpmoURpw4asumBmN"
+    },
+    {
+      "context": "Vercel – gxeon-ai-gxeon-dashboard",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-w39m",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-9swq",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-kzqy",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-veq5",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-72nc",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-hq7w",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-gv35",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-9qd3",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-e7uq",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-4wdd",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-g32e",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-p9ip",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-l2h7",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-wir1",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-lpgw",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ail",
+      "state": "pending",
+      "description": "Vercel is deploying your app",
+      "target_url": "https://vercel.com/xpex-neural/gxeon-ail/7UpYhFCp9QSuyroqMgXCTwcuzq1s"
+    },
+    {
+      "context": "Vercel – gxeon-ai-j5ud",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-b61u",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-wsd2",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-axlh",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-2ban",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "Vercel – gxeon-ai-glwt",
+      "state": "failure",
+      "description": "Account is blocked.",
+      "target_url": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked"
+    },
+    {
+      "context": "netlify/gxeon/deploy-preview",
+      "state": "failure",
+      "description": "Deploy Preview failed.",
+      "target_url": "https://app.netlify.com/projects/gxeon/deploys/6ad7d2d552ee11476ac77974"
+    },
+    {
+      "context": "netlify/gxeonai/deploy-preview",
+      "state": "success",
+      "description": "Deploy Preview ready!",
+      "target_url": "https://deploy-preview-456--gxeonai.netlify.app"
+    },
+    {
+      "context": "netlify/wonderful-phoenix-260614/deploy-preview",
+      "state": "success",
+      "description": "Deploy Preview ready!",
+      "target_url": "https://deploy-preview-456--wonderful-phoenix-260614.netlify.app"
+    },
+    {
+      "context": "Vercel – gxeon-ai-ia",
+      "state": "success",
+      "description": "Deployment has completed",
+      "target_url": "https://vercel.com/xpex-neural/gxeon-ai-ia/cs9GHywh8qhh4tczCT3KM64a5Nc2"
+    },
+    {
+      "context": "Vercel – gxeon-audit-os",
+      "state": "success",
+      "description": "Deployment has completed",
+      "target_url": "https://vercel.com/gxeon/gxeon-audit-os/GcjEK4pwZmXGxqPuKiwHpZBGmAvX"
+    },
+    {
+      "context": "netlify/gleaming-raindrop-1a263b/deploy-preview",
+      "state": "success",
+      "description": "Deploy Preview ready!",
+      "target_url": "https://deploy-preview-456--gleaming-raindrop-1a263b.netlify.app"
+    },
+    {
+      "context": "Vercel – gxeon-ai-api-server-611a",
+      "state": "success",
+      "description": "Deployment has completed",
+      "target_url": "https://vercel.com/junior-senas-projects-4226acc3/gxeon-ai-api-server-611a/55GHurSvZNSUA2vNmZc1VCCRnGVy"
+    },
+    {
+      "context": "Vercel – gxeon-ai-aoo",
+      "state": "success",
+      "description": "Deployment has completed",
+      "target_url": "https://vercel.com/junior-senas-projects-4226acc3/gxeon-ai-aoo/BUiEWKiACLmysmHBCrWC5B1EmvUF"
+    },
+    {
+      "context": "netlify/startling-platypus-66e8e2/deploy-preview",
+      "state": "success",
+      "description": "Deploy Preview ready!",
+      "target_url": "https://deploy-preview-456--startling-platypus-66e8e2.netlify.app"
+    },
+    {
+      "context": "Vercel – gxeon-ai-api-server",
+      "state": "failure",
+      "description": "Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_UsCVYSCyvJMFxz18q6bDXQKUbTpx --logs",
+      "target_url": "https://vercel.com/gxeon/gxeon-ai-api-server/UsCVYSCyvJMFxz18q6bDXQKUbTpx"
+    },
+    {
+      "context": "Vercel – gxeon-ai",
+      "state": "failure",
+      "description": "Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_F16CWUGwrDELihzKBK4Buoaz6vSs --logs",
+      "target_url": "https://vercel.com/xpex-neural/gxeon-ai/F16CWUGwrDELihzKBK4Buoaz6vSs"
+    },
+    {
+      "context": "netlify/coruscating-salmiakki-302f81/deploy-preview",
+      "state": "success",
+      "description": "Deploy Preview ready!",
+      "target_url": "https://deploy-preview-456--coruscating-salmiakki-302f81.netlify.app"
+    },
+    {
+      "context": "Vercel – gxeo",
+      "state": "failure",
+      "description": "Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_EKd4MZTJpCGu2iRf4bdnwW4kHr6h --logs",
+      "target_url": "https://vercel.com/junior-senas-projects-4226acc3/gxeo/EKd4MZTJpCGu2iRf4bdnwW4kHr6h"
+    },
+    {
+      "context": "netlify/gxeonaik/deploy-preview",
+      "state": "failure",
+      "description": "Deploy Preview failed.",
+      "target_url": "https://app.netlify.com/projects/gxeonaik/deploys/6ad7d2d54c019ea43d060625"
+    },
+    {
+      "context": "Vercel – gxeon-ai-mockup-sandbox",
+      "state": "failure",
+      "description": "Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_5BqkX14mwVQMCYFG7t1HcsvWFtTE --logs",
+      "target_url": "https://vercel.com/xpex-neural/gxeon-ai-mockup-sandbox/5BqkX14mwVQMCYFG7t1HcsvWFtTE"
+    },
+    {
+      "context": "Vercel – gxeon-ai-a",
+      "state": "failure",
+      "description": "Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_zmGFfFqY3orqMJLEA2T4EANDdEeV --logs",
+      "target_url": "https://vercel.com/junior-senas-projects-4226acc3/gxeon-ai-a/zmGFfFqY3orqMJLEA2T4EANDdEeV"
+    }
+  ],
+  "checkRuns": [
+    {
+      "name": "Vercel Preview Comments",
+      "app": "vercel",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://vercel.com/github"
+    },
+    {
+      "name": "Redirect rules - gxeonaik",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://app.netlify.com/projects/gxeonaik/deploys/6ad7d2d54c019ea43d060625"
+    },
+    {
+      "name": "Header rules - gxeonaik",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://app.netlify.com/projects/gxeonaik/deploys/6ad7d2d54c019ea43d060625"
+    },
+    {
+      "name": "Pages changed - gxeonaik",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://app.netlify.com/projects/gxeonaik/deploys/6ad7d2d54c019ea43d060625"
+    },
+    {
+      "name": "Redirect rules - coruscating-salmiakki-302f81",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/coruscating-salmiakki-302f81/deploys/6ad7d2d5fe3c270f3af17406"
+    },
+    {
+      "name": "Header rules - coruscating-salmiakki-302f81",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/coruscating-salmiakki-302f81/deploys/6ad7d2d5fe3c270f3af17406"
+    },
+    {
+      "name": "Pages changed - coruscating-salmiakki-302f81",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/coruscating-salmiakki-302f81/deploys/6ad7d2d5fe3c270f3af17406"
+    },
+    {
+      "name": "Redirect rules - startling-platypus-66e8e2",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/startling-platypus-66e8e2/deploys/6ad7d2d5678622162300135f"
+    },
+    {
+      "name": "Header rules - startling-platypus-66e8e2",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/startling-platypus-66e8e2/deploys/6ad7d2d5678622162300135f"
+    },
+    {
+      "name": "Pages changed - startling-platypus-66e8e2",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/startling-platypus-66e8e2/deploys/6ad7d2d5678622162300135f"
+    },
+    {
+      "name": "Redirect rules - gleaming-raindrop-1a263b",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/gleaming-raindrop-1a263b/deploys/6ad7d2d5584e5ba9bc77a7e7"
+    },
+    {
+      "name": "Header rules - gleaming-raindrop-1a263b",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/gleaming-raindrop-1a263b/deploys/6ad7d2d5584e5ba9bc77a7e7"
+    },
+    {
+      "name": "Pages changed - gleaming-raindrop-1a263b",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/gleaming-raindrop-1a263b/deploys/6ad7d2d5584e5ba9bc77a7e7"
+    },
+    {
+      "name": "Redirect rules - wonderful-phoenix-260614",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/wonderful-phoenix-260614/deploys/6ad7d2d55ec68dbcfd2a37d8"
+    },
+    {
+      "name": "Header rules - wonderful-phoenix-260614",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/wonderful-phoenix-260614/deploys/6ad7d2d55ec68dbcfd2a37d8"
+    },
+    {
+      "name": "Redirect rules - gxeonai",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/gxeonai/deploys/6ad7d2d5c4227b2ef1389cd6"
+    },
+    {
+      "name": "Pages changed - wonderful-phoenix-260614",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/wonderful-phoenix-260614/deploys/6ad7d2d55ec68dbcfd2a37d8"
+    },
+    {
+      "name": "Header rules - gxeonai",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/gxeonai/deploys/6ad7d2d5c4227b2ef1389cd6"
+    },
+    {
+      "name": "Redirect rules - gxeon",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://app.netlify.com/projects/gxeon/deploys/6ad7d2d552ee11476ac77974"
+    },
+    {
+      "name": "Pages changed - gxeonai",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://app.netlify.com/projects/gxeonai/deploys/6ad7d2d5c4227b2ef1389cd6"
+    },
+    {
+      "name": "Header rules - gxeon",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://app.netlify.com/projects/gxeon/deploys/6ad7d2d552ee11476ac77974"
+    },
+    {
+      "name": "Pages changed - gxeon",
+      "app": "netlify",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://app.netlify.com/projects/gxeon/deploys/6ad7d2d552ee11476ac77974"
+    },
+    {
+      "name": "TypeScript workspace validation",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661263/job/118876451439"
+    },
+    {
+      "name": "audit-flow",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661242/job/118876451246"
+    },
+    {
+      "name": "Monorepo build",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661161/job/118876450880"
+    },
+    {
+      "name": "isolated-staging",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661242/job/118876450878"
+    },
+    {
+      "name": "Operational radar report",
+      "app": "github-actions",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39494661182/job/118876450873"
+    },
+    {
+      "name": "Supabase Preview",
+      "app": "supabase",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://supabase.com/dashboard/project/zphpeynirstwzrzgvbct/branches"
+    }
+  ],
+  "readOnly": true,
+  "approvedProjectChanges": false
+}
