@@ -232,7 +232,16 @@ export default function FinancialLedgerPage() {
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
         {metricCards.map((metric) => {
           const Icon = metric.icon;
-          const value = summary[metric.key];
+          const value =
+            metric.key === "operatorConfirmedRevenueBrl"
+              ? "operatorConfirmedRevenueBrl" in summary
+                ? summary.operatorConfirmedRevenueBrl
+                : null
+              : metric.key === "providerVerifiedRevenueBrl"
+                ? "providerVerifiedRevenueBrl" in summary
+                  ? summary.providerVerifiedRevenueBrl
+                  : null
+                : summary[metric.key];
           return (
             <Card
               key={metric.label}
@@ -248,7 +257,7 @@ export default function FinancialLedgerPage() {
                   {metric.label}
                 </p>
                 <p className="mt-2 text-3xl font-black">
-                  {formatCurrency(value)}
+                  {typeof value === "number" && Number.isFinite(value) ? formatCurrency(value) : "Não verificado"}
                 </p>
               </CardContent>
             </Card>

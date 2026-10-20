@@ -22,6 +22,40 @@ import {
   validateWorkflowIntake,
 } from "../services/auditWorkflowChecks";
 import { readAuditJson } from "../../../gxeon-dashboard/src/services/auditTransport";
+import { readAuditRestRows } from "../services/auditRestRows";
+import { buildProposalPreview } from "../services/auditProposalService";
+
+test("REST list contracts reject error objects, invalid JSON and unidentified rows", async () => {
+  const response = (body: unknown, status = 200) =>
+    new Response(JSON.stringify(body), {
+      status,
+      headers: { "Content-Type": "application/json" },
+    });
+  assert.deepEqual(
+    await readAuditRestRows(response([{ id: "test-row", title: "TEST DATA" }])),
+    [{ id: "test-row", title: "TEST DATA" }],
+  );
+  assert.deepEqual(await readAuditRestRows(response([])), []);
+  await assert.rejects(
+    readAuditRestRows(response({ message: "private-provider-detail" }, 503)),
+    /AUDIT_REST_READ_FAILED/,
+  );
+  for (const body of [
+    { error: "private-provider-detail" },
+    [{}],
+    [null],
+    [["nested-array"]],
+  ]) {
+    await assert.rejects(
+      readAuditRestRows(response(body)),
+      /AUDIT_REST_CONTRACT_INVALID/,
+    );
+  }
+  await assert.rejects(
+    readAuditRestRows(new Response("<html>private-provider-detail</html>")),
+    /AUDIT_REST_CONTRACT_INVALID/,
+  );
+});
 
 const intake = {
   requestId: randomUUID(),
@@ -405,7 +439,7 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and 
             JSON.stringify(exported.data, null, 2),
           );
         }
-        if (testUrl)
+        if (testUrl) {
           assert.equal(
             (
               await request("/v1/audit/findings", "POST", {
@@ -415,6 +449,13 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and 
             ).status,
             409,
           );
+          const preview = await buildProposalPreview({
+            caseId: id,
+            offerKey: "technical_audit",
+          });
+          assert.match(preview.proposal.proposalCopy, /Reports: 1/);
+          assert.equal(preview.noWrite, true);
+        }
       },
     );
     await t.test(

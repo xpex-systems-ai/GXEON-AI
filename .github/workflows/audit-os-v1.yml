@@ -30,10 +30,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm run typecheck:libs
-      # Full workspace typecheck/build remain mandatory in their existing workflows.
-      # These focused checks let integration evidence run despite documented baseline failures.
-      - run: pnpm --filter @workspace/api-server exec tsc -p tsconfig.audit-v1.json --noEmit
-      - run: pnpm --filter @workspace/gxeon-dashboard exec tsc -p tsconfig.audit-v1.json --noEmit
+      - run: pnpm --filter @workspace/api-server run typecheck
+      - run: pnpm --filter @workspace/gxeon-dashboard run typecheck
       - name: Unit and file-backed persistence tests
         run: pnpm --filter @workspace/api-server run test:audit
       - name: PostgreSQL HTTP integration flow
