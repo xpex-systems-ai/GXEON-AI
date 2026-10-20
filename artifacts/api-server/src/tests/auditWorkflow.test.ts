@@ -115,6 +115,37 @@ test("bounded static checks and secret/input validation", () => {
     checkSubmittedConfig(conditional, ["vercel_api_routing"])[0]?.outcome,
     "not_observed",
   );
+  const conditionalCoverage = JSON.stringify({
+    rewrites: [
+      { source: "/api/:path*", destination: "https://example.invalid/:path*", has: [{ type: "header", key: "x-test" }] },
+      { source: "/(.*)", destination: "/index.html" },
+    ],
+    headers: [{ source: "/(.*)", has: [{ type: "header", key: "x-test" }], headers: [
+      { key: "Content-Security-Policy", value: "default-src 'self'" },
+      { key: "X-Content-Type-Options", value: "nosniff" },
+    ] }],
+  });
+  assert.ok(checkSubmittedConfig(conditionalCoverage, [...intake.checks] as ("vercel_api_routing" | "vercel_security_headers")[])
+    .every((result) => result.outcome === "observed"), "Conditional declarations do not establish unconditional coverage");
+});
+
+test("report contract rejects cross-case envelopes and unknown evidence references", () => {
+  const caseId = randomUUID();
+  const evidenceId = randomUUID();
+  const { artifact: _artifact, ...scope } = intake;
+  const candidate = { ok: true, caseId, reportId: randomUUID(), sha256: "a".repeat(64), report: {
+    version: "gx01-v1", caseId, title: "TEST DATA", testData: true, finalStatus: "CLOSED",
+    scope,
+    review: { decision: "approve", reference: "TEST DATA credential fixture", reviewedAt: new Date().toISOString(), role: "reviewer" },
+    evidence: [{ id: evidenceId, sha256: "b".repeat(64), capturedAt: new Date().toISOString(), source: "operator_submitted_artifact", content: "{}" }],
+    findings: [{ id: randomUUID(), title: "TEST DATA", summary: "TEST DATA", recommendation: "Review", evidenceIds: [evidenceId] }],
+    limitations: ["TEST DATA"], generatedAt: new Date().toISOString(),
+  } };
+  assert.ok(auditWorkflowReportSchema.safeParse(candidate).success);
+  assert.equal(auditWorkflowReportSchema.safeParse({ ...candidate, report: { ...candidate.report, review: undefined } }).success, false);
+  assert.equal(auditWorkflowReportSchema.safeParse({ ...candidate, caseId: randomUUID() }).success, false);
+  candidate.report.findings[0]!.evidenceIds = [randomUUID()];
+  assert.equal(auditWorkflowReportSchema.safeParse(candidate).success, false);
 });
 
 test("HTML transport fails with a useful routing diagnostic; raw server errors stay hidden", async () => {
@@ -194,7 +225,12 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and 
   else {
     const client = await getPool().connect();
     try {
-      await client.query(schema);
+      if (process.env.GXEON_AUDIT_TEST_REUSE_SCHEMA === "true") {
+        assert.ok((await client.query("SELECT to_regclass('public.audit_cases') AS name")).rows[0]?.name,
+          "Explicit schema reuse requires a previously initialized isolated gx01_test database");
+      } else {
+        await client.query(schema);
+      }
     } finally {
       client.release();
     }
@@ -449,6 +485,26 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and 
             ).status,
             409,
           );
+          for (const caseId of [id, ` ${id} `, `\t${id}\n`, id.replace(/-/g, ""), `{${id.toUpperCase()}}`]) {
+            for (const route of ["findings", "evidences"]) {
+              const before = await sql(
+                `SELECT count(*)::int AS n FROM audit_${route} WHERE case_id=$1`,
+                [id],
+              );
+              const mutation = await request(`/v1/audit/${route}`, "POST", {
+                caseId,
+                title: "TEST DATA - attempted legacy mutation",
+                summary: "TEST DATA - must not alter a closed workflow case",
+                redactedText: "TEST DATA - no private content",
+              });
+              assert.equal(mutation.status, 409, `${route} must reject normalized caseId`);
+              assert.equal(mutation.data.code, "WORKFLOW_ROUTE_REQUIRED");
+              assert.deepEqual(
+                (await sql(`SELECT count(*)::int AS n FROM audit_${route} WHERE case_id=$1`, [id])).rows,
+                before.rows,
+              );
+            }
+          }
           const preview = await buildProposalPreview({
             caseId: id,
             offerKey: "technical_audit",
@@ -494,6 +550,11 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and 
     await t.test(
       "identical operator/reviewer tokens cannot approve; provider failures are redacted",
       async () => {
+        delete process.env.GXEON_AUDIT_OPERATOR_TOKEN;
+        delete process.env.GXEON_AUDIT_REVIEWER_TOKEN;
+        assert.equal((await request(base, "POST", intake, "test-only-operator-credential")).status, 403);
+        process.env.GXEON_AUDIT_OPERATOR_TOKEN = "test-only-operator-credential";
+        process.env.GXEON_AUDIT_REVIEWER_TOKEN = "test-only-reviewer-credential";
         process.env.GXEON_AUDIT_REVIEWER_TOKEN =
           process.env.GXEON_AUDIT_OPERATOR_TOKEN;
         assert.equal(

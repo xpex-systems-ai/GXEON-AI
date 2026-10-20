@@ -10,6 +10,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "smoke:financial": "../../scripts/node_modules/.bin/tsx src/tests/financialRuntimeSmoke.ts",
     "test:audit": "tsx --test src/tests/auditWorkflow.test.ts",
+    "typecheck:audit-tests": "tsc -p tsconfig.audit-tests.json --noEmit",
     "demo:audit": "tsx src/tests/auditWorkflowDemo.ts"
   },
   "dependencies": {

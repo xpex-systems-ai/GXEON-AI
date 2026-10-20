@@ -1,0 +1,166 @@
+{
+  "referenceHead": "25931726ca4c264d918248ac1ee52a2dbd6e20f6",
+  "base": "main",
+  "baseSha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "branch": "codex/gxeon-audit-os-v1-gx01",
+  "draft": true,
+  "merged": false,
+  "reviews": [],
+  "reviewThreads": [],
+  "comments": [
+    {
+      "id": 6279281644,
+      "author": "netlify[bot]",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/pull/456#issuecomment-6279281644"
+    },
+    {
+      "id": 6279281657,
+      "author": "vercel[bot]",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/pull/456#issuecomment-6279281657"
+    },
+    {
+      "id": 6279281669,
+      "author": "netlify[bot]",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/pull/456#issuecomment-6279281669"
+    },
+    {
+      "id": 6279281694,
+      "author": "netlify[bot]",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/pull/456#issuecomment-6279281694"
+    },
+    {
+      "id": 6279286355,
+      "author": "netlify[bot]",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/pull/456#issuecomment-6279286355"
+    },
+    {
+      "id": 6279291319,
+      "author": "netlify[bot]",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/pull/456#issuecomment-6279291319"
+    },
+    {
+      "id": 6279295108,
+      "author": "netlify[bot]",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/pull/456#issuecomment-6279295108"
+    },
+    {
+      "id": 6279301076,
+      "author": "netlify[bot]",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/pull/456#issuecomment-6279301076"
+    }
+  ],
+  "vercelBotProjects": [
+    {
+      "name": "gxeon-ai-api-server-611a",
+      "projectId": "prj_STlhUAtwut0oWBsWD5PjmCFLhjBq",
+      "rootDirectory": null,
+      "state": "DEPLOYED",
+      "inspectorUrl": "https://vercel.com/junior-senas-projects-4226acc3/gxeon-ai-api-server-611a/E1NGkEMtmwTfo3muGUvMikG8MTG1",
+      "previewUrl": "gxeon-ai-api-server-6-git-4c23b5-junior-senas-projects-4226acc3.vercel.app"
+    },
+    {
+      "name": "gxeon-ai-api-server-sxv4",
+      "projectId": "prj_AqiT3Idishevz42J1s9E5LZ3SA85",
+      "rootDirectory": "artifacts",
+      "state": "FAILED",
+      "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai-api-server-sxv4/CiDMtkZcTGStzzLvqbHMUtRegYo8",
+      "previewUrl": ""
+    },
+    {
+      "name": "gxeon-ai01",
+      "projectId": "prj_EMDNZwGOLK3bdtOHcVecT84xp4Dp",
+      "rootDirectory": null,
+      "state": "DEPLOYED",
+      "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai01/DDvpMsQMeJEJm8A8qRvGiSRuvNc6",
+      "previewUrl": "gxeon-ai01-git-codex-gxeon-audit-os-v1-gx01-xpex-neural.vercel.app"
+    },
+    {
+      "name": "gxeon-ai-api-server",
+      "projectId": "prj_jpULAotL78AU5SlOd5GcyBTI8UWO",
+      "rootDirectory": null,
+      "state": "DEPLOYED",
+      "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai-api-server/AvDSKQYR4awqjJnHv6VUgwVLdCnY",
+      "previewUrl": "gxeon-ai-api-server-git-codex-gxeon-audit-os-28049f-xpex-neural.vercel.app"
+    },
+    {
+      "name": "gxeo",
+      "projectId": "prj_u4vHMlTnqVXLaJwnpTEn8T0JMOmD",
+      "rootDirectory": "artifacts/api-server",
+      "state": "FAILED",
+      "inspectorUrl": "https://vercel.com/junior-senas-projects-4226acc3/gxeo/7dgZzM85XUAAfkcXepqpafGrAtQN",
+      "previewUrl": ""
+    },
+    {
+      "name": "ai-ia",
+      "projectId": "prj_tQcb12xWLeTTY6h7Vhw6w4yp5frg",
+      "rootDirectory": null,
+      "state": "DEPLOYED",
+      "inspectorUrl": "https://vercel.com/xpex-neural/ai-ia/ezKEf4nnxbuR3U4MBS4ygdspqNmg",
+      "previewUrl": "ai-ia-git-codex-gxeon-audit-os-v1-gx01-xpex-neural.vercel.app"
+    },
+    {
+      "name": "gxeon-ai-aoo",
+      "projectId": "prj_F3OFtryPk4YmYwXc3zEJkbZTRZkv",
+      "rootDirectory": null,
+      "state": "DEPLOYED",
+      "inspectorUrl": "https://vercel.com/junior-senas-projects-4226acc3/gxeon-ai-aoo/9eDmXfVXDfkZkfMyUvNgAKsPUYB5",
+      "previewUrl": "gxeon-ai-aoo-git-codex-gx-395c1b-junior-senas-projects-4226acc3.vercel.app"
+    },
+    {
+      "name": "gxeon-ai",
+      "projectId": "prj_wu5d2rPcPUhdhIQ01P0Y4BddaJT2",
+      "rootDirectory": "dashboard",
+      "state": "FAILED",
+      "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai/ASspqJ9VMqy2DHJh85EEGAT4AWJG",
+      "previewUrl": ""
+    },
+    {
+      "name": "gxeon-ai-a",
+      "projectId": "prj_kssB4fuFxooxei5CYvt091ihp77z",
+      "rootDirectory": "artifacts/api-server",
+      "state": "FAILED",
+      "inspectorUrl": "https://vercel.com/junior-senas-projects-4226acc3/gxeon-ai-a/8qWTEL97KWaaCCnVqNLoXMVP4FHE",
+      "previewUrl": ""
+    },
+    {
+      "name": "gxeon-ai-gxeon-dashboard",
+      "projectId": "prj_UBNjAlz7cWsPvNDILUk66440E7nn",
+      "rootDirectory": "artifacts/gxeon-dashboard",
+      "state": "FAILED",
+      "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai-gxeon-dashboard/9nMbPrsHauQatihadtdQfMgPGn8Z",
+      "previewUrl": ""
+    },
+    {
+      "name": "gxeon-ai-mockup-sandbox",
+      "projectId": "prj_mo5cvJX4AXuPNsYXtQO3zYARLsLh",
+      "rootDirectory": "artifacts/mockup-sandbox",
+      "state": "FAILED",
+      "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai-mockup-sandbox/6Qu641Sr48B1kV2otuvNzMWFm6Ly",
+      "previewUrl": ""
+    },
+    {
+      "name": "gxeon-ai-ia",
+      "projectId": "prj_hODQYobRkk4O6rpZkGZgNkFrNwA4",
+      "rootDirectory": null,
+      "state": "DEPLOYED",
+      "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ai-ia/Bncw1CxMZmy3kxnD4fCTgiFhoRJf",
+      "previewUrl": "gxeon-ai-ia-git-codex-gxeon-audit-os-v1-gx01-xpex-neural.vercel.app"
+    },
+    {
+      "name": "gxeon-ail",
+      "projectId": "prj_RYR5u33XB5nE0UkSwyAGKSQft1gZ",
+      "rootDirectory": null,
+      "state": "DEPLOYED",
+      "inspectorUrl": "https://vercel.com/xpex-neural/gxeon-ail/6vZja7jV8WXmvXoo2oJviHsL9GKE",
+      "previewUrl": "gxeon-ail-git-codex-gxeon-audit-os-v1-gx01-xpex-neural.vercel.app"
+    },
+    {
+      "name": "gxeon-audit-os",
+      "projectId": "prj_owdXFSlvK1GBrWVuYCqeHpTlYjP4",
+      "rootDirectory": null,
+      "state": "DEPLOYED",
+      "inspectorUrl": "https://vercel.com/gxeon/gxeon-audit-os/832j3udr68YeA6hYj85Z28BMdWgM",
+      "previewUrl": "gxeon-audit-os-git-codex-gxeon-audit-os-v1-gx01-gxeon.vercel.app"
+    }
+  ]
+}

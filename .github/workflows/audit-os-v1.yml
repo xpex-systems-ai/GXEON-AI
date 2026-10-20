@@ -29,8 +29,10 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint:audit
       - run: pnpm run typecheck:libs
       - run: pnpm --filter @workspace/api-server run typecheck
+      - run: pnpm --filter @workspace/api-server run typecheck:audit-tests
       - run: pnpm --filter @workspace/gxeon-dashboard run typecheck
       - name: Unit and file-backed persistence tests
         run: pnpm --filter @workspace/api-server run test:audit
@@ -45,3 +47,34 @@ jobs:
         with:
           name: gx01-test-evidence
           path: ${{ runner.temp }}/gx01-evidence
+  isolated-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build:libs
+      - run: pnpm run build:apps
+      - name: Start isolated PostgreSQL 17 and existing applications
+        run: |
+          pnpm run stage:audit init
+          pnpm run stage:audit up
+      - name: Verify HTTP lifecycle, authorization, rollback and full restart
+        run: pnpm run verify:audit-staging
+      - name: Upload sanitized synthetic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gx012-isolated-staging
+          path: .gx012/evidence
+          include-hidden-files: true
+      - name: Stop staging without deleting the persistent volume
+        if: always()
+        run: pnpm run stage:audit stop

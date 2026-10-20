@@ -638,13 +638,19 @@
             "maxItems": 2,
             "uniqueItems": true,
             "items": {
-              "enum": ["vercel_api_routing", "vercel_security_headers"]
+              "enum": [
+                "vercel_api_routing",
+                "vercel_security_headers"
+              ]
             }
           },
           "artifact": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["name", "content"],
+            "required": [
+              "name",
+              "content"
+            ],
             "properties": {
               "name": {
                 "const": "vercel.json"
@@ -661,10 +667,17 @@
       "Review": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["decision", "humanReviewed", "reviewReference"],
+        "required": [
+          "decision",
+          "humanReviewed",
+          "reviewReference"
+        ],
         "properties": {
           "decision": {
-            "enum": ["approve", "reject"]
+            "enum": [
+              "approve",
+              "reject"
+            ]
           },
           "humanReviewed": {
             "const": true
@@ -678,7 +691,11 @@
       },
       "Action": {
         "type": "object",
-        "required": ["ok", "caseId", "status"],
+        "required": [
+          "ok",
+          "caseId",
+          "status"
+        ],
         "properties": {
           "ok": {
             "const": true
@@ -688,7 +705,12 @@
             "format": "uuid"
           },
           "status": {
-            "enum": ["DRAFT", "IN_REVIEW", "READY_FOR_REPORT", "CLOSED"]
+            "enum": [
+              "DRAFT",
+              "IN_REVIEW",
+              "READY_FOR_REPORT",
+              "CLOSED"
+            ]
           },
           "reportId": {
             "type": "string",
@@ -705,7 +727,10 @@
       },
       "Error": {
         "type": "object",
-        "required": ["ok", "code"],
+        "required": [
+          "ok",
+          "code"
+        ],
         "properties": {
           "ok": {
             "const": false
@@ -720,14 +745,25 @@
       },
       "Detail": {
         "type": "object",
-        "required": ["ok", "item", "evidences", "findings", "reports"],
+        "required": [
+          "ok",
+          "item",
+          "evidences",
+          "findings",
+          "reports"
+        ],
         "properties": {
           "ok": {
             "const": true
           },
           "item": {
             "type": "object",
-            "required": ["id", "title", "status", "metadata"],
+            "required": [
+              "id",
+              "title",
+              "status",
+              "metadata"
+            ],
             "properties": {
               "id": {
                 "type": "string",
@@ -737,7 +773,12 @@
                 "type": "string"
               },
               "status": {
-                "enum": ["DRAFT", "IN_REVIEW", "READY_FOR_REPORT", "CLOSED"]
+                "enum": [
+                  "DRAFT",
+                  "IN_REVIEW",
+                  "READY_FOR_REPORT",
+                  "CLOSED"
+                ]
               },
               "metadata": {
                 "type": "object"
@@ -766,7 +807,13 @@
       },
       "Export": {
         "type": "object",
-        "required": ["ok", "caseId", "reportId", "sha256", "report"],
+        "required": [
+          "ok",
+          "caseId",
+          "reportId",
+          "sha256",
+          "report"
+        ],
         "properties": {
           "ok": {
             "const": true
@@ -787,7 +834,8 @@
             "type": "object",
             "description": "Reviewed immutable snapshot: scope, testData flag, findings with evidence IDs, submitted evidence text and hashes, limitations, review attestation, state history and finalStatus CLOSED. Runtime Zod schema is authoritative."
           }
-        }
+        },
+        "description": "The envelope caseId must match report.caseId. Exactly one submitted evidence artifact is required. Every finding references an evidence ID in this report. The server verifies canonical report SHA-256 and embedded evidence SHA-256 before export."
       }
     }
   }

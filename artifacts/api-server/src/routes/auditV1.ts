@@ -63,7 +63,12 @@ router.use("/v1/audit", (req, res, next) => {
 });
 router.use("/v1/audit", async (req, res, next) => {
   // Legacy mutation paths must not change a reviewed GX-01 case through a second API.
-  const id = req.body?.caseId;
+  // PostgreSQL also accepts compact/braced UUIDs. Match the same case before any legacy write.
+  const rawId = typeof req.body?.caseId === "string" ? req.body.caseId.trim() : "";
+  const compact = rawId.replace(/^\{(.*)\}$/, "$1").replace(/-/g, "");
+  const id = /^[0-9a-f]{32}$/i.test(compact)
+    ? `${compact.slice(0, 8)}-${compact.slice(8, 12)}-${compact.slice(12, 16)}-${compact.slice(16, 20)}-${compact.slice(20)}`
+    : null;
   if (req.method !== "GET" && typeof id === "string" && /^[0-9a-f-]{36}$/i.test(id) && process.env.DATABASE_URL) {
     const result = await getPool().query("SELECT id FROM audit_cases WHERE id=$1 AND metadata->>'workflow'='gx01-v1'", [id]);
     if (result.rows.length) { res.status(409).json({ ok: false, code: "WORKFLOW_ROUTE_REQUIRED", message: "Use the GX-01 workflow routes for this case." }); return; }

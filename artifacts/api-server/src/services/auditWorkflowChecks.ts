@@ -94,6 +94,8 @@ export function checkSubmittedConfig(
           (r) =>
             r &&
             typeof r === "object" &&
+            !r.has &&
+            !r.missing &&
             ["/api/:path*", "/api/(.*)"].includes(r.source) &&
             typeof r.destination === "string" &&
             r.destination !== "/index.html",
@@ -112,7 +114,7 @@ export function checkSubmittedConfig(
     // Conditional/path-specific rules cannot establish deployed coverage. Report only explicit global declarations.
     const rules = Array.isArray(config.headers) ? config.headers : [];
     const names = rules
-      .filter((r) => r && ["/(.*)", "/:path*"].includes(r.source))
+      .filter((r) => r && !r.has && !r.missing && ["/(.*)", "/:path*"].includes(r.source))
       .flatMap((r) => (Array.isArray(r.headers) ? r.headers : []))
       .filter(
         (h) =>

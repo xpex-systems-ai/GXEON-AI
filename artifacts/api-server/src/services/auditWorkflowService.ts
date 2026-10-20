@@ -1,6 +1,7 @@
 import { getPool, type PoolClient } from "@workspace/db";
 import {
   auditWorkflowReviewSchema,
+  auditWorkflowReportSchema,
   type AuditWorkflowIntake,
 } from "@workspace/api-zod";
 import {
@@ -497,13 +498,18 @@ export function createAuditWorkflowService(
             "REPORT_INTEGRITY_FAILED",
             "Stored report does not match its hash.",
           );
-        return {
+        const exported = {
           ok: true as const,
           caseId: id,
           reportId: report.id,
           sha256,
           report: report.content,
         };
+        const verified = auditWorkflowReportSchema.safeParse(exported);
+        if (!verified.success) return fail(409, "REPORT_REFERENCE_INVALID", "Stored report does not satisfy the evidence-reference contract.");
+        if (verified.data.report.evidence.some((e) => digest(e.content) !== e.sha256))
+          return fail(409, "REPORT_EVIDENCE_INTEGRITY_FAILED", "Embedded evidence does not match its hash.");
+        return exported;
       });
     },
   };

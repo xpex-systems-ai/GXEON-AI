@@ -1,0 +1,56 @@
+{
+  "referenceHead": "25931726ca4c264d918248ac1ee52a2dbd6e20f6",
+  "scope": "xpex-neural",
+  "readOnly": true,
+  "deployments": [
+    {
+      "name": "gxeon-ai-api-server-sxv4",
+      "id": "dpl_CiDMtkZcTGStzzLvqbHMUtRegYo8",
+      "url": "gxeon-ai-api-server-sxv4-bsh8rr6ug-xpex-neural.vercel.app",
+      "state": "ERROR",
+      "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+      "errorMessage": "No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory."
+    },
+    {
+      "name": "gxeon-ai",
+      "id": "dpl_ASspqJ9VMqy2DHJh85EEGAT4AWJG",
+      "url": "gxeon-oh7gavgg9-xpex-neural.vercel.app",
+      "state": "ERROR",
+      "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+      "errorMessage": "No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory."
+    },
+    {
+      "name": "gxeon-ai-gxeon-dashboard",
+      "id": "dpl_9nMbPrsHauQatihadtdQfMgPGn8Z",
+      "url": "gxeon-ai-gxeon-dashboard-fu8w79y6e-xpex-neural.vercel.app",
+      "state": "ERROR",
+      "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+      "errorMessage": "No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory."
+    },
+    {
+      "name": "gxeon-ai-mockup-sandbox",
+      "id": "dpl_6Qu641Sr48B1kV2otuvNzMWFm6Ly",
+      "url": "gxeon-ai-mockup-sandbox-jwekk2fim-xpex-neural.vercel.app",
+      "state": "ERROR",
+      "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+      "errorMessage": "No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory."
+    }
+  ],
+  "eventsAvailability": "See scoped metadata; logs not persisted",
+  "otherScopeAvailability": {
+    "message": "Vercel API request failed (403: forbidden). Not authorized: Trying to access resource under scope \"junior-senas-projects-4226acc3\". You must re-authenticate to this scope or use a token with access to this scope.",
+    "recovery": "Try an available mapped CLI fallback first for the same authorized action, with the same explicit team/project and the CLI's own credentials. If it succeeds, use its result. If it fails or no CLI fallback is available, Ask the user to grant this MCP connection access to the target team through Vercel consent or app installation, then retry. Completing SSO does not add a missing team grant.",
+    "remediation": {
+      "actor": "user",
+      "action": "grant_team_access"
+    },
+    "status": 403,
+    "code": "forbidden",
+    "operation": "GET /v13/deployments/{idOrUrl}",
+    "saml": false,
+    "ssoEnforced": false,
+    "scope": "junior-senas-projects-4226acc3",
+    "teamId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+    "requestId": "gru1:sfo1::hxq7k-1792522199146-bc3e07ccdeef"
+  }
+}

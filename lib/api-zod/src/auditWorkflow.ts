@@ -62,10 +62,16 @@ export const auditWorkflowReportSchema = z.object({
       testData: z.boolean(),
       finalStatus: z.literal("CLOSED"),
       scope: auditWorkflowIntakeSchema.omit({ artifact: true }),
+      review: z.object({
+        decision: z.literal("approve"),
+        reference: z.string().min(3),
+        reviewedAt: z.string(),
+        role: z.literal("reviewer"),
+      }),
       evidence: z.array(
         z.object({
           id: z.string().uuid(),
-          sha256: z.string(),
+          sha256: z.string().regex(/^[a-f0-9]{64}$/),
           capturedAt: z.string(),
           source: z.literal("operator_submitted_artifact"),
           content: z.string(),
@@ -84,6 +90,19 @@ export const auditWorkflowReportSchema = z.object({
       generatedAt: z.string(),
     })
     .passthrough(),
+}).superRefine((value, ctx) => {
+  if (value.caseId !== value.report.caseId) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["report", "caseId"], message: "Report case must match its envelope." });
+  }
+  const ids = new Set(value.report.evidence.map((e) => e.id));
+  if (ids.size !== value.report.evidence.length || ids.size !== 1) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["report", "evidence"], message: "GX-01 requires one identified submitted artifact." });
+  }
+  for (const [index, finding] of value.report.findings.entries()) {
+    if (!finding.evidenceIds.length || finding.evidenceIds.some((id) => !ids.has(id))) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["report", "findings", index, "evidenceIds"], message: "Finding must reference this report's evidence." });
+    }
+  }
 });
 export const auditWorkflowDetailSchema = z.object({
   ok: z.literal(true),
