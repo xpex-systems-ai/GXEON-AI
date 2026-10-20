@@ -17,6 +17,8 @@ Este diretório organiza a documentação institucional, técnica e operacional 
 | Segurança | [GXEON_SECURITY_MODEL.md](security/GXEON_SECURITY_MODEL.md) | Modelo de credenciais, limites e auditoria. |
 | Monetização | [GXEON_MONETIZATION_PATH.md](monetization/GXEON_MONETIZATION_PATH.md) | Caminho operacional para monetização comprovada. |
 | Roadmap | [GXEON_MASTER_ROADMAP.md](roadmap/GXEON_MASTER_ROADMAP.md) | Evolução P0-P5. |
+| Proposta OMNIX AI | [Registro de fundação](omnix-ai/README.md) | Manifesto proposto, estrutura corporativa e limites comprovados. |
+| Roadmap OMNIX / GX-01 | [ROADMAP_GX01.md](omnix-ai/ROADMAP_GX01.md) | Gates de núcleo, homologação, piloto e expansão planejada. |
 | Marca | [GXEON_BRAND_SYSTEM.md](brand/GXEON_BRAND_SYSTEM.md) | Linguagem, tom e termos oficiais. |
 | Assets | [assets/README.md](assets/README.md) | Placeholders e convenções visuais. |
 

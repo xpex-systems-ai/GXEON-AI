@@ -148,6 +148,8 @@ These are initial package targets. They are not counted as revenue until real sc
 
 ## Investor-Readable Roadmap
 
+The [OMNIX AI foundation proposal](docs/omnix-ai/README.md) records a proposed customer-facing brand developed by XPeX Systems AI, with GXEON OS and Audit OS preserved as technical infrastructure. Its [GX-01 roadmap](docs/omnix-ai/ROADMAP_GX01.md) prioritizes core stabilization, staging validation and independent review before a commercial pilot. The brand and portfolio remain proposals; this is not a product rename or launch approval.
+
 | Phase | Milestone | Investor-readable outcome |
 | --- | --- | --- |
 | P0 | Foundation | Repository, contracts, safety policy, docs, brand and portfolio kit |
