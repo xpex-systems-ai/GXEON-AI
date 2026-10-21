@@ -1,0 +1,11 @@
+# Identidade e permissões
+
+GX-01.5 · 2026-10-21 · PR [#456](https://github.com/xpex-systems-ai/GXEON-AI/pull/456) DRAFT · integração main · estado global **BLOCKED**. Implementação e testes não equivalem a aprovação humana ou autorização de deploy.
+
+**TESTADO:** dois papéis com Bearer distintos,401sem token,403credencial inválida/papel errado, query/access_token/X-Audit-Role/X-Original-Authorization/X-Forwarded-For não concedem papel, sem credenciais idênticas para review, escritas disabled409, CLOSED imutável409, UUID equivalente não burla guarda, seletor legado não descobre caso GX para mutação. Evidências/relatórios exigem leitura autorizada, export valida hash/referências. [Testes e comandos](evidence/local-validation.json), [staging](evidence/local-acceptance.json), [CI atual](evidence/ci-validation.json).
+
+**NÃO IMPLEMENTADO/HOMOLOGADO:** identidade nominal, vínculo de uma credencial a uma pessoa, SSO/MFA de aplicação, sessões por usuário, trilha assinada, segregação por empresa, roles individuais e revogação individual. Duas credenciais não comprovam duas pessoas. Nenhum revisor humano designado e nenhuma aprovação artificial criada. A fixture humanReviewed=true exercita o contrato existente com referência explícita TEST DATA; não é aceite humano do piloto/PR.
+
+Escopo inicial é ambiente interno único, manual, sem dados privados. Proibir multiempresa. UI pede credencial de sessão (memória React), não persiste em localStorage/URL/cookie; não embutir segredos em VITE_*. Limpar sessão/recarregar ao trocar papel e nunca compartilhar credencial entre operador/revisor.
+
+Rotação proposta: titular interrompe novas escritas, gera dois valores independentes em canal privado, atualiza somente os nomes GXEON_AUDIT_OPERATOR_TOKEN e GXEON_AUDIT_REVIEWER_TOKEN do serviço dedicado autorizado, reinicia e prova401/403dos antigos e sucesso dos novos, registra apenas identidade nominal do custodiante/data/evidência sanitizada. Revogação urgente: disabled/false, retirar origem/acesso autorizado sob procedimento aprovado, invalidar tokens/reiniciar, verificar rejeição. Não publicar valores. Processo remoto e pessoas ainda pendentes; testes locais de igualdade/papel não comprovam rotação na conta.

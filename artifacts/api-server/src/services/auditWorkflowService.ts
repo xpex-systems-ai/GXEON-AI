@@ -1,4 +1,4 @@
-import { getPool, type PoolClient } from "@workspace/db";
+import { getPool, type PoolClient } from "@workspace/db/pool";
 import {
   auditWorkflowReviewSchema,
   auditWorkflowReportSchema,

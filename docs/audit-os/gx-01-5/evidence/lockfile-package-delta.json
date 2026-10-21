@@ -1,0 +1,14 @@
+{
+  "added": [
+    "fast-uri@3.1.8:",
+    "linkify-it@5.0.2:",
+    "markdown-it@14.3.3:"
+  ],
+  "removed": [
+    "fast-uri@3.1.2:",
+    "js-yaml@4.2.0:",
+    "linkify-it@5.0.0:",
+    "markdown-it@14.1.1:"
+  ],
+  "note": "Optional supports-color peer suffixes were re-resolved by pnpm10; no unrelated direct package upgrade. Frozen install and global build/typecheck validated."
+}

@@ -1,0 +1,3306 @@
+{
+  "head": "4016b8d32ff1e959e975bc1612a9821d85bfe2af",
+  "scope": "Static declarations, not proof of effective runtime permission. New dedicated routes are inventoried separately.",
+  "count": 435,
+  "rows": [
+    {
+      "module": "artifacts/api-server/src/routes/agentEconomy.ts",
+      "method": "USE",
+      "localPath": "/agent-economy",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agentEconomy.ts",
+      "method": "GET",
+      "localPath": "/agent-economy/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agentEconomy.ts",
+      "method": "GET",
+      "localPath": "/agent-economy/sources",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agentEconomy.ts",
+      "method": "GET",
+      "localPath": "/agent-economy/candidates",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agentEconomy.ts",
+      "method": "GET",
+      "localPath": "/agent-economy/candidates/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agentEconomy.ts",
+      "method": "POST",
+      "localPath": "/agent-economy/manual-import",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agentEconomy.ts",
+      "method": "POST",
+      "localPath": "/agent-economy/candidates/:id/create-connector-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agentEconomy.ts",
+      "method": "POST",
+      "localPath": "/agent-economy/candidates/:id/create-task-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agents.ts",
+      "method": "USE",
+      "localPath": "/agents/home-center",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agents.ts",
+      "method": "GET",
+      "localPath": "/agents/home-center/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agents.ts",
+      "method": "GET",
+      "localPath": "/agents/home-center/registry",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agents.ts",
+      "method": "GET",
+      "localPath": "/agents/home-center/permissions",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agents.ts",
+      "method": "GET",
+      "localPath": "/agents/home-center/grok-readiness",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agents.ts",
+      "method": "GET",
+      "localPath": "/agents/home-center/quantum/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agents.ts",
+      "method": "POST",
+      "localPath": "/agents/home-center/quantum/prioritize-opportunity",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agents.ts",
+      "method": "POST",
+      "localPath": "/agents/home-center/quantum/simulate-task-route",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agents.ts",
+      "method": "POST",
+      "localPath": "/agents/home-center/quantum/risk-energy",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/agents.ts",
+      "method": "USE",
+      "localPath": "/agents/home-center",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditOs.ts",
+      "method": "GET",
+      "localPath": "/audit-os/status",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditOs.ts",
+      "method": "GET",
+      "localPath": "/audit-os/catalog",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditOs.ts",
+      "method": "GET",
+      "localPath": "/audit-os/monetization-ladder",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditOs.ts",
+      "method": "POST",
+      "localPath": "/audit-os/preview",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "USE",
+      "localPath": "/v1/audit",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "USE",
+      "localPath": "/v1/audit",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/health",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/modules",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/schema-map",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/schema-diagnostics",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/cases/summary",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/intake/preview",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/cases",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/bootstrap/first-case",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/cases",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/cases/:caseId",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/cases/:caseId/timeline",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/findings/summary",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/baseline/status",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/baseline/first-evidence-finding",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/findings/preview",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/findings",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/evidences/preview",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/evidences",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/cases/:caseId/findings",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/findings/:findingId",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/cases/:caseId/evidences",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/findings/:findingId/evidences",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/reports/summary",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/missions/mission-006/status",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/missions/run-baseline-score-report",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/connectors/status",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/mission-control",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/offers/catalog",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/offers/catalog/:offerKey",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/proposals/status",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/proposals/first-draft/status",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/proposals/first-draft/preview-run",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/proposals/first-draft/run",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/proposals/preview",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/proposals",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/cases/:caseId/proposals",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "GET",
+      "localPath": "/v1/audit/proposals/:proposalId",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "POST",
+      "localPath": "/v1/audit/proposals/:proposalId/status/preview",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditV1.ts",
+      "method": "PATCH",
+      "localPath": "/v1/audit/proposals/:proposalId/status",
+      "middleware": [
+        "noStore"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditWorkflow.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "auditAccess(\"read\")"
+      ],
+      "authEvidence": "Declared middleware: review composition"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditWorkflow.ts",
+      "method": "POST",
+      "localPath": "/cases",
+      "middleware": [
+        "auditAccess(\"operator\")"
+      ],
+      "authEvidence": "Declared middleware: review composition"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditWorkflow.ts",
+      "method": "GET",
+      "localPath": "/cases/:caseId",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditWorkflow.ts",
+      "method": "POST",
+      "localPath": "/cases/:caseId/run",
+      "middleware": [
+        "auditAccess(\"operator\")"
+      ],
+      "authEvidence": "Declared middleware: review composition"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditWorkflow.ts",
+      "method": "POST",
+      "localPath": "/cases/:caseId/review",
+      "middleware": [
+        "auditAccess(\"reviewer\")"
+      ],
+      "authEvidence": "Declared middleware: review composition"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditWorkflow.ts",
+      "method": "POST",
+      "localPath": "/cases/:caseId/finalize",
+      "middleware": [
+        "auditAccess(\"operator\")"
+      ],
+      "authEvidence": "Declared middleware: review composition"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditWorkflow.ts",
+      "method": "GET",
+      "localPath": "/cases/:caseId/report",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/auditWorkflow.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "errorHandler"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/brain.ts",
+      "method": "USE",
+      "localPath": "/brain",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/brain.ts",
+      "method": "GET",
+      "localPath": "/brain/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/brain.ts",
+      "method": "GET",
+      "localPath": "/brain/revenue-sprint/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/brain.ts",
+      "method": "GET",
+      "localPath": "/brain/revenue-sprint/offer-packs",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/brain.ts",
+      "method": "GET",
+      "localPath": "/brain/revenue-sprint/sprints",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/brain.ts",
+      "method": "GET",
+      "localPath": "/brain/revenue-sprint/sprints/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/brain.ts",
+      "method": "POST",
+      "localPath": "/brain/revenue-sprint/start",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/brain.ts",
+      "method": "PATCH",
+      "localPath": "/brain/revenue-sprint/sprints/:id/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/broker.ts",
+      "method": "USE",
+      "localPath": "/broker",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/broker.ts",
+      "method": "GET",
+      "localPath": "/broker/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/broker.ts",
+      "method": "GET",
+      "localPath": "/broker/decisions",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/broker.ts",
+      "method": "GET",
+      "localPath": "/broker/decisions/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/broker.ts",
+      "method": "POST",
+      "localPath": "/broker/preview-route",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clawlancer.ts",
+      "method": "USE",
+      "localPath": "/clawlancer",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clawlancer.ts",
+      "method": "GET",
+      "localPath": "/clawlancer/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clawlancer.ts",
+      "method": "GET",
+      "localPath": "/clawlancer/opportunities",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clawlancer.ts",
+      "method": "GET",
+      "localPath": "/clawlancer/snapshot",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clawlancer.ts",
+      "method": "POST",
+      "localPath": "/clawlancer/listings/:id/claim",
+      "middleware": [
+        "governanceAuth"
+      ],
+      "authEvidence": "Declared middleware: review composition"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clawlancer.ts",
+      "method": "POST",
+      "localPath": "/clawlancer/transactions/:id/deliver",
+      "middleware": [
+        "governanceAuth"
+      ],
+      "authEvidence": "Declared middleware: review composition"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clientOfferSend.ts",
+      "method": "USE",
+      "localPath": "/client-offer-send",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clientOfferSend.ts",
+      "method": "GET",
+      "localPath": "/client-offer-send/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clientOfferSend.ts",
+      "method": "GET",
+      "localPath": "/client-offer-send/packs",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clientOfferSend.ts",
+      "method": "GET",
+      "localPath": "/client-offer-send/packs/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clientOfferSend.ts",
+      "method": "POST",
+      "localPath": "/client-offer-send/packs",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clientOfferSend.ts",
+      "method": "POST",
+      "localPath": "/client-offer-send/from-manual-payment/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clientOfferSend.ts",
+      "method": "POST",
+      "localPath": "/client-offer-send/from-delivery-workspace/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clientOfferSend.ts",
+      "method": "PATCH",
+      "localPath": "/client-offer-send/packs/:id/state",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/clientOfferSend.ts",
+      "method": "POST",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "`/client-offer-send/packs/:id/${path}`"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/github.ts",
+      "method": "GET",
+      "localPath": "/connectors/github/diagnostics",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/github.ts",
+      "method": "GET",
+      "localPath": "/connectors/github/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/github.ts",
+      "method": "GET",
+      "localPath": "/connectors/github/final-readiness",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/github.ts",
+      "method": "GET",
+      "localPath": "/connectors/github/connect-url",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/github.ts",
+      "method": "GET",
+      "localPath": "/connectors/github/activity",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/github.ts",
+      "method": "GET",
+      "localPath": "/connectors/github/callback",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/github.ts",
+      "method": "GET",
+      "localPath": "/connectors/github/snapshot",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/microsoft365.ts",
+      "method": "GET",
+      "localPath": "/connectors/microsoft365/diagnostics",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/microsoft365.ts",
+      "method": "GET",
+      "localPath": "/connectors/microsoft365/activity",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/microsoft365.ts",
+      "method": "GET",
+      "localPath": "/connectors/microsoft365/connect-url",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/microsoft365.ts",
+      "method": "GET",
+      "localPath": "/connectors/microsoft365/snapshot",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/railway.ts",
+      "method": "GET",
+      "localPath": "/connectors/railway/diagnostics",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/railway.ts",
+      "method": "GET",
+      "localPath": "/connectors/railway/activity",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/railway.ts",
+      "method": "GET",
+      "localPath": "/connectors/railway/snapshot",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/supabase.ts",
+      "method": "GET",
+      "localPath": "/connectors/supabase/diagnostics",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/supabase.ts",
+      "method": "GET",
+      "localPath": "/connectors/supabase/activity",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/supabase.ts",
+      "method": "GET",
+      "localPath": "/connectors/supabase/snapshot",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/vercel.ts",
+      "method": "GET",
+      "localPath": "/connectors/vercel/diagnostics",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/vercel.ts",
+      "method": "GET",
+      "localPath": "/connectors/vercel/activity",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors/vercel.ts",
+      "method": "GET",
+      "localPath": "/connectors/vercel/snapshot",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors.ts",
+      "method": "USE",
+      "localPath": "/connectors",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors.ts",
+      "method": "GET",
+      "localPath": "/connectors/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors.ts",
+      "method": "GET",
+      "localPath": "/connectors/registry",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors.ts",
+      "method": "GET",
+      "localPath": "/connectors/brain-summary",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors.ts",
+      "method": "GET",
+      "localPath": "/connectors/:id/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors.ts",
+      "method": "POST",
+      "localPath": "/connectors/:id/launch",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors.ts",
+      "method": "POST",
+      "localPath": "/connectors/:id/manual-status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/connectors.ts",
+      "method": "GET",
+      "localPath": "/connectors/:id/instructions",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/conversion.ts",
+      "method": "GET",
+      "localPath": "/v1/conversion/funnels",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/conversion.ts",
+      "method": "GET",
+      "localPath": "/v1/conversion/leads",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/conversion.ts",
+      "method": "POST",
+      "localPath": "/v1/leads/capture",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/conversion.ts",
+      "method": "GET",
+      "localPath": "/v1/conversion/telemetry",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/conversion.ts",
+      "method": "GET",
+      "localPath": "/v1/conversion/forecast",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/conversion.ts",
+      "method": "GET",
+      "localPath": "/v1/conversion/opportunities",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/conversion.ts",
+      "method": "GET",
+      "localPath": "/v1/conversion/runtime",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/conversion.ts",
+      "method": "GET",
+      "localPath": "/v1/revenue/live",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/execution.ts",
+      "method": "USE",
+      "localPath": "/execution",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/execution.ts",
+      "method": "GET",
+      "localPath": "/execution/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/execution.ts",
+      "method": "GET",
+      "localPath": "/execution/previews",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/execution.ts",
+      "method": "GET",
+      "localPath": "/execution/previews/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/execution.ts",
+      "method": "POST",
+      "localPath": "/execution/previews",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/execution.ts",
+      "method": "PATCH",
+      "localPath": "/execution/previews/:id/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/financial.ts",
+      "method": "GET",
+      "localPath": "/v1/financial/health",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/financial.ts",
+      "method": "GET",
+      "localPath": "/v1/financial/wallets",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/financial.ts",
+      "method": "GET",
+      "localPath": "/v1/financial/transactions",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "USE",
+      "localPath": "/github-demand",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "GET",
+      "localPath": "/github-demand/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "GET",
+      "localPath": "/github-demand/query-packs",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/search-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/score-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/pipeline-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "GET",
+      "localPath": "/github-demand/pipeline-previews",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "GET",
+      "localPath": "/github-demand/pipeline-previews/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/pipeline-previews/:id/proposal-pack",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/pipeline-previews/:id/conversion-pack",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "GET",
+      "localPath": "/github-demand/conversion-packs",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "GET",
+      "localPath": "/github-demand/conversion-packs/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/conversion-packs/:id/execution-pack",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "GET",
+      "localPath": "/github-demand/execution-packs",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "GET",
+      "localPath": "/github-demand/execution-packs/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/execution-packs/:id/task-preview",
+      "middleware": [
+        "executionAction(\"TASK_PREVIEW\",\"TASK_PREVIEW_CREATED\",createTaskPreviewFromExecutionPack)"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/execution-packs/:id/broker-preview",
+      "middleware": [
+        "executionAction(\"BROKER_ROUTE_PREVIEW\",\"BROKER_ROUTE_PREPARED\",createBrokerRoutePreviewFromExecutionPack)"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/execution-packs/:id/execution-center-preview",
+      "middleware": [
+        "executionAction(\"EXECUTION_CENTER_PREVIEW\",\"EXECUTION_PREVIEW_CREATED\",createExecutionCenterPreviewFromExecutionPack)"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/execution-packs/:id/validation-preview",
+      "middleware": [
+        "executionAction(\"VALIDATION_PREVIEW\",\"VALIDATION_PREVIEW_CREATED\",createValidationPreviewFromExecutionPack)"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/execution-packs/:id/release-preview",
+      "middleware": [
+        "executionAction(\"RELEASE_PREVIEW\",\"RELEASE_PREVIEW_CREATED\",createReleasePreviewFromExecutionPack)"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/execution-packs/:id/ledger-preview",
+      "middleware": [
+        "executionAction(\"LEDGER_PREVIEW\",\"LEDGER_PREVIEW_CREATED\",createLedgerPreviewFromExecutionPack)"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/execution-packs/:id/delivery-workspace-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/conversion-packs/:id/create-opportunity-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/conversion-packs/:id/create-task-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/conversion-packs/:id/brain-revenue-sprint-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/githubDemand.ts",
+      "method": "POST",
+      "localPath": "/github-demand/pipeline-previews/:id/create-opportunity-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/governance.ts",
+      "method": "USE",
+      "localPath": "/v1/governance",
+      "middleware": [
+        "governanceAuth"
+      ],
+      "authEvidence": "Declared middleware: review composition"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/governance.ts",
+      "method": "GET",
+      "localPath": "/v1/governance/merge",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/governance.ts",
+      "method": "GET",
+      "localPath": "/v1/governance/branches",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/governance.ts",
+      "method": "GET",
+      "localPath": "/v1/governance/deployments",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/governance.ts",
+      "method": "GET",
+      "localPath": "/v1/governance/conflicts",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/governance.ts",
+      "method": "GET",
+      "localPath": "/v1/governance/recovery",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/governance.ts",
+      "method": "GET",
+      "localPath": "/v1/governance/runtime-sync",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/governance.ts",
+      "method": "POST",
+      "localPath": "/v1/governance/reports",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/health.ts",
+      "method": "GET",
+      "localPath": "/healthz",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "healthRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "governanceRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "conversionRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "phase8Router"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "runtimeRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "financialRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "connectorsRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "githubConnectorRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "vercelConnectorRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "railwayConnectorRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "supabaseConnectorRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "microsoft365ConnectorRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "monetizationRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "radarRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "githubDemandRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "operatorDeliveryWorkspaceRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "manualPaymentRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "clientOfferSendRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "manualProspectsRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "r100WarRoomRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "revenueCloseLoopRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "operatorAssistantRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "operatorWorkflowRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "r100TruthRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "r100DurableStateRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "r100DatabaseMirrorRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "auditOsRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "/v1/audit/workflow",
+      "middleware": [
+        "auditWorkflowRouter()"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "auditV1Router"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "gxeonEcosystemRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "opportunitiesRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "tasksRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "web3TasksRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "agentEconomyRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "clawlancerRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "brainRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "agentsRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "brokerRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "executionRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "validationRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "releaseRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/index.ts",
+      "method": "USE",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "ledgerRouter"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/ledger.ts",
+      "method": "USE",
+      "localPath": "/ledger",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/ledger.ts",
+      "method": "GET",
+      "localPath": "/ledger/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/ledger.ts",
+      "method": "GET",
+      "localPath": "/ledger/summary",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/ledger.ts",
+      "method": "GET",
+      "localPath": "/ledger/previews",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/ledger.ts",
+      "method": "GET",
+      "localPath": "/ledger/previews/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/ledger.ts",
+      "method": "POST",
+      "localPath": "/ledger/previews",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/ledger.ts",
+      "method": "POST",
+      "localPath": "/ledger/from-close-loop/:closeLoopId",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/ledger.ts",
+      "method": "PATCH",
+      "localPath": "/ledger/previews/:id/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/ledger.ts",
+      "method": "PATCH",
+      "localPath": "/ledger/previews/:id/state",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualPayment.ts",
+      "method": "USE",
+      "localPath": "/manual-payment",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualPayment.ts",
+      "method": "GET",
+      "localPath": "/manual-payment/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualPayment.ts",
+      "method": "GET",
+      "localPath": "/manual-payment/requests",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualPayment.ts",
+      "method": "GET",
+      "localPath": "/manual-payment/requests/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualPayment.ts",
+      "method": "POST",
+      "localPath": "/manual-payment/requests",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualPayment.ts",
+      "method": "POST",
+      "localPath": "/manual-payment/from-delivery-workspace/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualPayment.ts",
+      "method": "POST",
+      "localPath": "/manual-payment/requests/:id/client-offer-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualPayment.ts",
+      "method": "PATCH",
+      "localPath": "/manual-payment/requests/:id/state",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualPayment.ts",
+      "method": "POST",
+      "localPath": "DYNAMIC_OR_MOUNT",
+      "middleware": [
+        "`/manual-payment/requests/:id/${path}`"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualProspects.ts",
+      "method": "GET",
+      "localPath": "/manual-prospects/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualProspects.ts",
+      "method": "GET",
+      "localPath": "/manual-prospects/prospects",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualProspects.ts",
+      "method": "GET",
+      "localPath": "/manual-prospects/prospects/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualProspects.ts",
+      "method": "POST",
+      "localPath": "/manual-prospects/prospects",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualProspects.ts",
+      "method": "PATCH",
+      "localPath": "/manual-prospects/prospects/:id/state",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualProspects.ts",
+      "method": "POST",
+      "localPath": "/manual-prospects/prospects/:id/link-offer-pack",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualProspects.ts",
+      "method": "POST",
+      "localPath": "/manual-prospects/prospects/:id/create-offer-pack-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualProspects.ts",
+      "method": "POST",
+      "localPath": "/manual-prospects/prospects/:id/create-manual-payment-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualProspects.ts",
+      "method": "POST",
+      "localPath": "/manual-prospects/prospects/:id/follow-up-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/manualProspects.ts",
+      "method": "POST",
+      "localPath": "/manual-prospects/prospects/:id/ledger-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/monetization.ts",
+      "method": "USE",
+      "localPath": "/monetization",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/monetization.ts",
+      "method": "GET",
+      "localPath": "/monetization/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/monetization.ts",
+      "method": "GET",
+      "localPath": "/monetization/offers",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorAssistant.ts",
+      "method": "GET",
+      "localPath": "/operator-assistant/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorAssistant.ts",
+      "method": "GET",
+      "localPath": "/operator-assistant/state",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorAssistant.ts",
+      "method": "GET",
+      "localPath": "/operator-assistant/next-action",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorAssistant.ts",
+      "method": "POST",
+      "localPath": "/operator-assistant/action-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorAssistant.ts",
+      "method": "POST",
+      "localPath": "/operator-assistant/internal-handoff",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorDeliveryWorkspace.ts",
+      "method": "USE",
+      "localPath": "/delivery-workspace",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorDeliveryWorkspace.ts",
+      "method": "GET",
+      "localPath": "/delivery-workspace/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorDeliveryWorkspace.ts",
+      "method": "GET",
+      "localPath": "/delivery-workspace/workspaces",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorDeliveryWorkspace.ts",
+      "method": "GET",
+      "localPath": "/delivery-workspace/workspaces/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorDeliveryWorkspace.ts",
+      "method": "POST",
+      "localPath": "/delivery-workspace/from-github-execution-pack/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorDeliveryWorkspace.ts",
+      "method": "POST",
+      "localPath": "/delivery-workspace/workspaces/:id/evidence-preview",
+      "middleware": [
+        "action(\"EVIDENCE_PREVIEW\",\"EVIDENCE_PREPARED\",\"evidenceChecklist\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorDeliveryWorkspace.ts",
+      "method": "POST",
+      "localPath": "/delivery-workspace/workspaces/:id/validation-preview",
+      "middleware": [
+        "action(\"VALIDATION_PREVIEW\",\"VALIDATION_PREVIEW_CREATED\",\"validationChecklist\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorDeliveryWorkspace.ts",
+      "method": "POST",
+      "localPath": "/delivery-workspace/workspaces/:id/release-preview",
+      "middleware": [
+        "action(\"RELEASE_PREVIEW\",\"RELEASE_PREVIEW_CREATED\",\"releaseChecklist\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorDeliveryWorkspace.ts",
+      "method": "POST",
+      "localPath": "/delivery-workspace/workspaces/:id/ledger-preview",
+      "middleware": [
+        "action(\"LEDGER_PREVIEW\",\"LEDGER_PREVIEW_CREATED\",\"ledgerPreview\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorDeliveryWorkspace.ts",
+      "method": "POST",
+      "localPath": "/delivery-workspace/workspaces/:id/manual-payment-request-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "GET",
+      "localPath": "/operator-workflow/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "GET",
+      "localPath": "/operator-workflow/summary",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "GET",
+      "localPath": "/operator-workflow/official-flow",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "GET",
+      "localPath": "/operator-workflow/handoffs",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "GET",
+      "localPath": "/operator-workflow/active-handoff",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "GET",
+      "localPath": "/operator-workflow/active-handoff/for-route",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "GET",
+      "localPath": "/operator-workflow/handoffs/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "POST",
+      "localPath": "/operator-workflow/handoffs/from-next-action",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "PATCH",
+      "localPath": "/operator-workflow/handoffs/:id/state",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "POST",
+      "localPath": "/operator-workflow/handoffs/:id/route-opened",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "POST",
+      "localPath": "/operator-workflow/handoffs/:id/archive",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "POST",
+      "localPath": "/operator-workflow/handoffs/:id/manual-completed",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/operatorWorkflow.ts",
+      "method": "POST",
+      "localPath": "/operator-workflow/handoffs/:id/create-target-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "USE",
+      "localPath": "/opportunities",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "GET",
+      "localPath": "/opportunities/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "GET",
+      "localPath": "/opportunities",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "GET",
+      "localPath": "/opportunities/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "POST",
+      "localPath": "/opportunities/from-radar-manual-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "POST",
+      "localPath": "/opportunities/from-radar-github-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "POST",
+      "localPath": "/opportunities/:id/qualify",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "POST",
+      "localPath": "/opportunities/:id/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "POST",
+      "localPath": "/opportunities/:id/proposal-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "POST",
+      "localPath": "/opportunities/:id/task-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "POST",
+      "localPath": "/opportunities/:id/evidence-plan",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/opportunities.ts",
+      "method": "USE",
+      "localPath": "/opportunities",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/observability/metrics",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/revenue/forecast",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/telemetry/live",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "POST",
+      "localPath": "/v1/mobile/runtime",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/mobile/telemetry",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/conversion/live",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/growth/runtime",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/production",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/activation",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/health",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/alerts",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/phase8.ts",
+      "method": "GET",
+      "localPath": "/v1/reports",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "GET",
+      "localPath": "/r100-db/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "GET",
+      "localPath": "/r100-db/readiness",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "GET",
+      "localPath": "/r100-db/activation-plan",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "GET",
+      "localPath": "/r100-db/operator-summary",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "GET",
+      "localPath": "/r100-db/schema-diagnostics",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "POST",
+      "localPath": "/r100-db/schema-dry-run",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "POST",
+      "localPath": "/r100-db/apply-schema",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "POST",
+      "localPath": "/r100-db/activation-smoke-test",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "GET",
+      "localPath": "/r100-db/latest-snapshot",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "POST",
+      "localPath": "/r100-db/probe",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DatabaseMirror.ts",
+      "method": "POST",
+      "localPath": "/r100-db/export-safe-snapshot",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DurableState.ts",
+      "method": "GET",
+      "localPath": "/r100-state/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DurableState.ts",
+      "method": "GET",
+      "localPath": "/r100-state/snapshot",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DurableState.ts",
+      "method": "GET",
+      "localPath": "/r100-state/verification",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DurableState.ts",
+      "method": "POST",
+      "localPath": "/r100-state/probe",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100DurableState.ts",
+      "method": "POST",
+      "localPath": "/r100-state/reload",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100Truth.ts",
+      "method": "GET",
+      "localPath": "/r100-truth/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100Truth.ts",
+      "method": "GET",
+      "localPath": "/r100-truth/summary",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100Truth.ts",
+      "method": "GET",
+      "localPath": "/r100-truth/topbar",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100Truth.ts",
+      "method": "GET",
+      "localPath": "/r100-truth/sidebar",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100WarRoom.ts",
+      "method": "USE",
+      "localPath": "/r100-war-room",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100WarRoom.ts",
+      "method": "GET",
+      "localPath": "/r100-war-room/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100WarRoom.ts",
+      "method": "GET",
+      "localPath": "/r100-war-room/summary",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100WarRoom.ts",
+      "method": "GET",
+      "localPath": "/r100-war-room/actions",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100WarRoom.ts",
+      "method": "POST",
+      "localPath": "/r100-war-room/manual-action-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/r100WarRoom.ts",
+      "method": "POST",
+      "localPath": "/r100-war-room/focus-sprint-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/radar.ts",
+      "method": "USE",
+      "localPath": "/radar",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/radar.ts",
+      "method": "GET",
+      "localPath": "/radar/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/radar.ts",
+      "method": "POST",
+      "localPath": "/radar/manual-intake/preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/radar.ts",
+      "method": "GET",
+      "localPath": "/radar/github/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/radar.ts",
+      "method": "POST",
+      "localPath": "/radar/github/search-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/radar.ts",
+      "method": "POST",
+      "localPath": "/radar/github/score-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/radar.ts",
+      "method": "USE",
+      "localPath": "/radar",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/release.ts",
+      "method": "USE",
+      "localPath": "/release",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/release.ts",
+      "method": "GET",
+      "localPath": "/release/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/release.ts",
+      "method": "GET",
+      "localPath": "/release/previews",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/release.ts",
+      "method": "GET",
+      "localPath": "/release/previews/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/release.ts",
+      "method": "POST",
+      "localPath": "/release/previews",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/release.ts",
+      "method": "PATCH",
+      "localPath": "/release/previews/:id/state",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "GET",
+      "localPath": "/revenue-close-loop/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "GET",
+      "localPath": "/revenue-close-loop/summary",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "GET",
+      "localPath": "/revenue-close-loop/loops",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "GET",
+      "localPath": "/revenue-close-loop/loops/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "POST",
+      "localPath": "/revenue-close-loop/from-prospect/:prospectId",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "POST",
+      "localPath": "/revenue-close-loop/from-offer/:offerId",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "POST",
+      "localPath": "/revenue-close-loop/from-payment/:paymentRequestId",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "PATCH",
+      "localPath": "/revenue-close-loop/loops/:id/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "POST",
+      "localPath": "/revenue-close-loop/loops/:id/proof-checklist-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "POST",
+      "localPath": "/revenue-close-loop/loops/:id/confirm-revenue-manually",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "POST",
+      "localPath": "/revenue-close-loop/loops/:id/ledger-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/revenueCloseLoop.ts",
+      "method": "POST",
+      "localPath": "/revenue-close-loop/loops/:id/next-action-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/sync",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/recovery",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/production",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/database",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/deployment",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/snapshots",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/railway",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/radar",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/providers",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/memory",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/supabase",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/provider-logs",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/log-sanitize",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/railway-core",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/signals",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/conversion-dna",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/alerts",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/payments",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/payments/create",
+      "middleware": [
+        "...financialMutation(\"financial:payments:create\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/payments/auto",
+      "middleware": [
+        "...financialMutation(\"financial:payments:auto\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/webhooks/mercado-pago",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/monetization",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/revenue",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/financial-core",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/monetization-audit",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/credits",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/credits/wallet",
+      "middleware": [
+        "...financialMutation(\"financial:credits:wallet\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/credits/transfer",
+      "middleware": [
+        "...financialMutation(\"financial:credits:transfer\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/commissions",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/commissions/settle",
+      "middleware": [
+        "...financialMutation(\"financial:commissions:settle\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/autonomous-revenue",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/tasks/enqueue",
+      "middleware": [
+        "...financialMutation(\"financial:revenue:tasks\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/tasks/run-cycle",
+      "middleware": [
+        "...financialMutation(\"financial:revenue:scheduler\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/credits/auto-topup",
+      "middleware": [
+        "...financialMutation(\"financial:credits:auto-topup\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/tasks/generate-from-radar",
+      "middleware": [
+        "...financialMutation(\"financial:revenue:radar\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/x-radar/metrics",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/x-radar/signals/generate",
+      "middleware": [
+        "...financialMutation(\"financial:x-radar:signals\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/x-radar/signals/consume",
+      "middleware": [
+        "...financialMutation(\"financial:x-radar:consume\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/x-radar/scan-cycle",
+      "middleware": [
+        "...financialMutation(\"financial:x-radar:scan\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/x-radar/revenue-cycle",
+      "middleware": [
+        "...financialMutation(\"financial:x-radar:revenue\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/monetization/subscriptions/catalog",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/monetization/subscriptions/subscribe",
+      "middleware": [
+        "...financialMutation(\"financial:monetization:subscriptions\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/runtime/pix/followups/process",
+      "middleware": [
+        "...financialMutation(\"financial:payments:followups\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/revenue-dashboard",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/revenue-engine/catalog",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/revenue-engine/analytics",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/revenue-engine/checkout",
+      "middleware": [
+        "...financialMutation(\"financial:revenue-engine:checkout\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/revenue-engine/checkout/:id/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/revenue-engine/recovery/process",
+      "middleware": [
+        "...financialMutation(\"financial:revenue-engine:recovery\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/revenue-engine/subscriptions/sale",
+      "middleware": [
+        "...financialMutation(\"financial:revenue-engine:subscriptions\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/revenue-engine/credits/packs/sale",
+      "middleware": [
+        "...financialMutation(\"financial:revenue-engine:credits\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/revenue-engine/radar/checkout",
+      "middleware": [
+        "...financialMutation(\"financial:revenue-engine:radar\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "POST",
+      "localPath": "/v1/revenue-engine/entitlements/activate",
+      "middleware": [
+        "...financialMutation(\"financial:revenue-engine:entitlements\")"
+      ],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/runtime/readiness",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/runtime.ts",
+      "method": "GET",
+      "localPath": "/v1/dashboard/runtime",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/tasks.ts",
+      "method": "USE",
+      "localPath": "/tasks",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/tasks.ts",
+      "method": "GET",
+      "localPath": "/tasks/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/tasks.ts",
+      "method": "GET",
+      "localPath": "/tasks",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/tasks.ts",
+      "method": "GET",
+      "localPath": "/tasks/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/tasks.ts",
+      "method": "POST",
+      "localPath": "/tasks/from-opportunity/:opportunityId",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/tasks.ts",
+      "method": "POST",
+      "localPath": "/tasks/:id/approve-manual-execution",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/tasks.ts",
+      "method": "POST",
+      "localPath": "/tasks/:id/block",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/tasks.ts",
+      "method": "POST",
+      "localPath": "/tasks/:id/cancel",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/tasks.ts",
+      "method": "USE",
+      "localPath": "/tasks",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/validation.ts",
+      "method": "USE",
+      "localPath": "/validation",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/validation.ts",
+      "method": "GET",
+      "localPath": "/validation/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/validation.ts",
+      "method": "GET",
+      "localPath": "/validation/previews",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/validation.ts",
+      "method": "GET",
+      "localPath": "/validation/previews/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/validation.ts",
+      "method": "POST",
+      "localPath": "/validation/previews",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/validation.ts",
+      "method": "PATCH",
+      "localPath": "/validation/previews/:id/state",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/web3Tasks.ts",
+      "method": "USE",
+      "localPath": "/web3-tasks",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/web3Tasks.ts",
+      "method": "GET",
+      "localPath": "/web3-tasks/status",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/web3Tasks.ts",
+      "method": "GET",
+      "localPath": "/web3-tasks/sources",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/web3Tasks.ts",
+      "method": "GET",
+      "localPath": "/web3-tasks/previews",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/web3Tasks.ts",
+      "method": "GET",
+      "localPath": "/web3-tasks/pipeline-links",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/web3Tasks.ts",
+      "method": "GET",
+      "localPath": "/web3-tasks/pipeline-links/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/web3Tasks.ts",
+      "method": "POST",
+      "localPath": "/web3-tasks/pipeline-links/:id/prepare-broker-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/web3Tasks.ts",
+      "method": "GET",
+      "localPath": "/web3-tasks/previews/:id",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/web3Tasks.ts",
+      "method": "POST",
+      "localPath": "/web3-tasks/manual-import",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    },
+    {
+      "module": "artifacts/api-server/src/routes/web3Tasks.ts",
+      "method": "POST",
+      "localPath": "/web3-tasks/previews/:id/create-internal-task-preview",
+      "middleware": [],
+      "authEvidence": "No named guard at this declaration; upstream/service controls require review"
+    }
+  ]
+}

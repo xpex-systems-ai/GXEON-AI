@@ -1,0 +1,70 @@
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { randomBytes, randomUUID } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import { Pool } from "@workspace/db/pool";
+import { assertAuditPilotDatabase } from "../auditPilotDatabase";
+import { createAuditWorkflowService } from "../services/auditWorkflowService";
+
+test("dedicated PostgreSQL 17 startup attestation rejects excessive grants and non-synthetic data", async () => {
+  const text = process.env.TEST_AUDIT_PILOT_DATABASE_URL;
+  assert.ok(text, "Use only the isolated PostgreSQL service created for this test");
+  const url = new URL(text);
+  assert.ok(["127.0.0.1", "localhost"].includes(url.hostname));
+  assert.ok(["5432", "55432"].includes(url.port));
+  assert.equal(url.pathname, "/gx01_pilot");
+  assert.ok(["gx01_pilot_owner", "gx01_stage_admin"].includes(url.username));
+  assert.equal(url.search, ""); assert.equal(url.hash, "");
+  const owner = new Pool({ connectionString: text, max: 1 });
+  let app: InstanceType<typeof Pool> | undefined;
+  try {
+    await owner.query("SET log_statement='none'; SET log_min_error_statement='panic'");
+    assert.equal((await owner.query("SELECT to_regclass('public.audit_cases') AS name")).rows[0].name, null,
+      "A fresh dedicated test database is required; no reset/overwrite is supported");
+    await owner.query(await readFile(new URL("../../../../lib/db/drizzle/0002_audit_os_schema.sql", import.meta.url), "utf8"));
+    const password = randomBytes(32).toString("base64url");
+    await owner.query(`CREATE ROLE gx01_pilot_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS CONNECTION LIMIT 8 PASSWORD '${password}'`);
+    await owner.query(`REVOKE ALL ON DATABASE gx01_pilot FROM PUBLIC;
+      GRANT CONNECT ON DATABASE gx01_pilot TO gx01_pilot_app;
+      REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+      GRANT USAGE ON SCHEMA public TO gx01_pilot_app;
+      GRANT SELECT, INSERT ON audit_assets,audit_evidences,audit_findings,audit_reports TO gx01_pilot_app;
+      GRANT SELECT, INSERT, UPDATE ON audit_cases TO gx01_pilot_app`);
+    const appUrl = new URL(text); appUrl.username = "gx01_pilot_app"; appUrl.password = password;
+    app = new Pool({ connectionString: appUrl.href, max: 2 });
+    await assertAuditPilotDatabase(app);
+    await assert.rejects(assertAuditPilotDatabase(owner), /AUDIT_DATABASE_BOUNDARY_REQUIRED/);
+    await owner.query("GRANT UPDATE ON audit_evidences TO gx01_pilot_app");
+    await assert.rejects(assertAuditPilotDatabase(app), /AUDIT_TABLE_PRIVILEGES_REQUIRED/);
+    await owner.query("REVOKE UPDATE ON audit_evidences FROM gx01_pilot_app");
+    await assertAuditPilotDatabase(app);
+    const previous = { ...process.env };
+    try {
+      Object.assign(process.env, { GXEON_AUDIT_DB_PROVIDER: "postgres", GXEON_AUDIT_WRITE_MODE: "enabled", GXEON_AUDIT_ALLOW_DB_WRITES: "true" });
+      const restricted = app;
+      const service = createAuditWorkflowService(() => restricted.connect());
+      const created = await service.create({ requestId: randomUUID(), authorized: true, testData: true,
+        assetName: "GX-01.5 TEST DATA restricted PostgreSQL role", assetReference: "test-fixture/vercel.json",
+        authorizationReference: "test-fixture/explicit-scope", checks: ["vercel_api_routing", "vercel_security_headers"],
+        artifact: { name: "vercel.json", content: '{"rewrites":[{"source":"/(.*)","destination":"/index.html"}]}' } });
+      await service.run(created.caseId);
+      await service.review(created.caseId, { decision: "approve", humanReviewed: true,
+        reviewReference: "TEST DATA service fixture; not human acceptance" });
+      await service.finalize(created.caseId);
+      const exported = await service.exportReport(created.caseId);
+      assert.equal(exported.report.finalStatus, "CLOSED");
+      const persisted = (await app.query("SELECT content,metadata FROM audit_reports WHERE id=$1", [exported.reportId])).rows[0];
+      assert.deepEqual(persisted.content, exported.report);
+      assert.equal(persisted.metadata.contentSha256, exported.sha256);
+      await assertAuditPilotDatabase(app);
+    } finally {
+      for (const key of Object.keys(process.env)) if (!(key in previous)) delete process.env[key];
+      Object.assign(process.env, previous);
+    }
+    await owner.query("INSERT INTO audit_cases(title,status,metadata) VALUES('TEST DATA negative startup attestation','DRAFT',$1::jsonb)",
+      [JSON.stringify({ scope: { testData: false } })]);
+    await assert.rejects(assertAuditPilotDatabase(app), /SYNTHETIC_PILOT_DATABASE_REQUIRED/);
+  } finally {
+    await app?.end(); await owner.end();
+  }
+});

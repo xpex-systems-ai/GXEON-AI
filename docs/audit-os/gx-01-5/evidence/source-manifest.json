@@ -1,0 +1,92 @@
+{
+  "generatedAt": "2026-10-21T13:37:21.451Z",
+  "sourceDirty": true,
+  "reference": "4016b8d32ff1e959e975bc1612a9821d85bfe2af",
+  "note": "Normalized LF hashes identify tested candidate files; independent checkout retained. Only intended paths staged; original checkout untouched.",
+  "files": [
+    {
+      "path": ".github/workflows/audit-os-v1.yml",
+      "sha256LF": "533b4807b4e77d2fe3b78a2786962607fc76ce77be3725e68545632d9534178e"
+    },
+    {
+      "path": "artifacts/api-server/build.mjs",
+      "sha256LF": "aa8fb6f7d1659e5d04960952f5e90d629795905f3320a376456005ce101c63b2"
+    },
+    {
+      "path": "artifacts/api-server/package.json",
+      "sha256LF": "12fc4d1a98bddd120d57f319452c1b8eff395498790d8b8007b2439086506428"
+    },
+    {
+      "path": "artifacts/api-server/src/services/auditWorkflowService.ts",
+      "sha256LF": "b2da10e892591d4faffb829828404d74d5686e490020ec42cf6e6455a472e6be"
+    },
+    {
+      "path": "artifacts/api-server/tsconfig.audit-tests.json",
+      "sha256LF": "6581dce27c121208b88b31f51e3d609fc745c7f53b7edcb6d11f18cfe4dc4958"
+    },
+    {
+      "path": "artifacts/api-server/src/audit-pilot.ts",
+      "sha256LF": "51881c17ec6ed39b819ac423e4e0b497c3b77f684fc631a8134422c7013b9f77"
+    },
+    {
+      "path": "artifacts/api-server/src/auditPilotApp.ts",
+      "sha256LF": "59518e410e30c62f089c24d9f21c55b23bcd71807c100756c5176edc295792bb"
+    },
+    {
+      "path": "artifacts/api-server/src/auditPilotConfig.ts",
+      "sha256LF": "6b5adf39944a6260dacd17b84a33ef723f8d16fd561fff62777c3f5bf162a439"
+    },
+    {
+      "path": "artifacts/api-server/src/auditPilotDatabase.ts",
+      "sha256LF": "f51f4362c3e443d0476de35aacd9dfa1d5329279f51fed1ed945e701bd2b471d"
+    },
+    {
+      "path": "artifacts/api-server/src/tests/auditPilot.test.ts",
+      "sha256LF": "06138f26789044d376886b0c084f9cec901a0f17fd276b3a15dd9273a4834704"
+    },
+    {
+      "path": "artifacts/api-server/src/tests/auditPilotDatabase.test.ts",
+      "sha256LF": "308b7e476b75ca8ff92ae89ddb5014fd1eb818a65b71cbcd43d2e12a31ea842c"
+    },
+    {
+      "path": "artifacts/gxeon-dashboard/src/pages/AuditWorkflowPage.tsx",
+      "sha256LF": "5bd46e6a9d866ba9294f3380e13053d518201358ea0aa16ff504d4f36303e790"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "sha256LF": "198b5008794bad7c72fd69004ee4cf4ab8e4e08063fad0682f52ee081ffaca52"
+    },
+    {
+      "path": "lib/db/package.json",
+      "sha256LF": "44ec64549debbfe41650bc95a88c2fdbb23f068cf632b90e27a9863e5a41d931"
+    },
+    {
+      "path": "lib/db/src/index.ts",
+      "sha256LF": "1bcae3c141cd399866a6bf0c032c7e0cecbfde2aef8c414be9c1550d5b363c8a"
+    },
+    {
+      "path": "lib/db/src/pool.ts",
+      "sha256LF": "8b8f28efc27849d0894eff6b47a9eb5dd74b02404ba36324b66e632d22357a02"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256LF": "692ddc136efd9d3c010abfd7ed50602349883728209515c7f1d5e2b1d531f2c9"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "sha256LF": "3c036e3ba0d572767bcfbc15d3a5fcd396f638cd179086846f77fd523d732cb3"
+    },
+    {
+      "path": "scripts/audit-staging/config.mjs",
+      "sha256LF": "aa723f52af8a55ac0bd952a65be1fed249e276f9fd385947d476327cc939c085"
+    },
+    {
+      "path": "scripts/audit-staging/backup-restore.mjs",
+      "sha256LF": "4ea0204a8f524839c3dd944e555ff2bb5a027118b377597cfa9c3662892c4b3a"
+    },
+    {
+      "path": "scripts/audit-staging/codegen-smoke.mjs",
+      "sha256LF": "52b574d914c897baf8a98754a7f8676062b19d3ab69d8ba24880576cd894b421"
+    }
+  ]
+}

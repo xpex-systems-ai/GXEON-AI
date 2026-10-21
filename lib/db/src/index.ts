@@ -1,36 +1,14 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
-import pg from "pg";
-export type { PoolClient } from "pg";
+import type pg from "pg";
+import { getPool, closePool } from "./pool";
+export { getPool, isDatabaseConfigured } from "./pool";
+export type { PoolClient } from "./pool";
 import * as schema from "./schema";
-
-const { Pool } = pg;
 
 type FinancialDatabase = NodePgDatabase<typeof schema>;
 type FinancialPool = pg.Pool;
 
-let poolSingleton: FinancialPool | null = null;
 let dbSingleton: FinancialDatabase | null = null;
-
-function assertDatabaseUrl(): string {
-  const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
-    throw new Error(
-      "DATABASE_URL must be set. Did you forget to provision a database?",
-    );
-  }
-  return databaseUrl;
-}
-
-export function isDatabaseConfigured(): boolean {
-  return Boolean(process.env.DATABASE_URL);
-}
-
-export function getPool(): FinancialPool {
-  if (!poolSingleton) {
-    poolSingleton = new Pool({ connectionString: assertDatabaseUrl(), connectionTimeoutMillis: 5000 });
-  }
-  return poolSingleton;
-}
 
 export function getDb(): FinancialDatabase {
   if (!dbSingleton) {
@@ -40,11 +18,8 @@ export function getDb(): FinancialDatabase {
 }
 
 export async function closeDb(): Promise<void> {
-  if (poolSingleton) {
-    await poolSingleton.end();
-    poolSingleton = null;
-    dbSingleton = null;
-  }
+  await closePool();
+  dbSingleton = null;
 }
 
 export const pool = new Proxy({} as FinancialPool, {

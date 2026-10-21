@@ -6,6 +6,32 @@ on:
 permissions:
   contents: read
 jobs:
+  pilot-database-boundary:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: gx01_pilot
+          POSTGRES_USER: gx01_pilot_owner
+          POSTGRES_PASSWORD: local-test-only
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U gx01_pilot_owner"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @workspace/api-server run test:audit-pilot-db
+        env:
+          TEST_AUDIT_PILOT_DATABASE_URL: postgresql://gx01_pilot_owner:local-test-only@localhost:5432/gx01_pilot
   audit-flow:
     runs-on: ubuntu-latest
     services:
@@ -30,6 +56,11 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm run lint:audit
+      - name: Isolated codegen regression for patched parser dependencies
+        run: |
+          node scripts/audit-staging/codegen-smoke.mjs
+          mkdir -p "$RUNNER_TEMP/gx01-evidence"
+          cp .gx012/evidence/codegen-smoke.json "$RUNNER_TEMP/gx01-evidence/"
       - run: pnpm run typecheck:libs
       - run: pnpm --filter @workspace/api-server run typecheck
       - run: pnpm --filter @workspace/api-server run typecheck:audit-tests
@@ -68,6 +99,10 @@ jobs:
           pnpm run stage:audit up
       - name: Verify HTTP lifecycle, authorization, rollback and full restart
         run: pnpm run verify:audit-staging
+      - name: Backup and restore synthetic data into a new isolated database
+        run: |
+          node scripts/audit-staging/backup-restore.mjs
+          cp artifacts/api-server/dist/audit-pilot-boundary.json .gx012/evidence/pilot-build-boundary.json
       - name: Upload sanitized synthetic evidence
         if: always()
         uses: actions/upload-artifact@v4

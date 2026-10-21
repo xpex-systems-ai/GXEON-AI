@@ -49,7 +49,7 @@ export async function loadConfig(create = false) {
 }
 
 export function databaseUrl(config, admin = false, database = config.database) {
-  if (!["gx01_staging", "gx01_test", "postgres"].includes(database)) throw new Error("UNSAFE_DATABASE_NAME");
+  if (!["gx01_staging", "gx01_test", "postgres"].includes(database) && !/^gx01_restore_[a-f0-9]{32}$/.test(database)) throw new Error("UNSAFE_DATABASE_NAME");
   return `postgresql://${admin ? "gx01_stage_admin" : "gx01_app"}:${admin ? config.adminPassword : config.appPassword}@127.0.0.1:${config.dbPort}/${database}`;
 }
 

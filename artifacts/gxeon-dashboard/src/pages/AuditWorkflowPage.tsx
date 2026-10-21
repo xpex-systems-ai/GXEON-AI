@@ -384,7 +384,7 @@ export default function AuditWorkflowPage() {
               link.download = `audit-${caseId}.json`;
               link.click();
               setTimeout(() => URL.revokeObjectURL(url), 1000);
-              setMessage("Relatório exportado com referências às evidências.");
+              setMessage("Arquivo do relatório preparado. Confira o download recebido no navegador.");
             })
           }
         >
