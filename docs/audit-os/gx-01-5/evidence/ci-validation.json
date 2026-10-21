@@ -1,0 +1,195 @@
+{
+  "queriedAt": "2026-10-21T13:42:38.698Z",
+  "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+  "base": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "workflows": [
+    {
+      "id": 39609775521,
+      "name": "GXEON Monorepo Health",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775521",
+      "headSha": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 119255289225,
+          "name": "Operational radar report",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775521/job/119255289225",
+          "conclusion": "success",
+          "logSha256": "f311fbf4156afdbcc9d1b096e18e77d4c77fe22d5a6f270cacfad898f20986d0",
+          "checkoutCommit": "833638d",
+          "summaryLines": []
+        }
+      ]
+    },
+    {
+      "id": 39609775832,
+      "name": "GXEON Typecheck",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775832",
+      "headSha": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 119255290392,
+          "name": "TypeScript workspace validation",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775832/job/119255290392",
+          "conclusion": null,
+          "logSha256": "2079cbd6f8f45e6350d20b9b7b9e9e5ad7221e4f2f59e02d11616fa2a30c96de",
+          "checkoutCommit": "833638d",
+          "summaryLines": []
+        }
+      ]
+    },
+    {
+      "id": 39609775480,
+      "name": "GXEON Build",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775480",
+      "headSha": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 119255289244,
+          "name": "Monorepo build",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775480/job/119255289244",
+          "conclusion": "success",
+          "logSha256": "8f3b0fdae181544432955fa8062eb13bcdc2562e7403eef201a94876ad482b28",
+          "checkoutCommit": "833638d",
+          "summaryLines": []
+        }
+      ]
+    },
+    {
+      "id": 39609775870,
+      "name": "Audit OS V1",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870",
+      "headSha": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 119255292303,
+          "name": "audit-flow",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870/job/119255292303",
+          "conclusion": "success",
+          "logSha256": "7417023c6f992078d5e8e447dd68f053ff756cd9150a34d4e1c448b7f76301b7",
+          "checkoutCommit": "833638d",
+          "summaryLines": [
+            "2026-10-21T13:39:12.4502094Z {\"scope\":\"GX-01 critical code and staging\",\"files\":28,\"errorCount\":0}",
+            "2026-10-21T13:39:41.6320124Z ℹ tests 13",
+            "2026-10-21T13:39:41.6320869Z ℹ pass 13",
+            "2026-10-21T13:39:41.6321188Z ℹ fail 0",
+            "2026-10-21T13:39:41.6323122Z ℹ duration_ms 6053.56699",
+            "2026-10-21T13:39:45.4287342Z ℹ tests 14",
+            "2026-10-21T13:39:45.4287963Z ℹ pass 14",
+            "2026-10-21T13:39:45.4288268Z ℹ fail 0",
+            "2026-10-21T13:39:45.4289835Z ℹ duration_ms 3309.773408"
+          ]
+        },
+        {
+          "id": 119255292649,
+          "name": "isolated-staging",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870/job/119255292649",
+          "conclusion": "success",
+          "logSha256": "af944c677227edfb1870648cf4689de5c39d6afc3cc2c27c136d4ef17d146473",
+          "checkoutCommit": "833638d",
+          "summaryLines": [
+            "2026-10-21T13:39:33.6152361Z {\"status\":\"CLOSED\",\"checks\":14,\"caseId\":\"ac966386-9b1a-406b-888a-542ec9ef1b89\",\"reportId\":\"416271d8-5660-4b19-8e3b-f31a7557c7d9\",\"sha256\":\"8fee35bafcc3e3677c47b22956f52a36cee634894d4660d14eea325748fcba22\",\"evidenceCount\":1,\"findingCount\":2,\"testData\":true}",
+            "2026-10-21T13:39:39.9220123Z {\"version\":\"gx01.5\",\"testData\":true,\"status\":\"PASS\",\"generatedAt\":\"2026-10-21T13:39:39.920Z\",\"sourceDatabase\":\"gx01_staging\",\"restoredDatabase\":\"gx01_restore_8ae72fc530ba41f68f0c4fe0648945e3\",\"targetCreatedNew\":true,\"existingDatabaseOverwritten\":false,\"dumpBytes\":49846,\"dumpSha256\":\"7c9e2795152a1b300e85b6391721ca5278b1834f61939413047b5ea3f3d44b6a\",\"tables\":{\"audit_assets\":{\"count\":3,\"sha256\":\"0bcc36985a4f4e441fb62b87f805d42a471e9fc0257b2a62c4dac1c69e516723\"},\"audit_cases\":{\"count\":3,\"sha256\":\"c81f781f36e9f82617a31565c782c4dfaaeca0079e801628902a162b1b4b13ce\"},\"audit_evidences\":{\"count\":3,\"sha256\":\"ce49ffaee92d2ca9ff359e09fba1adcdd01592e2a0a0ba0e9b74d9a077553d9f\"},\"audit_findings\":{\"count\":6,\"sha256\":\"9880840a877ff83c1a3e5404f8c8fc6e98fe9db732db28a93597d346183f706a\"},\"audit_reports\":{\"count\":2,\"sha256\":\"997d2b0dfbc71770b06e34bb2b392b4c0d1c2bba1c368de3075e4ff50d72628e\"}},\"matchesPersistedRecord\":true,\"restoredRecordVerified\":true,\"afterPostgreSQLRestart\":true,\"sourceApiReportUnchanged\":true,\"report\":{\"caseId\":\"ac966386-9b1a-406b-888a-542ec9ef1b89\",\"reportId\":\"416271d8-5660-4b19-8e3b-f31a7557c7d9\",\"sha256\":\"8fee35bafcc3e3677c47b22956f52a36cee634894d4660d14eea325748fcba22\",\"evidenceCount\":1,\"findingCount\":2,\"status\":\"CLOSED\",\"testData\":true},\"elapsedMs\":6217,\"browserDownloadVerified\":false,\"retention\":\"Private dump and isolated restored database retained; not automatically deleted or uploaded.\"}"
+          ]
+        },
+        {
+          "id": 119255292702,
+          "name": "pilot-database-boundary",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870/job/119255292702",
+          "conclusion": "success",
+          "logSha256": "312d1318948fe27a3f9ea2dd108ce54059d5abf6a592e67945d40c7e3ad55cb1",
+          "checkoutCommit": "833638d",
+          "summaryLines": [
+            "2026-10-21T13:39:12.6663601Z ℹ tests 1",
+            "2026-10-21T13:39:12.6664788Z ℹ pass 1",
+            "2026-10-21T13:39:12.6665227Z ℹ fail 0",
+            "2026-10-21T13:39:12.6672943Z ℹ duration_ms 507.014706"
+          ]
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 12349777678,
+      "name": "gxeon-monorepo-health",
+      "size": 3994,
+      "digest": "sha256:91e2de31949e8fa6b52874f406eba6dcaa60402c65155cee89663382f140525d",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/artifacts/12349777678/zip",
+      "expired": false,
+      "downloadSha256": "91e2de31949e8fa6b52874f406eba6dcaa60402c65155cee89663382f140525d",
+      "localZip": "artifact-12349777678.zip"
+    },
+    {
+      "id": 12349638057,
+      "name": "gx012-isolated-staging",
+      "size": 6507,
+      "digest": "sha256:e942a81b0ad3a56a8752ad7744cfdf1069ed4083bc709b32daa3003e397fcc95",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/artifacts/12349638057/zip",
+      "expired": false,
+      "downloadSha256": "e942a81b0ad3a56a8752ad7744cfdf1069ed4083bc709b32daa3003e397fcc95",
+      "localZip": "artifact-12349638057.zip"
+    },
+    {
+      "id": 12349278833,
+      "name": "gx01-test-evidence",
+      "size": 2632,
+      "digest": "sha256:ea057996b205aa02377d8a5ceecee91fd86f7b5882e217faea9c9e6663eeaece",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/artifacts/12349278833/zip",
+      "expired": false,
+      "downloadSha256": "ea057996b205aa02377d8a5ceecee91fd86f7b5882e217faea9c9e6663eeaece",
+      "localZip": "artifact-12349278833.zip"
+    }
+  ],
+  "note": "All four workflows and job conclusions reconsulted at this candidate head; logs and artifact hashes downloaded, no human approval inferred.",
+  "artifactVerification": {
+    "status": "PASS",
+    "report": {
+      "caseId": "ac966386-9b1a-406b-888a-542ec9ef1b89",
+      "reportId": "416271d8-5660-4b19-8e3b-f31a7557c7d9",
+      "sha256": "8fee35bafcc3e3677c47b22956f52a36cee634894d4660d14eea325748fcba22",
+      "evidenceCount": 1,
+      "findingCount": 2,
+      "status": "CLOSED",
+      "testData": true
+    },
+    "acceptanceSourceCommit": "833638da58309ee06d10b70048eaff136b0a38ae",
+    "sourceDirty": false,
+    "expectedHead": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+    "checkoutIsPRMergeCommit": true,
+    "stagingGroups": 14,
+    "backupRestored": true,
+    "browserDownloadVerified": false,
+    "mergeParents": [
+      "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+      "1c102b405e79be1b9265419c50b6e07c95da91f9"
+    ],
+    "sourceFilesVerified": [
+      ".github/workflows/audit-os-v1.yml",
+      "artifacts/api-server/build.mjs",
+      "artifacts/api-server/package.json",
+      "artifacts/api-server/src/services/auditWorkflowService.ts",
+      "artifacts/api-server/tsconfig.audit-tests.json",
+      "artifacts/api-server/src/audit-pilot.ts",
+      "artifacts/api-server/src/auditPilotApp.ts",
+      "artifacts/api-server/src/auditPilotConfig.ts",
+      "artifacts/api-server/src/auditPilotDatabase.ts",
+      "artifacts/api-server/src/tests/auditPilot.test.ts",
+      "artifacts/api-server/src/tests/auditPilotDatabase.test.ts",
+      "artifacts/gxeon-dashboard/src/pages/AuditWorkflowPage.tsx",
+      "eslint.config.mjs",
+      "lib/db/package.json",
+      "lib/db/src/index.ts",
+      "lib/db/src/pool.ts",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "scripts/audit-staging/config.mjs",
+      "scripts/audit-staging/backup-restore.mjs",
+      "scripts/audit-staging/codegen-smoke.mjs"
+    ]
+  },
+  "metadataLimitation": "Typecheck workflow success; all 10 returned steps success including Complete job. Jobs REST/connector still reported in_progress/null; preserved without rewriting. Logs were readable and workflow finished successfully."
+}

@@ -10,6 +10,10 @@ DO $$ BEGIN
       AND NOT rolcreatedb AND NOT rolcreaterole AND NOT rolreplication AND NOT rolbypassrls) THEN
     RAISE EXCEPTION 'RESTRICTED_APP_ROLE_REQUIRED';
   END IF;
+  IF EXISTS (SELECT 1 FROM pg_roles member_role WHERE member_role.rolname <> 'gx01_pilot_app'
+      AND pg_has_role('gx01_pilot_app', member_role.oid, 'MEMBER')) THEN
+    RAISE EXCEPTION 'APP_ROLE_MEMBERSHIP_FORBIDDEN';
+  END IF;
   IF EXISTS (SELECT 1 FROM audit_cases WHERE metadata->'scope'->>'testData' IS DISTINCT FROM 'true') THEN
     RAISE EXCEPTION 'SYNTHETIC_DATABASE_REQUIRED';
   END IF;

@@ -1,0 +1,108 @@
+{
+  "ok": true,
+  "caseId": "ac966386-9b1a-406b-888a-542ec9ef1b89",
+  "reportId": "416271d8-5660-4b19-8e3b-f31a7557c7d9",
+  "sha256": "8fee35bafcc3e3677c47b22956f52a36cee634894d4660d14eea325748fcba22",
+  "report": {
+    "version": "gx01-v1",
+    "caseId": "ac966386-9b1a-406b-888a-542ec9ef1b89",
+    "title": "[TEST DATA] GX-01.3 TEST DATA",
+    "testData": true,
+    "finalStatus": "CLOSED",
+    "scope": {
+      "requestId": "6435966e-5726-49fe-99e9-f76f8d9a037e",
+      "assetName": "GX-01.3 TEST DATA",
+      "assetReference": "test-fixture/vercel.json",
+      "authorizationReference": "test-fixture/authorized-scope",
+      "authorized": true,
+      "testData": true,
+      "checks": [
+        "vercel_api_routing",
+        "vercel_security_headers"
+      ]
+    },
+    "review": {
+      "decision": "approve",
+      "reference": "TEST DATA - automated credential fixture; human acceptance remains pending",
+      "reviewedAt": "2026-10-21T13:39:22.557Z",
+      "role": "reviewer"
+    },
+    "evidence": [
+      {
+        "id": "d7b8a3eb-3da6-4d87-874f-3739a8de6f10",
+        "sha256": "969331b09ff030aeed5964d515f9003c300aa48cfbfc9a79ebf4c568f77e5d1e",
+        "capturedAt": "2026-10-21T13:39:22.451Z",
+        "source": "operator_submitted_artifact",
+        "content": "{\"rewrites\":[{\"source\":\"/(.*)\",\"destination\":\"/index.html\"}]}"
+      }
+    ],
+    "findings": [
+      {
+        "id": "77ffb530-db03-4efd-a341-623b4bed5201",
+        "title": "vercel_security_headers",
+        "summary": "Global nonempty header declarations absent from supplied config: content-security-policy, x-content-type-options. Runtime headers were not measured.",
+        "recommendation": "Review header policies and measure the approved deployment separately; static absence alone is not proof of runtime vulnerability.",
+        "evidenceIds": [
+          "d7b8a3eb-3da6-4d87-874f-3739a8de6f10"
+        ]
+      },
+      {
+        "id": "884be9f7-3d98-4a37-b2dc-680044d13a7a",
+        "title": "vercel_api_routing",
+        "summary": "An unconditional SPA catch-all precedes any recognized API rewrite in the submitted configuration.",
+        "recommendation": "Exclude /api and /api/* from the SPA fallback; configure only a separately verified backend origin.",
+        "evidenceIds": [
+          "d7b8a3eb-3da6-4d87-874f-3739a8de6f10"
+        ]
+      }
+    ],
+    "limitations": [
+      "Static inspection of operator-submitted vercel.json only.",
+      "No deployed route, runtime header, external asset ownership or remote provider was verified.",
+      "Review records a separate credential holder's human-review attestation; identity is not independently verified.",
+      "No payments, network scans or external connector writes."
+    ],
+    "generatedAt": "2026-10-21T13:39:22.571Z",
+    "events": [
+      {
+        "at": "2026-10-21T13:39:22.473Z",
+        "role": "operator",
+        "state": "DRAFT"
+      },
+      {
+        "at": "2026-10-21T13:39:22.519Z",
+        "role": "operator",
+        "state": "IN_REVIEW"
+      },
+      {
+        "at": "2026-10-21T13:39:22.546Z",
+        "role": "reviewer",
+        "state": "IN_REVIEW"
+      },
+      {
+        "at": "2026-10-21T13:39:22.559Z",
+        "role": "reviewer",
+        "state": "READY_FOR_REPORT"
+      },
+      {
+        "at": "2026-10-21T13:39:22.570Z",
+        "role": "operator",
+        "state": "CLOSED"
+      }
+    ],
+    "results": [
+      {
+        "checkId": "vercel_api_routing",
+        "outcome": "observed",
+        "summary": "An unconditional SPA catch-all precedes any recognized API rewrite in the submitted configuration.",
+        "recommendation": "Exclude /api and /api/* from the SPA fallback; configure only a separately verified backend origin."
+      },
+      {
+        "checkId": "vercel_security_headers",
+        "outcome": "observed",
+        "summary": "Global nonempty header declarations absent from supplied config: content-security-policy, x-content-type-options. Runtime headers were not measured.",
+        "recommendation": "Review header policies and measure the approved deployment separately; static absence alone is not proof of runtime vulnerability."
+      }
+    ]
+  }
+}

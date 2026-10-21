@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-10-21T13:52:01.721Z",
+  "parentCandidate": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+  "reason": "Final review found untested unexpected role membership (including NOINHERIT/SET ROLE) not rejected by startup. Added refusal and negative PG17 regression; pinned Railpack Node24 in example. No external changes.",
+  "localLint": {
+    "files": 28,
+    "errors": 0
+  },
+  "testTypes": "PASS",
+  "linuxPostgresValidation": "Must be reconsulted at this commit after push; parent candidate evidence does not approve this delta",
+  "files": [
+    {
+      "path": "artifacts/api-server/src/auditPilotDatabase.ts",
+      "sha256LF": "71978603d3d0660cea5921546c0981caf773f3472e47d374b137abed4726100d"
+    },
+    {
+      "path": "artifacts/api-server/src/tests/auditPilotDatabase.test.ts",
+      "sha256LF": "b9875d26726ef26945e7019808f9dca6a6418b5fbe1de36ebf26da2249c473e0"
+    },
+    {
+      "path": "deploy/audit-pilot/grants.example.sql",
+      "sha256LF": "2142e8d5b6d4ed27334d7b35713418c0bb8cd23f759ae04ef1ad477127305f0e"
+    },
+    {
+      "path": "deploy/audit-pilot/backend.env.example",
+      "sha256LF": "e9b98391723bead3e07e9d7dc9b059c339cc2f1ea957fa52b743ff9190c64baa"
+    }
+  ]
+}

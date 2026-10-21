@@ -4,11 +4,13 @@ export async function assertAuditPilotDatabase(pool: Pick<InstanceType<typeof Po
   const result = await pool.query(`SELECT current_database() AS database, current_user AS role,
     current_setting('server_version_num')::int AS version, rolsuper, rolcreatedb, rolcreaterole, rolreplication, rolbypassrls,
     has_database_privilege(current_user, current_database(), 'CREATE') AS database_create,
-    has_schema_privilege(current_user, 'public', 'CREATE') AS schema_create
+    has_schema_privilege(current_user, 'public', 'CREATE') AS schema_create,
+    EXISTS (SELECT 1 FROM pg_roles member_role WHERE member_role.rolname <> current_user
+      AND pg_has_role(current_user, member_role.oid, 'MEMBER')) AS unexpected_membership
     FROM pg_roles WHERE rolname=current_user`);
   const r = result.rows[0];
   if (!r || r.database !== "gx01_pilot" || r.role !== "gx01_pilot_app" || r.version < 170000 || r.version >= 180000 ||
-      r.rolsuper || r.rolcreatedb || r.rolcreaterole || r.rolreplication || r.rolbypassrls || r.database_create || r.schema_create)
+      r.rolsuper || r.rolcreatedb || r.rolcreaterole || r.rolreplication || r.rolbypassrls || r.database_create || r.schema_create || r.unexpected_membership)
     throw new Error("AUDIT_DATABASE_BOUNDARY_REQUIRED");
   for (const table of ["audit_assets", "audit_cases", "audit_evidences", "audit_findings", "audit_reports"]) {
     const grants = (await pool.query(`SELECT

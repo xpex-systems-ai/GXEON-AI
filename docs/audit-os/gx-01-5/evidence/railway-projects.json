@@ -1,0 +1,20 @@
+{
+  "queriedAt": "2026-10-21T13:40:49.937Z",
+  "readOnly": true,
+  "projects": [
+    {
+      "id": "e09ea6c9-a436-4a80-b524-8b3cedc7e87c",
+      "name": "gxeon-plugin-production",
+      "workspaceId": "096f1f6b-d0e2-427a-8a64-c48fc64eff53",
+      "workspaceName": "My Projects",
+      "createdAt": "2026-10-02T12:18:05.834Z"
+    },
+    {
+      "id": "4437bfad-2670-4ade-923f-25d02d59ea5b",
+      "name": "xpex-systems-command-staging",
+      "workspaceId": "096f1f6b-d0e2-427a-8a64-c48fc64eff53",
+      "workspaceName": "My Projects",
+      "createdAt": "2026-10-02T01:01:16.928Z"
+    }
+  ]
+}

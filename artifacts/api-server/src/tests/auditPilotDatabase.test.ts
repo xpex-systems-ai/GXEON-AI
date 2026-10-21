@@ -34,6 +34,12 @@ test("dedicated PostgreSQL 17 startup attestation rejects excessive grants and n
     app = new Pool({ connectionString: appUrl.href, max: 2 });
     await assertAuditPilotDatabase(app);
     await assert.rejects(assertAuditPilotDatabase(owner), /AUDIT_DATABASE_BOUNDARY_REQUIRED/);
+    // Even a NOINHERIT membership may permit SET ROLE: the app needs no group role.
+    await owner.query("CREATE ROLE gx01_pilot_unexpected NOLOGIN");
+    await owner.query("GRANT gx01_pilot_unexpected TO gx01_pilot_app WITH INHERIT FALSE");
+    await assert.rejects(assertAuditPilotDatabase(app), /AUDIT_DATABASE_BOUNDARY_REQUIRED/);
+    await owner.query("REVOKE gx01_pilot_unexpected FROM gx01_pilot_app");
+    await assertAuditPilotDatabase(app);
     await owner.query("GRANT UPDATE ON audit_evidences TO gx01_pilot_app");
     await assert.rejects(assertAuditPilotDatabase(app), /AUDIT_TABLE_PRIVILEGES_REQUIRED/);
     await owner.query("REVOKE UPDATE ON audit_evidences FROM gx01_pilot_app");

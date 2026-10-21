@@ -9,3 +9,7 @@ O espaço disponível foi consultado em leitura: aproximadamente 20 GB em C:. No
 Comandos: git status --short --branch e git rev-parse HEAD no diretório antigo (leitura); Get-PSDrive (leitura); git clone --single-branch --branch codex/gxeon-audit-os-v1-gx01 no novo diretório; git diff --stat 7687bf2..4016b8d; inspeção dos nove docs GX-01.4, scripts e contratos. Não foram encontrados AGENTS.md no clone.
 
 O commit de implementação e o HEAD de entrega serão registrados com seus próprios testes, distinguindo branch SHA do merge de checkout do CI. O diretório antigo deve continuar preservado; uma futura reconciliação manual deve comparar conteúdos antes de incorporar/arquivar qualquer alteração, sem reset/clean/prune.
+
+## Fechamento de engenharia
+
+Candidato 1c102b405e79be1b9265419c50b6e07c95da91f9 enviado à mesma branch da PR456. Base permaneceu dbc29fff9a2c55487f85a83db597f41c493af7a8. Os quatro workflows passaram; [prova com IDs/logs/hashes](evidence/ci-validation.json). Merge de teste 833638da58309ee06d10b70048eaff136b0a38ae tem pais base+HEAD conferidos; não é merge realizado na main. Original preservado e nenhum reset/clean/prune/cache delete executado. O commit documental final será reconsultado separadamente na entrega.
