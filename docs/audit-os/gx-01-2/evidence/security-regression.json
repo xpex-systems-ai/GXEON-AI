@@ -1,0 +1,25 @@
+{
+  "testData": true,
+  "referenceCode": "25931726ca4c264d918248ac1ee52a2dbd6e20f6",
+  "red": {
+    "engine": "PostgreSQL 17.11 local gx01_test",
+    "condition": "Closed GX-01 case; POST legacy findings with whitespace-padded caseId",
+    "expectedStatus": 409,
+    "actualStatus": 201,
+    "assertion": "findings must reject normalized caseId",
+    "tests": 10,
+    "pass": 8,
+    "fail": 2,
+    "note": "Parent test and child count separately. Regression test was added before the guard fix."
+  },
+  "green": {
+    "engine": "PostgreSQL 17.11 local gx01_test",
+    "routes": ["findings", "evidences"],
+    "representations": ["canonical", "space padded", "tab/newline padded", "compact UUID", "uppercase braces"],
+    "expectedStatus": 409,
+    "expectedCode": "WORKFLOW_ROUTE_REQUIRED",
+    "persistence": "Counts unchanged",
+    "suiteAfterOtherAdditions": {"tests": 11, "pass": 11, "fail": 0},
+    "note": "Also covered through the staging frontend proxy. Bound source revision is recorded in acceptance.json."
+  }
+}

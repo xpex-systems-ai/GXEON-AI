@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { build as esbuild } from "esbuild";
 import esbuildPluginPino from "esbuild-plugin-pino";
-import { rm } from "node:fs/promises";
+import { rm, writeFile } from "node:fs/promises";
 
 // Plugins (e.g. 'esbuild-plugin-pino') may use `require` to resolve dependencies
 globalThis.require = createRequire(import.meta.url);
@@ -14,8 +14,9 @@ async function buildAll() {
   const distDir = path.resolve(artifactDir, "dist");
   await rm(distDir, { recursive: true, force: true });
 
-  await esbuild({
-    entryPoints: [path.resolve(artifactDir, "src/index.ts")],
+  const result = await esbuild({
+    entryPoints: { index: path.resolve(artifactDir, "src/index.ts"), "audit-pilot": path.resolve(artifactDir, "src/audit-pilot.ts") },
+    metafile: true,
     platform: "node",
     bundle: true,
     format: "esm",
@@ -118,6 +119,12 @@ globalThis.__dirname = __bannerPath.dirname(globalThis.__filename);
     `,
     },
   });
+  const entry = Object.entries(result.metafile.outputs).find(([, value]) => value.entryPoint?.endsWith("src/audit-pilot.ts"));
+  if (!entry) throw new Error("AUDIT_PILOT_BUILD_MISSING");
+  const inputs = Object.entries(entry[1].inputs).filter(([, value]) => value.bytesInOutput > 0).map(([name]) => name.replaceAll("\\", "/"));
+  const forbidden = inputs.filter(name => /(?:^|\/)src\/(?:app\.ts|index\.ts|routes\/index\.ts|routes\/(?!auditWorkflow\.ts)|services\/(?!auditWorkflow))/u.test(name) && (name.startsWith("src/") || name.includes("artifacts/api-server/")));
+  if (forbidden.length) throw new Error("AUDIT_PILOT_IMPORT_BOUNDARY_FAILED");
+  await writeFile(path.join(distDir, "audit-pilot-boundary.json"), JSON.stringify({ entry: "src/audit-pilot.ts", inputs, forbiddenImports: forbidden, note: "Only retained inputs of the dedicated output; not a production deployment." }, null, 2));
 }
 
 buildAll().catch((err) => {

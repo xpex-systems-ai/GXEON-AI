@@ -170,9 +170,12 @@ async function startMetro(expoPublicDomain, expoPublicReplId) {
     console.log(`Setting EXPO_PUBLIC_REPL_ID=${expoPublicReplId}`);
   }
 
+  const packageManagerCli = process.env.npm_execpath;
+  if (!packageManagerCli) exitWithError("Run the mobile build through pnpm run build.");
   metroProcess = spawn(
-    "pnpm",
+    process.execPath,
     [
+      packageManagerCli,
       "exec",
       "expo",
       "start",

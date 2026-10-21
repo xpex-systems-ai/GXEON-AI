@@ -1,0 +1,112 @@
+diff --git a/artifacts/api-server/src/services/auditEvidenceFindingService.ts b/artifacts/api-server/src/services/auditEvidenceFindingService.ts
+index 4f03126..49b3764 100644
+--- a/artifacts/api-server/src/services/auditEvidenceFindingService.ts
++++ b/artifacts/api-server/src/services/auditEvidenceFindingService.ts
+@@ -70 +70 @@ export async function findFirstInternalAuditCase() {
+-      if (cases[0]?.id) return { provider: "supabase_rest" as const, caseId: cases[0].id, case: cases[0] };
++      if (cases[0]?.id && cases[0].metadata?.workflow !== "gx01-v1") return { provider: "supabase_rest" as const, caseId: cases[0].id, case: cases[0] };
+@@ -73 +73 @@ export async function findFirstInternalAuditCase() {
+-    const found = cases.find((item) => item.metadata?.internal_case === true || item.metadata?.source === "operator_manual");
++    const found = cases.find((item) => item.metadata?.workflow !== "gx01-v1" && (item.metadata?.internal_case === true || item.metadata?.source === "operator_manual"));
+@@ -77 +77,2 @@ export async function findFirstInternalAuditCase() {
+-  const byAsset = await getDb().select({ id: auditCases.id, assetId: auditCases.assetId, metadata: auditCases.metadata, title: auditCases.title }).from(auditCases).leftJoin(auditAssets, eq(auditCases.assetId, auditAssets.id)).where(eq(auditAssets.referenceUrl, firstInternalAuditCaseReferenceUrl)).limit(1);
++  // Legacy routines infer the case without body.caseId; never select the governed workflow.
++  const byAsset = await getDb().select({ id: auditCases.id, assetId: auditCases.assetId, metadata: auditCases.metadata, title: auditCases.title }).from(auditCases).leftJoin(auditAssets, eq(auditCases.assetId, auditAssets.id)).where(and(eq(auditAssets.referenceUrl, firstInternalAuditCaseReferenceUrl), sql`${auditCases.metadata}->>'workflow' IS DISTINCT FROM 'gx01-v1'`)).limit(1);
+@@ -79 +80 @@ export async function findFirstInternalAuditCase() {
+-  const byMetadata = await getDb().select({ id: auditCases.id, assetId: auditCases.assetId, metadata: auditCases.metadata, title: auditCases.title }).from(auditCases).where(sql`${auditCases.metadata}->>'internal_case' = 'true' or ${auditCases.metadata}->>'source' = 'operator_manual'`).limit(1);
++  const byMetadata = await getDb().select({ id: auditCases.id, assetId: auditCases.assetId, metadata: auditCases.metadata, title: auditCases.title }).from(auditCases).where(sql`${auditCases.metadata}->>'workflow' IS DISTINCT FROM 'gx01-v1' AND (${auditCases.metadata}->>'internal_case' = 'true' or ${auditCases.metadata}->>'source' = 'operator_manual')`).limit(1);
+diff --git a/artifacts/api-server/src/tests/auditStagingServer.ts b/artifacts/api-server/src/tests/auditStagingServer.ts
+index 3a207a0..3a74a9a 100644
+--- a/artifacts/api-server/src/tests/auditStagingServer.ts
++++ b/artifacts/api-server/src/tests/auditStagingServer.ts
+@@ -46,0 +47,2 @@ stage.use((req, res, next) => {
++    req.path === "/api/v1/audit/baseline/first-evidence-finding" ||
++    req.path === "/api/v1/audit/baseline/status" ||
+diff --git a/artifacts/api-server/src/tests/auditWorkflow.test.ts b/artifacts/api-server/src/tests/auditWorkflow.test.ts
+index a57e862..38ff5df 100644
+--- a/artifacts/api-server/src/tests/auditWorkflow.test.ts
++++ b/artifacts/api-server/src/tests/auditWorkflow.test.ts
+@@ -265,0 +266 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and
++    extraHeaders: Record<string, string> = {},
+@@ -275,0 +277 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and
++        ...extraHeaders,
+@@ -283 +285 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and
+-      path: route,
++      path: route.split("?")[0],
+@@ -330,0 +333,4 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and
++        assert.equal(app.get("trust proxy"), false);
++        assert.equal((await request(`${base}?access_token=test-only-operator-credential`, "POST", intake, "", {
++          "X-Forwarded-For": "127.0.0.1", "X-Original-Authorization": "Bearer test-only-operator-credential", "X-Audit-Role": "operator",
++        })).status, 401, "Forwarded identity, role headers and query credentials do not grant access");
+@@ -516,0 +523,14 @@ test("real SQL persistence and HTTP lifecycle, independent review, rollback and
++    if (testUrl) await t.test("legacy baseline discovery cannot select a CLOSED GX case with the same asset reference", async () => {
++      const created = await request(base, "POST", { ...intake, requestId: randomUUID(), assetReference: "https://github.com/xpex-systems-ai/GXEON-AI" });
++      const collisionId = created.data.caseId as string;
++      assert.equal((await request(`${base}/${collisionId}/run`, "POST", {})).status, 200);
++      assert.equal((await request(`${base}/${collisionId}/review`, "POST", {
++        decision: "approve", humanReviewed: true, reviewReference: "TEST DATA - credential fixture",
++      }, "reviewer")).status, 200);
++      assert.equal((await request(`${base}/${collisionId}/finalize`, "POST", {})).status, 200);
++      const before = await sql("SELECT (SELECT count(*)::int FROM audit_findings) AS findings, (SELECT count(*)::int FROM audit_evidences) AS evidences");
++      const legacy = await request("/v1/audit/baseline/first-evidence-finding", "POST", {});
++      assert.equal(legacy.status, 404, "Legacy discovery must exclude GX cases even without body.caseId");
++      assert.equal(legacy.data.code, "FIRST_INTERNAL_CASE_NOT_FOUND");
++      assert.deepEqual((await sql("SELECT (SELECT count(*)::int FROM audit_findings) AS findings, (SELECT count(*)::int FROM audit_evidences) AS evidences")).rows, before.rows);
++    });
+diff --git a/lib/api-spec/package.json b/lib/api-spec/package.json
+index ff26781..8eccf99 100644
+--- a/lib/api-spec/package.json
++++ b/lib/api-spec/package.json
+@@ -9 +9 @@
+-    "orval": "^8.9.1"
++    "orval": "8.22.0"
+diff --git a/pnpm-workspace.yaml b/pnpm-workspace.yaml
+index f7e92b4..54a372f 100644
+--- a/pnpm-workspace.yaml
++++ b/pnpm-workspace.yaml
+@@ -77,0 +78,8 @@ overrides:
++  # GX-01.3: patch audited API and lint transitive dependencies without changing majors.
++  proxy-addr: "2.0.8"
++  qs: "6.16.0"
++  body-parser: "2.3.0"
++  shell-quote: "1.12.0"
++  tar: "7.5.19"
++  "brace-expansion@^1": "1.1.21"
++  "brace-expansion@^5": "5.0.12"
+@@ -160 +168 @@ overrides:
+-  esbuild: "0.27.3"
+\ No newline at end of file
++  esbuild: "0.27.3"
+diff --git a/scripts/audit-staging/stage.mjs b/scripts/audit-staging/stage.mjs
+index 1567d68..290fa07 100644
+--- a/scripts/audit-staging/stage.mjs
++++ b/scripts/audit-staging/stage.mjs
+@@ -15 +15,2 @@ async function waitFor(check, name) {
+-  for (let n = 0; n < 60; n++) { try { const value = await check(); if (value) return value; } catch { /* readiness only */ } await sleep(500); }
++  // Cold TypeScript imports can exceed 30s on constrained Windows hosts.
++  for (let n = 0; n < 240; n++) { try { const value = await check(); if (value) return value; } catch { /* readiness only */ } await sleep(500); }
+diff --git a/scripts/audit-staging/verify.mjs b/scripts/audit-staging/verify.mjs
+index 37db8f6..e313777 100644
+--- a/scripts/audit-staging/verify.mjs
++++ b/scripts/audit-staging/verify.mjs
+@@ -19 +19 @@ const payload = () => ({
+-  requestId: randomUUID(), assetName: "GX-01.2 TEST DATA",
++  requestId: randomUUID(), assetName: "GX-01.3 TEST DATA",
+@@ -130,0 +131,14 @@ try {
++  await check("legacy inferred baseline cannot mutate a closed GX case by asset reference", async () => {
++    const collision = (await expect(base, "POST", { ...payload(), assetReference: "https://github.com/xpex-systems-ai/GXEON-AI" }, "operator", 201)).data.caseId;
++    await expect(`${base}/${collision}/run`, "POST", {}, "operator", 200);
++    await approve(collision);
++    await expect(`${base}/${collision}/finalize`, "POST", {}, "operator", 200);
++    const original = await counts();
++    const baseline = await expect("/api/v1/audit/baseline/status", "GET", undefined, "operator", 200);
++    assert.equal(baseline.data.caseConfirmed, false, "The legacy selector must exclude GX cases");
++    // This restricted role intentionally sees only GX tables, so the broader
++    // legacy write-readiness inventory also blocks the mutation before writing.
++    // The PostgreSQL admin-role regression separately requires 404 from selection.
++    await expect("/api/v1/audit/baseline/first-evidence-finding", "POST", {}, "operator", 503, "AUDIT_TABLES_MISSING");
++    assert.deepEqual(await counts(), original);
++  });
+@@ -194 +208 @@ try {
+-    version: "gx01.2", testData: true, generatedAt: new Date().toISOString(),
++    version: "gx01.3", testData: true, generatedAt: new Date().toISOString(),

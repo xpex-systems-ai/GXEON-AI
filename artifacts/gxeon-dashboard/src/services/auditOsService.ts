@@ -1,12 +1,14 @@
 import { apiUrl } from "./apiBase";
+import { readAuditJson } from "./auditTransport";
 
 async function request<T = any>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(apiUrl(path), {
-    headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
     ...init,
+    headers: { "Content-Type": "application/json", ...(init?.headers ?? {}) },
+    cache: "no-store",
+    signal: init?.signal ?? AbortSignal.timeout(15000),
   });
-  if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  return await readAuditJson(res) as T;
 }
 
 export const auditOsService = {

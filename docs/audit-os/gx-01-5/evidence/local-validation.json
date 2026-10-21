@@ -1,0 +1,88 @@
+{
+  "generatedAt": "2026-10-21T13:29:10.617Z",
+  "environment": "Windows / Node 24.19.0 / pnpm 10.28.1 / isolated PostgreSQL17 / TEST DATA only",
+  "sourceReference": "4016b8d32ff1e959e975bc1612a9821d85bfe2af",
+  "sourceDirty": true,
+  "sourceNote": "GX015 uncommitted implementation plus Windows case collision; current-HEAD Linux CI will be separate evidence",
+  "results": [
+    {
+      "name": "install",
+      "command": "pnpm install --frozen-lockfile",
+      "exit": 0,
+      "logSha256": "538175e5e1e357b623da577ea843a94a8926b33902fedaa43f91faa6844d3066"
+    },
+    {
+      "name": "lint",
+      "command": "pnpm run lint:audit",
+      "exit": 0,
+      "logSha256": "c6cc31e249c28bbeaef20f83084a731b8d9efd0cfefe43aa31ec24fef4837946"
+    },
+    {
+      "name": "types",
+      "command": "pnpm run typecheck",
+      "exit": 0,
+      "logSha256": "1e1a8bb8c70bc125dd44ff2715af6aee3a7b46230948010a5baa78bab0e62578"
+    },
+    {
+      "name": "test-types",
+      "command": "pnpm --filter @workspace/api-server run typecheck:audit-tests",
+      "exit": 0,
+      "logSha256": "4c558a8195ed750c95b441008c3088c0bdc1a48c384d4e110d55a73a8ef3519b"
+    },
+    {
+      "name": "tests",
+      "command": "tsx --test --test-concurrency=1 src/tests/auditWorkflow.test.ts src/tests/auditPilot.test.ts",
+      "exit": 0,
+      "logSha256": "6164bb829107bdb57eb91848203f41341218ac6118c0fbb4bfdc73cb3bb3bf8e"
+    },
+    {
+      "name": "native-tests",
+      "command": "same test files with TEST_AUDIT_DATABASE_URL in fresh isolated gx01_test",
+      "exit": 0,
+      "logSha256": "900929d45c86b411754342327fae7700556b75e89fadcf2cff7e6cddaed4e4a4"
+    },
+    {
+      "name": "pilot-db",
+      "command": "pnpm --filter @workspace/api-server run test:audit-pilot-db (initial startup/grants fixture; expanded workflow awaits Linux CI)",
+      "exit": 0,
+      "logSha256": "4c1527f60a11a2d138fb31a289a327ba56340f8931105831e075d1a075a1c82a"
+    },
+    {
+      "name": "api-build",
+      "command": "pnpm --filter @workspace/api-server run build",
+      "exit": 0,
+      "logSha256": "d782b1623bab508e284f7584ba27c51b8d0815229accbff30167e4ce46ebfb74"
+    },
+    {
+      "name": "build",
+      "command": "pnpm run build",
+      "exit": 0,
+      "logSha256": "3348af1e78422a860b5c11ccdb84cb9be8d32cc71182805bf581d7971eb8ffa7"
+    },
+    {
+      "name": "codegen",
+      "command": "node scripts/audit-staging/codegen-smoke.mjs",
+      "exit": 0,
+      "logSha256": "beb654cc80d26fadb939b91296682cae3ce873eb6300cdcf46bb1ba828d69d03"
+    },
+    {
+      "name": "stage-verify",
+      "command": "node scripts/audit-staging/verify.mjs",
+      "exit": 0,
+      "logSha256": "6aa5a3b9abb06a3a93122ed45cc151c3a543a68ac0aa5646b41f8a611b105792"
+    },
+    {
+      "name": "audit",
+      "command": "pnpm audit --json",
+      "exit": 1,
+      "logSha256": "fbdb29dacaed4f68861208755a59acf597f05b9f779a27a6ae38f94328cd6461"
+    }
+  ],
+  "limitations": [
+    "Initial staging attempt timeout code23 under concurrent full mobile build; second run passed14 groups.",
+    "First restore attempt returned sanitized failure; retry succeeded. Cause not instrumented; do not assert root cause.",
+    "Actual browser UI download not verified: IAB webview attach timeout and Edge kernel timeout.",
+    "Native DB transport is loopback, not remote Railway TLS/private networking.",
+    "Independent reviewer not designated."
+  ]
+}

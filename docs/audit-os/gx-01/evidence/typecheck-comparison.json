@@ -1,0 +1,34 @@
+{
+  "api": {
+    "baselineErrors": 68,
+    "currentErrors": 68,
+    "newDiagnosticLocations": [],
+    "messageOnlyDifferences": {
+      "current": [
+        [
+          "src/durableState/r100DatabaseMirrorDiagnostics.ts",
+          "TS2345",
+          "Argument of type 'string' is not assignable to parameter of type '\"status\" | \"source\" | \"id\" | \"created_at\" | \"message\" | \"snapshot_id\" | \"schema_version\" | \"snapshot_mode\" | \"safe_redacted\" | \"operator_confirmed_revenue_brl\" | \"provider_verified_revenue_brl\" | ... 15 more ... | \"metadata_json\"'.",
+          1
+        ]
+      ],
+      "baseline": [
+        [
+          "src/durableState/r100DatabaseMirrorDiagnostics.ts",
+          "TS2345",
+          "Argument of type 'string' is not assignable to parameter of type '\"status\" | \"message\" | \"source\" | \"id\" | \"created_at\" | \"event_type\" | \"snapshot_id\" | \"schema_version\" | \"snapshot_mode\" | \"safe_redacted\" | \"operator_confirmed_revenue_brl\" | ... 15 more ... | \"metadata_json\"'.",
+          1
+        ]
+      ]
+    }
+  },
+  "dashboard": {
+    "baselineErrors": 10,
+    "currentErrors": 10,
+    "newDiagnosticLocations": [],
+    "messageOnlyDifferences": {
+      "current": [],
+      "baseline": []
+    }
+  }
+}

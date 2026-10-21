@@ -1,0 +1,21 @@
+{
+  "testData": true,
+  "sourceCommit": "39c0cfe9141cb8aafaf28ea9770ef76932812a6b",
+  "environment": {"os":"Windows", "node":"24.19.0", "pnpm":"10.28.1", "postgres":"17.11"},
+  "checks": [
+    {"command":"pnpm install --frozen-lockfile", "exitCode":0, "result":"Already up to date; resolution skipped", "note":"Invoked the pnpm CLI directly because the desktop fallback wrapper attempted an interactive reinstall. Git Bash configured for the existing preinstall only in this process."},
+    {"command":"pnpm run typecheck", "exitCode":0, "result":"Full configured workspace typecheck passed"},
+    {"command":"pnpm --filter @workspace/api-server run typecheck:audit-tests", "exitCode":0, "result":"Test sources typechecked without exclusions; direct tsc -p invocation locally"},
+    {"command":"pnpm run lint:audit", "exitCode":0, "files":19, "errors":0, "result":"ESLint recommended JS/TS rules; critical scope only"},
+    {"command":"pnpm --filter @workspace/api-server run test:audit", "engine":"PGlite file-backed", "exitCode":0, "tests":11, "pass":11, "fail":0},
+    {"command":"pnpm --filter @workspace/api-server run test:audit", "engine":"PostgreSQL 17.11 gx01_test", "exitCode":0, "tests":11, "pass":11, "fail":0, "note":"Explicit isolated schema reuse on rerun; default fresh-schema path exercised by CI"},
+    {"command":"pnpm run verify:audit-staging", "engine":"PostgreSQL 17.11 native", "exitCode":0, "groups":13, "result":"See clean source-bound acceptance.json"},
+    {"command":"node scripts/audit-staging/verify-report.mjs .gx012/evidence/api-report.json", "exitCode":0, "result":"API artifact matches persistent record, canonical report hash, evidence hash and references; does not prove browser download"},
+    {"command":"node scripts/monorepo_health_report.cjs", "exitCode":0, "result":"Generated operational documentation; generated root reports restored to avoid unrelated churn"},
+    {"command":"pnpm run build", "exitCode":1, "result":"Local Windows API/dashboard/mockup builds passed. Mobile progressed after spawn fix, then failed fetching Metro bundle with TypeError: fetch failed. Full Linux CI build on the same source passed.", "firstFailure":"spawn pnpm ENOENT before portable CLI fix"},
+    {"command":"git diff --check", "exitCode":0, "result":"No whitespace errors"},
+    {"command":"Known generated staging credential scan over candidate files", "exitCode":0, "files":34, "matches":0, "note":"Not a historical repository secret certification"}
+  ],
+  "browser": {"verified":false,"reason":"CUA runtime unavailable after reset; existing browser policy was respected"},
+  "humanReview": "pending"
+}

@@ -148,7 +148,7 @@ router.post("/clawlancer/listings/:id/claim", governanceAuth, async (req, res) =
   }
 
   try {
-    const result = await claimClawlancerBounty(req.params.id);
+    const result = await claimClawlancerBounty(String(req.params.id));
     return res.status(201).json({
       success: true,
       data: {
@@ -177,7 +177,7 @@ router.post("/clawlancer/transactions/:id/deliver", governanceAuth, async (req, 
   const deliverable = typeof body.deliverable === "string" ? body.deliverable : "";
 
   try {
-    const result = await deliverClawlancerTransaction(req.params.id, deliverable);
+    const result = await deliverClawlancerTransaction(String(req.params.id), deliverable);
     return res.status(201).json({
       success: true,
       data: {

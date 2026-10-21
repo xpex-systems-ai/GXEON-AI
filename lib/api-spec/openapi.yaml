@@ -3,7 +3,7 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Health API specification. The standalone GX-01 workflow contract is audit-workflow.openapi.json; runtime schemas are in lib/api-zod/src/auditWorkflow.ts.
 servers:
   - url: /api
     description: Base API path

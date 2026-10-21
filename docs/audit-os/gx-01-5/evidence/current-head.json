@@ -1,0 +1,1081 @@
+{
+  "queriedAt": "2026-10-21T13:42:12.326Z",
+  "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+  "base": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "branch": "codex/gxeon-audit-os-v1-gx01",
+  "baseBranch": "main",
+  "url": "https://github.com/xpex-systems-ai/GXEON-AI/pull/456",
+  "draft": true,
+  "merged": false,
+  "state": "open",
+  "reviews": [],
+  "statusCount": 42,
+  "statusCounts": {
+    "failure": 28,
+    "success": 13,
+    "pending": 1,
+    "error": 0
+  },
+  "statuses": [
+    {
+      "id": 56891673163,
+      "context": "Vercel – gxeon-ai-api-server-sxv4",
+      "state": "pending",
+      "targetUrl": "https://vercel.com/xpex-neural/gxeon-ai-api-server-sxv4/9mkSonS3mF1oJsGg2kzqTs6fxvvf",
+      "description": "Vercel is deploying your app",
+      "createdAt": "2026-10-21T13:38:44Z"
+    },
+    {
+      "id": 56891673526,
+      "context": "Vercel – gxeon-ai-gxeon-dashboard",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:44Z"
+    },
+    {
+      "id": 56891673697,
+      "context": "Vercel – gxeon-ai-w39m",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:44Z"
+    },
+    {
+      "id": 56891673847,
+      "context": "Vercel – gxeon-ai-kzqy",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:44Z"
+    },
+    {
+      "id": 56891673905,
+      "context": "Vercel – gxeon-ai-veq5",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:44Z"
+    },
+    {
+      "id": 56891673910,
+      "context": "Vercel – gxeon-ai-9swq",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:44Z"
+    },
+    {
+      "id": 56891673932,
+      "context": "Vercel – gxeon-ai-72nc",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:44Z"
+    },
+    {
+      "id": 56891673996,
+      "context": "Vercel – gxeon-ai-gv35",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:44Z"
+    },
+    {
+      "id": 56891674048,
+      "context": "Vercel – gxeon-ai-hq7w",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:44Z"
+    },
+    {
+      "id": 56891674090,
+      "context": "Vercel – gxeon-ai-9qd3",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:44Z"
+    },
+    {
+      "id": 56891674228,
+      "context": "Vercel – gxeon-ai-4wdd",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674265,
+      "context": "Vercel – gxeon-ai-g32e",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674290,
+      "context": "Vercel – gxeon-ai-e7uq",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674339,
+      "context": "Vercel – gxeon-ai-lpgw",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674419,
+      "context": "Vercel – gxeon-ai-p9ip",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674431,
+      "context": "Vercel – gxeon-ai-l2h7",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674454,
+      "context": "Vercel – gxeon-ai-wir1",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674563,
+      "context": "Vercel – gxeon-ai-glwt",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674661,
+      "context": "Vercel – gxeon-ai-j5ud",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674735,
+      "context": "Vercel – gxeon-ai-wsd2",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674742,
+      "context": "Vercel – gxeon-ai-b61u",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674957,
+      "context": "Vercel – gxeon-ai-2ban",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891674979,
+      "context": "Vercel – gxeon-ai-axlh",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/knowledge/why-is-my-account-deployment-blocked",
+      "description": "Account is blocked.",
+      "createdAt": "2026-10-21T13:38:45Z"
+    },
+    {
+      "id": 56891701256,
+      "context": "netlify/coruscating-salmiakki-302f81/deploy-preview",
+      "state": "success",
+      "targetUrl": "https://deploy-preview-456--coruscating-salmiakki-302f81.netlify.app",
+      "description": "Deploy Preview ready!",
+      "createdAt": "2026-10-21T13:39:03Z"
+    },
+    {
+      "id": 56891701956,
+      "context": "netlify/wonderful-phoenix-260614/deploy-preview",
+      "state": "success",
+      "targetUrl": "https://deploy-preview-456--wonderful-phoenix-260614.netlify.app",
+      "description": "Deploy Preview ready!",
+      "createdAt": "2026-10-21T13:39:03Z"
+    },
+    {
+      "id": 56891703261,
+      "context": "netlify/gxeonai/deploy-preview",
+      "state": "success",
+      "targetUrl": "https://deploy-preview-456--gxeonai.netlify.app",
+      "description": "Deploy Preview ready!",
+      "createdAt": "2026-10-21T13:39:04Z"
+    },
+    {
+      "id": 56891706941,
+      "context": "Vercel – gxeon-ail",
+      "state": "success",
+      "targetUrl": "https://vercel.com/xpex-neural/gxeon-ail/HM7zu3DkHRpiJxVBvP4Sqartq3EA",
+      "description": "Deployment has completed",
+      "createdAt": "2026-10-21T13:39:07Z"
+    },
+    {
+      "id": 56891734448,
+      "context": "netlify/gxeonaik/deploy-preview",
+      "state": "failure",
+      "targetUrl": "https://app.netlify.com/projects/gxeonaik/deploys/6ad8c05bb145bf9631492750",
+      "description": "Deploy Preview failed.",
+      "createdAt": "2026-10-21T13:39:27Z"
+    },
+    {
+      "id": 56891734804,
+      "context": "Vercel – gxeon-ai-a",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/junior-senas-projects-4226acc3/gxeon-ai-a/9eNV4qe6X9oWfLTBkPjxdSqDppan",
+      "description": "Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_9eNV4qe6X9oWfLTBkPjxdSqDppan --logs",
+      "createdAt": "2026-10-21T13:39:27Z"
+    },
+    {
+      "id": 56891766275,
+      "context": "Vercel – gxeon-ai-mockup-sandbox",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/xpex-neural/gxeon-ai-mockup-sandbox/3doJ64WW6ZXQaNBH1Dx1Basx4BNP",
+      "description": "Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_3doJ64WW6ZXQaNBH1Dx1Basx4BNP --logs",
+      "createdAt": "2026-10-21T13:39:49Z"
+    },
+    {
+      "id": 56891779431,
+      "context": "netlify/startling-platypus-66e8e2/deploy-preview",
+      "state": "success",
+      "targetUrl": "https://deploy-preview-456--startling-platypus-66e8e2.netlify.app",
+      "description": "Deploy Preview ready!",
+      "createdAt": "2026-10-21T13:39:58Z"
+    },
+    {
+      "id": 56891792510,
+      "context": "Vercel – gxeo",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/junior-senas-projects-4226acc3/gxeo/DKAr6J7sDFBRudZ2iLNFxNYphT8q",
+      "description": "Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_DKAr6J7sDFBRudZ2iLNFxNYphT8q --logs",
+      "createdAt": "2026-10-21T13:40:07Z"
+    },
+    {
+      "id": 56891802248,
+      "context": "Vercel – gxeon-audit-os",
+      "state": "success",
+      "targetUrl": "https://vercel.com/gxeon/gxeon-audit-os/BtGVzL5ykRSMQDnCEGGZNC7PWifE",
+      "description": "Deployment has completed",
+      "createdAt": "2026-10-21T13:40:14Z"
+    },
+    {
+      "id": 56891814953,
+      "context": "netlify/gleaming-raindrop-1a263b/deploy-preview",
+      "state": "success",
+      "targetUrl": "https://deploy-preview-456--gleaming-raindrop-1a263b.netlify.app",
+      "description": "Deploy Preview ready!",
+      "createdAt": "2026-10-21T13:40:23Z"
+    },
+    {
+      "id": 56891816547,
+      "context": "Vercel – gxeon-ai-ia",
+      "state": "success",
+      "targetUrl": "https://vercel.com/xpex-neural/gxeon-ai-ia/8SWcGD2obVrsZbkfZh7drvQ9SDLB",
+      "description": "Deployment has completed",
+      "createdAt": "2026-10-21T13:40:24Z"
+    },
+    {
+      "id": 56891827944,
+      "context": "Vercel – gxeon-ai-aoo",
+      "state": "success",
+      "targetUrl": "https://vercel.com/junior-senas-projects-4226acc3/gxeon-ai-aoo/AFw5XgWmevRncMjFQMNLSQDdMtox",
+      "description": "Deployment has completed",
+      "createdAt": "2026-10-21T13:40:31Z"
+    },
+    {
+      "id": 56891852108,
+      "context": "netlify/gxeon/deploy-preview",
+      "state": "failure",
+      "targetUrl": "https://app.netlify.com/projects/gxeon/deploys/6ad8c05b96ab24eedf055d0c",
+      "description": "Deploy Preview failed.",
+      "createdAt": "2026-10-21T13:40:47Z"
+    },
+    {
+      "id": 56891875997,
+      "context": "Vercel – gxeon-ai-api-server-611a",
+      "state": "success",
+      "targetUrl": "https://vercel.com/junior-senas-projects-4226acc3/gxeon-ai-api-server-611a/X3UpkeUMU6Hqge2LRCTXGkwQYCvA",
+      "description": "Deployment has completed",
+      "createdAt": "2026-10-21T13:41:03Z"
+    },
+    {
+      "id": 56891881606,
+      "context": "Vercel – gxeon-ai",
+      "state": "failure",
+      "targetUrl": "https://vercel.com/xpex-neural/gxeon-ai/D4XqTm8qbWShZJ2wQexAXX6YyKHj",
+      "description": "Deployment has failed — run this Vercel CLI command: npx vercel inspect dpl_D4XqTm8qbWShZJ2wQexAXX6YyKHj --logs",
+      "createdAt": "2026-10-21T13:41:07Z"
+    },
+    {
+      "id": 56891917851,
+      "context": "Vercel – gxeon-ai-api-server",
+      "state": "success",
+      "targetUrl": "https://vercel.com/junior-senas-projects-4226acc3/gxeon-ai-api-server/EK87BKHxmXF2hwndHUHmDznM5TdK",
+      "description": "Deployment has completed",
+      "createdAt": "2026-10-21T13:41:32Z"
+    },
+    {
+      "id": 56891923378,
+      "context": "Vercel – ai-ia",
+      "state": "success",
+      "targetUrl": "https://vercel.com/xpex-neural/ai-ia/FbsSY9Fk9nKaKpzD7b5XnUgKZMC3",
+      "description": "Deployment has completed",
+      "createdAt": "2026-10-21T13:41:36Z"
+    },
+    {
+      "id": 56891965416,
+      "context": "Vercel – gxeon-ai01",
+      "state": "success",
+      "targetUrl": "https://vercel.com/xpex-neural/gxeon-ai01/GsWxj1uqzsCtRchYZ5pQBsDgS8ZM",
+      "description": "Deployment has completed",
+      "createdAt": "2026-10-21T13:42:05Z"
+    }
+  ],
+  "checkRuns": [
+    {
+      "id": 119257051817,
+      "name": "Vercel Preview Comments",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119257051817"
+    },
+    {
+      "id": 119256226884,
+      "name": "Redirect rules - gxeon",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119256226884"
+    },
+    {
+      "id": 119256222218,
+      "name": "Header rules - gxeon",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119256222218"
+    },
+    {
+      "id": 119256216148,
+      "name": "Pages changed - gxeon",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119256216148"
+    },
+    {
+      "id": 119255996596,
+      "name": "Redirect rules - gleaming-raindrop-1a263b",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255996596"
+    },
+    {
+      "id": 119255992736,
+      "name": "Header rules - gleaming-raindrop-1a263b",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255992736"
+    },
+    {
+      "id": 119255988977,
+      "name": "Pages changed - gleaming-raindrop-1a263b",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255988977"
+    },
+    {
+      "id": 119255732556,
+      "name": "Redirect rules - startling-platypus-66e8e2",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255732556"
+    },
+    {
+      "id": 119255728909,
+      "name": "Header rules - startling-platypus-66e8e2",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255728909"
+    },
+    {
+      "id": 119255725056,
+      "name": "Pages changed - startling-platypus-66e8e2",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255725056"
+    },
+    {
+      "id": 119255540243,
+      "name": "Redirect rules - gxeonaik",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255540243"
+    },
+    {
+      "id": 119255535952,
+      "name": "Header rules - gxeonaik",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255535952"
+    },
+    {
+      "id": 119255531745,
+      "name": "Pages changed - gxeonaik",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255531745"
+    },
+    {
+      "id": 119255302190,
+      "name": "Redirect rules - coruscating-salmiakki-302f81",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255302190"
+    },
+    {
+      "id": 119255302079,
+      "name": "Redirect rules - gxeonai",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255302079"
+    },
+    {
+      "id": 119255300493,
+      "name": "Redirect rules - wonderful-phoenix-260614",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255300493"
+    },
+    {
+      "id": 119255298829,
+      "name": "Header rules - coruscating-salmiakki-302f81",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255298829"
+    },
+    {
+      "id": 119255298470,
+      "name": "Header rules - gxeonai",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255298470"
+    },
+    {
+      "id": 119255296877,
+      "name": "Header rules - wonderful-phoenix-260614",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255296877"
+    },
+    {
+      "id": 119255294795,
+      "name": "Pages changed - coruscating-salmiakki-302f81",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255294795"
+    },
+    {
+      "id": 119255293426,
+      "name": "Pages changed - gxeonai",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255293426"
+    },
+    {
+      "id": 119255292702,
+      "name": "pilot-database-boundary",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870/job/119255292702"
+    },
+    {
+      "id": 119255292649,
+      "name": "isolated-staging",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870/job/119255292649"
+    },
+    {
+      "id": 119255292303,
+      "name": "audit-flow",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870/job/119255292303"
+    },
+    {
+      "id": 119255292204,
+      "name": "Pages changed - wonderful-phoenix-260614",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255292204"
+    },
+    {
+      "id": 119255290392,
+      "name": "TypeScript workspace validation",
+      "status": "in_progress",
+      "conclusion": null,
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775832/job/119255290392"
+    },
+    {
+      "id": 119255289244,
+      "name": "Monorepo build",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775480/job/119255289244"
+    },
+    {
+      "id": 119255289225,
+      "name": "Operational radar report",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775521/job/119255289225"
+    },
+    {
+      "id": 119255267901,
+      "name": "Supabase Preview",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/119255267901"
+    }
+  ],
+  "workflows": [
+    {
+      "runId": 39609775521,
+      "name": "GXEON Monorepo Health",
+      "headSha": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775521",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-10-21T13:38:36Z",
+      "updatedAt": "2026-10-21T13:38:50Z",
+      "jobs": [
+        {
+          "id": 119255289225,
+          "name": "Operational radar report",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775521/job/119255289225",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Setup Node",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Generate health reports",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upload health reports",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Setup Node",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "id": 12349777678,
+          "name": "gxeon-monorepo-health",
+          "size": 3994,
+          "digest": "sha256:91e2de31949e8fa6b52874f406eba6dcaa60402c65155cee89663382f140525d",
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/artifacts/12349777678/zip",
+          "expired": false
+        }
+      ]
+    },
+    {
+      "runId": 39609775832,
+      "name": "GXEON Typecheck",
+      "headSha": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775832",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-10-21T13:38:36Z",
+      "updatedAt": "2026-10-21T13:39:28Z",
+      "jobs": [
+        {
+          "id": 119255290392,
+          "name": "TypeScript workspace validation",
+          "status": "in_progress",
+          "conclusion": null,
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775832/job/119255290392",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Setup pnpm",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Setup Node",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run typecheck",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Setup Node",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Setup pnpm",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "artifacts": []
+    },
+    {
+      "runId": 39609775480,
+      "name": "GXEON Build",
+      "headSha": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775480",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-10-21T13:38:36Z",
+      "updatedAt": "2026-10-21T13:40:25Z",
+      "jobs": [
+        {
+          "id": 119255289244,
+          "name": "Monorepo build",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775480/job/119255289244",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Setup pnpm",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Setup Node",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Install dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Build monorepo",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Setup Node",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Setup pnpm",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Checkout",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "artifacts": []
+    },
+    {
+      "runId": 39609775870,
+      "name": "Audit OS V1",
+      "headSha": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870",
+      "status": "completed",
+      "conclusion": "success",
+      "createdAt": "2026-10-21T13:38:36Z",
+      "updatedAt": "2026-10-21T13:39:53Z",
+      "jobs": [
+        {
+          "id": 119255292303,
+          "name": "audit-flow",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870/job/119255292303",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Initialize containers",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm/action-setup@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm install --frozen-lockfile",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm run lint:audit",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Isolated codegen regression for patched parser dependencies",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm run typecheck:libs",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm --filter @workspace/api-server run typecheck",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm --filter @workspace/api-server run typecheck:audit-tests",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm --filter @workspace/gxeon-dashboard run typecheck",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Unit and file-backed persistence tests",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "PostgreSQL HTTP integration flow",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upload test evidence (explicitly test data)",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run pnpm/action-setup@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Stop containers",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 119255292649,
+          "name": "isolated-staging",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870/job/119255292649",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm/action-setup@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm install --frozen-lockfile",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm run build:libs",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm run build:apps",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Start isolated PostgreSQL 17 and existing applications",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Verify HTTP lifecycle, authorization, rollback and full restart",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Backup and restore synthetic data into a new isolated database",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Upload sanitized synthetic evidence",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Stop staging without deleting the persistent volume",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Database startup diagnostics (test instance only)",
+              "status": "completed",
+              "conclusion": "skipped"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run pnpm/action-setup@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        },
+        {
+          "id": 119255292702,
+          "name": "pilot-database-boundary",
+          "status": "completed",
+          "conclusion": "success",
+          "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39609775870/job/119255292702",
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Initialize containers",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm/action-setup@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm install --frozen-lockfile",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Run pnpm --filter @workspace/api-server run test:audit-pilot-db",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/setup-node@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run pnpm/action-setup@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Stop containers",
+              "status": "completed",
+              "conclusion": "success"
+            },
+            {
+              "name": "Complete job",
+              "status": "completed",
+              "conclusion": "success"
+            }
+          ]
+        }
+      ],
+      "artifacts": [
+        {
+          "id": 12349638057,
+          "name": "gx012-isolated-staging",
+          "size": 6507,
+          "digest": "sha256:e942a81b0ad3a56a8752ad7744cfdf1069ed4083bc709b32daa3003e397fcc95",
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/artifacts/12349638057/zip",
+          "expired": false
+        },
+        {
+          "id": 12349278833,
+          "name": "gx01-test-evidence",
+          "size": 2632,
+          "digest": "sha256:ea057996b205aa02377d8a5ceecee91fd86f7b5882e217faea9c9e6663eeaece",
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/artifacts/12349278833/zip",
+          "expired": false
+        }
+      ]
+    }
+  ]
+}

@@ -6,7 +6,7 @@
   "outputDirectory": "artifacts/gxeon-dashboard/dist/public",
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/:path((?!api(?:/|$)).*)",
       "destination": "/index.html"
     }
   ]

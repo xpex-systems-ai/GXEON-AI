@@ -1,0 +1,20 @@
+{
+  "exit": 1,
+  "tool": "pnpm@10.28.1",
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 4,
+      "moderate": 19,
+      "high": 51,
+      "critical": 0
+    },
+    "dependencies": 1184,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1184
+  },
+  "advisoryEntries": 73,
+  "sha256": "a2b2f336940cf3b55075cfb2d620fe8d9b81c20c089e0a294e2dc9c508b37c58",
+  "note": "Canonical pnpm10 tool reports 74 occurrences in 73 advisories, matching 74 advisory-version rows. pnpm11 comparison reports 89->73 and counts dev dependencies differently; no risk silently removed."
+}

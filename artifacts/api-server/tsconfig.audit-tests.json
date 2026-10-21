@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "../..",
+    "lib": ["es2022", "DOM"],
+    "jsx": "preserve"
+  },
+  "include": ["src/tests/auditWorkflow.test.ts", "src/tests/auditPilot.test.ts", "src/tests/auditPilotDatabase.test.ts"],
+  "exclude": []
+}

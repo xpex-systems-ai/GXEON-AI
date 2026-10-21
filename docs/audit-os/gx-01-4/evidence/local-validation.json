@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-10-20T20:44:56.941Z",
+  "initialHead": "7687bf248cfc6034af198926a2b07d045ca9b715",
+  "sourceDirty": true,
+  "install": {
+    "command": "npx --yes pnpm@10.28.1 install --frozen-lockfile",
+    "exit": 0,
+    "preinstall": "pass",
+    "note": "Global pnpm11 first aborted no-TTY module-layout purge; no purge confirmation supplied."
+  },
+  "lint": {
+    "command": "node scripts/audit-staging/lint.mjs",
+    "exit": 0,
+    "files": 19,
+    "errorCount": 0
+  },
+  "knownGeneratedSecrets": {
+    "files": 11,
+    "found": 0
+  },
+  "disk": {
+    "availableBytesObserved": 0,
+    "impact": "new docs/build/staging and Git synchronization blocked"
+  },
+  "cacheCleanup": {
+    "automaticApprovalRejected": true,
+    "target": "only newly created npx pnpm10 cache",
+    "removed": false,
+    "retriedViaAlternative": false
+  },
+  "preservation": "Current-phase audit JSON losslessly gzip compressed; JSON parse/metadata checked. Prior code, DB and evidence retained. GitHub API used for same branch.",
+  "browserDownloadVerified": false,
+  "humanReview": "NOT DESIGNATED",
+  "decision": "BLOCKED"
+}

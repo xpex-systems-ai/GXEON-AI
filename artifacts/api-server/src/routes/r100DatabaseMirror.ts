@@ -51,7 +51,7 @@ router.post("/r100-db/apply-schema", async (req, res) => {
 
 router.post("/r100-db/activation-smoke-test", async (req, res) => {
   noStore(res);
-  if (!isConfirmed(req.body, RUN_R100_DB_MIRROR_ACTIVATION_SMOKE_TEST_ACTION)) return res.status(400).json({ success: false, error: "RUN_R100_DB_MIRROR_ACTIVATION_SMOKE_TEST_CONFIRMATION_REQUIRED" });
+  if (!isConfirmed(req.body, RUN_R100_DB_MIRROR_ACTIVATION_SMOKE_TEST_ACTION)) { res.status(400).json({ success: false, error: "RUN_R100_DB_MIRROR_ACTIVATION_SMOKE_TEST_CONFIRMATION_REQUIRED" }); return; }
   res.json({ success: true, data: await runR100DatabaseMirrorActivationSmokeTest() });
 });
 
@@ -62,7 +62,7 @@ router.get("/r100-db/latest-snapshot", async (_req, res) => {
 
 router.post("/r100-db/probe", async (req, res) => {
   noStore(res);
-  if (!isConfirmed(req.body, "CREATE_SAFE_R100_DB_MIRROR_PROBE")) return res.status(400).json({ success: false, error: "CREATE_SAFE_R100_DB_MIRROR_PROBE_CONFIRMATION_REQUIRED" });
+  if (!isConfirmed(req.body, "CREATE_SAFE_R100_DB_MIRROR_PROBE")) { res.status(400).json({ success: false, error: "CREATE_SAFE_R100_DB_MIRROR_PROBE_CONFIRMATION_REQUIRED" }); return; }
   try {
     res.json({ success: true, data: await createR100DatabaseMirrorProbe() });
   } catch (error) {
@@ -72,7 +72,7 @@ router.post("/r100-db/probe", async (req, res) => {
 
 router.post("/r100-db/export-safe-snapshot", async (req, res) => {
   noStore(res);
-  if (!isConfirmed(req.body, "EXPORT_SAFE_R100_SNAPSHOT_TO_DB_MIRROR")) return res.status(400).json({ success: false, error: "EXPORT_SAFE_R100_SNAPSHOT_TO_DB_MIRROR_CONFIRMATION_REQUIRED" });
+  if (!isConfirmed(req.body, "EXPORT_SAFE_R100_SNAPSHOT_TO_DB_MIRROR")) { res.status(400).json({ success: false, error: "EXPORT_SAFE_R100_SNAPSHOT_TO_DB_MIRROR_CONFIRMATION_REQUIRED" }); return; }
   try {
     res.json({ success: true, data: await exportSafeR100SnapshotToDatabaseMirror() });
   } catch (error) {

@@ -1,0 +1,29 @@
+name: gxeon-gx012
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: gx01_staging
+      POSTGRES_USER: gx01_stage_admin
+      POSTGRES_PASSWORD_FILE: /run/secrets/admin_password
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - gx012_data:/var/lib/postgresql/data
+    secrets:
+      - admin_password
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gx01_stage_admin -d gx01_staging"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+    networks:
+      - isolated
+secrets:
+  admin_password:
+    file: ../../.gx012/admin-password
+volumes:
+  gx012_data:
+networks:
+  isolated:
+    driver: bridge

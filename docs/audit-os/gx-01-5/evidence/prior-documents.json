@@ -1,0 +1,47 @@
+[
+  {
+    "name": "ACCEPTANCE_DECISION.md",
+    "bytes": 2406,
+    "sha256": "af96ca0203acc8b0ec97149f78733e8bd613650ac10d367be7c3b60acae85c19"
+  },
+  {
+    "name": "CANONICAL_INFRASTRUCTURE_MATRIX.md",
+    "bytes": 20443,
+    "sha256": "3e4e58f0b847af5862978572fabc86f24e7139a0053446bd454693169d584ae1"
+  },
+  {
+    "name": "DEPENDENCY_RISK_REGISTER.md",
+    "bytes": 62533,
+    "sha256": "059b6573cc16dbe19bafd21b9e9d23991f0aaf80790e6a615834746fbc68662b"
+  },
+  {
+    "name": "DOWNLOAD_FINAL_VERIFICATION.md",
+    "bytes": 2877,
+    "sha256": "d1ff78f8f281e94e134ea9045c2b8fd7c5d1e50f4352da3b304749542d4c7888"
+  },
+  {
+    "name": "EXTERNAL_CHECKS_FINAL_MATRIX.md",
+    "bytes": 20424,
+    "sha256": "ad0f2ebf101cf8b253885d068d29e3527560013cc833c832eccecb56c10325cf"
+  },
+  {
+    "name": "FINAL_DELIVERY.md",
+    "bytes": 7131,
+    "sha256": "3152408eab4105d4ddef3123e6c1dca413ad6dc050bf5c979c5005aa35fa0a60"
+  },
+  {
+    "name": "INDEPENDENT_REVIEW_HANDOFF.md",
+    "bytes": 7478,
+    "sha256": "8c962fb918c01f301deef37bcbd4509a90b7138346d958fca751019bcf376b25"
+  },
+  {
+    "name": "INFRASTRUCTURE_DECISION_PROPOSAL.md",
+    "bytes": 6403,
+    "sha256": "9e1d871e90f9449f972a243ae27f43af879399ec52a6e9812d4dada3fea167cb"
+  },
+  {
+    "name": "INITIAL_SNAPSHOT.md",
+    "bytes": 3136,
+    "sha256": "246b7c9507a68e219106bcbd294728dbdb1684737faf8c355e6138415994a107"
+  }
+]

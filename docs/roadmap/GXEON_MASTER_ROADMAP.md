@@ -1,5 +1,13 @@
 # GXEON Master Roadmap
 
+## Prioridade atual — fundação OMNIX AI / GX-01
+
+Em 2026-10-19 foi registrada a [proposta OMNIX AI](../omnix-ai/README.md), preservando GXEON OS como infraestrutura e GXEON Audit OS como núcleo técnico candidato. Marca, portfólio e lançamento continuam propostos.
+
+Para a próxima entrega do Audit OS, seguir os critérios do [roadmap GX-01](../omnix-ai/ROADMAP_GX01.md): estabilizar os checks globais, homologar UI/API/persistência e obter revisão independente antes de abrir o piloto. Conectores, multimodelo e propriedades enterprise dependem de evidências próprias; não são capacidades liberadas pelo manifesto.
+
+A tabela P0-P5 abaixo mantém a visão ampla do ecossistema. Ela não substitui os gates de liberação do recorte GX-01 nem implica conclusão das fases.
+
 ## Status table
 
 | Fase | Nome | Objetivo | Status atual |

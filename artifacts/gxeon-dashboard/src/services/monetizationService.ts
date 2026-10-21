@@ -39,6 +39,23 @@ export type OfferTemplate = MonetizationSafetyBoundary & {
 };
 
 export type MonetizationRuntimeStatus = MonetizationSafetyBoundary & {
+  githubDemandExecution?: {
+    readyCount: number;
+    topRouteForR100Sprint: {
+      packId: string;
+      route: string;
+      offerTitle: string;
+      targetBrl: number;
+      nextManualAction: string;
+    } | null;
+    manualRevenueSource: true;
+    revenueReceived: false;
+    providerVerified: false;
+    githubWriteDisabled: true;
+    externalContactDisabled: true;
+    paymentProviderDisabled: true;
+  };
+
   status: "MONETIZATION_RUNTIME_READY";
   payments: "NOT_CONNECTED";
   offers: "TEMPLATE_READY_NO_CLIENTS";

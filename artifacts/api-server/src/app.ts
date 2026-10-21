@@ -1,4 +1,4 @@
-import express, { type Express } from "express";
+import express, { type Express, type ErrorRequestHandler } from "express";
 import cors from "cors";
 import pinoHttp from "pino-http";
 import router from "./routes";
@@ -34,5 +34,15 @@ app.use(express.json({
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", router);
+
+app.use("/api", (_req, res) => {
+  res.status(404).json({ ok: false, code: "API_ROUTE_NOT_FOUND", message: "API route was not found." });
+});
+const apiErrorHandler: ErrorRequestHandler = (error: unknown, _req, res, _next) => {
+  const status = (error as { status?: number })?.status;
+  const clientError = status === 400 || status === 413;
+  res.status(clientError ? status : 503).json({ ok: false, code: clientError ? "INVALID_REQUEST_BODY" : "API_UNAVAILABLE", message: clientError ? "Request body is invalid or exceeds the size limit." : "The API could not complete this request." });
+};
+app.use(apiErrorHandler);
 
 export default app;
