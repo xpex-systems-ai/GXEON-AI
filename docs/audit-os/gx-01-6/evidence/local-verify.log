@@ -13,4 +13,3 @@ PASS write-disabled mode refuses mutations while retaining report reads
 PASS API and database restart retain closed status, IDs, references and hashes
 PASS logs and public frontend bundle do not contain staging credentials
 {"status":"CLOSED","checks":14,"caseId":"b1466091-e285-45c2-bed2-df0f50447133","reportId":"706bf5bb-38cf-4a4b-9788-25a0a08059c0","sha256":"581b5661b3edbed378c95cfac8e45ee2b369af8f72f29dea61fce8b5fb5bb286","evidenceCount":1,"findingCount":2,"testData":true}
-

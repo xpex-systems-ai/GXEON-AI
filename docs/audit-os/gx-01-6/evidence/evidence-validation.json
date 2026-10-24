@@ -4,5 +4,6 @@
   "exactGeneratedCredentialValuesFound": false,
   "privateKeyOrGithubTokenPatternFound": false,
   "relativeDocumentLinksValid": true,
-  "scope": "Selected GX016 sources and evidence only; not a universal secret detection guarantee"
+  "scope": "Selected GX016 sources and evidence only; not a universal secret detection guarantee",
+  "logPresentation": "Readable .log copies trim trailing blank lines; .log.gz preserves exact captured sanitized command output."
 }
