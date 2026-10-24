@@ -1,0 +1,356 @@
+{
+  "queriedAt": "2026-10-24T18:59:44.259Z",
+  "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+  "localHead": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+  "base": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "branch": "codex/gxeon-audit-os-v1-gx01",
+  "baseBranch": "main",
+  "draft": true,
+  "merged": false,
+  "state": "open",
+  "shortStatus": {
+    "count": 30,
+    "counts": {
+      "success": 3,
+      "failure": 24,
+      "pending": 3,
+      "error": 0
+    }
+  },
+  "fullStatus": {
+    "count": 42,
+    "counts": {
+      "success": 11,
+      "failure": 28,
+      "pending": 3,
+      "error": 0
+    }
+  },
+  "checkRuns": [
+    {
+      "id": 120959113773,
+      "name": "Vercel Preview Comments",
+      "app": "vercel",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959113773",
+      "detailsUrl": "https://vercel.com/github"
+    },
+    {
+      "id": 120959026310,
+      "name": "Redirect rules - gleaming-raindrop-1a263b",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959026310",
+      "detailsUrl": "https://app.netlify.com/projects/gleaming-raindrop-1a263b/deploys/6adcff97cd11ef8c0a89774c"
+    },
+    {
+      "id": 120959024927,
+      "name": "Header rules - gleaming-raindrop-1a263b",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959024927",
+      "detailsUrl": "https://app.netlify.com/projects/gleaming-raindrop-1a263b/deploys/6adcff97cd11ef8c0a89774c"
+    },
+    {
+      "id": 120959023615,
+      "name": "Pages changed - gleaming-raindrop-1a263b",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959023615",
+      "detailsUrl": "https://app.netlify.com/projects/gleaming-raindrop-1a263b/deploys/6adcff97cd11ef8c0a89774c"
+    },
+    {
+      "id": 120958931578,
+      "name": "Redirect rules - coruscating-salmiakki-302f81",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958931578",
+      "detailsUrl": "https://app.netlify.com/projects/coruscating-salmiakki-302f81/deploys/6adcff97ce6f919630532160"
+    },
+    {
+      "id": 120958930052,
+      "name": "Header rules - coruscating-salmiakki-302f81",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958930052",
+      "detailsUrl": "https://app.netlify.com/projects/coruscating-salmiakki-302f81/deploys/6adcff97ce6f919630532160"
+    },
+    {
+      "id": 120958928663,
+      "name": "Pages changed - coruscating-salmiakki-302f81",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958928663",
+      "detailsUrl": "https://app.netlify.com/projects/coruscating-salmiakki-302f81/deploys/6adcff97ce6f919630532160"
+    },
+    {
+      "id": 120958811820,
+      "name": "Redirect rules - startling-platypus-66e8e2",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958811820",
+      "detailsUrl": "https://app.netlify.com/projects/startling-platypus-66e8e2/deploys/6adcff978a7f63f1c3b7a20c"
+    },
+    {
+      "id": 120958810433,
+      "name": "Header rules - startling-platypus-66e8e2",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958810433",
+      "detailsUrl": "https://app.netlify.com/projects/startling-platypus-66e8e2/deploys/6adcff978a7f63f1c3b7a20c"
+    },
+    {
+      "id": 120958808873,
+      "name": "Pages changed - startling-platypus-66e8e2",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958808873",
+      "detailsUrl": "https://app.netlify.com/projects/startling-platypus-66e8e2/deploys/6adcff978a7f63f1c3b7a20c"
+    },
+    {
+      "id": 120958726605,
+      "name": "Redirect rules - gxeonaik",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958726605",
+      "detailsUrl": "https://app.netlify.com/projects/gxeonaik/deploys/6adcff973a7d959cddf02325"
+    },
+    {
+      "id": 120958725073,
+      "name": "Header rules - gxeonaik",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958725073",
+      "detailsUrl": "https://app.netlify.com/projects/gxeonaik/deploys/6adcff973a7d959cddf02325"
+    },
+    {
+      "id": 120958723778,
+      "name": "Pages changed - gxeonaik",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958723778",
+      "detailsUrl": "https://app.netlify.com/projects/gxeonaik/deploys/6adcff973a7d959cddf02325"
+    },
+    {
+      "id": 120958642022,
+      "name": "Redirect rules - gxeon",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958642022",
+      "detailsUrl": "https://app.netlify.com/projects/gxeon/deploys/6adcff97c9aba1839a6a7905"
+    },
+    {
+      "id": 120958641404,
+      "name": "Redirect rules - gxeonai",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958641404",
+      "detailsUrl": "https://app.netlify.com/projects/gxeonai/deploys/6adcff972f713985f847d300"
+    },
+    {
+      "id": 120958640467,
+      "name": "Redirect rules - wonderful-phoenix-260614",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958640467",
+      "detailsUrl": "https://app.netlify.com/projects/wonderful-phoenix-260614/deploys/6adcff97d65fbc09c49175b1"
+    },
+    {
+      "id": 120958640214,
+      "name": "Header rules - gxeon",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958640214",
+      "detailsUrl": "https://app.netlify.com/projects/gxeon/deploys/6adcff97c9aba1839a6a7905"
+    },
+    {
+      "id": 120958640029,
+      "name": "Header rules - gxeonai",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958640029",
+      "detailsUrl": "https://app.netlify.com/projects/gxeonai/deploys/6adcff972f713985f847d300"
+    },
+    {
+      "id": 120958639201,
+      "name": "Header rules - wonderful-phoenix-260614",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958639201",
+      "detailsUrl": "https://app.netlify.com/projects/wonderful-phoenix-260614/deploys/6adcff97d65fbc09c49175b1"
+    },
+    {
+      "id": 120958638379,
+      "name": "Pages changed - gxeonai",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958638379",
+      "detailsUrl": "https://app.netlify.com/projects/gxeonai/deploys/6adcff972f713985f847d300"
+    },
+    {
+      "id": 120958638335,
+      "name": "Pages changed - gxeon",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "failure",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958638335",
+      "detailsUrl": "https://app.netlify.com/projects/gxeon/deploys/6adcff97c9aba1839a6a7905"
+    },
+    {
+      "id": 120958637772,
+      "name": "audit-flow",
+      "app": "github-actions",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078306/job/120958637772",
+      "detailsUrl": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078306/job/120958637772"
+    },
+    {
+      "id": 120958637716,
+      "name": "Pages changed - wonderful-phoenix-260614",
+      "app": "netlify",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958637716",
+      "detailsUrl": "https://app.netlify.com/projects/wonderful-phoenix-260614/deploys/6adcff97d65fbc09c49175b1"
+    },
+    {
+      "id": 120958637691,
+      "name": "pilot-database-boundary",
+      "app": "github-actions",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078306/job/120958637691",
+      "detailsUrl": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078306/job/120958637691"
+    },
+    {
+      "id": 120958637534,
+      "name": "TypeScript workspace validation",
+      "app": "github-actions",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078249/job/120958637534",
+      "detailsUrl": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078249/job/120958637534"
+    },
+    {
+      "id": 120958637522,
+      "name": "isolated-staging",
+      "app": "github-actions",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078306/job/120958637522",
+      "detailsUrl": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078306/job/120958637522"
+    },
+    {
+      "id": 120958637506,
+      "name": "Operational radar report",
+      "app": "github-actions",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078297/job/120958637506",
+      "detailsUrl": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078297/job/120958637506"
+    },
+    {
+      "id": 120958637421,
+      "name": "Monorepo build",
+      "app": "github-actions",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078272/job/120958637421",
+      "detailsUrl": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078272/job/120958637421"
+    },
+    {
+      "id": 120958623372,
+      "name": "Supabase Preview",
+      "app": "supabase",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "skipped",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120958623372",
+      "detailsUrl": "https://supabase.com/dashboard/project/zphpeynirstwzrzgvbct/branches"
+    }
+  ],
+  "reviews": [],
+  "workflows": [
+    {
+      "id": 40123078249,
+      "name": "GXEON Typecheck",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078249"
+    },
+    {
+      "id": 40123078297,
+      "name": "GXEON Monorepo Health",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078297"
+    },
+    {
+      "id": 40123078306,
+      "name": "Audit OS V1",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078306"
+    },
+    {
+      "id": 40123078272,
+      "name": "GXEON Build",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078272"
+    }
+  ]
+}

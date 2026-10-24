@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-10-24T19:02:33.362Z",
+  "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+  "checkout": "380dec6654d0a9635146e490278b09bab2fcf177",
+  "sourceDirty": false,
+  "pglite": {
+    "tests": 15,
+    "pass": 15,
+    "fail": 0
+  },
+  "postgresHttp": {
+    "tests": 16,
+    "pass": 16,
+    "fail": 0
+  },
+  "grantsMemberships": {
+    "tests": 1,
+    "pass": 1,
+    "fail": 0
+  },
+  "stagingGroups": 14,
+  "allStagingGroupsPass": true,
+  "postgresVersion": 170011,
+  "recoveryPass": true,
+  "restorePass": true,
+  "report": {
+    "caseId": "fefdc05f-00a3-41b9-bcf1-9b4ba20a4243",
+    "reportId": "3f15ead6-13cd-41cf-aafb-5a510efb7b62",
+    "sha256": "d32f352ec1f607972c7a34be769fb11253ebdf5afca7d4ed9be22c3dc922bf55",
+    "evidenceCount": 1,
+    "findingCount": 2,
+    "status": "CLOSED",
+    "testData": true
+  },
+  "matchesPersistedRecord": true,
+  "browserDownloadVerified": false,
+  "bodyParser": "2.4.0",
+  "zodRuntime": "3.25.76",
+  "forbiddenImports": [],
+  "workflows": [
+    {
+      "id": 40123078249,
+      "name": "GXEON Typecheck",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078249"
+    },
+    {
+      "id": 40123078297,
+      "name": "GXEON Monorepo Health",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078297"
+    },
+    {
+      "id": 40123078306,
+      "name": "Audit OS V1",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078306"
+    },
+    {
+      "id": 40123078272,
+      "name": "GXEON Build",
+      "head": "1af24f61c376225c3e94928a1f58c59b2f7e597e",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123078272"
+    }
+  ],
+  "note": "Candidate SHA evidence only; final documentation HEAD CI will be reconsulted and recorded in PR body and final delivery message, not inferred from this candidate."
+}

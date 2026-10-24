@@ -1,0 +1,84 @@
+{
+  "testData": true,
+  "status": "PASS",
+  "externalNetworkUsed": false,
+  "fixturesRetained": true,
+  "versions": [
+    {
+      "name": "body-parser",
+      "before": "2.3.0",
+      "version": "2.4.0",
+      "chain": "artifacts__api-server>express>body-parser"
+    },
+    {
+      "name": "fast-uri",
+      "before": "3.1.8",
+      "version": "3.1.9",
+      "chain": "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+    },
+    {
+      "name": "undici",
+      "before": "6.25.0",
+      "version": "6.29.1",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+    },
+    {
+      "name": "ws",
+      "before": "6.2.3",
+      "version": "6.2.6",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>@react-native/dev-middleware>ws"
+    },
+    {
+      "name": "ws",
+      "before": "7.5.10",
+      "version": "7.5.13",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>ws"
+    },
+    {
+      "name": "js-yaml",
+      "before": "3.14.2",
+      "version": "3.15.2",
+      "chain": "artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+    },
+    {
+      "name": "brace-expansion",
+      "before": "2.1.0",
+      "version": "2.1.7",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+    },
+    {
+      "name": "tar",
+      "before": "7.5.19",
+      "version": "7.5.21",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>tar"
+    },
+    {
+      "name": "@xmldom/xmldom",
+      "before": "0.8.13",
+      "version": "0.8.15",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+    },
+    {
+      "name": "@xmldom/xmldom",
+      "before": "0.9.10",
+      "version": "0.9.12",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+    },
+    {
+      "name": "compression",
+      "before": "1.8.1",
+      "version": "1.8.2",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>compression"
+    }
+  ],
+  "checks": [
+    "installed parent resolution",
+    "YAML3 roundtrip",
+    "brace2 expansion",
+    "XML0.8/0.9 and plist roundtrip",
+    "tar7 create/extract new fixture",
+    "Undici6 HTTP + compression1 gzip",
+    "ws6/ws7 echo"
+  ],
+  "fixtureContentSha256": "fe5dbf0cfcab6720db556f4ae123b0af5d3043c9a233b2e93b7ac26702f24fcd"
+}

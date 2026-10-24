@@ -12,6 +12,6 @@
 | H Independent Review | BLOCKED — INDEPENDENT REVIEWER NOT ASSIGNED | Pacote/formulário preparados; sem nome/assinatura/aprovação simulada |
 | I Budget | BLOCKED — AUTHORIZATION REQUIRED | Estimativa40–70, cap proposto70/30dias; custo real e aprovação ausentes |
 | J Pilot Scope | DOCUMENTED; APPROVAL PENDING | Um vercel.json, dois checks, limites/dados/suporte/retenção/preço propostos; nenhuma execução comercial |
-| K Quality | Consultar FINAL_DELIVERY e CI do SHA final | Local lint/typecheck/testes/health e buildAPI; build Windows Metro falhou; Linux obrigatório no SHA final |
+| K Quality | CI CANDIDATO PASS; HEAD final consultar PR | Quatro workflows success em 1af24f61c376225c3e94928a1f58c59b2f7e597e; build Linux/testes/restore. HEAD final documental será reconsultado separadamente; build Windows Metro FAIL preservado |
 
 **Decisão global: BLOCKED.** Pacote disponível para análise, sem qualificar o produto como aprovado para piloto. READY FOR INDEPENDENT REVIEW não é usado para ocultar gates técnicos abertos. Não houve merge/deploy/contratação/alteração externa/financeira.

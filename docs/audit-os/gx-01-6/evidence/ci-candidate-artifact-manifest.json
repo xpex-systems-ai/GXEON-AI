@@ -1,0 +1,65 @@
+[
+  {
+    "archive": "candidate-gx01-test-evidence.zip",
+    "path": "codegen-smoke.json",
+    "saved": "candidate-gx01-test-evidence--codegen-smoke.json",
+    "bytes": 418,
+    "sha256": "c9de33411f3f47f2292845c3adede22b5af00c558840dc27928738414dd4b9e2"
+  },
+  {
+    "archive": "candidate-gx01-test-evidence.zip",
+    "path": "dependency-smoke.json",
+    "saved": "candidate-gx01-test-evidence--dependency-smoke.json",
+    "bytes": 2403,
+    "sha256": "bf44f0b471279dcfbf5e7e2b9524b6382197882d1715b606f9ecc741042ef7d6"
+  },
+  {
+    "archive": "candidate-gx01-test-evidence.zip",
+    "path": "http-calls.json",
+    "saved": "candidate-gx01-test-evidence--http-calls.json",
+    "bytes": 10309,
+    "sha256": "1bac4e0a68887c208a63e7c74d8262cac14a48a82edb5289ee472e4cb3e01ee0"
+  },
+  {
+    "archive": "candidate-gx01-test-evidence.zip",
+    "path": "test-report.json",
+    "saved": "candidate-gx01-test-evidence--test-report.json",
+    "bytes": 4128,
+    "sha256": "8c2303d5ea16c0d8f6b8630edb8cdb3889a09dae57184656e47eeaa1d0385986"
+  },
+  {
+    "archive": "candidate-gx012-isolated-staging.zip",
+    "path": "api-report.json",
+    "saved": "candidate-gx012-isolated-staging--api-report.json",
+    "bytes": 4185,
+    "sha256": "3b74be4925f499b7ef95ec688b489a631859476c7be2db98951996ec380cba6d"
+  },
+  {
+    "archive": "candidate-gx012-isolated-staging.zip",
+    "path": "backup-restore.json",
+    "saved": "candidate-gx012-isolated-staging--backup-restore.json",
+    "bytes": 1673,
+    "sha256": "3c288f2936c308f31453a86ed7de5765389dffadf64c23f91c684b56d87ba292"
+  },
+  {
+    "archive": "candidate-gx012-isolated-staging.zip",
+    "path": "acceptance.json",
+    "saved": "candidate-gx012-isolated-staging--acceptance.json",
+    "bytes": 13330,
+    "sha256": "9e677335a7e5b54a2f007288b75d92f73f525d375112984220f608b99bd24d31"
+  },
+  {
+    "archive": "candidate-gx012-isolated-staging.zip",
+    "path": "pilot-build-boundary.json",
+    "saved": "candidate-gx012-isolated-staging--pilot-build-boundary.json",
+    "bytes": 17004,
+    "sha256": "45e649d3e5727e8f84763c14469281f94efbf571d5563ba8163727e1f5f2d4c1"
+  },
+  {
+    "archive": "candidate-gx012-isolated-staging.zip",
+    "path": "recovery-failures.json",
+    "saved": "candidate-gx012-isolated-staging--recovery-failures.json",
+    "bytes": 950,
+    "sha256": "3db428d1c7d97a0a57bb38b7c686e6e7f4591065dec490bdb21cd230c553c329"
+  }
+]

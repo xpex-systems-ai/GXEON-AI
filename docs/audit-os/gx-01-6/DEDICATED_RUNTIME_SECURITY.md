@@ -17,3 +17,5 @@
 A falha controlada expôs um defeito do pool singleton usado pelo staging compartilhado: erro de cliente ocioso sem listener encerrava Node e podia serializar o cliente. lib/db/src/pool.ts agora captura o evento com mensagem estática, sem raw error/client. O dedicado já tinha seu listener próprio; a correção não é apresentada como novo isolamento de produção. [Regressão](evidence/local-recovery-failures.json) demonstra 503 e recuperação sem reinício da API.
 
 15 testes PGlite, 16 PostgreSQL HTTP e 1 grants/memberships passaram localmente. O CI do SHA final deverá confirmar a mesma superfície. Testes de factory não estabelecem TLS Railway, identidade humana ou resistência distribuída. [Riscos](RESIDUAL_SECURITY_RISKS.md).
+
+[CI candidato verificado](evidence/candidate-validation.json): quatro workflows success, 15/15 PGlite,16/16PG,1/1grants e14grupos de staging. Checkout sintético de PR 380dec6654d0a9635146e490278b09bab2fcf177 tem pais base dbc29fff9a2c55487f85a83db597f41c493af7a8 e head 1af24f61c376225c3e94928a1f58c59b2f7e597e; sourceDirty=false. Isso é o merge de teste do GitHub, sem merge real da PR.

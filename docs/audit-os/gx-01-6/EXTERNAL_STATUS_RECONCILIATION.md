@@ -52,3 +52,5 @@ Inventário Vercel read-only em24/10: xpex-neural62, gxeon16, junior-senas-proje
 | Vercel / xpex-neural / prj_UBNjAlz7cWsPvNDILUk66440E7nn | Vercel – gxeon-ai-gxeon-dashboard | failure | [link](https://vercel.com/xpex-neural/gxeon-ai-gxeon-dashboard/GmHBbp9ixwaQAo3rfijF9z6h5Nyi) | NOT VERIFIED |
 
 Decisão pendente do proprietário: confirmar titularidade e projetos canônicos, finalidade de integrações legadas e quais checks condicionam GX01. Backend com nome api-server em projeto estático não comprova API dedicada. Não repetir deploy para “limpar” status; não alterar integração sem aprovação específica.
+
+Candidato de implementação 1af24f61c376225c3e94928a1f58c59b2f7e597e, consulta 2026-10-24T18:59:44.259Z: 42 contextos, 28 failure / 11 success / 3 pending; 29 check-runs (fontes distintas). [Snapshot bruto](evidence/candidate-statuses.json), [workflows/check-runs](evidence/candidate-ci.json). Contagem inicial 29/13 não é reaproveitada para este SHA. Pendentes externos não equivalem a falha de GitHub Actions. Causas de deployments recentes continuam NOT VERIFIED; consultar owner, sem alterar integrações.
