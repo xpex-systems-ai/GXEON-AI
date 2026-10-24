@@ -1,0 +1,1952 @@
+{
+  "generatedAt": "2026-10-24T18:55:11.544Z",
+  "before": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 6,
+      "moderate": 18,
+      "high": 40,
+      "critical": 0
+    },
+    "dependencies": 1183,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1183
+  },
+  "after": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 1,
+      "moderate": 4,
+      "high": 5,
+      "critical": 0
+    },
+    "dependencies": 1183,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1183
+  },
+  "occurrenceDefinition": "One advisory finding/version; all dependency paths retained per occurrence",
+  "records": [
+    {
+      "advisory": "GHSA-w5hq-g745-h8pq",
+      "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+      "severity": "moderate",
+      "module": "uuid",
+      "installedBefore": "7.0.3",
+      "patchedRange": ">=11.1.1",
+      "installedAfter": "7.0.3",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>uuid"
+      ],
+      "relationship": "transitive",
+      "priority": "P2",
+      "usage": "geração Xcode/CLI ngrok, desenvolvimento móvel",
+      "vector": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "exposure": "Buffer de destino curto em v3/v5/v6 pode escrever fora dos limites esperados. API usa node:crypto.randomUUID, não este pacote.",
+      "runtimeBundleContains": false,
+      "decision": "3/7→>=11.1.1 requer migração de API/ESM dos pais; não substituir globalmente.",
+      "requiredTests": "Config plugins/Xcode e CLI sem túnel após migração; fixture de bounds.",
+      "status": "OPEN",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-w5hq-g745-h8pq",
+      "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+      "severity": "moderate",
+      "module": "uuid",
+      "installedBefore": "3.4.0",
+      "patchedRange": ">=11.1.1",
+      "installedAfter": "3.4.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/ngrok>uuid"
+      ],
+      "relationship": "transitive",
+      "priority": "P2",
+      "usage": "geração Xcode/CLI ngrok, desenvolvimento móvel",
+      "vector": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "exposure": "Buffer de destino curto em v3/v5/v6 pode escrever fora dos limites esperados. API usa node:crypto.randomUUID, não este pacote.",
+      "runtimeBundleContains": false,
+      "decision": "3/7→>=11.1.1 requer migração de API/ESM dos pais; não substituir globalmente.",
+      "requiredTests": "Config plugins/Xcode e CLI sem túnel após migração; fixture de bounds.",
+      "status": "OPEN",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-g7r4-m6w7-qqqr",
+      "url": "https://github.com/advisories/GHSA-g7r4-m6w7-qqqr",
+      "severity": "low",
+      "module": "esbuild",
+      "installedBefore": "0.27.3",
+      "patchedRange": ">=0.28.1",
+      "installedAfter": "0.27.3",
+      "paths": [
+        "artifacts__api-server>esbuild"
+      ],
+      "relationship": "direct",
+      "priority": "P2",
+      "usage": "build API; dependência direta de ferramenta",
+      "vector": "esbuild allows arbitrary file read when running the development server on Windows",
+      "exposure": "Advisory exige dev server no Windows; esta missão usa build() e nenhum esbuild serve público. O backend dedicado não expõe esse servidor.",
+      "runtimeBundleContains": false,
+      "decision": "0.27→>=0.28.1 exige migração de linha 0.x e build completo. Não ativar serve; correção futura revisada.",
+      "requiredTests": "Build/boundary/codegen e regressão do dev server se vier a ser usado.",
+      "status": "OPEN",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-p88m-4jfj-68fv",
+      "url": "https://github.com/advisories/GHSA-p88m-4jfj-68fv",
+      "severity": "moderate",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.27.0",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to HTTP header injection via Set-Cookie percent-decoding",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-vxpw-j846-p89q",
+      "url": "https://github.com/advisories/GHSA-vxpw-j846-p89q",
+      "severity": "high",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.27.0",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-g8m3-5g58-fq7m",
+      "url": "https://github.com/advisories/GHSA-g8m3-5g58-fq7m",
+      "severity": "low",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.27.0",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to Set-Cookie SameSite attribute downgrade via permissive substring matching",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-8xcm-r25x-g524",
+      "url": "https://github.com/advisories/GHSA-8xcm-r25x-g524",
+      "severity": "moderate",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.28.0",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to downstream response desynchronization via retry interceptor",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-m8rv-5g2x-5cg5",
+      "url": "https://github.com/advisories/GHSA-m8rv-5g2x-5cg5",
+      "severity": "moderate",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.28.0",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to CRLF Injection via blob-like body 'type' property",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-v3r7-h72x-cjcm",
+      "url": "https://github.com/advisories/GHSA-v3r7-h72x-cjcm",
+      "severity": "moderate",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.28.0",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to cookie attribute injection via unsanitized domain and unparsed setCookie fields",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-35p6-xmwp-9g52",
+      "url": "https://github.com/advisories/GHSA-35p6-xmwp-9g52",
+      "severity": "low",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.27.0",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to HTTP response queue poisoning via keep-alive socket reuse",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-3wwx-pv8p-q78v",
+      "url": "https://github.com/advisories/GHSA-3wwx-pv8p-q78v",
+      "severity": "moderate",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.28.1",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-r53p-7pc4-xj5r",
+      "url": "https://github.com/advisories/GHSA-r53p-7pc4-xj5r",
+      "severity": "low",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.28.1",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to downstream response splitting via retry interceptor",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-rfgv-xxqx-mfg5",
+      "url": "https://github.com/advisories/GHSA-rfgv-xxqx-mfg5",
+      "severity": "high",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.28.1",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-4qv8-2p9j-2685",
+      "url": "https://github.com/advisories/GHSA-4qv8-2p9j-2685",
+      "severity": "moderate",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.29.1",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to Denial of Service via unbounded memory in the EventSource parser",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-xjj6-f33q-929c",
+      "url": "https://github.com/advisories/GHSA-xjj6-f33q-929c",
+      "severity": "high",
+      "module": "undici",
+      "installedBefore": "6.25.0",
+      "patchedRange": ">=6.29.1",
+      "installedAfter": "6.29.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>undici"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "undici vulnerable to Denial of Service via unhandled error on excessive content-encodings",
+      "exposure": "Cliente HTTP/WebSocket da CLI Expo no pipeline; respostas hostis podem injetar headers, confundir cookies/filas ou consumir recursos. Ausente do bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-h67p-54hq-rp68",
+      "url": "https://github.com/advisories/GHSA-h67p-54hq-rp68",
+      "severity": "moderate",
+      "module": "js-yaml",
+      "installedBefore": "3.14.2",
+      "patchedRange": ">=3.15.0",
+      "installedAfter": "3.15.2",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "JS-YAML: Quadratic-complexity DoS in merge key handling via repeated aliases",
+      "exposure": "Configuração de cobertura Babel/Jest; YAML com aliases/merges/omap pode exaurir CPU. Somente fontes confiáveis no CI.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-52cp-r559-cp3m",
+      "url": "https://github.com/advisories/GHSA-52cp-r559-cp3m",
+      "severity": "high",
+      "module": "js-yaml",
+      "installedBefore": "3.14.2",
+      "patchedRange": ">=3.15.0",
+      "installedAfter": "3.15.2",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "js-yaml: YAML merge-key chains can force quadratic CPU consumption",
+      "exposure": "Configuração de cobertura Babel/Jest; YAML com aliases/merges/omap pode exaurir CPU. Somente fontes confiáveis no CI.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-5p4m-2wfm-xmqj",
+      "url": "https://github.com/advisories/GHSA-5p4m-2wfm-xmqj",
+      "severity": "high",
+      "module": "js-yaml",
+      "installedBefore": "3.14.2",
+      "patchedRange": ">=3.15.1",
+      "installedAfter": "3.15.2",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "JS-YAML: Quadratic CPU consumption in !!omap resolution (3.x and 4.x) — CVE-2026-59870 fix not backported",
+      "exposure": "Configuração de cobertura Babel/Jest; YAML com aliases/merges/omap pode exaurir CPU. Somente fontes confiáveis no CI.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-2883-xcg3-v3hh",
+      "url": "https://github.com/advisories/GHSA-2883-xcg3-v3hh",
+      "severity": "high",
+      "module": "js-yaml",
+      "installedBefore": "3.14.2",
+      "patchedRange": ">=3.15.2",
+      "installedAfter": "3.15.2",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "js-yaml: maxTotalMergeKeys does not limit CPU use for empty merge sources",
+      "exposure": "Configuração de cobertura Babel/Jest; YAML com aliases/merges/omap pode exaurir CPU. Somente fontes confiáveis no CI.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-96hv-2xvq-fx4p",
+      "url": "https://github.com/advisories/GHSA-96hv-2xvq-fx4p",
+      "severity": "high",
+      "module": "ws",
+      "installedBefore": "7.5.10",
+      "patchedRange": ">=7.5.11",
+      "installedAfter": "6.2.6 / 7.5.13",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>ws"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "ws: Memory exhaustion DoS from tiny fragments and data chunks",
+      "exposure": "Servidores dev Metro/middleware; frames fragmentados hostis. Sem WebSocket na API dedicada.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-96hv-2xvq-fx4p",
+      "url": "https://github.com/advisories/GHSA-96hv-2xvq-fx4p",
+      "severity": "high",
+      "module": "ws",
+      "installedBefore": "6.2.3",
+      "patchedRange": ">=6.2.4",
+      "installedAfter": "6.2.6 / 7.5.13",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@react-native/dev-middleware>ws"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "ws: Memory exhaustion DoS from tiny fragments and data chunks",
+      "exposure": "Servidores dev Metro/middleware; frames fragmentados hostis. Sem WebSocket na API dedicada.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-3jxr-9vmj-r5cp",
+      "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
+      "severity": "high",
+      "module": "brace-expansion",
+      "installedBefore": "2.1.0",
+      "patchedRange": ">=2.1.2",
+      "installedAfter": "2.1.7",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+      "exposure": "Minimatch da CLI; padrões de glob podem exaurir CPU, memória ou pilha. Nenhum glob fornecido ao Audit OS.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-mh99-v99m-4gvg",
+      "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+      "severity": "high",
+      "module": "brace-expansion",
+      "installedBefore": "2.1.0",
+      "patchedRange": ">=2.1.3",
+      "installedAfter": "2.1.7",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+      "exposure": "Minimatch da CLI; padrões de glob podem exaurir CPU, memória ou pilha. Nenhum glob fornecido ao Audit OS.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-rgw5-rvv9-x895",
+      "url": "https://github.com/advisories/GHSA-rgw5-rvv9-x895",
+      "severity": "high",
+      "module": "brace-expansion",
+      "installedBefore": "2.1.0",
+      "patchedRange": ">=2.1.4",
+      "installedAfter": "2.1.7",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+      "exposure": "Minimatch da CLI; padrões de glob podem exaurir CPU, memória ou pilha. Nenhum glob fornecido ao Audit OS.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-q2hr-2g5m-vwhr",
+      "url": "https://github.com/advisories/GHSA-q2hr-2g5m-vwhr",
+      "severity": "moderate",
+      "module": "brace-expansion",
+      "installedBefore": "2.1.0",
+      "patchedRange": ">=2.1.7",
+      "installedAfter": "2.1.7",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+      "exposure": "Minimatch da CLI; padrões de glob podem exaurir CPU, memória ou pilha. Nenhum glob fornecido ao Audit OS.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-qhr7-859c-m2p7",
+      "url": "https://github.com/advisories/GHSA-qhr7-859c-m2p7",
+      "severity": "high",
+      "module": "brace-expansion",
+      "installedBefore": "2.1.0",
+      "patchedRange": ">=2.1.6",
+      "installedAfter": "2.1.7",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+      "exposure": "Minimatch da CLI; padrões de glob podem exaurir CPU, memória ou pilha. Nenhum glob fornecido ao Audit OS.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-6j4f-fj2g-mc7p",
+      "url": "https://github.com/advisories/GHSA-6j4f-fj2g-mc7p",
+      "severity": "high",
+      "module": "brace-expansion",
+      "installedBefore": "2.1.0",
+      "patchedRange": ">=2.1.5",
+      "installedAfter": "2.1.7",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+      "exposure": "Minimatch da CLI; padrões de glob podem exaurir CPU, memória ou pilha. Nenhum glob fornecido ao Audit OS.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-r292-9mhp-454m",
+      "url": "https://github.com/advisories/GHSA-r292-9mhp-454m",
+      "severity": "high",
+      "module": "tar",
+      "installedBefore": "7.5.19",
+      "patchedRange": ">=7.5.21",
+      "installedAfter": "7.5.21",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>tar"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "node-tar: Uncontrolled recursion in mapHas/filesFilter allows uncatchable stack-overflow DoS via crafted long-path tar with member selection",
+      "exposure": "Extração/seleção de arquivos da CLI; caminho longo malicioso provoca recursão. Patch na mesma major; arquivo fixture próprio.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-vcc3-ghjq-m6fr",
+      "url": "https://github.com/advisories/GHSA-vcc3-ghjq-m6fr",
+      "severity": "moderate",
+      "module": "decode-uri-component",
+      "installedBefore": "0.2.2",
+      "patchedRange": ">=0.5.0",
+      "installedAfter": "0.2.2",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>expo-router>query-string>decode-uri-component"
+      ],
+      "relationship": "transitive",
+      "priority": "P2",
+      "usage": "expo-router móvel, fora da UI web deste piloto",
+      "vector": "decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input",
+      "exposure": "URI percent-encoded malformada pode causar decodificação exponencial. A superfície móvel não foi autorizada para piloto e não entra no bundle dedicado.",
+      "runtimeBundleContains": false,
+      "decision": "0.2→>=0.5 é mudança de linha 0.x. Atualizar query-string/router em trabalho específico; sem exposição móvel no piloto.",
+      "requiredTests": "Rotas/URLs móveis inválidas e build após atualização.",
+      "status": "OPEN",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-6gmq-8vp8-gcm6",
+      "url": "https://github.com/advisories/GHSA-6gmq-8vp8-gcm6",
+      "severity": "moderate",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.12",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-6gmq-8vp8-gcm6",
+      "url": "https://github.com/advisories/GHSA-6gmq-8vp8-gcm6",
+      "severity": "moderate",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.8.13",
+      "patchedRange": ">=0.8.15",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: XML fragment injection via invalid EntityReference.nodeName during requireWellFormed serialization",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-6mj3-qw4j-hgrw",
+      "url": "https://github.com/advisories/GHSA-6mj3-qw4j-hgrw",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.12",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: HTML raw-text closing-tag case mismatch causes output amplification",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-g53g-w8rj-fmg7",
+      "url": "https://github.com/advisories/GHSA-g53g-w8rj-fmg7",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.11",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom PI grammar regex ReDoS: quadratic backtracking on unterminated processing instructions",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-w2rr-34g9-rvrj",
+      "url": "https://github.com/advisories/GHSA-w2rr-34g9-rvrj",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.8.13",
+      "patchedRange": ">=0.8.14",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Element name injection via createElement() bypasses requireWellFormed",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-w2rr-34g9-rvrj",
+      "url": "https://github.com/advisories/GHSA-w2rr-34g9-rvrj",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.11",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Element name injection via createElement() bypasses requireWellFormed",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-4w3w-2rp5-g8jm",
+      "url": "https://github.com/advisories/GHSA-4w3w-2rp5-g8jm",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.8.13",
+      "patchedRange": ">=0.8.14",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Attribute name injection via setAttribute() bypasses requireWellFormed",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-4w3w-2rp5-g8jm",
+      "url": "https://github.com/advisories/GHSA-4w3w-2rp5-g8jm",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.11",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Attribute name injection via setAttribute() bypasses requireWellFormed",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-c7q8-3ch8-vqpv",
+      "url": "https://github.com/advisories/GHSA-c7q8-3ch8-vqpv",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.12",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Processing Instruction Target Injection Bypasses requireWellFormed",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-c7q8-3ch8-vqpv",
+      "url": "https://github.com/advisories/GHSA-c7q8-3ch8-vqpv",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.8.13",
+      "patchedRange": ">=0.8.15",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Processing Instruction Target Injection Bypasses requireWellFormed",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-27p8-2357-5qqv",
+      "url": "https://github.com/advisories/GHSA-27p8-2357-5qqv",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.12",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: DocType `name` Injection Bypasses requireWellFormed",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-27p8-2357-5qqv",
+      "url": "https://github.com/advisories/GHSA-27p8-2357-5qqv",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.8.13",
+      "patchedRange": ">=0.8.15",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: DocType `name` Injection Bypasses requireWellFormed",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-3px3-54cx-rmw9",
+      "url": "https://github.com/advisories/GHSA-3px3-54cx-rmw9",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.12",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Creation-time XML Name/QName validation is bypassable via an embedded line terminator, allowing injection on the default serialization path",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-vr34-hp96-76pp",
+      "url": "https://github.com/advisories/GHSA-vr34-hp96-76pp",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.12",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: requireWellFormed DocType publicId/systemId validation is bypassable via an embedded line terminator",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-6h8r-xr42-gp59",
+      "url": "https://github.com/advisories/GHSA-6h8r-xr42-gp59",
+      "severity": "moderate",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.12",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-6h8r-xr42-gp59",
+      "url": "https://github.com/advisories/GHSA-6h8r-xr42-gp59",
+      "severity": "moderate",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.8.13",
+      "patchedRange": ">=0.8.15",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Parser silently accepts a not-well-formed end tag whose name is followed by a line break and trailing content",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-8344-3jmq-59r6",
+      "url": "https://github.com/advisories/GHSA-8344-3jmq-59r6",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.12",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Quadratic-time attribute deduplication",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-8344-3jmq-59r6",
+      "url": "https://github.com/advisories/GHSA-8344-3jmq-59r6",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.8.13",
+      "patchedRange": ">=0.8.15",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Quadratic-time attribute deduplication",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-x4fp-j954-r2f4",
+      "url": "https://github.com/advisories/GHSA-x4fp-j954-r2f4",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.8.13",
+      "patchedRange": ">=0.8.15",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: End-tag Whitespace-Trim Regex ReDoS — quadratic backtracking in the 0.8.x end-tag parser",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-965w-775f-mr7g",
+      "url": "https://github.com/advisories/GHSA-965w-775f-mr7g",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.12",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Quadratic-memory consumption",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-965w-775f-mr7g",
+      "url": "https://github.com/advisories/GHSA-965w-775f-mr7g",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.8.13",
+      "patchedRange": ">=0.8.15",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Quadratic-memory consumption",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-93r5-fhx6-vmg9",
+      "url": "https://github.com/advisories/GHSA-93r5-fhx6-vmg9",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.9.10",
+      "patchedRange": ">=0.9.12",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-93r5-fhx6-vmg9",
+      "url": "https://github.com/advisories/GHSA-93r5-fhx6-vmg9",
+      "severity": "high",
+      "module": "@xmldom/xmldom",
+      "installedBefore": "0.8.13",
+      "patchedRange": ">=0.8.15",
+      "installedAfter": "0.8.15 / 0.9.12",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "xmldom: Quadratic-time parsing via the malformed-input recovery path — `parseElementStartPart` re-scan and `normalize()` adjacent-text merge",
+      "exposure": "Configuração plist/XML do Expo; nomes/instruções/doctype podem injetar XML ou provocar consumo quadrático. Backports separados por linha 0.x.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-5p2g-fcmc-qvqq",
+      "url": "https://github.com/advisories/GHSA-5p2g-fcmc-qvqq",
+      "severity": "high",
+      "module": "image-size",
+      "installedBefore": "1.2.1",
+      "patchedRange": ">=2.0.3",
+      "installedAfter": "1.2.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>image-size"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build Metro móvel no CI",
+      "vector": "image-size: JXL and HEIF parsers allow denial of service through infinite loops",
+      "exposure": "Processa imagens do repositório durante build; JXL/HEIF/ICNS hostis podem travar processo. Não está no bundle dedicado. Contribuições não confiáveis ao pipeline continuam relevantes.",
+      "runtimeBundleContains": false,
+      "decision": "1.2.1→>=2.0.3 exige migração de API/Metro; não forçar major por override. Limitar CI a fontes revisadas; aceite pendente.",
+      "requiredTests": "Migração Metro com fixtures de formatos e build Linux; timeout operacional do job.",
+      "status": "OPEN",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-w3rx-r6r6-pgpr",
+      "url": "https://github.com/advisories/GHSA-w3rx-r6r6-pgpr",
+      "severity": "high",
+      "module": "image-size",
+      "installedBefore": "1.2.1",
+      "patchedRange": ">=2.0.3",
+      "installedAfter": "1.2.1",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>image-size"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build Metro móvel no CI",
+      "vector": "image-size: ICNS parser allows denial of service through an infinite loop",
+      "exposure": "Processa imagens do repositório durante build; JXL/HEIF/ICNS hostis podem travar processo. Não está no bundle dedicado. Contribuições não confiáveis ao pipeline continuam relevantes.",
+      "runtimeBundleContains": false,
+      "decision": "1.2.1→>=2.0.3 exige migração de API/Metro; não forçar major por override. Limitar CI a fontes revisadas; aceite pendente.",
+      "requiredTests": "Migração Metro com fixtures de formatos e build Linux; timeout operacional do job.",
+      "status": "OPEN",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-86w9-cpqp-85rv",
+      "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+      "severity": "high",
+      "module": "node-forge",
+      "installedBefore": "1.4.0",
+      "patchedRange": "<0.0.0",
+      "installedAfter": "1.4.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>node-forge"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "CLI Expo; caminho criptográfico não executado pelo Audit OS",
+      "vector": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+      "exposure": "Verificação RSA PKCS#1 v1.5 pode aceitar DigestAlgorithm extra; assinatura/identidade poderia ser comprometida se o caminho for usado. Import/caminho de chamada sensível não provado no piloto.",
+      "runtimeBundleContains": false,
+      "decision": "Feed sem versão corrigida (<0.0.0). Não interpretar como patch. Não usar CLI para estabelecer confiança de certificados; aguardar upstream ou substituição revisada.",
+      "requiredTests": "Regressão de assinatura negativa após patch e build; nenhum certificado remoto homologado.",
+      "status": "OPEN",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-ch52-4w7c-c8xp",
+      "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+      "severity": "high",
+      "module": "http-cache-semantics",
+      "installedBefore": "4.2.0",
+      "patchedRange": "<0.0.0",
+      "installedAfter": "4.2.0",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/ngrok>got>cacheable-request>http-cache-semantics"
+      ],
+      "relationship": "transitive",
+      "priority": "P2",
+      "usage": "@expo/ngrok>got>cacheable-request; ferramenta de túnel fora do piloto",
+      "vector": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+      "exposure": "max-stale em cache compartilhado pode expor resposta de outro usuário. Não se abriu túnel, não há cache compartilhado na API dedicada. Ausência de exploração não é aceite.",
+      "runtimeBundleContains": false,
+      "decision": "Feed sem patch reconhecido (<0.0.0). Versão de registry não comprova correção. Manter túnel desativado no escopo; decisão humana pendente.",
+      "requiredTests": "Teste de isolamento de cache por credenciais na futura atualização; não disparar túnel para testar.",
+      "status": "OPEN",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-vc2v-76pw-4v95",
+      "url": "https://github.com/advisories/GHSA-vc2v-76pw-4v95",
+      "severity": "high",
+      "module": "compression",
+      "installedBefore": "1.8.1",
+      "patchedRange": ">=1.8.2",
+      "installedAfter": "1.8.2",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>compression"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "compression vulnerable to Denial of Service via memory leak on premature response close",
+      "exposure": "Servidor da CLI Expo; encerramento prematuro pode vazar memória. Não usado no dedicado. Override apenas @expo/cli>compression.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-rj75-hqrm-r3gf",
+      "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+      "severity": "moderate",
+      "module": "postcss-selector-parser",
+      "installedBefore": "6.0.10",
+      "patchedRange": ">=7.1.6",
+      "installedAfter": "6.0.10",
+      "paths": [
+        "artifacts__gxeon-dashboard>@tailwindcss/typography>postcss-selector-parser"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build web @tailwindcss/typography",
+      "vector": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+      "exposure": "CSS com seletor plano extenso pode exaurir CPU no build. vercel.json não é encaminhado ao parser CSS; contribuições CSS não confiáveis ao CI são vetor.",
+      "runtimeBundleContains": false,
+      "decision": "6→>=7.1.6 depende de compatibilidade do plugin. Não forçar major; revisar entradas de build.",
+      "requiredTests": "Build de estilos e smoke visual após migração.",
+      "status": "OPEN",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-mrhx-c7xc-m3w5",
+      "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+      "severity": "high",
+      "module": "zod",
+      "installedBefore": "3.25.76",
+      "patchedRange": ">=4.6.6",
+      "installedAfter": "3.25.76",
+      "paths": [
+        "artifacts__gxeon-dashboard>zod"
+      ],
+      "relationship": "direct",
+      "priority": "P1",
+      "usage": "runtime e frontend",
+      "vector": "Zod can exhaust memory while validating oversized constrained collections",
+      "exposure": "Bundle dedicado contém zod/v3; arrays checks sujeitos a entrada autenticada. Limite 32 KiB, preflight length<=2 antes do Zod e admissão reduzem impacto; não corrigem Zod globalmente.",
+      "runtimeBundleContains": true,
+      "decision": "Migrar contratos e gerador para >=4.6.6 em mudança própria, ou obter aceite humano explícito limitado. Não aceitar em nome do revisor.",
+      "requiredTests": "PGlite/PG + coleção oversized sem traversal + contratos e UI + codegen após migração.",
+      "status": "OPEN",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-27r3-jxmh-p828",
+      "url": "https://github.com/advisories/GHSA-27r3-jxmh-p828",
+      "severity": "high",
+      "module": "body-parser",
+      "installedBefore": "2.3.0",
+      "patchedRange": ">=2.4.0",
+      "installedAfter": "2.4.0",
+      "paths": [
+        "artifacts__api-server>express>body-parser"
+      ],
+      "relationship": "transitive",
+      "priority": "P0",
+      "usage": "HTTP runtime",
+      "vector": "body-parser vulnerable to Denial of Service via trailing bytes after a compressed request body",
+      "exposure": "Parser HTTP de runtime; gzip com bytes finais pode encerrar processo. Patch na mesma major e recusa de compressão no piloto.",
+      "runtimeBundleContains": true,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-w74x-v6f9-j3xg",
+      "url": "https://github.com/advisories/GHSA-w74x-v6f9-j3xg",
+      "severity": "moderate",
+      "module": "fast-uri",
+      "installedBefore": "3.1.8",
+      "patchedRange": ">=3.1.9",
+      "installedAfter": "3.1.9",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "fast-uri vulnerable to URI scheme spoofing via percent-encoded scheme decoding",
+      "exposure": "Resolução OpenAPI via Orval/Ajv; esquema/host/caminho malformado pode confundir referências. Override apenas ajv>fast-uri.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-xhq7-xmqj-769h",
+      "url": "https://github.com/advisories/GHSA-xhq7-xmqj-769h",
+      "severity": "low",
+      "module": "fast-uri",
+      "installedBefore": "3.1.8",
+      "patchedRange": ">=3.1.9",
+      "installedAfter": "3.1.9",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "fast-uri vulnerable to improper path equivalence in relative reference normalization",
+      "exposure": "Resolução OpenAPI via Orval/Ajv; esquema/host/caminho malformado pode confundir referências. Override apenas ajv>fast-uri.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-wjr9-j795-jxcr",
+      "url": "https://github.com/advisories/GHSA-wjr9-j795-jxcr",
+      "severity": "moderate",
+      "module": "fast-uri",
+      "installedBefore": "3.1.8",
+      "patchedRange": ">=3.1.9",
+      "installedAfter": "3.1.9",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "fast-uri vulnerable to host confusion via unchecked WHATWG host canonicalization",
+      "exposure": "Resolução OpenAPI via Orval/Ajv; esquema/host/caminho malformado pode confundir referências. Override apenas ajv>fast-uri.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    },
+    {
+      "advisory": "GHSA-333x-w4r6-6crp",
+      "url": "https://github.com/advisories/GHSA-333x-w4r6-6crp",
+      "severity": "low",
+      "module": "fast-uri",
+      "installedBefore": "3.1.8",
+      "patchedRange": ">=3.1.9",
+      "installedAfter": "3.1.9",
+      "paths": [
+        "lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri"
+      ],
+      "relationship": "transitive",
+      "priority": "P1",
+      "usage": "build/test tooling",
+      "vector": "fast-uri vulnerable to scheme injection via an unescaped first-segment colon in suffix references",
+      "exposure": "Resolução OpenAPI via Orval/Ajv; esquema/host/caminho malformado pode confundir referências. Override apenas ajv>fast-uri.",
+      "runtimeBundleContains": false,
+      "decision": "Patch controlado na mesma linha; nenhuma aceitação de risco implícita.",
+      "requiredTests": "Instalação congelada, fixtures de compatibilidade, typecheck e build Linux/CI; fixture não é prova de exploração eliminada.",
+      "status": "RESOLVED_IN_AUDIT",
+      "formalRiskAccepted": false,
+      "decisionOwner": "Responsável de segurança/revisor independente a designar; proprietário xpex-systems-ai decide escopo",
+      "reviewDate": "2026-10-24",
+      "evidence": [
+        "remediated-audit.json.gz",
+        "local-dependency-smoke.json",
+        "local-codegen-smoke.json",
+        "local-pilot-build-boundary.json"
+      ]
+    }
+  ]
+}

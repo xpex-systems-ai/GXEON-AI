@@ -1,0 +1,47 @@
+✔ dedicated runtime configuration fails closed without distinct roles, private DB and exact HTTPS origins (44.5839ms)
+✔ dedicated HTTP boundary preserves the audit lifecycle and excludes legacy, administrative and financial APIs (26755.9522ms)
+✔ GX intake refuses oversized check collections before traversing elements in Zod (3.6869ms)
+✔ dedicated admission limits bound role rate and concurrent readiness without trusting forwarded IPs (116.0535ms)
+✔ REST list contracts reject error objects, invalid JSON and unidentified rows (53.1038ms)
+✔ bounded static checks and secret/input validation (8.8733ms)
+✔ report contract rejects cross-case envelopes and unknown evidence references (3.7791ms)
+✔ HTML transport fails with a useful routing diagnostic; raw server errors stay hidden (2.3014ms)
+✖ real SQL persistence and HTTP lifecycle, independent review, rollback and evidence integrity (81.3959ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 50406.7284
+
+✖ failing tests:
+
+test at src\tests\auditWorkflow.test.ts:1:5550
+✖ real SQL persistence and HTTP lifecycle, independent review, rollback and evidence integrity (81.3959ms)
+  error: the database system is shutting down
+      at C:\Users\P-c\Documents\Codex\2026-10-19\gxeon-handoff-mestre-gx-01-audit\work\GXEON-AI-gx016\node_modules\.pnpm\pg-pool@3.13.0_pg@8.20.0\node_modules\pg-pool\index.js:45:11
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\P-c\Documents\Codex\2026-10-19\gxeon-handoff-mestre-gx-01-audit\work\GXEON-AI-gx016\artifacts\api-server\src\tests\auditWorkflow.test.ts:226:20)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    length: 107,
+    severity: 'FATAL',
+    code: '57P03',
+    detail: undefined,
+    hint: undefined,
+    position: undefined,
+    internalPosition: undefined,
+    internalQuery: undefined,
+    where: undefined,
+    schema: undefined,
+    table: undefined,
+    column: undefined,
+    dataType: undefined,
+    constraint: undefined,
+    file: 'backend_startup.c',
+    line: '294',
+    routine: 'BackendInitialize'
+  }
+

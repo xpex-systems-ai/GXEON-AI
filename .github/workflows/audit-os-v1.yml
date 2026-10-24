@@ -56,6 +56,11 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm run lint:audit
+      - name: Reviewed dependency compatibility fixtures (loopback only)
+        run: |
+          node scripts/audit-staging/dependency-smoke.mjs
+          mkdir -p "$RUNNER_TEMP/gx01-evidence"
+          cp .gx012/evidence/dependency-smoke.json "$RUNNER_TEMP/gx01-evidence/"
       - name: Isolated codegen regression for patched parser dependencies
         run: |
           node scripts/audit-staging/codegen-smoke.mjs
@@ -99,6 +104,8 @@ jobs:
           pnpm run stage:audit up
       - name: Verify HTTP lifecycle, authorization, rollback and full restart
         run: pnpm run verify:audit-staging
+      - name: Recover from isolated API and database failures without record mutation
+        run: node scripts/audit-staging/recovery-failures.mjs
       - name: Backup and restore synthetic data into a new isolated database
         run: |
           node scripts/audit-staging/backup-restore.mjs

@@ -8,6 +8,8 @@ type Options = {
   origins: readonly string[];
   service: AuditWorkflowService;
   ready: () => Promise<void>;
+  // Testable process-local limits; runtime uses defaults with one replica.
+  admission?: { requestsPerMinute?: number; maxConcurrent?: number; now?: () => number };
   log?: (record: { event: string; requestId: string; method: string; route: string; status: number }) => void;
 };
 export function createAuditPilotApp(options: Options) {
@@ -15,6 +17,33 @@ export function createAuditPilotApp(options: Options) {
   const app = express();
   app.disable("x-powered-by");
   app.set("trust proxy", false);
+  const requestsPerMinute = options.admission?.requestsPerMinute ?? 60;
+  const maxConcurrent = options.admission?.maxConcurrent ?? 4;
+  const now = options.admission?.now ?? (() => performance.now());
+  if (!Number.isInteger(requestsPerMinute) || requestsPerMinute < 1 || requestsPerMinute > 600 ||
+      !Number.isInteger(maxConcurrent) || maxConcurrent < 1 || maxConcurrent > 8) throw new Error("BOUNDED_ADMISSION_REQUIRED");
+  const buckets = new Map<string, { started: number; count: number }>();
+  let active = 0;
+  const admit: express.RequestHandler = (req, res, next) => {
+    // Invoked only after auditAccess. Two role buckets, never IP/query/token map keys.
+    const role = req.get("authorization") === "Bearer " + process.env.GXEON_AUDIT_OPERATOR_TOKEN ? "operator" : "reviewer";
+    const time = now();
+    let bucket = buckets.get(role);
+    if (!bucket || time - bucket.started >= 60000) { bucket = { started: time, count: 0 }; buckets.set(role, bucket); }
+    if (bucket.count >= requestsPerMinute) {
+      res.setHeader("Retry-After", String(Math.max(1, Math.ceil((60000 - (time - bucket.started)) / 1000))));
+      res.status(429).json({ ok: false, code: "AUDIT_RATE_LIMIT" }); return;
+    }
+    bucket.count++;
+    if (active >= maxConcurrent) {
+      res.setHeader("Retry-After", "1"); res.status(503).json({ ok: false, code: "AUDIT_BUSY" }); return;
+    }
+    active++;
+    let released = false;
+    const release = () => { if (!released) { released = true; active--; } };
+    res.once("finish", release); res.once("close", release);
+    next();
+  };
   app.use((req, res, next) => {
     const requestId = randomUUID();
     res.setHeader("Cache-Control", "no-store");
@@ -51,14 +80,18 @@ export function createAuditPilotApp(options: Options) {
     next();
   });
   app.get("/api/healthz", (_req, res) => res.json({ ok: true, service: "gxeon-audit-pilot" }));
-  app.get("/api/readyz", auditAccess("read"), async (_req, res) => {
+  app.get("/api/readyz", auditAccess("read"), admit, async (_req, res) => {
     try { await options.ready(); res.json({ ok: true }); }
     catch { res.status(503).json({ ok: false, code: "AUDIT_NOT_READY" }); }
   });
-  app.use("/api/v1/audit/workflow", auditAccess("read"), (req, res, next) => {
+  app.use("/api/v1/audit/workflow", auditAccess("read"), admit, (req, res, next) => {
+    const encoding = req.get("content-encoding");
+    if (encoding && encoding.toLowerCase() !== "identity") {
+      res.status(415).json({ ok: false, code: "ENCODING_UNSUPPORTED" }); return;
+    }
     if (req.method === "POST" && !req.is("application/json")) { res.status(415).json({ ok: false, code: "JSON_REQUIRED" }); return; }
     next();
-  }, express.json({ limit: "32kb", strict: true }), (req, res, next) => {
+  }, express.json({ limit: "32kb", strict: true, inflate: false }), (req, res, next) => {
     if (req.method === "POST" && /^\/cases\/?$/i.test(req.path) && req.body?.testData !== true) {
       res.status(400).json({ ok: false, code: "PILOT_REQUIRES_TEST_DATA" }); return;
     }

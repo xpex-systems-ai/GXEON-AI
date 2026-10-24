@@ -1,0 +1,42 @@
+{
+  "base": "5b58ead338a24ff168a43a2d71fc2639c355afb4",
+  "normalization": "UTF-8 LF; git checkout normalizes CRLF on Windows",
+  "sources": [
+    {
+      "file": ".github/workflows/audit-os-v1.yml",
+      "sha256": "2c02863a9304715c79ccd3cb730f80e87464e399f7d23c4c7863277e89b6d075"
+    },
+    {
+      "file": "artifacts/api-server/src/auditPilotApp.ts",
+      "sha256": "90116a1d25bcde74dffb1752bd4418bad727acfda63524d36e35d22e1947646b"
+    },
+    {
+      "file": "artifacts/api-server/src/services/auditWorkflowChecks.ts",
+      "sha256": "e711fc8a38547acfdf46f8bab0cd4d8836efe5763ea36c77400183bf4a3e717e"
+    },
+    {
+      "file": "artifacts/api-server/src/tests/auditPilot.test.ts",
+      "sha256": "2e03c5ef5c0a277f099ec40709ffd92b78517113c2c1ac2d5dcfa71cceb5d7ce"
+    },
+    {
+      "file": "lib/db/src/pool.ts",
+      "sha256": "d6d69e5d02cbf33502aff546d8666142ecb2119fcb520f42f3d6c2678f709b37"
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "sha256": "ba0f8e9d9072ad5e558725c726c1a99ba4c07da0b16a18e1fa0ac7ce31135cb5"
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "sha256": "037a4ea2f501befffc29d363e11fbe61d860beba02873d99c46494c04c649fe0"
+    },
+    {
+      "file": "scripts/audit-staging/dependency-smoke.mjs",
+      "sha256": "96b682c077bbabceea2b0245a03b5dc954247b31f03faf2049de36dc28afb382"
+    },
+    {
+      "file": "scripts/audit-staging/recovery-failures.mjs",
+      "sha256": "54806e1f75853aabfed9ad73e186e8c3eda43e1aaffb18038230aed7db0ca33c"
+    }
+  ]
+}

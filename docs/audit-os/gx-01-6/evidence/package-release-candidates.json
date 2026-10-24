@@ -1,0 +1,1872 @@
+{
+  "queriedAt": "2026-10-24T18:19:33.798Z",
+  "source": "https://registry.npmjs.org",
+  "minimumAgeMinutes": 1440,
+  "packages": [
+    {
+      "name": "brace-expansion",
+      "distTags": {
+        "maintenance-v3": "3.0.6",
+        "maintenance-v2": "2.1.4",
+        "maintenance-v1": "1.1.18",
+        "2.x": "2.1.7",
+        "latest": "5.0.12",
+        "1.x": "1.1.21",
+        "3.x": "3.0.9"
+      },
+      "recent": [
+        {
+          "version": "5.0.11",
+          "published": "2026-09-14T21:49:31.581Z",
+          "engines": {
+            "node": "20 || >=22"
+          },
+          "dependencies": {
+            "balanced-match": "^4.0.2"
+          },
+          "repository": {
+            "url": "git+https://github.com/juliangruber/brace-expansion.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.1.20",
+          "published": "2026-09-14T21:49:58.092Z",
+          "dependencies": {
+            "concat-map": "0.0.1",
+            "balanced-match": "^1.0.0"
+          },
+          "repository": {
+            "url": "git://github.com/juliangruber/brace-expansion.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "3.0.8",
+          "published": "2026-09-14T21:51:10.067Z",
+          "engines": {
+            "node": ">= 18"
+          },
+          "dependencies": {
+            "balanced-match": "^3.0.0"
+          },
+          "repository": {
+            "url": "git://github.com/juliangruber/brace-expansion.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.1.6",
+          "published": "2026-09-14T21:51:19.666Z",
+          "dependencies": {
+            "balanced-match": "^1.0.0"
+          },
+          "repository": {
+            "url": "git://github.com/juliangruber/brace-expansion.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "5.0.12",
+          "published": "2026-09-14T21:59:00.288Z",
+          "engines": {
+            "node": "20 || >=22"
+          },
+          "dependencies": {
+            "balanced-match": "^4.0.2"
+          },
+          "repository": {
+            "url": "git+https://github.com/juliangruber/brace-expansion.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.1.21",
+          "published": "2026-09-14T21:59:28.332Z",
+          "dependencies": {
+            "concat-map": "0.0.1",
+            "balanced-match": "^1.0.0"
+          },
+          "repository": {
+            "url": "git://github.com/juliangruber/brace-expansion.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "3.0.9",
+          "published": "2026-09-14T21:59:58.721Z",
+          "engines": {
+            "node": ">= 18"
+          },
+          "dependencies": {
+            "balanced-match": "^3.0.0"
+          },
+          "repository": {
+            "url": "git://github.com/juliangruber/brace-expansion.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.1.7",
+          "published": "2026-09-14T22:02:58.810Z",
+          "dependencies": {
+            "balanced-match": "^1.0.0"
+          },
+          "repository": {
+            "url": "git://github.com/juliangruber/brace-expansion.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "fast-uri",
+      "distTags": {
+        "two": "2.4.8",
+        "latest": "4.2.3",
+        "three": "3.1.9"
+      },
+      "recent": [
+        {
+          "version": "3.1.8",
+          "published": "2026-09-15T07:36:25.444Z",
+          "repository": {
+            "url": "git+https://github.com/fastify/fast-uri.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.4.7",
+          "published": "2026-09-15T07:38:43.511Z",
+          "repository": {
+            "url": "git+https://github.com/fastify/fast-uri.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.2.0",
+          "published": "2026-09-18T07:35:19.116Z",
+          "repository": {
+            "url": "git+https://github.com/fastify/fast-uri.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.2.1",
+          "published": "2026-09-18T11:36:11.309Z",
+          "repository": {
+            "url": "git+https://github.com/fastify/fast-uri.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.2.2",
+          "published": "2026-10-10T10:12:05.953Z",
+          "repository": {
+            "url": "git+https://github.com/fastify/fast-uri.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.2.3",
+          "published": "2026-10-19T22:51:36.634Z",
+          "repository": {
+            "url": "git+https://github.com/fastify/fast-uri.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "3.1.9",
+          "published": "2026-10-19T23:05:26.357Z",
+          "repository": {
+            "url": "git+https://github.com/fastify/fast-uri.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.4.8",
+          "published": "2026-10-19T23:10:34.959Z",
+          "repository": {
+            "url": "git+https://github.com/fastify/fast-uri.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "image-size",
+      "distTags": {
+        "legacy": "1.2.1",
+        "latest": "2.0.4"
+      },
+      "recent": [
+        {
+          "version": "1.1.1",
+          "published": "2024-01-02T15:16:15.106Z",
+          "engines": {
+            "node": ">=16.x"
+          },
+          "dependencies": {
+            "queue": "6.0.2"
+          },
+          "repository": {
+            "url": "git://github.com/image-size/image-size.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.2.0",
+          "published": "2024-12-22T04:00:49.642Z",
+          "engines": {
+            "node": ">=16.x"
+          },
+          "dependencies": {
+            "queue": "6.0.2"
+          },
+          "repository": {
+            "url": "git://github.com/image-size/image-size.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.0.0",
+          "published": "2025-02-25T11:47:11.040Z",
+          "engines": {
+            "node": ">=16.x"
+          },
+          "repository": {
+            "url": "git://github.com/image-size/image-size.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.0.1",
+          "published": "2025-03-13T11:03:59.427Z",
+          "engines": {
+            "node": ">=16.x"
+          },
+          "repository": {
+            "url": "git://github.com/image-size/image-size.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.0.2",
+          "published": "2025-04-02T14:22:29.940Z",
+          "engines": {
+            "node": ">=16.x"
+          },
+          "repository": {
+            "url": "git://github.com/image-size/image-size.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.2.1",
+          "published": "2025-04-02T14:30:29.710Z",
+          "engines": {
+            "node": ">=16.x"
+          },
+          "dependencies": {
+            "queue": "6.0.2"
+          },
+          "repository": {
+            "url": "git://github.com/image-size/image-size.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.0.3",
+          "published": "2026-09-14T15:57:47.615Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "repository": {
+            "url": "https://codeberg.org/image-size/image-size.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.0.4",
+          "published": "2026-09-14T16:38:44.378Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "repository": {
+            "url": "https://codeberg.org/image-size/image-size.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "js-yaml",
+      "distTags": {
+        "v4-legacy": "4.3.2",
+        "v3-legacy": "3.15.2",
+        "latest": "5.5.0"
+      },
+      "recent": [
+        {
+          "version": "5.3.0",
+          "published": "2026-08-14T09:31:39.879Z",
+          "dependencies": {
+            "argparse": "^2.0.1"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodeca/js-yaml.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "5.4.0",
+          "published": "2026-08-25T07:03:21.871Z",
+          "dependencies": {
+            "argparse": "^2.0.1"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodeca/js-yaml.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "5.4.1",
+          "published": "2026-08-26T19:31:37.034Z",
+          "dependencies": {
+            "argparse": "^2.0.1"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodeca/js-yaml.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.3.2",
+          "published": "2026-08-26T20:42:48.747Z",
+          "dependencies": {
+            "argparse": "^2.0.1"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodeca/js-yaml.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "3.15.2",
+          "published": "2026-08-26T20:53:50.335Z",
+          "dependencies": {
+            "esprima": "^4.0.0",
+            "argparse": "^1.0.7"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodeca/js-yaml.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "5.4.2",
+          "published": "2026-09-13T00:15:39.365Z",
+          "dependencies": {
+            "argparse": "^2.0.1"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodeca/js-yaml.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "5.4.3",
+          "published": "2026-10-05T22:13:55.389Z",
+          "dependencies": {
+            "argparse": "^2.0.1"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodeca/js-yaml.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "5.5.0",
+          "published": "2026-10-15T23:28:37.500Z",
+          "dependencies": {
+            "argparse": "^3.0.3"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodeca/js-yaml.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "ws",
+      "distTags": {
+        "latest": "8.22.0"
+      },
+      "recent": [
+        {
+          "version": "7.5.12",
+          "published": "2026-07-14T17:12:09.695Z",
+          "engines": {
+            "node": ">=8.3.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/websockets/ws.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "8.21.1",
+          "published": "2026-07-14T17:12:25.599Z",
+          "engines": {
+            "node": ">=10.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/websockets/ws.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "5.2.7",
+          "published": "2026-07-17T16:44:55.481Z",
+          "dependencies": {
+            "async-limiter": "~1.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/websockets/ws.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "6.2.6",
+          "published": "2026-07-17T16:45:23.908Z",
+          "dependencies": {
+            "async-limiter": "~1.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/websockets/ws.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.5.13",
+          "published": "2026-07-17T16:45:58.051Z",
+          "engines": {
+            "node": ">=8.3.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/websockets/ws.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "8.21.2",
+          "published": "2026-08-03T20:37:45.880Z",
+          "engines": {
+            "node": ">=10.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/websockets/ws.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "8.21.3",
+          "published": "2026-08-07T14:10:25.816Z",
+          "engines": {
+            "node": ">=10.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/websockets/ws.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "8.22.0",
+          "published": "2026-09-26T15:00:57.748Z",
+          "engines": {
+            "node": ">=10.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/websockets/ws.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "tar",
+      "distTags": {
+        "v3-legacy": "3.2.3",
+        "v5-legacy": "5.0.11",
+        "v4-legacy": "4.4.19",
+        "latest": "7.5.22"
+      },
+      "recent": [
+        {
+          "version": "7.5.15",
+          "published": "2026-05-07T17:40:17.594Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "chownr": "^3.0.0",
+            "yallist": "^5.0.0",
+            "minipass": "^7.1.2",
+            "minizlib": "^3.1.0",
+            "@isaacs/fs-minipass": "^4.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/isaacs/node-tar.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.5.16",
+          "published": "2026-06-01T16:20:51.215Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "chownr": "^3.0.0",
+            "yallist": "^5.0.0",
+            "minipass": "^7.1.2",
+            "minizlib": "^3.1.0",
+            "@isaacs/fs-minipass": "^4.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/isaacs/node-tar.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.5.17",
+          "published": "2026-06-25T14:07:19.498Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "chownr": "^3.0.0",
+            "yallist": "^5.0.0",
+            "minipass": "^7.1.2",
+            "minizlib": "^3.1.0",
+            "@isaacs/fs-minipass": "^4.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/isaacs/node-tar.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.5.18",
+          "published": "2026-06-27T22:24:06.691Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "chownr": "^3.0.0",
+            "yallist": "^5.0.0",
+            "minipass": "^7.1.2",
+            "minizlib": "^3.1.0",
+            "@isaacs/fs-minipass": "^4.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/isaacs/node-tar.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.5.19",
+          "published": "2026-06-27T22:59:56.668Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "chownr": "^3.0.0",
+            "yallist": "^5.0.0",
+            "minipass": "^7.1.2",
+            "minizlib": "^3.1.0",
+            "@isaacs/fs-minipass": "^4.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/isaacs/node-tar.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.5.20",
+          "published": "2026-07-12T04:11:09.830Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "chownr": "^3.0.0",
+            "yallist": "^5.0.0",
+            "minipass": "^7.1.2",
+            "minizlib": "^3.1.0",
+            "@isaacs/fs-minipass": "^4.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/isaacs/node-tar.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.5.21",
+          "published": "2026-07-21T22:11:06.885Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "chownr": "^3.0.0",
+            "yallist": "^5.0.0",
+            "minipass": "^7.1.2",
+            "minizlib": "^3.1.0",
+            "@isaacs/fs-minipass": "^4.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/isaacs/node-tar.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.5.22",
+          "published": "2026-07-24T15:48:51.111Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "chownr": "^3.0.0",
+            "yallist": "^5.0.0",
+            "minipass": "^7.1.2",
+            "minizlib": "^3.1.0",
+            "@isaacs/fs-minipass": "^4.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/isaacs/node-tar.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "postcss-selector-parser",
+      "distTags": {
+        "latest": "7.1.7",
+        "legacy-v6": "6.1.5"
+      },
+      "recent": [
+        {
+          "version": "6.1.3",
+          "published": "2026-06-11T08:29:32.256Z",
+          "engines": {
+            "node": ">=4"
+          },
+          "dependencies": {
+            "cssesc": "^3.0.0",
+            "util-deprecate": "^1.0.2"
+          },
+          "repository": {
+            "url": "git+https://github.com/postcss/postcss-selector-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.1.3",
+          "published": "2026-06-11T08:32:07.795Z",
+          "engines": {
+            "node": ">=4"
+          },
+          "dependencies": {
+            "cssesc": "^3.0.0",
+            "util-deprecate": "^1.0.2"
+          },
+          "repository": {
+            "url": "git+https://github.com/postcss/postcss-selector-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "6.1.4",
+          "published": "2026-06-11T12:39:58.437Z",
+          "engines": {
+            "node": ">=4"
+          },
+          "dependencies": {
+            "cssesc": "^3.0.0",
+            "util-deprecate": "^1.0.2"
+          },
+          "repository": {
+            "url": "git+https://github.com/postcss/postcss-selector-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.1.4",
+          "published": "2026-06-11T12:41:13.740Z",
+          "engines": {
+            "node": ">=4"
+          },
+          "dependencies": {
+            "cssesc": "^3.0.0",
+            "util-deprecate": "^1.0.2"
+          },
+          "repository": {
+            "url": "git+https://github.com/postcss/postcss-selector-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.1.5",
+          "published": "2026-08-07T09:32:20.792Z",
+          "engines": {
+            "node": ">=4"
+          },
+          "dependencies": {
+            "cssesc": "^3.0.0",
+            "util-deprecate": "^1.0.2"
+          },
+          "repository": {
+            "url": "git+https://github.com/postcss/postcss-selector-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.1.6",
+          "published": "2026-09-03T08:59:01.963Z",
+          "engines": {
+            "node": ">=4"
+          },
+          "dependencies": {
+            "cssesc": "^3.0.0",
+            "util-deprecate": "^1.0.2"
+          },
+          "repository": {
+            "url": "git+https://github.com/postcss/postcss-selector-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "6.1.5",
+          "published": "2026-10-19T15:02:08.894Z",
+          "engines": {
+            "node": ">=4"
+          },
+          "dependencies": {
+            "cssesc": "^3.0.0",
+            "util-deprecate": "^1.0.2"
+          },
+          "repository": {
+            "url": "git+https://github.com/postcss/postcss-selector-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.1.7",
+          "published": "2026-10-20T09:08:33.097Z",
+          "engines": {
+            "node": ">=4"
+          },
+          "dependencies": {
+            "cssesc": "^3.0.0",
+            "util-deprecate": "^1.0.2"
+          },
+          "repository": {
+            "url": "git+https://github.com/postcss/postcss-selector-parser.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "esbuild",
+      "distTags": {
+        "latest": "0.28.2"
+      },
+      "recent": [
+        {
+          "version": "0.27.2",
+          "published": "2025-12-17T01:05:48.693Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "repository": {
+            "url": "git+https://github.com/evanw/esbuild.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.27.3",
+          "published": "2026-02-05T22:03:47.060Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "repository": {
+            "url": "git+https://github.com/evanw/esbuild.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.27.4",
+          "published": "2026-03-12T14:23:59.944Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "repository": {
+            "url": "git+https://github.com/evanw/esbuild.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.27.5",
+          "published": "2026-04-02T00:29:23.059Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "repository": {
+            "url": "git+https://github.com/evanw/esbuild.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.27.7",
+          "published": "2026-04-02T16:43:44.831Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "repository": {
+            "url": "git+https://github.com/evanw/esbuild.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.28.0",
+          "published": "2026-04-02T20:38:46.463Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "repository": {
+            "url": "git+https://github.com/evanw/esbuild.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.28.1",
+          "published": "2026-06-11T22:47:05.085Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "repository": {
+            "url": "git+https://github.com/evanw/esbuild.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.28.2",
+          "published": "2026-08-08T20:00:55.454Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "repository": {
+            "url": "git+https://github.com/evanw/esbuild.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "decode-uri-component",
+      "distTags": {
+        "latest": "0.5.1"
+      },
+      "recent": [
+        {
+          "version": "0.2.0",
+          "published": "2017-06-28T18:16:07.372Z",
+          "engines": {
+            "node": ">=0.10"
+          },
+          "repository": {
+            "url": "git+https://github.com/samverschueren/decode-uri-component.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.2.1",
+          "published": "2022-12-01T16:11:44.983Z",
+          "engines": {
+            "node": ">=0.10"
+          },
+          "repository": {
+            "url": "git+https://github.com/SamVerschueren/decode-uri-component.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.2.2",
+          "published": "2022-12-01T18:22:59.105Z",
+          "engines": {
+            "node": ">=0.10"
+          },
+          "repository": {
+            "url": "git+https://github.com/SamVerschueren/decode-uri-component.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.3.0",
+          "published": "2022-12-13T18:00:47.926Z",
+          "engines": {
+            "node": ">=0.10"
+          },
+          "repository": {
+            "url": "git+https://github.com/SamVerschueren/decode-uri-component.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.4.0",
+          "published": "2022-12-15T14:31:51.640Z",
+          "engines": {
+            "node": ">=14.16"
+          },
+          "repository": {
+            "url": "git+https://github.com/SamVerschueren/decode-uri-component.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.4.1",
+          "published": "2022-12-19T09:20:12.140Z",
+          "engines": {
+            "node": ">=14.16"
+          },
+          "repository": {
+            "url": "git+https://github.com/SamVerschueren/decode-uri-component.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.5.0",
+          "published": "2026-06-29T16:00:20.602Z",
+          "engines": {
+            "node": ">=14.16"
+          },
+          "repository": {
+            "url": "git+https://github.com/SamVerschueren/decode-uri-component.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.5.1",
+          "published": "2026-10-23T12:48:46.830Z",
+          "engines": {
+            "node": ">=14.16"
+          },
+          "repository": {
+            "url": "git+https://github.com/SamVerschueren/decode-uri-component.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "undici",
+      "distTags": {
+        "test": "5.24.0-test.6",
+        "next": "7.0.0-alpha.10",
+        "five": "5.29.0",
+        "seven": "7.30.1",
+        "six": "6.29.1",
+        "latest": "8.12.3"
+      },
+      "recent": [
+        {
+          "version": "7.30.0",
+          "published": "2026-09-25T07:15:17.199Z",
+          "engines": {
+            "node": ">=20.18.1"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodejs/undici.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "6.29.0",
+          "published": "2026-09-25T09:45:19.865Z",
+          "engines": {
+            "node": ">=18.17"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodejs/undici.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "8.12.0",
+          "published": "2026-10-14T09:04:37.331Z",
+          "engines": {
+            "node": ">=22.19.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodejs/undici.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "8.12.1",
+          "published": "2026-10-14T09:25:38.547Z",
+          "engines": {
+            "node": ">=22.19.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodejs/undici.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "7.30.1",
+          "published": "2026-10-15T14:18:31.283Z",
+          "engines": {
+            "node": ">=20.18.1"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodejs/undici.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "6.29.1",
+          "published": "2026-10-15T14:19:28.454Z",
+          "engines": {
+            "node": ">=18.17"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodejs/undici.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "8.12.2",
+          "published": "2026-10-15T15:05:34.415Z",
+          "engines": {
+            "node": ">=22.19.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodejs/undici.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "8.12.3",
+          "published": "2026-10-19T14:02:56.699Z",
+          "engines": {
+            "node": ">=22.19.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/nodejs/undici.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "uuid",
+      "distTags": {
+        "legacy-12": "12.0.1",
+        "legacy-11": "11.1.1",
+        "legacy-13": "13.0.2",
+        "latest": "14.0.3"
+      },
+      "recent": [
+        {
+          "version": "14.0.0",
+          "published": "2026-04-19T15:15:42.302Z",
+          "repository": {
+            "url": "git+https://github.com/uuidjs/uuid.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "13.0.1",
+          "published": "2026-04-29T12:44:23.872Z",
+          "repository": {
+            "url": "git+https://github.com/uuidjs/uuid.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "12.0.1",
+          "published": "2026-04-29T12:54:38.598Z",
+          "repository": {
+            "url": "git+https://github.com/uuidjs/uuid.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "11.1.1",
+          "published": "2026-04-29T15:17:24.795Z",
+          "repository": {
+            "url": "git+https://github.com/uuidjs/uuid.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "13.0.2",
+          "published": "2026-05-04T13:37:27.339Z",
+          "repository": {
+            "url": "git+https://github.com/uuidjs/uuid.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "14.0.1",
+          "published": "2026-06-20T11:56:02.499Z",
+          "repository": {
+            "url": "git+https://github.com/uuidjs/uuid.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "14.0.2",
+          "published": "2026-08-18T18:21:56.060Z",
+          "repository": {
+            "url": "git+https://github.com/uuidjs/uuid.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "14.0.3",
+          "published": "2026-10-10T00:30:19.423Z",
+          "repository": {
+            "url": "git+https://github.com/uuidjs/uuid.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "http-cache-semantics",
+      "distTags": {
+        "beta": "4.2.0-beta.1",
+        "next": "4.2.0-beta.2",
+        "latest": "4.3.0"
+      },
+      "recent": [
+        {
+          "version": "4.0.1",
+          "published": "2018-11-27T11:01:07.864Z",
+          "repository": {
+            "url": "git+https://github.com/kornelski/http-cache-semantics.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.0.2",
+          "published": "2019-01-09T14:06:10.008Z",
+          "repository": {
+            "url": "git+https://github.com/kornelski/http-cache-semantics.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.0.3",
+          "published": "2019-02-10T12:22:59.672Z",
+          "repository": {
+            "url": "git+https://github.com/kornelski/http-cache-semantics.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.0.4",
+          "published": "2020-02-10T22:16:08.024Z",
+          "repository": {
+            "url": "git+https://github.com/kornelski/http-cache-semantics.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.1.0",
+          "published": "2020-03-01T23:54:55.142Z",
+          "repository": {
+            "url": "git+https://github.com/kornelski/http-cache-semantics.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.1.1",
+          "published": "2023-01-27T01:29:11.933Z",
+          "repository": {
+            "url": "git+https://github.com/kornelski/http-cache-semantics.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.2.0",
+          "published": "2025-05-09T13:38:11.855Z",
+          "repository": {
+            "url": "git+https://github.com/kornelski/http-cache-semantics.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.3.0",
+          "published": "2026-10-04T02:56:05.593Z",
+          "repository": {
+            "url": "git+https://github.com/kornelski/http-cache-semantics.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "compression",
+      "distTags": {
+        "latest": "1.8.2"
+      },
+      "recent": [
+        {
+          "version": "1.7.1",
+          "published": "2017-09-27T05:10:20.820Z",
+          "engines": {
+            "node": ">= 0.8.0"
+          },
+          "dependencies": {
+            "vary": "~1.1.2",
+            "bytes": "3.0.0",
+            "debug": "2.6.9",
+            "accepts": "~1.3.4",
+            "on-headers": "~1.0.1",
+            "safe-buffer": "5.1.1",
+            "compressible": "~2.0.11"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/compression.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.7.2",
+          "published": "2018-02-19T04:50:54.459Z",
+          "engines": {
+            "node": ">= 0.8.0"
+          },
+          "dependencies": {
+            "vary": "~1.1.2",
+            "bytes": "3.0.0",
+            "debug": "2.6.9",
+            "accepts": "~1.3.4",
+            "on-headers": "~1.0.1",
+            "safe-buffer": "5.1.1",
+            "compressible": "~2.0.13"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/compression.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.7.3",
+          "published": "2018-07-15T21:37:27.495Z",
+          "engines": {
+            "node": ">= 0.8.0"
+          },
+          "dependencies": {
+            "vary": "~1.1.2",
+            "bytes": "3.0.0",
+            "debug": "2.6.9",
+            "accepts": "~1.3.5",
+            "on-headers": "~1.0.1",
+            "safe-buffer": "5.1.2",
+            "compressible": "~2.0.14"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/compression.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.7.4",
+          "published": "2019-03-18T14:43:24.201Z",
+          "engines": {
+            "node": ">= 0.8.0"
+          },
+          "dependencies": {
+            "vary": "~1.1.2",
+            "bytes": "3.0.0",
+            "debug": "2.6.9",
+            "accepts": "~1.3.5",
+            "on-headers": "~1.0.2",
+            "safe-buffer": "5.1.2",
+            "compressible": "~2.0.16"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/compression.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.7.5",
+          "published": "2024-10-31T15:26:14.257Z",
+          "engines": {
+            "node": ">= 0.8.0"
+          },
+          "dependencies": {
+            "vary": "~1.1.2",
+            "bytes": "3.1.2",
+            "debug": "2.6.9",
+            "negotiator": "~0.6.4",
+            "on-headers": "~1.0.2",
+            "safe-buffer": "5.2.1",
+            "compressible": "~2.0.18"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/compression.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.8.0",
+          "published": "2025-02-10T20:48:32.292Z",
+          "engines": {
+            "node": ">= 0.8.0"
+          },
+          "dependencies": {
+            "vary": "~1.1.2",
+            "bytes": "3.1.2",
+            "debug": "2.6.9",
+            "negotiator": "~0.6.4",
+            "on-headers": "~1.0.2",
+            "safe-buffer": "5.2.1",
+            "compressible": "~2.0.18"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/compression.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.8.1",
+          "published": "2025-07-17T17:36:13.234Z",
+          "engines": {
+            "node": ">= 0.8.0"
+          },
+          "dependencies": {
+            "vary": "~1.1.2",
+            "bytes": "3.1.2",
+            "debug": "2.6.9",
+            "negotiator": "~0.6.4",
+            "on-headers": "~1.1.0",
+            "safe-buffer": "5.2.1",
+            "compressible": "~2.0.18"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/compression.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.8.2",
+          "published": "2026-09-11T11:16:47.669Z",
+          "engines": {
+            "node": ">= 0.8.0"
+          },
+          "dependencies": {
+            "vary": "~1.1.2",
+            "bytes": "3.1.2",
+            "debug": "2.6.9",
+            "destroy": "1.2.0",
+            "negotiator": "~0.6.4",
+            "on-headers": "~1.1.0",
+            "safe-buffer": "5.2.1",
+            "compressible": "~2.0.18"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/compression.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "body-parser",
+      "distTags": {
+        "next": "2.1.0",
+        "latest": "2.4.0",
+        "latest-1.x": "1.20.9"
+      },
+      "recent": [
+        {
+          "version": "1.20.4",
+          "published": "2025-12-01T15:53:40.942Z",
+          "engines": {
+            "npm": "1.2.8000 || >= 1.4.16",
+            "node": ">= 0.8"
+          },
+          "dependencies": {
+            "qs": "~6.14.0",
+            "depd": "2.0.0",
+            "bytes": "~3.1.2",
+            "debug": "2.6.9",
+            "unpipe": "~1.0.0",
+            "destroy": "~1.2.0",
+            "type-is": "~1.6.18",
+            "raw-body": "~2.5.3",
+            "iconv-lite": "~0.4.24",
+            "http-errors": "~2.0.1",
+            "on-finished": "~2.4.1",
+            "content-type": "~1.0.5"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/body-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.2.2",
+          "published": "2026-01-07T09:38:34.589Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "qs": "^6.14.1",
+            "bytes": "^3.1.2",
+            "debug": "^4.4.3",
+            "type-is": "^2.0.1",
+            "raw-body": "^3.0.1",
+            "iconv-lite": "^0.7.0",
+            "http-errors": "^2.0.0",
+            "on-finished": "^2.4.1",
+            "content-type": "^1.0.5"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/body-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.20.5",
+          "published": "2026-04-24T17:55:23.868Z",
+          "engines": {
+            "npm": "1.2.8000 || >= 1.4.16",
+            "node": ">= 0.8"
+          },
+          "dependencies": {
+            "qs": "~6.15.1",
+            "depd": "2.0.0",
+            "bytes": "~3.1.2",
+            "debug": "2.6.9",
+            "unpipe": "~1.0.0",
+            "destroy": "~1.2.0",
+            "type-is": "~1.6.18",
+            "raw-body": "~2.5.3",
+            "iconv-lite": "~0.4.24",
+            "http-errors": "~2.0.1",
+            "on-finished": "~2.4.1",
+            "content-type": "~1.0.5"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/body-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.3.0",
+          "published": "2026-06-15T10:46:12.880Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "qs": "^6.15.2",
+            "bytes": "^3.1.2",
+            "debug": "^4.4.3",
+            "type-is": "^2.1.0",
+            "raw-body": "^3.0.2",
+            "iconv-lite": "^0.7.2",
+            "http-errors": "^2.0.1",
+            "on-finished": "^2.4.1",
+            "content-type": "^2.0.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/body-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.20.6",
+          "published": "2026-07-09T09:05:46.130Z",
+          "engines": {
+            "npm": "1.2.8000 || >= 1.4.16",
+            "node": ">= 0.8"
+          },
+          "dependencies": {
+            "qs": "~6.15.1",
+            "depd": "2.0.0",
+            "bytes": "~3.1.2",
+            "debug": "2.6.9",
+            "unpipe": "~1.0.0",
+            "destroy": "~1.2.0",
+            "type-is": "~1.6.18",
+            "raw-body": "~2.5.3",
+            "iconv-lite": "~0.4.24",
+            "http-errors": "~2.0.1",
+            "on-finished": "~2.4.1",
+            "content-type": "~1.0.5"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/body-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.20.8",
+          "published": "2026-09-08T10:32:14.519Z",
+          "engines": {
+            "npm": "1.2.8000 || >= 1.4.16",
+            "node": ">= 0.8"
+          },
+          "dependencies": {
+            "qs": "~6.16.0",
+            "depd": "2.0.0",
+            "bytes": "~3.1.2",
+            "debug": "2.6.9",
+            "unpipe": "~1.0.0",
+            "destroy": "~1.2.0",
+            "type-is": "~1.6.18",
+            "raw-body": "~2.5.3",
+            "iconv-lite": "~0.4.24",
+            "http-errors": "~2.0.1",
+            "on-finished": "~2.4.1",
+            "content-type": "~1.0.5"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/body-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.20.9",
+          "published": "2026-10-22T11:38:27.889Z",
+          "engines": {
+            "npm": "1.2.8000 || >= 1.4.16",
+            "node": ">= 0.8"
+          },
+          "dependencies": {
+            "qs": "~6.16.0",
+            "depd": "2.0.0",
+            "bytes": "~3.1.2",
+            "debug": "2.6.9",
+            "unpipe": "~1.0.0",
+            "destroy": "~1.2.0",
+            "type-is": "~1.6.18",
+            "raw-body": "~2.5.3",
+            "iconv-lite": "~0.4.24",
+            "http-errors": "~2.0.1",
+            "on-finished": "~2.4.1",
+            "content-type": "~1.0.5"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/body-parser.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "2.4.0",
+          "published": "2026-10-22T11:39:38.614Z",
+          "engines": {
+            "node": ">=18"
+          },
+          "dependencies": {
+            "qs": "^6.16.1",
+            "bytes": "^3.1.2",
+            "debug": "^4.4.3",
+            "type-is": "^2.1.0",
+            "raw-body": "^3.0.2",
+            "iconv-lite": "^0.7.3",
+            "http-errors": "^2.0.1",
+            "on-finished": "^2.4.1",
+            "content-type": "^2.1.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/expressjs/body-parser.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "@xmldom/xmldom",
+      "distTags": {
+        "lts": "0.8.15",
+        "latest": "0.9.12"
+      },
+      "recent": [
+        {
+          "version": "0.8.12",
+          "published": "2026-03-29T19:19:35.930Z",
+          "engines": {
+            "node": ">=10.0.0"
+          },
+          "dependencies": {},
+          "repository": {
+            "url": "git://github.com/xmldom/xmldom.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.9.9",
+          "published": "2026-03-29T19:46:43.323Z",
+          "engines": {
+            "node": ">=14.6"
+          },
+          "repository": {
+            "url": "git://github.com/xmldom/xmldom.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.8.13",
+          "published": "2026-04-18T11:27:55.806Z",
+          "engines": {
+            "node": ">=10.0.0"
+          },
+          "dependencies": {},
+          "repository": {
+            "url": "git://github.com/xmldom/xmldom.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.9.10",
+          "published": "2026-04-18T11:34:10.031Z",
+          "engines": {
+            "node": ">=14.6"
+          },
+          "repository": {
+            "url": "git://github.com/xmldom/xmldom.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.8.14",
+          "published": "2026-08-12T19:19:55.967Z",
+          "engines": {
+            "node": ">=10.0.0"
+          },
+          "dependencies": {},
+          "repository": {
+            "url": "git://github.com/xmldom/xmldom.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.9.11",
+          "published": "2026-08-12T19:37:06.526Z",
+          "engines": {
+            "node": ">=14.6"
+          },
+          "repository": {
+            "url": "git://github.com/xmldom/xmldom.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.8.15",
+          "published": "2026-08-21T22:20:29.920Z",
+          "engines": {
+            "node": ">=10.0.0"
+          },
+          "dependencies": {},
+          "repository": {
+            "url": "git://github.com/xmldom/xmldom.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "0.9.12",
+          "published": "2026-08-21T22:32:42.389Z",
+          "engines": {
+            "node": ">=14.6"
+          },
+          "repository": {
+            "url": "git://github.com/xmldom/xmldom.git",
+            "type": "git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "node-forge",
+      "distTags": {
+        "latest": "1.4.0"
+      },
+      "recent": [
+        {
+          "version": "1.1.0",
+          "published": "2022-01-07T04:01:19.745Z",
+          "engines": {
+            "node": ">= 6.13.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/digitalbazaar/forge.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.2.0",
+          "published": "2022-01-08T02:20:20.676Z",
+          "engines": {
+            "node": ">= 6.13.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/digitalbazaar/forge.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.2.1",
+          "published": "2022-01-11T19:56:55.068Z",
+          "engines": {
+            "node": ">= 6.13.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/digitalbazaar/forge.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.3.0",
+          "published": "2022-03-17T23:21:00.909Z",
+          "engines": {
+            "node": ">= 6.13.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/digitalbazaar/forge.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.3.1",
+          "published": "2022-03-30T00:12:21.829Z",
+          "engines": {
+            "node": ">= 6.13.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/digitalbazaar/forge.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.3.2",
+          "published": "2025-11-25T19:24:11.142Z",
+          "engines": {
+            "node": ">= 6.13.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/digitalbazaar/forge.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.3.3",
+          "published": "2025-12-02T19:12:51.271Z",
+          "engines": {
+            "node": ">= 6.13.0"
+          },
+          "repository": {
+            "url": "git+https://github.com/digitalbazaar/forge.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "1.4.0",
+          "published": "2026-03-24T21:44:34.668Z",
+          "engines": {
+            "node": ">= 6.13.0"
+          },
+          "repository": {
+            "type": "git",
+            "url": "git+https://github.com/digitalbazaar/forge.git"
+          }
+        }
+      ]
+    },
+    {
+      "name": "zod",
+      "distTags": {
+        "next": "3.25.0-beta.20250519T094321",
+        "alpha": "3.25.68-alpha.11",
+        "beta": "4.1.13-beta.0",
+        "canary": "4.5.0-canary.20260828T171753",
+        "latest": "4.6.7"
+      },
+      "recent": [
+        {
+          "version": "4.6.0",
+          "published": "2026-09-09T19:25:02.729Z",
+          "repository": {
+            "url": "git+https://github.com/colinhacks/zod.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.6.1",
+          "published": "2026-09-09T21:50:12.924Z",
+          "repository": {
+            "url": "git+https://github.com/colinhacks/zod.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.6.2",
+          "published": "2026-09-10T21:44:31.022Z",
+          "repository": {
+            "url": "git+https://github.com/colinhacks/zod.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.6.3",
+          "published": "2026-09-12T22:23:48.121Z",
+          "repository": {
+            "url": "git+https://github.com/colinhacks/zod.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.6.4",
+          "published": "2026-09-13T00:12:11.332Z",
+          "repository": {
+            "url": "git+https://github.com/colinhacks/zod.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.6.5",
+          "published": "2026-09-13T23:25:14.644Z",
+          "repository": {
+            "url": "git+https://github.com/colinhacks/zod.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.6.6",
+          "published": "2026-10-11T16:18:23.878Z",
+          "repository": {
+            "url": "git+https://github.com/colinhacks/zod.git",
+            "type": "git"
+          }
+        },
+        {
+          "version": "4.6.7",
+          "published": "2026-10-12T16:29:37.778Z",
+          "repository": {
+            "url": "git+https://github.com/colinhacks/zod.git",
+            "type": "git"
+          }
+        }
+      ]
+    }
+  ]
+}

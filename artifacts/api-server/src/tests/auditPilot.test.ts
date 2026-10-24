@@ -3,11 +3,13 @@ import { test } from "node:test";
 import { once } from "node:events";
 import { randomBytes, randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
+import { gzipSync } from "node:zlib";
 import { PGlite } from "@electric-sql/pglite";
 import type { PoolClient } from "@workspace/db/pool";
 import { createAuditWorkflowService } from "../services/auditWorkflowService";
 import { createAuditPilotApp } from "../auditPilotApp";
 import { loadAuditPilotConfig } from "../auditPilotConfig";
+import { AuditWorkflowError, validateWorkflowIntake } from "../services/auditWorkflowChecks";
 
 const synthetic = () => randomBytes(32).toString("base64url");
 test("dedicated runtime configuration fails closed without distinct roles, private DB and exact HTTPS origins", () => {
@@ -69,6 +71,12 @@ test("dedicated HTTP boundary preserves the audit lifecycle and excludes legacy,
     assert.equal((await req(base, "OPTIONS", undefined, "", { Origin: "https://pilot.example.invalid", "Access-Control-Request-Method": "DELETE" })).status, 403);
     assert.equal((await req(base, "POST", { ...intake, testData: false })).status, 400);
     assert.equal((await req(base, "POST", "x".repeat(40000))).status, 413);
+    assert.equal((await req(base, "POST", { ...intake, checks: Array(1000).fill("invalid") })).status, 400);
+    const compressed = Uint8Array.from(Buffer.concat([gzipSync(JSON.stringify(intake)), Buffer.from("trailing TEST DATA")]));
+    const encoded = await fetch(origin + base, { method: "POST", body: compressed,
+      headers: { Authorization: "Bearer " + operator, "Content-Type": "application/json", "Content-Encoding": "gzip" } });
+    assert.equal(encoded.status, 415); assert.equal((await encoded.json()).code, "ENCODING_UNSUPPORTED");
+    assert.equal((await req("/api/healthz")).status, 200, "Rejected compressed body must not terminate the process");
     const created = await req(base, "POST", intake, operator, { Origin: "https://pilot.example.invalid" });
     assert.equal(created.status, 201); assert.equal(created.headers.get("access-control-allow-origin"), "https://pilot.example.invalid");
     assert.equal(created.headers.get("access-control-allow-credentials"), null);
@@ -93,5 +101,51 @@ test("dedicated HTTP boundary preserves the audit lifecycle and excludes legacy,
     await engine.close();
     for (const key of Object.keys(process.env)) if (!(key in old)) delete process.env[key];
     Object.assign(process.env, old);
+  }
+});
+
+test("GX intake refuses oversized check collections before traversing elements in Zod", () => {
+  const checks = Array(1000);
+  Object.defineProperty(checks, "0", { get() { throw new Error("ELEMENT_MUST_NOT_BE_READ"); } });
+  assert.throws(() => validateWorkflowIntake({ checks }), (error: unknown) =>
+    error instanceof AuditWorkflowError && error.status === 400 && error.code === "INVALID_INTAKE");
+});
+
+test("dedicated admission limits bound role rate and concurrent readiness without trusting forwarded IPs", async () => {
+  const previous = { ...process.env }, operator = synthetic(), reviewer = synthetic();
+  Object.assign(process.env, { GXEON_AUDIT_OPERATOR_TOKEN: operator, GXEON_AUDIT_REVIEWER_TOKEN: reviewer });
+  let time = 0, block = false, calls = 0;
+  let release: (() => void) | undefined, entered: (() => void) | undefined;
+  const waiting = new Promise<void>(resolve => { entered = resolve; });
+  const app = createAuditPilotApp({ origins: ["https://pilot.example.invalid"],
+    service: createAuditWorkflowService(async () => { throw new Error("DB_NOT_USED_IN_ADMISSION_TEST"); }),
+    admission: { requestsPerMinute: 2, maxConcurrent: 1, now: () => time },
+    ready: async () => { calls++; if (block) { entered?.(); await new Promise<void>(resolve => { release = resolve; }); } } });
+  const server = app.listen(0, "127.0.0.1"); await once(server, "listening");
+  const address = server.address(); assert.ok(address && typeof address !== "string");
+  const origin = `http://127.0.0.1:${address.port}`;
+  const request = (token = operator, path = "/api/readyz", forwarded = "127.0.0.1") => fetch(origin + path, {
+    headers: { ...(token ? { Authorization: "Bearer " + token } : {}), "X-Forwarded-For": forwarded }, signal: AbortSignal.timeout(5000) });
+  try {
+    assert.equal((await request("", "/api/readyz")).status, 401);
+    assert.equal((await request()).status, 200);
+    assert.equal((await request(operator, "/api/readyz", "192.0.2.2")).status, 200);
+    const limited = await request(operator, "/api/readyz", "192.0.2.3");
+    assert.equal(limited.status, 429); assert.equal(limited.headers.get("retry-after"), "60");
+    assert.equal((await limited.json()).code, "AUDIT_RATE_LIMIT");
+    assert.equal((await request(reviewer)).status, 200, "Role buckets remain independent");
+    assert.equal((await request("", "/api/healthz")).status, 200);
+    time = 60001; block = true;
+    const first = request(); await waiting;
+    const before = calls, busy = await request(reviewer);
+    assert.equal(busy.status, 503); assert.equal((await busy.json()).code, "AUDIT_BUSY");
+    assert.equal(calls, before, "Saturated requests must not enter readiness or enqueue DB work");
+    assert.equal((await request("", "/api/healthz")).status, 200);
+    block = false; release?.(); assert.equal((await first).status, 200);
+    assert.equal((await request()).status, 200, "Completing a request must release capacity");
+  } finally {
+    release?.(); server.closeAllConnections(); await new Promise<void>(resolve => server.close(() => resolve()));
+    for (const key of Object.keys(process.env)) if (!(key in previous)) delete process.env[key];
+    Object.assign(process.env, previous);
   }
 });

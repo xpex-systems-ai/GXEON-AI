@@ -1,0 +1,295 @@
+{
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 1,
+      "moderate": 4,
+      "high": 5,
+      "critical": 0
+    },
+    "dependencies": 1183,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1183
+  },
+  "groups": [
+    {
+      "module": "uuid",
+      "severities": {
+        "moderate": 2
+      },
+      "versions": [
+        "7.0.3",
+        "3.4.0"
+      ],
+      "patches": [
+        ">=11.1.1"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-w5hq-g745-h8pq",
+          "severity": "moderate",
+          "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+          "patched": ">=11.1.1",
+          "url": "https://github.com/advisories/GHSA-w5hq-g745-h8pq",
+          "findings": [
+            {
+              "version": "7.0.3",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>uuid"
+              ]
+            },
+            {
+              "version": "3.4.0",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>@expo/ngrok>uuid"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "module": "esbuild",
+      "severities": {
+        "low": 1
+      },
+      "versions": [
+        "0.27.3"
+      ],
+      "patches": [
+        ">=0.28.1"
+      ],
+      "roots": [
+        "artifacts__api-server"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-g7r4-m6w7-qqqr",
+          "severity": "low",
+          "title": "esbuild allows arbitrary file read when running the development server on Windows",
+          "patched": ">=0.28.1",
+          "url": "https://github.com/advisories/GHSA-g7r4-m6w7-qqqr",
+          "findings": [
+            {
+              "version": "0.27.3",
+              "paths": [
+                "artifacts__api-server>esbuild"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "module": "decode-uri-component",
+      "severities": {
+        "moderate": 1
+      },
+      "versions": [
+        "0.2.2"
+      ],
+      "patches": [
+        ">=0.5.0"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-vcc3-ghjq-m6fr",
+          "severity": "moderate",
+          "title": "decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input",
+          "patched": ">=0.5.0",
+          "url": "https://github.com/advisories/GHSA-vcc3-ghjq-m6fr",
+          "findings": [
+            {
+              "version": "0.2.2",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>expo-router>query-string>decode-uri-component"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "module": "image-size",
+      "severities": {
+        "high": 2
+      },
+      "versions": [
+        "1.2.1"
+      ],
+      "patches": [
+        ">=2.0.3"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-5p2g-fcmc-qvqq",
+          "severity": "high",
+          "title": "image-size: JXL and HEIF parsers allow denial of service through infinite loops",
+          "patched": ">=2.0.3",
+          "url": "https://github.com/advisories/GHSA-5p2g-fcmc-qvqq",
+          "findings": [
+            {
+              "version": "1.2.1",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>image-size"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "GHSA-w3rx-r6r6-pgpr",
+          "severity": "high",
+          "title": "image-size: ICNS parser allows denial of service through an infinite loop",
+          "patched": ">=2.0.3",
+          "url": "https://github.com/advisories/GHSA-w3rx-r6r6-pgpr",
+          "findings": [
+            {
+              "version": "1.2.1",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>image-size"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "module": "node-forge",
+      "severities": {
+        "high": 1
+      },
+      "versions": [
+        "1.4.0"
+      ],
+      "patches": [
+        "<0.0.0"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-86w9-cpqp-85rv",
+          "severity": "high",
+          "title": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+          "patched": "<0.0.0",
+          "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+          "findings": [
+            {
+              "version": "1.4.0",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>@expo/cli>node-forge"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "module": "http-cache-semantics",
+      "severities": {
+        "high": 1
+      },
+      "versions": [
+        "4.2.0"
+      ],
+      "patches": [
+        "<0.0.0"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-ch52-4w7c-c8xp",
+          "severity": "high",
+          "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+          "patched": "<0.0.0",
+          "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+          "findings": [
+            {
+              "version": "4.2.0",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>@expo/ngrok>got>cacheable-request>http-cache-semantics"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "module": "postcss-selector-parser",
+      "severities": {
+        "moderate": 1
+      },
+      "versions": [
+        "6.0.10"
+      ],
+      "patches": [
+        ">=7.1.6"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-rj75-hqrm-r3gf",
+          "severity": "moderate",
+          "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+          "patched": ">=7.1.6",
+          "url": "https://github.com/advisories/GHSA-rj75-hqrm-r3gf",
+          "findings": [
+            {
+              "version": "6.0.10",
+              "paths": [
+                "artifacts__gxeon-dashboard>@tailwindcss/typography>postcss-selector-parser"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "module": "zod",
+      "severities": {
+        "high": 1
+      },
+      "versions": [
+        "3.25.76"
+      ],
+      "patches": [
+        ">=4.6.6"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-mrhx-c7xc-m3w5",
+          "severity": "high",
+          "title": "Zod can exhaust memory while validating oversized constrained collections",
+          "patched": ">=4.6.6",
+          "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+          "findings": [
+            {
+              "version": "3.25.76",
+              "paths": [
+                "artifacts__gxeon-dashboard>zod"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
