@@ -1,0 +1,465 @@
+{
+  "queriedAt": "2026-10-25T11:00:35.639Z",
+  "noPackageChanged": true,
+  "registry": [
+    {
+      "name": "node-forge",
+      "url": "https://registry.npmjs.org/node-forge",
+      "latest": "1.4.0",
+      "versions": [
+        {
+          "version": "1.4.0",
+          "publishedAt": "2026-03-24T21:44:34.668Z",
+          "type": "commonjs",
+          "engines": {
+            "node": ">= 6.13.0"
+          }
+        }
+      ]
+    },
+    {
+      "name": "http-cache-semantics",
+      "url": "https://registry.npmjs.org/http-cache-semantics",
+      "latest": "4.3.0",
+      "versions": [
+        {
+          "version": "4.3.0",
+          "publishedAt": "2026-10-04T02:56:05.593Z",
+          "type": "commonjs"
+        }
+      ]
+    },
+    {
+      "name": "decode-uri-component",
+      "url": "https://registry.npmjs.org/decode-uri-component",
+      "latest": "0.5.1",
+      "versions": [
+        {
+          "version": "0.5.1",
+          "publishedAt": "2026-10-23T12:48:46.830Z",
+          "type": "module",
+          "exports": {
+            "types": "./index.d.ts",
+            "default": "./index.js"
+          },
+          "engines": {
+            "node": ">=14.16"
+          }
+        }
+      ]
+    },
+    {
+      "name": "query-string",
+      "url": "https://registry.npmjs.org/query-string",
+      "latest": "10.0.0",
+      "versions": [
+        {
+          "version": "10.0.0",
+          "publishedAt": "2026-10-21T12:25:29.106Z",
+          "type": "module",
+          "exports": {
+            "types": "./index.d.ts",
+            "default": "./index.js"
+          },
+          "dependencies": {
+            "filter-obj": "^6.1.0",
+            "split-on-first": "^4.0.0"
+          },
+          "engines": {
+            "node": ">=22"
+          }
+        },
+        {
+          "version": "7.1.1",
+          "publishedAt": "2022-02-05T18:52:12.908Z",
+          "type": "commonjs",
+          "dependencies": {
+            "filter-obj": "^1.1.0",
+            "split-on-first": "^1.0.0",
+            "strict-uri-encode": "^2.0.0",
+            "decode-uri-component": "^0.2.0"
+          },
+          "engines": {
+            "node": ">=6"
+          }
+        },
+        {
+          "version": "7.1.2",
+          "publishedAt": "2022-12-01T17:16:43.269Z",
+          "type": "commonjs",
+          "dependencies": {
+            "filter-obj": "^1.1.0",
+            "split-on-first": "^1.0.0",
+            "strict-uri-encode": "^2.0.0",
+            "decode-uri-component": "^0.2.1"
+          },
+          "engines": {
+            "node": ">=6"
+          }
+        },
+        {
+          "version": "7.1.3",
+          "publishedAt": "2022-12-02T17:45:39.131Z",
+          "type": "commonjs",
+          "dependencies": {
+            "filter-obj": "^1.1.0",
+            "split-on-first": "^1.0.0",
+            "strict-uri-encode": "^2.0.0",
+            "decode-uri-component": "^0.2.2"
+          },
+          "engines": {
+            "node": ">=6"
+          }
+        }
+      ]
+    },
+    {
+      "name": "expo-router",
+      "url": "https://registry.npmjs.org/expo-router",
+      "latest": "58.0.26",
+      "versions": [
+        {
+          "version": "58.0.26",
+          "publishedAt": "2026-10-23T23:26:56.555Z",
+          "type": "commonjs",
+          "exports": {
+            ".": {
+              "types": {
+                "default": "./build/index.d.ts",
+                "expo-source": "./src/index.tsx"
+              },
+              "default": "./build/index.js",
+              "expo-source": "./src/index.tsx"
+            },
+            "./ui": {
+              "types": {
+                "default": "./build/ui/index.d.ts",
+                "expo-source": "./src/ui/index.ts"
+              },
+              "default": "./build/ui/index.js",
+              "expo-source": "./src/ui/index.ts"
+            },
+            "./rsc": {
+              "types": {
+                "default": "./build/rsc/exports.d.ts",
+                "expo-source": "./src/rsc/exports.tsx"
+              },
+              "default": "./build/rsc/exports.js",
+              "expo-source": "./src/rsc/exports.tsx"
+            },
+            "./_ctx": {
+              "types": "./_ctx.d.ts",
+              "browser": "./_ctx.web.js",
+              "default": "./_ctx.js"
+            },
+            "./head": {
+              "types": {
+                "default": "./build/head/index.d.ts",
+                "expo-source": "./src/head/index.ts"
+              },
+              "default": "./build/head/index.js",
+              "expo-source": "./src/head/index.ts"
+            },
+            "./html": {
+              "types": {
+                "default": "./build/html.d.ts",
+                "expo-source": "./src/html.ts"
+              },
+              "default": "./build/html.js",
+              "expo-source": "./src/html.ts"
+            },
+            "./link": {
+              "types": "./link/index.d.ts",
+              "default": "./link/index.js"
+            },
+            "./tabs": {
+              "types": {
+                "default": "./build/layouts/Tabs.d.ts",
+                "expo-source": "./src/layouts/Tabs.tsx"
+              },
+              "default": "./build/layouts/Tabs.js",
+              "expo-source": "./src/layouts/Tabs.tsx"
+            },
+            "./entry": "./entry.js",
+            "./stack": {
+              "types": {
+                "default": "./build/stack.d.ts",
+                "expo-source": "./src/stack.ts"
+              },
+              "default": "./build/stack.js",
+              "expo-source": "./src/stack.ts"
+            },
+            "./_error": "./_error.js",
+            "./drawer": {
+              "types": {
+                "default": "./build/layouts/Drawer.d.ts",
+                "expo-source": "./src/layouts/Drawer.tsx"
+              },
+              "default": "./build/layouts/Drawer.js",
+              "expo-source": "./src/layouts/Drawer.tsx"
+            },
+            "./plugin": "./plugin/build/index.js",
+            "./server": {
+              "types": {
+                "default": "./build/server/index.d.ts",
+                "expo-source": "./src/server/index.ts"
+              },
+              "default": "./build/server/index.js",
+              "expo-source": "./src/server/index.ts"
+            },
+            "./build/*": {
+              "types": {
+                "default": "./build/*.d.ts",
+                "expo-source": "./src/*.ts"
+              },
+              "default": "./build/*.js",
+              "expo-source": "./src/*.ts"
+            },
+            "./js-tabs": {
+              "types": {
+                "default": "./build/layouts/Tabs.d.ts",
+                "expo-source": "./src/layouts/Tabs.tsx"
+              },
+              "default": "./build/layouts/Tabs.js",
+              "expo-source": "./src/layouts/Tabs.tsx"
+            },
+            "./assets/*": "./assets/*",
+            "./entry.js": "./entry.js",
+            "./js-stack": {
+              "types": {
+                "default": "./build/layouts/JSStack.d.ts",
+                "expo-source": "./src/layouts/JSStack.tsx"
+              },
+              "default": "./build/layouts/JSStack.js",
+              "expo-source": "./src/layouts/JSStack.tsx"
+            },
+            "./_ctx-html": "./_ctx-html.js",
+            "./_error.js": "./_error.js",
+            "./rsc/entry": "./rsc/entry.js",
+            "./build/*.js": {
+              "types": {
+                "default": "./build/*.d.ts",
+                "expo-source": "./src/*.ts"
+              },
+              "default": "./build/*.js",
+              "expo-source": "./src/*.ts"
+            },
+            "./internal/*": {
+              "types": {
+                "default": "./build/internal/*.d.ts",
+                "expo-source": "./src/internal/*.ts"
+              },
+              "default": "./build/internal/*.js",
+              "expo-source": "./src/internal/*.ts"
+            },
+            "./_ctx-shared": "./_ctx-shared.js",
+            "./build/Route": {
+              "types": {
+                "default": "./build/Route.d.ts",
+                "expo-source": "./src/Route.tsx"
+              },
+              "default": "./build/Route.js",
+              "expo-source": "./src/Route.tsx"
+            },
+            "./js-top-tabs": {
+              "types": {
+                "default": "./build/layouts/TopTabs.d.ts",
+                "expo-source": "./src/layouts/TopTabs.tsx"
+              },
+              "default": "./build/layouts/TopTabs.js",
+              "expo-source": "./src/layouts/TopTabs.tsx"
+            },
+            "./native-tabs": {
+              "types": {
+                "default": "./build/native-tabs/index.d.ts",
+                "expo-source": "./src/native-tabs/index.ts"
+              },
+              "default": "./build/native-tabs/index.js",
+              "expo-source": "./src/native-tabs/index.ts"
+            },
+            "./rsc/headers": {
+              "types": "./rsc/headers.d.ts",
+              "default": "./rsc/headers.js"
+            },
+            "./native-stack": {
+              "types": {
+                "default": "./build/react-navigation/native-stack/index.d.ts",
+                "expo-source": "./src/react-navigation/native-stack/index.tsx"
+              },
+              "default": "./build/react-navigation/native-stack/index.js",
+              "expo-source": "./src/react-navigation/native-stack/index.tsx"
+            },
+            "./package.json": "./package.json",
+            "./rsc/entry.js": "./rsc/entry.js",
+            "./rsc/internal": {
+              "types": {
+                "default": "./build/rsc/router/host.d.ts",
+                "expo-source": "./src/rsc/router/host.tsx"
+              },
+              "default": "./build/rsc/router/host.js",
+              "expo-source": "./src/rsc/router/host.tsx"
+            },
+            "./app.plugin.js": "./app.plugin.js",
+            "./entry-classic": "./entry-classic.js",
+            "./build/matchers": {
+              "types": {
+                "default": "./build/matchers.d.ts",
+                "expo-source": "./src/matchers.tsx"
+              },
+              "default": "./build/matchers.js",
+              "expo-source": "./src/matchers.tsx"
+            },
+            "./rsc/headers.js": {
+              "types": "./rsc/headers.d.ts",
+              "default": "./rsc/headers.js"
+            },
+            "./testing-library": {
+              "types": {
+                "default": "./build/testing-library/index.d.ts",
+                "expo-source": "./src/testing-library/index.tsx"
+              },
+              "default": "./build/testing-library/index.js",
+              "expo-source": "./src/testing-library/index.tsx"
+            },
+            "./entry-classic.js": "./entry-classic.js",
+            "./react-navigation": {
+              "types": {
+                "default": "./build/react-navigation/index.d.ts",
+                "expo-source": "./src/react-navigation/index.ts"
+              },
+              "default": "./build/react-navigation/index.js",
+              "expo-source": "./src/react-navigation/index.ts"
+            },
+            "./unstable-split-view": {
+              "types": {
+                "default": "./build/split-view/index.d.ts",
+                "expo-source": "./src/split-view/index.ts"
+              },
+              "default": "./build/split-view/index.js",
+              "expo-source": "./src/split-view/index.ts"
+            },
+            "./unstable-native-tabs": {
+              "types": {
+                "default": "./build/unstable-native-tabs.d.ts",
+                "expo-source": "./src/unstable-native-tabs.ts"
+              },
+              "default": "./build/unstable-native-tabs.js",
+              "expo-source": "./src/unstable-native-tabs.ts"
+            }
+          },
+          "dependencies": {
+            "nanoid": "^3.3.18",
+            "react-is": "^19.1.0",
+            "client-only": "^0.0.1",
+            "expo-server": "^58.0.6",
+            "server-only": "^0.0.1",
+            "@expo/log-box": "^58.0.13",
+            "expo-status-bar": "^58.0.4",
+            "expo-glass-effect": "^58.0.5",
+            "@expo/schema-utils": "^58.0.2",
+            "react-fast-compare": "^3.2.2",
+            "@expo/metro-runtime": "^58.0.15",
+            "standard-navigation": "^0.0.5",
+            "@radix-ui/react-slot": "^1.2.0",
+            "@radix-ui/react-tabs": "^1.1.12",
+            "react-native-screens": "^4.30.0 || ^5.0.0-alpha.3",
+            "sf-symbols-typescript": "^2.1.0",
+            "react-native-drawer-layout": "^4.2.12",
+            "@react-native/normalize-colors": "0.88.0",
+            "@react-native-masked-view/masked-view": "^0.3.2"
+          }
+        },
+        {
+          "version": "6.0.22",
+          "publishedAt": "2026-01-20T20:03:23.528Z",
+          "type": "commonjs",
+          "dependencies": {
+            "vaul": "^1.1.2",
+            "debug": "^4.3.4",
+            "nanoid": "^3.3.8",
+            "semver": "~7.6.3",
+            "invariant": "^2.2.4",
+            "client-only": "^0.0.1",
+            "expo-server": "^1.0.5",
+            "server-only": "^0.0.1",
+            "query-string": "^7.1.3",
+            "shallowequal": "^1.1.0",
+            "fast-deep-equal": "^3.1.3",
+            "@expo/schema-utils": "^0.1.8",
+            "react-fast-compare": "^3.2.2",
+            "@expo/metro-runtime": "^6.1.2",
+            "use-latest-callback": "^0.2.1",
+            "@radix-ui/react-slot": "1.2.0",
+            "@radix-ui/react-tabs": "^1.1.12",
+            "escape-string-regexp": "^4.0.0",
+            "sf-symbols-typescript": "^2.1.0",
+            "@react-navigation/native": "^7.1.8",
+            "react-native-is-edge-to-edge": "^1.1.6",
+            "@react-navigation/bottom-tabs": "^7.4.0",
+            "@react-navigation/native-stack": "^7.3.16"
+          }
+        },
+        {
+          "version": "6.0.23",
+          "publishedAt": "2026-01-31T14:21:05.562Z",
+          "type": "commonjs",
+          "dependencies": {
+            "vaul": "^1.1.2",
+            "debug": "^4.3.4",
+            "nanoid": "^3.3.8",
+            "semver": "~7.6.3",
+            "invariant": "^2.2.4",
+            "client-only": "^0.0.1",
+            "expo-server": "^1.0.5",
+            "server-only": "^0.0.1",
+            "query-string": "^7.1.3",
+            "shallowequal": "^1.1.0",
+            "fast-deep-equal": "^3.1.3",
+            "@expo/schema-utils": "^0.1.8",
+            "react-fast-compare": "^3.2.2",
+            "@expo/metro-runtime": "^6.1.2",
+            "use-latest-callback": "^0.2.1",
+            "@radix-ui/react-slot": "1.2.0",
+            "@radix-ui/react-tabs": "^1.1.12",
+            "escape-string-regexp": "^4.0.0",
+            "sf-symbols-typescript": "^2.1.0",
+            "@react-navigation/native": "^7.1.8",
+            "react-native-is-edge-to-edge": "^1.1.6",
+            "@react-navigation/bottom-tabs": "^7.4.0",
+            "@react-navigation/native-stack": "^7.3.16"
+          }
+        },
+        {
+          "version": "6.0.24",
+          "publishedAt": "2026-05-28T21:19:45.195Z",
+          "type": "commonjs",
+          "dependencies": {
+            "vaul": "^1.1.2",
+            "debug": "^4.3.4",
+            "nanoid": "^3.3.8",
+            "semver": "~7.6.3",
+            "invariant": "^2.2.4",
+            "client-only": "^0.0.1",
+            "expo-server": "^1.0.7",
+            "server-only": "^0.0.1",
+            "query-string": "^7.1.3",
+            "shallowequal": "^1.1.0",
+            "fast-deep-equal": "^3.1.3",
+            "@expo/schema-utils": "^0.1.8",
+            "react-fast-compare": "^3.2.2",
+            "@expo/metro-runtime": "^6.1.2",
+            "use-latest-callback": "^0.2.1",
+            "@radix-ui/react-slot": "1.2.0",
+            "@radix-ui/react-tabs": "^1.1.12",
+            "escape-string-regexp": "^4.0.0",
+            "sf-symbols-typescript": "^2.1.0",
+            "@react-navigation/native": "^7.1.8",
+            "react-native-is-edge-to-edge": "^1.1.6",
+            "@react-navigation/bottom-tabs": "^7.4.0",
+            "@react-navigation/native-stack": "^7.3.16"
+          }
+        }
+      ]
+    }
+  ]
+}

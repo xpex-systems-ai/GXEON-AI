@@ -1,0 +1,72 @@
+[
+  {
+    "archive": "candidate-complete-gx01-test-evidence.zip",
+    "path": "codegen-smoke.json",
+    "saved": "candidate-complete-gx01-test-evidence--codegen-smoke.json",
+    "bytes": 621,
+    "sha256": "21fc29a593ed34a6a5796e2ba98ba897b504ab596b322d6ce4aa854420c2227f"
+  },
+  {
+    "archive": "candidate-complete-gx01-test-evidence.zip",
+    "path": "http-calls.json",
+    "saved": "candidate-complete-gx01-test-evidence--http-calls.json",
+    "bytes": 10309,
+    "sha256": "ace9513daa2c729ffc5a5126b7f47c404c99058b197721c69d5b9d501f0439df"
+  },
+  {
+    "archive": "candidate-complete-gx01-test-evidence.zip",
+    "path": "dependency-smoke.json",
+    "saved": "candidate-complete-gx01-test-evidence--dependency-smoke.json",
+    "bytes": 2403,
+    "sha256": "bf44f0b471279dcfbf5e7e2b9524b6382197882d1715b606f9ecc741042ef7d6"
+  },
+  {
+    "archive": "candidate-complete-gx01-test-evidence.zip",
+    "path": "security-compatibility.json",
+    "saved": "candidate-complete-gx01-test-evidence--security-compatibility.json",
+    "bytes": 2264,
+    "sha256": "da115018ab584377cd7d274f214f2a84b30eb49025f58a031cc0f61137a0402d"
+  },
+  {
+    "archive": "candidate-complete-gx01-test-evidence.zip",
+    "path": "test-report.json",
+    "saved": "candidate-complete-gx01-test-evidence--test-report.json",
+    "bytes": 4128,
+    "sha256": "6d8b93796c72a9766e6679282f9525c1016169d440bdc02d80c69e8b4471bcfb"
+  },
+  {
+    "archive": "candidate-complete-gx012-isolated-staging.zip",
+    "path": "backup-restore.json",
+    "saved": "candidate-complete-gx012-isolated-staging--backup-restore.json",
+    "bytes": 1673,
+    "sha256": "761eb4ed07b05a10b888d41364519b327ba81ced58f0aa40e4d773bea106a61b"
+  },
+  {
+    "archive": "candidate-complete-gx012-isolated-staging.zip",
+    "path": "acceptance.json",
+    "saved": "candidate-complete-gx012-isolated-staging--acceptance.json",
+    "bytes": 13330,
+    "sha256": "0d9168ee6fc7337fd8ef9915500ff2393e298779e6a2932dc4474badaa16763a"
+  },
+  {
+    "archive": "candidate-complete-gx012-isolated-staging.zip",
+    "path": "pilot-build-boundary.json",
+    "saved": "candidate-complete-gx012-isolated-staging--pilot-build-boundary.json",
+    "bytes": 28343,
+    "sha256": "d53abbe8e03021d8e69865ccd56a14f4d7121b3992b8ed48793d29e43ad50e5d"
+  },
+  {
+    "archive": "candidate-complete-gx012-isolated-staging.zip",
+    "path": "api-report.json",
+    "saved": "candidate-complete-gx012-isolated-staging--api-report.json",
+    "bytes": 4185,
+    "sha256": "0f9a305d92fe1800b4edaa38a8396042f8e7b25116c16f0139cdde43b87b216f"
+  },
+  {
+    "archive": "candidate-complete-gx012-isolated-staging.zip",
+    "path": "recovery-failures.json",
+    "saved": "candidate-complete-gx012-isolated-staging--recovery-failures.json",
+    "bytes": 950,
+    "sha256": "78822ee81521d47bbcf2e950b759c8e772d2c04322caeb322d38ad0266f60145"
+  }
+]

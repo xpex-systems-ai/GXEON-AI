@@ -4,3 +4,13 @@ docs/**/gx-01-7/evidence/*.json text eol=lf
 docs/**/gx-01-7/evidence/*.log text eol=lf
 docs/**/gx-01-7/evidence/*.gz binary
 docs/**/gx-01-7/evidence/*.png binary
+
+# Preserve GX018 evidence and reproducible helper bytes.
+docs/**/gx-01-8/evidence/*.json text eol=lf
+docs/**/gx-01-8/evidence/*.mjs text eol=lf
+docs/**/gx-01-8/evidence/*.log text eol=lf
+docs/**/gx-01-8/evidence/*.gz binary
+docs/**/gx-01-8/evidence/*.png binary
+docs/**/gx-01-8/evidence/ci-candidate/*.json text eol=lf
+# Command logs intentionally preserve final blank output lines.
+docs/**/gx-01-8/evidence/*.log whitespace=-blank-at-eof

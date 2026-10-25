@@ -1,0 +1,52 @@
+[
+  {
+    "file": "docs/gxeon/gx-01-7/FINAL_DELIVERY.md",
+    "sha256": "0de5b14694c0f07e077b91ac1cd7e9bf4b747aecc57712087b8329dade76c034",
+    "bytes": 7798
+  },
+  {
+    "file": "docs/gxeon/gx-01-7/UNIFIED_ACCEPTANCE_MATRIX.md",
+    "sha256": "1eff188590f0ef7ecaf87489b2469dce45bdeb642e2c71cae406156b55880bac",
+    "bytes": 2107
+  },
+  {
+    "file": "docs/gxeon/gx-01-7/EXECUTIVE_DECISION_MEMO.md",
+    "sha256": "9e75d7acdf1adf01ab36241ba3dcdbad3a1345493cc88280fd242e6462f7928a",
+    "bytes": 2248
+  },
+  {
+    "file": "docs/audit-os/gx-01-7/DEPENDENCY_SECURITY_CLOSURE.md",
+    "sha256": "b61bb9d86bfe2f0bb5e22387c560ea249aaa0edf2cef1d7c388ecb330601978f",
+    "bytes": 3601
+  },
+  {
+    "file": "docs/audit-os/gx-01-7/RESIDUAL_RISK_DECISIONS.md",
+    "sha256": "5b40bcd6228bbe71a213050b712118b84718fa538c044ca7d631a85f4a612eb2",
+    "bytes": 2182
+  },
+  {
+    "file": "docs/audit-os/gx-01-7/BROWSER_EXPORT_ACCEPTANCE.md",
+    "sha256": "60a9fa04cddf393ce9ab48b8eee19bfb6d79fa586ed866585371b8d45ae416d6",
+    "bytes": 2093
+  },
+  {
+    "file": "docs/audit-os/gx-01-7/INDEPENDENT_SECURITY_REVIEW_PACKAGE.md",
+    "sha256": "d3f26f809dbd4722c52b0af537463938bc744eea6b7510a02ca7c0dd1cd74486",
+    "bytes": 2269
+  },
+  {
+    "file": "docs/audit-os/gx-01-7/REMOTE_INFRASTRUCTURE_APPROVAL_PLAN.md",
+    "sha256": "188c1e908db4ca1f1041081893d22678797d1ab377c00cb23413560f18bd52e4",
+    "bytes": 1931
+  },
+  {
+    "file": "docs/omnix-ai/gx-01-7/MERCADO_LIVRE_OFFICIAL_API_AND_POLICY_AUDIT.md",
+    "sha256": "f6dc44ff0aa39926ba3608538d3a1ed531d5d67372e6b4c29576a5ca766aeed5",
+    "bytes": 5500
+  },
+  {
+    "file": "docs/omnix-ai/gx-01-7/CHATGPT_MCP_OMNIX_INTEGRATION_BLUEPRINT.md",
+    "sha256": "bcf54cd722decd13858c69941003d9046864f9b4f4e6a1afe3b653074f87c161",
+    "bytes": 2285
+  }
+]

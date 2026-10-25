@@ -1,0 +1,18 @@
+{
+  "checkedAt": "2026-10-25T11:31:07.015Z",
+  "candidate": "d71996bc73502f6c2352c0c687ef1cba90012ea4",
+  "documents": 24,
+  "relativeLinksBroken": [],
+  "exactDownloadedFileCopy": true,
+  "secretScan": {
+    "exactPrivateFixtureValuesChecked": 5,
+    "credentialPatternsChecked": 5,
+    "inflatedGzipIncluded": true,
+    "findings": [],
+    "limitations": "Targeted scan, not proof of absence of all secrets/PII; no private config/database/dumps included"
+  },
+  "humanApprovalsAutoFilled": false,
+  "publishedTextNormalizedLF": true,
+  "preservedOriginals": true,
+  "whitespaceNote": "First git diff --check flagged intentional final empty command-output lines. Scoped .log whitespace attribute preserves exact output instead of trimming evidence. Other whitespace checks remain active."
+}

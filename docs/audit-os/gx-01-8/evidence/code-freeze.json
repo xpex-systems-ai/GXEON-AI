@@ -1,0 +1,13 @@
+{
+  "initialHead": "1dc8e920a7d47d315c9482002ff9434667b596bf",
+  "codeCandidate": "d71996bc73502f6c2352c0c687ef1cba90012ea4",
+  "files": [
+    "artifacts/api-server/build.mjs",
+    "artifacts/api-server/src/tests/auditPilot.test.ts"
+  ],
+  "createdAt": "2026-10-25T11:13:17.077Z",
+  "proposal": "CODE FREEZE for independent review; not human approval or pilot authorization",
+  "dependenciesChanged": false,
+  "wireContractsChanged": false,
+  "runtimeBusinessLogicChanged": false
+}

@@ -1,0 +1,38 @@
+{
+  "recordedAt": "2026-10-25T11:15:37.884Z",
+  "initialHead": "1dc8e920a7d47d315c9482002ff9434667b596bf",
+  "candidate": "d71996bc73502f6c2352c0c687ef1cba90012ea4",
+  "localEvidenceSourceDirty": true,
+  "localAcceptanceSourceCommit": "1dc8e920a7d47d315c9482002ff9434667b596bf",
+  "explanation": "Local tests ran with the two reviewed source changes before candidate commit; full-file hashes bind them to candidate. Dirty case-collision and generated health reports excluded. CI clean checkout is separate evidence.",
+  "candidateFiles": [
+    {
+      "file": "artifacts/api-server/build.mjs",
+      "sha256": "ea96426d11805dbec78db71cd3c17675a353120541ec2a6144cc305d6d8b7d58",
+      "gitSha256": "27f9d19febac56ccada9f1b056d85d95f88ecdd57abcd0ec43d0f6009e4dda08",
+      "normalizedLfSha256": "27f9d19febac56ccada9f1b056d85d95f88ecdd57abcd0ec43d0f6009e4dda08"
+    },
+    {
+      "file": "artifacts/api-server/src/tests/auditPilot.test.ts",
+      "sha256": "8263a763a4ed131c77ad4f8976a6674da21e97571f8aceca61dc1aa7576fce37",
+      "gitSha256": "9acb65ece55471a6e96b44c78a04c8e14d35f816dd061474f5b5350e867b377a",
+      "normalizedLfSha256": "9acb65ece55471a6e96b44c78a04c8e14d35f816dd061474f5b5350e867b377a"
+    }
+  ],
+  "bundleByteIdenticalToInitialBuild": true,
+  "bundle": [
+    {
+      "file": "audit-pilot.mjs",
+      "bytes": 2153148,
+      "sha256": "48819cdcea62dde340e2ff0071c0c11bbdfbd1e671842c383ccb67c4f896ff1f"
+    },
+    {
+      "file": "audit-pilot.mjs.map",
+      "bytes": 3546382,
+      "sha256": "54da8fd09049398abe656827b8dec0baefd6d23f54e626b738070f27eecb2c04"
+    }
+  ],
+  "contractsDiff": "",
+  "nonBuiltinExternal": "pg-native; optional and not installed in this inventory; NODE_PG_FORCE_NATIVE must remain unset. All remaining emitted externals are Node builtins.",
+  "lineEndingNote": "Windows working files may contain CRLF; normalized LF hashes equal Git blob hashes; actual working hashes are retained too."
+}
