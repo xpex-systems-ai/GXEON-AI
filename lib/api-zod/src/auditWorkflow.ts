@@ -38,7 +38,7 @@ export const auditWorkflowCaseSchema = z
     id: z.string().uuid(),
     title: z.string(),
     status: z.enum(["DRAFT", "IN_REVIEW", "READY_FOR_REPORT", "CLOSED"]),
-    metadata: z.record(z.unknown()),
+    metadata: z.record(z.string(), z.unknown()),
   })
   .passthrough();
 export const auditWorkflowActionSchema = z.object({
@@ -113,7 +113,7 @@ export const auditWorkflowDetailSchema = z.object({
         id: z.string().uuid(),
         case_id: z.string().uuid(),
         redacted_text: z.string(),
-        metadata: z.record(z.unknown()),
+        metadata: z.record(z.string(), z.unknown()),
       })
       .passthrough(),
   ),
@@ -124,13 +124,13 @@ export const auditWorkflowDetailSchema = z.object({
         case_id: z.string().uuid(),
         title: z.string(),
         summary: z.string(),
-        metadata: z.record(z.unknown()),
+        metadata: z.record(z.string(), z.unknown()),
       })
       .passthrough(),
   ),
   reports: z.array(
     z
-      .object({ id: z.string().uuid(), content: z.record(z.unknown()) })
+      .object({ id: z.string().uuid(), content: z.record(z.string(), z.unknown()) })
       .passthrough(),
   ),
 });

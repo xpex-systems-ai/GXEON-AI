@@ -1,0 +1,55 @@
+{
+  "queriedAt": "2026-10-25T00:05:51.367Z",
+  "scope": "Read-only GitHub profile, named repo, and authenticated search; public metadata only in this record",
+  "profile": {
+    "url": "https://github.com/xpex-systems-ai",
+    "type": "User",
+    "blog": ""
+  },
+  "root": {
+    "name": "xpex-systems-ai/GXEON-AI",
+    "url": "https://github.com/xpex-systems-ai/GXEON-AI",
+    "homepage": "",
+    "description": null,
+    "defaultBranch": "main",
+    "archived": false
+  },
+  "omnix": {
+    "total": 0,
+    "incomplete": false,
+    "publicResults": [],
+    "nonPublicResultsOmitted": 0
+  },
+  "knownProjects": {
+    "total": 11,
+    "incomplete": false,
+    "publicResults": [
+      {
+        "name": "xpex-systems-ai/xpex-systems-ai",
+        "url": "https://github.com/xpex-systems-ai/xpex-systems-ai",
+        "homepage": "https://xpex-systems-ai.vercel.app",
+        "description": "Official corporate repository for XPeX Systems AI — AI Systems, Agents & Company Intelligence.",
+        "defaultBranch": "main",
+        "archived": false
+      },
+      {
+        "name": "xpex-systems-ai/XPeX-Plugin-Factory-",
+        "url": "https://github.com/xpex-systems-ai/XPeX-Plugin-Factory-",
+        "homepage": null,
+        "description": null,
+        "defaultBranch": "main",
+        "archived": false
+      },
+      {
+        "name": "xpex-systems-ai/remix-of-remix-of-remix-of-remix-of-xpex-api-hub-87",
+        "url": "https://github.com/xpex-systems-ai/remix-of-remix-of-remix-of-remix-of-xpex-api-hub-87",
+        "homepage": "https://remix-of-remix-of-remix-of-remix-of-delta-five.vercel.app",
+        "description": null,
+        "defaultBranch": "main",
+        "archived": false
+      }
+    ],
+    "nonPublicResultsOmitted": 8
+  },
+  "doesNotProveWorldwideAbsenceOfOmnixRepository": true
+}

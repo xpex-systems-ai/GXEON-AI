@@ -1,0 +1,103 @@
+{
+  "node": "24.19.0",
+  "pnpm": "10.28.1",
+  "testData": true,
+  "scope": "GX017 local controlled checkout before commit; final CI must name exact SHA",
+  "commands": [
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "result": "PASS baseline and retained final selection",
+      "evidence": "baseline-install.log / compatible-install.log"
+    },
+    {
+      "command": "node scripts/audit-staging/lint.mjs",
+      "result": "PASS 31 files, zero errors",
+      "evidence": "retained-lint.log"
+    },
+    {
+      "command": "pnpm run typecheck",
+      "result": "PASS after UI change",
+      "evidence": "gx017-ui-final-types.log"
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server run typecheck:audit-tests",
+      "result": "PASS",
+      "evidence": "retained-testTypes.log"
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server exec tsx --test --test-concurrency=1 src/tests/auditWorkflow.test.ts src/tests/auditPilot.test.ts",
+      "result": "PASS PGlite16 / native PG17 (TEST_AUDIT_DATABASE_URL set privately)",
+      "evidence": "retained-tests.log / retained-native-tests.log"
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server exec tsx --test src/tests/auditPilotDatabase.test.ts",
+      "result": "PASS1 native PG17 (TEST_AUDIT_PILOT_DATABASE_URL set privately)",
+      "evidence": "retained-pilot-db.log"
+    },
+    {
+      "command": "node scripts/audit-staging/security-compatibility.mjs",
+      "result": "PASS7 bounded groups, no tunnel",
+      "evidence": "security-compatibility.json"
+    },
+    {
+      "command": "node scripts/audit-staging/codegen-smoke.mjs",
+      "result": "PASS generated client/schema typecheck and validation",
+      "evidence": "codegen-smoke.json"
+    },
+    {
+      "command": "pnpm run build:libs",
+      "result": "PASS",
+      "evidence": "retained-libs.log"
+    },
+    {
+      "command": "pnpm --filter @workspace/api-server run build",
+      "result": "PASS dedicated boundary and generalAPI build",
+      "evidence": "retained-apiBuild.log"
+    },
+    {
+      "command": "pnpm --filter @workspace/gxeon-dashboard run build",
+      "result": "PASS chunk size warning recorded",
+      "evidence": "retained-dashboardBuild.log"
+    },
+    {
+      "command": "pnpm run health:report",
+      "result": "PASS generated reports excluded from commit",
+      "evidence": "gx017-current-health.log"
+    },
+    {
+      "command": "node scripts/audit-staging/verify.mjs",
+      "result": "PASS14 groups",
+      "evidence": "acceptance.json"
+    },
+    {
+      "command": "node scripts/audit-staging/recovery-failures.mjs",
+      "result": "Initial health TimeoutError, retry PASS after owned restart",
+      "evidence": "recovery-v1-failures.log / recovery-failures.json"
+    },
+    {
+      "command": "node scripts/audit-staging/backup-restore.mjs",
+      "result": "PASS new isolated target, no overwrite",
+      "evidence": "backup-restore.json"
+    },
+    {
+      "command": "IAB visible link download + node scripts/audit-staging/verify-report.mjs <observed file path>",
+      "result": "PASS same downloaded file before and after owned API+DB restart",
+      "evidence": "browser-before-restart.json / browser-after-restart.json"
+    },
+    {
+      "command": "pnpm audit --json",
+      "result": "FAIL baseline10 / retained4; no waiver",
+      "evidence": "baseline-audit.json.gz / retained-audit.json.gz"
+    },
+    {
+      "command": "Direct Expo CLI startup with EXPO_OFFLINE=1, CI=1, --localhost on owned18081",
+      "result": "Health119049ms; no full mobile build; first incompatible flags attempt preserved; no cache clear",
+      "evidence": "metro-probe-flags-fixed.json"
+    },
+    {
+      "command": "pnpm run build",
+      "result": "NOT RUN locally: mobile script clears protected caches; Linux full build required on finalCI",
+      "evidence": "Final PR receipt / GXEON Build"
+    }
+  ]
+}

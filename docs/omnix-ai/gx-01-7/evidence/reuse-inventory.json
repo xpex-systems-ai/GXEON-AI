@@ -1,0 +1,292 @@
+{
+  "generatedAt": "2026-10-25T00:38:04.222Z",
+  "sourceBase": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+  "uncommittedGX017CorrectionsIncluded": true,
+  "rows": [
+    {
+      "file": "artifacts/api-server/src/audit-pilot.ts",
+      "sha256": "2cf9c2feda759d8b37927bc26cfcb526f0e93536187e4a363890e99c19dd3c45",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/api-server/src/auditPilotApp.ts",
+      "sha256": "3a93932a19036bd81ac1a547c3f423aefc6b4be7ba0e97ff0116d792386a35b1",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/api-server/src/auditPilotConfig.ts",
+      "sha256": "c6a39da2c2a17cfd505acaca1b12579a0de71ebed3b2cbfbc148cf176790d096",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/api-server/src/auditPilotDatabase.ts",
+      "sha256": "29574f932ccb93776bef4fdf8d3fe15e6a528d379942eeb00d09d61725515de9",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/cliInstructionBuilder.ts",
+      "sha256": "52de42b1cc3882057f6b1dd475ae0da1cfe31da32b86eafd86fc0d8da153c9b9",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/connectorBrainSummary.ts",
+      "sha256": "ea6465ae0c70fc988ec0fc195410e9af9d75fe79caf235e3490b48f0409293f3",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/connectorRegistry.ts",
+      "sha256": "f65d32aee42129deec1a9c6da632be6015fe0aa9ec3804e96b887d50056883af",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/connectorStatusEngine.ts",
+      "sha256": "1bd17bc9fe67c3bc7d851d20ebed96a013f5ec87bbce86511ffb3c9f72be9e0e",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/connectorStatusStore.ts",
+      "sha256": "2ed30d0561c7a5c3373ce5bf56f2913d55ec1136189a2090177811c4d5921292",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/connectorTypes.ts",
+      "sha256": "d65c3e77cd98d4e25809f087bc1ac15d5323b726078750cc6197bfab44678100",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/github/githubAppInstallationClient.ts",
+      "sha256": "47e339578fbd95d564e9797b0266c603b08960d52be8566343dbca9f2aeeaffb",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/github/githubAuthConfig.ts",
+      "sha256": "c2a16a37d086088da0813078514126aa6bad368b9083907d0bf15c6c7d0b152f",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/github/githubConnectorActivityLog.ts",
+      "sha256": "af745cf19278da521cf3c36eda915b69e4db7abfe280d88fef12d5e2358b2ac6",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/github/githubConnectorConfig.ts",
+      "sha256": "0f63285ff432945ed5a142e9653255faa674d57b4eb7f0bfeca9799c5b031624",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/github/githubConnectorStateStore.ts",
+      "sha256": "520288b43c5d5e29f1140fc4aa4583ad63b014ed1cf1e1f026559f6e8d89f55a",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/github/githubConnectorTypes.ts",
+      "sha256": "4a5e697ae601d143a208d2ae6f301ed13b10288a534e353da8d16ff99991ab61",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/github/githubInstallationResolver.ts",
+      "sha256": "a9b26b89ecdeb74770c3ef28a8877d3a3c6a2bff5b9fb7958a3e690dd8fffd26",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/github/githubOAuthState.ts",
+      "sha256": "6ddbe6ef42c241135afe721c4bdfd94d30e4c47eb6d93db4bfcd9f9c2ec56847",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/github/githubReadonlyClient.ts",
+      "sha256": "d935d65de343dadf45ae308222ea916a98ea41819bb0f4649fa5d993336eb6fd",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/github/githubReadonlyNormalizer.ts",
+      "sha256": "ae78ea5b9ffda0ae78bc5d9268b612366db7c19c5656f8247971eaaa2dbc6dbe",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/microsoft365/microsoft365ConnectorActivityLog.ts",
+      "sha256": "97f21cd113b32ce6daa639e54ed6005c58803dbf0fc88e23f65921ce51ac9310",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/microsoft365/microsoft365ConnectorConfig.ts",
+      "sha256": "9ff244df008cfc748a2f1a19b6cce47d4539cd1836f28edd4384c66598994337",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/microsoft365/microsoft365ConnectorTypes.ts",
+      "sha256": "1a2530f264fb3989085452fd936d9b4b24eff99879eb5f85cac6d55e545f798b",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/microsoft365/microsoft365ReadonlyClient.ts",
+      "sha256": "f273720d9b1abe508bd34ab90a728b7b9f418674db1f74191d3a6466bd306821",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/microsoft365/microsoft365ReadonlyNormalizer.ts",
+      "sha256": "1383df155067c96ba0b211587e5e8fd00758c08f51ce615499aa9108d7db3bea",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/oauthLaunchBuilder.ts",
+      "sha256": "ecd322bb2142a63c3bdbae7e92a4945bed36c5a0466392653b833a88ce91f773",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/railway/railwayConnectorActivityLog.ts",
+      "sha256": "3fe0cc74032351dc977266729a324363ef7dfdcba0f66d805fb6292cb9944fb9",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/railway/railwayConnectorConfig.ts",
+      "sha256": "c1f70e80758f611b0df5fc71faaff076d88c05a6435360887c8d5176871e94b8",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/railway/railwayConnectorTypes.ts",
+      "sha256": "9219f5cd0a0b2686f72c9ddb806c1e6e4a95c96847115aeb2c8cf1e5ea37042d",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/railway/railwayReadonlyClient.ts",
+      "sha256": "4db300e0c76a3b069d4fe1bba40eb4d82fb3e64e12794eb16532d88301cd3614",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/railway/railwayReadonlyNormalizer.ts",
+      "sha256": "c6fe8e203a4157821ec925a9c73eda7512e73f51940164d411cb6c4a1d9135bf",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/supabase/supabaseConnectorActivityLog.ts",
+      "sha256": "d80f9dc4a34e8e10ea80de0262283017ef634ce437abeaff813fa574d0b15075",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/supabase/supabaseConnectorConfig.ts",
+      "sha256": "7d8ecb40a7f82d2ab9fcf70f2b27928f0ac492efaa3d15a7f11131cfbea3c15f",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/supabase/supabaseConnectorTypes.ts",
+      "sha256": "b188a65127f1e436e51ed4a11f1e762f74c69261968e8848c6829d9a89f78b50",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/supabase/supabaseReadonlyClient.ts",
+      "sha256": "65305f7bee297a85fb7b9882e953fe39292b8980b90f34e574525fe7c8968f82",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/supabase/supabaseReadonlyNormalizer.ts",
+      "sha256": "246ed129635e2a5f59e69297c24c2e6efd42c3955965fe8e7cdbcc5ee7bd3e78",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/vercel/vercelConnectorActivityLog.ts",
+      "sha256": "25382146d4a7cb5f0ec75a4348a215ff24348bd4f78d1bcedb68e4fca54c6066",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/vercel/vercelConnectorConfig.ts",
+      "sha256": "80b237303165bf3517e4f1f6bc580726fe8cdfce0c5dd3665d5c92bf365c463c",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/vercel/vercelConnectorTypes.ts",
+      "sha256": "56386531589c885f1b2877e6876c2923252898294fef5e631acecbee82bdb361",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/vercel/vercelReadonlyClient.ts",
+      "sha256": "63fd30581bdeaef24d95e674195ddb4ff6f3353107f55b277acc31cfb045f656",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/vercel/vercelReadonlyNormalizer.ts",
+      "sha256": "9f7d31054ab875565a2ca16bfbdea57a3c3fa6a4bc5c0de8bb9b9200428687e1",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/connectors/walletSafetyBuilder.ts",
+      "sha256": "e8435c9b26b379434be90a0c7387f02022f36dd302a5a50ea928fc31a87c41dc",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/auditWorkflow.ts",
+      "sha256": "2807b570397ea5ec4620d4929cdb16bc39a3d4e6d25d3426ee57cce5421b295a",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/connectors/github.ts",
+      "sha256": "3df0eb15206c9b70e303b625c7961bd1512651c63681ab773574dbdee7e65d58",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/connectors/microsoft365.ts",
+      "sha256": "86bfb581bc6b985a0ad6f5330242183992742a89e38c93aab9c0dba2aeecbaec",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/connectors/railway.ts",
+      "sha256": "3d32a238000c7de9e880bd2f6d70baf8680e531db857d3054417bf763d653ae8",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/connectors/supabase.ts",
+      "sha256": "80277b359102aaa6f859b5614adae44addd7e11b76f089d1dd6cb80ec88edff1",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/routes/connectors/vercel.ts",
+      "sha256": "49b107e522ba0292a4921cafd97e22abaec3c525676de003eba3784fe059f79a",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    },
+    {
+      "file": "artifacts/api-server/src/services/auditWorkflowChecks.ts",
+      "sha256": "e76f98bd4f129c9a888971cd9dfaf6314f10b75596c3a6897426c282229ece31",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/api-server/src/services/auditWorkflowService.ts",
+      "sha256": "08d9c648a00c25ca4cd1fa296cbb2f90d0000e6c9de8f97e100a1d440f1ef83a",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/api-server/src/tests/auditPilot.test.ts",
+      "sha256": "3ce88990708d807ed2de64cf00ca81ffb9513cc666147fa520a4cf6f7f7a6e22",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/api-server/src/tests/auditPilotDatabase.test.ts",
+      "sha256": "ece99a49b08b509333aa8dd1c05d0ef5b8ad6cee2454d90a5e15d8a133441bf0",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/api-server/src/tests/auditWorkflow.test.ts",
+      "sha256": "3fcbea8c9ae04e30fdc60a9e28e93b9549627fe39c692026f5c6194c9daaf2dd",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/api-server/src/tests/auditWorkflowDemo.ts",
+      "sha256": "3c017daaed901fcaf741652a0e35e5c134ebdc7cd761196a27f3acbd645bc016",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "artifacts/gxeon-dashboard/src/pages/AuditWorkflowPage.tsx",
+      "sha256": "2a0eeb42537f17f632d231298f8fe11864cf5f88d22bcc1cbb7afa0f0c9b7e67",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "lib/api-zod/src/auditWorkflow.ts",
+      "sha256": "58f26f67613e9fe3b9f4a99f6cb1eea0048cb5900965855fb5fab95c48e76457",
+      "classification": "Source exists; only tested subset described in GX017 acceptance"
+    },
+    {
+      "file": "lib/db/src/schema/audit.ts",
+      "sha256": "629c5251c71d3e17d301a1c6d99cdb6d854c55f1dbbf9000a85fe446c6544e54",
+      "classification": "Source existence only; operational capability NOT VERIFIED"
+    }
+  ]
+}

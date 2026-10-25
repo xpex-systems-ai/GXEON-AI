@@ -1,0 +1,3 @@
+
+> @workspace/api-server@0.0.0 typecheck:audit-tests [WORKSPACE]\GXEON-AI-gx017\artifacts\api-server
+> tsc -p tsconfig.audit-tests.json --noEmit

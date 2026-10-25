@@ -10,8 +10,20 @@ import { createAuditWorkflowService } from "../services/auditWorkflowService";
 import { createAuditPilotApp } from "../auditPilotApp";
 import { loadAuditPilotConfig } from "../auditPilotConfig";
 import { AuditWorkflowError, validateWorkflowIntake } from "../services/auditWorkflowChecks";
+import { auditWorkflowDetailSchema, auditWorkflowReportSchema } from "@workspace/api-zod";
 
 const synthetic = () => randomBytes(32).toString("base64url");
+test("Zod4 accepts an existing GX016 report without changing its wire data and rejects invalid references", async () => {
+  const report = JSON.parse(await readFile(new URL("../../../../docs/audit-os/gx-01-6/evidence/local-api-report.json", import.meta.url), "utf8"));
+  assert.deepEqual(auditWorkflowReportSchema.parse(report), report);
+  const changed = structuredClone(report);
+  changed.report.findings[0].evidenceIds = [randomUUID()];
+  assert.equal(auditWorkflowReportSchema.safeParse(changed).success, false);
+  const detail = { ok: true, item: { id: report.caseId, title: "TEST DATA", status: "CLOSED",
+    metadata: { scope: { testData: true }, optionalDiagnostic: null } }, evidences: [], findings: [], reports: [] };
+  assert.deepEqual(auditWorkflowDetailSchema.parse(detail), detail, "Record metadata preserves string keys and unknown JSON values");
+  assert.equal(auditWorkflowDetailSchema.safeParse({ ...detail, item: { ...detail.item, id: "00000000-0000-4000-7000-000000000000" } }).success, false);
+});
 test("dedicated runtime configuration fails closed without distinct roles, private DB and exact HTTPS origins", () => {
   const valid = { NODE_ENV: "production", PORT: "8080", GXEON_AUDIT_PILOT_ENABLED: "true",
     GXEON_AUDIT_DB_PROVIDER: "postgres", GXEON_AUDIT_AUTO_RUN_MISSION_006: "false",

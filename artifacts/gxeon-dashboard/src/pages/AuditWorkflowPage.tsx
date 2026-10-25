@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import {
   auditWorkflowActionSchema as actionSchema,
@@ -37,6 +37,8 @@ export default function AuditWorkflowPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const [download, setDownload] = useState<{ url: string; caseId: string }>();
+  useEffect(() => () => { if (download) URL.revokeObjectURL(download.url); }, [download]);
 
   async function request(path: string, body?: unknown) {
     return readAuditJson(
@@ -115,6 +117,7 @@ export default function AuditWorkflowPage() {
               setRole(e.target.value as typeof role);
               setToken("");
               setDetail(undefined);
+              setDownload(undefined);
             }}
           >
             <option value="operator">Operador</option>
@@ -257,6 +260,7 @@ export default function AuditWorkflowPage() {
             onChange={(e) => {
               setCaseId(e.target.value);
               setDetail(undefined);
+              setDownload(undefined);
             }}
           />
         </label>
@@ -379,17 +383,21 @@ export default function AuditWorkflowPage() {
                   type: "application/json",
                 }),
               );
-              const link = document.createElement("a");
-              link.href = url;
-              link.download = `audit-${caseId}.json`;
-              link.click();
-              setTimeout(() => URL.revokeObjectURL(url), 1000);
-              setMessage("Arquivo do relatório preparado. Confira o download recebido no navegador.");
+              // Keep a real, accessible download link until replacement/unmount.
+              // Preparing a Blob is not proof that the browser received a file.
+              setDownload({ url, caseId });
+              setMessage("Relatório JSON preparado. Use Baixar relatório JSON e confira o arquivo recebido no navegador.");
             })
           }
         >
           Exportar JSON
         </button>
+        {download && download.caseId === caseId && detail?.item.status === "CLOSED" && (
+          <a className="ml-3 inline-block rounded border p-2 text-cyan-300 underline"
+            href={download.url} download={`audit-${download.caseId}.json`}>
+            Baixar relatório JSON
+          </a>
+        )}
       </section>
       {busy && <p role="status">Aguardando confirmação da API…</p>}
       {message && <p role="status">{message}</p>}

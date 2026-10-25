@@ -124,7 +124,13 @@ globalThis.__dirname = __bannerPath.dirname(globalThis.__filename);
   const inputs = Object.entries(entry[1].inputs).filter(([, value]) => value.bytesInOutput > 0).map(([name]) => name.replaceAll("\\", "/"));
   const forbidden = inputs.filter(name => /(?:^|\/)src\/(?:app\.ts|index\.ts|routes\/index\.ts|routes\/(?!auditWorkflow\.ts)|services\/(?!auditWorkflow))/u.test(name) && (name.startsWith("src/") || name.includes("artifacts/api-server/")));
   if (forbidden.length) throw new Error("AUDIT_PILOT_IMPORT_BOUNDARY_FAILED");
-  await writeFile(path.join(distDir, "audit-pilot-boundary.json"), JSON.stringify({ entry: "src/audit-pilot.ts", inputs, forbiddenImports: forbidden, note: "Only retained inputs of the dedicated output; not a production deployment." }, null, 2));
+  const schemaRequire = createRequire(path.resolve(artifactDir, "../../lib/api-zod/package.json"));
+  const zodVersion = schemaRequire("zod/package.json").version;
+  const legacyZodInputs = inputs.filter(name => /\/zod\/v3\//u.test(name));
+  if (zodVersion !== "4.6.6" || legacyZodInputs.length || !inputs.some(name => /\/zod\/v4\//u.test(name)))
+    throw new Error("AUDIT_PILOT_ZOD_BOUNDARY_FAILED");
+  await writeFile(path.join(distDir, "audit-pilot-boundary.json"), JSON.stringify({ entry: "src/audit-pilot.ts", inputs, forbiddenImports: forbidden,
+    zod: { version: zodVersion, legacyInputs: legacyZodInputs }, note: "Only retained inputs of the dedicated output; not a production deployment." }, null, 2));
 }
 
 buildAll().catch((err) => {

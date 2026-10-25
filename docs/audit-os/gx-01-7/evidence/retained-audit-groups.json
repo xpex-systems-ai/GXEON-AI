@@ -1,0 +1,145 @@
+{
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 1,
+      "high": 3,
+      "critical": 0
+    },
+    "dependencies": 1182,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1182
+  },
+  "groups": [
+    {
+      "module": "decode-uri-component",
+      "severities": {
+        "moderate": 1
+      },
+      "versions": [
+        "0.2.2"
+      ],
+      "patches": [
+        ">=0.5.0"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-vcc3-ghjq-m6fr",
+          "severity": "moderate",
+          "title": "decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input",
+          "patched": ">=0.5.0",
+          "url": "https://github.com/advisories/GHSA-vcc3-ghjq-m6fr",
+          "findings": [
+            {
+              "version": "0.2.2",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>expo-router>query-string>decode-uri-component"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "module": "node-forge",
+      "severities": {
+        "high": 1
+      },
+      "versions": [
+        "1.4.0"
+      ],
+      "patches": [
+        "<0.0.0"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-86w9-cpqp-85rv",
+          "severity": "high",
+          "title": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+          "patched": "<0.0.0",
+          "url": "https://github.com/advisories/GHSA-86w9-cpqp-85rv",
+          "findings": [
+            {
+              "version": "1.4.0",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>@expo/cli>node-forge"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "module": "http-cache-semantics",
+      "severities": {
+        "high": 1
+      },
+      "versions": [
+        "4.2.0"
+      ],
+      "patches": [
+        "<0.0.0"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-ch52-4w7c-c8xp",
+          "severity": "high",
+          "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+          "patched": "<0.0.0",
+          "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+          "findings": [
+            {
+              "version": "4.2.0",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>@expo/ngrok>got>cacheable-request>http-cache-semantics"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "module": "zod",
+      "severities": {
+        "high": 1
+      },
+      "versions": [
+        "3.25.76"
+      ],
+      "patches": [
+        ">=4.6.6"
+      ],
+      "roots": [
+        "artifacts__gxeon-dashboard-mobile"
+      ],
+      "advisories": [
+        {
+          "id": "GHSA-mrhx-c7xc-m3w5",
+          "severity": "high",
+          "title": "Zod can exhaust memory while validating oversized constrained collections",
+          "patched": ">=4.6.6",
+          "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+          "findings": [
+            {
+              "version": "3.25.76",
+              "paths": [
+                "artifacts__gxeon-dashboard-mobile>zod"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

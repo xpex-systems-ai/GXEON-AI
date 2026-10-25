@@ -1,0 +1,125 @@
+✔ Zod4 accepts an existing GX016 report without changing its wire data and rejects invalid references (143.5897ms)
+✔ dedicated runtime configuration fails closed without distinct roles, private DB and exact HTTPS origins (4.5688ms)
+✔ dedicated HTTP boundary preserves the audit lifecycle and excludes legacy, administrative and financial APIs (19462.1678ms)
+✔ GX intake refuses oversized check collections before traversing elements in Zod (3.5148ms)
+✔ dedicated admission limits bound role rate and concurrent readiness without trusting forwarded IPs (106.4515ms)
+✔ REST list contracts reject error objects, invalid JSON and unidentified rows (90.4974ms)
+✔ bounded static checks and secret/input validation (10.4604ms)
+✔ report contract rejects cross-case envelopes and unknown evidence references (9.1996ms)
+✔ HTML transport fails with a useful routing diagnostic; raw server errors stay hidden (2.143ms)
+▶ real SQL persistence and HTTP lifecycle, independent review, rollback and evidence integrity
+  ✔ private routes deny missing/invalid credentials; public contracts and unknown API routes are JSON (374.5348ms)
+  ✔ write flags, validation and review gate prevent unsafe transitions (70.0987ms)
+  ✔ intake → checks → review → report → closed; repeated runs/finalization do not duplicate (404.6798ms)
+  ✔ tampered evidence is blocked; failed intake rolls back assets and cases (97.1819ms)
+[21:12:08.983] [32mINFO[39m (24340): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 1,
+      "method": "GET",
+      "url": "/api/v1/audit/cases"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 32
+  ✔ identical operator/reviewer tokens cannot approve; provider failures are redacted (40.5597ms)
+[21:12:09.018] [32mINFO[39m (24340): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 2,
+      "method": "GET",
+      "url": "/api/v1/audit/mission-control"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 9
+[21:12:09.037] [32mINFO[39m (24340): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 3,
+      "method": "GET",
+      "url": "/api/v1/audit/schema-diagnostics"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 2
+[21:12:09.132] [32mINFO[39m (24340): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 4,
+      "method": "POST",
+      "url": "/api/v1/audit/cases"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 1
+[21:12:09.149] [32mINFO[39m (24340): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 5,
+      "method": "GET",
+      "url": "/api/healthz"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 3
+[21:12:09.166] [32mINFO[39m (24340): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 6,
+      "method": "GET",
+      "url": "/api/v1/audit/health"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 4
+[21:12:09.180] [32mINFO[39m (24340): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 7,
+      "method": "GET",
+      "url": "/api/v1/audit/modules"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2
+[21:12:09.199] [32mINFO[39m (24340): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 8,
+      "method": "GET",
+      "url": "/api/v1/audit/offers/catalog"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 5
+[21:12:09.211] [32mINFO[39m (24340): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 9,
+      "method": "GET",
+      "url": "/api/v1/audit/health"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1
+[21:12:09.232] [32mINFO[39m (24340): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 10,
+      "method": "GET",
+      "url": "/api/v1/audit/not-a-route"
+    }
+    [35mres[39m: {
+      "statusCode": 404
+    }
+    [35mresponseTime[39m: 6
+  ✔ changes after review invalidate approval; report tampering blocks export (145.1302ms)
+✔ real SQL persistence and HTTP lifecycle, independent review, rollback and evidence integrity (25799.0599ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 98059.5999

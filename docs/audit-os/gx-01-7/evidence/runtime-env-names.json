@@ -1,0 +1,19 @@
+{
+  "source": "artifacts/api-server/src/auditPilotConfig.ts",
+  "namesOnly": true,
+  "names": [
+    "DATABASE_URL",
+    "GXEON_AUDIT_ALLOWED_ORIGINS",
+    "GXEON_AUDIT_ALLOW_DB_WRITES",
+    "GXEON_AUDIT_AUTO_CREATE_FIRST_PROPOSAL",
+    "GXEON_AUDIT_AUTO_RUN_MISSION_006",
+    "GXEON_AUDIT_DATABASE_TLS_CA",
+    "GXEON_AUDIT_DB_PROVIDER",
+    "GXEON_AUDIT_OPERATOR_TOKEN",
+    "GXEON_AUDIT_PILOT_ENABLED",
+    "GXEON_AUDIT_REVIEWER_TOKEN",
+    "GXEON_AUDIT_WRITE_MODE",
+    "NODE_ENV",
+    "PORT"
+  ]
+}

@@ -66,6 +66,10 @@ jobs:
           node scripts/audit-staging/codegen-smoke.mjs
           mkdir -p "$RUNNER_TEMP/gx01-evidence"
           cp .gx012/evidence/codegen-smoke.json "$RUNNER_TEMP/gx01-evidence/"
+      - name: Reviewed GX017 parent API compatibility and patched schema runtime
+        run: |
+          node scripts/audit-staging/security-compatibility.mjs
+          cp .gx012/evidence/security-compatibility.json "$RUNNER_TEMP/gx01-evidence/"
       - run: pnpm run typecheck:libs
       - run: pnpm --filter @workspace/api-server run typecheck
       - run: pnpm --filter @workspace/api-server run typecheck:audit-tests
@@ -97,7 +101,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build:libs
-      - run: pnpm run build:apps
+      # Staging exercises only its API and frontend; the separate Build workflow still builds the entire monorepo.
+      - run: pnpm --filter @workspace/api-server --filter @workspace/gxeon-dashboard run build
       - name: Start isolated PostgreSQL 17 and existing applications
         run: |
           pnpm run stage:audit init

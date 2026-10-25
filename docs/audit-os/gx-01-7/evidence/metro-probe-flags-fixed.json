@@ -1,0 +1,363 @@
+{
+  "testData": true,
+  "repo": "GXEON-AI-gx017",
+  "mode": "Direct Expo CLI offline startup only; existing build script and its cache deletion were NOT executed",
+  "offlineEnvironmentSupported": true,
+  "expoVersion": "54.0.34",
+  "port": 18081,
+  "ownedPid": 10920,
+  "terminationScope": "Only the directly spawned CLI and its child tree; no unrelated process selected",
+  "cacheDeletionRequested": false,
+  "temporaryFilesRetained": true,
+  "startupHealthMs": 119049,
+  "previousBuildBudgetMs": 60000,
+  "exceededPreviousBudget": true,
+  "childExitCode": null,
+  "samples": [
+    {
+      "elapsedMs": 5025,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 10507,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 15540,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 20570,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 25646,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 30691,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 35707,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 40723,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 45746,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 51006,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 56017,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 61720,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 66933,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 72621,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 78266,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 83316,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 88365,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 93389,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 98410,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 103441,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 108462,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 114028,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 119049,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "TimeoutError"
+      },
+      "localhost": {
+        "status": 200,
+        "body": "packager-status:running"
+      },
+      "[::1]": {
+        "status": 200,
+        "body": "packager-status:running"
+      }
+    }
+  ]
+}

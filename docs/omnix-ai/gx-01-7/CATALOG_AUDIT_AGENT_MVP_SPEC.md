@@ -1,0 +1,17 @@
+# GX-01.7 — OMNIX Commerce Catalog Audit Agent
+
+**PLANEJADO; implementação e onboarding BLOCKED por política/evidência.** Um único agente de diagnóstico read-only do catálogo de vendedor consentido. Não é scanner de concorrentes nem execução de mudanças comerciais. Todo exemplo aqui é hipótese/testData, não resultado de vendedor.
+
+Usuário alvo: responsável nominal por um vendedor/organização. Escopo inicial proposto: até50anúncios explicitamente selecionados, um site/conta e uma execução manual, limite configurável menor conforme quota oficial; zero agendamento/webhook inicialmente. Esse50 é limite de produto proposto, não quota da API. Sem acesso a compradores, pedidos, finanças, mensagens, campanhas ou anúncios de outros vendedores.
+
+Entradas: org/ator/membership, consentimento verificável, conta do provedor obtida pelo backend, itemIDs autorizados, finalidade, versão das regras, janela e testData. Não aceitar token/URL arbitrária do usuário/modelo. Backend coleta somente endpoints oficiais read-only validados para anúncio/categoria/atributos/variação/imagem/estoque visível necessário. Método/endpoint/schema final dependem da auditoria integral; nenhum contrato remoto foi homologado.
+
+Regras candidatas determinísticas: atributos exigidos da categoria ausentes, campos declarados inconsistentes, referência de imagem ausente, variação incompleta, disponibilidade informada como desconhecida/inconsistente. Título é comparado com metadados oficiais da categoria, sem inventar tamanho universal. Estoque zero não é automaticamente defeito. Nenhuma recomendação de preço/ranking ou estimativa de vendas. Diferenciar produto de catálogo/item/UserProduct; quando semântica não comprovada→UNKNOWN/NOT_APPLICABLE.
+
+Evidência proposta: evidenceId,org,providerAccountId,itemId,endpoint/método permitido,observedAt,sourceVersion,ruleVersion,fieldsUsed,redactedSnapshot,sha256,consentId,retentionUntil. Não armazenar access/refresh tokens, dados de comprador ou resposta bruta indiscriminada. Hash comprova integridade, não veracidade do provedor. Snapshot inválido/incompleto expira e não sustenta novo achado.
+
+Saída proposta: runId/status,coverage de itens realmente lidos,total solicitado/inspecionado/falhou,findings(severidade operacional justificada,rule,evidenceIds,limitação,ação sugerida),reviewState,reportVersion. Exportação segregada por tenant com trilha auditável. Sem dado suficiente→PARTIAL/FAILED, nunca preencher com mock em resultado real. Relatório exibe testData, alcance, data e que não houve alteração na conta.
+
+Critérios futuros de aceite:403sem consentimento válido; nega item de outra conta mesmo com ID conhecido; JWTaud/tenant/org falsificados negados; refreshrotation/revogação/429/timeouts testados; evidências e digest rastreáveis; export autenticado sem cruzar tenant; recomendação humana reproduzível; nenhumPOST/PUT/DELETE comercial possível pela toolallowlist; segredos ausentes de logs/modelo; política/jurídico e reviewer aprovados no SHA testado. São critérios PLANEJADOS, sem testes executados desse agente nesta fase.
+
+Exclusões: editar/publicar anúncios, preço, estoque, publicidade, mensagens, pagamentos, promessas de receita/ROI, scraping, coleta de dados de compradores, treinamento e compartilhamento com IA externa até permissão comprovada. Atual AuditOS pode inspirar evidência/workflow; ele não torna esse agente implementado. Próxima missão somente após fechar política: implementar fixture provider e testes negativos locais, sem onboarding real até autorização posterior.

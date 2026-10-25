@@ -1,0 +1,33 @@
+{
+  "generatedAt": "2026-10-25T00:38:05.789Z",
+  "hashAlgorithm": "SHA-256 of bytes in repository",
+  "privateConfigDumpsExcluded": true,
+  "rows": [
+    {
+      "file": "canonical-public-inventory.json",
+      "bytes": 1803,
+      "sha256": "928e4964aa20323b43d385cf83a1129e73de137c948a2521ac3e3d25d11a5859"
+    },
+    {
+      "file": "company-documents.json",
+      "bytes": 3271,
+      "sha256": "d47e31a651f96f6319bb0b06e5f6847a029e16d9e161973152fc47da54bc1682"
+    },
+    {
+      "file": "company-public-source.json",
+      "bytes": 13535,
+      "sha256": "5b0fa573dc30a9c52a6feceb93f40de8334e90b97899f8f7af964b77c9c658df"
+    },
+    {
+      "file": "reuse-inventory.json",
+      "bytes": 15158,
+      "sha256": "4e30b4a1b30f87dddd7ce28bda077e531d6c01c227dc662008875daadc5f3dbc"
+    },
+    {
+      "file": "source-ledger.json",
+      "bytes": 4758,
+      "sha256": "7f304f7762ab3c5fbf6d6a5b795781c7a0bb63d441ac3ec0c4c321e2585f341f"
+    }
+  ],
+  "normalization": "Published text uses UTF-8/LF, trailing blank lines removed, local workspace paths sanitized. Original logs and received browser file retained outside Git."
+}

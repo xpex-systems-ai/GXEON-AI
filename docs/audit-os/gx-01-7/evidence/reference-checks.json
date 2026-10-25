@@ -1,0 +1,3147 @@
+{
+  "total_count": 29,
+  "check_runs": [
+    {
+      "id": 120960998889,
+      "name": "Vercel Preview Comments",
+      "node_id": "CR_kwDORw4ofc8AAAAcKdZd6Q",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960998889",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960998889",
+      "details_url": "https://vercel.com/github",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-24T19:07:40Z",
+      "completed_at": "2026-10-24T19:07:40Z",
+      "output": {
+        "title": "✅ No unresolved feedback",
+        "summary": "💬 0 unresolved, 0 resolved.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960998889/annotations"
+      },
+      "check_suite": {
+        "id": 108754763960
+      },
+      "app": {
+        "id": 8329,
+        "client_id": "Iv1.9d7d662ea00b8481",
+        "slug": "vercel",
+        "node_id": "MDM6QXBwODMyOQ==",
+        "owner": {
+          "login": "vercel",
+          "id": 14985020,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjE0OTg1MDIw",
+          "avatar_url": "https://avatars.githubusercontent.com/u/14985020?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/vercel",
+          "html_url": "https://github.com/vercel",
+          "followers_url": "https://api.github.com/users/vercel/followers",
+          "following_url": "https://api.github.com/users/vercel/following{/other_user}",
+          "gists_url": "https://api.github.com/users/vercel/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/vercel/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/vercel/subscriptions",
+          "organizations_url": "https://api.github.com/users/vercel/orgs",
+          "repos_url": "https://api.github.com/users/vercel/repos",
+          "events_url": "https://api.github.com/users/vercel/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/vercel/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Vercel",
+        "description": "Vercel for GitHub automatically deploys your PRs to Vercel.\r\nPreview every PR live, without any configuration required.\r\n\r\nFor more information, see our [documentation](https://vercel.com/docs/github?utm_source=github&utm_medium=marketplace&utm_campaign=vercel-app).\r\n\r\n![](https://assets.vercel.com/image/upload/v1597943727/front/github/github-comment-monorepo.png)",
+        "external_url": "https://vercel.com/github",
+        "html_url": "https://github.com/apps/vercel",
+        "created_at": "2018-01-19T21:51:06Z",
+        "updated_at": "2026-10-12T19:18:05Z",
+        "permissions": {
+          "actions": "read",
+          "administration": "write",
+          "checks": "write",
+          "contents": "write",
+          "deployments": "write",
+          "emails": "read",
+          "issues": "write",
+          "members": "read",
+          "metadata": "read",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "statuses": "write",
+          "workflows": "write"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "delete",
+          "deployment",
+          "issue_comment",
+          "membership",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "pull_request_review_thread",
+          "push",
+          "repository",
+          "status",
+          "team"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960306018,
+      "name": "Redirect rules - gxeon",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcvLYg",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3e0d1eb6090d74d7a",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960306018",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960306018",
+      "details_url": "https://app.netlify.com/projects/gxeon/deploys/6add00f3e0d1eb6090d74d7a",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-10-24T19:04:38Z",
+      "completed_at": "2026-10-24T19:05:02Z",
+      "output": {
+        "title": "Deploy failed",
+        "summary": "Please check [the logs](https://app.netlify.com/projects/gxeon/deploys/6add00f3e0d1eb6090d74d7a).",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960306018/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960304392,
+      "name": "Header rules - gxeon",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcvFCA",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3e0d1eb6090d74d7a",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960304392",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960304392",
+      "details_url": "https://app.netlify.com/projects/gxeon/deploys/6add00f3e0d1eb6090d74d7a",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-10-24T19:04:38Z",
+      "completed_at": "2026-10-24T19:05:01Z",
+      "output": {
+        "title": "Deploy failed",
+        "summary": "Please check [the logs](https://app.netlify.com/projects/gxeon/deploys/6add00f3e0d1eb6090d74d7a).",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960304392/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960302714,
+      "name": "Pages changed - gxeon",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcu-eg",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3e0d1eb6090d74d7a",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960302714",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960302714",
+      "details_url": "https://app.netlify.com/projects/gxeon/deploys/6add00f3e0d1eb6090d74d7a",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-10-24T19:04:38Z",
+      "completed_at": "2026-10-24T19:05:01Z",
+      "output": {
+        "title": "Deploy failed",
+        "summary": "Please check [the logs](https://app.netlify.com/projects/gxeon/deploys/6add00f3e0d1eb6090d74d7a).",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960302714/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960239061,
+      "name": "Redirect rules - gleaming-raindrop-1a263b",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcrF1Q",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3bdcaab1bff600970",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960239061",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960239061",
+      "details_url": "https://app.netlify.com/projects/gleaming-raindrop-1a263b/deploys/6add00f3bdcaab1bff600970",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:04:21Z",
+      "completed_at": "2026-10-24T19:04:36Z",
+      "output": {
+        "title": "No redirect rules processed",
+        "summary": "This deploy did not include any redirect rules.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960239061/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960237390,
+      "name": "Header rules - gleaming-raindrop-1a263b",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcq_Tg",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3bdcaab1bff600970",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960237390",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960237390",
+      "details_url": "https://app.netlify.com/projects/gleaming-raindrop-1a263b/deploys/6add00f3bdcaab1bff600970",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:04:21Z",
+      "completed_at": "2026-10-24T19:04:36Z",
+      "output": {
+        "title": "No header rules processed",
+        "summary": "This deploy did not include any header rules.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960237390/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960236070,
+      "name": "Pages changed - gleaming-raindrop-1a263b",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcq6Jg",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3bdcaab1bff600970",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960236070",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960236070",
+      "details_url": "https://app.netlify.com/projects/gleaming-raindrop-1a263b/deploys/6add00f3bdcaab1bff600970",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:04:21Z",
+      "completed_at": "2026-10-24T19:04:36Z",
+      "output": {
+        "title": "All files already uploaded",
+        "summary": "All files already uploaded by a previous deploy with the same commits.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960236070/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960152948,
+      "name": "Redirect rules - startling-platypus-66e8e2",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcl1dA",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f35ae7833178e030a8",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960152948",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960152948",
+      "details_url": "https://app.netlify.com/projects/startling-platypus-66e8e2/deploys/6add00f35ae7833178e030a8",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:59Z",
+      "completed_at": "2026-10-24T19:04:19Z",
+      "output": {
+        "title": "No redirect rules processed",
+        "summary": "This deploy did not include any redirect rules.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960152948/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960151365,
+      "name": "Header rules - startling-platypus-66e8e2",
+      "node_id": "CR_kwDORw4ofc8AAAAcKclvRQ",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f35ae7833178e030a8",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960151365",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960151365",
+      "details_url": "https://app.netlify.com/projects/startling-platypus-66e8e2/deploys/6add00f35ae7833178e030a8",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:59Z",
+      "completed_at": "2026-10-24T19:04:19Z",
+      "output": {
+        "title": "No header rules processed",
+        "summary": "This deploy did not include any header rules.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960151365/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960149842,
+      "name": "Pages changed - startling-platypus-66e8e2",
+      "node_id": "CR_kwDORw4ofc8AAAAcKclpUg",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f35ae7833178e030a8",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960149842",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960149842",
+      "details_url": "https://app.netlify.com/projects/startling-platypus-66e8e2/deploys/6add00f35ae7833178e030a8",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:59Z",
+      "completed_at": "2026-10-24T19:04:19Z",
+      "output": {
+        "title": "All files already uploaded",
+        "summary": "All files already uploaded by a previous deploy with the same commits.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960149842/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960061679,
+      "name": "Redirect rules - gxeonaik",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcgQ7w",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3a3df51462d0fe615",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960061679",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960061679",
+      "details_url": "https://app.netlify.com/projects/gxeonaik/deploys/6add00f3a3df51462d0fe615",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-10-24T19:03:36Z",
+      "completed_at": "2026-10-24T19:04:00Z",
+      "output": {
+        "title": "Deploy failed",
+        "summary": "Please check [the logs](https://app.netlify.com/projects/gxeonaik/deploys/6add00f3a3df51462d0fe615).",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960061679/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960060212,
+      "name": "Header rules - gxeonaik",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcgLNA",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3a3df51462d0fe615",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960060212",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960060212",
+      "details_url": "https://app.netlify.com/projects/gxeonaik/deploys/6add00f3a3df51462d0fe615",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-10-24T19:03:36Z",
+      "completed_at": "2026-10-24T19:03:59Z",
+      "output": {
+        "title": "Deploy failed",
+        "summary": "Please check [the logs](https://app.netlify.com/projects/gxeonaik/deploys/6add00f3a3df51462d0fe615).",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960060212/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120960058737,
+      "name": "Pages changed - gxeonaik",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcgFcQ",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3a3df51462d0fe615",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960058737",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120960058737",
+      "details_url": "https://app.netlify.com/projects/gxeonaik/deploys/6add00f3a3df51462d0fe615",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2026-10-24T19:03:36Z",
+      "completed_at": "2026-10-24T19:03:59Z",
+      "output": {
+        "title": "Deploy failed",
+        "summary": "Please check [the logs](https://app.netlify.com/projects/gxeonaik/deploys/6add00f3a3df51462d0fe615).",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120960058737/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959983394,
+      "name": "Redirect rules - wonderful-phoenix-260614",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbfIg",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f30ca3e73eab2fd837",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959983394",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959983394",
+      "details_url": "https://app.netlify.com/projects/wonderful-phoenix-260614/deploys/6add00f30ca3e73eab2fd837",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:16Z",
+      "completed_at": "2026-10-24T19:03:31Z",
+      "output": {
+        "title": "No redirect rules processed",
+        "summary": "This deploy did not include any redirect rules.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959983394/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959983101,
+      "name": "Redirect rules - coruscating-salmiakki-302f81",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbd_Q",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3ff6e36a671ec7750",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959983101",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959983101",
+      "details_url": "https://app.netlify.com/projects/coruscating-salmiakki-302f81/deploys/6add00f3ff6e36a671ec7750",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:16Z",
+      "completed_at": "2026-10-24T19:03:33Z",
+      "output": {
+        "title": "No redirect rules processed",
+        "summary": "This deploy did not include any redirect rules.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959983101/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959982715,
+      "name": "Redirect rules - gxeonai",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbcew",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f30ce9ad46a8cf13b0",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959982715",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959982715",
+      "details_url": "https://app.netlify.com/projects/gxeonai/deploys/6add00f30ce9ad46a8cf13b0",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:16Z",
+      "completed_at": "2026-10-24T19:03:32Z",
+      "output": {
+        "title": "No redirect rules processed",
+        "summary": "This deploy did not include any redirect rules.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959982715/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959982168,
+      "name": "Header rules - wonderful-phoenix-260614",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbaWA",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f30ca3e73eab2fd837",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959982168",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959982168",
+      "details_url": "https://app.netlify.com/projects/wonderful-phoenix-260614/deploys/6add00f30ca3e73eab2fd837",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:16Z",
+      "completed_at": "2026-10-24T19:03:31Z",
+      "output": {
+        "title": "No header rules processed",
+        "summary": "This deploy did not include any header rules.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959982168/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959981625,
+      "name": "Header rules - coruscating-salmiakki-302f81",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbYOQ",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3ff6e36a671ec7750",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959981625",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959981625",
+      "details_url": "https://app.netlify.com/projects/coruscating-salmiakki-302f81/deploys/6add00f3ff6e36a671ec7750",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:16Z",
+      "completed_at": "2026-10-24T19:03:33Z",
+      "output": {
+        "title": "No header rules processed",
+        "summary": "This deploy did not include any header rules.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959981625/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959981419,
+      "name": "Header rules - gxeonai",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbXaw",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f30ce9ad46a8cf13b0",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959981419",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959981419",
+      "details_url": "https://app.netlify.com/projects/gxeonai/deploys/6add00f30ce9ad46a8cf13b0",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:16Z",
+      "completed_at": "2026-10-24T19:03:32Z",
+      "output": {
+        "title": "No header rules processed",
+        "summary": "This deploy did not include any header rules.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959981419/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959980782,
+      "name": "Pages changed - wonderful-phoenix-260614",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbU7g",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f30ca3e73eab2fd837",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959980782",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959980782",
+      "details_url": "https://app.netlify.com/projects/wonderful-phoenix-260614/deploys/6add00f30ca3e73eab2fd837",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:16Z",
+      "completed_at": "2026-10-24T19:03:31Z",
+      "output": {
+        "title": "30 new files uploaded",
+        "summary": "No generated pages and 30 assets changed.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959980782/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959980282,
+      "name": "Pages changed - gxeonai",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbS-g",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f30ce9ad46a8cf13b0",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959980282",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959980282",
+      "details_url": "https://app.netlify.com/projects/gxeonai/deploys/6add00f30ce9ad46a8cf13b0",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:16Z",
+      "completed_at": "2026-10-24T19:03:32Z",
+      "output": {
+        "title": "30 new files uploaded",
+        "summary": "No generated pages and 30 assets changed.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959980282/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959980205,
+      "name": "Pages changed - coruscating-salmiakki-302f81",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbSrQ",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "6add00f3ff6e36a671ec7750",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959980205",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959980205",
+      "details_url": "https://app.netlify.com/projects/coruscating-salmiakki-302f81/deploys/6add00f3ff6e36a671ec7750",
+      "status": "completed",
+      "conclusion": "neutral",
+      "started_at": "2026-10-24T19:03:16Z",
+      "completed_at": "2026-10-24T19:03:33Z",
+      "output": {
+        "title": "30 new files uploaded",
+        "summary": "No generated pages and 30 assets changed.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959980205/annotations"
+      },
+      "check_suite": {
+        "id": 108754764456
+      },
+      "app": {
+        "id": 13473,
+        "client_id": "Iv1.0acdee22e0bba5eb",
+        "slug": "netlify",
+        "node_id": "MDM6QXBwMTM0NzM=",
+        "owner": {
+          "login": "netlify",
+          "id": 7892489,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjc4OTI0ODk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/7892489?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/netlify",
+          "html_url": "https://github.com/netlify",
+          "followers_url": "https://api.github.com/users/netlify/followers",
+          "following_url": "https://api.github.com/users/netlify/following{/other_user}",
+          "gists_url": "https://api.github.com/users/netlify/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/netlify/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/netlify/subscriptions",
+          "organizations_url": "https://api.github.com/users/netlify/orgs",
+          "repos_url": "https://api.github.com/users/netlify/repos",
+          "events_url": "https://api.github.com/users/netlify/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/netlify/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Netlify",
+        "description": "Publish incredibly high performance websites and applications right from GitHub. The Netlify platform connects your repositories to an all-in-one workflow for global CDN deployment, continuous integration, and automatic (and free) HTTPS. Each time you commit changes, Netlify builds your site, prerenders markup, and optimizes assets on dedicated build infrastructure. Easily create an entirely automated workflows for your web applications\r\n\r\n## Features\r\n\r\n### Push your site live, directly from GitHub\r\nDeploy your site to an ultra-redundant global CDN that’s purpose built for serving pages and assets quickly and consistently.\r\n\r\n### Automate deployment\r\nNetlify’s built-in Continuous Deployment automatically runs your build commands and deploys the result whenever you push to your Git repository.\r\n\r\n### Add a custom domain\r\nPurchase domains and manage DNS zones and records right inside of Netlify.\r\n\r\n### HTTPS is automatic\r\nYour site will automatically be secured with a free TLS certificate from Let’s Encrypt.\r\n\r\n### Deploy Previews\r\nNetlify’s Deploy Previews streamlined your workflow by giving you a unique, permanent URL to check what your changes will be like in production whenever you submit a pull request.\r\n\r\n### And a lot more!\r\nNetlify includes solutions for forms, identity, and even custom functions powered by AWS Lambda. And all this functionality can be configured directly in your repo.\r\n",
+        "external_url": "https://www.netlify.com",
+        "html_url": "https://github.com/apps/netlify",
+        "created_at": "2018-06-12T15:16:51Z",
+        "updated_at": "2025-07-17T12:19:42Z",
+        "permissions": {
+          "checks": "write",
+          "contents": "read",
+          "emails": "read",
+          "issues": "write",
+          "metadata": "read",
+          "pull_requests": "write",
+          "statuses": "write"
+        },
+        "events": [
+          "create",
+          "delete",
+          "issue_comment",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959979677,
+      "name": "audit-flow",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbQnQ",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "cf16c022-5d37-5851-8d03-fa1d2b51ae60",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979677",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524394/job/120959979677",
+      "details_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524394/job/120959979677",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-24T19:03:19Z",
+      "completed_at": "2026-10-24T19:04:11Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 2,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979677/annotations"
+      },
+      "check_suite": {
+        "id": 108754775575
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959979583,
+      "name": "pilot-database-boundary",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbQPw",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "8048a36d-0c36-5ca6-aeef-8b6d717695f1",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979583",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524394/job/120959979583",
+      "details_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524394/job/120959979583",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-24T19:03:19Z",
+      "completed_at": "2026-10-24T19:03:58Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 2,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979583/annotations"
+      },
+      "check_suite": {
+        "id": 108754775575
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959979497,
+      "name": "isolated-staging",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbP6Q",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "42696385-3f81-5af8-b637-5593e56e4b34",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979497",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524394/job/120959979497",
+      "details_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524394/job/120959979497",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-24T19:03:19Z",
+      "completed_at": "2026-10-24T19:04:25Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 2,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979497/annotations"
+      },
+      "check_suite": {
+        "id": 108754775575
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959979452,
+      "name": "TypeScript workspace validation",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbPvA",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "88b9e476-485d-558f-bc95-0af3c1d3bf91",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979452",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524451/job/120959979452",
+      "details_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524451/job/120959979452",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-24T19:03:19Z",
+      "completed_at": "2026-10-24T19:04:00Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 2,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979452/annotations"
+      },
+      "check_suite": {
+        "id": 108754775708
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959979353,
+      "name": "Operational radar report",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbPWQ",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "10c75702-e304-576b-917c-137b2b063523",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979353",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524424/job/120959979353",
+      "details_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524424/job/120959979353",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-24T19:03:19Z",
+      "completed_at": "2026-10-24T19:03:27Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 2,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979353/annotations"
+      },
+      "check_suite": {
+        "id": 108754775653
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959979305,
+      "name": "Monorepo build",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcbPKQ",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "28eb8506-3c76-52bc-b100-e85a0fb2468e",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979305",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524385/job/120959979305",
+      "details_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524385/job/120959979305",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-24T19:03:18Z",
+      "completed_at": "2026-10-24T19:04:36Z",
+      "output": {
+        "title": null,
+        "summary": null,
+        "text": null,
+        "annotations_count": 2,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959979305/annotations"
+      },
+      "check_suite": {
+        "id": 108754775558
+      },
+      "app": {
+        "id": 15368,
+        "client_id": "Iv1.05c79e9ad1f6bdfa",
+        "slug": "github-actions",
+        "node_id": "MDM6QXBwMTUzNjg=",
+        "owner": {
+          "login": "github",
+          "id": 9919,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjk5MTk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/9919?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/github",
+          "html_url": "https://github.com/github",
+          "followers_url": "https://api.github.com/users/github/followers",
+          "following_url": "https://api.github.com/users/github/following{/other_user}",
+          "gists_url": "https://api.github.com/users/github/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/github/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/github/subscriptions",
+          "organizations_url": "https://api.github.com/users/github/orgs",
+          "repos_url": "https://api.github.com/users/github/repos",
+          "events_url": "https://api.github.com/users/github/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/github/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "GitHub Actions",
+        "description": "Automate your workflow from idea to production",
+        "external_url": "https://help.github.com/en/actions",
+        "html_url": "https://github.com/apps/github-actions",
+        "created_at": "2018-07-30T09:30:17Z",
+        "updated_at": "2026-06-18T16:17:48Z",
+        "permissions": {
+          "actions": "write",
+          "administration": "read",
+          "artifact_metadata": "write",
+          "attestations": "write",
+          "checks": "write",
+          "code_quality": "write",
+          "contents": "write",
+          "copilot_requests": "write",
+          "deployments": "write",
+          "discussions": "write",
+          "drives": "write",
+          "issues": "write",
+          "merge_queues": "write",
+          "metadata": "read",
+          "models": "read",
+          "packages": "write",
+          "pages": "write",
+          "pull_requests": "write",
+          "repository_hooks": "write",
+          "repository_projects": "write",
+          "security_events": "write",
+          "statuses": "write",
+          "vulnerability_alerts": "read"
+        },
+        "events": [
+          "branch_protection_rule",
+          "check_run",
+          "check_suite",
+          "create",
+          "delete",
+          "deployment",
+          "deployment_status",
+          "discussion",
+          "discussion_comment",
+          "fork",
+          "gollum",
+          "issues",
+          "issue_comment",
+          "label",
+          "merge_group",
+          "milestone",
+          "page_build",
+          "public",
+          "pull_request",
+          "pull_request_review",
+          "pull_request_review_comment",
+          "push",
+          "registry_package",
+          "release",
+          "repository",
+          "repository_dispatch",
+          "status",
+          "watch",
+          "workflow_dispatch",
+          "workflow_run"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": 120959965623,
+      "name": "Supabase Preview",
+      "node_id": "CR_kwDORw4ofc8AAAAcKcaZtw",
+      "head_sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "external_id": "",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959965623",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/runs/120959965623",
+      "details_url": "https://supabase.com/dashboard/project/zphpeynirstwzrzgvbct/branches",
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-10-24T19:03:13Z",
+      "completed_at": "2026-10-24T19:03:13Z",
+      "output": {
+        "title": "Supabase Preview",
+        "summary": "This git branch is not associated with any Supabase Branch. You can open a PR to create a new branch.",
+        "text": null,
+        "annotations_count": 0,
+        "annotations_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/120959965623/annotations"
+      },
+      "check_suite": {
+        "id": 108754764872
+      },
+      "app": {
+        "id": 330661,
+        "client_id": "Iv1.b91a6d8eaa272168",
+        "slug": "supabase",
+        "node_id": "A_kwHOAz8kpM4ABQul",
+        "owner": {
+          "login": "supabase",
+          "id": 54469796,
+          "node_id": "MDEyOk9yZ2FuaXphdGlvbjU0NDY5Nzk2",
+          "avatar_url": "https://avatars.githubusercontent.com/u/54469796?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/supabase",
+          "html_url": "https://github.com/supabase",
+          "followers_url": "https://api.github.com/users/supabase/followers",
+          "following_url": "https://api.github.com/users/supabase/following{/other_user}",
+          "gists_url": "https://api.github.com/users/supabase/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/supabase/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/supabase/subscriptions",
+          "organizations_url": "https://api.github.com/users/supabase/orgs",
+          "repos_url": "https://api.github.com/users/supabase/repos",
+          "events_url": "https://api.github.com/users/supabase/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/supabase/received_events",
+          "type": "Organization",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "name": "Supabase",
+        "description": "Supabase for GitHub automatically runs your migrations when pull requests are merged and launches preview databases for new pull requests.\r\n\r\nFor more information, see our [documentation](https://supabase.com/docs/guides/platform/branching).",
+        "external_url": "https://supabase.com/docs/guides/platform/branching",
+        "html_url": "https://github.com/apps/supabase",
+        "created_at": "2023-05-08T02:39:16Z",
+        "updated_at": "2026-10-12T22:21:25Z",
+        "permissions": {
+          "actions": "write",
+          "checks": "write",
+          "contents": "read",
+          "metadata": "read",
+          "pull_requests": "write",
+          "workflows": "write"
+        },
+        "events": [
+          "pull_request",
+          "push",
+          "repository"
+        ]
+      },
+      "pull_requests": [
+        {
+          "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/pulls/456",
+          "id": 4928569243,
+          "number": 456,
+          "head": {
+            "ref": "codex/gxeon-audit-os-v1-gx01",
+            "sha": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          },
+          "base": {
+            "ref": "main",
+            "sha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+            "repo": {
+              "id": 1192110205,
+              "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI",
+              "name": "GXEON-AI"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

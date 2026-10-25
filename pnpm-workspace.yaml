@@ -75,6 +75,11 @@ onlyBuiltDependencies:
   - unrs-resolver
 
 overrides:
+  # GX-01.7: reviewed parent APIs; compatibility fixtures and full build required.
+  "metro>image-size": "2.0.3"
+  "xcode>uuid": "11.1.1"
+  "@expo/ngrok>uuid": "11.1.1"
+  "@tailwindcss/typography>postcss-selector-parser": "7.1.6"
   # GX-01.6: reviewed runtime/parser and same-line pipeline security fixes.
   "undici@^6": "6.29.1"
   "ws@^6": "6.2.6"
@@ -189,4 +194,4 @@ overrides:
   "@expo/ngrok-bin>@expo/ngrok-bin-win32-x64": "-"
   # drizzle-kit uses esbuild internally on an older version that's vulnerable, this overrides it
   "@esbuild-kit/esm-loader": "npm:tsx@^4.21.0"
-  esbuild: "0.27.3"
+  esbuild: "0.28.1"

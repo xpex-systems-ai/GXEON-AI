@@ -18,8 +18,8 @@ export const digest = (value: string) =>
 
 // Submitted text is data only. No URLs are fetched, paths opened, regexes evaluated or commands run.
 export function validateWorkflowIntake(body: unknown): AuditWorkflowIntake {
-  // Fail before Zod 3 traverses an oversized constrained collection (GHSA-mrhx-c7xc-m3w5).
-  // This bounds the GX intake only; it does not claim a library-wide fix.
+  // Defense in depth: bound the GX collection before schema validation.
+  // The dedicated contract library separately uses patched Zod 4.6.6.
   const checks = body && typeof body === "object" ? (body as { checks?: unknown }).checks : undefined;
   if (Array.isArray(checks) && checks.length > 2)
     throw new AuditWorkflowError(400, "INVALID_INTAKE", "Select at most two bounded checks.");

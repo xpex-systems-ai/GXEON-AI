@@ -1,0 +1,11 @@
+
+> workspace@0.0.0 typecheck [WORKSPACE]\GXEON-AI-gx017
+> pnpm run typecheck:libs && pnpm -r --workspace-concurrency=1 --filter "./artifacts/**" --filter "./scripts" --if-present run typecheck
+
+$ tsc --build
+Scope: 5 of 10 workspace projects
+$ tsc -p tsconfig.json --noEmit
+$ tsc -p tsconfig.json --noEmit
+$ tsc -p tsconfig.json --noEmit
+$ tsc -p tsconfig.json --noEmit
+$ tsc -p tsconfig.json --noEmit
