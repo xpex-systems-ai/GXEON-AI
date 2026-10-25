@@ -1,0 +1,6 @@
+# Preserve dependency patch hashes and published GX017 evidence bytes on Windows.
+patches/*.patch text eol=lf
+docs/**/gx-01-7/evidence/*.json text eol=lf
+docs/**/gx-01-7/evidence/*.log text eol=lf
+docs/**/gx-01-7/evidence/*.gz binary
+docs/**/gx-01-7/evidence/*.png binary

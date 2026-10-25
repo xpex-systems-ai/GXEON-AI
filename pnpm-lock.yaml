@@ -185,6 +185,11 @@ overrides:
   '@esbuild-kit/esm-loader': npm:tsx@^4.21.0
   esbuild: 0.28.1
 
+patchedDependencies:
+  metro@0.83.3:
+    hash: ac2fed386441e538df0b0cd99ef0feadc681d63b4e18ec6b523d6eecf96dcb3e
+    path: patches/metro@0.83.3.patch
+
 importers:
 
   .:
@@ -7263,7 +7268,7 @@ snapshots:
 
   '@expo/metro@54.2.0':
     dependencies:
-      metro: 0.83.3
+      metro: 0.83.3(patch_hash=ac2fed386441e538df0b0cd99ef0feadc681d63b4e18ec6b523d6eecf96dcb3e)
       metro-babel-transformer: 0.83.3
       metro-cache: 0.83.3
       metro-cache-key: 0.83.3
@@ -10983,7 +10988,7 @@ snapshots:
       connect: 3.7.0
       flow-enums-runtime: 0.0.6
       jest-validate: 29.7.0
-      metro: 0.83.3
+      metro: 0.83.3(patch_hash=ac2fed386441e538df0b0cd99ef0feadc681d63b4e18ec6b523d6eecf96dcb3e)
       metro-cache: 0.83.3
       metro-core: 0.83.3
       metro-runtime: 0.83.3
@@ -11156,7 +11161,7 @@ snapshots:
       '@babel/parser': 7.29.9
       '@babel/types': 7.29.8
       flow-enums-runtime: 0.0.6
-      metro: 0.83.3
+      metro: 0.83.3(patch_hash=ac2fed386441e538df0b0cd99ef0feadc681d63b4e18ec6b523d6eecf96dcb3e)
       metro-babel-transformer: 0.83.3
       metro-cache: 0.83.3
       metro-cache-key: 0.83.3
@@ -11189,7 +11194,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  metro@0.83.3:
+  metro@0.83.3(patch_hash=ac2fed386441e538df0b0cd99ef0feadc681d63b4e18ec6b523d6eecf96dcb3e):
     dependencies:
       '@babel/code-frame': 7.29.0
       '@babel/core': 7.29.6

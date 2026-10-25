@@ -68,6 +68,10 @@ catalog:
 
 autoInstallPeers: false
 
+# GX-01.7: bridge Metro's removed synchronous file-path API to image-size v2 bytes.
+patchedDependencies:
+  metro@0.83.3: patches/metro@0.83.3.patch
+
 onlyBuiltDependencies:
   - '@swc/core'
   - esbuild

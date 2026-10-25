@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { readFile, realpath, mkdir, writeFile } from "node:fs/promises";
+import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { repoRoot, stateDir } from "./config.mjs";
 
@@ -30,6 +31,19 @@ const png = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR
 assert.deepEqual(metroAssets.getAssetSize("png", png, "TEST-DATA.png"), { width: 1, height: 1 });
 assert.equal(metroAssets.getAssetSize("txt", Buffer.from("TEST DATA"), "fixture.txt"), null);
 assert.throws(() => metroAssets.getAssetSize("png", Buffer.alloc(0), "empty.png"));
+// getAssetSize alone misses getAssetData's historical synchronous file-path call.
+// Exercise that actual parent path as well, retaining this private fixture.
+const assetFixture = path.join(stateDir, "security-assets", randomUUID());
+await mkdir(assetFixture, { recursive: true });
+const assetPath = path.join(assetFixture, "GX017-TEST-DATA.png");
+await writeFile(assetPath, png, { flag: "wx" });
+const asset = await metroAssets.getAssetData(assetPath, "GX017-TEST-DATA.png", [], null, "/assets");
+assert.equal(asset.width, 1); assert.equal(asset.height, 1);
+assert.match(asset.hash, /^[a-f0-9]{32}$/);
+const routerRequire = createRequire(path.join(repoRoot, mobile, "package.json"));
+const routerAsset = path.join(path.dirname(routerRequire.resolve("expo-router/package.json")), "assets/unmatched.png");
+const routerData = await metroAssets.getAssetData(routerAsset, "unmatched.png", [], null, "/assets");
+assert.ok(routerData.width > 0 && routerData.height > 0);
 
 for (const chain of [["@expo/cli", "@expo/config-plugins", "xcode", "uuid"], ["@expo/ngrok", "uuid"]]) {
   const item = await resolveChain(mobile, chain, "11.1.1"), uuid = item.module;
@@ -68,7 +82,7 @@ const transformed = babel.transformSync("export const testData: boolean = true;"
 assert.ok(preset.module);
 assert.match(transformed.code, /testData/);
 const result = { status: "PASS", testData: true, externalNetworkUsed: false, tunnelStarted: false,
-  versions, checks: ["Metro actual image-size default import with PNG and empty image", "xcode actual UUID generation and ngrok import without tunnel",
+  versions, checks: ["Metro actual image-size Buffer path and getAssetData file paths, including Expo Router's real PNG", "xcode actual UUID generation and ngrok import without tunnel",
     "UUID v3 buffer bounds", "query-string actual decoding", "typography actual selector utility", "esbuild TypeScript transform", "Zod4 record wire values",
     "Mobile Babel configuration resolves its declared Expo preset and transforms actual TypeScript"],
   legacyZod3GloballyRemediated: false, note: "Global mobile/database Zod3 remains a separately disclosed residual; dedicated build rejects retained v3 inputs." };
