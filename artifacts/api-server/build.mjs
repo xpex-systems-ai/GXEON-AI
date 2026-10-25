@@ -130,6 +130,7 @@ globalThis.__dirname = __bannerPath.dirname(globalThis.__filename);
   if (zodVersion !== "4.6.6" || legacyZodInputs.length || !inputs.some(name => /\/zod\/v4\//u.test(name)))
     throw new Error("AUDIT_PILOT_ZOD_BOUNDARY_FAILED");
   await writeFile(path.join(distDir, "audit-pilot-boundary.json"), JSON.stringify({ entry: "src/audit-pilot.ts", inputs, forbiddenImports: forbidden,
+    externalImports: entry[1].imports.filter(value => value.external).map(({ path, kind }) => ({ path, kind })),
     zod: { version: zodVersion, legacyInputs: legacyZodInputs }, note: "Only retained inputs of the dedicated output; not a production deployment." }, null, 2));
 }
 
