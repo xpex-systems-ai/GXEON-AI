@@ -1,0 +1,61 @@
+Scope: all 10 workspace projects
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Progress: resolved 23, reused 0, downloaded 0, added 0
+Progress: resolved 35, reused 0, downloaded 0, added 0
+Progress: resolved 40, reused 0, downloaded 0, added 0
+Progress: resolved 41, reused 0, downloaded 0, added 0
+Progress: resolved 43, reused 0, downloaded 0, added 0
+Progress: resolved 44, reused 0, downloaded 0, added 0
+Progress: resolved 45, reused 0, downloaded 0, added 0
+Progress: resolved 47, reused 0, downloaded 0, added 0
+Progress: resolved 48, reused 0, downloaded 0, added 0
+Progress: resolved 50, reused 0, downloaded 0, added 0
+Progress: resolved 51, reused 0, downloaded 0, added 0
+artifacts/gxeon-dashboard                |  WARN  deprecated recharts@2.15.4
+Progress: resolved 55, reused 0, downloaded 0, added 0
+Progress: resolved 60, reused 0, downloaded 0, added 0
+Progress: resolved 61, reused 0, downloaded 0, added 0
+Progress: resolved 69, reused 0, downloaded 0, added 0
+Progress: resolved 77, reused 0, downloaded 0, added 0
+Progress: resolved 87, reused 0, downloaded 0, added 0
+Progress: resolved 88, reused 0, downloaded 0, added 0
+ WARN  deprecated eslint@9.39.5: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+Progress: resolved 96, reused 0, downloaded 0, added 0
+Progress: resolved 103, reused 0, downloaded 0, added 0
+Progress: resolved 108, reused 0, downloaded 0, added 0
+Progress: resolved 121, reused 0, downloaded 0, added 0
+Progress: resolved 122, reused 0, downloaded 0, added 0
+Progress: resolved 123, reused 0, downloaded 0, added 0
+Progress: resolved 125, reused 0, downloaded 0, added 0
+Progress: resolved 126, reused 0, downloaded 0, added 0
+Progress: resolved 128, reused 0, downloaded 0, added 0
+Progress: resolved 130, reused 0, downloaded 0, added 0
+Progress: resolved 131, reused 0, downloaded 0, added 0
+Progress: resolved 132, reused 0, downloaded 0, added 0
+Progress: resolved 134, reused 0, downloaded 0, added 0
+Progress: resolved 153, reused 0, downloaded 0, added 0
+Progress: resolved 174, reused 0, downloaded 0, added 0
+Progress: resolved 188, reused 0, downloaded 0, added 0
+Progress: resolved 204, reused 0, downloaded 0, added 0
+Progress: resolved 227, reused 0, downloaded 0, added 0
+Progress: resolved 243, reused 0, downloaded 0, added 0
+Progress: resolved 273, reused 0, downloaded 0, added 0
+Progress: resolved 287, reused 0, downloaded 0, added 0
+Progress: resolved 296, reused 0, downloaded 0, added 0
+Progress: resolved 313, reused 0, downloaded 0, added 0
+Progress: resolved 342, reused 0, downloaded 0, added 0
+Progress: resolved 355, reused 0, downloaded 0, added 0
+Progress: resolved 398, reused 0, downloaded 0, added 0
+Progress: resolved 432, reused 0, downloaded 0, added 0
+Progress: resolved 433, reused 0, downloaded 0, added 0
+Progress: resolved 499, reused 0, downloaded 0, added 0
+Progress: resolved 572, reused 0, downloaded 0, added 0
+Progress: resolved 630, reused 0, downloaded 0, added 0
+Progress: resolved 710, reused 0, downloaded 0, added 0
+Progress: resolved 842, reused 0, downloaded 0, added 0
+Progress: resolved 955, reused 0, downloaded 0, added 0
+Progress: resolved 1146, reused 0, downloaded 0, added 0
+ WARN  3 deprecated subdependencies found: glob@7.2.3, inflight@1.0.6, rimraf@3.0.2
+Progress: resolved 1146, reused 0, downloaded 0, added 0, done
+
+Done in 1m 29.3s using pnpm v10.28.1

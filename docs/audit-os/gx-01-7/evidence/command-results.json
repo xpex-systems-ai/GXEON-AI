@@ -98,6 +98,31 @@
       "command": "pnpm run build",
       "result": "NOT RUN locally: mobile script clears protected caches; Linux full build required on finalCI",
       "evidence": "Final PR receipt / GXEON Build"
+    },
+    {
+      "command": "pnpm install --frozen-lockfile after Metro exact patch",
+      "result": "PASS; first premature frozen install refused while previous lock resolution was still running; that orchestration failure retained",
+      "evidence": "mobile-preset-install.log / metro-path-bridge-install.log"
+    },
+    {
+      "command": "node scripts/audit-staging/lint.mjs",
+      "result": "PASS32 files; initial CommonJS scope configuration lacked __dirname, corrected before final pass",
+      "evidence": "mobile-preset-lint.log / metro-path-bridge-lint.log"
+    },
+    {
+      "command": "node scripts/audit-staging/security-compatibility.mjs",
+      "result": "PASS8 groups including actual Metro getAssetData file paths and real Babel config",
+      "evidence": "security-compatibility.json"
+    },
+    {
+      "command": "Direct owned Expo CLI, no cache clearing, own iOS bundle request",
+      "result": "200, 3608265 bytes after Metro patch; before patch500 in file-path API. This is not the complete Windows static deployment build.",
+      "evidence": "metro-probe-metro-path-bridge.json"
+    },
+    {
+      "command": "GXEON Build / Typecheck / Health / Audit OS candidate6daddee",
+      "result": "All four workflows SUCCESS on source candidate; final document commit still requires final CI receipt",
+      "evidence": "source-candidate-ci.json"
     }
   ]
 }

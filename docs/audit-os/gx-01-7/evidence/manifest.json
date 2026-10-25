@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-25T00:38:05.782Z",
+  "generatedAt": "2026-10-25T01:03:30.406Z",
   "hashAlgorithm": "SHA-256 of bytes in repository",
   "privateConfigDumpsExcluded": true,
   "rows": [
@@ -60,8 +60,8 @@
     },
     {
       "file": "command-results.json",
-      "bytes": 3909,
-      "sha256": "e210c843d1848e9a70fd1b696ac2cfc2c12263210db97f7f161b319dde4f4d89"
+      "bytes": 5280,
+      "sha256": "847137d974ce973da31c7f57c58dece7bf4af1b540d5ebed41f1a6ccf8dfa687"
     },
     {
       "file": "compatible-install.log",
@@ -84,6 +84,26 @@
       "sha256": "e2c440cce014274529f34c57a0b80f6eaf88e3a4f3961f23dc8d70480ee79135"
     },
     {
+      "file": "metro-path-bridge-compat.log",
+      "bytes": 1642,
+      "sha256": "d5085ccd4e08f144e314be416a51443b4ae93b4946305b24288466fb1569bd57"
+    },
+    {
+      "file": "metro-path-bridge-install.log",
+      "bytes": 746,
+      "sha256": "27b185231d294ead94db03d69e329578a0e169a10e78f408b475183454ec58fd"
+    },
+    {
+      "file": "metro-path-bridge-lint.log",
+      "bytes": 71,
+      "sha256": "a6e253c5c08a21582fa429c7f778873881c877396d7603904f15ef34b4434c46"
+    },
+    {
+      "file": "metro-probe-bundle-diagnostic.json",
+      "bytes": 1507,
+      "sha256": "0907303d17aff115f2f1a16b1745de72b87ed1bef47c69a210af12cbbce07e6d"
+    },
+    {
       "file": "metro-probe-flags-fixed.json",
       "bytes": 7858,
       "sha256": "74a1ff17107b248812988598f94cf0461d98c75658256bb59155fc0801bf8e2d"
@@ -94,6 +114,16 @@
       "sha256": "c621f09e5e6a339ca6e8602a21985f4a5cce4af0f149ea55c0eefe4062a7b12e"
     },
     {
+      "file": "metro-probe-metro-path-bridge.json",
+      "bytes": 952,
+      "sha256": "556b2128d64b6c9930d2900296ac67be5af2eec6dbcc056fb6456fbc68ea7aa1"
+    },
+    {
+      "file": "metro-probe-preset-declared.json",
+      "bytes": 1577,
+      "sha256": "b24f1d0702470cb8243f65b4fdc06e6aa05f7c2ab31c3dd93153a6ddecc8d14b"
+    },
+    {
       "file": "metro-probe.json",
       "bytes": 793,
       "sha256": "b4602aad342ed70acdfe8b331c1a3b4b8792964c26a24d8e5ab9f873fd518fea"
@@ -102,6 +132,36 @@
       "file": "metro-probe.log",
       "bytes": 86,
       "sha256": "adb4ff38d2c7c32976b4a8e6ad87ed47a99c129aadf095538911db6bfe3ff529"
+    },
+    {
+      "file": "mobile-preset-compat.log",
+      "bytes": 1608,
+      "sha256": "0c54ed285c0fd5124e64023778c97a1f69987f8b086c345af44e145c2ac31fbc"
+    },
+    {
+      "file": "mobile-preset-configured-lint.log",
+      "bytes": 71,
+      "sha256": "a6e253c5c08a21582fa429c7f778873881c877396d7603904f15ef34b4434c46"
+    },
+    {
+      "file": "mobile-preset-frozen-install.log",
+      "bytes": 500,
+      "sha256": "ecbf92767c9eccb75952c0441601fbbd5ad2bd4e2aa8302b1dd1c55a285eee22"
+    },
+    {
+      "file": "mobile-preset-install.log",
+      "bytes": 497,
+      "sha256": "c1c98528f6ffa03b3e9044866508d6033500c680560adfdf1315f43dcbddc482"
+    },
+    {
+      "file": "mobile-preset-lint.log",
+      "bytes": 238,
+      "sha256": "459df1934963cce82433e6eaa1cdfbeb84e1ac1eb8c170a01e82d9885c686752"
+    },
+    {
+      "file": "mobile-preset-lock.log",
+      "bytes": 3446,
+      "sha256": "93e72b13d7eaf5e194b1f79117d9b27b21be9ed4b47762984906e0cc3d63416f"
     },
     {
       "file": "patched-compat.log",
@@ -235,8 +295,13 @@
     },
     {
       "file": "security-compatibility.json",
-      "bytes": 1839,
-      "sha256": "9285c5f32e7c98b9e14d3ca4933181290c31e2ccc868b423af5be4709e57c198"
+      "bytes": 2265,
+      "sha256": "a76537c6ebe81d604c1ab763d6e27c3c06ec392bf9b19bc581eea4ab0cac0893"
+    },
+    {
+      "file": "source-candidate-ci.json",
+      "bytes": 15456,
+      "sha256": "63c926d2748426d9d6d59f19c5d4920c1d539b2aa46be775f5a1da87ce434816"
     }
   ],
   "normalization": "Published text uses UTF-8/LF, trailing blank lines removed, local workspace paths sanitized. Original logs and received browser file retained outside Git."

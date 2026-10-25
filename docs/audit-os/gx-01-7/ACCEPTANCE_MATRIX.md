@@ -17,3 +17,5 @@
 | Riscos/orçamento/piloto |BLOCKED sem assinatura humana |decisões pendentes |
 
 **ResultadoA: BLOCKED. Global: NO-GO.** O gate browser local foi encerrado nesta fase. Os gates remotos, residuais e humanos permanecem. READY FOR INDEPENDENT REVIEW ou READY FOR PILOT APPROVAL só poderão ser atribuídos após fechar seus pré-requisitos, por decisão explícita baseada no SHA e evidências correspondentes. PR456 permanece DRAFT, sem merge/deploy de produção.
+
+O candidato de código6daddeea4f1f19ff4861719a2a13d2c35fbe9443 passou nos quatro workflows após correção do caminho de arquivo Metro; este documento de fechamento gera novo commit, que exige nova consulta de CI. Ver source-candidate-ci.json e recibo final da PR.

@@ -1,0 +1,56 @@
+{
+  "testData": true,
+  "repo": "GXEON-AI-gx017",
+  "mode": "Direct Expo CLI offline startup and bounded own iOS bundle request; no cache deletion",
+  "offlineEnvironmentSupported": true,
+  "expoVersion": "54.0.34",
+  "port": 18081,
+  "ownedPid": 23204,
+  "terminationScope": "Only the directly spawned CLI and its child tree; no unrelated process selected",
+  "cacheDeletionRequested": false,
+  "temporaryFilesRetained": true,
+  "startupHealthMs": 10122,
+  "previousBuildBudgetMs": 60000,
+  "exceededPreviousBudget": false,
+  "childExitCode": null,
+  "bundleResult": {
+    "status": 500,
+    "bytes": 14412,
+    "error": {
+      "type": "TransformError",
+      "message": "..\\..\\node_modules\\.pnpm\\expo-router@6.0.23_@types+r_04f3cfea3f36377152fc4ab423a44bfe\\node_modules\\expo-router\\entry.js: Cannot find module 'babel-preset-expo'"
+    }
+  },
+  "samples": [
+    {
+      "elapsedMs": 5022,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    },
+    {
+      "elapsedMs": 10122,
+      "127.0.0.1": {
+        "status": 200,
+        "body": "packager-status:running"
+      },
+      "localhost": {
+        "status": 200,
+        "body": "packager-status:running"
+      },
+      "[::1]": {
+        "status": 200,
+        "body": "packager-status:running"
+      }
+    }
+  ]
+}
