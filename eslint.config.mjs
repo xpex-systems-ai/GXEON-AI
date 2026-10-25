@@ -17,8 +17,8 @@ export const typescriptFiles = [
   "lib/api-zod/src/auditWorkflow.ts",
   "lib/db/src/pool.ts",
 ];
-export const javascriptFiles = ["scripts/audit-staging/*.mjs", "scripts/build_workspace.mjs", "eslint.config.mjs"];
-const globals = Object.fromEntries(["process", "console", "Buffer", "URL", "fetch", "AbortSignal", "setTimeout", "clearTimeout", "structuredClone"].map((name) => [name, "readonly"]));
+export const javascriptFiles = ["scripts/audit-staging/*.mjs", "scripts/build_workspace.mjs", "eslint.config.mjs", "artifacts/gxeon-dashboard-mobile/scripts/build.js"];
+const globals = Object.fromEntries(["process", "console", "Buffer", "URL", "fetch", "AbortSignal", "AbortController", "setTimeout", "clearTimeout", "structuredClone"].map((name) => [name, "readonly"]));
 
 export default defineConfig(
   { ignores: ["**/node_modules/**", "**/dist/**", ".gx012/**"] },
@@ -26,4 +26,5 @@ export default defineConfig(
     languageOptions: { globals, parserOptions: { ecmaFeatures: { jsx: true } } },
     rules: { "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }] } },
   { files: javascriptFiles, extends: [js.configs.recommended], languageOptions: { globals } },
+  { files: ["artifacts/gxeon-dashboard-mobile/scripts/build.js"], languageOptions: { sourceType: "commonjs", globals: { __dirname: "readonly" } } },
 );

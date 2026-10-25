@@ -58,9 +58,19 @@ const zod = (await resolveChain("lib/api-zod", ["zod"], "4.6.6")).module;
 const validation = zod.z.object({ labels: zod.z.record(zod.z.string(), zod.z.string()) });
 assert.equal(validation.safeParse({ labels: { origin: "TEST DATA" } }).success, true);
 assert.equal(validation.safeParse({ labels: { origin: 123 } }).success, false);
+const preset = await resolveChain(mobile, ["babel-preset-expo"], "54.0.10");
+const babel = (await resolveChain(mobile, ["@babel/core"], "7.29.6")).module;
+const transformed = babel.transformSync("export const testData: boolean = true;", {
+  cwd: path.join(repoRoot, mobile), filename: "GX017-TEST-DATA.ts",
+  configFile: path.join(repoRoot, mobile, "babel.config.js"), babelrc: false,
+  caller: { name: "metro", platform: "ios", isDev: false },
+});
+assert.ok(preset.module);
+assert.match(transformed.code, /testData/);
 const result = { status: "PASS", testData: true, externalNetworkUsed: false, tunnelStarted: false,
   versions, checks: ["Metro actual image-size default import with PNG and empty image", "xcode actual UUID generation and ngrok import without tunnel",
-    "UUID v3 buffer bounds", "query-string actual decoding", "typography actual selector utility", "esbuild TypeScript transform", "Zod4 record wire values"],
+    "UUID v3 buffer bounds", "query-string actual decoding", "typography actual selector utility", "esbuild TypeScript transform", "Zod4 record wire values",
+    "Mobile Babel configuration resolves its declared Expo preset and transforms actual TypeScript"],
   legacyZod3GloballyRemediated: false, note: "Global mobile/database Zod3 remains a separately disclosed residual; dedicated build rejects retained v3 inputs." };
 result.decodeUriAdvisoryRemediated = false;
 await mkdir(path.join(stateDir, "evidence"), { recursive: true });
