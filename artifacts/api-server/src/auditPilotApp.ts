@@ -3,8 +3,10 @@ import { randomUUID } from "node:crypto";
 import { auditAccess } from "./middlewares/auditAccess";
 import { auditWorkflowRouter } from "./routes/auditWorkflow";
 import type { AuditWorkflowService } from "./services/auditWorkflowService";
+import { omnixPreviewRouter, type OmnixPreviewConfig } from "./omnixPreview";
 
 type Options = {
+  portal?: OmnixPreviewConfig;
   origins: readonly string[];
   service: AuditWorkflowService;
   ready: () => Promise<void>;
@@ -80,6 +82,7 @@ export function createAuditPilotApp(options: Options) {
     next();
   });
   app.get("/api/healthz", (_req, res) => res.json({ ok: true, service: "gxeon-audit-pilot" }));
+  if (options.portal) app.use("/api/omnix", omnixPreviewRouter(options.portal, options.service, options.origins));
   app.get("/api/readyz", auditAccess("read"), admit, async (_req, res) => {
     try { await options.ready(); res.json({ ok: true }); }
     catch { res.status(503).json({ ok: false, code: "AUDIT_NOT_READY" }); }

@@ -45,6 +45,7 @@ import R100DurableStatePage from "@/pages/R100DurableStatePage";
 import R100DatabaseMirrorConsolePage from "@/pages/R100DatabaseMirrorConsolePage";
 import AuditOsPage from "@/pages/AuditOsPage";
 import AuditWorkflowPage from "@/pages/AuditWorkflowPage";
+import OmnixPortalPage from "@/pages/OmnixPortalPage";
 
 const queryClient = new QueryClient();
 
@@ -86,6 +87,7 @@ const professionalPlaceholderRoutes = [
 function Router() {
   return (
     <Switch>
+      <Route path="/omnix" component={OmnixPortalPage} />
       {/* Standalone diagnostic page — no layout wrapper, matches original */}
       <Route path="/test" component={TestPage} />
 

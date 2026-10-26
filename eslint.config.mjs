@@ -16,6 +16,9 @@ export const typescriptFiles = [
   "artifacts/gxeon-dashboard/src/services/auditTransport.ts",
   "lib/api-zod/src/auditWorkflow.ts",
   "lib/db/src/pool.ts",
+  "artifacts/api-server/src/omnixPreview.ts",
+  "lib/api-zod/src/omnixPortal.ts",
+  "artifacts/gxeon-dashboard/src/pages/OmnixPortalPage.tsx",
 ];
 export const javascriptFiles = ["scripts/audit-staging/*.mjs", "scripts/build_workspace.mjs", "eslint.config.mjs", "artifacts/gxeon-dashboard-mobile/scripts/build.js"];
 const globals = Object.fromEntries(["process", "console", "Buffer", "URL", "fetch", "AbortSignal", "AbortController", "setTimeout", "clearTimeout", "structuredClone"].map((name) => [name, "readonly"]));

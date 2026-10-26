@@ -14,6 +14,7 @@ import {
 type State = "DRAFT" | "IN_REVIEW" | "READY_FOR_REPORT" | "CLOSED";
 type Metadata = {
   workflow: "gx01-v1";
+  portal?: { userId: string; organizationId: string };
   scope: Omit<AuditWorkflowIntake, "artifact">;
   artifactSha256: string;
   results?: ReturnType<typeof checkSubmittedConfig>;
@@ -25,7 +26,7 @@ type Metadata = {
     role: "reviewer";
   };
   reviewFingerprint?: string;
-  events: { state: State; at: string; role: string }[];
+  events: { state: State; at: string; role: string; actorId?: string }[];
 };
 type CaseRow = { id: string; title: string; status: State; metadata: Metadata };
 type EvidenceRow = {
@@ -49,6 +50,8 @@ type ReportRow = {
   metadata: { contentSha256: string };
 };
 type Connection = Pick<PoolClient, "query" | "release">;
+// Server-derived preview identity. Never accepted from intake JSON.
+export type AuditWorkflowActor = { userId: string; organizationId: string; role: "operator" | "reviewer" };
 
 const now = () => new Date().toISOString();
 const fail = (status: number, code: string, message: string): never => {
@@ -72,7 +75,11 @@ function writesEnabled() {
 // Injecting a connection factory lets tests use an isolated PostgreSQL engine without remote credentials.
 export function createAuditWorkflowService(
   connect: () => Promise<Connection> = () => getPool().connect(),
+  actor?: AuditWorkflowActor,
 ) {
+  const requireRole = (role: AuditWorkflowActor["role"]) => {
+    if (actor && actor.role !== role) fail(403, "ROLE_DENIED", "This identity cannot perform this action.");
+  };
   async function transaction<T>(
     fn: (client: Connection) => Promise<T>,
   ): Promise<T> {
@@ -100,6 +107,9 @@ export function createAuditWorkflowService(
     ).rows[0];
     if (!item || item.metadata.workflow !== "gx01-v1")
       return fail(404, "CASE_NOT_FOUND", "GX-01 case was not found.");
+    if (actor && (!item.metadata.portal || item.metadata.portal.organizationId !== actor.organizationId ||
+        (actor.role !== "reviewer" && item.metadata.portal.userId !== actor.userId)))
+      return fail(404, "CASE_NOT_FOUND", "GX-01 case was not found.");
     return item;
   }
   async function state(
@@ -108,7 +118,7 @@ export function createAuditWorkflowService(
     target: State,
     role: string,
   ) {
-    item.metadata.events.push({ state: target, at: now(), role });
+    item.metadata.events.push({ state: target, at: now(), role, ...(actor ? { actorId: actor.userId } : {}) });
     await client.query(
       "UPDATE audit_cases SET status=$2::audit_case_status, metadata=$3::jsonb, updated_at=now(), closed_at=CASE WHEN $2::text='CLOSED' THEN now() ELSE NULL END WHERE id=$1",
       [item.id, target, JSON.stringify(item.metadata)],
@@ -142,15 +152,31 @@ export function createAuditWorkflowService(
     return JSON.stringify(value) ?? "null";
   }
   return {
+    forActor(identity: AuditWorkflowActor) { return createAuditWorkflowService(connect, identity); },
+    async list() {
+      if (!actor) return fail(403, "IDENTITY_REQUIRED", "An individual preview identity is required.");
+      return transaction(async client => {
+        const params = [actor.organizationId, actor.userId, actor.role === "reviewer"];
+        const filter = "c.metadata->>'workflow'='gx01-v1' AND c.metadata->'portal'->>'organizationId'=$1 AND (c.metadata->'portal'->>'userId'=$2 OR $3::boolean)";
+        const rows = (await client.query<{ id: string; title: string; status: State; createdAt: Date | string; updatedAt: Date | string; findingCount: number }>(
+          `SELECT c.id,c.title,c.status,c.created_at AS "createdAt",c.updated_at AS "updatedAt",(SELECT count(*)::int FROM audit_findings f WHERE f.case_id=c.id) AS "findingCount" FROM audit_cases c WHERE ${filter} ORDER BY c.created_at DESC,c.id DESC LIMIT 51`, params)).rows;
+        const counts = (await client.query<{ total: number; closed: number }>(`SELECT count(*)::int AS total,count(*) FILTER(WHERE c.status='CLOSED')::int AS closed FROM audit_cases c WHERE ${filter}`, params)).rows[0]!;
+        const severity = (await client.query<{ severity: string; count: number }>(`SELECT f.severity::text AS severity,count(*)::int AS count FROM audit_findings f JOIN audit_cases c ON c.id=f.case_id WHERE ${filter} GROUP BY f.severity`, params)).rows;
+        return { ok: true as const, items: rows.slice(0, 50).map(r => ({ ...r, createdAt: new Date(r.createdAt).toISOString(), updatedAt: new Date(r.updatedAt).toISOString() })), hasMore: rows.length > 50,
+          summary: { total: counts.total, closed: counts.closed, open: counts.total - counts.closed, findingsBySeverity: Object.fromEntries(severity.map(r => [r.severity, r.count])) } };
+      });
+    },
     async create(body: unknown) {
+      requireRole("operator");
       const input = validateWorkflowIntake(body);
+      if (actor && !input.testData) return fail(400, "PREVIEW_TEST_DATA_REQUIRED", "Only synthetic data is permitted.");
       writesEnabled();
       return transaction(async (client) => {
         await client.query(
           "SELECT pg_advisory_xact_lock(hashtextextended($1, 0))",
           [input.requestId],
         );
-        const requestSha256 = digest(canonical(input));
+        const requestSha256 = digest(canonical(actor ? { input, owner: { userId: actor.userId, organizationId: actor.organizationId } } : input));
         const existing = (
           await client.query<CaseRow>(
             "SELECT id,title,status,metadata FROM audit_cases WHERE metadata->>'workflow'='gx01-v1' AND metadata->'scope'->>'requestId'=$1",
@@ -158,6 +184,8 @@ export function createAuditWorkflowService(
           )
         ).rows[0];
         if (existing) {
+          if (actor && (existing.metadata.portal?.userId !== actor.userId || existing.metadata.portal.organizationId !== actor.organizationId))
+            return fail(404, "CASE_NOT_FOUND", "GX-01 case was not found.");
           if (existing.metadata.requestSha256 !== requestSha256)
             return fail(
               409,
@@ -185,10 +213,11 @@ export function createAuditWorkflowService(
         ).rows[0]!;
         const metadata: Metadata = {
           workflow: "gx01-v1",
+          ...(actor ? { portal: { userId: actor.userId, organizationId: actor.organizationId } } : {}),
           scope,
           artifactSha256: sha256,
           requestSha256,
-          events: [{ state: "DRAFT", at: now(), role: "operator" }],
+          events: [{ state: "DRAFT", at: now(), role: "operator", ...(actor ? { actorId: actor.userId } : {}) }],
         };
         const item = (
           await client.query<{ id: string }>(
@@ -248,6 +277,7 @@ export function createAuditWorkflowService(
       });
     },
     async run(id: string) {
+      requireRole("operator");
       writesEnabled();
       return transaction(async (client) => {
         const item = await locked(client, id);
@@ -301,6 +331,7 @@ export function createAuditWorkflowService(
       });
     },
     async review(id: string, body: unknown) {
+      requireRole("reviewer");
       const parsed = auditWorkflowReviewSchema.safeParse(body);
       if (!parsed.success)
         return fail(
@@ -346,6 +377,7 @@ export function createAuditWorkflowService(
       });
     },
     async finalize(id: string) {
+      requireRole("operator");
       writesEnabled();
       return transaction(async (client) => {
         const item = await locked(client, id);

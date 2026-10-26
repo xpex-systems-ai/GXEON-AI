@@ -81,13 +81,13 @@ export async function apiHealth(config) {
   if (data.instanceId !== config.instanceId || data.testData !== true) throw new Error("STAGING_INSTANCE_MISMATCH");
   return data;
 }
-export async function startApps(config, writeEnabled = true) {
+export async function startApps(config, writeEnabled = true, omnix = false) {
   await access(path.join(repoRoot, "artifacts/gxeon-dashboard/dist/public/index.html"));
   let running;
   try { running = await apiHealth(config); } catch { /* not running */ }
   if (running) throw new Error("STAGING_API_ALREADY_RUNNING");
   const env = childEnvironment(config, writeEnabled);
-  await launch("api", process.execPath, [apiRequire.resolve("tsx/cli"), path.join(repoRoot, "artifacts/api-server/src/tests/auditStagingServer.ts")], env);
+  await launch("api", process.execPath, [apiRequire.resolve("tsx/cli"), path.join(repoRoot, omnix ? "scripts/audit-staging/omnix-api.mjs" : "artifacts/api-server/src/tests/auditStagingServer.ts")], env);
   await waitFor(() => apiHealth(config), "API");
   await launch("frontend", process.execPath, [path.join(import.meta.dirname, "frontend.mjs")], env);
   await waitFor(async () => {

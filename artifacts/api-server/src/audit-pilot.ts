@@ -4,6 +4,7 @@ import { loadAuditPilotConfig } from "./auditPilotConfig";
 import { assertAuditPilotDatabase } from "./auditPilotDatabase";
 import { createAuditPilotApp } from "./auditPilotApp";
 import { createAuditWorkflowService } from "./services/auditWorkflowService";
+import { loadOmnixPreviewConfig } from "./omnixPreview";
 
 async function start() {
   const config = loadAuditPilotConfig();
@@ -14,6 +15,7 @@ async function start() {
   try { await assertAuditPilotDatabase(pool); }
   catch { await pool.end(); throw new Error("AUDIT_DATABASE_NOT_READY"); }
   const app = createAuditPilotApp({ origins: config.origins,
+    portal: loadOmnixPreviewConfig(),
     service: createAuditWorkflowService(() => pool.connect()),
     ready: async () => { await pool.query("SELECT 1"); },
     log: record => console.log(JSON.stringify(record)) });
