@@ -14,6 +14,16 @@ Metadados filtrados em `evidence/*preview.json` e `evidence/railway-readonly.jso
 
 URLs reais: [site preview](https://xpex-systems-nr6sfgrax-xpex-neural.vercel.app/?view=omnix); [portal preview protegido](https://gxeon-audit-cueu5zd4t-gxeon.vercel.app/omnix). A página corporativa abre publicamente nesta observação; o portal requer a sessão Vercel existente do responsável. Não foi iniciado login interativo, criado share link ou desativada proteção para obter PASS. Ferramenta de fetch do conector cria/reutiliza share link temporário; não foi usada porque alteraria acesso. Sem CLI Vercel autenticada disponível nesta execução. SSO é uma pendência de verificação, não uma licença para reduzir proteção.
 
+## Atualização após autorização — 26/10/2026
+
+O fundador **autorizou a prévia segregada proposta**, com 1 API Node24 e 1 PG17 privado por sete dias, envelope de US$30/mês antes de impostos e sem produção/merge/dados reais, sujeito à confirmação prévia do plano e do controle de gasto. Não é necessário repetir essa aprovação. Conta conectada `xpex-systems-ai`, único workspace disponível **GXEON AI** (`39b76b7c-7d01-480f-83b5-ff6e6eb41ea2`). Nenhum projeto/serviço/banco/volume/domínio remoto foi criado nesta verificação.
+
+A autorização não substitui a validação técnica de cobrança: o conector permite inventário mas não consulta plano/limites. CLI oficial 5.71.0 instalada isoladamente, fora das dependências do produto; login salvo recusado por invalid grant. Renovação iniciada no navegador padrão, e a aba de uso abriu o login GitHub/Railway. Aguardando autenticação do titular, sem pedir senha/2FA/token no chat. O hard limit documentado pela Railway é de **workspace** e derruba todos os workloads ao atingir o teto; não foi alterado, pois o workspace contém dois projetos legados. Plano, consumo atual e limite efetivo continuam NÃO VERIFICADOS.
+
+O template PostgreSQL atual aponta para PG18 e foi recusado para esta missão. Imagem PG17 inspecionada no registro público, sem executá-la: `ghcr.io/railwayapp-templates/postgres-ssl@sha256:5e806d28c18198f933d25e79989470a47a938f465bf0634e030b416961b3463e`; revisão 09ff77dca25f9af407827b9f27c7de9c5c660790. O código TLS dessa revisão inclui o hostname privado no SAN; isso não comprova ainda um handshake remoto. Região Virginia confirmada como `us-east4-eqdc4a`. [Recibo de preflight](evidence/activation-preflight.json).
+
+Estado atual: **AUTHORIZED — BLOCKED ON BILLING ACCESS AND BUDGET VALIDATION**. Próxima ação é concluir o login da conta existente e ler plano/uso/limites. Não provisionar com base somente no inventário ou na estimativa. O restante deste documento preserva a proposta e a observação anteriores à autorização.
+
 ## Plano concreto a submeter ao fundador
 
 Proposta somente, **não executada nem aprovada**:
