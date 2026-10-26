@@ -14,6 +14,14 @@ Metadados filtrados em `evidence/*preview.json` e `evidence/railway-readonly.jso
 
 URLs reais: [site preview](https://xpex-systems-nr6sfgrax-xpex-neural.vercel.app/?view=omnix); [portal preview protegido](https://gxeon-audit-cueu5zd4t-gxeon.vercel.app/omnix). A página corporativa abre publicamente nesta observação; o portal requer a sessão Vercel existente do responsável. Não foi iniciado login interativo, criado share link ou desativada proteção para obter PASS. Ferramenta de fetch do conector cria/reutiliza share link temporário; não foi usada porque alteraria acesso. Sem CLI Vercel autenticada disponível nesta execução. SSO é uma pendência de verificação, não uma licença para reduzir proteção.
 
+## Recusa confirmada pelo provedor — 26/10/2026
+
+A autorização foi reiterada pelo fundador. Foi tentada a criação do projeto privado `omnix-gx019-preview`, com ambiente `preview-synthetic`, sem iniciar serviços, para preparar mudanças pendentes. A Railway recusou a própria criação: **“Your trial has expired. Please select a plan to continue using Railway.”** Código `INVALID_ARGUMENT`. O projeto não foi criado: inventário posterior ainda mostra somente os dois projetos legados. [Recibo da tentativa](evidence/activation-provider-rejection.json). Nenhum serviço/volume/domínio foi provisionado, plano/limites não foram alterados e produção permaneceu intacta.
+
+O bloqueio atual é **RAILWAY TRIAL EXPIRED / PLAN REQUIRED**, além da autenticação local pendente. A CLI retorna `UNAUTHORIZED` e o OAuth iniciado anteriormente expirou. A sessão Edge existente chegou à página de autorização da CLI, mas o controle do navegador recusou automação porque outra interface de extensão está aberta; não se tentou contornar essa proteção. O titular precisa fechar o popup da extensão e ativar um plano válido dentro do orçamento já autorizado. A autorização textual não foi tratada como plano ativo ou autenticação concluída.
+
+Depois da mudança real na conta, verificar plano, uso e hard limit; somente então criar e aplicar a infraestrutura segregada. Não alterar ou reutilizar os dois projetos production para contornar a recusa do provedor. Regressão em `de0ef11`: quatro workflows/seis jobs PASS; esta atualização continua somente documental.
+
 ## Atualização após autorização — 26/10/2026
 
 O fundador **autorizou a prévia segregada proposta**, com 1 API Node24 e 1 PG17 privado por sete dias, envelope de US$30/mês antes de impostos e sem produção/merge/dados reais, sujeito à confirmação prévia do plano e do controle de gasto. Não é necessário repetir essa aprovação. Conta conectada `xpex-systems-ai`, único workspace disponível **GXEON AI** (`39b76b7c-7d01-480f-83b5-ff6e6eb41ea2`). Nenhum projeto/serviço/banco/volume/domínio remoto foi criado nesta verificação.
