@@ -1,0 +1,50 @@
+{
+  "version": "gx01.5",
+  "testData": true,
+  "status": "PASS",
+  "generatedAt": "2026-10-26T21:12:56.451Z",
+  "sourceDatabase": "gx01_staging",
+  "restoredDatabase": "gx01_restore_581178955674418185f43013153bc88b",
+  "targetCreatedNew": true,
+  "existingDatabaseOverwritten": false,
+  "dumpBytes": 49862,
+  "dumpSha256": "ec699f2e57470ffcd147e62b8ad7f5c4c3715a2c4f548dad2ba8920dab233832",
+  "tables": {
+    "audit_assets": {
+      "count": 3,
+      "sha256": "751c564d83eee9f6d7326ce9b4d51ccbbf046c0301ac7a67fd99f5ea02db9ecc"
+    },
+    "audit_cases": {
+      "count": 3,
+      "sha256": "e3405490e96575098daa1cffa03f378bc605a8edc470c84e724cf38aa475809f"
+    },
+    "audit_evidences": {
+      "count": 3,
+      "sha256": "b93e5801561aa5329e0c02c954e6cb5b9fd453c9b1fa3f863c256790ce154828"
+    },
+    "audit_findings": {
+      "count": 6,
+      "sha256": "e97e449a94cd3c9b7f962d208976b501650f2e6ace2fc6d81a60b084bef1eced"
+    },
+    "audit_reports": {
+      "count": 2,
+      "sha256": "eb16e331c14ecd2282623f018b6f951e1ae29bc97374f6bdac00515209289e7f"
+    }
+  },
+  "matchesPersistedRecord": true,
+  "restoredRecordVerified": true,
+  "afterPostgreSQLRestart": true,
+  "sourceApiReportUnchanged": true,
+  "report": {
+    "caseId": "b9012b07-fe40-4142-beee-bac547569d3c",
+    "reportId": "1a39f30a-8c26-4466-82b5-5e67e2836faf",
+    "sha256": "bd3d12376c387bc7a577834e6a62b6f45e0bea3c265ff19a245ab3060a00eabc",
+    "evidenceCount": 1,
+    "findingCount": 2,
+    "status": "CLOSED",
+    "testData": true
+  },
+  "elapsedMs": 6211,
+  "browserDownloadVerified": false,
+  "retention": "Private dump and isolated restored database retained; not automatically deleted or uploaded."
+}

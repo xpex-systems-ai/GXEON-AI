@@ -1,0 +1,22 @@
+{
+  "id": "dpl_81GryLfaSP6i2be8FU2HdRdFChSZ",
+  "url": "https://gxeon-audit-cueu5zd4t-gxeon.vercel.app",
+  "project": {
+    "id": "prj_owdXFSlvK1GBrWVuYCqeHpTlYjP4",
+    "name": "gxeon-audit-os",
+    "framework": null
+  },
+  "git": {
+    "githubCommitRef": "codex/gxeon-audit-os-v1-gx01",
+    "githubCommitSha": "743247221ace7600b74f8e73fb80c1c73dfd37a2",
+    "githubCommitMessage": "feat(omnix): integrate scoped synthetic sessions and persistent audit portal",
+    "githubRepo": "GXEON-AI",
+    "githubOrg": "xpex-systems-ai"
+  },
+  "target": null,
+  "source": "git",
+  "state": "READY",
+  "regions": [
+    "iad1"
+  ]
+}

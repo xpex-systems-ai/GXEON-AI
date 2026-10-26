@@ -1,0 +1,12 @@
+{
+  "head": "743247221ace7600b74f8e73fb80c1c73dfd37a2",
+  "base": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "testedCheckout": "6201b2c227eb5ab6825d3ee6c02ae0a4a2c68d95",
+  "parents": [
+    "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+    "743247221ace7600b74f8e73fb80c1c73dfd37a2"
+  ],
+  "sourceDirty": false,
+  "syntheticPullRequestMerge": true,
+  "actualPullRequestMerged": false
+}

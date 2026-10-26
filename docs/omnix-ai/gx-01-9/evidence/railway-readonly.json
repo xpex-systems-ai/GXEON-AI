@@ -1,0 +1,81 @@
+[
+  {
+    "projectId": "81f9f7c0-8674-4d2c-be9e-b6a3821410ca",
+    "service": {
+      "id": "0e1a760b-5dd1-40c2-8b33-7100b997953e",
+      "name": "gxeon i.a"
+    },
+    "environment": {
+      "id": "a5f9db01-8a8d-40f6-b489-bab7db183796",
+      "name": "production"
+    },
+    "source": {
+      "repo": "xpex-systems-ai/GXEON-AI",
+      "branch": "main",
+      "rootDirectory": "",
+      "checkSuites": false
+    },
+    "regions": {
+      "us-west2": {
+        "numReplicas": 1
+      }
+    },
+    "stagedChanges": false,
+    "variableValuesRead": false,
+    "deployments": [
+      {
+        "id": "15e40aed-abec-4dee-8fd4-22bcebd22587",
+        "status": "REMOVED",
+        "createdAt": "2026-04-30T14:48:43.981Z",
+        "commit": "824067570eeec60ad5ab8eab895d912cc17e92d7",
+        "branch": "main"
+      },
+      {
+        "id": "244b9259-d14f-46f4-bf44-c84086ed9c95",
+        "status": "FAILED",
+        "createdAt": "2026-04-30T09:40:15.960Z",
+        "commit": "cfdf1e733fc864ea4d110025cb32686102bfb8ee",
+        "branch": "main"
+      }
+    ]
+  },
+  {
+    "projectId": "691c6b11-c1ad-4814-9080-46d4e892aad3",
+    "service": {
+      "id": "7121ff5c-717a-495a-ae28-6b4a450817c9",
+      "name": "GXEON-AI"
+    },
+    "environment": {
+      "id": "56149575-e772-473a-8e90-70ad5ff600f1",
+      "name": "production"
+    },
+    "source": {
+      "repo": "xpex-systems-ai/GXEON-AI",
+      "branch": "main",
+      "checkSuites": false
+    },
+    "regions": {
+      "us-west2": {
+        "numReplicas": 1
+      }
+    },
+    "stagedChanges": false,
+    "variableValuesRead": false,
+    "deployments": [
+      {
+        "id": "57ad2a99-5545-4c75-9f73-af30b3628cef",
+        "status": "FAILED",
+        "createdAt": "2026-04-25T04:25:45.622Z",
+        "commit": "cfdf1e733fc864ea4d110025cb32686102bfb8ee",
+        "branch": "main"
+      },
+      {
+        "id": "d819e6fa-2a06-4388-ba26-ab365c56f1c8",
+        "status": "REMOVED",
+        "createdAt": "2026-04-25T00:16:19.422Z",
+        "commit": "824067570eeec60ad5ab8eab895d912cc17e92d7",
+        "branch": "main"
+      }
+    ]
+  }
+]

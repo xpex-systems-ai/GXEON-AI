@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-10-26T21:11:32.294Z",
+  "head": "743247221ace7600b74f8e73fb80c1c73dfd37a2",
+  "files": [
+    ".gitignore",
+    "artifacts/api-server/package.json",
+    "artifacts/api-server/src/audit-pilot.ts",
+    "artifacts/api-server/src/auditPilotApp.ts",
+    "artifacts/api-server/src/services/auditWorkflowService.ts",
+    "artifacts/api-server/src/omnixPreview.ts",
+    "artifacts/api-server/src/tests/auditOmnixPreview.test.ts",
+    "artifacts/api-server/tsconfig.audit-tests.json",
+    "artifacts/gxeon-dashboard/src/App.tsx",
+    "artifacts/gxeon-dashboard/src/pages/OmnixPortalPage.tsx",
+    "artifacts/gxeon-dashboard/src/pages/omnix.css",
+    "artifacts/gxeon-dashboard/src/data/omnix-example-report.json",
+    "eslint.config.mjs",
+    "lib/api-zod/src/index.ts",
+    "lib/api-zod/src/omnixPortal.ts",
+    "scripts/audit-staging/stage.mjs",
+    "scripts/audit-staging/omnix-api.mjs",
+    "scripts/audit-staging/omnix-stage.mjs"
+  ],
+  "privateFixtureValuesChecked": 8,
+  "dependencyChanges": false,
+  "existingEngineReused": true,
+  "customersEnabled": false
+}
