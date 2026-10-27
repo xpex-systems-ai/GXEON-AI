@@ -16,6 +16,7 @@ export async function verifyPortable(profile = "compose") {
   await assert.rejects(web(c, "/api/healthz", { servername: "unapproved.invalid" }), /CERT_ALTNAME/);
   const home = await web(c, "/"); assert.equal(home.status, 302); assert.equal(home.headers.location, "/omnix");
   const page = await web(c, "/omnix"); assert.equal(page.status, 200); assert.match(page.headers["content-type"], /text\/html/);
+  assert.doesNotMatch(page.text, /<(?:script|link)[^>]*(?:src|href)=["']https?:\/\//i, "Portable entry HTML must use local scripts, styles and fonts");
   assert.match(page.headers["content-security-policy"], /frame-ancestors 'none'/);
   const asset = page.text.match(/src="(\/assets\/[^"\s]+\.js)"/); assert.ok(asset, "Actual compiled frontend must reference a built JS asset");
   assert.equal((await web(c, asset[1])).status, 200);
