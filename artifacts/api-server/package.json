@@ -10,7 +10,7 @@
     "start:audit-pilot": "node --enable-source-maps ./dist/audit-pilot.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "smoke:financial": "../../scripts/node_modules/.bin/tsx src/tests/financialRuntimeSmoke.ts",
-    "test:audit": "tsx --test src/tests/auditWorkflow.test.ts src/tests/auditPilot.test.ts src/tests/auditOmnixPreview.test.ts",
+    "test:audit": "tsx --test src/tests/auditWorkflow.test.ts src/tests/auditPilot.test.ts src/tests/auditOmnixPreview.test.ts src/tests/auditPortable.test.ts",
     "test:audit-pilot-db": "tsx --test src/tests/auditPilotDatabase.test.ts",
     "typecheck:audit-tests": "tsc -p tsconfig.audit-tests.json --noEmit",
     "demo:audit": "tsx src/tests/auditWorkflowDemo.ts"

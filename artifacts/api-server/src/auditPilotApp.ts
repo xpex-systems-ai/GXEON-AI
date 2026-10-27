@@ -1,11 +1,14 @@
 import express, { type ErrorRequestHandler } from "express";
 import { randomUUID } from "node:crypto";
+import { resolve, join, isAbsolute } from "node:path";
+import { statSync } from "node:fs";
 import { auditAccess } from "./middlewares/auditAccess";
 import { auditWorkflowRouter } from "./routes/auditWorkflow";
 import type { AuditWorkflowService } from "./services/auditWorkflowService";
 import { omnixPreviewRouter, type OmnixPreviewConfig } from "./omnixPreview";
 
 type Options = {
+  frontendRoot?: string;
   portal?: OmnixPreviewConfig;
   origins: readonly string[];
   service: AuditWorkflowService;
@@ -100,11 +103,24 @@ export function createAuditPilotApp(options: Options) {
     }
     next();
   }, auditWorkflowRouter(options.service));
+  if (options.frontendRoot) {
+    const root = resolve(options.frontendRoot);
+    if (!isAbsolute(options.frontendRoot) || !statSync(join(root, "index.html")).isFile() ||
+        !statSync(join(root, "assets")).isDirectory()) throw new Error("AUDIT_FRONTEND_BUILD_REQUIRED");
+    app.use((_req, res, next) => {
+      res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'");
+      res.setHeader("X-Frame-Options", "DENY"); next();
+    });
+    app.get("/", (_req, res) => res.redirect(302, "/omnix"));
+    app.get("/omnix", (_req, res, next) => res.sendFile("index.html", { root }, error => { if (error) next(error); }));
+    app.use("/assets", express.static(join(root, "assets"), { dotfiles: "deny", index: false, fallthrough: false,
+      immutable: true, maxAge: "1y", setHeaders: res => res.setHeader("Cache-Control", "public, max-age=31536000, immutable") }));
+  }
   app.use((_req, res) => res.status(404).json({ ok: false, code: "AUDIT_ROUTE_NOT_FOUND" }));
   const errors: ErrorRequestHandler = (error: unknown, _req, res, _next) => {
     const status = (error as { status?: number })?.status;
-    res.status(status === 400 || status === 413 ? status : 503).json({ ok: false,
-      code: status === 400 || status === 413 ? "INVALID_REQUEST_BODY" : "AUDIT_UNAVAILABLE" });
+    res.status(status === 404 ? 404 : status === 400 || status === 413 ? status : 503).json({ ok: false,
+      code: status === 404 ? "AUDIT_ROUTE_NOT_FOUND" : status === 400 || status === 413 ? "INVALID_REQUEST_BODY" : "AUDIT_UNAVAILABLE" });
   };
   app.use(errors);
   return app;

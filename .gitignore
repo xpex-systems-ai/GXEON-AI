@@ -55,5 +55,6 @@ Thumbs.db
 .supabase/
 .gx012/
 .gx019/
+.gx-selfhost/
 supabase/.branches/
 supabase/.temp/

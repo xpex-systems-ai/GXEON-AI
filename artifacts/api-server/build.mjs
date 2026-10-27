@@ -15,7 +15,7 @@ async function buildAll() {
   await rm(distDir, { recursive: true, force: true });
 
   const result = await esbuild({
-    entryPoints: { index: path.resolve(artifactDir, "src/index.ts"), "audit-pilot": path.resolve(artifactDir, "src/audit-pilot.ts") },
+    entryPoints: { ...(process.env.GXEON_AUDIT_BUILD_ONLY === "true" ? {} : { index: path.resolve(artifactDir, "src/index.ts") }), "audit-pilot": path.resolve(artifactDir, "src/audit-pilot.ts") },
     metafile: true,
     platform: "node",
     bundle: true,

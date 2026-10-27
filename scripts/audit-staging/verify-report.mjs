@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { canonical, loadConfig } from "./config.mjs";
+import { canonical } from "./canonical.mjs";
 
 export const sha256 = (text) => createHash("sha256").update(text, "utf8").digest("hex");
 export function verifyReport(envelope) {
@@ -33,6 +33,7 @@ async function main() {
   if (!process.argv[2]) throw new Error("Provide the local JSON file path; no browser policy bypass is used.");
   const downloaded = JSON.parse(await readFile(path.resolve(process.argv[2]), "utf8"));
   const result = verifyReport(downloaded);
+  const { loadConfig } = await import("./config.mjs");
   const config = await loadConfig();
   const response = await fetch(`http://127.0.0.1:5174/api/v1/audit/workflow/cases/${result.caseId}/report`, {
     headers: { Authorization: "Bearer " + config.operatorToken }, signal: AbortSignal.timeout(10000),

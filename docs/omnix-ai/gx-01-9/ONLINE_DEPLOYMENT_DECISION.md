@@ -1,5 +1,7 @@
 # GX019 — decisão de implantação online
 
+**Diretriz atual, 26/10/2026:** execução portátil em infraestrutura da XPeX. Railway deixou de ser dependência do runtime; não prosseguir com novas tentativas de contratação. Ver [independência operacional](PROVIDER_INDEPENDENCE.md) e [pacote executável](../../../../deploy/self-hosted/README.md). As seções abaixo são histórico de reconciliação e das tentativas anteriores, não autorização para insistir em um provedor.
+
 **BLOCKED para API/PG remotos e dados reais.** Frontend implementado e prévias Git existentes utilizadas dentro da autorização GX019. Nenhum deploy manual, merge, domínio novo, mudança de proteção, variável sensível, serviço pago ou banco remoto foi executado.
 
 | Superfície | Observado em 26/10/2026 | Decisão atual |

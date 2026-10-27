@@ -1,0 +1,91 @@
+name: omnix-private
+services:
+  postgres:
+    build:
+      context: ../..
+      dockerfile: deploy/self-hosted/Dockerfile.postgres
+    environment:
+      POSTGRES_DB: gx01_pilot
+      POSTGRES_USER: gx01_pilot_owner
+      POSTGRES_PASSWORD_FILE: /run/secrets/admin_password
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    secrets: [admin_password, app_password, postgres_key, postgres_cert, ca]
+    networks: [database]
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -h 127.0.0.1 -U gx01_pilot_owner -d gx01_pilot]
+      interval: 3s
+      timeout: 3s
+      retries: 40
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 1G
+  app:
+    build:
+      context: ../..
+      dockerfile: deploy/self-hosted/Dockerfile
+    environment:
+      NODE_ENV: production
+      PORT: '8080'
+      GXEON_AUDIT_BIND_HOST: 0.0.0.0
+      GXEON_AUDIT_DEPLOYMENT_MODE: private
+      GXEON_AUDIT_DATABASE_HOST: postgres
+      GXEON_AUDIT_DATABASE_TLS_CA_FILE: /run/secrets/ca
+      DATABASE_URL_FILE: /run/secrets/database_url
+      GXEON_AUDIT_HTTPS_CERT_FILE: /run/secrets/web_cert
+      GXEON_AUDIT_HTTPS_CA_FILE: /run/secrets/ca
+      GXEON_AUDIT_HTTPS_KEY_FILE: /run/secrets/web_key
+      GXEON_AUDIT_FRONTEND_ROOT: /app/public
+      GXEON_AUDIT_PILOT_ENABLED: 'true'
+      GXEON_AUDIT_DB_PROVIDER: postgres
+      GXEON_AUDIT_ALLOWED_ORIGINS: ${OMNIX_ORIGIN:-https://localhost:8443}
+      GXEON_AUDIT_OPERATOR_TOKEN_FILE: /run/secrets/operator_token
+      GXEON_AUDIT_REVIEWER_TOKEN_FILE: /run/secrets/reviewer_token
+      GXEON_AUDIT_WRITE_MODE: enabled
+      GXEON_AUDIT_ALLOW_DB_WRITES: 'true'
+      GXEON_AUDIT_AUTO_RUN_MISSION_006: 'false'
+      GXEON_AUDIT_AUTO_CREATE_FIRST_PROPOSAL: 'false'
+      GXEON_OMNIX_PREVIEW_ENABLED: 'true'
+      GXEON_OMNIX_PREVIEW_IDENTITIES_FILE: /run/secrets/identities
+    ports:
+      - 127.0.0.1:${OMNIX_HTTPS_PORT:-8443}:8080
+    secrets: [database_url, operator_token, reviewer_token, identities, ca, web_key, web_cert]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    networks: [database, ingress]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: [CMD, node, /app/health.mjs]
+      interval: 15s
+      timeout: 6s
+      retries: 8
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 512M
+secrets:
+  admin_password: {file: ../../.gx-selfhost/compose/admin-password}
+  app_password: {file: ../../.gx-selfhost/compose/app-password}
+  database_url: {file: ../../.gx-selfhost/compose/database-url}
+  operator_token: {file: ../../.gx-selfhost/compose/operator-token}
+  reviewer_token: {file: ../../.gx-selfhost/compose/reviewer-token}
+  identities: {file: ../../.gx-selfhost/compose/identities.json}
+  ca: {file: ../../.gx-selfhost/compose/ca.crt}
+  web_key: {file: ../../.gx-selfhost/compose/web.key}
+  web_cert: {file: ../../.gx-selfhost/compose/web.crt}
+  postgres_key: {file: ../../.gx-selfhost/compose/postgres.key}
+  postgres_cert: {file: ../../.gx-selfhost/compose/postgres.crt}
+networks:
+  database: {internal: true}
+  ingress: {}
+volumes:
+  pgdata: {}

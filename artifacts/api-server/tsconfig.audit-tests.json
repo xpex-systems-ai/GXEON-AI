@@ -13,7 +13,8 @@
     "src/tests/auditWorkflow.test.ts",
     "src/tests/auditPilot.test.ts",
     "src/tests/auditPilotDatabase.test.ts",
-    "src/tests/auditOmnixPreview.test.ts"
+    "src/tests/auditOmnixPreview.test.ts",
+    "src/tests/auditPortable.test.ts"
   ],
   "exclude": []
 }

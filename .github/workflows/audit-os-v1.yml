@@ -6,6 +6,35 @@ on:
 permissions:
   contents: read
 jobs:
+  portable-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Generate local-only synthetic secrets and certificates
+        run: node deploy/self-hosted/init.mjs compose
+      - name: Build and start provider-independent HTTPS runtime and private PG17
+        run: docker compose -f deploy/self-hosted/compose.yaml up --build -d --wait --wait-timeout 120
+      - name: Verify TLS, routing, scoped sessions, audit, export and restore
+        run: node deploy/self-hosted/verify.mjs compose
+      - name: Restart portable services without deleting data
+        run: |
+          docker compose -f deploy/self-hosted/compose.yaml restart
+          docker compose -f deploy/self-hosted/compose.yaml up -d --wait --wait-timeout 120
+          node deploy/self-hosted/verify-restart.mjs compose
+      - name: Upload sanitized portable test receipts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omnix-portable-runtime
+          path: .gx-selfhost/compose/evidence
+          include-hidden-files: true
+      - name: Stop only the portable stack, retaining the volume
+        if: always()
+        run: docker compose -f deploy/self-hosted/compose.yaml stop
   pilot-database-boundary:
     runs-on: ubuntu-latest
     services:

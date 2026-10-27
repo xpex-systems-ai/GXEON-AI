@@ -5,21 +5,26 @@ import { assertAuditPilotDatabase } from "./auditPilotDatabase";
 import { createAuditPilotApp } from "./auditPilotApp";
 import { createAuditWorkflowService } from "./services/auditWorkflowService";
 import { loadOmnixPreviewConfig } from "./omnixPreview";
+import { auditPilotConnectionOptions } from "./auditPilotConnection";
+import { loadAuditPilotSecretFiles } from "./auditPilotFiles";
+import { createServer } from "node:https";
+import { readFileSync } from "node:fs";
 
 async function start() {
+  Object.assign(process.env, loadAuditPilotSecretFiles());
   const config = loadAuditPilotConfig();
-  const pool = new Pool({ connectionString: config.databaseUrl, max: 4, connectionTimeoutMillis: 5000,
-    idleTimeoutMillis: 30000, statement_timeout: 5000,
-    ssl: { rejectUnauthorized: true, ...(config.databaseCa ? { ca: config.databaseCa } : {}) } });
+  const pool = new Pool(await auditPilotConnectionOptions(config));
   pool.on("error", () => console.error(JSON.stringify({ event: "audit_database_unavailable" })));
   try { await assertAuditPilotDatabase(pool); }
   catch { await pool.end(); throw new Error("AUDIT_DATABASE_NOT_READY"); }
   const app = createAuditPilotApp({ origins: config.origins,
+    frontendRoot: config.frontendRoot,
     portal: loadOmnixPreviewConfig(),
     service: createAuditWorkflowService(() => pool.connect()),
     ready: async () => { await pool.query("SELECT 1"); },
     log: record => console.log(JSON.stringify(record)) });
-  const server = app.listen(config.port, "0.0.0.0");
+  const server = config.https ? createServer({ key: readFileSync(config.https.keyFile),
+    cert: readFileSync(config.https.certFile), minVersion: "TLSv1.2" }, app).listen(config.port, config.bindHost) : app.listen(config.port, config.bindHost);
   server.requestTimeout = 15000;
   server.headersTimeout = 10000;
   server.keepAliveTimeout = 5000;

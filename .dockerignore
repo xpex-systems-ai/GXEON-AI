@@ -1,0 +1,11 @@
+.git
+**/node_modules
+**/dist
+.gx*
+**/.env
+**/.env.*
+**/*.log
+**/*.tsbuildinfo
+docs
+.cache
+.local
