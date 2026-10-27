@@ -11,9 +11,11 @@ import { canonical } from "../../scripts/audit-staging/canonical.mjs";
 
 const profile = process.argv[2] ?? "native";
 let c, child, databaseRunning = false;
+let phase = "preflight";
 function pg(name, args) {
+  phase = name;
   execFileSync(path.join(c.pgBin, name + (process.platform === "win32" ? ".exe" : "")), args,
-    { windowsHide: true, stdio: "ignore", env: baseEnvironment(), timeout: 30000 });
+    { windowsHide: true, stdio: "ignore", env: baseEnvironment(), timeout: name === "initdb" ? 120000 : 30000 });
 }
 function pgdata() {
   const dir = path.resolve(c.dir, "pgdata");
@@ -64,7 +66,7 @@ try {
   const appPassword = fs.readFileSync(path.join(c.dir, "app-password"), "utf8").trim(); assert.match(appPassword, /^[A-Za-z0-9_-]{43}$/);
   sql(c, `SET log_statement='none'; SET log_min_error_statement='panic'; CREATE ROLE gx01_pilot_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS CONNECTION LIMIT 8 PASSWORD '${appPassword}';`);
   sql(c, fs.readFileSync(path.join(root, "deploy/audit-pilot/grants.example.sql"), "utf8"));
-  await startApp(); const proof = await verifyPortable(profile);
+  phase = "application-start"; await startApp(); phase = "acceptance"; const proof = await verifyPortable(profile);
   const identity = JSON.parse(fs.readFileSync(path.join(c.dir, "access.json"))).identities[0];
   const login = await web(c, "/api/omnix/login", { method: "POST", body: { identity: identity.id, code: identity.code } }); assert.equal(login.status, 200);
   const cookie = login.headers["set-cookie"][0].split(";")[0];
@@ -81,5 +83,6 @@ try {
   console.log(JSON.stringify({ ...proof, restart }));
 } catch (error) {
   console.error(JSON.stringify({ event: "PORTABLE_NATIVE_PROOF_FAILED", kind: error.name, code: error.code,
+    phase,
     source: error.stack?.split("\n").find(l => l.trim().startsWith("at ")) })); process.exitCode = 1;
 } finally { await stopApp(); stopDb(); }
