@@ -1,4 +1,20 @@
-# GX019 — entrega funcional
+# GX019 — entrega do runtime independente
+
+**Diretriz atual de 26/10/2026: executar sem depender da Railway. Núcleo portátil implementado e validado; aceite final de operação pública e clientes reais BLOCKED.** O fundador confirmou que existe infraestrutura própria, mas host/IP, domínio, SO e método de acesso ainda não foram informados. Não há novo destino público, contratação, merge ou deploy produtivo nesta entrega.
+
+[Motor PR456 DRAFT](https://github.com/xpex-systems-ai/GXEON-AI/pull/456) · [Site PR45 DRAFT](https://github.com/xpex-systems-ai/xpex-systems-ai/pull/45) · [Instruções executáveis](../../../../deploy/self-hosted/README.md) · [Escopo e matriz atuais](PROVIDER_INDEPENDENCE.md).
+
+Fonte portátil `5432b1d3a8423e81b1be3a915edb828de64f70e0`; ajuste do harness e candidato testado `30bdd5cd3b52697f10c0181ab019b79d8282b579`. Site `e6a52733ffbf40347dec85cf09e112c71a1c8c71` aponta para instalação independente. O HEAD documental posterior é informado na PR. Quatro workflows/sete jobs PASS no candidato: instalação congelada, tipos, lint49, testes24/24 PGlite e25/25 PG, grants1/1, build global, staging e novo fluxo Docker HTTPS+restore+restart. Prova standalone nativa passou em Node24.19.0/PG17.11 com bundle isolado e sessão invalidada após reinício. Site build+cinco suites PASS.
+
+Prova Docker: caso `7f236d5e-a0a3-4c53-892b-ad47b269c7f1`, relatório `9e823084-ab53-4d1a-9068-9a8a8273acac`, 1 evidência/2 achados; SHA canônico `01f043e3b8c0c69526c866d13521aa15991f2456cc05e7f8c4539d79c6b9a29e`, arquivo `f9d9283fc0c0a5eb70ac7e2e0872bd28ed380ffa46848760288d28d74c2a501c`. [Relatório recebido](evidence/portable/docker/portable-report.json), [aceitação](evidence/portable/docker/portable-acceptance.json), [reinício](evidence/portable/docker/portable-restart.json). A exportação nova usa cliente Node HTTPS; não é download de navegador nem aprovação humana.
+
+Prova nativa: caso `71300e68-8d21-4efe-b779-da7c3e72e588`, relatório `5524abea-176c-48b4-b027-20e89e2ad6c2`, SHA canônico `a6a229fa8aca38a91d692b3add6e534982753064e298ef3339347f317d14142d`. [Aceitação nativa](evidence/portable/native/portable-acceptance.json). Dumps privados restaurados em bancos novos, cinco hashes comparados e fonte preservada. Estado privado e chaves excluídos do [manifesto público](evidence/portable/manifest.json).
+
+O audit global continua FAIL3HIGH/1MODERATE. SBOM dedicado atual:84 componentes/294 inputs, zero correspondências conhecidas ao feed consultado; não cobre Node/OS/imagem. Permanecem pendentes revisão humana independente, host de destino, IAM/privacidade/recuperação e aceite operacional para dados reais. Sessão sintética de uma réplica não é identidade empresarial. Outros módulos/provedores legados não foram migrados por esta entrega. Recomendação **BLOCKED para aceite final/publicação/dados reais**; pacote de engenharia pronto para revisão e execução sintética independente.
+
+## Registro histórico anterior à diretriz de independência
+
+Os 22 itens abaixo preservam os resultados do portal/browser original e os bloqueios de hospedagem observados naquele momento. Não são o plano atual de contratação; o pacote privado acima substitui a dependência proposta de Railway. O download no browser anterior continua uma prova separada da nova execução HTTPS.
 
 **OMNIX FRONTEND PREVIEW READY — BACKEND INTEGRATION BLOCKED.** Página corporativa online e demo local persistido verificados. E2E remoto e cliente real continuam bloqueados. Não houve merge, deploy manual/produtivo, nova infraestrutura, alteração de proteção, Stripe, fundos, OAuth externo ou envio de contato comercial.
 

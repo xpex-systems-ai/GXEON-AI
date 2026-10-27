@@ -1,0 +1,312 @@
+{
+  "generatedAt": "2026-10-27T00:22:14.589Z",
+  "records": [
+    {
+      "workspace": "artifacts/gxeon-dashboard-mobile",
+      "chain": [
+        {
+          "name": "@expo/cli",
+          "version": "54.0.23",
+          "manifest": "node_modules/.pnpm/@expo+cli@54.0.23_expo-rout_ff91a881d4ae11d6fdae385494ac65cd/node_modules/@expo/cli/package.json",
+          "manifestSha256": "0b64ffc1d46c4c6d741617076c04894a84dad1cce92b1458ea8943e07f8d7f0d",
+          "declaredDependencies": {
+            "@0no-co/graphql.web": "^1.0.8",
+            "@expo/code-signing-certificates": "^0.0.6",
+            "@expo/config": "~12.0.13",
+            "@expo/config-plugins": "~54.0.4",
+            "@expo/devcert": "^1.2.1",
+            "@expo/env": "~2.0.8",
+            "@expo/image-utils": "^0.8.8",
+            "@expo/json-file": "^10.0.8",
+            "@expo/metro": "~54.2.0",
+            "@expo/metro-config": "~54.0.14",
+            "@expo/osascript": "^2.3.8",
+            "@expo/package-manager": "^1.9.10",
+            "@expo/plist": "^0.4.8",
+            "@expo/prebuild-config": "^54.0.8",
+            "@expo/schema-utils": "^0.1.8",
+            "@expo/spawn-async": "^1.7.2",
+            "@expo/ws-tunnel": "^1.0.1",
+            "@expo/xcpretty": "^4.3.0",
+            "@react-native/dev-middleware": "0.81.5",
+            "@urql/core": "^5.0.6",
+            "@urql/exchange-retry": "^1.3.0",
+            "accepts": "^1.3.8",
+            "arg": "^5.0.2",
+            "better-opn": "~3.0.2",
+            "bplist-creator": "0.1.0",
+            "bplist-parser": "^0.3.1",
+            "chalk": "^4.0.0",
+            "ci-info": "^3.3.0",
+            "compression": "^1.7.4",
+            "connect": "^3.7.0",
+            "debug": "^4.3.4",
+            "env-editor": "^0.4.1",
+            "expo-server": "^1.0.5",
+            "freeport-async": "^2.0.0",
+            "getenv": "^2.0.0",
+            "glob": "^13.0.0",
+            "lan-network": "^0.1.6",
+            "minimatch": "^9.0.0",
+            "node-forge": "^1.3.3",
+            "npm-package-arg": "^11.0.0",
+            "ora": "^3.4.0",
+            "picomatch": "^3.0.1",
+            "pretty-bytes": "^5.6.0",
+            "pretty-format": "^29.7.0",
+            "progress": "^2.0.3",
+            "prompts": "^2.3.2",
+            "qrcode-terminal": "0.11.0",
+            "require-from-string": "^2.0.2",
+            "requireg": "^0.2.2",
+            "resolve": "^1.22.2",
+            "resolve-from": "^5.0.0",
+            "resolve.exports": "^2.0.3",
+            "semver": "^7.6.0",
+            "send": "^0.19.0",
+            "slugify": "^1.3.4",
+            "source-map-support": "~0.5.21",
+            "stacktrace-parser": "^0.1.10",
+            "structured-headers": "^0.4.1",
+            "tar": "^7.5.2",
+            "terminal-link": "^2.1.1",
+            "undici": "^6.18.2",
+            "wrap-ansi": "^7.0.0",
+            "ws": "^8.12.1"
+          },
+          "type": "commonjs"
+        },
+        {
+          "name": "node-forge",
+          "version": "1.4.0",
+          "manifest": "node_modules/.pnpm/node-forge@1.4.0/node_modules/node-forge/package.json",
+          "manifestSha256": "a907bca8a62d97478062f2bd8ed5cd47d00b79385d3f08a8cad1c3bd7e3eb5bf",
+          "declaredDependencies": {},
+          "type": "commonjs"
+        }
+      ]
+    },
+    {
+      "workspace": "artifacts/gxeon-dashboard-mobile",
+      "chain": [
+        {
+          "name": "@expo/ngrok",
+          "version": "4.1.3",
+          "manifest": "node_modules/.pnpm/@expo+ngrok@4.1.3/node_modules/@expo/ngrok/package.json",
+          "manifestSha256": "b349ced2d9501bdfa38ac245e2b1263d5a84dd920fbe2f0d9ad259410fb4f5c8",
+          "declaredDependencies": {
+            "@expo/ngrok-bin": "2.3.42",
+            "got": "^11.5.1",
+            "uuid": "^3.3.2",
+            "yaml": "^1.10.0"
+          },
+          "type": "commonjs"
+        },
+        {
+          "name": "got",
+          "version": "11.8.6",
+          "manifest": "node_modules/.pnpm/got@11.8.6/node_modules/got/package.json",
+          "manifestSha256": "48233e01876e5114699a823cd53c597a9c3a3510c3223350c5cb19cbc9e3f251",
+          "declaredDependencies": {
+            "@sindresorhus/is": "^4.0.0",
+            "@szmarczak/http-timer": "^4.0.5",
+            "@types/cacheable-request": "^6.0.1",
+            "@types/responselike": "^1.0.0",
+            "cacheable-lookup": "^5.0.3",
+            "cacheable-request": "^7.0.2",
+            "decompress-response": "^6.0.0",
+            "http2-wrapper": "^1.0.0-beta.5.2",
+            "lowercase-keys": "^2.0.0",
+            "p-cancelable": "^2.0.0",
+            "responselike": "^2.0.0"
+          },
+          "type": "commonjs"
+        },
+        {
+          "name": "cacheable-request",
+          "version": "7.0.4",
+          "manifest": "node_modules/.pnpm/cacheable-request@7.0.4/node_modules/cacheable-request/package.json",
+          "manifestSha256": "04af7e62979b2a3d5b512c3704732a92bae610b43cc34a377c07d416d68d5447",
+          "declaredDependencies": {
+            "clone-response": "^1.0.2",
+            "get-stream": "^5.1.0",
+            "http-cache-semantics": "^4.0.0",
+            "keyv": "^4.0.0",
+            "lowercase-keys": "^2.0.0",
+            "normalize-url": "^6.0.1",
+            "responselike": "^2.0.0"
+          },
+          "type": "commonjs"
+        },
+        {
+          "name": "http-cache-semantics",
+          "version": "4.2.0",
+          "manifest": "node_modules/.pnpm/http-cache-semantics@4.2.0/node_modules/http-cache-semantics/package.json",
+          "manifestSha256": "bee0609d5ab09a590afe0e1209d3702b0afb0a3c158492f90902a724d889d22b",
+          "declaredDependencies": {},
+          "type": "commonjs"
+        }
+      ]
+    },
+    {
+      "workspace": "artifacts/gxeon-dashboard-mobile",
+      "chain": [
+        {
+          "name": "expo-router",
+          "version": "6.0.23",
+          "manifest": "node_modules/.pnpm/expo-router@6.0.23_@types+r_04f3cfea3f36377152fc4ab423a44bfe/node_modules/expo-router/package.json",
+          "manifestSha256": "b88d110f0a472e0126feddb1065672d7126cbf23e15f6dc8ff4d287770f6d3c5",
+          "declaredDependencies": {
+            "@expo/metro-runtime": "^6.1.2",
+            "@expo/schema-utils": "^0.1.8",
+            "@radix-ui/react-slot": "1.2.0",
+            "@radix-ui/react-tabs": "^1.1.12",
+            "@react-navigation/bottom-tabs": "^7.4.0",
+            "@react-navigation/native": "^7.1.8",
+            "@react-navigation/native-stack": "^7.3.16",
+            "client-only": "^0.0.1",
+            "debug": "^4.3.4",
+            "escape-string-regexp": "^4.0.0",
+            "expo-server": "^1.0.5",
+            "fast-deep-equal": "^3.1.3",
+            "invariant": "^2.2.4",
+            "nanoid": "^3.3.8",
+            "query-string": "^7.1.3",
+            "react-fast-compare": "^3.2.2",
+            "react-native-is-edge-to-edge": "^1.1.6",
+            "semver": "~7.6.3",
+            "server-only": "^0.0.1",
+            "sf-symbols-typescript": "^2.1.0",
+            "shallowequal": "^1.1.0",
+            "use-latest-callback": "^0.2.1",
+            "vaul": "^1.1.2"
+          },
+          "type": "commonjs"
+        },
+        {
+          "name": "query-string",
+          "version": "7.1.3",
+          "manifest": "node_modules/.pnpm/query-string@7.1.3/node_modules/query-string/package.json",
+          "manifestSha256": "4e806a521ebf91707fe03761008e20e07413080485aac67f467d079999374512",
+          "declaredDependencies": {
+            "decode-uri-component": "^0.2.2",
+            "filter-obj": "^1.1.0",
+            "split-on-first": "^1.0.0",
+            "strict-uri-encode": "^2.0.0"
+          },
+          "type": "commonjs"
+        },
+        {
+          "name": "decode-uri-component",
+          "version": "0.2.2",
+          "manifest": "node_modules/.pnpm/decode-uri-component@0.2.2/node_modules/decode-uri-component/package.json",
+          "manifestSha256": "8f2e9784337b3b4fa69359f88f75a2847e0aa17776f062cb518d008d8d408bca",
+          "declaredDependencies": {},
+          "type": "commonjs"
+        }
+      ]
+    },
+    {
+      "workspace": "lib/db",
+      "chain": [
+        {
+          "name": "zod",
+          "version": "3.25.76",
+          "manifest": "node_modules/.pnpm/zod@3.25.76/node_modules/zod/package.json",
+          "manifestSha256": "70eedbe34fd52385a4ae2f3e5759b19682189f0118ea73a6e7c32c677f61668e",
+          "declaredDependencies": {},
+          "type": "module"
+        }
+      ]
+    },
+    {
+      "workspace": "artifacts/gxeon-dashboard-mobile",
+      "chain": [
+        {
+          "name": "zod",
+          "version": "3.25.76",
+          "manifest": "node_modules/.pnpm/zod@3.25.76/node_modules/zod/package.json",
+          "manifestSha256": "70eedbe34fd52385a4ae2f3e5759b19682189f0118ea73a6e7c32c677f61668e",
+          "declaredDependencies": {},
+          "type": "module"
+        }
+      ]
+    },
+    {
+      "workspace": "lib/api-zod",
+      "chain": [
+        {
+          "name": "zod",
+          "version": "4.6.6",
+          "manifest": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/package.json",
+          "manifestSha256": "cff7e142055a9dd9bc2947a71ca3fb5e3aacdfda966d7728993ff3656245b94a",
+          "declaredDependencies": {},
+          "type": "module"
+        }
+      ]
+    },
+    {
+      "workspace": "artifacts/gxeon-dashboard",
+      "chain": [
+        {
+          "name": "zod",
+          "version": "4.6.6",
+          "manifest": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/package.json",
+          "manifestSha256": "cff7e142055a9dd9bc2947a71ca3fb5e3aacdfda966d7728993ff3656245b94a",
+          "declaredDependencies": {},
+          "type": "module"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "package": "decode-uri-component",
+      "ghsa": "GHSA-vcc3-ghjq-m6fr",
+      "severity": "moderate",
+      "versions": [
+        "0.2.2"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>expo-router>query-string>decode-uri-component"
+      ],
+      "patched": ">=0.5.0"
+    },
+    {
+      "package": "node-forge",
+      "ghsa": "GHSA-86w9-cpqp-85rv",
+      "severity": "high",
+      "versions": [
+        "1.4.0"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>node-forge"
+      ],
+      "patched": "<0.0.0"
+    },
+    {
+      "package": "http-cache-semantics",
+      "ghsa": "GHSA-ch52-4w7c-c8xp",
+      "severity": "high",
+      "versions": [
+        "4.2.0"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/ngrok>got>cacheable-request>http-cache-semantics"
+      ],
+      "patched": "<0.0.0"
+    },
+    {
+      "package": "zod",
+      "ghsa": "GHSA-mrhx-c7xc-m3w5",
+      "severity": "high",
+      "versions": [
+        "3.25.76"
+      ],
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>zod"
+      ],
+      "patched": ">=4.6.6"
+    }
+  ]
+}
