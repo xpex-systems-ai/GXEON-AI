@@ -13,6 +13,9 @@ import {
 } from "@workspace/api-zod";
 import type { AuditWorkflowService } from "./services/auditWorkflowService";
 import { AuditWorkflowError } from "./services/auditWorkflowChecks";
+import { createOmnixDistributionRouter } from "./omnixDistributionRouter";
+import { OmnixReadError } from "./omnixReadGateway";
+import { enterpriseReadScopes } from "./enterpriseIdentity";
 
 type Identity = typeof omnixPreviewIdentitySchema._output;
 // Synthetic identities only. This is NOT customer registration/password recovery or an enterprise IdP.
@@ -227,6 +230,14 @@ export function omnixPreviewRouter(
     res.clearCookie(cookieName, cookie);
     res.json({ ok: true });
   });
+  router.use("/distribution", createOmnixDistributionRouter({ origins, workflow: service,
+    resolve: async (_req, res) => {
+      const preview = res.locals.preview, current = sessions.get(preview.key);
+      if (!current || current.expires <= now()) throw new OmnixReadError(401, "PREVIEW_LOGIN_REQUIRED", "A current synthetic session is required.");
+      const user = current.identity;
+      return { userId: user.id, organizationId: user.organizationId, scopes: enterpriseReadScopes,
+        workflowActor: { userId: user.id, organizationId: user.organizationId, role: user.role } };
+    } }));
   router.get("/cases", async (_req, res) =>
     res.json(
       omnixCasesSchema.parse(

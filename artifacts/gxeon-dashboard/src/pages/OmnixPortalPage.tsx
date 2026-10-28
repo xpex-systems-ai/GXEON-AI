@@ -14,9 +14,10 @@ import {
 } from "@workspace/api-zod";
 import { readAuditJson } from "@/services/auditTransport";
 import example from "@/data/omnix-example-report.json";
+import OmnixCapabilitiesPanel from "./OmnixCapabilitiesPanel";
 import "./omnix.css";
 
-type View = "dashboard" | "new" | "result" | "history" | "example";
+type View = "dashboard" | "new" | "result" | "history" | "example" | "capabilities";
 const checkNames = {
   vercel_api_routing: "Fallback SPA e roteamento da API",
   vercel_security_headers: "Declarações globais de headers de segurança",
@@ -293,6 +294,7 @@ export default function OmnixPortalPage() {
                 ["new", "Nova auditoria"],
                 ["history", "Histórico"],
                 ["example", "Exemplo de relatório"],
+                ["capabilities", "Capacidades"],
               ] as const
             ).map(([id, label]) => (
               <button
@@ -483,6 +485,12 @@ export default function OmnixPortalPage() {
                 </section>
               ) : (
                 <>
+                  {view === "capabilities" && (
+                    <OmnixCapabilitiesPanel
+                      key={`${session.user.organizationId}:${session.user.id}:${session.expiresAt}`}
+                      cases={cases}
+                    />
+                  )}
                   {(view === "dashboard" || view === "history") && (
                     <>
                       <div className="ox-page-heading">

@@ -358,6 +358,8 @@ export function createAuditWorkflowService(
             "INVALID_STATE",
             "Only IN_REVIEW cases can be reviewed.",
           );
+        if (actor && item.metadata.portal?.userId === actor.userId)
+          return fail(403, "SELF_REVIEW_DENIED", "The case author cannot review this case, including after a role change.");
         item.metadata.review = {
           decision: parsed.data.decision,
           reference: parsed.data.reviewReference,

@@ -11,7 +11,13 @@ if (fs.existsSync(directory)) throw new Error("RELEASE_EXISTS_NO_OVERWRITE");
 fs.mkdirSync(directory, { recursive: true, mode: 0o700 });
 const files = [["artifacts/api-server/dist/audit-pilot.mjs", "audit-pilot.mjs"], ["lib/db/drizzle/0002_audit_os_schema.sql", "schema.sql"],
   ["deploy/audit-pilot/grants.example.sql", "grants.sql"], ["deploy/self-hosted/README.md", "README.md"],
-  ["deploy/self-hosted/runtime.env.example", "runtime.env.example"]];
+  ["deploy/self-hosted/runtime.env.example", "runtime.env.example"],
+  ["lib/db/drizzle/0003_omnix_enterprise_identity.sql", "enterprise-schema.sql"],
+  ["lib/db/drizzle/0004_omnix_commercial_intake.sql", "commercial-schema.sql"],
+  ["deploy/render/enterprise-grants.example.sql", "enterprise-grants.example.sql"],
+  ["deploy/self-hosted/encrypted-backup.mjs", "encrypted-backup.mjs"],
+  ["docs/audit-os/gx-04-0/IDENTITY.md", "IDENTITY.md"],
+  ["docs/audit-os/gx-04-0/DISTRIBUTION.md", "DISTRIBUTION.md"]];
 for (const [from, to] of files) fs.copyFileSync(path.join(root, from), path.join(directory, to), fs.constants.COPYFILE_EXCL);
 fs.cpSync(path.join(root, "artifacts/gxeon-dashboard/dist/public"), path.join(directory, "public"), { recursive: true, errorOnExist: true, force: false });
 const records = [];

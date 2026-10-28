@@ -31,6 +31,20 @@ docker compose -f deploy/self-hosted/compose.yaml stop
 
 O verificador usa **cliente Node HTTPS**, não download de navegador: cria caso, verifica dono/organização, executa checks, revisa com identidade distinta, fecha e recebe o JSON. Testa CA/hostname inválidos, assets compilados, API 404 em JSON, cookie Secure, TLS real do banco e restauração em **um banco novo**, comparando hashes das cinco tabelas e confirmando fonte intacta. Dump e segredos ficam privados; só `evidence/` contém os recibos publicáveis. A revisão sintética não é parecer humano independente.
 
+## Backup criptografado e restauração autenticada
+
+O verificador criptografa o dump privado usando **OpenSSL CMS AuthEnvelopedData, AES-256-GCM e RSA-OAEP-SHA256**, com chave/certificado de teste próprios em `backup-recipient/`, separados de TLS. Não instala certificados no SO ou navegador. Antes do restore, recusa envelope adulterado e chave incorreta sem criar arquivo de plaintext, autentica o envelope íntegro e grava um **novo** `.authenticated.sql` com exclusividade. A restauração usa esse arquivo e compara os hashes das cinco tabelas com a origem. O recibo `backupRestore.encryptionReceipt` contém somente cifra, tamanhos e hashes; não contém dumps, chaves ou caminhos privados.
+
+Para usar um destinatário aprovado pelo operador, com OpenSSL disponível (ou `GXEON_OPENSSL_BIN`):
+
+```sh
+node deploy/self-hosted/encrypted-backup.mjs encrypt /privado/dump.sql /privado/recipient.crt /privado/dump.sql.cms
+node deploy/self-hosted/encrypted-backup.mjs decrypt /privado/dump.sql.cms /privado/recipient.crt /privado/recipient.key /privado/restore-authenticated.sql
+node --test deploy/self-hosted/encrypted-backup.test.mjs
+```
+
+O limite desta ferramenta é **16 MiB** por dump. Entrada e resultado ficam limitados em memória; somente o exit bem-sucedido do OpenSSL permite publicar plaintext. Não sobrescreve arquivos, não aceita CMS sem autenticação GCM e não imprime o stderr privado do OpenSSL. Os arquivos de teste, inclusive dump e restore em claro, permanecem na pasta privada para inspeção; a criptografia do backup não elimina esses arquivos de origem. Os certificados sintéticos têm validade de 14 dias; as chaves não possuem rotação ou expiração automática. A decriptação CMS não verifica a validade temporal do certificado. Custódia separada da chave, ACLs do host Windows, cópia fora do host, rotação, expiração, agendamento e retenção continuam sob decisão operacional. Uma cópia CMS local não prova recuperação após perda do host. O formato e os algoritmos seguem a [documentação oficial do OpenSSL CMS](https://docs.openssl.org/3.0/man1/openssl-cms/).
+
 ## Limites e segredos
 
 - App rootless, filesystem somente leitura, sem capabilities, HTTPS e porta do host vinculada apenas a `127.0.0.1`.
@@ -50,6 +64,8 @@ node deploy/self-hosted/release.mjs
 ```
 
 O diretório `.gx-selfhost/releases/<commit>/` contém o bundle dedicado, frontend compilado, schema/grants e manifesto SHA256; não contém node_modules, segredos ou runtime financeiro. Para executar em outro host, instale Node24, prepare um PG17 privado e vazio, aplique o schema por seu dono, crie o papel restrito e aplique grants. Configure os arquivos privados conforme `runtime.env.example`, usando certificados válidos para os hosts escolhidos:
+
+GX040 inclui schemas empresariais/comerciais aditivos e o utilitário de backup cifrado no pacote, sem ativar esses módulos. `enterprise-schema.sql`, `commercial-schema.sql` e `enterprise-grants.example.sql` exigem seleção administrativa explícita do banco isolado. Primeiro configure/verifique um IdP confiável e o responsável destinatário conforme `IDENTITY.md`; não use códigos do portal de teste para clientes. Atestação de grants cobre somente extensões habilitadas. Nenhuma política definitiva de retenção de clientes ou revisão humana vem embutida nesse pacote.
 
 ```sh
 node --env-file=/caminho/privado/runtime.env audit-pilot.mjs

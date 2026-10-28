@@ -98,6 +98,9 @@ test("dedicated runtime configuration fails closed without distinct roles, priva
     { GXEON_AUDIT_AUTO_RUN_MISSION_006: "true" }, { GXEON_AUDIT_AUTO_CREATE_FIRST_PROPOSAL: "true" },
     { GXEON_AUDIT_DB_PROVIDER: "supabase_rest" }, { DATABASE_URL: "postgresql://admin:private@public.example.invalid/shared" },
     { DATABASE_URL: valid.DATABASE_URL + "?sslmode=no-verify" }, { GXEON_AUDIT_ALLOWED_ORIGINS: "*" },
+    { DATABASE_URL: "postgresql://gx01_pilot_app:" + "%61".repeat(10) + "@postgres.railway.internal/gx01_pilot" },
+    { DATABASE_URL: "postgresql://gx01_pilot_app:" + "a".repeat(24) + "%GG@postgres.railway.internal/gx01_pilot" },
+    { DATABASE_URL: "postgresql://gx01_pilot_app:" + "a".repeat(24) + "%00@postgres.railway.internal/gx01_pilot" },
     { GXEON_AUDIT_ALLOWED_ORIGINS: "http://pilot.example.invalid" }, { GXEON_AUDIT_ALLOWED_ORIGINS: "https://pilot.example.invalid/path" },
     { GXEON_AUDIT_WRITE_MODE: "enabled", GXEON_AUDIT_ALLOW_DB_WRITES: "false" },
   ]) assert.throws(() => loadAuditPilotConfig({ ...valid, ...patch }), /AUDIT_PILOT_CONFIGURATION_REQUIRED/);

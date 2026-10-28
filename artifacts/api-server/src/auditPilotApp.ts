@@ -7,8 +7,13 @@ import { auditWorkflowRouter } from "./routes/auditWorkflow";
 import type { AuditWorkflowService } from "./services/auditWorkflowService";
 import { omnixPreviewRouter, type OmnixPreviewConfig } from "./omnixPreview";
 import { renderIngressBoundary, type RenderIngressConfig } from "./auditRenderIngress";
+import { createEnterpriseIdentityRouter, resolveEnterpriseRequest } from "./enterpriseIdentityRouter";
+import { createOmnixDistributionRouter } from "./omnixDistributionRouter";
+import { omnixCommercialRouter, type CommercialRouterOptions } from "./omnixCommercial";
 
 type Options = {
+  enterprise?: Omit<Parameters<typeof createEnterpriseIdentityRouter>[0], "workflow" | "origins">;
+  commercial?: CommercialRouterOptions;
   renderIngress?: RenderIngressConfig;
   frontendRoot?: string;
   portal?: OmnixPreviewConfig;
@@ -83,12 +88,12 @@ export function createAuditPilotApp(options: Options) {
       const method = req.get("access-control-request-method");
       const headers = (req.get("access-control-request-headers") ?? "").split(",").map(s => s.trim().toLowerCase()).filter(Boolean);
       if (!origin || !["GET", "POST"].includes(method ?? "") ||
-          headers.some(h => !["authorization", "content-type"].includes(h))) {
+          headers.some(h => !["authorization", "content-type", "x-omnix-organization-id"].includes(h))) {
         res.status(403).json({ ok: false, code: "PREFLIGHT_DENIED" }); return;
       }
-      if (!req.path.startsWith("/api/v1/audit/workflow/")) { res.status(404).json({ ok: false, code: "AUDIT_ROUTE_NOT_FOUND" }); return; }
+      if (!["/api/v1/audit/workflow/", "/api/omnix-enterprise/"].some(prefix => req.path.startsWith(prefix))) { res.status(404).json({ ok: false, code: "AUDIT_ROUTE_NOT_FOUND" }); return; }
       res.setHeader("Access-Control-Allow-Methods", "GET, POST");
-      res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+      res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Omnix-Organization-Id");
       res.status(204).end(); return;
     }
     next();
@@ -113,6 +118,13 @@ export function createAuditPilotApp(options: Options) {
     res.json({ ok: true, service: "gxeon-audit-pilot" });
   });
   if (options.portal) app.use("/api/omnix", omnixPreviewRouter(options.portal, options.service, options.origins));
+  if (options.enterprise) {
+    const dependencies = { ...options.enterprise, workflow: options.service };
+    app.use("/api/omnix-enterprise/distribution", createOmnixDistributionRouter({ workflow: options.service, origins: options.origins,
+      resolve: async req => (await resolveEnterpriseRequest(req.get("authorization"), req.get("x-omnix-organization-id"), dependencies)).principal }));
+    app.use("/api/omnix-enterprise", createEnterpriseIdentityRouter({ ...dependencies, origins: options.origins }));
+  }
+  if (options.commercial) app.use("/api/omnix-commercial", omnixCommercialRouter(options.commercial));
   app.get("/api/readyz", auditAccess("read"), admit, async (_req, res) => {
     try { await options.ready(); res.json({ ok: true }); }
     catch { res.status(503).json({ ok: false, code: "AUDIT_NOT_READY" }); }

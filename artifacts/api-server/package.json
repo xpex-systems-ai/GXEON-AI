@@ -10,7 +10,7 @@
     "start:audit-pilot": "node --enable-source-maps ./dist/audit-pilot.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "smoke:financial": "../../scripts/node_modules/.bin/tsx src/tests/financialRuntimeSmoke.ts",
-    "test:audit": "tsx --test src/tests/auditWorkflow.test.ts src/tests/auditPilot.test.ts src/tests/auditOmnixPreview.test.ts src/tests/auditPortable.test.ts src/tests/auditRender.test.ts && node --test ../../deploy/render/release-guard.test.mjs",
+    "test:audit": "tsx --test --test-concurrency=1 src/tests/auditWorkflow.test.ts src/tests/auditPilot.test.ts src/tests/auditOmnixPreview.test.ts src/tests/auditPortable.test.ts src/tests/auditRender.test.ts src/tests/auditDatabaseTrust.test.ts src/tests/auditEnterpriseIdentity.test.ts src/tests/auditOmnixDistribution.test.ts src/tests/auditCommercial.test.ts src/tests/auditRuntimeExtensions.test.ts && node --test ../../deploy/render/release-guard.test.mjs ../../deploy/self-hosted/encrypted-backup.test.mjs",
     "test:audit-pilot-db": "tsx --test src/tests/auditPilotDatabase.test.ts",
     "typecheck:audit-tests": "tsc -p tsconfig.audit-tests.json --noEmit",
     "demo:audit": "tsx src/tests/auditWorkflowDemo.ts"
@@ -22,6 +22,7 @@
     "cors": "^2.8.6",
     "drizzle-orm": "catalog:",
     "express": "^5.2.1",
+    "jose": "6.2.13",
     "pino": "^9.14.0",
     "pino-http": "^10.5.0"
   },

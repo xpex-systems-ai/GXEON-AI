@@ -15,7 +15,12 @@
     "src/tests/auditPilotDatabase.test.ts",
     "src/tests/auditOmnixPreview.test.ts",
     "src/tests/auditPortable.test.ts",
-    "src/tests/auditRender.test.ts"
+    "src/tests/auditRender.test.ts",
+    "src/tests/auditDatabaseTrust.test.ts",
+    "src/tests/auditEnterpriseIdentity.test.ts",
+    "src/tests/auditOmnixDistribution.test.ts",
+    "src/tests/auditCommercial.test.ts",
+    "src/tests/auditRuntimeExtensions.test.ts"
   ],
   "exclude": []
 }

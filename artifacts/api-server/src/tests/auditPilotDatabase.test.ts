@@ -6,7 +6,9 @@ import { Pool } from "@workspace/db/pool";
 import { assertAuditPilotDatabase } from "../auditPilotDatabase";
 import { createAuditWorkflowService } from "../services/auditWorkflowService";
 
-test("dedicated PostgreSQL 17 startup attestation rejects excessive grants and non-synthetic data", async () => {
+test("dedicated PostgreSQL 17 startup attestation rejects excessive grants and non-synthetic data", {
+  skip: !process.env.TEST_AUDIT_PILOT_DATABASE_URL,
+}, async () => {
   const text = process.env.TEST_AUDIT_PILOT_DATABASE_URL;
   assert.ok(text, "Use only the isolated PostgreSQL service created for this test");
   const url = new URL(text);
@@ -67,6 +69,54 @@ test("dedicated PostgreSQL 17 startup attestation rejects excessive grants and n
       for (const key of Object.keys(process.env)) if (!(key in previous)) delete process.env[key];
       Object.assign(process.env, previous);
     }
+    // GX040: additive extensions only in this fresh isolated PG17 database.
+    // These migrations preserve the canonical audit tables and their test data.
+    await owner.query(await readFile(new URL("../../../../lib/db/drizzle/0003_omnix_enterprise_identity.sql", import.meta.url), "utf8"));
+    await owner.query(await readFile(new URL("../../../../lib/db/drizzle/0004_omnix_commercial_intake.sql", import.meta.url), "utf8"));
+    await assert.rejects(assertAuditPilotDatabase(app, { enterprise: true, commercial: true }), /OMNIX_EXTENSION_PRIVILEGES_REQUIRED/,
+      "Creating extension tables does not grant the app authority to use them");
+    await owner.query(await readFile(new URL("../../../../deploy/render/enterprise-grants.example.sql", import.meta.url), "utf8"));
+    const extensions = { enterprise: true, commercial: true };
+    await assertAuditPilotDatabase(app, { enterprise: true });
+    await assertAuditPilotDatabase(app, extensions);
+    await assert.rejects(assertAuditPilotDatabase(app, { commercial: true }), /ENTERPRISE_COMMERCIAL_IDENTITY_REQUIRED/);
+    // Statements touch zero rows. Their success/failure proves SQL privileges,
+    // without changing membership roles, removing audit logs or admitting PII.
+    await app.query("UPDATE omnix_memberships SET revoked_at=NULL WHERE false");
+    await app.query("UPDATE omnix_commercial_requests SET delivery='ACKNOWLEDGED',acknowledged_at=now() WHERE false");
+    const permissionDenied = (error: unknown) => (error as { code?: string }).code === "42501";
+    await assert.rejects(app.query("UPDATE omnix_memberships SET role='owner' WHERE false"), permissionDenied);
+    await assert.rejects(app.query("DELETE FROM omnix_identity_events WHERE false"), permissionDenied);
+    await assert.rejects(app.query("SELECT event FROM omnix_identity_events LIMIT 0"), permissionDenied);
+    // Revoke only each additional negative-test grant; do not reset the role or
+    // reapply a broad privilege set that could conceal a faulty initial grant.
+    await owner.query("GRANT UPDATE(role) ON omnix_memberships TO gx01_pilot_app");
+    try {
+      await assert.rejects(assertAuditPilotDatabase(app, extensions), /OMNIX_EXTENSION_COLUMN_GRANTS_REQUIRED/);
+    } finally {
+      await owner.query("REVOKE UPDATE(role) ON omnix_memberships FROM gx01_pilot_app");
+    }
+    await assertAuditPilotDatabase(app, extensions);
+    await owner.query("GRANT UPDATE ON omnix_memberships TO gx01_pilot_app");
+    try {
+      await assert.rejects(assertAuditPilotDatabase(app, extensions), /OMNIX_EXTENSION_PRIVILEGES_REQUIRED/);
+    } finally {
+      await owner.query("REVOKE UPDATE ON omnix_memberships FROM gx01_pilot_app");
+      // PG17 also removes the previously granted column UPDATE when revoking
+      // table UPDATE. Restore only the exact baseline revocation column grant;
+      // the initial minimal-grant and forbidden-role checks already ran above.
+      await owner.query("GRANT UPDATE(revoked_at) ON omnix_memberships TO gx01_pilot_app");
+    }
+    await assertAuditPilotDatabase(app, extensions);
+    await owner.query("GRANT DELETE ON omnix_identity_events TO gx01_pilot_app");
+    try {
+      await assert.rejects(assertAuditPilotDatabase(app, extensions), /OMNIX_EXTENSION_PRIVILEGES_REQUIRED/);
+    } finally {
+      await owner.query("REVOKE DELETE ON omnix_identity_events FROM gx01_pilot_app");
+    }
+    await assertAuditPilotDatabase(app, extensions);
+    await assert.rejects(app.query("UPDATE omnix_memberships SET role='owner' WHERE false"), permissionDenied);
+    await assert.rejects(app.query("DELETE FROM omnix_identity_events WHERE false"), permissionDenied);
     await owner.query("INSERT INTO audit_cases(title,status,metadata) VALUES('TEST DATA negative startup attestation','DRAFT',$1::jsonb)",
       [JSON.stringify({ scope: { testData: false } })]);
     await assert.rejects(assertAuditPilotDatabase(app), /SYNTHETIC_PILOT_DATABASE_REQUIRED/);

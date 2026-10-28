@@ -385,6 +385,15 @@ test("GX019 persisted portal lifecycle isolates owners and organizations, distin
     assert.equal(report.report.evidence.length, 1);
     assert.equal(report.report.findings.length, 2);
     assert.equal(report.report.testData, true);
+    const distributed = await api.request("/distribution/mcp", a, { jsonrpc: "2.0", id: 40, method: "tools/call",
+      params: { name: "omnix_get_report", arguments: { caseId: id } } });
+    assert.equal(distributed.status, 200);
+    const distributedBody = await distributed.json();
+    assert.equal(distributedBody.result.isError, false);
+    assert.ok(JSON.stringify(distributedBody.result.structuredContent).includes(report.reportId));
+    const crossOrganization = await api.request("/distribution/mcp", other, { jsonrpc: "2.0", id: 41, method: "tools/call",
+      params: { name: "omnix_get_report", arguments: { caseId: id } } });
+    assert.equal((await crossOrganization.json()).result.isError, true);
     const metrics = omnixCasesSchema.parse(
       await (await api.request("/cases", a)).json(),
     );

@@ -1,6 +1,7 @@
 import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
-import { checkServerIdentity } from "node:tls";
+import { checkServerIdentity, rootCertificates } from "node:tls";
+import { isPublicAuditAddress, isRenderAuditDatabaseHost } from "./auditDatabaseTrust";
 import type { AuditPilotConfig } from "./auditPilotConfig";
 
 export function isPrivateAuditAddress(address: string): boolean {
@@ -19,8 +20,12 @@ type Resolve = (hostname: string) => Promise<readonly { address: string; family:
 export async function auditPilotConnectionOptions(config: AuditPilotConfig,
   resolve: Resolve = hostname => lookup(hostname, { all: true })) {
   const url = new URL(config.databaseUrl), hostname = url.hostname.replace(/^\[|\]$/g, "");
+  const external = config.databaseNetwork === "render-external-public-ca";
+  if (external && (config.deploymentMode !== "render" || !isRenderAuditDatabaseHost(hostname) || config.databaseCa || (url.port && url.port !== "5432")))
+    throw new Error("AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED");
   const addresses = isIP(hostname) ? [{ address: hostname, family: isIP(hostname) }] : await resolve(hostname);
-  if (!addresses.length || addresses.some(a => !isPrivateAuditAddress(a.address))) throw new Error("PRIVATE_AUDIT_DATABASE_ADDRESS_REQUIRED");
+  if (!addresses.length || addresses.some(a => !(external ? isPublicAuditAddress(a.address) : isPrivateAuditAddress(a.address))))
+    throw new Error(external ? "PUBLIC_AUDIT_DATABASE_ADDRESS_REQUIRED" : "PRIVATE_AUDIT_DATABASE_ADDRESS_REQUIRED");
   const pinned = addresses.find(a => a.family === 4) ?? addresses[0]!;
   // Connect to the already validated IP: do not perform a second DNS lookup.
   // Verify the certificate against the original operator-approved hostname.
@@ -28,7 +33,8 @@ export async function auditPilotConnectionOptions(config: AuditPilotConfig,
     password: decodeURIComponent(url.password), database: "gx01_pilot", max: 4,
     connectionTimeoutMillis: 5000, idleTimeoutMillis: 30000, statement_timeout: 5000,
     ssl: { rejectUnauthorized: true, minVersion: "TLSv1.2" as const,
-      ...(config.databaseCa ? { ca: config.databaseCa } : {}),
+      // Bundled public roots exclude opportunistic certificates and environment-added CAs.
+      ca: external ? [...rootCertificates] : config.databaseCa,
       ...(!isIP(hostname) ? { servername: hostname } : {}),
       checkServerIdentity: (_host: string, cert: Parameters<typeof checkServerIdentity>[1]) => checkServerIdentity(hostname, cert) } };
 }

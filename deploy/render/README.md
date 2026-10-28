@@ -1,4 +1,4 @@
-# OMNIX / Render — candidato GX030
+# OMNIX / Render — candidato GX040
 
 Estado: **BLOCKED para ativação**. Este diretório adapta o runtime existente; não provisiona recursos. Não há URL OMNIX Render confirmada. A PR #456 continua em rascunho. Não usar códigos de teste como identidade de clientes.
 
@@ -14,7 +14,7 @@ As variáveis de revisão no runtime são **configuração**, não prova indepen
 
 ## Banco: bloqueio determinante
 
-O contrato atual continua exigindo `gx01_pilot_app`, `gx01_pilot`, PG17, grants mínimos, DNS exclusivamente privado, CA explícita, `rejectUnauthorized=true`, SNI e verificação do hostname original. Nenhuma dessas garantias foi removida.
+O perfil padrão continua exigindo `gx01_pilot_app`, `gx01_pilot`, PG17, grants mínimos, DNS exclusivamente privado, CA explícita, `rejectUnauthorized=true`, SNI e verificação do hostname original. GX040 adiciona um perfil externo candidato, desligado por padrão, sujeito a revisão própria. Ele altera o isolamento de rede; não é aceitação de segurança nem prova de um endpoint real.
 
 [Render documenta](https://render.com/docs/postgresql-creating-connecting) que a conexão interna usa certificado autossinado e não oferece verify-ca/full. Não existe neste pacote uma CA/identidade Render verificada. Copiar o certificado apresentado e confiar nele sem comprovação não resolve a autenticação inicial.
 
@@ -23,11 +23,20 @@ Rotas para decisão:
 | Rota | Resultado atual | Próxima prova necessária |
 | --- | --- | --- |
 | Interna padrão Render | Incompatível com o contrato atual | Cadeia e hostname autenticados por fonte confiável; ainda não disponíveis |
-| Externa Render com TLS gerenciado | Candidata, não implementada/aceita | Revisar mudança de isolamento e DNS, identidade/SNI, ACL de origem e teste negativo de CA/hostname |
-| PostgreSQL já autorizado com CA/host privados | Nenhum destino compatível identificado | Host, titularidade, rede autorizada e CA confiável; não enviar segredo no chat |
-| Infraestrutura própria com pacote self-hosted | Testada localmente e em CI | Servidor remoto identificado, backup externo e revisão operacional |
+| A — Externa Render com TLS gerenciado | Perfil implementado e testes negativos locais; sem banco real/aceite | Revisão independente do modelo, certificado real, DNS/SNI, ACL restrita ao egress aprovado e grants PG17 |
+| B — PostgreSQL gerenciado externo já autorizado | Nenhum destino compatível identificado | Host, titularidade, rede autorizada e CA confiável; não enviar segredo no chat |
+| C — Infraestrutura própria com pacote self-hosted | Fluxo local e CI já demonstrados; backup cifrado ampliado no GX040 | Servidor remoto identificado, cópia de backup externa, revisão operacional e novo recibo do SHA final |
+| D — Outro caminho seguro comprovado | NÃO COMPROVADO | Proposta concreta com custo, rede, confiança, isolamento e revisão; nenhum provedor substituto contratado |
 
 GX-03.0 §6 exige revisão humana independente e aprovação explícita para mudar confiança/autenticação TLS. A criação Free é condicional à compatibilidade; por isso não foi iniciado o prazo de expiração de um banco sem integração segura. Não há recurso OMNIX criado nem alteração na Academy.
+
+### Perfil externo candidato
+
+`GXEON_AUDIT_DATABASE_NETWORK=render-external-public-ca` aceita somente modo Render e hostname público Oregon `dpg-…-a.oregon-postgres.render.com` explicitamente igual a `GXEON_AUDIT_DATABASE_HOST`, porta 5432. Rejeita CA substituta, query de conexão, redes privadas/reservadas/documentação/multicast e respostas DNS mistas. Pina o IP validado e conserva SNI/hostname originais. A cadeia usa exclusivamente as raízes públicas incluídas no Node; nenhum certificado apresentado é copiado como confiança. O perfil privado permanece padrão.
+
+O pré-flight `node deploy/render/release-guard.mjs --database` exige revisão GitHub real, humana, independente, no SHA exato, com a linha `GX040_DATABASE_EXTERNAL_MODEL_ACCEPTED`. Nomes: `GXEON_AUDIT_DATABASE_REVIEW_COMMIT`, `GXEON_AUDIT_DATABASE_REVIEW_REFERENCE`, `GXEON_AUDIT_DATABASE_REVIEWER`. O recibo continua `databaseTlsAccepted=false` e `deploymentAuthorized=false`: aceitação do modelo não verifica um banco ainda inexistente. Não preencher IDs com fixtures.
+
+Render documenta ACL externa inicialmente ampla. **Não usar 0.0.0.0/0 para ativar o candidato**: confirmar egress real, restringir CIDRs e testar negação da origem indevida antes de qualquer dado. Ainda faltam hostname/cadeia/ACL/latência/custo observados de uma instância concreta; nenhum desses gates foi convertido em aprovado por variável de ambiente.
 
 ## Conta e custo observados em 2026-10-28
 
