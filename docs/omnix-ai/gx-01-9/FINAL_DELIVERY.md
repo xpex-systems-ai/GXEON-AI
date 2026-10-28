@@ -1,5 +1,24 @@
 # GX019 — entrega do runtime independente
 
+## Reconsulta de 27/10/2026
+
+Novo handoff reconciliado com a execução existente. PR456 e PR45 permanecem DRAFT, sem merge. Runtime corrigido E=`30e0b00a219eb4c45d4fd57064b92f1165b1c739`; interface/browser U=`670449a2d384164cedc8e0449343219fa6b3a4ba` (mesmo frontend em E); site C=`b4ab3bcba57f93410e372dfb59888131fd287236`. HEAD documental posterior e seus checks são informados na PR. [Evidências atuais](evidence/recheck-2026-10-27/manifest.json).
+
+Status: **OMNIX FRONTEND PREVIEW READY — BACKEND INTEGRATION BLOCKED**. [Prévia corporativa](https://xpex-systems-aggjdj7jx-xpex-neural.vercel.app/?view=omnix) aberta no browser: exemplo congelado rotulado e download JSON comprovado, sem exigir GitHub no caminho principal. Não é E2E remoto com API/PG nem CUSTOMER PILOT APPROVED. A diretriz de independência continua: nenhum serviço contratado; host/IP/domínio/SO/acesso próprios ainda não informados.
+
+Mudanças novas: correção de invalidação de arquivo/consentimento; entrada pública para exemplo na própria página; download congelado validado com preparação explícita; patch qs6.16.1 e fixture de regressão. Sem reconstruir motor, conta de cliente, pagamento ou infraestrutura.
+
+O fluxo completo local agora usou o seletor real de arquivo. Caso `d513da2e-6d48-4665-b394-0f9ed69b56aa`, relatório `15cf371e-dc3c-4354-aaeb-3c8a6cb1e664`,4339 bytes, SHA arquivo `37bd24e36e55a22f7b3cd36be054d8efa47979d2b60d2ce2d76e00be1bbcbc12`; SHA canônico `efcd82c9279146394d26665e4b8648f2936e41066608cbcb7507a6fac623f66d`. Refresh preservou conteúdo e propriedade. O primeiro503 e a recuperação201 são preservados como fatos; causa exata não comprovada.
+
+E repetiu HTTPS com CA/hostname inválidos recusados, PG17 TLS, isolamento, relatório, restauração em banco novo e reinício API+PG, com sessão antiga invalidada. [Aceitação nativa atual](evidence/recheck-2026-10-27/native/portable-acceptance.json). Isso usa cliente Node HTTPS e é separado da prova de browser HTTP local. O pacote exportável usa o bundle dedicado e frontend atuais, com manifesto SHA256 e sem credenciais.
+
+Página online C permite conhecer o produto e baixar o exemplo sintético sem GitHub. Não permite enviar configurações reais nem afirma API remota disponível. Oferta Configuration Integrity Audit permanece candidata, preço sob aprovação, sem solicitação recebida, contrato, pagamento ou receita comprovados. Revisor independente não designado. Grok/Claude/DeepSeek: NÃO EXECUTADOS.
+
+Riscos atuais: audit global3HIGH/1MODERATE/1LOW, scan Node/OS/imagem não concluído, IAM/privacidade/recuperação e operação remota pendentes. Nenhum novo serviço pago, domínio, banco remoto, merge, Stripe, carteira, webhook ou produção foi alterado. Próxima ação: identificar host/IP/domínio/SO/acesso do servidor próprio confirmado e então executar a prévia externa sintética dentro da autorização específica. **BLOCKED para aceite final/E2E remoto/dados reais.**
+
+
+## Registro anterior preservado
+
 **Diretriz atual de 26/10/2026: executar sem depender da Railway. Núcleo portátil implementado e validado; aceite final de operação pública e clientes reais BLOCKED.** O fundador confirmou que existe infraestrutura própria, mas host/IP, domínio, SO e método de acesso ainda não foram informados. Não há novo destino público, contratação, merge ou deploy produtivo nesta entrega.
 
 [Motor PR456 DRAFT](https://github.com/xpex-systems-ai/GXEON-AI/pull/456) · [Site PR45 DRAFT](https://github.com/xpex-systems-ai/xpex-systems-ai/pull/45) · [Instruções executáveis](../../../../deploy/self-hosted/README.md) · [Escopo e matriz atuais](PROVIDER_INDEPENDENCE.md).

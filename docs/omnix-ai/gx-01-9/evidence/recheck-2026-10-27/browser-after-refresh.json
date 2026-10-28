@@ -1,0 +1,32 @@
+{
+  "checkedAt": "2026-10-28T00:39:18.705Z",
+  "phase": "after-refresh",
+  "sourceCommit": "670449a2d384164cedc8e0449343219fa6b3a4ba",
+  "sourceDirty": false,
+  "environment": "LOCAL browser HTTP loopback -> existing dedicated app -> native PostgreSQL17; not remote E2E",
+  "testData": true,
+  "nativeFileChooserVerified": true,
+  "invalidNameAndMalformedJsonRejected": true,
+  "consentInvalidatedOnReplacement": true,
+  "browserDownloadVerified": true,
+  "persistedContentMatchesDownload": true,
+  "persistedEvidenceMatchesUploadedFile": true,
+  "requestIdUniqueAfter503Retry": true,
+  "caseId": "d513da2e-6d48-4665-b394-0f9ed69b56aa",
+  "reportId": "15cf371e-dc3c-4354-aaeb-3c8a6cb1e664",
+  "evidenceCount": 1,
+  "findingCount": 2,
+  "status": "CLOSED",
+  "bytes": 4339,
+  "fileSha256": "37bd24e36e55a22f7b3cd36be054d8efa47979d2b60d2ce2d76e00be1bbcbc12",
+  "reportSha256": "efcd82c9279146394d26665e4b8648f2936e41066608cbcb7507a6fac623f66d",
+  "evidenceFileSha256": "1abbc0baf6a050b3c703dc05e873776d44ee0bfcbb1117036df26acfa455c29a",
+  "review": "Synthetic automation with distinct identity; not independent human approval",
+  "transientFailure": {
+    "status": 503,
+    "subsequentAttemptStatus": 201,
+    "exactCauseConfirmed": false,
+    "noLimitsWeakened": true
+  },
+  "diagnosticCaseRetained": "2935f868-afb8-44c1-8322-2ccd652b5a61"
+}

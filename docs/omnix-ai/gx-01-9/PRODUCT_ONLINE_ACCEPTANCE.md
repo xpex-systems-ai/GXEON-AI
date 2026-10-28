@@ -1,5 +1,47 @@
 # GX-01.9 — aceite do produto
 
+## Reconsulta de 27/10/2026
+
+Novo handoff reconciliado com a execução existente. PR456 e PR45 permanecem DRAFT, sem merge. Runtime corrigido E=`30e0b00a219eb4c45d4fd57064b92f1165b1c739`; interface/browser U=`670449a2d384164cedc8e0449343219fa6b3a4ba` (mesmo frontend em E); site C=`b4ab3bcba57f93410e372dfb59888131fd287236`. HEAD documental posterior e seus checks são informados na PR. [Evidências atuais](evidence/recheck-2026-10-27/manifest.json).
+
+Status: **OMNIX FRONTEND PREVIEW READY — BACKEND INTEGRATION BLOCKED**. [Prévia corporativa](https://xpex-systems-aggjdj7jx-xpex-neural.vercel.app/?view=omnix) aberta no browser: exemplo congelado rotulado e download JSON comprovado, sem exigir GitHub no caminho principal. Não é E2E remoto com API/PG nem CUSTOMER PILOT APPROVED. A diretriz de independência continua: nenhum serviço contratado; host/IP/domínio/SO/acesso próprios ainda não informados.
+
+| Gate | Estado atual | Evidência / commit | URL | Responsável | Bloqueio / próxima ação |
+|---|---|---|---|---|---|
+| G01 Site | PASS | C, preview Git conferido | prévia acima | Codex | produção main preservada |
+| G02 Motor | PASS | E, mesmo serviço/checks/contratos | PR456 | Codex | nenhum segundo motor criado |
+| G03 Reuso | PASS | U/E, React no dashboard existente | /omnix local | Codex | manter escopo atual |
+| G04 Página | PASS PREVIEW | C, screenshot e download do exemplo | prévia acima | Codex | exemplo não substitui resultados de sessão |
+| G05 Portal | PASS LOCAL | U, browser → API → PG; recibos | 127.0.0.1:5174/omnix | Codex | remoto ainda bloqueado |
+| G06 Login | PASS SINTÉTICO | U/E, papéis distintos, sessões e isolamento nos testes | local / CI | Codex | não é IdP/recuperação empresarial |
+| G07 Formulário | PASS LOCAL | U, seletor real, nome/JSON inválidos, consentimento invalidado | local | Codex | apenas vercel.json sintético limitado |
+| G08 API | PASS LOCAL/CI | E, contratos e respostas reais | local / CI | Codex | API remota dedicada não comprovada |
+| G09 Persistência | PASS LOCAL/CI | E, PG17 TLS, restore novo e reinício | local / CI | Codex | operação externa requer destino |
+| G10 Dashboard | PASS LOCAL | U, números SQL incluindo caso diagnóstico identificado TEST DATA | local | Codex | nenhuma métrica comercial inferida |
+| G11 JSON | PASS LOCAL | U, download real4339 bytes e igualdade SQL | local | Codex | exportação da API remota pendente |
+| G12 Integridade | PASS LOCAL/CI | U/E, refresh e hashes; runtime privado restart/restore | local / CI | Codex | não é assinatura/certificação independente |
+| G13 Online | PARCIAL | C: página/exemplo disponíveis; portal Vercel protegido | prévia acima | Codex / titular | acesso ao backend integrado continua pendente |
+| G14 E2E online | BLOCKED | não há recibo remoto API+PG | nenhuma URL inventada | titular / Codex | informar host/IP, domínio, SO e método de acesso |
+| G15 Clientes | BLOCKED | audit global3HIGH/1MOD/1LOW; IAM/privacidade/operação não aceitos | feed e SBOM anexos | fundador / técnicos | fechar gates antes de dados reais |
+| G16 Comercial | PARCIAL | C, oferta candidata e rascunho local sem envio | página OMNIX | fundador | preço/termos/contrato/pagamento dependem de aprovação e comprovação |
+| G17 Operação/custos | BLOCKED | nenhum recurso novo contratado; consumo marginal não medido | decisão de deploy | titular | identificar servidor, quotas, TLS, monitoramento, backup e rollback |
+| G18 Abertura | BLOCKED | nenhuma aprovação humana independente alegada | PRs DRAFT | fundador / revisor a designar | decisão explícita após gates |
+
+Prova U: caso `d513da2e-6d48-4665-b394-0f9ed69b56aa`, relatório `15cf371e-dc3c-4354-aaeb-3c8a6cb1e664`, 1 evidência/2 achados, CLOSED; download do browser4339 bytes, SHA256 `37bd24e36e55a22f7b3cd36be054d8efa47979d2b60d2ce2d76e00be1bbcbc12`. Evidência persistida igual ao arquivo escolhido; apenas um caso com o requestId após nova tentativa. [Antes](evidence/recheck-2026-10-27/browser-before-refresh.json) / [após refresh](evidence/recheck-2026-10-27/browser-after-refresh.json). Revisão sintética distinta, não humana independente.
+
+Falha preservada: primeira submissão503, causa exata não confirmada; health/ready e banco200, verificação direta de armazenamento bem-sucedida e nova tentativa idempotente201. Nenhum timeout/TLS/controle foi relaxado. Caso diagnóstico `2935f868-afb8-44c1-8322-2ccd652b5a61` mantido e identificado TEST DATA; não é cliente. Registra-se a falha sem atribuir causa especulativa.
+
+O download estático inicial do site não iniciou no navegador apesar do endpoint retornar JSON correto. A preparação explícita e bounded do arquivo em C corrigiu o caminho observado; browser recebeu4185 bytes idênticos ao exemplo do motor. [Recibo](evidence/recheck-2026-10-27/corporate-prepared-download.json). É exemplo congelado, não E2E remoto.
+
+Layout local em viewport390px: largura DOM390px, sem overflow da página nesse estado. Captura visual móvel foi inconclusiva (compositor/timeout); emulação restaurada. Não declarar validação em dispositivo físico ou auditoria completa de acessibilidade. Desktop e controles inspecionados no browser.
+
+Instalação congelada, tipos globais, lint49/zero erros, builds e cinco suites corporativas PASS. Regressão qs em Express: serialização comma com toString não chamável e parsing normal PASS; patch sem mudança de major, política de1440 minutos intacta. CI do candidato E executa24/24 PGlite,25/25 PostgreSQL,grants1/1 e os quatro workflows/sete jobs; resultados finais e checkout são vinculados na PR e nos recibos baixados, sem antecipar checks pendentes.
+
+Feed atualizado encontrou qs MODERATE e deepmerge LOW além dos avisos anteriores. qs foi corrigido para6.16.1; audit pós-patch **FAIL3HIGH/1MODERATE/1LOW**. Deepmerge está na cadeia Expo/CLI, sem patch publicado no advisory. SBOM dedicado atual84 componentes/294 inputs, zero correspondências conhecidas ao feed pós-patch; não cobre Node/OS/imagem. [Resumo pós-patch](evidence/recheck-2026-10-27/post-security/audit-summary.json) / [SBOM](evidence/recheck-2026-10-27/post-security/runtime/dedicated-runtime.cdx.json). Fontes: [qs](https://github.com/advisories/GHSA-6pq8-jhm2-2vcw), [deepmerge](https://github.com/advisories/GHSA-gcqx-w48m-w2h4).
+
+
+## Registro anterior preservado
+
 26/10/2026. **OMNIX FRONTEND PREVIEW READY — BACKEND INTEGRATION BLOCKED**.
 Não é OMNIX DEMO ONLINE VERIFIED nem CUSTOMER PILOT APPROVED. Desenvolvimento e teste sintético foram executados sem depender de contratação de auditor externo.
 

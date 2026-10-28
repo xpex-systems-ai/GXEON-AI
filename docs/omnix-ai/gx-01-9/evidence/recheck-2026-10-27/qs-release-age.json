@@ -1,0 +1,10 @@
+{
+  "source": "https://registry.npmjs.org/qs",
+  "observedAt": "2026-10-28T00:46:56.582Z",
+  "version": "6.16.1",
+  "published": "2026-10-14T22:06:17.002Z",
+  "ageMinutes": 18880.660133333335,
+  "requiredMinimumReleaseAge": 1440,
+  "eligibleWithoutException": true,
+  "integrity": "sha512-5Px6J7rfHBAGUhNQ3es4YzcOdBBw0SDcVtThJml4RdnKw4tKs2epA0kPZ+K8X+WiHktT93RHVcQ/3ym5aTCgtg=="
+}
