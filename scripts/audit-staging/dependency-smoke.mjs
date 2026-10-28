@@ -74,6 +74,15 @@ assert.ok((await stat(path.join(fixture, "fixture.tar"))).size < 65536);
 await tar.x({ cwd: path.join(fixture, "restored"), file: path.join(fixture, "fixture.tar") });
 assert.equal(await readFile(path.join(fixture, "restored/test-data.txt"), "utf8"), "TEST DATA bounded archive fixture");
 const apiRequire = createRequire(path.join(repoRoot, "artifacts/api-server/package.json"));
+const expressRequire = createRequire(apiRequire.resolve("express"));
+const qs = expressRequire("qs"), qsVersion = expressRequire("qs/package.json").version;
+assert.equal(qsVersion, "6.16.1");
+// GHSA-6pq8-jhm2-2vcw: comma serialization of an own non-callable toString
+// must not crash an Express consumer. Exercise both the hostile value and normal use.
+assert.doesNotThrow(() => qs.stringify({ a: [{ toString: "x" }] }, { arrayFormat: "comma" }));
+assert.equal(qs.stringify({ a: ["one", "two"] }, { arrayFormat: "comma" }), "a=one%2Ctwo");
+assert.deepEqual(qs.parse("project[name]=TEST&checks[]=one&checks[]=two"), { project: { name: "TEST" }, checks: ["one", "two"] });
+resolved.push({ name: "qs", before: "6.16.0", version: qsVersion, chain: "artifacts__api-server>express>qs", module: qs });
 const express = apiRequire("express"), text = "TEST DATA ".repeat(800);
 const app = express(); app.use(get("compression")({ threshold: 0 })); app.get("/fixture", (_req, res) => res.type("text/plain").send(text));
 const server = app.listen(0, "127.0.0.1"); await once(server, "listening");
@@ -92,7 +101,7 @@ for (const version of ["6.2.6", "7.5.13"]) {
 }
 const result = { testData: true, status: "PASS", externalNetworkUsed: false, fixturesRetained: true,
   versions: resolved.map(({ name, before, version, chain }) => ({ name, before, version, chain })),
-  checks: ["installed parent resolution", "YAML3 roundtrip", "brace2 expansion", "XML0.8/0.9 and plist roundtrip", "tar7 create/extract new fixture", "Undici6 HTTP + compression1 gzip", "ws6/ws7 echo"],
+  checks: ["installed parent resolution", "YAML3 roundtrip", "brace2 expansion", "XML0.8/0.9 and plist roundtrip", "tar7 create/extract new fixture", "Undici6 HTTP + compression1 gzip", "ws6/ws7 echo", "qs6 comma adversarial serialization and normal nested parsing"],
   fixtureContentSha256: createHash("sha256").update(text).digest("hex") };
 await mkdir(path.join(stateDir, "evidence"), { recursive: true });
 await writeFile(path.join(stateDir, "evidence/dependency-smoke.json"), JSON.stringify(result, null, 2));

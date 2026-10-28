@@ -110,7 +110,8 @@ overrides:
   "ws@^8": "8.21.0"
   # GX-01.3: patch audited API and lint transitive dependencies without changing majors.
   proxy-addr: "2.0.8"
-  qs: "6.16.0"
+  # GX019: GHSA-6pq8-jhm2-2vcw; same-major patch aged beyond the 1440-minute policy.
+  qs: "6.16.1"
   body-parser: "2.4.0"
   shell-quote: "1.12.0"
   tar: "7.5.21"
