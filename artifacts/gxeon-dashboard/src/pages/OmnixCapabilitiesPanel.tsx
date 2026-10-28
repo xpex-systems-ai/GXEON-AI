@@ -170,7 +170,7 @@ export default function OmnixCapabilitiesPanel({ cases }: { cases?: OmnixCases }
           <button type="button" disabled={consulting} onClick={() => void consult({ intent: "latest_report" })}>Último relatório autorizado</button>
         </div>
         <label>Casos do histórico autorizado
-          <select className="ox-code" value={selectedCaseId} disabled={consulting || !selectedCaseId} onChange={event => setCaseId(event.target.value)}>
+          <select className="ox-code" style={{ width: "100%", minWidth: 0, maxWidth: "100%" }} value={selectedCaseId} disabled={consulting || !selectedCaseId} onChange={event => setCaseId(event.target.value)}>
             {!selectedCaseId ? <option value="">Nenhum caso disponível</option> : null}
             {cases?.items.map(item => <option value={item.id} key={item.id}>{item.title} · {item.id}</option>)}
           </select>
