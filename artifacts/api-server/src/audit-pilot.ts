@@ -9,6 +9,7 @@ import { auditPilotConnectionOptions } from "./auditPilotConnection";
 import { loadAuditPilotSecretFiles } from "./auditPilotFiles";
 import { createServer } from "node:https";
 import { readFileSync } from "node:fs";
+import { createAuditTelemetry } from "./auditTelemetry";
 
 async function start() {
   Object.assign(process.env, loadAuditPilotSecretFiles());
@@ -18,10 +19,12 @@ async function start() {
   try { await assertAuditPilotDatabase(pool); }
   catch { await pool.end(); throw new Error("AUDIT_DATABASE_NOT_READY"); }
   const app = createAuditPilotApp({ origins: config.origins,
+    renderIngress: config.renderIngress,
     frontendRoot: config.frontendRoot,
     portal: loadOmnixPreviewConfig(),
     service: createAuditWorkflowService(() => pool.connect()),
     ready: async () => { await pool.query("SELECT 1"); },
+    operationalLog: createAuditTelemetry(record => console.log(JSON.stringify(record))),
     log: record => console.log(JSON.stringify(record)) });
   const server = config.https ? createServer({ key: readFileSync(config.https.keyFile),
     cert: readFileSync(config.https.certFile), minVersion: "TLSv1.2" }, app).listen(config.port, config.bindHost) : app.listen(config.port, config.bindHost);

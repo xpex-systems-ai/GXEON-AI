@@ -12,8 +12,19 @@ import { createAuditPilotApp } from "../auditPilotApp";
 import { loadAuditPilotConfig } from "../auditPilotConfig";
 import { AuditWorkflowError, validateWorkflowIntake } from "../services/auditWorkflowChecks";
 import { auditWorkflowDetailSchema, auditWorkflowReportSchema } from "@workspace/api-zod";
+import { insertAuditCaseSchema } from "../../../../lib/db/src/schema/audit";
+import { insertActorWalletSchema } from "../../../../lib/db/src/schema/financial";
 
 const synthetic = () => randomBytes(32).toString("base64url");
+test("GX030 patched Zod4 preserves drizzle audit and legacy numeric/enum wire validation without database or financial actions", () => {
+  const audit = { title: "GX030 TEST DATA", metadata: { scope: { testData: true }, optionalDiagnostic: null } };
+  assert.deepEqual(insertAuditCaseSchema.parse(audit), audit);
+  const legacyRow = { actorId: "GX030_SCHEMA_FIXTURE_ONLY", balance: "1.23", metadata: { testData: true } };
+  assert.deepEqual(insertActorWalletSchema.parse(legacyRow), legacyRow);
+  assert.equal(insertActorWalletSchema.safeParse({ ...legacyRow, balance: 1.23 }).success, false);
+  assert.equal(insertActorWalletSchema.safeParse({ ...legacyRow, status: "UNAPPROVED" }).success, false);
+  assert.equal(insertAuditCaseSchema.safeParse({ ...audit, status: "UNAPPROVED" }).success, false);
+});
 test("GX018 operator URL labels and instruction-like JSON remain inert data", async () => {
   const engine = await PGlite.create();
   await engine.exec(await readFile(new URL("../../../../lib/db/drizzle/0002_audit_os_schema.sql", import.meta.url), "utf8"));

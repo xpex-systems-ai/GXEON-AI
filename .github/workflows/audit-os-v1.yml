@@ -6,6 +6,24 @@ on:
 permissions:
   contents: read
 jobs:
+  render-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build dedicated Render candidate (no provider resources)
+        run: docker build -f deploy/render/Dockerfile -t omnix-render-candidate .
+      - name: Verify rootless image and refusal without reviewed configuration
+        run: |
+          test "$(docker inspect --format '{{.Config.User}}' omnix-render-candidate)" = node
+          if docker run --rm omnix-render-candidate > "$RUNNER_TEMP/render-refusal.log" 2>&1; then
+            echo 'Runtime unexpectedly started without configuration'; exit 1
+          fi
+          test "$(cat "$RUNNER_TEMP/render-refusal.log")" = '{"event":"audit_pilot_start_refused"}'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gx030-render-candidate
+          path: ${{ runner.temp }}/render-refusal.log
   portable-runtime:
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -99,6 +117,10 @@ jobs:
         run: |
           node scripts/audit-staging/security-compatibility.mjs
           cp .gx012/evidence/security-compatibility.json "$RUNNER_TEMP/gx01-evidence/"
+      - name: GX030 adversarial regressions and installed Expo parent compatibility
+        run: |
+          node scripts/audit-staging/gx030-security.mjs
+          cp .gx012/evidence/gx030-security.json "$RUNNER_TEMP/gx01-evidence/"
       - run: pnpm run typecheck:libs
       - run: pnpm --filter @workspace/api-server run typecheck
       - run: pnpm --filter @workspace/api-server run typecheck:audit-tests

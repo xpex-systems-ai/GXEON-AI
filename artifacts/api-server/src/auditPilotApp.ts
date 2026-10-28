@@ -6,8 +6,10 @@ import { auditAccess } from "./middlewares/auditAccess";
 import { auditWorkflowRouter } from "./routes/auditWorkflow";
 import type { AuditWorkflowService } from "./services/auditWorkflowService";
 import { omnixPreviewRouter, type OmnixPreviewConfig } from "./omnixPreview";
+import { renderIngressBoundary, type RenderIngressConfig } from "./auditRenderIngress";
 
 type Options = {
+  renderIngress?: RenderIngressConfig;
   frontendRoot?: string;
   portal?: OmnixPreviewConfig;
   origins: readonly string[];
@@ -16,6 +18,7 @@ type Options = {
   // Testable process-local limits; runtime uses defaults with one replica.
   admission?: { requestsPerMinute?: number; maxConcurrent?: number; now?: () => number };
   log?: (record: { event: string; requestId: string; method: string; route: string; status: number }) => void;
+  operationalLog?: (method: string, path: string, status: number, elapsedMs: number) => void;
 };
 export function createAuditPilotApp(options: Options) {
   if (!options.origins.length || options.origins.includes("*")) throw new Error("EXACT_AUDIT_ORIGINS_REQUIRED");
@@ -50,16 +53,22 @@ export function createAuditPilotApp(options: Options) {
     next();
   };
   app.use((req, res, next) => {
-    const requestId = randomUUID();
+    const requestId = randomUUID(), startedAt = now();
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("X-Content-Type-Options", "nosniff");
     res.setHeader("Referrer-Policy", "no-referrer");
     res.setHeader("X-Request-Id", requestId);
     // Fixed categories only: never log query, path parameters, headers, body or errors.
-    res.on("finish", () => options.log?.({ event: "audit_http", requestId,
+    res.on("finish", () => { options.log?.({ event: "audit_http", requestId,
       method: ["GET", "POST", "OPTIONS"].includes(req.method) ? req.method : "OTHER",
       route: req.path === "/api/healthz" ? "health" : req.path === "/api/readyz" ? "ready" :
-        req.path.startsWith("/api/v1/audit/workflow/") ? "workflow" : "unknown", status: res.statusCode }));
+        req.path.startsWith("/api/v1/audit/workflow/") ? "workflow" : req.path.startsWith("/api/omnix/") ? "portal" : "unknown", status: res.statusCode });
+      options.operationalLog?.(req.method, req.path, res.statusCode, Math.max(0, now() - startedAt));
+    });
+    next();
+  });
+  if (options.renderIngress) app.use(renderIngressBoundary(options.renderIngress));
+  app.use((req, res, next) => {
     const origin = req.get("origin");
     if (origin && !options.origins.includes(origin)) { res.status(403).json({ ok: false, code: "ORIGIN_DENIED" }); return; }
     if (origin) {
@@ -84,7 +93,25 @@ export function createAuditPilotApp(options: Options) {
     }
     next();
   });
-  app.get("/api/healthz", (_req, res) => res.json({ ok: true, service: "gxeon-audit-pilot" }));
+  let healthProbe: Promise<boolean> | undefined, healthAt: number | undefined, healthy = false;
+  app.get("/api/healthz", async (_req, res) => {
+    if (options.renderIngress) {
+      // Only the first request waits for a probe. Concurrent requests fail closed
+      // rather than enqueue database work or waiters on the same promise.
+      if (healthProbe) {
+        res.setHeader("Retry-After", "5");
+        res.status(503).json({ ok: false, service: "gxeon-audit-pilot" }); return;
+      }
+      if (healthAt === undefined || now() - healthAt >= 5000) {
+        healthProbe = Promise.resolve().then(options.ready).then(() => true, () => false).then(value => {
+          healthy = value; healthAt = now(); healthProbe = undefined; return value;
+        });
+        await healthProbe;
+      }
+      res.status(healthy ? 200 : 503).json({ ok: healthy, service: "gxeon-audit-pilot" }); return;
+    }
+    res.json({ ok: true, service: "gxeon-audit-pilot" });
+  });
   if (options.portal) app.use("/api/omnix", omnixPreviewRouter(options.portal, options.service, options.origins));
   app.get("/api/readyz", auditAccess("read"), admit, async (_req, res) => {
     try { await options.ready(); res.json({ ok: true }); }

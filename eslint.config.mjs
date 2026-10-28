@@ -7,6 +7,8 @@ import { defineConfig } from "eslint/config";
 export const typescriptFiles = [
   "artifacts/api-server/src/middlewares/auditAccess.ts",
   "artifacts/api-server/src/auditPilot*.ts",
+  "artifacts/api-server/src/auditRenderIngress.ts",
+  "artifacts/api-server/src/auditTelemetry.ts",
   "artifacts/api-server/src/audit-pilot.ts",
   "artifacts/api-server/src/routes/auditWorkflow.ts",
   "artifacts/api-server/src/services/auditWorkflow*.ts",
@@ -20,7 +22,7 @@ export const typescriptFiles = [
   "lib/api-zod/src/omnixPortal.ts",
   "artifacts/gxeon-dashboard/src/pages/OmnixPortalPage.tsx",
 ];
-export const javascriptFiles = ["scripts/audit-staging/*.mjs", "deploy/self-hosted/*.mjs", "scripts/build_workspace.mjs", "eslint.config.mjs", "artifacts/gxeon-dashboard-mobile/scripts/build.js"];
+export const javascriptFiles = ["scripts/audit-staging/*.mjs", "deploy/self-hosted/*.mjs", "deploy/render/*.mjs", "scripts/build_workspace.mjs", "eslint.config.mjs", "artifacts/gxeon-dashboard-mobile/scripts/build.js"];
 const globals = Object.fromEntries(["process", "console", "Buffer", "URL", "fetch", "AbortSignal", "AbortController", "setTimeout", "clearTimeout", "structuredClone"].map((name) => [name, "readonly"]));
 
 export default defineConfig(

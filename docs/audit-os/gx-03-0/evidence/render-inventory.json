@@ -1,0 +1,59 @@
+{
+  "at": "2026-10-28T19:08:06.890Z",
+  "workspaceId": "tea-d720q2qa214c73dkifo0",
+  "newResourcesCreated": 0,
+  "postgres": [],
+  "services": [
+    {
+      "id": "srv-da3it6rtqb8s73d0jf30",
+      "name": "xpexacadem86",
+      "plan": "free",
+      "region": "oregon",
+      "branch": "dev",
+      "autoDeploy": "yes",
+      "updatedAt": "2026-09-08T20:09:11.152841Z"
+    },
+    {
+      "id": "srv-da3it3mk1f9s73f1rq90",
+      "name": "xpexacadem",
+      "plan": "free",
+      "region": "oregon",
+      "branch": "dev",
+      "autoDeploy": "yes",
+      "updatedAt": "2026-09-08T20:09:21.690457Z"
+    },
+    {
+      "id": "srv-da3isv0ae00c73ava0o0",
+      "name": "XPEX-ACADEMY-ai",
+      "plan": "free",
+      "region": "oregon",
+      "branch": "dev",
+      "autoDeploy": "yes",
+      "updatedAt": "2026-09-08T20:09:22.046552Z"
+    },
+    {
+      "id": "srv-da3islbncjis73cl6qhg",
+      "name": "XPEX-ACADEMY",
+      "plan": "free",
+      "region": "oregon",
+      "branch": "dev",
+      "autoDeploy": "yes",
+      "updatedAt": "2026-09-08T20:09:06.866628Z"
+    }
+  ],
+  "billingObservation": {
+    "day": "2026-10-28",
+    "plan": "Hobby",
+    "cardOnFile": false,
+    "freeHoursUsed": 0.25,
+    "freeHoursIncluded": 750,
+    "servicesUsed": 4,
+    "serviceAllowance": 25,
+    "bandwidthUsedMB": 0,
+    "bandwidthIncludedGB": 5,
+    "pipelineMinutesUsed": 0,
+    "pipelineMinutesIncluded": 500
+  },
+  "compatibility": "BLOCKED_DATABASE_TLS",
+  "productionDeploy": false
+}

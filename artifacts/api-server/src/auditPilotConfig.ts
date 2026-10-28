@@ -1,9 +1,12 @@
+import { loadRenderIngress, type RenderIngressConfig } from "./auditRenderIngress";
+
 export type AuditPilotConfig = {
   port: number;
   origins: readonly string[];
   databaseUrl: string;
   databaseCa?: string;
-  deploymentMode: "railway" | "private";
+  deploymentMode: "railway" | "private" | "render";
+  renderIngress?: RenderIngressConfig;
   bindHost: string;
   frontendRoot?: string;
   https?: { keyFile: string; certFile: string };
@@ -25,15 +28,18 @@ export function loadAuditPilotConfig(env: NodeJS.ProcessEnv = process.env): Audi
   let database: URL;
   try { database = new URL(env.DATABASE_URL ?? ""); } catch { return refuse(); }
   const mode = env.GXEON_AUDIT_DEPLOYMENT_MODE ?? "railway";
-  if (!["railway", "private"].includes(mode) || env.NODE_TLS_REJECT_UNAUTHORIZED === "0") refuse();
+  if (!["railway", "private", "render"].includes(mode) || env.NODE_TLS_REJECT_UNAUTHORIZED === "0") refuse();
   if (!["postgres:", "postgresql:"].includes(database.protocol) ||
       database.username !== "gx01_pilot_app" ||
       database.pathname !== "/gx01_pilot" || database.search || database.hash || database.password.length < 24) refuse();
   if (mode === "railway" && !database.hostname.endsWith(".railway.internal")) refuse();
   const certFile = env.GXEON_AUDIT_HTTPS_CERT_FILE, keyFile = env.GXEON_AUDIT_HTTPS_KEY_FILE;
   if (!!certFile !== !!keyFile) refuse();
-  if (mode === "private" && (env.GXEON_AUDIT_DATABASE_HOST !== database.hostname ||
-      !env.GXEON_AUDIT_DATABASE_TLS_CA?.includes("-----BEGIN CERTIFICATE-----") || !certFile || !keyFile)) refuse();
+  if (["private", "render"].includes(mode) && (env.GXEON_AUDIT_DATABASE_HOST !== database.hostname ||
+      !env.GXEON_AUDIT_DATABASE_TLS_CA?.includes("-----BEGIN CERTIFICATE-----"))) refuse();
+  if (mode === "private" && (!certFile || !keyFile)) refuse();
+  const renderIngress = mode === "render" ? loadRenderIngress(env) : undefined;
+  if (mode === "render" && (certFile || keyFile || !env.GXEON_AUDIT_FRONTEND_ROOT)) refuse();
   const bindHost = env.GXEON_AUDIT_BIND_HOST ?? (mode === "private" ? "127.0.0.1" : "0.0.0.0");
   if (!["127.0.0.1", "::1", "0.0.0.0", "::"].includes(bindHost)) refuse();
   const origins = (env.GXEON_AUDIT_ALLOWED_ORIGINS ?? "").split(",").map(s => s.trim());
@@ -41,7 +47,9 @@ export function loadAuditPilotConfig(env: NodeJS.ProcessEnv = process.env): Audi
     try { const u = new URL(value); return u.protocol !== "https:" || u.origin !== value || !!u.username || !!u.password; }
     catch { return true; }
   })) refuse();
-  return { port, origins: [...new Set(origins)], databaseUrl: database.href, deploymentMode: mode as "railway" | "private", bindHost,
+  if (renderIngress && bindHost !== "0.0.0.0") refuse();
+  return { port, origins: [...new Set(origins)], databaseUrl: database.href, deploymentMode: mode as AuditPilotConfig["deploymentMode"], bindHost,
+    ...(renderIngress ? { renderIngress } : {}),
     ...(env.GXEON_AUDIT_FRONTEND_ROOT ? { frontendRoot: env.GXEON_AUDIT_FRONTEND_ROOT } : {}),
     ...(certFile && keyFile ? { https: { certFile, keyFile } } : {}),
     ...(env.GXEON_AUDIT_DATABASE_TLS_CA ? { databaseCa: env.GXEON_AUDIT_DATABASE_TLS_CA } : {}) };

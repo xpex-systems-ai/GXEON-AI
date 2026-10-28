@@ -56,8 +56,8 @@ for (const chain of [["@expo/cli", "@expo/config-plugins", "xcode", "uuid"], ["@
   }
   else assert.equal(typeof item.parent("./index.js").connect, "function"); // Never invoke connect/startTunnel.
 }
-// Candidate 0.5.0 broke query-string's CJS call contract; retain and disclose 0.2.2.
-const decoder = await resolveChain(mobile, ["expo-router", "query-string", "decode-uri-component"], "0.2.2");
+// GX030 pins the linear decoder and patches its parent's CJS/default interop.
+const decoder = await resolveChain(mobile, ["expo-router", "query-string", "decode-uri-component"], "0.5.1");
 const queryString = decoder.parent("./index.js");
 assert.equal(queryString.parse("label=TEST%20DATA&bad=%FF").label, "TEST DATA");
 assert.equal(typeof queryString.parse("bad=%FF").bad, "string");
@@ -85,8 +85,8 @@ const result = { status: "PASS", testData: true, externalNetworkUsed: false, tun
   versions, checks: ["Metro actual image-size Buffer path and getAssetData file paths, including Expo Router's real PNG", "xcode actual UUID generation and ngrok import without tunnel",
     "UUID v3 buffer bounds", "query-string actual decoding", "typography actual selector utility", "esbuild TypeScript transform", "Zod4 record wire values",
     "Mobile Babel configuration resolves its declared Expo preset and transforms actual TypeScript"],
-  legacyZod3GloballyRemediated: false, note: "Global mobile/database Zod3 remains a separately disclosed residual; dedicated build rejects retained v3 inputs." };
-result.decodeUriAdvisoryRemediated = false;
+  legacyZod3GloballyRemediated: true, note: "Unused mobile Zod3/validation-error declarations removed; shared catalog uses patched Zod4. drizzle-zod already consumed v4; schema regressions and full monorepo build are required." };
+result.decodeUriAdvisoryRemediated = true;
 await mkdir(path.join(stateDir, "evidence"), { recursive: true });
 await writeFile(path.join(stateDir, "evidence/security-compatibility.json"), JSON.stringify(result, null, 2));
 console.log(JSON.stringify(result));

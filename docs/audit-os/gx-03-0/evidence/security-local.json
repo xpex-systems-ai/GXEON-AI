@@ -1,0 +1,73 @@
+{
+  "at": "2026-10-28T19:09:05.184Z",
+  "auditCommand": "pnpm audit --json",
+  "auditExit": 1,
+  "auditStatus": "FAIL",
+  "scope": "entire workspace; no audit exclusions added",
+  "before": {
+    "info": 0,
+    "low": 1,
+    "moderate": 1,
+    "high": 3,
+    "critical": 0
+  },
+  "after": {
+    "info": 0,
+    "low": 1,
+    "moderate": 0,
+    "high": 1,
+    "critical": 0
+  },
+  "rawAuditSha256": "6b0e0771c22a19ee3538d8b42d0e304da57ce82d5387896fa0502bc8a9a72883",
+  "sourceAtObservation": "23b981d3fd30d73e8351965d2762afca3aa07c45",
+  "sourceDirty": true,
+  "dedicatedBundleSha256": "cf77290ed32000f246d453f3098c2407dac02e32056fd06f05ec4c5afbbbf528",
+  "retainedZod": {
+    "version": "4.6.6",
+    "legacyInputs": []
+  },
+  "advisories": [
+    {
+      "module": "http-cache-semantics",
+      "severity": "high",
+      "url": "https://github.com/advisories/GHSA-ch52-4w7c-c8xp",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/ngrok>got>cacheable-request>http-cache-semantics"
+      ],
+      "dedicatedRetainedInputs": [],
+      "treatment": "local backport with adversarial tests; upstream advisory remains; independent review pending"
+    },
+    {
+      "module": "deepmerge",
+      "severity": "low",
+      "url": "https://github.com/advisories/GHSA-gcqx-w48m-w2h4",
+      "paths": [
+        "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config>deepmerge"
+      ],
+      "dedicatedRetainedInputs": [],
+      "treatment": "local backport with adversarial tests; upstream advisory remains; independent review pending"
+    }
+  ],
+  "patches": [
+    {
+      "name": "deepmerge@4.3.1",
+      "sha256": "7416c15a20711d40ff76d9a221e8691f1cea36a0427e792987228819574655ea"
+    },
+    {
+      "name": "http-cache-semantics@4.2.0",
+      "sha256": "93bda86d4c365f42093528243691fa73e0de5c5af2304bee17690fb1312c755c"
+    },
+    {
+      "name": "query-string@7.1.3",
+      "sha256": "31922a5d968008ce63ff4f0a275192da1086bd21e709418945967eed084d406c"
+    }
+  ],
+  "rejectedCandidate": {
+    "name": "http-cache-semantics",
+    "version": "4.3.0",
+    "observedAt": "2026-10-28T19:09:08.207Z",
+    "maxAge": 0,
+    "servesPrivateCookieWithMaxStale": true,
+    "adopted": false
+  }
+}
