@@ -748,6 +748,12 @@ export default function OmnixPortalPage() {
                               onChange={(e) => {
                                 const file = e.target.files?.[0];
                                 if (!file) return;
+                                // A replacement invalidates the previous artifact and consent,
+                                // including when the newly selected file is rejected.
+                                setContent("");
+                                setAuthorized(false);
+                                setSynthetic(false);
+                                e.target.value = "";
                                 void perform(async () => {
                                   if (
                                     file.name !== "vercel.json" ||
@@ -759,8 +765,6 @@ export default function OmnixPortalPage() {
                                   const text = await file.text();
                                   configObject(text);
                                   setContent(text);
-                                  setAuthorized(false);
-                                  setSynthetic(false);
                                 });
                               }}
                             />
