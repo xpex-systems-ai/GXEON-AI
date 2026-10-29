@@ -25,7 +25,7 @@ export async function auditPilotConnectionOptions(config: AuditPilotConfig,
   const publicEndpoint = externalRender || externalSupabase;
   if (externalRender && (config.deploymentMode !== "render" || !isRenderAuditDatabaseHost(hostname) || config.databaseCa || (url.port && url.port !== "5432")))
     throw new Error("AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED");
-  if (externalSupabase && (!["render", "private"].includes(config.deploymentMode) ||
+  if (externalSupabase && (!["render", "private", "railway"].includes(config.deploymentMode) ||
       !isSupabaseAuditDatabaseHost(hostname, config.supabaseProjectRef ?? "") ||
       !config.databaseCa?.includes("-----BEGIN CERTIFICATE-----") ||
       url.pathname !== "/postgres" || (url.port && url.port !== "5432")))
