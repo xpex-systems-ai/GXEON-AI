@@ -29,9 +29,12 @@ import {
 } from "@/services/enterprisePortalTransport";
 import example from "@/data/omnix-example-report.json";
 import OmnixCapabilitiesPanel from "./OmnixCapabilitiesPanel";
+import OmnixProductSurface, { productViews, type ProductView } from "./OmnixProductSurface";
 import "./omnix.css";
+import "./omnix-product.css";
 
 type View =
+  | ProductView
   | "dashboard"
   | "new"
   | "result"
@@ -479,6 +482,7 @@ export default function OmnixPortalPage() {
     if (target !== "result")
       window.history.replaceState(null, "", portalPath());
   };
+  const productView = productViews.includes(view);
   return (
     <div className="omnix" translate="no">
       <a className="ox-skip" href="#omnix-main">
@@ -493,7 +497,7 @@ export default function OmnixPortalPage() {
               : "/omnix"
           }
         >
-          <span aria-hidden="true">◈</span>
+          <img className="of-logo" src="/assets/omnix-lion.png" alt="" width="44" height="44" />
           <b>
             OMNIX <em>AI</em>
           </b>
@@ -530,9 +534,18 @@ export default function OmnixPortalPage() {
           <nav aria-label="Portal OMNIX">
             {(
               [
-                ["dashboard", "Visão geral"],
+                ["dashboard", "Command Center"],
+                ["company", "Empresas e ambientes"],
+                ["engineer", "Audit Engineer"],
                 ["new", "Nova auditoria"],
-                ["history", "Histórico"],
+                ["history", "Histórico e aprovações"],
+                ["evidence", "Achados e evidências"],
+                ["reports", "Relatórios"],
+                ["specialists", "Especialistas"],
+                ["vercel", "Vercel Specialist"],
+                ["workforce", "Agent Workforce"],
+                ["integrations", "Integrações"],
+                ["lab", "Evidence Lab"],
                 ["example", "Exemplo de relatório"],
                 ["capabilities", "Capacidades"],
               ] as const
@@ -666,7 +679,8 @@ export default function OmnixPortalPage() {
               Confirmando operação e registros…
             </p>
           )}
-          {view === "example" ? (
+          {productView && <OmnixProductSurface view={view as ProductView} cases={cases} authenticated={!!session} organization={session?.user.organizationId} busy={busy} navigate={nav} openCase={id=>void perform(()=>open(id))} />}
+          {productView ? null : view === "example" ? (
             <>
               <p className="ox-kicker">TEST DATA / EXEMPLO CONGELADO</p>
               <h1>Evidências, em contexto.</h1>

@@ -34,6 +34,7 @@ export const typescriptFiles = [
   "lib/api-zod/src/omnixTask.ts",
   "artifacts/gxeon-dashboard/src/services/enterprisePortalTransport.ts",
   "artifacts/gxeon-dashboard/src/pages/OmnixPortalPage.tsx",
+  "artifacts/gxeon-dashboard/src/pages/OmnixProductSurface.tsx",
   "artifacts/gxeon-dashboard/src/pages/OmnixCapabilitiesPanel.tsx",
 ];
 export const javascriptFiles = ["scripts/audit-staging/*.mjs", "deploy/self-hosted/*.mjs", "deploy/render/*.mjs", "scripts/build_workspace.mjs", "eslint.config.mjs", "artifacts/gxeon-dashboard-mobile/scripts/build.js"];
