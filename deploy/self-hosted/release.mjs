@@ -17,7 +17,12 @@ const files = [["artifacts/api-server/dist/audit-pilot.mjs", "audit-pilot.mjs"],
   ["deploy/render/enterprise-grants.example.sql", "enterprise-grants.example.sql"],
   ["deploy/self-hosted/encrypted-backup.mjs", "encrypted-backup.mjs"],
   ["docs/audit-os/gx-04-0/IDENTITY.md", "IDENTITY.md"],
-  ["docs/audit-os/gx-04-0/DISTRIBUTION.md", "DISTRIBUTION.md"]];
+  ["docs/audit-os/gx-04-0/DISTRIBUTION.md", "DISTRIBUTION.md"],
+  ["lib/db/drizzle/0005_omnix_lead_intake.sql", "lead-schema.sql"],
+  ["deploy/render/lead-grants.example.sql", "lead-grants.example.sql"],
+  ["deploy/enterprise/bootstrap-owner.example.sql", "bootstrap-owner.example.sql"],
+  ["docs/audit-os/gx-05-0/IDENTITY.md", "IDENTITY_BROWSER.md"],
+  ["docs/audit-os/gx-05-0/CLIENT01_OPERATIONS.md", "CLIENT01_OPERATIONS.md"]];
 for (const [from, to] of files) fs.copyFileSync(path.join(root, from), path.join(directory, to), fs.constants.COPYFILE_EXCL);
 fs.cpSync(path.join(root, "artifacts/gxeon-dashboard/dist/public"), path.join(directory, "public"), { recursive: true, errorOnExist: true, force: false });
 const records = [];

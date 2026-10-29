@@ -54,6 +54,13 @@ type Connection = Pick<PoolClient, "query" | "release">;
 export type AuditWorkflowActor = { userId: string; organizationId: string; role: "operator" | "reviewer" };
 
 const now = () => new Date().toISOString();
+const reportLimitations = [
+  "Static inspection of operator-submitted vercel.json only.",
+  "No deployed route, runtime header, external asset ownership or remote provider was verified.",
+  "Review records a separate credential holder's human-review attestation; identity is not independently verified.",
+  "No payments, network scans or external connector writes.",
+];
+const reportFields = ["version", "caseId", "title", "testData", "scope", "results", "review", "evidence", "findings", "limitations", "generatedAt", "finalStatus", "events"].sort();
 const fail = (status: number, code: string, message: string): never => {
   throw new AuditWorkflowError(status, code, message);
 };
@@ -150,6 +157,36 @@ export function createAuditWorkflowService(
         .map(([k, v]) => `${JSON.stringify(k)}:${canonical(v)}`)
         .join(",")}}`;
     return JSON.stringify(value) ?? "null";
+  }
+  function verifyCanonicalReport(item: CaseRow, report: ReportRow, data: Awaited<ReturnType<typeof snapshot>>) {
+    const sha256 = digest(canonical(report.content));
+    if (sha256 !== report.metadata.contentSha256)
+      return fail(409, "REPORT_INTEGRITY_FAILED", "Stored report does not match its hash.");
+    const exported = { ok: true as const, caseId: item.id, reportId: report.id, sha256, report: report.content };
+    const verified = auditWorkflowReportSchema.safeParse(exported);
+    if (!verified.success) return fail(409, "REPORT_REFERENCE_INVALID", "Stored report does not satisfy the evidence-reference contract.");
+    const content = verified.data.report;
+    // Parsed nested objects can strip unknown fields. Never return raw injected
+    // claims that were absent from the contract we actually verified.
+    if (canonical(Object.keys(report.content).sort()) !== canonical(reportFields) ||
+        canonical(report.content) !== canonical(content) ||
+        canonical(content.limitations) !== canonical(reportLimitations) ||
+        !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(content.generatedAt) ||
+        !Number.isFinite(Date.parse(content.generatedAt)))
+      return fail(409, "REPORT_CANONICAL_MISMATCH", "Report fields or declared limitations differ from the canonical contract.");
+    if (content.evidence.some(e => digest(e.content) !== e.sha256))
+      return fail(409, "REPORT_EVIDENCE_INTEGRITY_FAILED", "Embedded evidence does not match its hash.");
+    const ordered = { evidences: [...data.evidences].sort((a,b) => a.id.localeCompare(b.id)), findings: [...data.findings].sort((a,b) => a.id.localeCompare(b.id)) };
+    const evidence = ordered.evidences.map(e => ({ id: e.id, sha256: e.metadata.sha256, capturedAt: e.captured_at, source: "operator_submitted_artifact", content: e.redacted_text }));
+    const findings = ordered.findings.map(f => ({ id: f.id, title: f.title, summary: f.summary, recommendation: f.recommendation, evidenceIds: f.metadata.evidenceIds }));
+    if (content.title !== item.title || content.testData !== item.metadata.scope.testData ||
+        canonical(content.scope) !== canonical(item.metadata.scope) || canonical(content.review) !== canonical(item.metadata.review) ||
+        canonical(content.results) !== canonical(item.metadata.results) || canonical(content.events) !== canonical(item.metadata.events) ||
+        canonical(content.evidence) !== canonical(evidence) || canonical(content.findings) !== canonical(findings) ||
+        content.evidence.some(e => e.sha256 !== item.metadata.artifactSha256) ||
+        digest(canonical(ordered)) !== item.metadata.reviewFingerprint)
+      return fail(409, "REPORT_CANONICAL_MISMATCH", "Report or reviewed records differ from the canonical audit case.");
+    return exported;
   }
   return {
     forActor(identity: AuditWorkflowActor) { return createAuditWorkflowService(connect, identity); },
@@ -269,7 +306,7 @@ export function createAuditWorkflowService(
         ).rows;
         const reports = (
           await client.query<ReportRow>(
-            "SELECT id,content FROM audit_reports WHERE case_id=$1 ORDER BY created_at,id",
+            "SELECT id,content,metadata FROM audit_reports WHERE case_id=$1 ORDER BY created_at,id",
             [id],
           )
         ).rows;
@@ -283,7 +320,11 @@ export function createAuditWorkflowService(
             evidence.metadata.sha256 !== item.metadata.artifactSha256 ||
             digest(evidence.redacted_text) !== item.metadata.artifactSha256)
           return fail(409, "EVIDENCE_INTEGRITY_FAILED", "Submitted evidence does not match the canonical case intake hash.");
-        return { ok: true as const, item, evidences, findings, reports };
+        if (reports.length || item.status === "CLOSED") {
+          if (item.status !== "CLOSED" || reports.length !== 1) return fail(409, "REPORT_CANONICAL_MISMATCH", "The canonical case must have one finalized report.");
+          verifyCanonicalReport(item, reports[0]!, { evidences, findings });
+        }
+        return { ok: true as const, item, evidences, findings, reports: reports.map(({id,content}) => ({id,content})) };
       });
     },
     async run(id: string) {
@@ -487,12 +528,7 @@ export function createAuditWorkflowService(
             recommendation: f.recommendation,
             evidenceIds: f.metadata.evidenceIds,
           })),
-          limitations: [
-            "Static inspection of operator-submitted vercel.json only.",
-            "No deployed route, runtime header, external asset ownership or remote provider was verified.",
-            "Review records a separate credential holder's human-review attestation; identity is not independently verified.",
-            "No payments, network scans or external connector writes.",
-          ],
+          limitations: reportLimitations,
           generatedAt: now(),
           finalStatus: "CLOSED",
           events: item.metadata.events,
@@ -535,34 +571,7 @@ export function createAuditWorkflowService(
             "REPORT_NOT_READY",
             "The approved case must be finalized before export.",
           );
-        const sha256 = digest(canonical(report.content));
-        if (sha256 !== report.metadata.contentSha256)
-          return fail(
-            409,
-            "REPORT_INTEGRITY_FAILED",
-            "Stored report does not match its hash.",
-          );
-        const exported = {
-          ok: true as const,
-          caseId: id,
-          reportId: report.id,
-          sha256,
-          report: report.content,
-        };
-        const verified = auditWorkflowReportSchema.safeParse(exported);
-        if (!verified.success) return fail(409, "REPORT_REFERENCE_INVALID", "Stored report does not satisfy the evidence-reference contract.");
-        if (verified.data.report.evidence.some((e) => digest(e.content) !== e.sha256))
-          return fail(409, "REPORT_EVIDENCE_INTEGRITY_FAILED", "Embedded evidence does not match its hash.");
-        // Cross-check against independently stored case facts, not just the
-        // report's own content and digest.
-        const content = verified.data.report;
-        if (content.title !== item.title ||
-            content.testData !== item.metadata.scope.testData ||
-            canonical(content.scope) !== canonical(item.metadata.scope) ||
-            canonical(content.review) !== canonical(item.metadata.review) ||
-            content.evidence.some((e) => e.sha256 !== item.metadata.artifactSha256))
-          return fail(409, "REPORT_CANONICAL_MISMATCH", "Report differs from the canonical audit case.");
-        return exported;
+        return verifyCanonicalReport(item, report, await snapshot(client, id));
       });
     },
   };

@@ -16,6 +16,20 @@ test("GX040 extensions require separate identity, recipient and credentials; cus
   const token = secret(), env = { ...enterprise, GXEON_OMNIX_COMMERCIAL_ENABLED: "true", GXEON_OMNIX_COMMERCIAL_TOKEN: token,
     GXEON_OMNIX_COMMERCIAL_RECIPIENT_USER_ID: randomUUID(), GXEON_OMNIX_COMMERCIAL_RECIPIENT_ORGANIZATION_ID: randomUUID() };
   assert.ok(loadOmnixRuntimeExtensions(env).commercial);
+  assert.throws(() => loadOmnixRuntimeExtensions({...env,GXEON_OMNIX_OIDC_CLIENT_SECRET:token}),/COMMERCIAL_RUNTIME_CONFIGURATION_REQUIRED/);
+  const browser = {...enterprise,GXEON_OMNIX_BROWSER_ENABLED:"true",GXEON_OMNIX_BROWSER_ORIGIN:origin,
+    GXEON_OMNIX_OIDC_CLIENT_ID:"gx050-test-client",GXEON_OMNIX_OIDC_CLIENT_SECRET:secret(),
+    GXEON_OMNIX_OIDC_AUTHORIZATION_ENDPOINT:"https://idp.example.invalid/realm/authorize",
+    GXEON_OMNIX_OIDC_TOKEN_ENDPOINT:"https://idp.example.invalid/realm/token"};
+  assert.ok(loadOmnixRuntimeExtensions(browser).browser);
+  for(const name of ["GXEON_AUDIT_OPERATOR_TOKEN","GXEON_AUDIT_REVIEWER_TOKEN","GXEON_OMNIX_COMMERCIAL_TOKEN","GXEON_OMNIX_LEAD_TOKEN"])
+    assert.throws(() => loadOmnixRuntimeExtensions({...browser,[name]:browser.GXEON_OMNIX_OIDC_CLIENT_SECRET}),/BROWSER_CREDENTIAL_SEPARATION_REQUIRED/);
+  const lead = { ...enterprise, GXEON_OMNIX_LEAD_ENABLED: "true", GXEON_OMNIX_LEAD_MODE: "synthetic", GXEON_OMNIX_LEAD_TOKEN: secret(), GXEON_OMNIX_LEAD_CHANNEL_ID: randomUUID() };
+  assert.equal(loadOmnixRuntimeExtensions(lead).lead?.mode, "synthetic");
+  for (const patch of [{GXEON_OMNIX_LEAD_MODE:"off"},{GXEON_OMNIX_LEAD_CHANNEL_ID:"prompt-authority"},
+    {GXEON_AUDIT_OPERATOR_TOKEN:lead.GXEON_OMNIX_LEAD_TOKEN},{GXEON_OMNIX_ENTERPRISE_ENABLED:"false"}])
+    assert.throws(() => loadOmnixRuntimeExtensions({...lead,...patch}),/LEAD_RUNTIME_CONFIGURATION_REQUIRED/);
+  assert.throws(() => loadOmnixRuntimeExtensions({...lead,GXEON_OMNIX_ALLOW_CUSTOMER_DATA:"true"}),/CUSTOMER_ADMISSION_REVIEW_REQUIRED/);
   for (const patch of [{ GXEON_OMNIX_ENTERPRISE_ENABLED: "false" }, { GXEON_OMNIX_COMMERCIAL_RECIPIENT_USER_ID: "prompt-owner" },
     { GXEON_AUDIT_OPERATOR_TOKEN: token }, { GXEON_AUDIT_REVIEWER_TOKEN: token }, { GXEON_OMNIX_COMMERCIAL_TOKEN: "" }])
     assert.throws(() => loadOmnixRuntimeExtensions({ ...env, ...patch }), /COMMERCIAL_RUNTIME_CONFIGURATION_REQUIRED/);
@@ -34,6 +48,10 @@ test("GX040 mounted synthetic distribution uses live protected session, fixed ca
     headers: { Origin: origin, "Content-Type": "application/json", ...(cookie ? { Cookie: cookie } : {}) },
     ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
   try {
+    const browserStatus = await call("/api/omnix-enterprise/browser/status"); assert.equal(browserStatus.status,503);
+    assert.equal((await browserStatus.json()).configured,false);
+    const leadStatus = await call("/api/omnix-leads/status"); assert.equal(leadStatus.status,503);
+    assert.equal((await leadStatus.json()).leadDataAllowed,false);
     for (const route of ["/api/omnix-enterprise/distribution/capabilities", "/api/omnix-commercial/status"]) {
       const response = await call(route); assert.equal(response.status, 404); assert.match(response.headers.get("content-type")!, /application\/json/);
     }

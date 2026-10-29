@@ -10,8 +10,13 @@ import { renderIngressBoundary, type RenderIngressConfig } from "./auditRenderIn
 import { createEnterpriseIdentityRouter, resolveEnterpriseRequest } from "./enterpriseIdentityRouter";
 import { createOmnixDistributionRouter } from "./omnixDistributionRouter";
 import { omnixCommercialRouter, type CommercialRouterOptions } from "./omnixCommercial";
+import type { createEnterpriseBrowser } from "./enterpriseBrowser";
+import { EnterpriseIdentityError } from "./enterpriseIdentity";
+import { omnixLeadIntakeRouter, type LeadRouterOptions } from "./omnixLeadIntakeRouter";
 
 type Options = {
+  browser?: Awaited<ReturnType<typeof createEnterpriseBrowser>>;
+  lead?: LeadRouterOptions;
   enterprise?: Omit<Parameters<typeof createEnterpriseIdentityRouter>[0], "workflow" | "origins">;
   commercial?: CommercialRouterOptions;
   renderIngress?: RenderIngressConfig;
@@ -118,13 +123,22 @@ export function createAuditPilotApp(options: Options) {
     res.json({ ok: true, service: "gxeon-audit-pilot" });
   });
   if (options.portal) app.use("/api/omnix", omnixPreviewRouter(options.portal, options.service, options.origins));
+  if (options.browser) app.use("/api/omnix-enterprise/browser", options.browser.router);
+  else app.get("/api/omnix-enterprise/browser/status", (_req,res) => res.status(503).json({ ok: false, configured: false,
+    customerDataAllowed: false, realProviderAcceptanceVerified: false, code: "ENTERPRISE_BROWSER_NOT_CONFIGURED" }));
   if (options.enterprise) {
+    if (options.browser) app.use("/api/omnix-enterprise", options.browser.middleware);
     const dependencies = { ...options.enterprise, workflow: options.service };
     app.use("/api/omnix-enterprise/distribution", createOmnixDistributionRouter({ workflow: options.service, origins: options.origins,
       resolve: async req => (await resolveEnterpriseRequest(req.get("authorization"), req.get("x-omnix-organization-id"), dependencies)).principal }));
     app.use("/api/omnix-enterprise", createEnterpriseIdentityRouter({ ...dependencies, origins: options.origins }));
   }
-  if (options.commercial) app.use("/api/omnix-commercial", omnixCommercialRouter(options.commercial));
+  if (options.commercial) {
+    if (options.browser) app.use("/api/omnix-commercial", options.browser.middleware);
+    app.use("/api/omnix-commercial", omnixCommercialRouter(options.commercial));
+  }
+  if (options.browser) app.use("/api/omnix-leads", options.browser.middleware);
+  app.use("/api/omnix-leads", omnixLeadIntakeRouter(options.lead));
   app.get("/api/readyz", auditAccess("read"), admit, async (_req, res) => {
     try { await options.ready(); res.json({ ok: true }); }
     catch { res.status(503).json({ ok: false, code: "AUDIT_NOT_READY" }); }
@@ -157,6 +171,10 @@ export function createAuditPilotApp(options: Options) {
   }
   app.use((_req, res) => res.status(404).json({ ok: false, code: "AUDIT_ROUTE_NOT_FOUND" }));
   const errors: ErrorRequestHandler = (error: unknown, _req, res, _next) => {
+    if (error instanceof EnterpriseIdentityError) {
+      if (error.status === 401) res.setHeader("WWW-Authenticate", "Bearer");
+      res.status(error.status).json({ ok: false, code: error.code }); return;
+    }
     const status = (error as { status?: number })?.status;
     res.status(status === 404 ? 404 : status === 400 || status === 413 ? status : 503).json({ ok: false,
       code: status === 404 ? "AUDIT_ROUTE_NOT_FOUND" : status === 400 || status === 413 ? "INVALID_REQUEST_BODY" : "AUDIT_UNAVAILABLE" });

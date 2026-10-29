@@ -5,6 +5,7 @@ import { readFile } from "node:fs/promises";
 import { Pool } from "@workspace/db/pool";
 import { assertAuditPilotDatabase } from "../auditPilotDatabase";
 import { createAuditWorkflowService } from "../services/auditWorkflowService";
+import { createLeadIntakeService } from "../omnixLeadIntake";
 
 test("dedicated PostgreSQL 17 startup attestation rejects excessive grants and non-synthetic data", {
   skip: !process.env.TEST_AUDIT_PILOT_DATABASE_URL,
@@ -103,6 +104,41 @@ test("dedicated PostgreSQL 17 startup attestation rejects excessive grants and n
     const permissionDenied = (error: unknown) => (error as { code?: string }).code === "42501";
     await assert.rejects(app.query("UPDATE omnix_memberships SET role='owner' WHERE false"), permissionDenied);
     await assert.rejects(app.query("DELETE FROM omnix_identity_events WHERE false"), permissionDenied);
+    // GX050 channel approval belongs to the offline owner, never the app role.
+    await owner.query(await readFile(new URL("../../../../lib/db/drizzle/0005_omnix_lead_intake.sql", import.meta.url), "utf8"));
+    await owner.query(await readFile(new URL("../../../../deploy/render/lead-grants.example.sql", import.meta.url), "utf8"));
+    const leadExtensions = { ...extensions, lead: true };
+    await assertAuditPilotDatabase(app, leadExtensions);
+    await assert.rejects(app.query("INSERT INTO omnix_lead_channels SELECT * FROM omnix_lead_channels WHERE false"), permissionDenied);
+    await assert.rejects(app.query("UPDATE omnix_lead_channels SET admission_mode='real' WHERE false"), permissionDenied);
+    await assert.rejects(app.query("UPDATE omnix_lead_events SET evidence_reference='forged-reference' WHERE false"), permissionDenied);
+    const leadOrg = randomUUID(), leadUser = randomUUID(), channelId = randomUUID();
+    await owner.query("INSERT INTO omnix_organizations(id,name,kind) VALUES($1,'TEST DATA lead owner organization','client')", [leadOrg]);
+    await owner.query("INSERT INTO omnix_users(id,issuer,subject) VALUES($1,'https://idp.example.invalid','GX050-TEST-DATA-OWNER')", [leadUser]);
+    await owner.query("INSERT INTO omnix_memberships(organization_id,user_id,role) VALUES($1,$2,'owner')", [leadOrg,leadUser]);
+    const leads = createLeadIntakeService(() => app!.connect(), { channelId, mode: "synthetic", resolveRecipient: async (_channel,client) => {
+      const row = (await client.query("SELECT role FROM omnix_memberships WHERE organization_id=$1 AND user_id=$2 AND revoked_at IS NULL",[leadOrg,leadUser])).rows[0];
+      return row?.role === "owner" ? { userId:leadUser,organizationId:leadOrg,role:"owner" } : undefined;
+    }});
+    await assert.rejects(leads.ready(), /LEAD_APPROVED_CHANNEL_REQUIRED/);
+    await owner.query(`INSERT INTO omnix_lead_channels(id,recipient_user_id,recipient_organization_id,admission_mode,privacy_version,privacy_notice_url,
+      recipient_approval_ref,founder_approval_ref,privacy_approval_ref,durable_database_ref,antispam_approval_ref,approved_at,expires_at)
+      VALUES($1,$2,$3,'synthetic','gx050-lead-v1','https://fixture.example.invalid/privacy','TEST-DATA/recipient','TEST-DATA/founder',
+      'TEST-DATA/privacy','TEST-DATA/isolated-pg17','TEST-DATA/antispam',now(),now()+interval '1 day')`,[channelId,leadUser,leadOrg]);
+    assert.equal((await leads.ready()).leadDataAllowed,false);
+    const challenge = await leads.challenge();
+    await owner.query("UPDATE omnix_lead_challenges SET created_at=now()-interval '3 seconds' WHERE token_sha256=$1",[createHash("sha256").update(challenge.challengeToken).digest("hex")]);
+    const received = await leads.submit({requestId:randomUUID(),name:"TEST DATA Contact",company:"TEST DATA Company",email:"contact@example.invalid",
+      needType:"configuration-integrity",description:"TEST DATA contact only, no technical uploads.",consent:true,privacyVersion:"gx050-lead-v1",website:"",challengeToken:challenge.challengeToken});
+    assert.equal(received.state,"leadReceived");
+    await owner.query("UPDATE omnix_memberships SET revoked_at=now() WHERE user_id=$1 AND organization_id=$2",[leadUser,leadOrg]);
+    await assert.rejects(leads.ready(), /LEAD_RECIPIENT_UNAVAILABLE/);
+    await owner.query("UPDATE omnix_memberships SET revoked_at=NULL WHERE user_id=$1 AND organization_id=$2",[leadUser,leadOrg]);
+    await owner.query("UPDATE omnix_leads SET expires_at=now()-interval '1 second' WHERE id=$1",[received.receiptId]);
+    const purged = await leads.purgeExpired({userId:leadUser,organizationId:leadOrg,role:"owner"},{confirmLeadRetentionPurge:true,reviewReference:"TEST-DATA/retention-fixture"});
+    assert.equal(purged.deletedLeads,1);
+    assert.equal((await owner.query("SELECT count(*)::int AS count FROM omnix_leads WHERE id=$1",[received.receiptId])).rows[0].count,0);
+    await assertAuditPilotDatabase(app, leadExtensions);
     await assert.rejects(app.query("SELECT event FROM omnix_identity_events LIMIT 0"), permissionDenied);
     // Revoke only each additional negative-test grant; do not reset the role or
     // reapply a broad privilege set that could conceal a faulty initial grant.

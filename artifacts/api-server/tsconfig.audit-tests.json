@@ -20,7 +20,10 @@
     "src/tests/auditEnterpriseIdentity.test.ts",
     "src/tests/auditOmnixDistribution.test.ts",
     "src/tests/auditCommercial.test.ts",
-    "src/tests/auditRuntimeExtensions.test.ts"
+    "src/tests/auditRuntimeExtensions.test.ts",
+    "src/tests/auditEnterpriseBrowser.test.ts",
+    "src/tests/auditLeadIntake.test.ts",
+    "src/tests/auditTaskContract.test.ts"
   ],
   "exclude": []
 }

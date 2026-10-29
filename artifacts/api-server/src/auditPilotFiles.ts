@@ -2,7 +2,8 @@ import { readFileSync, statSync } from "node:fs";
 import { isAbsolute } from "node:path";
 
 const fileSecrets = ["DATABASE_URL", "GXEON_AUDIT_OPERATOR_TOKEN", "GXEON_AUDIT_REVIEWER_TOKEN",
-  "GXEON_AUDIT_DATABASE_TLS_CA", "GXEON_OMNIX_PREVIEW_IDENTITIES"] as const;
+  "GXEON_AUDIT_DATABASE_TLS_CA", "GXEON_OMNIX_PREVIEW_IDENTITIES", "GXEON_OMNIX_OIDC_CLIENT_SECRET",
+  "GXEON_OMNIX_COMMERCIAL_TOKEN", "GXEON_OMNIX_LEAD_TOKEN"] as const;
 export function loadAuditPilotSecretFiles(env: NodeJS.ProcessEnv = process.env): NodeJS.ProcessEnv {
   const result = { ...env };
   try {

@@ -13,11 +13,31 @@ import {
   type OmnixSession,
 } from "@workspace/api-zod";
 import { readAuditJson } from "@/services/auditTransport";
+import {
+  beginEnterpriseBrowserLogin,
+  EnterprisePortalHttpError,
+  getEnterpriseBrowserSession,
+  getEnterpriseBrowserStatus,
+  getEnterpriseRecoveryUrl,
+  logoutEnterpriseBrowserSession,
+  projectEnterprisePortalSession,
+  requestEnterpriseAudit,
+  type EnterpriseBrowserSession,
+  type EnterpriseBrowserStatus,
+  type EnterprisePortalSession,
+  type PortalIdentityMode,
+} from "@/services/enterprisePortalTransport";
 import example from "@/data/omnix-example-report.json";
 import OmnixCapabilitiesPanel from "./OmnixCapabilitiesPanel";
 import "./omnix.css";
 
-type View = "dashboard" | "new" | "result" | "history" | "example" | "capabilities";
+type View =
+  | "dashboard"
+  | "new"
+  | "result"
+  | "history"
+  | "example"
+  | "capabilities";
 const checkNames = {
   vercel_api_routing: "Fallback SPA e roteamento da API",
   vercel_security_headers: "Declarações globais de headers de segurança",
@@ -48,17 +68,50 @@ const date = (v: string) =>
     dateStyle: "short",
     timeStyle: "short",
   }).format(new Date(v));
+function portalError(error: unknown) {
+  if (error instanceof EnterprisePortalHttpError) {
+    if (error.status === 401)
+      return "Sua sessão empresarial expirou. Entre novamente com o provedor.";
+    if (error.status === 403)
+      return "Esta identidade não tem a associação ou a permissão necessária. Confira o acesso com o responsável da organização.";
+    return "Não foi possível confirmar a operação empresarial. Tente novamente ou consulte o responsável.";
+  }
+  if (
+    error instanceof Error &&
+    (error.name === "ZodError" || /^[A-Z][A-Z0-9_]+$/.test(error.message))
+  )
+    return "O serviço não retornou o contrato esperado. Nenhum resultado novo foi confirmado.";
+  return error instanceof Error
+    ? error.message
+    : "Não foi possível confirmar a operação. Tente novamente.";
+}
 
 export default function OmnixPortalPage() {
+  const [identityMode, setIdentityMode] = useState<PortalIdentityMode>(() =>
+    new URLSearchParams(location.search).get("identity") === "enterprise"
+      ? "enterprise"
+      : "preview",
+  );
+  const identityModeRef = useRef(identityMode);
+  const [enterpriseStatus, setEnterpriseStatus] =
+    useState<EnterpriseBrowserStatus>();
+  const [enterpriseBrowser, setEnterpriseBrowser] =
+    useState<EnterpriseBrowserSession>();
+  const [organizationId, setOrganizationId] = useState("");
+  const organizationRef = useRef("");
+  const pendingRequests = useRef(new Set<AbortController>());
   const [connection, setConnection] = useState<
     "checking" | "online" | "blocked"
   >("checking");
-  const [session, setSession] = useState<OmnixSession>();
+  const [session, setSession] = useState<
+    OmnixSession | EnterprisePortalSession
+  >();
   const [cases, setCases] = useState<OmnixCases>();
   const [detail, setDetail] = useState<OmnixDetail>();
   const [view, setView] = useState<View>("dashboard");
   const [identity, setIdentity] = useState("");
   const [code, setCode] = useState("");
+  const [invitationToken, setInvitationToken] = useState("");
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
   const [authorized, setAuthorized] = useState(false);
@@ -85,62 +138,137 @@ export default function OmnixPortalPage() {
     [download],
   );
   const sessionEpoch = useRef(0);
-  const reset = () => {
+  const resetWorkspace = () => {
     sessionEpoch.current++;
+    for (const controller of pendingRequests.current) controller.abort();
+    pendingRequests.current.clear();
     setSession(undefined);
     setCases(undefined);
     setDetail(undefined);
     setDownload(undefined);
     setContent("");
     setCode("");
+    setInvitationToken("");
     setReview("");
     setReviewed(false);
+    setName("");
+    setAuthorized(false);
+    setSynthetic(false);
+    setChecks(["vercel_api_routing", "vercel_security_headers"]);
+    setRequestId(crypto.randomUUID());
+    setBusy(false);
+    organizationRef.current = "";
+    setOrganizationId("");
   };
+  const reset = () => {
+    resetWorkspace();
+    setEnterpriseBrowser(undefined);
+  };
+  function portalPath(caseId?: string) {
+    const query = new URLSearchParams();
+    if (identityModeRef.current === "enterprise")
+      query.set("identity", "enterprise");
+    if (caseId) query.set("case", caseId);
+    return `/omnix${query.size ? "?" + query.toString() : ""}`;
+  }
+  function trackedController() {
+    const controller = new AbortController();
+    pendingRequests.current.add(controller);
+    return controller;
+  }
+  function switchIdentityMode(mode: PortalIdentityMode) {
+    reset();
+    identityModeRef.current = mode;
+    setIdentityMode(mode);
+    setEnterpriseStatus(undefined);
+    setConnection("checking");
+    setView("dashboard");
+    setError("");
+    setMessage("");
+    window.history.replaceState(null, "", portalPath());
+  }
   async function request(path: string, body?: unknown) {
     const epoch = sessionEpoch.current;
-    const response = await fetch(`/api/omnix${path}`, {
-      method: body === undefined ? "GET" : "POST",
-      credentials: "same-origin",
-      cache: "no-store",
-      headers: { "Content-Type": "application/json" },
-      signal: AbortSignal.timeout(15000),
-      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-    });
-    if (epoch !== sessionEpoch.current) {
-      await response.body?.cancel();
-      throw new Error(
-        "A sessão mudou durante a consulta. Atualize o histórico.",
-      );
-    }
-    if (response.status === 401) {
-      await response.body?.cancel();
-      reset();
-      throw new Error(
-        "Acesso inválido ou sessão expirada. Entre com sua identidade de teste.",
-      );
-    }
+    const controller = trackedController();
     try {
-      const value = await readAuditJson(response);
-      if (epoch !== sessionEpoch.current) throw new Error("STALE_SESSION");
-      return value;
-    } catch (e) {
-      const source = e instanceof Error ? e.message : "";
-      const guidance: Record<string, string> = {
-        POTENTIAL_SECRET:
-          "O arquivo pode conter uma credencial. Remova segredos e use somente dados sintéticos.",
-        CASE_NOT_FOUND:
-          "O caso não está disponível para esta identidade. Confira seu histórico autorizado.",
-        ROLE_DENIED: "Esta ação exige uma identidade de teste com outro papel.",
-        REVIEW_REQUIRED:
-          "Conclua a revisão por uma identidade distinta antes de gerar o relatório.",
-        INVALID_JSON: "O arquivo não contém JSON válido.",
-        WRITE_DISABLED:
-          "O serviço está em modo de consulta. O envio ainda não foi habilitado.",
-      };
-      throw new Error(
-        Object.entries(guidance).find(([key]) => source.includes(key))?.[1] ??
-          "O serviço não confirmou a operação. Confira o escopo e tente novamente; nenhum resultado novo é declarado.",
-      );
+      if (identityModeRef.current === "enterprise" && path === "/logout") {
+        try {
+          await logoutEnterpriseBrowserSession(controller.signal);
+        } catch (error) {
+          if (
+            error instanceof EnterprisePortalHttpError &&
+            error.status === 401
+          ) {
+            reset();
+            setError(portalError(error));
+          }
+          throw error;
+        }
+        if (epoch !== sessionEpoch.current) throw new Error("STALE_SESSION");
+        return { ok: true };
+      }
+      const response =
+        identityModeRef.current === "enterprise"
+          ? await requestEnterpriseAudit(
+              path.replace(/^\/cases(?=\/|$)/, "/audits"),
+              organizationRef.current,
+              { body, signal: controller.signal },
+            )
+          : await fetch(`/api/omnix${path}`, {
+              method: body === undefined ? "GET" : "POST",
+              credentials: "same-origin",
+              cache: "no-store",
+              headers: { "Content-Type": "application/json" },
+              signal: AbortSignal.any([
+                controller.signal,
+                AbortSignal.timeout(15000),
+              ]),
+              ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+            });
+      if (epoch !== sessionEpoch.current) {
+        await response.body?.cancel();
+        throw new Error(
+          "A sessão mudou durante a consulta. Atualize o histórico.",
+        );
+      }
+      if (response.status === 401) {
+        await response.body?.cancel();
+        if (path !== "/session") {
+          reset();
+          setError(
+            "Acesso inválido ou sessão expirada. Entre novamente com sua identidade.",
+          );
+        }
+        throw new Error(
+          "Acesso inválido ou sessão expirada. Entre novamente com sua identidade.",
+        );
+      }
+      try {
+        const value = await readAuditJson(response);
+        if (epoch !== sessionEpoch.current) throw new Error("STALE_SESSION");
+        return value;
+      } catch (e) {
+        const source = e instanceof Error ? e.message : "";
+        const guidance: Record<string, string> = {
+          POTENTIAL_SECRET:
+            "O arquivo pode conter uma credencial. Remova segredos e use somente dados sintéticos.",
+          CASE_NOT_FOUND:
+            "O caso não está disponível para esta identidade. Confira seu histórico autorizado.",
+          ROLE_DENIED:
+            "Esta ação exige uma identidade de teste com outro papel.",
+          REVIEW_REQUIRED:
+            "Conclua a revisão por uma identidade distinta antes de gerar o relatório.",
+          INVALID_JSON: "O arquivo não contém JSON válido.",
+          WRITE_DISABLED:
+            "O serviço está em modo de consulta. O envio ainda não foi habilitado.",
+        };
+        throw new Error(
+          Object.entries(guidance).find(([key]) => source.includes(key))?.[1] ??
+            "O serviço não confirmou a operação. Confira o escopo e tente novamente; nenhum resultado novo é declarado.",
+        );
+      }
+    } finally {
+      pendingRequests.current.delete(controller);
     }
   }
   async function history() {
@@ -158,35 +286,108 @@ export default function OmnixPortalPage() {
     setReview("");
     setView("result");
     window.scrollTo(0, 0);
-    window.history.replaceState(
-      null,
-      "",
-      `/omnix?case=${encodeURIComponent(id)}`,
-    );
+    window.history.replaceState(null, "", portalPath(id));
   }
   async function perform(action: () => Promise<void>) {
+    const epoch = sessionEpoch.current;
     setBusy(true);
     setError("");
     setMessage("");
     try {
       await action();
     } catch (e) {
-      setError(
-        e instanceof Error
-          ? e.message
-          : "Não foi possível confirmar a operação. Tente novamente.",
-      );
+      if (epoch === sessionEpoch.current) setError(portalError(e));
     } finally {
-      setBusy(false);
+      if (epoch === sessionEpoch.current) setBusy(false);
     }
+  }
+  async function syncEnterpriseSession(
+    signal: AbortSignal,
+    preferredOrganization?: string,
+  ) {
+    const epoch = sessionEpoch.current;
+    const browserSession = await getEnterpriseBrowserSession(signal);
+    if (signal.aborted || epoch !== sessionEpoch.current) return;
+    setEnterpriseBrowser(browserSession);
+    const candidate =
+      preferredOrganization ?? browserSession.organizations[0]?.id;
+    if (!candidate) return;
+    if (!browserSession.organizations.some((item) => item.id === candidate))
+      throw new EnterprisePortalHttpError(403);
+    const scoped = await getEnterpriseBrowserSession(signal, candidate);
+    if (signal.aborted || epoch !== sessionEpoch.current) return;
+    const projected = projectEnterprisePortalSession(scoped, candidate);
+    setEnterpriseBrowser(scoped);
+    organizationRef.current = candidate;
+    setOrganizationId(candidate);
+    setSession(projected);
+    await history();
+    const selectedCase = new URLSearchParams(location.search).get("case");
+    if (selectedCase && /^[a-f0-9-]{36}$/i.test(selectedCase))
+      await open(selectedCase);
+  }
+  function chooseOrganization(candidate: string) {
+    if (!enterpriseBrowser?.organizations.some((item) => item.id === candidate))
+      return;
+    resetWorkspace();
+    setError("");
+    setMessage("");
+    setView("dashboard");
+    window.history.replaceState(null, "", portalPath());
+    void perform(async () => {
+      const controller = trackedController();
+      try {
+        await syncEnterpriseSession(controller.signal, candidate);
+      } finally {
+        pendingRequests.current.delete(controller);
+      }
+    });
   }
   useEffect(() => {
     document.title = "OMNIX AI | Prévia de auditoria";
     document.documentElement.lang = "pt-BR";
     let current = true;
+    const controller = trackedController(),
+      epoch = sessionEpoch.current;
     setBusy(true);
     void (async () => {
       try {
+        if (identityMode === "enterprise") {
+          const status = await getEnterpriseBrowserStatus(controller.signal);
+          if (
+            !current ||
+            controller.signal.aborted ||
+            epoch !== sessionEpoch.current
+          )
+            return;
+          setEnterpriseStatus(status);
+          setConnection(status.ok && status.configured ? "online" : "blocked");
+          if (status.ok && status.configured) {
+            try {
+              await syncEnterpriseSession(controller.signal);
+            } catch (error) {
+              if (
+                !current ||
+                controller.signal.aborted ||
+                epoch !== sessionEpoch.current
+              )
+                return;
+              if (
+                !(
+                  error instanceof EnterprisePortalHttpError &&
+                  error.status === 401
+                )
+              )
+                setError(
+                  error instanceof EnterprisePortalHttpError &&
+                    error.status === 403
+                    ? "Não há associação autorizada disponível ou seu acesso mudou. Confira com o responsável da organização."
+                    : "Não foi possível confirmar sua sessão empresarial. Tente novamente ou consulte o responsável.",
+                );
+            }
+          }
+          return;
+        }
         omnixStatusSchema.parse(await request("/status"));
         let authenticated: OmnixSession | undefined;
         try {
@@ -194,7 +395,7 @@ export default function OmnixPortalPage() {
         } catch {
           /* No session is a normal access state; never fabricate one. */
         }
-        if (!current) return;
+        if (!current || controller.signal.aborted) return;
         setConnection("online");
         if (authenticated) {
           setSession(authenticated);
@@ -213,20 +414,48 @@ export default function OmnixPortalPage() {
           }
         }
       } catch {
-        if (current) {
+        if (current && !controller.signal.aborted) {
           setConnection("blocked");
           setCases(undefined);
         }
       } finally {
-        if (current) setBusy(false);
+        if (current && !controller.signal.aborted) setBusy(false);
       }
     })();
     return () => {
       current = false;
+      controller.abort();
+      for (const pending of pendingRequests.current) pending.abort();
+      pendingRequests.current.clear();
     };
-    // Mount-only discovery; all later refreshes are explicit authenticated requests.
-  }, []);
-  const operator = session?.user.role === "operator";
+    // Rediscover only the selected identity mode. Organization changes explicitly
+    // refresh membership and clear the workspace before another authorized read.
+  }, [identityMode]);
+  const enterpriseSession = session && !session.preview ? session : undefined;
+  const operator =
+    session?.user.role === "operator" &&
+    (!enterpriseSession ||
+      enterpriseSession.scopes.includes("omnix:audits:write"));
+  const reviewer =
+    session?.user.role === "reviewer" &&
+    (!enterpriseSession ||
+      enterpriseSession.scopes.includes("omnix:approvals:write"));
+  const organizations = [
+    ...new Map(
+      enterpriseBrowser?.organizations.map(
+        (item) => [item.id, item] as const,
+      ) ?? [],
+    ).values(),
+  ];
+  const enterpriseConfigured =
+    enterpriseStatus?.ok === true && enterpriseStatus.configured;
+  const roleLabels = {
+    owner: "Proprietário",
+    admin: "Administrador",
+    operator: "Operador",
+    reviewer: "Revisor",
+    reader: "Leitor",
+  };
   const selected = detail?.item;
   async function transition(
     action: "run" | "review" | "finalize",
@@ -247,7 +476,8 @@ export default function OmnixPortalPage() {
     setView(target);
     setError("");
     setMessage("");
-    if (target !== "result") window.history.replaceState(null, "", "/omnix");
+    if (target !== "result")
+      window.history.replaceState(null, "", portalPath());
   };
   return (
     <div className="omnix" translate="no">
@@ -255,7 +485,14 @@ export default function OmnixPortalPage() {
         Pular para conteúdo
       </a>
       <header className="ox-top">
-        <a className="ox-brand" href="/omnix">
+        <a
+          className="ox-brand"
+          href={
+            identityMode === "enterprise"
+              ? "/omnix?identity=enterprise"
+              : "/omnix"
+          }
+        >
           <span aria-hidden="true">◈</span>
           <b>
             OMNIX <em>AI</em>
@@ -273,15 +510,18 @@ export default function OmnixPortalPage() {
           {connection === "checking"
             ? "Conferindo serviço…"
             : connection === "online"
-              ? "API de teste conectada"
+              ? identityMode === "enterprise"
+                ? "Acesso empresarial configurado"
+                : "API de teste conectada"
               : "Interface de prévia · backend pendente"}
         </span>
       </header>
       <div className="ox-notice">
         <b>PRÉVIA DE ENGENHARIA</b>
         <span>
-          Somente identidades e configurações sintéticas. Cadastro e dados de
-          clientes ainda não estão liberados.
+          {identityMode === "enterprise"
+            ? "Somente configurações sintéticas. Identidade empresarial não libera dados de clientes."
+            : "Somente identidades e configurações sintéticas. Cadastro e dados de clientes ainda não estão liberados."}
         </span>
       </div>
       <div className="ox-shell">
@@ -310,6 +550,60 @@ export default function OmnixPortalPage() {
               </button>
             ))}
           </nav>
+          <div
+            role="group"
+            aria-label="Modo de identidade"
+            style={{
+              display: "grid",
+              gap: 8,
+              marginTop: 24,
+              fontSize: ".8rem",
+            }}
+          >
+            <small>Acesso ao portal</small>
+            <button
+              type="button"
+              aria-pressed={identityMode === "preview"}
+              disabled={busy || identityMode === "preview"}
+              onClick={() => switchIdentityMode("preview")}
+            >
+              Prévia sintética
+            </button>
+            <button
+              type="button"
+              aria-pressed={identityMode === "enterprise"}
+              disabled={busy || identityMode === "enterprise"}
+              onClick={() => switchIdentityMode("enterprise")}
+            >
+              Acesso empresarial
+            </button>
+            {identityMode === "enterprise" && organizations.length ? (
+              <label style={{ display: "grid", gap: 8 }}>
+                Organização autorizada
+                <select
+                  value={organizationId}
+                  disabled={busy}
+                  style={{
+                    width: "100%",
+                    minWidth: 0,
+                    maxWidth: "100%",
+                    background: "#111416",
+                    color: "#e8d6ac",
+                  }}
+                  onChange={(event) => chooseOrganization(event.target.value)}
+                >
+                  {!organizationId ? (
+                    <option value="">Selecione uma organização</option>
+                  ) : null}
+                  {organizations.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : null}
+          </div>
           <div className="ox-side-note">
             <b>Escopo atual</b>
             <p>
@@ -325,8 +619,15 @@ export default function OmnixPortalPage() {
             <div className="ox-identity">
               <b>{session.user.name}</b>
               <small>
-                {operator ? "Submissor de teste" : "Revisor de teste"}
+                {enterpriseSession
+                  ? roleLabels[enterpriseSession.user.role]
+                  : operator
+                    ? "Submissor de teste"
+                    : "Revisor de teste"}
               </small>
+              {enterpriseSession?.delegated ? (
+                <small>Leitura por delegação vigente</small>
+              ) : null}
               <small>Sessão até {date(session.expiresAt)}</small>
               <button
                 type="button"
@@ -336,7 +637,11 @@ export default function OmnixPortalPage() {
                     await request("/logout", {});
                     reset();
                     nav("dashboard");
-                    setMessage("Sessão de teste encerrada.");
+                    setMessage(
+                      identityMode === "enterprise"
+                        ? "Sessão empresarial encerrada."
+                        : "Sessão de teste encerrada.",
+                    );
                   })
                 }
               >
@@ -409,8 +714,134 @@ export default function OmnixPortalPage() {
                   </div>
                   <div className="ox-card">
                     <p className="ox-kicker">ACESSO CONTROLADO</p>
-                    <h2>Entre na prévia.</h2>
-                    {connection === "blocked" ? (
+                    <h2>
+                      {identityMode === "enterprise"
+                        ? "Entre com seu provedor."
+                        : "Entre na prévia."}
+                    </h2>
+                    {identityMode === "enterprise" ? (
+                      <>
+                        {connection === "checking" ? (
+                          <p role="status">
+                            Conferindo a configuração do acesso empresarial…
+                          </p>
+                        ) : null}
+                        {!enterpriseConfigured && connection !== "checking" ? (
+                          <div className="ox-empty">
+                            <b>
+                              O login empresarial ainda não está disponível
+                              neste ambiente.
+                            </b>
+                            <p>
+                              O provedor precisa ser configurado e validado
+                              antes do acesso. Você pode consultar o exemplo
+                              sintético ou usar uma identidade de prévia
+                              autorizada.
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() => location.reload()}
+                            >
+                              Verificar acesso empresarial novamente
+                            </button>
+                          </div>
+                        ) : null}
+                        {enterpriseConfigured ? (
+                          <>
+                            <p>
+                              Use o provedor autorizado da organização. As
+                              permissões e associações são confirmadas pelo
+                              servidor.
+                            </p>
+                            <label>
+                              Convite autorizado (opcional)
+                              <input type="password" autoComplete="off" spellCheck={false} maxLength={43}
+                                value={invitationToken} disabled={busy} onChange={event => setInvitationToken(event.target.value)} />
+                            </label>
+                            <button
+                              type="button"
+                              className="ox-primary"
+                              disabled={busy}
+                              onClick={() =>
+                                void perform(async () => {
+                                  const controller = trackedController();
+                                  try {
+                                    const url =
+                                      await beginEnterpriseBrowserLogin(
+                                        controller.signal,
+                                        invitationToken || undefined,
+                                      );
+                                    if (!controller.signal.aborted) {
+                                      setInvitationToken("");
+                                      window.location.assign(url);
+                                    }
+                                  } finally {
+                                    pendingRequests.current.delete(controller);
+                                  }
+                                })
+                              }
+                            >
+                              Continuar com o provedor empresarial →
+                            </button>
+                            {enterpriseStatus?.recoveryConfigured ? (
+                              <button
+                                type="button"
+                                disabled={busy}
+                                onClick={() =>
+                                  void perform(async () => {
+                                    const controller = trackedController();
+                                    try {
+                                      const url =
+                                        await getEnterpriseRecoveryUrl(
+                                          controller.signal,
+                                        );
+                                      if (!controller.signal.aborted)
+                                        window.location.assign(url);
+                                    } finally {
+                                      pendingRequests.current.delete(
+                                        controller,
+                                      );
+                                    }
+                                  })
+                                }
+                              >
+                                Recuperar acesso no provedor
+                              </button>
+                            ) : null}
+                            <button
+                              type="button"
+                              disabled={busy}
+                              onClick={() => {
+                                resetWorkspace();
+                                void perform(async () => {
+                                  const controller = trackedController();
+                                  try {
+                                    await syncEnterpriseSession(
+                                      controller.signal,
+                                    );
+                                  } finally {
+                                    pendingRequests.current.delete(controller);
+                                  }
+                                });
+                              }}
+                            >
+                              Atualizar sessão empresarial
+                            </button>
+                            {enterpriseBrowser && !organizations.length ? (
+                              <p className="ox-empty">
+                                Nenhuma organização autorizada foi confirmada
+                                para esta identidade.
+                              </p>
+                            ) : null}
+                            <p className="ox-muted">
+                              Acesso empresarial em validação. Aceite do
+                              provedor, recuperação e dados de clientes ainda
+                              não estão liberados.
+                            </p>
+                          </>
+                        ) : null}
+                      </>
+                    ) : connection === "blocked" ? (
                       <div className="ox-empty">
                         <b>O backend desta prévia ainda não foi conectado.</b>
                         <p>
@@ -427,11 +858,11 @@ export default function OmnixPortalPage() {
                       <form
                         onSubmit={(e) => {
                           e.preventDefault();
+                          resetWorkspace();
                           void perform(async () => {
                             const s = omnixSessionSchema.parse(
                               await request("/login", { identity, code }),
                             );
-                            sessionEpoch.current++;
                             setSession(s);
                             window.scrollTo(0, 0);
                             setCode("");
@@ -475,9 +906,8 @@ export default function OmnixPortalPage() {
                         <p className="ox-muted">
                           Sem cadastro aberto. Códigos são individuais, não são
                           os tokens técnicos do motor. Para recuperar o acesso
-                          de teste, solicite novo código ao responsável.
-                          Identidade empresarial e recuperação de contas reais
-                          são uma etapa futura.
+                          de teste, solicite novo código ao responsável. O
+                          acesso empresarial tem configuração e sessão próprias.
                         </p>
                       </form>
                     )}
@@ -487,8 +917,10 @@ export default function OmnixPortalPage() {
                 <>
                   {view === "capabilities" && (
                     <OmnixCapabilitiesPanel
-                      key={`${session.user.organizationId}:${session.user.id}:${session.expiresAt}`}
+                      key={`${identityMode}:${session.user.organizationId}:${session.user.id}:${session.expiresAt}`}
                       cases={cases}
+                      identityMode={identityMode}
+                      organizationId={enterpriseSession?.user.organizationId}
                     />
                   )}
                   {(view === "dashboard" || view === "history") && (
@@ -498,7 +930,9 @@ export default function OmnixPortalPage() {
                           <p className="ox-kicker">
                             {operator
                               ? "SEUS CASOS DE TESTE"
-                              : "ORGANIZAÇÃO DE TESTE / REVISÃO"}
+                              : reviewer
+                                ? "ORGANIZAÇÃO DE TESTE / REVISÃO"
+                                : "ORGANIZAÇÃO AUTORIZADA / CONSULTA"}
                           </p>
                           <h1>
                             {view === "history"
@@ -655,7 +1089,11 @@ export default function OmnixPortalPage() {
                       </p>
                       {!operator ? (
                         <section className="ox-empty">
-                          <h2>Esta identidade revisa os casos.</h2>
+                          <h2>
+                            {reviewer
+                              ? "Esta identidade revisa os casos."
+                              : "Esta identidade consulta os casos."}
+                          </h2>
                           <p>
                             A criação e execução pertencem à identidade de
                             submissor.
@@ -944,7 +1382,7 @@ export default function OmnixPortalPage() {
                             2,
                           )}
                         </pre>
-                        {!operator && selected.status === "IN_REVIEW" && (
+                        {reviewer && selected.status === "IN_REVIEW" && (
                           <>
                             <label>
                               Referência da revisão de teste

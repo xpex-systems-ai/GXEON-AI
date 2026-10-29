@@ -21,6 +21,8 @@ export const typescriptFiles = [
   "lib/db/src/pool.ts",
   "artifacts/api-server/src/omnixPreview.ts",
   "artifacts/api-server/src/enterpriseIdentity*.ts",
+  "artifacts/api-server/src/enterpriseBrowser*.ts",
+  "artifacts/api-server/src/omnixLeadIntake*.ts",
   "artifacts/api-server/src/omnixCapabilities.ts",
   "artifacts/api-server/src/omnixReadGateway.ts",
   "artifacts/api-server/src/omnixDistributionRouter.ts",
@@ -28,6 +30,9 @@ export const typescriptFiles = [
   "artifacts/api-server/src/omnixCommercial.ts",
   "lib/api-zod/src/omnixPortal.ts",
   "lib/api-zod/src/omnixCapabilities.ts",
+  "lib/api-zod/src/omnixEnterprisePortal.ts",
+  "lib/api-zod/src/omnixTask.ts",
+  "artifacts/gxeon-dashboard/src/services/enterprisePortalTransport.ts",
   "artifacts/gxeon-dashboard/src/pages/OmnixPortalPage.tsx",
   "artifacts/gxeon-dashboard/src/pages/OmnixCapabilitiesPanel.tsx",
 ];

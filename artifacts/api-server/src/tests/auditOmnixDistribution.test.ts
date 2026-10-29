@@ -82,6 +82,47 @@ test("GX040 authorized distribution reads the same SQL cases and blocks altered 
     await service.forActor(principalA.workflowActor).finalize(a.caseId);
     const exported = await gatewayA.callTool("omnix_get_report", { caseId: a.caseId }); assert.ok(JSON.stringify(exported).includes(a.caseId));
     const latest = await gatewayA.converse({ intent: "latest_report" }); assert.ok(JSON.stringify(latest).includes(a.caseId)); assert.ok(!JSON.stringify(latest).includes(b.caseId));
+    // A forged report plus its recomputed self-digest is still untrusted. Every
+    // read must bind findings/results/events to the distinct canonical records.
+    const originalReport = await service.forActor(principalA.workflowActor).exportReport(a.caseId);
+    const canonical = (value: unknown): string => {
+      if (value instanceof Date) return JSON.stringify(value.toISOString());
+      if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
+      if (value && typeof value === "object") return `{${Object.entries(value).sort(([a],[b]) => a.localeCompare(b)).map(([key,item]) => `${JSON.stringify(key)}:${canonical(item)}`).join(",")}}`;
+      return JSON.stringify(value) ?? "null";
+    };
+    const mutateReport = async (content: typeof originalReport.report, hash?: string) => {
+      const client = await connect();
+      try { await client.query("UPDATE audit_reports SET content=$1::jsonb, metadata=jsonb_set(metadata,'{contentSha256}',to_jsonb($2::text)) WHERE id=$3",
+        [JSON.stringify(content), hash ?? createHash("sha256").update(canonical(content)).digest("hex"), originalReport.reportId]); }
+      finally { client.release(); }
+    };
+    for (const field of ["findings", "results", "events", "limitations", "unknown", "nestedUnknown", "generatedAt"] as const) {
+      const content = structuredClone(originalReport.report);
+      if (field === "findings") (content.findings as { summary: string }[])[0]!.summary = "GX050 forged finding and matching own digest";
+      else if (field === "limitations") content.limitations = [];
+      else if (field === "unknown") content.humanSecurityAccepted = true;
+      else if (field === "nestedUnknown") (content.review as Record<string,unknown>).humanSecurityAccepted = true;
+      else if (field === "generatedAt") content.generatedAt = "forged non-date";
+      else content[field] = [{ forged: "GX050 synthetic corruption fixture" }];
+      await mutateReport(content);
+      await reject(gatewayA.callTool("omnix_get_report", { caseId: a.caseId }), 409, "REPORT_CANONICAL_MISMATCH");
+      await reject(gatewayA.callTool("omnix_get_audit", { caseId: a.caseId }), 409, "REPORT_CANONICAL_MISMATCH");
+      await mutateReport(originalReport.report, originalReport.sha256);
+    }
+    const forged = structuredClone(originalReport.report);
+    const firstFinding = (forged.findings as { id: string; summary: string }[])[0]!;
+    const originalSummary = firstFinding.summary; firstFinding.summary = "GX050 finding and report changed together";
+    const findingWriter = await connect();
+    try { await findingWriter.query("UPDATE audit_findings SET summary=$1 WHERE id=$2", [firstFinding.summary, firstFinding.id]); }
+    finally { findingWriter.release(); }
+    await mutateReport(forged);
+    await reject(gatewayA.callTool("omnix_get_report", { caseId: a.caseId }), 409, "REPORT_CANONICAL_MISMATCH");
+    const restoreFinding = await connect();
+    try { await restoreFinding.query("UPDATE audit_findings SET summary=$1 WHERE id=$2", [originalSummary, firstFinding.id]); }
+    finally { restoreFinding.release(); }
+    await mutateReport(originalReport.report, originalReport.sha256);
+    assert.equal((await service.forActor(principalA.workflowActor).exportReport(a.caseId)).sha256, originalReport.sha256);
     const limited = createOmnixReadGateway(async () => ({ ...principalA, scopes: ["omnix:audits:read", "omnix:reports:read"] }), service);
     await reject(limited.callTool("omnix_get_report", { caseId: a.caseId }), 403, "READ_SCOPE_REQUIRED");
     const small = await limited.callTool("omnix_get_audit", { caseId: a.caseId }); assert.ok(!JSON.stringify(small).includes(malicious));
