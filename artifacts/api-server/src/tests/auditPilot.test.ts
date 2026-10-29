@@ -249,6 +249,24 @@ test("Supabase sandbox configuration enforces project pin, CA, HTTPS origin and 
   const railway = loadAuditPilotConfig({ ...valid, GXEON_AUDIT_DEPLOYMENT_MODE: "railway",
     GXEON_AUDIT_HTTPS_CERT_FILE: undefined, GXEON_AUDIT_HTTPS_KEY_FILE: undefined });
   assert.equal(railway.databaseNetwork, "supabase-direct-ca");
+  const sessionHost = "aws-0-sa-east-1.pooler.supabase.com";
+  const session = loadAuditPilotConfig({ ...valid,
+    GXEON_AUDIT_DATABASE_NETWORK: "supabase-session-ca",
+    GXEON_AUDIT_DATABASE_HOST: sessionHost,
+    GXEON_AUDIT_SUPABASE_POOLER_HOST: sessionHost,
+    DATABASE_URL: `postgresql://gx01_pilot_app.${ref}:${synthetic()}@${sessionHost}:5432/postgres` });
+  assert.equal(session.databaseNetwork, "supabase-session-ca");
+  assert.equal(session.supabaseProjectRef, ref);
+  for (const patch of [
+    { GXEON_AUDIT_SUPABASE_POOLER_HOST: "evil.invalid" },
+    { GXEON_AUDIT_DATABASE_TLS_CA: "" },
+    { DATABASE_URL: session.databaseUrl.replace(":5432", ":6543") },
+    { DATABASE_URL: session.databaseUrl.replace("gx01_pilot_app.", "postgres.") },
+  ]) assert.throws(() => loadAuditPilotConfig({ ...valid,
+    GXEON_AUDIT_DATABASE_NETWORK: "supabase-session-ca",
+    GXEON_AUDIT_DATABASE_HOST: sessionHost,
+    GXEON_AUDIT_SUPABASE_POOLER_HOST: sessionHost,
+    DATABASE_URL: session.databaseUrl, ...patch }), /AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED|AUDIT_PILOT_CONFIGURATION_REQUIRED/);
   for (const patch of [
     { GXEON_AUDIT_SUPABASE_SANDBOX: "false" },
     { GXEON_AUDIT_SUPABASE_PROJECT_REF: "aaaaaaaaaaaaaaaaaaaa" },
