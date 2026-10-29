@@ -16,7 +16,7 @@ export function loadAuditDatabaseNetwork(env: NodeJS.ProcessEnv, mode: string, d
     // Candidate sandbox only. Real customers remain disabled at the HTTP/data gates.
     // Direct Supabase endpoint needs public IPv6 or an explicitly purchased IPv4 route;
     // pooler hosts/ports are not silently treated as the direct service.
-    if (!["private", "render"].includes(mode) ||
+    if (!["private", "render", "railway"].includes(mode) ||
         env.GXEON_AUDIT_SUPABASE_SANDBOX !== "true" ||
         !isSupabaseAuditDatabaseHost(database.hostname, env.GXEON_AUDIT_SUPABASE_PROJECT_REF ?? "") ||
         env.GXEON_AUDIT_DATABASE_HOST !== database.hostname ||
