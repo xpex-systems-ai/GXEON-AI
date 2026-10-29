@@ -21,6 +21,17 @@ The existing website, seven canonical systems, Railway projects and historical S
 - `auditPilotDatabase.ts` and `audit-pilot.ts`: startup attests real DB name, dedicated role and exact grants; all existing synthetic-only checks remain.
 - Added negative tests to the same security suites; build/CI results must be checked at the HEAD SHA and may not be reported as PASS while incomplete.
 
+## Live-provider compatibility reconciled on 2026-10-29
+- Railway API refused project creation: **trial expired / plan required**. No paid plan was selected and no service created. Never report Railway as deployed.
+- Vercel refused an explicit preview API deployment of the latest site SHA due to the **100+ deployments/day Free quota** (HTTP 402, retry after 24h). No production change was attempted.
+- For Render's IPv4-only egress and Supabase Free IPv6 direct Postgres, use the **shared Supavisor session pooler on port 5432**, not the direct `db.<ref>.supabase.co` address. Render's public support guide confirms that Render services cannot reach Supabase direct IPv6 without the paid IPv4 add-on: https://render.com/articles/how-to-connect-a-render-service-to-supabase-postgres .
+- Added code profile `supabase-session-ca`. It accepts only hostname matching `aws-[0-9]+-sa-east-1.pooler.supabase.com` AND the **exact pooler host from the project's Connect panel**, user `gx01_pilot_app.bdxqxunosdkdvnxuamid`, port **5432**, database **postgres**, CA-validated TLS with SNI and original hostname verification. Wrong cluster/project/port, DNS to reserved addresses, absent CA, or `NODE_TLS_REJECT_UNAUTHORIZED=0` are denied.
+- **Host has NOT been retrieved from Supabase Connect.** Do not guess the `aws-N` index, supply an invented endpoint, or treat a passing unit fixture as network connectivity.
+- Supavisor session pooler compatibility with PostgreSQL startup parameter `options=-c search_path=omnix_audit,pg_catalog` is **unverified**. If the real pooler rejects it, implement a reviewed connection initialization mechanism with schema isolation, rather than dropping that requirement.
+- No role login/password was configured, no Render web service provisioned and no external API handshake completed. Service deployment requires the correct host, CA, protected credential flow, and approved cost/availability policy.
+- Render Free web services suspend after 15 minutes of idle and are not recommended for a customer SLA: https://render.com/docs/free .
+- The private schema currently **does not provide per-tenant data isolation** for real client records. Existing synthetic-only constraints and closed enterprise access must stay until a reviewed tenant model with negative cross-organization tests is implemented.
+
 ## Do not deploy blindly
 1. **Free direct connection is IPv6** by default. Verify the actual backend (including Railway if chosen) supports IPv6. If not, design and review a separate pinned **session pooler** connection with the right URL, user, port, CA and privileges; never rewrite the hostname/port by guess.
 2. Obtain Supabase's actual database CA from the project's dashboard or approved system and store privately. Never use `rejectUnauthorized:false`, `sslmode=require` without validation, or disabled TLS.
