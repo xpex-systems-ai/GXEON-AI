@@ -35,9 +35,13 @@ export function loadAuditPilotConfig(env: NodeJS.ProcessEnv = process.env): Audi
   if (!["railway", "private", "render"].includes(mode) || env.NODE_TLS_REJECT_UNAUTHORIZED === "0") refuse();
   if (!["postgres:", "postgresql:"].includes(database.protocol) ||
       database.username !== "gx01_pilot_app" ||
-      database.pathname !== "/gx01_pilot" || database.search || database.hash || password.length < 24 || Array.from(password).some(c => c.codePointAt(0)! < 32 || c.codePointAt(0) === 127)) refuse();
+      !["/gx01_pilot", "/postgres"].includes(database.pathname) ||
+      database.search || database.hash || password.length < 24 || Array.from(password).some(c => c.codePointAt(0)! < 32 || c.codePointAt(0) === 127)) refuse();
   if (mode === "railway" && !database.hostname.endsWith(".railway.internal")) refuse();
   const databaseNetwork = loadAuditDatabaseNetwork(env, mode, database);
+  // Supabase uses its own postgres database. Legacy isolated gx01_pilot remains unchanged.
+  if ((databaseNetwork === "supabase-direct-ca" && database.pathname !== "/postgres") ||
+      (databaseNetwork !== "supabase-direct-ca" && database.pathname !== "/gx01_pilot")) refuse();
   const certFile = env.GXEON_AUDIT_HTTPS_CERT_FILE, keyFile = env.GXEON_AUDIT_HTTPS_KEY_FILE;
   if (!!certFile !== !!keyFile) refuse();
   if (["private", "render"].includes(mode) && (env.GXEON_AUDIT_DATABASE_HOST !== database.hostname ||
