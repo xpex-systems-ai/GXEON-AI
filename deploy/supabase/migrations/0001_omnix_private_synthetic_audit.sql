@@ -335,7 +335,7 @@ END $gx$;
 CREATE ROLE gx01_pilot_app NOLOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS;
 GRANT CONNECT ON DATABASE postgres TO gx01_pilot_app;
 GRANT USAGE ON SCHEMA omnix_audit TO gx01_pilot_app;
-GRANT USAGE ON ALL TYPES IN SCHEMA omnix_audit TO gx01_pilot_app;
+GRANT USAGE ON TYPE omnix_audit.audit_asset_type, omnix_audit.audit_case_status, omnix_audit.audit_connector_status, omnix_audit.audit_evidence_type, omnix_audit.audit_module_key, omnix_audit.audit_proposal_status, omnix_audit.audit_report_type, omnix_audit.audit_revenue_status, omnix_audit.audit_severity, omnix_audit.audit_task_status TO gx01_pilot_app;
 
 GRANT SELECT,INSERT ON omnix_audit.audit_assets,omnix_audit.audit_evidences,
   omnix_audit.audit_findings,omnix_audit.audit_reports TO gx01_pilot_app;
