@@ -553,6 +553,15 @@ export function createAuditWorkflowService(
         if (!verified.success) return fail(409, "REPORT_REFERENCE_INVALID", "Stored report does not satisfy the evidence-reference contract.");
         if (verified.data.report.evidence.some((e) => digest(e.content) !== e.sha256))
           return fail(409, "REPORT_EVIDENCE_INTEGRITY_FAILED", "Embedded evidence does not match its hash.");
+        // Cross-check against independently stored case facts, not just the
+        // report's own content and digest.
+        const content = verified.data.report;
+        if (content.title !== item.title ||
+            content.testData !== item.metadata.scope.testData ||
+            canonical(content.scope) !== canonical(item.metadata.scope) ||
+            canonical(content.review) !== canonical(item.metadata.review) ||
+            content.evidence.some((e) => e.sha256 !== item.metadata.artifactSha256))
+          return fail(409, "REPORT_CANONICAL_MISMATCH", "Report differs from the canonical audit case.");
         return exported;
       });
     },

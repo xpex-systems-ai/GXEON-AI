@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { randomBytes, randomUUID } from "node:crypto";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { Pool } from "@workspace/db/pool";
 import { assertAuditPilotDatabase } from "../auditPilotDatabase";
@@ -64,6 +64,22 @@ test("dedicated PostgreSQL 17 startup attestation rejects excessive grants and n
       const persisted = (await app.query("SELECT content,metadata FROM audit_reports WHERE id=$1", [exported.reportId])).rows[0];
       assert.deepEqual(persisted.content, exported.report);
       assert.equal(persisted.metadata.contentSha256, exported.sha256);
+      const modified = structuredClone(persisted.content);
+      modified.title = "TEST DATA changed report title";
+      const canonical = (v: unknown): string => {
+        if (v instanceof Date) return JSON.stringify(v.toISOString());
+        if (Array.isArray(v)) return `[${v.map(canonical).join(",")}]`;
+        if (v && typeof v === "object") return `{${Object.entries(v).sort(([a],[b]) => a.localeCompare(b)).map(([k,val]) => `${JSON.stringify(k)}:${canonical(val)}`).join(",")}}`;
+        return JSON.stringify(v) ?? "null";
+      };
+      const changedHash = createHash("sha256").update(canonical(modified)).digest("hex");
+      await owner.query("UPDATE audit_reports SET content=$1::jsonb, metadata=jsonb_set(metadata,'{contentSha256}',to_jsonb($2::text)) WHERE id=$3",
+        [JSON.stringify(modified), changedHash, exported.reportId]);
+      await assert.rejects(service.exportReport(created.caseId),
+        (error: unknown) => (error as {code?: string}).code === "REPORT_CANONICAL_MISMATCH");
+      await owner.query("UPDATE audit_reports SET content=$1::jsonb, metadata=jsonb_set(metadata,'{contentSha256}',to_jsonb($2::text)) WHERE id=$3",
+        [JSON.stringify(persisted.content), exported.sha256, exported.reportId]);
+      assert.equal((await service.exportReport(created.caseId)).sha256, exported.sha256);
       await assertAuditPilotDatabase(app);
     } finally {
       for (const key of Object.keys(process.env)) if (!(key in previous)) delete process.env[key];
