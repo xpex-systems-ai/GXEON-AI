@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { readFile } from "node:fs/promises";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { PGlite } from "@electric-sql/pglite";
 import { Pool, type PoolClient } from "@workspace/db/pool";
 import { auditCheckIds } from "@workspace/api-zod";
@@ -100,8 +100,23 @@ test("GX040 authorized distribution reads the same SQL cases and blocks altered 
     await reject(gatewayA.callTool("omnix_list_audits"), 403, "READ_ACCESS_DENIED"); assert.equal(queryCount, callsBefore, "Revoked authorization cannot enter SQL");
     const revoked = await gatewayA.handleRpc({ jsonrpc: "2.0", id: 7, method: "tools/list" }); assert.equal(revoked.status, 403); assert.ok(!JSON.stringify(revoked).includes("PRIVATE_IDENTITY_DETAIL"));
     assert.ok(authCalls > 10, "Authorization is freshly resolved across reads rather than cached in the adapter"); active = true;
-    const client = await connect(); try { await client.query("UPDATE audit_evidences SET redacted_text=$1 WHERE id=$2", ["GX040 TEST DATA altered evidence", a.evidenceId]); } finally { client.release(); }
+    // A hostile storage mutation that rewrites content AND its own metadata digest
+    // must still fail against the original case-intake hash. Do not change audit_cases.
+    const alteredText = "GX040 TEST DATA altered content and matching forged evidence hash";
+    const alteredHash = createHash("sha256").update(alteredText).digest("hex");
+    const client = await connect();
+    try {
+      await client.query("BEGIN");
+      await client.query("UPDATE audit_evidences SET redacted_text=$1, metadata=jsonb_set(metadata, '{sha256}', to_jsonb($2::text)) WHERE id=$3", [alteredText, alteredHash, a.evidenceId]);
+      await client.query("UPDATE audit_findings SET metadata=jsonb_set(metadata, '{sha256}', to_jsonb($1::text)) WHERE case_id=$2", [alteredHash, a.caseId]);
+      await client.query("COMMIT");
+    } catch (error) {
+      await client.query("ROLLBACK").catch(() => undefined);
+      throw error;
+    } finally { client.release(); }
     await reject(gatewayA.callTool("omnix_get_evidence", { caseId: a.caseId, evidenceId: a.evidenceId }), 409, "EVIDENCE_INTEGRITY_FAILED");
+    await reject(gatewayA.callTool("omnix_get_audit", { caseId: a.caseId }), 409, "EVIDENCE_INTEGRITY_FAILED");
+    await reject(gatewayA.callTool("omnix_get_findings", { caseId: a.caseId }), 409, "EVIDENCE_INTEGRITY_FAILED");
     const broken = createOmnixReadGateway(async () => { throw new Error("PRIVATE_DATABASE_CREDENTIAL_DETAIL"); }, service);
     const failed = await broken.handleRpc({ jsonrpc: "2.0", id: 8, method: "tools/list" }); assert.equal(failed.status, 503); assert.ok(!JSON.stringify(failed).includes("PRIVATE_DATABASE_CREDENTIAL_DETAIL"));
   } finally {

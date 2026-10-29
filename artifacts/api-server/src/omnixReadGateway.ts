@@ -55,8 +55,15 @@ function verifiedEvidence(detail: OmnixDetail) {
   if (detail.evidences.length !== 1 || detail.findings.length > auditCheckIds.length || detail.reports.length > 1)
     fail(409, "AUDIT_REFERENCE_INVALID", "Canonical audit relationships exceed the current workflow contract.");
   const evidence = detail.evidences[0]!;
-  if (evidence.case_id !== detail.item.id || typeof evidence.metadata.sha256 !== "string" || digest(evidence.redacted_text) !== evidence.metadata.sha256)
-    fail(409, "EVIDENCE_INTEGRITY_FAILED", "Submitted evidence does not match its stored hash.");
+  // The immutable intake hash is recorded on the case separately from the evidence.
+  // Matching a rewritten artifact to its rewritten evidence metadata is insufficient.
+  if (evidence.case_id !== detail.item.id ||
+      typeof detail.item.metadata.artifactSha256 !== "string" ||
+      !/^[a-f0-9]{64}$/.test(detail.item.metadata.artifactSha256) ||
+      typeof evidence.metadata.sha256 !== "string" ||
+      evidence.metadata.sha256 !== detail.item.metadata.artifactSha256 ||
+      digest(evidence.redacted_text) !== detail.item.metadata.artifactSha256)
+    fail(409, "EVIDENCE_INTEGRITY_FAILED", "Submitted evidence does not match the canonical case intake hash.");
   for (const finding of detail.findings) {
     const refs = finding.metadata.evidenceIds;
     if (finding.case_id !== detail.item.id || !Array.isArray(refs) || refs.length !== 1 || refs[0] !== evidence.id || finding.metadata.sha256 !== evidence.metadata.sha256)
