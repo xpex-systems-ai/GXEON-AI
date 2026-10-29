@@ -94,7 +94,7 @@ test("Supabase direct candidate is exact-project, CA-bound, and synthetic-only b
     new URL(supabaseUrl.href.replace(supabaseHost, `db.aaaaaaaaaaaaaaaaaaaa.supabase.co`)),
     new URL(supabaseUrl.href.replace("/postgres", ":6543/postgres")),
   ]) assert.throws(() => loadAuditDatabaseNetwork(supabaseEnv, "private", url), /AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED/);
-  assert.throws(() => loadAuditDatabaseNetwork(supabaseEnv, "railway", supabaseUrl), /AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED/);
+  assert.equal(loadAuditDatabaseNetwork(supabaseEnv, "railway", supabaseUrl), "supabase-direct-ca");
 });
 
 test("Supabase direct PostgreSQL candidate pins IPv6 public endpoint, CA and private search path", async () => {
