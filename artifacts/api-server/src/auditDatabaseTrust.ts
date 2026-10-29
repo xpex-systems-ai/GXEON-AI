@@ -22,7 +22,7 @@ export function loadAuditDatabaseNetwork(env: NodeJS.ProcessEnv, mode: string, d
         env.GXEON_AUDIT_DATABASE_HOST !== database.hostname ||
         database.pathname !== "/postgres" ||
         (database.port && database.port !== "5432") ||
-        !/^-----BEGIN CERTIFICATE-----[\\s\\S]+-----END CERTIFICATE-----\\s*$/.test(env.GXEON_AUDIT_DATABASE_TLS_CA ?? "") ||
+        !/^-----BEGIN CERTIFICATE-----[\s\S]+-----END CERTIFICATE-----\s*$/.test(env.GXEON_AUDIT_DATABASE_TLS_CA ?? "") ||
         env.NODE_TLS_REJECT_UNAUTHORIZED === "0")
       throw new Error("AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED");
     return profile;
