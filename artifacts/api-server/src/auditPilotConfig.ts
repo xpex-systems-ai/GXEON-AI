@@ -7,6 +7,7 @@ export type AuditPilotConfig = {
   databaseUrl: string;
   databaseCa?: string;
   databaseNetwork?: AuditDatabaseNetwork;
+  supabaseProjectRef?: string;
   deploymentMode: "railway" | "private" | "render";
   renderIngress?: RenderIngressConfig;
   bindHost: string;
@@ -57,7 +58,9 @@ export function loadAuditPilotConfig(env: NodeJS.ProcessEnv = process.env): Audi
     catch { return true; }
   })) refuse();
   if (renderIngress && bindHost !== "0.0.0.0") refuse();
-  return { port, origins: [...new Set(origins)], databaseUrl: database.href, databaseNetwork, deploymentMode: mode as AuditPilotConfig["deploymentMode"], bindHost,
+  return { port, origins: [...new Set(origins)], databaseUrl: database.href, databaseNetwork,
+    ...(databaseNetwork === "supabase-direct-ca" ? { supabaseProjectRef: env.GXEON_AUDIT_SUPABASE_PROJECT_REF } : {}),
+    deploymentMode: mode as AuditPilotConfig["deploymentMode"], bindHost,
     ...(renderIngress ? { renderIngress } : {}),
     ...(env.GXEON_AUDIT_FRONTEND_ROOT ? { frontendRoot: env.GXEON_AUDIT_FRONTEND_ROOT } : {}),
     ...(certFile && keyFile ? { https: { certFile, keyFile } } : {}),
