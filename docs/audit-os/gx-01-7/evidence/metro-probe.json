@@ -1,0 +1,32 @@
+{
+  "testData": true,
+  "repo": "GXEON-AI-gx017",
+  "mode": "Direct Expo CLI offline startup only; existing build script and its cache deletion were NOT executed",
+  "expoVersion": "54.0.34",
+  "port": 18081,
+  "ownedPid": 19452,
+  "terminatedOwnedProcessTreeOnly": true,
+  "cacheDeletionRequested": false,
+  "temporaryFilesRetained": true,
+  "startupHealthMs": null,
+  "previousBuildBudgetMs": 60000,
+  "exceededPreviousBudget": null,
+  "childExitCode": 1,
+  "samples": [
+    {
+      "elapsedMs": 5028,
+      "127.0.0.1": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "localhost": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      },
+      "[::1]": {
+        "status": "UNAVAILABLE",
+        "code": "ECONNREFUSED"
+      }
+    }
+  ]
+}

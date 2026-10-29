@@ -1,0 +1,40 @@
+{
+  "recordedAt": "2026-10-25T11:15:39.100Z",
+  "legacyZod": {
+    "dbVersion": "3.25.76",
+    "mobileVersion": "3.25.76",
+    "staticInspection": [
+      "lib/db/src/index.ts imports/reexports schema; schema/{audit,financial,r100OperationalState}.ts calls drizzle-zod createInsertSchema/createSelectSchema",
+      "Installed lib/db/node_modules/drizzle-zod/index.cjs imports zod/v4 from effective Zod3.25.76 (vendored v4 pre4.6.6)",
+      "General API auditV1 and auditCase/Evidence/Proposal/Mission plus financial services import @workspace/db; isolated entry imports @workspace/db/pool only",
+      "No direct mobile source import from zod found by rg; declared installed legacy package remains. Static search is not complete dynamic reachability proof.",
+      "No demonstrated attacker-controlled unbounded array parse through these legacy generated DB schemas. Do not equate installed with exploit absent/present. Review before general API/mobile deployment."
+    ],
+    "files": [
+      {
+        "file": "lib/db/src/index.ts",
+        "sha256": "7a7b477cf4c1a7e12508b2af502993825560fe2c1b80bda8c80d296c2b317e88"
+      },
+      {
+        "file": "lib/db/src/schema/audit.ts",
+        "sha256": "629c5251c71d3e17d301a1c6d99cdb6d854c55f1dbbf9000a85fe446c6544e54"
+      },
+      {
+        "file": "lib/db/src/schema/financial.ts",
+        "sha256": "0a91b4c34fed97213b66d359715b5887cc3142f735f8060eec6f9a70192f311f"
+      },
+      {
+        "file": "lib/db/src/schema/r100OperationalState.ts",
+        "sha256": "67145f7352abdcac2e1eece8cca4481e7b93dcca7a888b3102519b0432c807b7"
+      },
+      {
+        "file": "artifacts/api-server/src/audit-pilot.ts",
+        "sha256": "2cf9c2feda759d8b37927bc26cfcb526f0e93536187e4a363890e99c19dd3c45"
+      },
+      {
+        "file": "lib/db/node_modules/drizzle-zod/index.cjs",
+        "sha256": "c09a7de093dd3f3b76bafec207050d69d71ac6fc0906ffec3c170504eb57949b"
+      }
+    ]
+  }
+}

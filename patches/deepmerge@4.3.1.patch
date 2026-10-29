@@ -1,0 +1,84 @@
+diff --git a/dist/cjs.js b/dist/cjs.js
+index 7c36cbdd06cc22c92d590be3f87a08a91ca06b40..340ba70e2add6af18cd51e57c0cca3579f05997e 100644
+--- a/dist/cjs.js
++++ b/dist/cjs.js
+@@ -80,7 +80,8 @@ function mergeObject(target, source, options) {
+ 	var destination = {};
+ 	if (options.isMergeableObject(target)) {
+ 		getKeys(target).forEach(function(key) {
+-			destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
++			// GX030: define an own data property; never invoke the __proto__ setter.
++			Object.defineProperty(destination, key, { value: cloneUnlessOtherwiseSpecified(target[key], options), enumerable: true, configurable: true, writable: true });
+ 		});
+ 	}
+ 	getKeys(source).forEach(function(key) {
+@@ -89,9 +90,11 @@ function mergeObject(target, source, options) {
+ 		}
+ 
+ 		if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
+-			destination[key] = getMergeFunction(key, options)(target[key], source[key], options);
++			// GX030: define an own data property; never invoke the __proto__ setter.
++			Object.defineProperty(destination, key, { value: getMergeFunction(key, options)(target[key], source[key], options), enumerable: true, configurable: true, writable: true });
+ 		} else {
+-			destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
++			// GX030: define an own data property; never invoke the __proto__ setter.
++			Object.defineProperty(destination, key, { value: cloneUnlessOtherwiseSpecified(source[key], options), enumerable: true, configurable: true, writable: true });
+ 		}
+ 	});
+ 	return destination
+diff --git a/dist/umd.js b/dist/umd.js
+index 4071e7c56ec8e5273fe166f6e723ac460fab8b72..14379762b2244891b54b104740e8140238512349 100644
+--- a/dist/umd.js
++++ b/dist/umd.js
+@@ -84,7 +84,8 @@
+ 		var destination = {};
+ 		if (options.isMergeableObject(target)) {
+ 			getKeys(target).forEach(function(key) {
+-				destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
++				// GX030: define an own data property; never invoke the __proto__ setter.
++			Object.defineProperty(destination, key, { value: cloneUnlessOtherwiseSpecified(target[key], options), enumerable: true, configurable: true, writable: true });
+ 			});
+ 		}
+ 		getKeys(source).forEach(function(key) {
+@@ -93,9 +94,11 @@
+ 			}
+ 
+ 			if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
+-				destination[key] = getMergeFunction(key, options)(target[key], source[key], options);
++				// GX030: define an own data property; never invoke the __proto__ setter.
++			Object.defineProperty(destination, key, { value: getMergeFunction(key, options)(target[key], source[key], options), enumerable: true, configurable: true, writable: true });
+ 			} else {
+-				destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
++				// GX030: define an own data property; never invoke the __proto__ setter.
++			Object.defineProperty(destination, key, { value: cloneUnlessOtherwiseSpecified(source[key], options), enumerable: true, configurable: true, writable: true });
+ 			}
+ 		});
+ 		return destination
+diff --git a/index.js b/index.js
+index 77968aed5d456cccc294f60912ef381fa1e52a7b..f7839be47c054a0380c010e2b4d22148445c4a6d 100644
+--- a/index.js
++++ b/index.js
+@@ -55,7 +55,8 @@ function mergeObject(target, source, options) {
+ 	var destination = {}
+ 	if (options.isMergeableObject(target)) {
+ 		getKeys(target).forEach(function(key) {
+-			destination[key] = cloneUnlessOtherwiseSpecified(target[key], options)
++			// GX030: define an own data property; never invoke the __proto__ setter.
++			Object.defineProperty(destination, key, { value: cloneUnlessOtherwiseSpecified(target[key], options), enumerable: true, configurable: true, writable: true });
+ 		})
+ 	}
+ 	getKeys(source).forEach(function(key) {
+@@ -64,9 +65,11 @@ function mergeObject(target, source, options) {
+ 		}
+ 
+ 		if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
+-			destination[key] = getMergeFunction(key, options)(target[key], source[key], options)
++			// GX030: define an own data property; never invoke the __proto__ setter.
++			Object.defineProperty(destination, key, { value: getMergeFunction(key, options)(target[key], source[key], options), enumerable: true, configurable: true, writable: true });
+ 		} else {
+-			destination[key] = cloneUnlessOtherwiseSpecified(source[key], options)
++			// GX030: define an own data property; never invoke the __proto__ setter.
++			Object.defineProperty(destination, key, { value: cloneUnlessOtherwiseSpecified(source[key], options), enumerable: true, configurable: true, writable: true });
+ 		}
+ 	})
+ 	return destination

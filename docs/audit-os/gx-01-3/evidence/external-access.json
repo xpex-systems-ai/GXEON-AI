@@ -1,0 +1,20 @@
+{
+  "readOnly": true,
+  "scopes": [
+    {
+      "scope": "junior-senas-projects-4226acc3",
+      "projectId": "prj_u4vHMlTnqVXLaJwnpTEn8T0JMOmD",
+      "status": 403,
+      "errorCode": "forbidden"
+    },
+    {
+      "scope": "gxeon",
+      "projectId": "prj_owdXFSlvK1GBrWVuYCqeHpTlYjP4",
+      "status": 403,
+      "errorCode": "forbidden"
+    }
+  ],
+  "netlify": "No connected Netlify tool; browser runtimes fail before initialization. Build cause not proven.",
+  "decisionOwner": "xpex-systems-ai",
+  "externalWrites": false
+}

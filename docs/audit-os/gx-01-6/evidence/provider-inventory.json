@@ -1,0 +1,556 @@
+{
+  "queriedAt": "2026-10-24T18:48:36.132Z",
+  "vercel": [
+    {
+      "scope": "xpex-neural",
+      "projects": [
+        {
+          "id": "prj_9TzNOpz6Uzz34uHfLrlYAXzXcfgw",
+          "name": "xpex-systems-ai",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_GRGA7dhQ0lLnyWN7ixIJ8MGlPrhe",
+          "name": "gxeon-wallet-command-center",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_UBNjAlz7cWsPvNDILUk66440E7nn",
+          "name": "gxeon-ai-gxeon-dashboard",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_3gcH2XkcpFatpPEAZZF56IBCqvsZ",
+          "name": "remix-of-remix-of-remix-of-remix-of-xpex-api-hub-87",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_RYR5u33XB5nE0UkSwyAGKSQft1gZ",
+          "name": "gxeon-ail",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_tQcb12xWLeTTY6h7Vhw6w4yp5frg",
+          "name": "ai-ia",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_jpULAotL78AU5SlOd5GcyBTI8UWO",
+          "name": "gxeon-ai-api-server",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_hODQYobRkk4O6rpZkGZgNkFrNwA4",
+          "name": "gxeon-ai-ia",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_EMDNZwGOLK3bdtOHcVecT84xp4Dp",
+          "name": "gxeon-ai01",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_wu5d2rPcPUhdhIQ01P0Y4BddaJT2",
+          "name": "gxeon-ai",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_AqiT3Idishevz42J1s9E5LZ3SA85",
+          "name": "gxeon-ai-api-server-sxv4",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_mo5cvJX4AXuPNsYXtQO3zYARLsLh",
+          "name": "gxeon-ai-mockup-sandbox",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_uKx4ggmKth6IAp9m8RxszXo6Ls9p",
+          "name": "xpex-academy",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_u09zbfXwyIAYAXox6OHxo1YgDz1M",
+          "name": "xpex-monetary-dashboard",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_Gpwm2GdhpS4PeHimqEcTNspoarQy",
+          "name": "xpex-os",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_FEUCHGYx0D8rXfCuxPS90oj0LjBj",
+          "name": "nextjs-commerce",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_DdboOQMmQTuldjMyy7JEMd5DHZIE",
+          "name": "xpex-task-agents-8ah1",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_D5RozZFS0TAJWS91UXdAPcUaJiFJ",
+          "name": "https-github-com-seu-usuario-promptmaster-50-6",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_BA8KFKzrlWGML9j9jN8pxKfSMGl1",
+          "name": "xpex-task-agents-4rt3",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_AnNzUNc9nwLUbk5H0cZBltT22tQO",
+          "name": "v0-about-us-page",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_9OAFE7ry5OWOqe4y1HLjzQ3GuMrM",
+          "name": "xpex-task-agents-kuel",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_8vykt4TkmGreg7izg8CtYwZhLk1Z",
+          "name": "xpex-commander",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_89Mjooy3CoDdXtWEIRDVdu3K0GyN",
+          "name": "xpex-task2",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_7XD21GVWi8vz5ApBEvltj8bMOzQm",
+          "name": "fenix86-l7oy",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_6tYR6NnvpYs6U41AFDSm9hjVlN2b",
+          "name": "xpex-os-cbr7",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_6jvkoiqEObIgrq5OdKD3K87kcarD",
+          "name": "xpex-monetary-system",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_5oHHtxlbQueHrYBHBBvjrqv0bqWv",
+          "name": "xpex-dashboard",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_4yuGYVLO3W8UfTpMl81rIdNBAcu0",
+          "name": "xpex-neural",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_2KVSUmjQdpGwANKLgGlH9X2jmOpj",
+          "name": "xpex-commander-hxpm",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_ywlAi28ddiyRqqFC5KUYS1yIAcvj",
+          "name": "xpex-task2-46uk",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_ycinCdO9atSLkiNLWjeQzlAUdWeW",
+          "name": "xpex-monetary-task2",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_xBTvhQj3xmKro8RxrFZlT4EgrrCh",
+          "name": "fenix86s",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_uteHooGeLzyDWKkuegHZ5Mhh7Dbm",
+          "name": "v0-thumbnail-aip-ro-config",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_syjC4UqHmbDY7R6yO49NKNI1haCv",
+          "name": "tool-jet",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_qU6kfEgDKnlN8klLRYhoZAkWeRbJ",
+          "name": "supabase",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_q2omMZ0kpq7BybLzdyWJdSmOmCcz",
+          "name": "cuponsads-pr",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_lrfbAuloy5ztX0IdmB6osqufVFGB",
+          "name": "fenix86-awmc",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_kdrLuMW8LOFySJP52GQt0UIWoi70",
+          "name": "builder-neon-landing",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_i7SAzIzI7LV41QhGUy577xOVIeIa",
+          "name": "fenix86",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_fu9kVcFUjYGEwb44O8IThyRJZvZQ",
+          "name": "xpex-task-agents-wth7",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_dTFlmLpk8xqhyVnSreCIfWT1dG4r",
+          "name": "v0-prompt-pack-saa-s",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_bz49GGTP0Bx4E5cgVO2vVn5H7xRA",
+          "name": "maestro-core",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_bsGO3RMG9OFgiUGdQPvDgKDzy0aS",
+          "name": "promptpack-50",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_bZBmP4ZdglCTPhoREotk92vkb6sB",
+          "name": "v0-cyberpunk-dashboard-design",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_bS1sCAkH6Oy61PQTY1JA86c2sF2Q",
+          "name": "xpex-monetary-tasks",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_aPEbFQSYSmHqDk2YkRhrOhmguOjL",
+          "name": "neuralbeatx-9m4p",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_Yk1sa5DjIaY5scS89gqgYVMg5M3C",
+          "name": "adcoupon-vault",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_XUAwljwwKcFl34xawCFIangcyzxY",
+          "name": "v0-synapse-revenue-hub",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_W1QGJ0tA2gLe8NPDFKkVKNPLN4HK",
+          "name": "xpex-task-agents",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_UN0sXbaAMPn0ZA7vYKRMZv405MJl",
+          "name": "neuralbeatx",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_UBav2EmgFv2AZkd4AS0fXxIanEXg",
+          "name": "promptpack-ai",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_U0PDC3FX2sIP3FMeeiPeUYyo7n7V",
+          "name": "xpex-commander-6x9u",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_TMGaG1bI7Ocd9fzfsLxGKOIvzHhA",
+          "name": "hyper-prompt-core",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_SF5GHcB84zXnKM5iwwgmkqw0qbDL",
+          "name": "platforms-starter-kit",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_R6KKq1RvQAMfuzkNsmJ3DoVwWhvd",
+          "name": "xpex-monetary-task2-fr4w",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_Q60CIW88CZl68Pr4EOs601sh6D9f",
+          "name": "nextjs-with-supabase",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_P6kR6JDQFeckYuPdy1SZoPafAkpc",
+          "name": "xpex-task-agents-3p99",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_P1CfzNkyJIE6qORIzHEHO3zPVMHX",
+          "name": "xpex-task-agents-d2db",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_NZzQHBpCFDOJzX04Fj5JVYxSSvaX",
+          "name": "xpex-task-agents-noq4",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_MRnyCBUHEoveQlWvSng3AM7yEz6q",
+          "name": "xpex-task-agents-g321",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_L7ZqC75fwyDrzGY2Ed3g7DoZ3bMU",
+          "name": "xpex-task-agents-nvoe",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        },
+        {
+          "id": "prj_J2RSwIPQ1x3vc9iuJc5neAm7QLsX",
+          "name": "prompt-pack",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX"
+        }
+      ],
+      "pagination": {
+        "count": 62,
+        "prev": 1792204370691
+      }
+    },
+    {
+      "scope": "gxeon",
+      "projects": [
+        {
+          "id": "prj_owdXFSlvK1GBrWVuYCqeHpTlYjP4",
+          "name": "gxeon-audit-os",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_xnxV5ZVur0Sv7f1uvZHADP358nHf",
+          "name": "gxeon-ai-api-server",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_EvLi9wcPcy2p7op1ChdvI8kPksKV",
+          "name": "xpex-academy-ai",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_lusVrpATbArDHBafb4VQAvh14TyE",
+          "name": "xpex-academy-536s",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_XCgo9X30sb5L4Pu2aEQBnQILXlix",
+          "name": "xpex-academy-3rb4",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_EjFGUFVEUm6adcZhhjN4ujtIEj9y",
+          "name": "xpex-academy",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_llFFgrz69J0emeMgZhVeZdAMlz8Z",
+          "name": "xpex-academy-sfh6",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_Vz5ENExQovKTZKVqG35Cet9rExUl",
+          "name": "xpex-studio-ai",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_z2ZZuRADXdunjCxKBVFAksbaS1co",
+          "name": "xpex-studio-ai-2be9",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_9H0nam6xdoO894oGIMQ6jMR3r4bU",
+          "name": "xpe-x-creator-commerce-os-j35b",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_j46KtjdhtBfWOrrrQReDiAN28nPg",
+          "name": "xpe-x-creator-commerce-os-61ly",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_pvGMC3kj65MJdDn1LVHBK7qIOFmy",
+          "name": "xpe-x-creator-commerce-os",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_AO88FD4t3kB9bbwExeRuEgf9QXPT",
+          "name": "polo-unib-polo-unibf",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_A6lPmsKDxL5xeKA7XjjKdM4AhV3s",
+          "name": "polo-unib",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_gcGHFvvAITKeI4LWnMKxL4HO9NjE",
+          "name": "polo-unib-api-server",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        },
+        {
+          "id": "prj_cHvDUHL6eFQ2kG8XzXOBRksW7vPQ",
+          "name": "polo-unibf",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB"
+        }
+      ],
+      "pagination": {
+        "count": 16,
+        "prev": 1791351688833
+      }
+    },
+    {
+      "scope": "junior-senas-projects-4226acc3",
+      "projects": [
+        {
+          "id": "prj_STlhUAtwut0oWBsWD5PjmCFLhjBq",
+          "name": "gxeon-ai-api-server-611a",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_F3OFtryPk4YmYwXc3zEJkbZTRZkv",
+          "name": "gxeon-ai-aoo",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_R2ILQClNw9Zk8XCbj0EalzflwtVO",
+          "name": "gxeon-ai-api-server",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_kssB4fuFxooxei5CYvt091ihp77z",
+          "name": "gxeon-ai-a",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_u4vHMlTnqVXLaJwnpTEn8T0JMOmD",
+          "name": "gxeo",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_JrKbgeLDWjlY13jXCF7O8C0dbUgE",
+          "name": "xpex-neural-unlocker-gateway",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_Hs9tTbIApdyZw4TXYE7kfCoVl3DA",
+          "name": "golden-profit-forge-40",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_D5FiWgtvtME6dr2zQ2uHIOwrqKXu",
+          "name": "synapse-revenue-hub-najh",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_C4jtEa6MsHmcaSJhO3l5BfLpguMt",
+          "name": "divine-pix-ascension-drop",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_8j0UZLuqMF0SQloWYUaGOmJQJ4hz",
+          "name": "xpexneuron",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_7hfucTneNZrkoLLDuMLuYTD7TNrH",
+          "name": "exacore-growth-orchestrator",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_5l6tGRNl7vKZUu0Z9fwbpnK8bPz9",
+          "name": "exercito-bot",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_400BPe9u5bhuC14EFejqWpqLExiB",
+          "name": "automai-xpex-systems-51277",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_3MG7CwfNEWJPb2bzhaFl7qjd7Pxt",
+          "name": "automai-biz-flow-onbq",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_u2IPNbjwmgJC0n6zYzLGKP1DkUSj",
+          "name": "neural-stealth-vault",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_qNYGuhXlA7EPUpiIJv1tSKvtu9zw",
+          "name": "xpex-command-nexus",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_ozGg7UwrWf8sOiaFNC8xtDDjpyn9",
+          "name": "hyperprofit-crypto-pulse",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_k7cacdcAAQM9p6xKMR7pgaUnDhlt",
+          "name": "painel-central",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_j4xpjd6JzsufemEXlvcxX4Jy1UCJ",
+          "name": "product-forge-ai",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_gbVU2QTMAZM1eRXS1DPKjduBOqqX",
+          "name": "neural-stealth-vault-mhzp",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_f7MuJRw8pe3IFuLI7HAGrze7msre",
+          "name": "supreme-dashboard-nexus",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_ef5Wdi2hURdZa8lrMxV5k7RpOi6S",
+          "name": "automai-biz-flow",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_cXSdntGF4fwCK1LLahiTkBiMYFXh",
+          "name": "jason-flow-demo-uplead",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_WYnyGTm2E1HUIDJTFLJLo8bbbSI2",
+          "name": "product-json-creator-wizard-8o3s",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_Q7ndeUwErlyFo6FzEsuk2UedT8Wc",
+          "name": "product-json-creator-wizard",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        },
+        {
+          "id": "prj_PCWqgIrUgP5yJ4FMFAuWzmIBmAT3",
+          "name": "synapse-revenue-hub",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV"
+        }
+      ],
+      "pagination": {
+        "count": 26,
+        "prev": 1791351815201
+      }
+    }
+  ],
+  "railway": {
+    "status": "BLOCKED",
+    "reason": "Connector requires reauthentication; no credentials requested or provisioning attempted"
+  }
+}

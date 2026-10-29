@@ -1,0 +1,471 @@
+{
+  "recordedAt": "2026-10-25 11:00:15 UTC",
+  "observationRangeUTC": {"start":"2026-10-25T10:44:46.734Z","end":"2026-10-25 11:00:15 UTC"},
+  "readOnly": true,
+  "scope": "Authenticated Vercel metadata only; never queried env values or source files",
+  "inventoryCounts": [
+    62,
+    16,
+    26
+  ],
+  "paginationComplete": true,
+  "selectedMatchingPublicRepo": 14,
+  "unrelatedProjectDetailsOmitted": 90,
+  "rows": [
+    {
+      "projectId": "prj_UBNjAlz7cWsPvNDILUk66440E7nn",
+      "projectName": "gxeon-ai-gxeon-dashboard",
+      "scope": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": "vite",
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_5Csrd39WRaEMVyheexXgCys3sWYU",
+        "url": "gxeon-ai-gxeon-dashboard-9y11la2bj-xpex-neural.vercel.app",
+        "createdAt": 1792890270662,
+        "state": "ERROR",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_RYR5u33XB5nE0UkSwyAGKSQft1gZ",
+      "projectName": "gxeon-ail",
+      "scope": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_CT4APnLg2xt1BratDRZJwbiSEGob",
+        "url": "gxeon-f033dhxn2-xpex-neural.vercel.app",
+        "createdAt": 1792890268615,
+        "state": "READY",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": null,
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_jpULAotL78AU5SlOd5GcyBTI8UWO",
+      "projectName": "gxeon-ai-api-server",
+      "scope": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_GC7366EkUGfRwZkTy41svRmG7E36",
+        "url": "gxeon-ai-api-server-m51yvgkwe-xpex-neural.vercel.app",
+        "createdAt": 1792890268443,
+        "state": "READY",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": null,
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_hODQYobRkk4O6rpZkGZgNkFrNwA4",
+      "projectName": "gxeon-ai-ia",
+      "scope": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_DB7HtPAQBruPKsTPUC8icPjrBe1H",
+        "url": "gxeon-ai-m396sb25d-xpex-neural.vercel.app",
+        "createdAt": 1792890269633,
+        "state": "READY",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": null,
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_EMDNZwGOLK3bdtOHcVecT84xp4Dp",
+      "projectName": "gxeon-ai01",
+      "scope": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_9Vo8qs5JfN3QuD7G1AoTwfgsmzf6",
+        "url": "gxeon-ai01-gwqooavv4-xpex-neural.vercel.app",
+        "createdAt": 1792890270052,
+        "state": "READY",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": null,
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_wu5d2rPcPUhdhIQ01P0Y4BddaJT2",
+      "projectName": "gxeon-ai",
+      "scope": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_7e369WUFRzvYFe3hDqJboaBwNRa9",
+        "url": "gxeon-enrgiegsv-xpex-neural.vercel.app",
+        "createdAt": 1792890269594,
+        "state": "ERROR",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_AqiT3Idishevz42J1s9E5LZ3SA85",
+      "projectName": "gxeon-ai-api-server-sxv4",
+      "scope": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_2TTf7nhhCBRVkTgwUcLYhj86maFq",
+        "url": "gxeon-ai-api-server-sxv4-kusbuct8c-xpex-neural.vercel.app",
+        "createdAt": 1792890270247,
+        "state": "ERROR",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_mo5cvJX4AXuPNsYXtQO3zYARLsLh",
+      "projectName": "gxeon-ai-mockup-sandbox",
+      "scope": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+      "framework": "vite",
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_5h7uFQcPsvFDwP8tXuTLg8DoM4DU",
+        "url": "gxeon-ai-mockup-sandbox-1j2r4gt72-xpex-neural.vercel.app",
+        "createdAt": 1792890268902,
+        "state": "ERROR",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO DE OUTRO PRODUTO / SANDBOX",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_owdXFSlvK1GBrWVuYCqeHpTlYjP4",
+      "projectName": "gxeon-audit-os",
+      "scope": "team_qQ2k1diGpBITcKNCR5eLrVRB",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_7DtRiHF82tEfSV5zFCNENhRzJqxm",
+        "url": "gxeon-audit-4w3hqq579-gxeon.vercel.app",
+        "createdAt": 1792890269802,
+        "state": "READY",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": null,
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_xnxV5ZVur0Sv7f1uvZHADP358nHf",
+      "projectName": "gxeon-ai-api-server",
+      "scope": "team_qQ2k1diGpBITcKNCR5eLrVRB",
+      "framework": "express",
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_7sus4AbzdTR4ez4TRDc3doLVEBVe",
+        "url": "gxeon-ai-api-server-9v1lmhgs1-gxeon.vercel.app",
+        "createdAt": 1792890268398,
+        "state": "ERROR",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_STlhUAtwut0oWBsWD5PjmCFLhjBq",
+      "projectName": "gxeon-ai-api-server-611a",
+      "scope": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_7gyUm7fZsAWFANBcjLdqB99cTGbK",
+        "url": "gxeon-ai-api-server-611a-79pxdcltj.vercel.app",
+        "createdAt": 1792890270524,
+        "state": "READY",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": null,
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_F3OFtryPk4YmYwXc3zEJkbZTRZkv",
+      "projectName": "gxeon-ai-aoo",
+      "scope": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_HcyYysfo4V5pHjG3MKrHpQM69BEm",
+        "url": "gxeon-ai-bfg6jm17v-junior-senas-projects-4226acc3.vercel.app",
+        "createdAt": 1792890270624,
+        "state": "READY",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": null,
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_R2ILQClNw9Zk8XCbj0EalzflwtVO",
+      "projectName": "gxeon-ai-api-server",
+      "scope": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+      "framework": null,
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_3gPRPnLiwMx4SkjvxL5bAs569E9P",
+        "url": "gxeon-ai-api-server-1lpkn0hm1-junior-senas-projects-4226acc3.vercel.app",
+        "createdAt": 1792890268695,
+        "state": "READY",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": null,
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    },
+    {
+      "projectId": "prj_kssB4fuFxooxei5CYvt091ihp77z",
+      "projectName": "gxeon-ai-a",
+      "scope": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+      "framework": "express",
+      "nodeVersion": "24.x",
+      "ownerConfirmed": false,
+      "rootDirectory": "NOT RETURNED BY CONNECTOR",
+      "outputDirectory": "NOT RETURNED BY CONNECTOR",
+      "cost": "NOT VERIFIED",
+      "latestDeployment": {
+        "id": "dpl_EefJnToNcvwHRd6KBDF6CFfMnaXc",
+        "url": "gxeon-ai-9d2zw7qlw-junior-senas-projects-4226acc3.vercel.app",
+        "createdAt": 1792890269794,
+        "state": "ERROR",
+        "target": null,
+        "regions": [
+          "iad1"
+        ],
+        "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+        "aliasError": null,
+        "git": {
+          "owner": "xpex-systems-ai",
+          "repo": "GXEON-AI",
+          "branch": "codex/gxeon-audit-os-v1-gx01",
+          "sha": "1dc8e920a7d47d315c9482002ff9434667b596bf"
+        }
+      },
+      "classification": "PROJETO LEGADO — classificação provisória para decisão do proprietário",
+      "canonicalStatus": "No external canonical project selected or approved",
+      "nextAction": "Owner confirms title, purpose, root/output, scope and budget; no change authorized"
+    }
+  ],
+  "railway": {
+    "status": "BLOCKED — CONNECTION REAUTHENTICATION REQUIRED",
+    "noRetryOrCredentialRequest": true
+  },
+  "netlify": {
+    "status": "NOT IDENTIFIED in available connector scope; GitHub status contexts retained"
+  }
+}

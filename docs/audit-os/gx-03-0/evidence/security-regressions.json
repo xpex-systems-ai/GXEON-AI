@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "testData": true,
+  "externalNetworkUsed": false,
+  "keysPersisted": false,
+  "versions": [
+    {
+      "chain": [
+        "@expo/cli",
+        "node-forge"
+      ],
+      "version": "1.4.2"
+    },
+    {
+      "chain": [
+        "@expo/cli",
+        "@expo/code-signing-certificates"
+      ],
+      "version": "0.0.6"
+    },
+    {
+      "chain": [
+        "@expo/ngrok",
+        "got",
+        "cacheable-request",
+        "http-cache-semantics"
+      ],
+      "version": "4.2.0"
+    },
+    {
+      "chain": [
+        "expo-router",
+        "query-string",
+        "decode-uri-component"
+      ],
+      "version": "0.5.1"
+    },
+    {
+      "chain": [
+        "@expo/cli",
+        "@expo/config",
+        "deepmerge"
+      ],
+      "version": "4.3.1"
+    }
+  ],
+  "checks": [
+    "Expo CSR and RSA valid signature",
+    "extra nested DigestAlgorithm rejected",
+    "zero-freshness cache cannot be resurrected by max-stale or stale-while-revalidate",
+    "cache serialization and public positive-TTL response",
+    "query-string CJS/Metro interop and malformed decoding bounded to 5s",
+    "deepmerge own/null-prototype malicious targets across CJS/UMD distributions; normal arrays/symbols/custom merge",
+    "actual Expo app config consumer"
+  ],
+  "upstreamUnpatchedAdvisoriesRemain": [
+    "GHSA-ch52-4w7c-c8xp",
+    "GHSA-gcqx-w48m-w2h4"
+  ],
+  "independentReviewComplete": false
+}

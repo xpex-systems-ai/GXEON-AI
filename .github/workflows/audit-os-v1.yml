@@ -1,0 +1,201 @@
+name: Audit OS V1
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  global-dependency-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Preserve the complete audit and its real exit status
+        run: pnpm audit --json > "$RUNNER_TEMP/global-dependency-audit.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gx040-global-dependency-audit
+          path: ${{ runner.temp }}/global-dependency-audit.json
+  render-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build dedicated Render candidate (no provider resources)
+        run: docker build -f deploy/render/Dockerfile -t omnix-render-candidate .
+      - name: Verify rootless image and refusal without reviewed configuration
+        run: |
+          test "$(docker inspect --format '{{.Config.User}}' omnix-render-candidate)" = node
+          if docker run --rm omnix-render-candidate > "$RUNNER_TEMP/render-refusal.log" 2>&1; then
+            echo 'Runtime unexpectedly started without configuration'; exit 1
+          fi
+          test "$(cat "$RUNNER_TEMP/render-refusal.log")" = '{"event":"audit_pilot_start_refused"}'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gx030-render-candidate
+          path: ${{ runner.temp }}/render-refusal.log
+  portable-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Generate local-only synthetic secrets and certificates
+        run: node deploy/self-hosted/init.mjs compose
+      - name: Build and start provider-independent HTTPS runtime and private PG17
+        run: docker compose -f deploy/self-hosted/compose.yaml up --build -d --wait --wait-timeout 120
+      - name: Verify TLS, routing, scoped sessions, audit, export and restore
+        run: node deploy/self-hosted/verify.mjs compose
+      - name: Restart portable services without deleting data
+        run: |
+          docker compose -f deploy/self-hosted/compose.yaml restart
+          docker compose -f deploy/self-hosted/compose.yaml up -d --wait --wait-timeout 120
+          node deploy/self-hosted/verify-restart.mjs compose
+      - name: Upload sanitized portable test receipts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: omnix-portable-runtime
+          path: .gx-selfhost/compose/evidence
+          include-hidden-files: true
+      - name: Stop only the portable stack, retaining the volume
+        if: always()
+        run: docker compose -f deploy/self-hosted/compose.yaml stop
+  pilot-database-boundary:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: gx01_pilot
+          POSTGRES_USER: gx01_pilot_owner
+          POSTGRES_PASSWORD: local-test-only
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U gx01_pilot_owner"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @workspace/api-server run test:audit-pilot-db
+        env:
+          TEST_AUDIT_PILOT_DATABASE_URL: postgresql://gx01_pilot_owner:local-test-only@localhost:5432/gx01_pilot
+  audit-flow:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: gx01_test
+          POSTGRES_USER: gx01_test
+          POSTGRES_PASSWORD: local-test-only
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U gx01_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run lint:audit
+      - name: Reviewed dependency compatibility fixtures (loopback only)
+        run: |
+          node scripts/audit-staging/dependency-smoke.mjs
+          mkdir -p "$RUNNER_TEMP/gx01-evidence"
+          cp .gx012/evidence/dependency-smoke.json "$RUNNER_TEMP/gx01-evidence/"
+      - name: Isolated codegen regression for patched parser dependencies
+        run: |
+          node scripts/audit-staging/codegen-smoke.mjs
+          mkdir -p "$RUNNER_TEMP/gx01-evidence"
+          cp .gx012/evidence/codegen-smoke.json "$RUNNER_TEMP/gx01-evidence/"
+      - name: Reviewed GX017 parent API compatibility and patched schema runtime
+        run: |
+          node scripts/audit-staging/security-compatibility.mjs
+          cp .gx012/evidence/security-compatibility.json "$RUNNER_TEMP/gx01-evidence/"
+      - name: GX030 adversarial regressions and installed Expo parent compatibility
+        run: |
+          node scripts/audit-staging/gx030-security.mjs
+          cp .gx012/evidence/gx030-security.json "$RUNNER_TEMP/gx01-evidence/"
+      - run: pnpm run typecheck:libs
+      - run: pnpm --filter @workspace/api-server run typecheck
+      - run: pnpm --filter @workspace/api-server run typecheck:audit-tests
+      - run: pnpm --filter @workspace/gxeon-dashboard run typecheck
+      - name: Unit and file-backed persistence tests
+        run: pnpm --filter @workspace/api-server run test:audit
+      - name: PostgreSQL HTTP integration flow
+        run: pnpm --filter @workspace/api-server run test:audit
+        env:
+          TEST_AUDIT_DATABASE_URL: postgresql://gx01_test:local-test-only@localhost:5432/gx01_test
+          GXEON_AUDIT_TEST_EVIDENCE_DIR: ${{ runner.temp }}/gx01-evidence
+      - name: Upload test evidence (explicitly test data)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gx01-test-evidence
+          path: ${{ runner.temp }}/gx01-evidence
+  isolated-staging:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build:libs
+      # Staging exercises only its API and frontend; the separate Build workflow still builds the entire monorepo.
+      - run: pnpm --filter @workspace/api-server --filter @workspace/gxeon-dashboard run build
+      - name: Start isolated PostgreSQL 17 and existing applications
+        run: |
+          pnpm run stage:audit init
+          pnpm run stage:audit up
+      - name: Verify HTTP lifecycle, authorization, rollback and full restart
+        run: pnpm run verify:audit-staging
+      - name: Recover from isolated API and database failures without record mutation
+        run: node scripts/audit-staging/recovery-failures.mjs
+      - name: Backup and restore synthetic data into a new isolated database
+        run: |
+          node scripts/audit-staging/backup-restore.mjs
+          cp artifacts/api-server/dist/audit-pilot-boundary.json .gx012/evidence/pilot-build-boundary.json
+      - name: Upload sanitized synthetic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gx012-isolated-staging
+          path: .gx012/evidence
+          include-hidden-files: true
+      - name: Stop staging without deleting the persistent volume
+        if: always()
+        run: pnpm run stage:audit stop
+      - name: Database startup diagnostics (test instance only)
+        if: failure()
+        run: docker compose -f scripts/audit-staging/compose.yaml logs --tail 60 postgres

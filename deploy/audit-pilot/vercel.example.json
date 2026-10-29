@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "PORT=3000 BASE_PATH=/ pnpm --filter @workspace/gxeon-dashboard run build",
+  "outputDirectory": "artifacts/gxeon-dashboard/dist/public",
+  "rewrites": [{ "source": "/:path((?!api(?:/|$)).*)", "destination": "/index.html" }]
+}

@@ -1,0 +1,123 @@
+{
+  "observedLocalDate": "2026-10-24",
+  "timezone": "America/Sao_Paulo",
+  "purpose": "Read-only official documentation and public prices, no provider API/account onboarding",
+  "sources": [
+    {
+      "url": "https://developers.mercadolivre.com.br/pt_br/termos-e-condicoes",
+      "method": "Web official search index and direct open",
+      "fullPageStatus": 403,
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/autenticacao-e-autorizacao",
+      "method": "Web official search index and direct open",
+      "fullPageStatus": 403,
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/desenvolvimento-in-house",
+      "method": "Web official search index and direct open",
+      "fullPageStatus": 403,
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/pt_br/permissoes-funcionais/",
+      "method": "Web official search index and direct open",
+      "fullPageStatus": 403,
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/pt_br/publicacao-no-catalogo",
+      "method": "Web official search index and direct open",
+      "fullPageStatus": 403,
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/pt_br/server-mcp",
+      "method": "Web official search index and direct open",
+      "fullPageStatus": 403,
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/pt_br/developer-partner-program",
+      "method": "Web official search index and direct open",
+      "fullPageStatus": 403,
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/pt_br/manual-de-uso-de-medalhas",
+      "method": "Web official search index and direct open",
+      "fullPageStatus": 403,
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/pt_br/realizacao-de-testes/crie-uma-aplicacao-no-mercado-livre",
+      "method": "Official search index only",
+      "fullPageStatus": "NOT_OPENED",
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/pt_br/pt_br/publicacao-de-produtos",
+      "method": "Official search index only",
+      "fullPageStatus": "NOT_OPENED",
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/pt_br/descricao-de-produtos/produto-receba-notificacoes",
+      "method": "Official search index only",
+      "fullPageStatus": "NOT_OPENED",
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/produto-receba-notificacoes/boas-praticas-para-usar-a-plataforma",
+      "method": "Official search index only",
+      "fullPageStatus": "NOT_OPENED",
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.mercadolivre.com.br/pt_br/experiencia-de-compra",
+      "method": "Official search index only",
+      "fullPageStatus": "NOT_OPENED",
+      "access": "INDEXED_ONLY / FULL_TEXT_NOT_VERIFIED",
+      "permissionGranted": false
+    },
+    {
+      "url": "https://developers.openai.com/plugins/build/auth",
+      "method": "Direct official web open",
+      "access": "READ",
+      "operationalPermissionGranted": false
+    },
+    {
+      "url": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm",
+      "method": "Direct official web open",
+      "access": "READ",
+      "operationalPermissionGranted": false
+    },
+    {
+      "url": "https://vercel.com/pricing",
+      "method": "Direct official web open",
+      "access": "READ",
+      "operationalPermissionGranted": false
+    },
+    {
+      "url": "https://railway.com/pricing",
+      "method": "Direct official web open",
+      "access": "READ",
+      "operationalPermissionGranted": false
+    }
+  ],
+  "conclusion": "Critical ML terms/AI/derived-data/third-party permissions NOT VERIFIED. BLOCKED — POLICY OR EVIDENCE GAP. No bypass, no account/app/API calls."
+}

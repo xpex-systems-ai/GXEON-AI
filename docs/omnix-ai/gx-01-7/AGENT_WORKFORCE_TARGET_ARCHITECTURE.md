@@ -1,0 +1,18 @@
+# GX-01.7 — arquitetura alvo do Agent Workforce
+
+**PLANEJADO. Nenhum dos agentes Commerce foi implementado nesta fase.** Um orquestrador futuro recebe identidade nominal+org, escopo/consentimento e propósito, resolve política antes de enfileirar tarefa e limita ferramentas por agente. Execução separa coleta read-only, análise determinística, recomendação e revisão. Tokens ficam no vault; modelo recebe somente dados minimizados autorizados, se a política futura permitir.
+
+Contrato comum proposto (não API existente): requestId, organizationId, actorId, membershipVersion, consentId, providerAccountId, scope, purpose, policyVersion, testData, requestedAt; saída status [QUEUED/RUNNING/PARTIAL/REVIEW_REQUIRED/COMPLETED/FAILED/CANCELLED], findings com evidenceIds, limitações, nextAction e traceId. Falha/revogação deve parar novas coletas e nunca inventar sucesso. Idempotência por org+requestId, cotas por org/provedor e auditoria append-only segregada. Modelo/agent não pode decidir consentimento nem ampliar ferramenta.
+
+| Agente / função | Entradas e fontes | Permissões / limites | Saída / evidência | Aprovação / erros / indicador de sucesso |
+|---|---|---|---|---|
+| Audit Engineer |escopo+artefato autorizado; workflow atual como referência |dois checks estáticos no estado atual; futura expansão separada |achados e relatório com digest/ref |humano revê; erro inválido/foraescopo; sucesso=referências verificáveis, não número de vulnerabilidades |
+| Sales Intelligence |métricas agregadas autorizadas por período; API oficial apóspolicy |leitura mínima; sem carteira/financeiro/PII; sem previsão garantida |observações+qualidade/freshness com snapshot |humano decide; dados insuficientes→PARTIAL; indicador=cálculo reproduzível |
+| Catalog |IDs/anúncios/categoria/atributos do vendedor consentido |read-only; sem publicação/preço/estoque; MVP abaixo |diagnóstico e recomendações por item/regra |revisão recomendada antes de uso;403/429/revogação explícitos; sucesso=cobertura comprovada dos itens selecionados |
+| Inventory |quantidades/variações autorizadas e janela |somente leitura; não reserva/ajusta estoque; sem adivinhar disponibilidade |alertas com timestamp/fonte |humano valida; sem snapshot→UNKNOWN; sucesso=alerta rastreável sem alterar saldo |
+| Marketing |dados de catálogo e métricas permitidas, nunca leads raspados |sem ads budget/postagem/mensagem; textos sujeitos à política |rascunhos e hipóteses vinculados à evidência |aprovação humana; conteúdo proibido→refusar; sucesso=rascunho revisável, não ROI |
+| Customer Operations |política/FAQ aprovada e contexto mínimo consentido |sem caixa de mensagens/compradores noMVP; sem contato automático |sugestão interna documentada |humano envia futuramente; PII/consentimento insuficiente→BLOCKED; sucesso=proveniência e privacidade |
+| Integration |conexões/escopos/health metadados sem segredos |backend troca/renova/revoga tokens; agente não vê token e não cria app |status e plano de correção com trace |mudança de acesso requer humano; invalid_grant→reconnect; sucesso=isolamento/revogação testados |
+| Executive |somente agregados autorizados dos demais agentes |não atravessa tenant; não inventa receita/margem/cliente |resumo com links/intervalos/limites |decisor humano; divergência→PARTIAL; sucesso=claims inteiramente evidenciadas |
+
+Cada agente declara schemaVersion, dependências, versão de regra, ferramenta allowlisted, política de retenção, timeout/retry budget e custo previsto antes de execução. Registro de catálogo exige implementação/testes/revisão/política para mudar status de Planejado para Homologação/Disponível. Critérios são alvos futuros, não resultados medidos. Lançamento inicial de apenas Catalog evita vender catálogo de oito produtos inexistentes.

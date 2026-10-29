@@ -1,0 +1,245 @@
+✔ dedicated runtime configuration fails closed without distinct roles, private DB and exact HTTPS origins (5.4814ms)
+✔ dedicated HTTP boundary preserves the audit lifecycle and excludes legacy, administrative and financial APIs (30234.5092ms)
+✔ GX intake refuses oversized check collections before traversing elements in Zod (3.723ms)
+✔ dedicated admission limits bound role rate and concurrent readiness without trusting forwarded IPs (114.459ms)
+✔ REST list contracts reject error objects, invalid JSON and unidentified rows (1043.3521ms)
+✔ bounded static checks and secret/input validation (9.5016ms)
+✔ report contract rejects cross-case envelopes and unknown evidence references (2.0039ms)
+✔ HTML transport fails with a useful routing diagnostic; raw server errors stay hidden (1.9183ms)
+▶ real SQL persistence and HTTP lifecycle, independent review, rollback and evidence integrity
+  ✔ private routes deny missing/invalid credentials; public contracts and unknown API routes are JSON (243.6379ms)
+[15:39:18.646] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 1,
+      "method": "GET",
+      "url": "/api/v1/audit/cases"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 14
+[15:39:18.670] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 2,
+      "method": "GET",
+      "url": "/api/v1/audit/mission-control"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 9
+[15:39:18.681] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 3,
+      "method": "GET",
+      "url": "/api/v1/audit/schema-diagnostics"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 5
+[15:39:18.774] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 4,
+      "method": "POST",
+      "url": "/api/v1/audit/cases"
+    }
+    [35mres[39m: {
+      "statusCode": 401
+    }
+    [35mresponseTime[39m: 2
+[15:39:18.779] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 5,
+      "method": "GET",
+      "url": "/api/healthz"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2
+[15:39:18.784] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 6,
+      "method": "GET",
+      "url": "/api/v1/audit/health"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2
+[15:39:18.790] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 7,
+      "method": "GET",
+      "url": "/api/v1/audit/modules"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 1
+[15:39:18.809] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 8,
+      "method": "GET",
+      "url": "/api/v1/audit/offers/catalog"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 7
+[15:39:18.821] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 9,
+      "method": "GET",
+      "url": "/api/v1/audit/health"
+    }
+    [35mres[39m: {
+      "statusCode": 200
+    }
+    [35mresponseTime[39m: 2
+[15:39:18.843] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 10,
+      "method": "GET",
+      "url": "/api/v1/audit/not-a-route"
+    }
+    [35mres[39m: {
+      "statusCode": 404
+    }
+    [35mresponseTime[39m: 8
+  ✔ write flags, validation and review gate prevent unsafe transitions (54.8233ms)
+[15:39:19.997] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 11,
+      "method": "POST",
+      "url": "/api/v1/audit/findings"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 4
+[15:39:20.029] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 12,
+      "method": "POST",
+      "url": "/api/v1/audit/findings"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 2
+[15:39:20.043] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 13,
+      "method": "POST",
+      "url": "/api/v1/audit/evidences"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 3
+[15:39:20.059] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 14,
+      "method": "POST",
+      "url": "/api/v1/audit/findings"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 2
+[15:39:20.074] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 15,
+      "method": "POST",
+      "url": "/api/v1/audit/evidences"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 2
+[15:39:20.090] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 16,
+      "method": "POST",
+      "url": "/api/v1/audit/findings"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 2
+[15:39:20.105] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 17,
+      "method": "POST",
+      "url": "/api/v1/audit/evidences"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 2
+[15:39:20.120] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 18,
+      "method": "POST",
+      "url": "/api/v1/audit/findings"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 2
+[15:39:20.136] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 19,
+      "method": "POST",
+      "url": "/api/v1/audit/evidences"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 2
+[15:39:20.151] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 20,
+      "method": "POST",
+      "url": "/api/v1/audit/findings"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 2
+[15:39:20.167] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 21,
+      "method": "POST",
+      "url": "/api/v1/audit/evidences"
+    }
+    [35mres[39m: {
+      "statusCode": 409
+    }
+    [35mresponseTime[39m: 2
+  ✔ intake → checks → review → report → closed; repeated runs/finalization do not duplicate (1667.3498ms)
+  ✔ legacy baseline discovery cannot select a CLOSED GX case with the same asset reference (142.9829ms)
+[15:39:20.859] [32mINFO[39m (18060): [36mrequest completed[39m
+    [35mreq[39m: {
+      "id": 22,
+      "method": "POST",
+      "url": "/api/v1/audit/baseline/first-evidence-finding"
+    }
+    [35mres[39m: {
+      "statusCode": 404
+    }
+    [35mresponseTime[39m: 18
+  ✔ tampered evidence is blocked; failed intake rolls back assets and cases (80.8833ms)
+  ✔ identical operator/reviewer tokens cannot approve; provider failures are redacted (41.9766ms)
+  ✔ changes after review invalidate approval; report tampering blocks export (211.8592ms)
+✔ real SQL persistence and HTTP lifecycle, independent review, rollback and evidence integrity (6946.9307ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 51362.4884

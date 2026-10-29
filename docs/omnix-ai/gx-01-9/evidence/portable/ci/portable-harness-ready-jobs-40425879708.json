@@ -1,0 +1,97 @@
+{
+  "total_count": 1,
+  "jobs": [
+    {
+      "id": 121931387330,
+      "run_id": 40425879708,
+      "workflow_name": "GXEON Monorepo Health",
+      "head_branch": "codex/gxeon-audit-os-v1-gx01",
+      "run_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/runs/40425879708",
+      "run_attempt": 1,
+      "node_id": "CR_kwDORw4ofc8AAAAcY61Rwg",
+      "head_sha": "30bdd5cd3b52697f10c0181ab019b79d8282b579",
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/jobs/121931387330",
+      "html_url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40425879708/job/121931387330",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-27T00:21:33Z",
+      "started_at": "2026-10-27T00:21:34Z",
+      "completed_at": "2026-10-27T00:21:43Z",
+      "name": "Operational radar report",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-27T00:21:35Z",
+          "completed_at": "2026-10-27T00:21:36Z"
+        },
+        {
+          "name": "Checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-27T00:21:36Z",
+          "completed_at": "2026-10-27T00:21:37Z"
+        },
+        {
+          "name": "Setup Node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-27T00:21:37Z",
+          "completed_at": "2026-10-27T00:21:39Z"
+        },
+        {
+          "name": "Generate health reports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-27T00:21:39Z",
+          "completed_at": "2026-10-27T00:21:40Z"
+        },
+        {
+          "name": "Upload health reports",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-27T00:21:40Z",
+          "completed_at": "2026-10-27T00:21:41Z"
+        },
+        {
+          "name": "Post Setup Node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-27T00:21:41Z",
+          "completed_at": "2026-10-27T00:21:41Z"
+        },
+        {
+          "name": "Post Checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-27T00:21:41Z",
+          "completed_at": "2026-10-27T00:21:41Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-27T00:21:41Z",
+          "completed_at": "2026-10-27T00:21:41Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/check-runs/121931387330",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000013531,
+      "runner_name": "GitHub Actions 1000013531",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+
+> workspace@0.0.0 health:report [WORKSPACE]\GXEON-AI-gx017
+> node scripts/monorepo_health_report.cjs
+
+Wrote WORKSPACE_STATUS.md
+Wrote DEPENDENCY_GRAPH.md
+Wrote MONOREPO_HEALTH_REPORT.md
+Wrote GITHUB_ACTIONS_STATUS.md
+Wrote DEPLOY_READINESS_REPORT.md

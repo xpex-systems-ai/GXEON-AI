@@ -1,0 +1,146 @@
+{
+  "queriedAt": "2026-10-21T13:25:56.641Z",
+  "readOnly": true,
+  "filterRepo": "https://github.com/xpex-systems-ai/GXEON-AI",
+  "accounts": [
+    {
+      "accountIndex": 1,
+      "projects": [
+        {
+          "id": "prj_UBNjAlz7cWsPvNDILUk66440E7nn",
+          "name": "gxeon-ai-gxeon-dashboard",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+          "createdAt": 1780614015013,
+          "updatedAt": 1791771112879
+        },
+        {
+          "id": "prj_RYR5u33XB5nE0UkSwyAGKSQft1gZ",
+          "name": "gxeon-ail",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+          "createdAt": 1780882723177,
+          "updatedAt": 1790746135031
+        },
+        {
+          "id": "prj_tQcb12xWLeTTY6h7Vhw6w4yp5frg",
+          "name": "ai-ia",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+          "createdAt": 1780882494954,
+          "updatedAt": 1790746111653
+        },
+        {
+          "id": "prj_jpULAotL78AU5SlOd5GcyBTI8UWO",
+          "name": "gxeon-ai-api-server",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+          "createdAt": 1780880395936,
+          "updatedAt": 1790746059159
+        },
+        {
+          "id": "prj_hODQYobRkk4O6rpZkGZgNkFrNwA4",
+          "name": "gxeon-ai-ia",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+          "createdAt": 1780882480942,
+          "updatedAt": 1790746041125
+        },
+        {
+          "id": "prj_EMDNZwGOLK3bdtOHcVecT84xp4Dp",
+          "name": "gxeon-ai01",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+          "createdAt": 1780720612849,
+          "updatedAt": 1790745959080
+        },
+        {
+          "id": "prj_wu5d2rPcPUhdhIQ01P0Y4BddaJT2",
+          "name": "gxeon-ai",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+          "createdAt": 1775754633285,
+          "updatedAt": 1790745940880
+        },
+        {
+          "id": "prj_AqiT3Idishevz42J1s9E5LZ3SA85",
+          "name": "gxeon-ai-api-server-sxv4",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+          "createdAt": 1780668815102,
+          "updatedAt": 1790745940802
+        },
+        {
+          "id": "prj_mo5cvJX4AXuPNsYXtQO3zYARLsLh",
+          "name": "gxeon-ai-mockup-sandbox",
+          "accountId": "team_rvTe2wbTmDcXGPMIMXC8mgRX",
+          "createdAt": 1780617399649,
+          "updatedAt": 1790745939869
+        }
+      ],
+      "pagination": {
+        "count": 9,
+        "prev": 1791771112879
+      }
+    },
+    {
+      "accountIndex": 2,
+      "projects": [
+        {
+          "id": "prj_owdXFSlvK1GBrWVuYCqeHpTlYjP4",
+          "name": "gxeon-audit-os",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB",
+          "createdAt": 1781817894220,
+          "updatedAt": 1791351688833
+        },
+        {
+          "id": "prj_xnxV5ZVur0Sv7f1uvZHADP358nHf",
+          "name": "gxeon-ai-api-server",
+          "accountId": "team_qQ2k1diGpBITcKNCR5eLrVRB",
+          "createdAt": 1781736018946,
+          "updatedAt": 1791351669890
+        }
+      ],
+      "pagination": {
+        "count": 2,
+        "prev": 1791351688833
+      }
+    },
+    {
+      "accountIndex": 3,
+      "projects": [
+        {
+          "id": "prj_STlhUAtwut0oWBsWD5PjmCFLhjBq",
+          "name": "gxeon-ai-api-server-611a",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+          "createdAt": 1780894800370,
+          "updatedAt": 1791351815201
+        },
+        {
+          "id": "prj_F3OFtryPk4YmYwXc3zEJkbZTRZkv",
+          "name": "gxeon-ai-aoo",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+          "createdAt": 1780944733636,
+          "updatedAt": 1791351706732
+        },
+        {
+          "id": "prj_R2ILQClNw9Zk8XCbj0EalzflwtVO",
+          "name": "gxeon-ai-api-server",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+          "createdAt": 1780883335426,
+          "updatedAt": 1791351686894
+        },
+        {
+          "id": "prj_kssB4fuFxooxei5CYvt091ihp77z",
+          "name": "gxeon-ai-a",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+          "createdAt": 1780893480936,
+          "updatedAt": 1791351670566
+        },
+        {
+          "id": "prj_u4vHMlTnqVXLaJwnpTEn8T0JMOmD",
+          "name": "gxeo",
+          "accountId": "team_DqK4uMQ3idpdQY7RF42uaGeV",
+          "createdAt": 1781817632789,
+          "updatedAt": 1791351669368
+        }
+      ],
+      "pagination": {
+        "count": 5,
+        "prev": 1791351815201
+      }
+    }
+  ]
+}

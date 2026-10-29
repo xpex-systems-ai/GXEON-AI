@@ -1,0 +1,212 @@
+{
+  "queriedAt": "2026-10-24T18:17:37.808Z",
+  "head": "5b58ead338a24ff168a43a2d71fc2639c355afb4",
+  "branch": "codex/gxeon-audit-os-v1-gx01",
+  "base": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "baseBranch": "main",
+  "draft": true,
+  "merged": false,
+  "state": "open",
+  "localHead": "5b58ead338a24ff168a43a2d71fc2639c355afb4",
+  "localDirty": [
+    "M .github/PULL_REQUEST_TEMPLATE.md",
+    " M artifacts/mockup-sandbox/src/.generated/mockup-components.ts"
+  ],
+  "sourceCheckout": "C:\\Users\\P-c\\Documents\\Codex\\2026-10-19\\gxeon-handoff-mestre-gx-01-audit\\work\\GXEON-AI-gx015",
+  "originalCheckoutPreserved": true,
+  "shortStatus": {
+    "count": 30,
+    "counts": {
+      "success": 7,
+      "failure": 23,
+      "pending": 0,
+      "error": 0
+    }
+  },
+  "fullStatus": {
+    "count": 42,
+    "counts": {
+      "success": 13,
+      "failure": 29,
+      "pending": 0,
+      "error": 0
+    }
+  },
+  "defaultPageLimit": 30,
+  "checkRunCount": 29,
+  "reviews": [],
+  "workflows": [
+    {
+      "id": 39611829960,
+      "name": "GXEON Monorepo Health",
+      "head": "5b58ead338a24ff168a43a2d71fc2639c355afb4",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39611829960"
+    },
+    {
+      "id": 39611830601,
+      "name": "GXEON Typecheck",
+      "head": "5b58ead338a24ff168a43a2d71fc2639c355afb4",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39611830601"
+    },
+    {
+      "id": 39611830518,
+      "name": "Audit OS V1",
+      "head": "5b58ead338a24ff168a43a2d71fc2639c355afb4",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39611830518"
+    },
+    {
+      "id": 39611830204,
+      "name": "GXEON Build",
+      "head": "5b58ead338a24ff168a43a2d71fc2639c355afb4",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39611830204"
+    }
+  ],
+  "gx015Diff": {
+    "files": [
+      ".github/workflows/audit-os-v1.yml",
+      "artifacts/api-server/build.mjs",
+      "artifacts/api-server/package.json",
+      "artifacts/api-server/src/audit-pilot.ts",
+      "artifacts/api-server/src/auditPilotApp.ts",
+      "artifacts/api-server/src/auditPilotConfig.ts",
+      "artifacts/api-server/src/auditPilotDatabase.ts",
+      "artifacts/api-server/src/services/auditWorkflowService.ts",
+      "artifacts/api-server/src/tests/auditPilot.test.ts",
+      "artifacts/api-server/src/tests/auditPilotDatabase.test.ts",
+      "artifacts/api-server/tsconfig.audit-tests.json",
+      "artifacts/gxeon-dashboard/src/pages/AuditWorkflowPage.tsx",
+      "deploy/audit-pilot/backend.env.example",
+      "deploy/audit-pilot/frontend.env.example",
+      "deploy/audit-pilot/grants.example.sql",
+      "deploy/audit-pilot/railway.example.json",
+      "deploy/audit-pilot/vercel.example.json",
+      "docs/audit-os/gx-01-5/ACCEPTANCE_MATRIX.md",
+      "docs/audit-os/gx-01-5/API_ATTACK_SURFACE_REVIEW.md",
+      "docs/audit-os/gx-01-5/BACKUP_RESTORE_RUNBOOK.md",
+      "docs/audit-os/gx-01-5/BROWSER_DOWNLOAD_ACCEPTANCE.md",
+      "docs/audit-os/gx-01-5/CONTROLLED_PILOT_PLAN.md",
+      "docs/audit-os/gx-01-5/DEDICATED_INFRASTRUCTURE_BLUEPRINT.md",
+      "docs/audit-os/gx-01-5/DEPENDENCY_REMEDIATION_PLAN.md",
+      "docs/audit-os/gx-01-5/EXTERNAL_DEPLOY_GOVERNANCE.md",
+      "docs/audit-os/gx-01-5/FINAL_DELIVERY.md",
+      "docs/audit-os/gx-01-5/IDENTITY_AND_ACCESS_GATE.md",
+      "docs/audit-os/gx-01-5/INDEPENDENT_SECURITY_REVIEW_PACKAGE.md",
+      "docs/audit-os/gx-01-5/INITIAL_SNAPSHOT.md",
+      "docs/audit-os/gx-01-5/PILOT_COST_AND_CAPACITY.md",
+      "docs/audit-os/gx-01-5/REPOSITORY_RECONCILIATION.md",
+      "docs/audit-os/gx-01-5/evidence/api-route-inventory.json",
+      "docs/audit-os/gx-01-5/evidence/ci-acceptance.json",
+      "docs/audit-os/gx-01-5/evidence/ci-api-report.json",
+      "docs/audit-os/gx-01-5/evidence/ci-backup-restore.json",
+      "docs/audit-os/gx-01-5/evidence/ci-codegen-smoke.json",
+      "docs/audit-os/gx-01-5/evidence/ci-pilot-build-boundary.json",
+      "docs/audit-os/gx-01-5/evidence/ci-validation.json",
+      "docs/audit-os/gx-01-5/evidence/current-head.json",
+      "docs/audit-os/gx-01-5/evidence/dependency-after.json.gz",
+      "docs/audit-os/gx-01-5/evidence/dependency-before.json.gz",
+      "docs/audit-os/gx-01-5/evidence/dependency-risk-register.json",
+      "docs/audit-os/gx-01-5/evidence/deployments.json",
+      "docs/audit-os/gx-01-5/evidence/external-project-matrix.json",
+      "docs/audit-os/gx-01-5/evidence/final-boundary-followup.json",
+      "docs/audit-os/gx-01-5/evidence/job-119255289225.log.gz",
+      "docs/audit-os/gx-01-5/evidence/job-119255289244.log.gz",
+      "docs/audit-os/gx-01-5/evidence/job-119255290392.log.gz",
+      "docs/audit-os/gx-01-5/evidence/job-119255292303.log.gz",
+      "docs/audit-os/gx-01-5/evidence/job-119255292649.log.gz",
+      "docs/audit-os/gx-01-5/evidence/job-119255292702.log.gz",
+      "docs/audit-os/gx-01-5/evidence/local-acceptance.json",
+      "docs/audit-os/gx-01-5/evidence/local-api-report.json",
+      "docs/audit-os/gx-01-5/evidence/local-backup-restore.json",
+      "docs/audit-os/gx-01-5/evidence/local-codegen-smoke.json",
+      "docs/audit-os/gx-01-5/evidence/local-validation.json",
+      "docs/audit-os/gx-01-5/evidence/lockfile-package-delta.json",
+      "docs/audit-os/gx-01-5/evidence/package-release-ages.json",
+      "docs/audit-os/gx-01-5/evidence/pilot-build-boundary.json",
+      "docs/audit-os/gx-01-5/evidence/prior-documents.json",
+      "docs/audit-os/gx-01-5/evidence/railway-projects.json",
+      "docs/audit-os/gx-01-5/evidence/reference-checks.json",
+      "docs/audit-os/gx-01-5/evidence/reference-pr.json",
+      "docs/audit-os/gx-01-5/evidence/reference-reviews.json",
+      "docs/audit-os/gx-01-5/evidence/reference-statuses.json",
+      "docs/audit-os/gx-01-5/evidence/source-manifest.json",
+      "docs/audit-os/gx-01-5/evidence/vercel-projects.json",
+      "eslint.config.mjs",
+      "lib/db/package.json",
+      "lib/db/src/index.ts",
+      "lib/db/src/pool.ts",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "scripts/audit-staging/backup-restore.mjs",
+      "scripts/audit-staging/codegen-smoke.mjs",
+      "scripts/audit-staging/config.mjs"
+    ],
+    "bytes": 971188,
+    "sha256": "1194aeddf2d0ff5e2a811d1342df5a0f0e156683c176379aa5a4174ffad67209"
+  },
+  "documents": [
+    {
+      "name": "ACCEPTANCE_MATRIX.md",
+      "sha256": "fb9a32dfb795112fa858a93ff4fbe1858ea8b563c989a442ee1cd14867ff85bd"
+    },
+    {
+      "name": "API_ATTACK_SURFACE_REVIEW.md",
+      "sha256": "3d4f3a4e4077b6cd2702b3cfac57027430cba8d7fc4ecdcc53fc0691d5c5b586"
+    },
+    {
+      "name": "BACKUP_RESTORE_RUNBOOK.md",
+      "sha256": "530695851d45b2dc3766aad94d884e1fe6ad05e53268db184fd15f9b4596e7ff"
+    },
+    {
+      "name": "BROWSER_DOWNLOAD_ACCEPTANCE.md",
+      "sha256": "3f7bf58ae10832f336a3c4215c9e64078e849b026e7ffe7ebd979acd3fc6173e"
+    },
+    {
+      "name": "CONTROLLED_PILOT_PLAN.md",
+      "sha256": "58e82a6b1a156e66316d0a56b8b07c952f76bec0540e0d49f7efc89edb9624ce"
+    },
+    {
+      "name": "DEDICATED_INFRASTRUCTURE_BLUEPRINT.md",
+      "sha256": "948463a6fec0c0e9cd624d5de6dce97296f4c3ec619e8c7d96d4a6fc67bebcdd"
+    },
+    {
+      "name": "DEPENDENCY_REMEDIATION_PLAN.md",
+      "sha256": "9526ee17a00d3bb9cd8500bad0e9c3544e46836cc946bdd67d852a39f2bdc51a"
+    },
+    {
+      "name": "EXTERNAL_DEPLOY_GOVERNANCE.md",
+      "sha256": "2078ee5340aacae2d25c212cbc77f96ebe9fb323a9d18497b943fea99148db03"
+    },
+    {
+      "name": "FINAL_DELIVERY.md",
+      "sha256": "6600e8016c05d0067df6b38b012307dc146f088797710bd8dee3aeedd965e82a"
+    },
+    {
+      "name": "IDENTITY_AND_ACCESS_GATE.md",
+      "sha256": "968aeb26e7240ebad2ec33c829cb21aabba402976f5f7bb4afdbcadcaef7e46c"
+    },
+    {
+      "name": "INDEPENDENT_SECURITY_REVIEW_PACKAGE.md",
+      "sha256": "8bd800e0ffc24bb68a343e0871400ba1b6393e4da1ce8976420d079938ee2091"
+    },
+    {
+      "name": "INITIAL_SNAPSHOT.md",
+      "sha256": "e2cdc62a1fa751797c891a6cc7c474721e2b3b9b95357b08765b9bf6260f6286"
+    },
+    {
+      "name": "PILOT_COST_AND_CAPACITY.md",
+      "sha256": "69265f84a705ced824b8f7b4948b6a73918a36437d41ac7dc5451e5b5acdf422"
+    },
+    {
+      "name": "REPOSITORY_RECONCILIATION.md",
+      "sha256": "f4a771e0d57a9fbcea54e0f924060fd30d619d28e36a48ce1b0c07e5c82272f5"
+    }
+  ]
+}

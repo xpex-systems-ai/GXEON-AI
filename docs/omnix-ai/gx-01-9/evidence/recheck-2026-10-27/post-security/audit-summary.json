@@ -1,0 +1,41 @@
+{
+  "queriedAt": "2026-10-28T00:51:40.959Z",
+  "sourceCommit": "30e0b00a219eb4c45d4fd57064b92f1165b1c739",
+  "command": "pnpm audit --json",
+  "exit": 1,
+  "vulnerabilities": {
+    "info": 0,
+    "low": 1,
+    "moderate": 1,
+    "high": 3,
+    "critical": 0
+  },
+  "qsPatched": "6.16.1",
+  "advisories": [
+    {
+      "package": "decode-uri-component",
+      "id": "GHSA-vcc3-ghjq-m6fr",
+      "severity": "moderate"
+    },
+    {
+      "package": "node-forge",
+      "id": "GHSA-86w9-cpqp-85rv",
+      "severity": "high"
+    },
+    {
+      "package": "http-cache-semantics",
+      "id": "GHSA-ch52-4w7c-c8xp",
+      "severity": "high"
+    },
+    {
+      "package": "zod",
+      "id": "GHSA-mrhx-c7xc-m3w5",
+      "severity": "high"
+    },
+    {
+      "package": "deepmerge",
+      "id": "GHSA-gcqx-w48m-w2h4",
+      "severity": "low"
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+🎉 SyntheticAudit - Your OpenAPI spec has been converted into ready to use orval!
+{"testData":true,"status":"PASS","generator":"orval 8.22.0","localYamlReferenceFixture":true,"fixtureSha256":"a0dfd446d7b4a4a658625d29313b0f9a1267830b93a08dd3670e2e6240425b92","outputSha256":"3e29e16b09db427230bdfd867018f314d4805b766e41eaadc38c60fc94bf1a51","generatedClientTypechecked":true,"repositoryGeneratedSourcesModified":false,"clean":false,"externalSpecFetched":false}

@@ -1,0 +1,159 @@
+{
+  "at": "2026-10-28T14:26:49.140Z",
+  "head": "2db7506278979b54256f547f395afdfb67cd133e",
+  "base": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "testedCheckout": "c4ce5b73b0ad94ac43e09dfd94370d2053bbfa19",
+  "parents": [
+    "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+    "2db7506278979b54256f547f395afdfb67cd133e"
+  ],
+  "sourceDirty": false,
+  "syntheticCiMerge": true,
+  "pullRequestMerged": false,
+  "workflows": [
+    {
+      "id": 40704401065,
+      "name": "GXEON Monorepo Health",
+      "status": "completed",
+      "conclusion": "success",
+      "head": "2db7506278979b54256f547f395afdfb67cd133e",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40704401065"
+    },
+    {
+      "id": 40704401196,
+      "name": "GXEON Typecheck",
+      "status": "completed",
+      "conclusion": "success",
+      "head": "2db7506278979b54256f547f395afdfb67cd133e",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40704401196"
+    },
+    {
+      "id": 40704401134,
+      "name": "Audit OS V1",
+      "status": "completed",
+      "conclusion": "success",
+      "head": "2db7506278979b54256f547f395afdfb67cd133e",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40704401134"
+    },
+    {
+      "id": 40704401189,
+      "name": "GXEON Build",
+      "status": "completed",
+      "conclusion": "success",
+      "head": "2db7506278979b54256f547f395afdfb67cd133e",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40704401189"
+    }
+  ],
+  "logs": [
+    {
+      "file": "engine-job-122872489620.log.gz",
+      "results": [
+        "ℹ tests 1",
+        "ℹ pass 1",
+        "ℹ fail 0"
+      ]
+    },
+    {
+      "file": "engine-job-122872489928.log.gz",
+      "results": []
+    },
+    {
+      "file": "engine-job-122872490051.log.gz",
+      "results": [
+        "{\"status\":\"CLOSED\",\"checks\":14,\"caseId\":\"7467ec59-6dfc-4eac-9425-89cdbe81ffb3\",\"reportId\":\"35c43fd3-6ad2-48a9-8057-bc7a6bab5bbd\",\"sha256\":\"35929d92f0a00931282f4ceddb2b990855cce1d565e56ae2ec58a7112a2e00e1\",\"evidenceCount\":1,\"findingCount\":2,\"testData\":true}",
+        "{\"testData\":true,\"status\":\"PASS\",\"generatedAt\":\"2026-10-28T14:17:58.606Z\",\"apiStoppedAndRecovered\":true,\"databaseStoppedWithApiLive\":true,\"databaseUnavailableStatus\":503,\"recoveredWithoutApiRestart\":true,\"repeatedReads\":3,\"noRecordMutation\":true,\"before\":{\"cases\":\"3\",\"evidences\":\"3\",\"findings\":\"6\",\"reports\":\"2\"},\"after\":{\"cases\":\"3\",\"evidences\":\"3\",\"findings\":\"6\",\"reports\":\"2\"},\"report\":{\"caseId\":\"7467ec59-6dfc-4eac-9425-89cdbe81ffb3\",\"reportId\":\"35c43fd3-6ad2-48a9-8057-bc7a6bab5bbd\",\"sha256\":\"35929d92f0a00931282f4ceddb2b990855cce1d565e56ae2ec58a7112a2e00e1\",\"evidenceCount\":1,\"findingCount\":2,\"status\":\"CLOSED\",\"testData\":true},\"matchesPersistedRecord\":true,\"browserDownloadVerified\":false,\"scope\":\"Authenticated GX016 loopback test instance only; no remote infrastructure verified\"}",
+        "{\"version\":\"gx01.5\",\"testData\":true,\"status\":\"PASS\",\"generatedAt\":\"2026-10-28T14:18:05.021Z\",\"sourceDatabase\":\"gx01_staging\",\"restoredDatabase\":\"gx01_restore_48e3db116d674cdb892d197098d2241c\",\"targetCreatedNew\":true,\"existingDatabaseOverwritten\":false,\"dumpBytes\":49868,\"dumpSha256\":\"bec3264c6f12e029fde3a82fd22b4f1dabb1336aa88c673e91b72aef2d54caab\",\"tables\":{\"audit_assets\":{\"count\":3,\"sha256\":\"d211b1dafc319468bba7421301bd73449672d01e5509911a3905960677fe1f46\"},\"audit_cases\":{\"count\":3,\"sha256\":\"39b94ad395a5449d2c92773a2e8af8b3c7205306fdb74d58c10b85beca2c3e96\"},\"audit_evidences\":{\"count\":3,\"sha256\":\"23f21ea7b3a7a1e7c3bd052daa96072d5d159fd43a14649fe134d21d675a64d7\"},\"audit_findings\":{\"count\":6,\"sha256\":\"3194a51ed9382a5cd0f7568af17bb661e2c2eb6e0ccd08771c45a83148d24534\"},\"audit_reports\":{\"count\":2,\"sha256\":\"3af6217f20b3258444bfa02c1c29e8595d2f9247e92e815f236bea745f948fd5\"}},\"matchesPersistedRecord\":true,\"restoredRecordVerified\":true,\"afterPostgreSQLRestart\":true,\"sourceApiReportUnchanged\":true,\"report\":{\"caseId\":\"7467ec59-6dfc-4eac-9425-89cdbe81ffb3\",\"reportId\":\"35c43fd3-6ad2-48a9-8057-bc7a6bab5bbd\",\"sha256\":\"35929d92f0a00931282f4ceddb2b990855cce1d565e56ae2ec58a7112a2e00e1\",\"evidenceCount\":1,\"findingCount\":2,\"status\":\"CLOSED\",\"testData\":true},\"elapsedMs\":6330,\"browserDownloadVerified\":false,\"retention\":\"Private dump and isolated restored database retained; not automatically deleted or uploaded.\"}"
+      ]
+    },
+    {
+      "file": "engine-job-122872490073.log.gz",
+      "results": []
+    },
+    {
+      "file": "engine-job-122872490099.log.gz",
+      "results": [
+        "##[group]Run node scripts/audit-staging/dependency-smoke.mjs",
+        "node scripts/audit-staging/dependency-smoke.mjs",
+        "{\"testData\":true,\"status\":\"PASS\",\"externalNetworkUsed\":false,\"fixturesRetained\":true,\"versions\":[{\"name\":\"body-parser\",\"before\":\"2.3.0\",\"version\":\"2.4.0\",\"chain\":\"artifacts__api-server>express>body-parser\"},{\"name\":\"fast-uri\",\"before\":\"3.1.8\",\"version\":\"3.1.9\",\"chain\":\"lib__api-spec>orval>@scalar/openapi-parser>ajv>fast-uri\"},{\"name\":\"undici\",\"before\":\"6.25.0\",\"version\":\"6.29.1\",\"chain\":\"artifacts__gxeon-dashboard-mobile>@expo/cli>undici\"},{\"name\":\"ws\",\"before\":\"6.2.3\",\"version\":\"6.2.6\",\"chain\":\"artifacts__gxeon-dashboard-mobile>@expo/cli>@react-native/dev-middleware>ws\"},{\"name\":\"ws\",\"before\":\"7.5.10\",\"version\":\"7.5.13\",\"chain\":\"artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>ws\"},{\"name\":\"js-yaml\",\"before\":\"3.14.2\",\"version\":\"3.15.2\",\"chain\":\"artifacts__gxeon-dashboard-mobile>react-native>babel-jest>babel-plugin-istanbul>@istanbuljs/load-nyc-config>js-yaml\"},{\"name\":\"brace-expansion\",\"before\":\"2.1.0\",\"version\":\"2.1.7\",\"chain\":\"artifacts__gxeon-dashboard-mobile>@expo/cli>minimatch>brace-expansion\"},{\"name\":\"tar\",\"before\":\"7.5.19\",\"version\":\"7.5.21\",\"chain\":\"artifacts__gxeon-dashboard-mobile>@expo/cli>tar\"},{\"name\":\"@xmldom/xmldom\",\"before\":\"0.8.13\",\"version\":\"0.8.15\",\"chain\":\"artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/plist>@xmldom/xmldom\"},{\"name\":\"@xmldom/xmldom\",\"before\":\"0.9.10\",\"version\":\"0.9.12\",\"chain\":\"artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>simple-plist>plist>@xmldom/xmldom\"},{\"name\":\"compression\",\"before\":\"1.8.1\",\"version\":\"1.8.2\",\"chain\":\"artifacts__gxeon-dashboard-mobile>@expo/cli>compression\"},{\"name\":\"qs\",\"before\":\"6.16.0\",\"version\":\"6.16.1\",\"chain\":\"artifacts__api-server>express>qs\"}],\"checks\":[\"installed parent resolution\",\"YAML3 roundtrip\",\"brace2 expansion\",\"XML0.8/0.9 and plist roundtrip\",\"tar7 create/extract new fixture\",\"Undici6 HTTP + compression1 gzip\",\"ws6/ws7 echo\",\"qs6 comma adversarial serialization and normal nested parsing\"],\"fixtureContentSha256\":\"fe5dbf0cfcab6720db556f4ae123b0af5d3043c9a233b2e93b7ac26702f24fcd\"}",
+        "##[group]Run node scripts/audit-staging/codegen-smoke.mjs",
+        "node scripts/audit-staging/codegen-smoke.mjs",
+        "{\"testData\":true,\"status\":\"PASS\",\"generator\":\"orval 8.22.0\",\"localYamlReferenceFixture\":true,\"fixtureSha256\":\"73d0aba09b1f1b1ad3c6749d239afd433c4c8516c3776938706965608b1fd45e\",\"outputSha256\":\"b03d0ddaa12728f968468720eece0d0c184bfade3efb10f626bc0160b405f845\",\"generatedClientTypechecked\":true,\"repositoryGeneratedSourcesModified\":false,\"clean\":false,\"externalSpecFetched\":false,\"generatedZodSchemaTypechecked\":true,\"generatedZodSchemaValidated\":true,\"schemaZodVersion\":\"4.6.6\",\"generatedZodSha256\":\"b8b45d36d95fe3916e72bf23908cec05a4952e59c584d1897d27a7321f1fd1a7\"}",
+        "{\"status\":\"PASS\",\"testData\":true,\"externalNetworkUsed\":false,\"tunnelStarted\":false,\"versions\":[{\"workspace\":\"artifacts/gxeon-dashboard-mobile\",\"chain\":[\"@expo/cli\",\"@expo/metro\",\"metro\",\"image-size\"],\"version\":\"2.0.3\"},{\"workspace\":\"artifacts/gxeon-dashboard-mobile\",\"chain\":[\"@expo/cli\",\"@expo/config-plugins\",\"xcode\",\"uuid\"],\"version\":\"11.1.1\"},{\"workspace\":\"artifacts/gxeon-dashboard-mobile\",\"chain\":[\"@expo/ngrok\",\"uuid\"],\"version\":\"11.1.1\"},{\"workspace\":\"artifacts/gxeon-dashboard-mobile\",\"chain\":[\"expo-router\",\"query-string\",\"decode-uri-component\"],\"version\":\"0.2.2\"},{\"workspace\":\"artifacts/gxeon-dashboard\",\"chain\":[\"@tailwindcss/typography\",\"postcss-selector-parser\"],\"version\":\"7.1.6\"},{\"workspace\":\"artifacts/api-server\",\"chain\":[\"esbuild\"],\"version\":\"0.28.1\"},{\"workspace\":\"lib/api-zod\",\"chain\":[\"zod\"],\"version\":\"4.6.6\"},{\"workspace\":\"artifacts/gxeon-dashboard-mobile\",\"chain\":[\"babel-preset-expo\"],\"version\":\"54.0.10\"},{\"workspace\":\"artifacts/gxeon-dashboard-mobile\",\"chain\":[\"@babel/core\"],\"version\":\"7.29.6\"}],\"checks\":[\"Metro actual image-size Buffer path and getAssetData file paths, including Expo Router's real PNG\",\"xcode actual UUID generation and ngrok import without tunnel\",\"UUID v3 buffer bounds\",\"query-string actual decoding\",\"typography actual selector utility\",\"esbuild TypeScript transform\",\"Zod4 record wire values\",\"Mobile Babel configuration resolves its declared Expo preset and transforms actual TypeScript\"],\"legacyZod3GloballyRemediated\":false,\"note\":\"Global mobile/database Zod3 remains a separately disclosed residual; dedicated build rejects retained v3 inputs.\",\"decodeUriAdvisoryRemediated\":false}",
+        "ℹ tests 24",
+        "ℹ pass 24",
+        "ℹ fail 0",
+        "ℹ tests 25",
+        "ℹ pass 25",
+        "ℹ fail 0"
+      ]
+    },
+    {
+      "file": "engine-job-122872490333.log.gz",
+      "results": [
+        "{\"checkedAt\":\"2026-10-28T14:18:11.353Z\",\"sourceCommit\":\"c4ce5b73b0ad94ac43e09dfd94370d2053bbfa19\",\"sourceDirty\":false,\"knownWorkstationCollisionExcluded\":false,\"clientNodeVersion\":\"v24.21.0\",\"postgresVersion\":\"170011\",\"testData\":true,\"transport\":\"HTTPS + pinned CA -> same-process frontend/API -> private PostgreSQL17 with verified TLS\",\"mode\":\"docker-compose\",\"browserDownloadVerified\":false,\"exportMechanism\":\"Node HTTPS test client; not browser download\",\"vendorCredentialsRequired\":false,\"publicDatabasePort\":false,\"role\":\"gx01_pilot_app\",\"sslVerified\":true,\"wrongCaRejected\":true,\"wrongHostnameRejected\":true,\"frontendAssetVerified\":true,\"apiMissesAreJson\":true,\"ownerIsolationVerified\":true,\"sessionCookieSecure\":true,\"caseId\":\"4a296532-63e3-4d93-b674-28ce2ccc8cf9\",\"reportId\":\"1a78ee66-1a27-4be3-8a48-1d3c55578aba\",\"reportSha256\":\"f4f43526b2c368ee73029711d5dd13ff9dc4d67f67eccf95b3fd77ac23c61e34\",\"bytesSha256\":\"a0abe8d8912c7a3bef583f3596d2755fadcef46a673294de82c8928004eff918\",\"evidenceCount\":1,\"findingCount\":2,\"review\":\"Synthetic automation, not independent human approval\",\"backupRestore\":{\"createdNewDatabase\":\"gx01_restore_5b23ef763afc4a22a005ad34ee0d9dfa\",\"dumpBytes\":37501,\"dumpSha256\":\"3684571fdc8d719ba5d1afe17183f88925996121f03200ef5f5f6f636fa25463\",\"tableHashes\":{\"audit_assets\":\"e396eccd2faf5b1192e270e1e15bf091805facf68d1574f0946c37577ea102e5\",\"audit_cases\":\"45e232752cc45282259759b97e31b4c13a030ed01e0a3bc6c32d678df34b7a20\",\"audit_evidences\":\"c5a82d4fccb312e9d3f4bc9c456ce87d783f07d0a76a87f6127bd831bfb70734\",\"audit_findings\":\"f0db55ab4963c717425151942b61fd6e339e7f93c2bffbd842342cb3631074fd\",\"audit_reports\":\"6b0e1b72a288aa4ea232d797e3160ab2626839663c1ce71532cf37e4a5ee2af8\"},\"sourceUnchanged\":true}}"
+      ]
+    },
+    {
+      "file": "engine-job-122872490426.log.gz",
+      "results": []
+    }
+  ],
+  "artifactFiles": {
+    "portable/portable-acceptance.json": "d81d768412cb74bf04ab17d30fc9350f023cc54abffbf374cad9b85333aae7f8",
+    "portable/portable-report.json": "a0abe8d8912c7a3bef583f3596d2755fadcef46a673294de82c8928004eff918",
+    "portable/portable-restart.json": "74bf23d24537d46e332911f2457c82404832068ed257e7922e096c59b5f01cb4",
+    "engine-tests/codegen-smoke.json": "21fc29a593ed34a6a5796e2ba98ba897b504ab596b322d6ce4aa854420c2227f",
+    "engine-tests/dependency-smoke.json": "ed4b16d6327d8976be6a28f6eaa38bcda29bc57854724bf226cb5837d85c2333",
+    "engine-tests/http-calls.json": "7cc80b20c7185f7c1db77b3071a41c66315134e0f3c3347ca424852e99e75054",
+    "engine-tests/security-compatibility.json": "da115018ab584377cd7d274f214f2a84b30eb49025f58a031cc0f61137a0402d",
+    "engine-tests/test-report.json": "c8ebd6570732987af701e28e7ffe96c353e6dd64388d78293193615184ba7a84",
+    "engine-staging/acceptance.json": "2357619f970fcfb9bde3a0809f07c6c426c4d156689e73b7158d1fc5cae1c955",
+    "engine-staging/api-report.json": "521ffb548d7f2a2b65c26912c6fe54ed1fe51282d1d454b7256059df5e604f28",
+    "engine-staging/backup-restore.json": "3ca3f69099e4c3a92b875c99a6ca8e85694367eac55b36a16f8aae7eb841d97a",
+    "engine-staging/pilot-build-boundary.json": "8cae8b055de943709156bf0f3999312cf89aab9ada8d1e151698050c9ee71edd",
+    "engine-staging/recovery-failures.json": "61552418554a6ed93facbff972f8525040ea474813ab584e96158e3002399a93"
+  },
+  "portable": {
+    "checkedAt": "2026-10-28T14:18:11.353Z",
+    "sourceCommit": "c4ce5b73b0ad94ac43e09dfd94370d2053bbfa19",
+    "sourceDirty": false,
+    "knownWorkstationCollisionExcluded": false,
+    "clientNodeVersion": "v24.21.0",
+    "postgresVersion": "170011",
+    "testData": true,
+    "transport": "HTTPS + pinned CA -> same-process frontend/API -> private PostgreSQL17 with verified TLS",
+    "mode": "docker-compose",
+    "browserDownloadVerified": false,
+    "exportMechanism": "Node HTTPS test client; not browser download",
+    "vendorCredentialsRequired": false,
+    "publicDatabasePort": false,
+    "role": "gx01_pilot_app",
+    "sslVerified": true,
+    "wrongCaRejected": true,
+    "wrongHostnameRejected": true,
+    "frontendAssetVerified": true,
+    "apiMissesAreJson": true,
+    "ownerIsolationVerified": true,
+    "sessionCookieSecure": true,
+    "caseId": "4a296532-63e3-4d93-b674-28ce2ccc8cf9",
+    "reportId": "1a78ee66-1a27-4be3-8a48-1d3c55578aba",
+    "reportSha256": "f4f43526b2c368ee73029711d5dd13ff9dc4d67f67eccf95b3fd77ac23c61e34",
+    "bytesSha256": "a0abe8d8912c7a3bef583f3596d2755fadcef46a673294de82c8928004eff918",
+    "evidenceCount": 1,
+    "findingCount": 2,
+    "review": "Synthetic automation, not independent human approval",
+    "backupRestore": {
+      "createdNewDatabase": "gx01_restore_5b23ef763afc4a22a005ad34ee0d9dfa",
+      "dumpBytes": 37501,
+      "dumpSha256": "3684571fdc8d719ba5d1afe17183f88925996121f03200ef5f5f6f636fa25463",
+      "tableHashes": {
+        "audit_assets": "e396eccd2faf5b1192e270e1e15bf091805facf68d1574f0946c37577ea102e5",
+        "audit_cases": "45e232752cc45282259759b97e31b4c13a030ed01e0a3bc6c32d678df34b7a20",
+        "audit_evidences": "c5a82d4fccb312e9d3f4bc9c456ce87d783f07d0a76a87f6127bd831bfb70734",
+        "audit_findings": "f0db55ab4963c717425151942b61fd6e339e7f93c2bffbd842342cb3631074fd",
+        "audit_reports": "6b0e1b72a288aa4ea232d797e3160ab2626839663c1ce71532cf37e4a5ee2af8"
+      },
+      "sourceUnchanged": true
+    }
+  }
+}

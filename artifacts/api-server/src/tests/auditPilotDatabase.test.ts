@@ -1,0 +1,178 @@
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
+import { readFile } from "node:fs/promises";
+import { Pool } from "@workspace/db/pool";
+import { assertAuditPilotDatabase } from "../auditPilotDatabase";
+import { createAuditWorkflowService } from "../services/auditWorkflowService";
+import { createLeadIntakeService } from "../omnixLeadIntake";
+
+test("dedicated PostgreSQL 17 startup attestation rejects excessive grants and non-synthetic data", {
+  skip: !process.env.TEST_AUDIT_PILOT_DATABASE_URL,
+}, async () => {
+  const text = process.env.TEST_AUDIT_PILOT_DATABASE_URL;
+  assert.ok(text, "Use only the isolated PostgreSQL service created for this test");
+  const url = new URL(text);
+  assert.ok(["127.0.0.1", "localhost"].includes(url.hostname));
+  assert.ok(["5432", "55432"].includes(url.port));
+  assert.equal(url.pathname, "/gx01_pilot");
+  assert.ok(["gx01_pilot_owner", "gx01_stage_admin"].includes(url.username));
+  assert.equal(url.search, ""); assert.equal(url.hash, "");
+  const owner = new Pool({ connectionString: text, max: 1 });
+  let app: InstanceType<typeof Pool> | undefined;
+  try {
+    await owner.query("SET log_statement='none'; SET log_min_error_statement='panic'");
+    assert.equal((await owner.query("SELECT to_regclass('public.audit_cases') AS name")).rows[0].name, null,
+      "A fresh dedicated test database is required; no reset/overwrite is supported");
+    await owner.query(await readFile(new URL("../../../../lib/db/drizzle/0002_audit_os_schema.sql", import.meta.url), "utf8"));
+    const password = randomBytes(32).toString("base64url");
+    await owner.query(`CREATE ROLE gx01_pilot_app LOGIN NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS CONNECTION LIMIT 8 PASSWORD '${password}'`);
+    await owner.query(`REVOKE ALL ON DATABASE gx01_pilot FROM PUBLIC;
+      GRANT CONNECT ON DATABASE gx01_pilot TO gx01_pilot_app;
+      REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+      GRANT USAGE ON SCHEMA public TO gx01_pilot_app;
+      GRANT SELECT, INSERT ON audit_assets,audit_evidences,audit_findings,audit_reports TO gx01_pilot_app;
+      GRANT SELECT, INSERT, UPDATE ON audit_cases TO gx01_pilot_app`);
+    const appUrl = new URL(text); appUrl.username = "gx01_pilot_app"; appUrl.password = password;
+    app = new Pool({ connectionString: appUrl.href, max: 2 });
+    await assertAuditPilotDatabase(app);
+    await assert.rejects(assertAuditPilotDatabase(owner), /AUDIT_DATABASE_BOUNDARY_REQUIRED/);
+    // Even a NOINHERIT membership may permit SET ROLE: the app needs no group role.
+    await owner.query("CREATE ROLE gx01_pilot_unexpected NOLOGIN");
+    await owner.query("GRANT gx01_pilot_unexpected TO gx01_pilot_app WITH INHERIT FALSE");
+    await assert.rejects(assertAuditPilotDatabase(app), /AUDIT_DATABASE_BOUNDARY_REQUIRED/);
+    await owner.query("REVOKE gx01_pilot_unexpected FROM gx01_pilot_app");
+    await assertAuditPilotDatabase(app);
+    await owner.query("GRANT UPDATE ON audit_evidences TO gx01_pilot_app");
+    await assert.rejects(assertAuditPilotDatabase(app), /AUDIT_TABLE_PRIVILEGES_REQUIRED/);
+    await owner.query("REVOKE UPDATE ON audit_evidences FROM gx01_pilot_app");
+    await assertAuditPilotDatabase(app);
+    const previous = { ...process.env };
+    try {
+      Object.assign(process.env, { GXEON_AUDIT_DB_PROVIDER: "postgres", GXEON_AUDIT_WRITE_MODE: "enabled", GXEON_AUDIT_ALLOW_DB_WRITES: "true" });
+      const restricted = app;
+      const service = createAuditWorkflowService(() => restricted.connect());
+      const created = await service.create({ requestId: randomUUID(), authorized: true, testData: true,
+        assetName: "GX-01.5 TEST DATA restricted PostgreSQL role", assetReference: "test-fixture/vercel.json",
+        authorizationReference: "test-fixture/explicit-scope", checks: ["vercel_api_routing", "vercel_security_headers"],
+        artifact: { name: "vercel.json", content: '{"rewrites":[{"source":"/(.*)","destination":"/index.html"}]}' } });
+      await service.run(created.caseId);
+      await service.review(created.caseId, { decision: "approve", humanReviewed: true,
+        reviewReference: "TEST DATA service fixture; not human acceptance" });
+      await service.finalize(created.caseId);
+      const exported = await service.exportReport(created.caseId);
+      assert.equal(exported.report.finalStatus, "CLOSED");
+      const persisted = (await app.query("SELECT content,metadata FROM audit_reports WHERE id=$1", [exported.reportId])).rows[0];
+      assert.deepEqual(persisted.content, exported.report);
+      assert.equal(persisted.metadata.contentSha256, exported.sha256);
+      const modified = structuredClone(persisted.content);
+      modified.title = "TEST DATA changed report title";
+      const canonical = (v: unknown): string => {
+        if (v instanceof Date) return JSON.stringify(v.toISOString());
+        if (Array.isArray(v)) return `[${v.map(canonical).join(",")}]`;
+        if (v && typeof v === "object") return `{${Object.entries(v).sort(([a],[b]) => a.localeCompare(b)).map(([k,val]) => `${JSON.stringify(k)}:${canonical(val)}`).join(",")}}`;
+        return JSON.stringify(v) ?? "null";
+      };
+      const changedHash = createHash("sha256").update(canonical(modified)).digest("hex");
+      await owner.query("UPDATE audit_reports SET content=$1::jsonb, metadata=jsonb_set(metadata,'{contentSha256}',to_jsonb($2::text)) WHERE id=$3",
+        [JSON.stringify(modified), changedHash, exported.reportId]);
+      await assert.rejects(service.exportReport(created.caseId),
+        (error: unknown) => (error as {code?: string}).code === "REPORT_CANONICAL_MISMATCH");
+      await owner.query("UPDATE audit_reports SET content=$1::jsonb, metadata=jsonb_set(metadata,'{contentSha256}',to_jsonb($2::text)) WHERE id=$3",
+        [JSON.stringify(persisted.content), exported.sha256, exported.reportId]);
+      assert.equal((await service.exportReport(created.caseId)).sha256, exported.sha256);
+      await assertAuditPilotDatabase(app);
+    } finally {
+      for (const key of Object.keys(process.env)) if (!(key in previous)) delete process.env[key];
+      Object.assign(process.env, previous);
+    }
+    // GX040: additive extensions only in this fresh isolated PG17 database.
+    // These migrations preserve the canonical audit tables and their test data.
+    await owner.query(await readFile(new URL("../../../../lib/db/drizzle/0003_omnix_enterprise_identity.sql", import.meta.url), "utf8"));
+    await owner.query(await readFile(new URL("../../../../lib/db/drizzle/0004_omnix_commercial_intake.sql", import.meta.url), "utf8"));
+    await assert.rejects(assertAuditPilotDatabase(app, { enterprise: true, commercial: true }), /OMNIX_EXTENSION_PRIVILEGES_REQUIRED/,
+      "Creating extension tables does not grant the app authority to use them");
+    await owner.query(await readFile(new URL("../../../../deploy/render/enterprise-grants.example.sql", import.meta.url), "utf8"));
+    const extensions = { enterprise: true, commercial: true };
+    await assertAuditPilotDatabase(app, { enterprise: true });
+    await assertAuditPilotDatabase(app, extensions);
+    await assert.rejects(assertAuditPilotDatabase(app, { commercial: true }), /ENTERPRISE_COMMERCIAL_IDENTITY_REQUIRED/);
+    // Statements touch zero rows. Their success/failure proves SQL privileges,
+    // without changing membership roles, removing audit logs or admitting PII.
+    await app.query("UPDATE omnix_memberships SET revoked_at=NULL WHERE false");
+    await app.query("UPDATE omnix_commercial_requests SET delivery='ACKNOWLEDGED',acknowledged_at=now() WHERE false");
+    const permissionDenied = (error: unknown) => (error as { code?: string }).code === "42501";
+    await assert.rejects(app.query("UPDATE omnix_memberships SET role='owner' WHERE false"), permissionDenied);
+    await assert.rejects(app.query("DELETE FROM omnix_identity_events WHERE false"), permissionDenied);
+    // GX050 channel approval belongs to the offline owner, never the app role.
+    await owner.query(await readFile(new URL("../../../../lib/db/drizzle/0005_omnix_lead_intake.sql", import.meta.url), "utf8"));
+    await owner.query(await readFile(new URL("../../../../deploy/render/lead-grants.example.sql", import.meta.url), "utf8"));
+    const leadExtensions = { ...extensions, lead: true };
+    await assertAuditPilotDatabase(app, leadExtensions);
+    await assert.rejects(app.query("INSERT INTO omnix_lead_channels SELECT * FROM omnix_lead_channels WHERE false"), permissionDenied);
+    await assert.rejects(app.query("UPDATE omnix_lead_channels SET admission_mode='real' WHERE false"), permissionDenied);
+    await assert.rejects(app.query("UPDATE omnix_lead_events SET evidence_reference='forged-reference' WHERE false"), permissionDenied);
+    const leadOrg = randomUUID(), leadUser = randomUUID(), channelId = randomUUID();
+    await owner.query("INSERT INTO omnix_organizations(id,name,kind) VALUES($1,'TEST DATA lead owner organization','client')", [leadOrg]);
+    await owner.query("INSERT INTO omnix_users(id,issuer,subject) VALUES($1,'https://idp.example.invalid','GX050-TEST-DATA-OWNER')", [leadUser]);
+    await owner.query("INSERT INTO omnix_memberships(organization_id,user_id,role) VALUES($1,$2,'owner')", [leadOrg,leadUser]);
+    const leads = createLeadIntakeService(() => app!.connect(), { channelId, mode: "synthetic", resolveRecipient: async (_channel,client) => {
+      const row = (await client.query("SELECT role FROM omnix_memberships WHERE organization_id=$1 AND user_id=$2 AND revoked_at IS NULL",[leadOrg,leadUser])).rows[0];
+      return row?.role === "owner" ? { userId:leadUser,organizationId:leadOrg,role:"owner" } : undefined;
+    }});
+    await assert.rejects(leads.ready(), /LEAD_APPROVED_CHANNEL_REQUIRED/);
+    await owner.query(`INSERT INTO omnix_lead_channels(id,recipient_user_id,recipient_organization_id,admission_mode,privacy_version,privacy_notice_url,
+      recipient_approval_ref,founder_approval_ref,privacy_approval_ref,durable_database_ref,antispam_approval_ref,approved_at,expires_at)
+      VALUES($1,$2,$3,'synthetic','gx050-lead-v1','https://fixture.example.invalid/privacy','TEST-DATA/recipient','TEST-DATA/founder',
+      'TEST-DATA/privacy','TEST-DATA/isolated-pg17','TEST-DATA/antispam',now(),now()+interval '1 day')`,[channelId,leadUser,leadOrg]);
+    assert.equal((await leads.ready()).leadDataAllowed,false);
+    const challenge = await leads.challenge();
+    await owner.query("UPDATE omnix_lead_challenges SET created_at=now()-interval '3 seconds' WHERE token_sha256=$1",[createHash("sha256").update(challenge.challengeToken).digest("hex")]);
+    const received = await leads.submit({requestId:randomUUID(),name:"TEST DATA Contact",company:"TEST DATA Company",email:"contact@example.invalid",
+      needType:"configuration-integrity",description:"TEST DATA contact only, no technical uploads.",consent:true,privacyVersion:"gx050-lead-v1",website:"",challengeToken:challenge.challengeToken});
+    assert.equal(received.state,"leadReceived");
+    await owner.query("UPDATE omnix_memberships SET revoked_at=now() WHERE user_id=$1 AND organization_id=$2",[leadUser,leadOrg]);
+    await assert.rejects(leads.ready(), /LEAD_RECIPIENT_UNAVAILABLE/);
+    await owner.query("UPDATE omnix_memberships SET revoked_at=NULL WHERE user_id=$1 AND organization_id=$2",[leadUser,leadOrg]);
+    await owner.query("UPDATE omnix_leads SET expires_at=now()-interval '1 second' WHERE id=$1",[received.receiptId]);
+    const purged = await leads.purgeExpired({userId:leadUser,organizationId:leadOrg,role:"owner"},{confirmLeadRetentionPurge:true,reviewReference:"TEST-DATA/retention-fixture"});
+    assert.equal(purged.deletedLeads,1);
+    assert.equal((await owner.query("SELECT count(*)::int AS count FROM omnix_leads WHERE id=$1",[received.receiptId])).rows[0].count,0);
+    await assertAuditPilotDatabase(app, leadExtensions);
+    await assert.rejects(app.query("SELECT event FROM omnix_identity_events LIMIT 0"), permissionDenied);
+    // Revoke only each additional negative-test grant; do not reset the role or
+    // reapply a broad privilege set that could conceal a faulty initial grant.
+    await owner.query("GRANT UPDATE(role) ON omnix_memberships TO gx01_pilot_app");
+    try {
+      await assert.rejects(assertAuditPilotDatabase(app, extensions), /OMNIX_EXTENSION_COLUMN_GRANTS_REQUIRED/);
+    } finally {
+      await owner.query("REVOKE UPDATE(role) ON omnix_memberships FROM gx01_pilot_app");
+    }
+    await assertAuditPilotDatabase(app, extensions);
+    await owner.query("GRANT UPDATE ON omnix_memberships TO gx01_pilot_app");
+    try {
+      await assert.rejects(assertAuditPilotDatabase(app, extensions), /OMNIX_EXTENSION_PRIVILEGES_REQUIRED/);
+    } finally {
+      await owner.query("REVOKE UPDATE ON omnix_memberships FROM gx01_pilot_app");
+      // PG17 also removes the previously granted column UPDATE when revoking
+      // table UPDATE. Restore only the exact baseline revocation column grant;
+      // the initial minimal-grant and forbidden-role checks already ran above.
+      await owner.query("GRANT UPDATE(revoked_at) ON omnix_memberships TO gx01_pilot_app");
+    }
+    await assertAuditPilotDatabase(app, extensions);
+    await owner.query("GRANT DELETE ON omnix_identity_events TO gx01_pilot_app");
+    try {
+      await assert.rejects(assertAuditPilotDatabase(app, extensions), /OMNIX_EXTENSION_PRIVILEGES_REQUIRED/);
+    } finally {
+      await owner.query("REVOKE DELETE ON omnix_identity_events FROM gx01_pilot_app");
+    }
+    await assertAuditPilotDatabase(app, extensions);
+    await assert.rejects(app.query("UPDATE omnix_memberships SET role='owner' WHERE false"), permissionDenied);
+    await assert.rejects(app.query("DELETE FROM omnix_identity_events WHERE false"), permissionDenied);
+    await owner.query("INSERT INTO audit_cases(title,status,metadata) VALUES('TEST DATA negative startup attestation','DRAFT',$1::jsonb)",
+      [JSON.stringify({ scope: { testData: false } })]);
+    await assert.rejects(assertAuditPilotDatabase(app), /SYNTHETIC_PILOT_DATABASE_REQUIRED/);
+  } finally {
+    await app?.end(); await owner.end();
+  }
+});

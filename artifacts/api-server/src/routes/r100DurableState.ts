@@ -95,7 +95,7 @@ router.get("/r100-state/verification", (_req, res) => {
 router.post("/r100-state/probe", (req, res) => {
   noStore(res);
   if (!isConfirmed(req.body, "CREATE_SAFE_R100_DURABILITY_PROBE")) {
-    return res.status(400).json({ success: false, error: "CREATE_SAFE_R100_DURABILITY_PROBE_CONFIRMATION_REQUIRED" });
+    res.status(400).json({ success: false, error: "CREATE_SAFE_R100_DURABILITY_PROBE_CONFIRMATION_REQUIRED" }); return;
   }
 
   res.json({ success: true, data: createR100DurabilityProbe() });
@@ -104,7 +104,7 @@ router.post("/r100-state/probe", (req, res) => {
 router.post("/r100-state/reload", (req, res) => {
   noStore(res);
   if (!isConfirmed(req.body, "RELOAD_R100_STATE_MANUALLY")) {
-    return res.status(400).json({ success: false, error: "RELOAD_R100_STATE_MANUALLY_CONFIRMATION_REQUIRED" });
+    res.status(400).json({ success: false, error: "RELOAD_R100_STATE_MANUALLY_CONFIRMATION_REQUIRED" }); return;
   }
 
   hydrateManualProspectsFromDurableState();

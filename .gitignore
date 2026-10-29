@@ -53,5 +53,8 @@ Thumbs.db
 !.env.example
 !.env.*.example
 .supabase/
+.gx012/
+.gx019/
+.gx-selfhost/
 supabase/.branches/
 supabase/.temp/

@@ -1,0 +1,43 @@
+{
+  "checkedAt": "2026-10-28T00:51:43.143Z",
+  "sourceCommit": "30e0b00a219eb4c45d4fd57064b92f1165b1c739",
+  "sourceDirty": false,
+  "knownWorkstationCollisionExcluded": true,
+  "clientNodeVersion": "v24.19.0",
+  "postgresVersion": "170011",
+  "testData": true,
+  "transport": "HTTPS + pinned CA -> same-process frontend/API -> private PostgreSQL17 with verified TLS",
+  "mode": "native",
+  "browserDownloadVerified": false,
+  "exportMechanism": "Node HTTPS test client; not browser download",
+  "vendorCredentialsRequired": false,
+  "publicDatabasePort": false,
+  "role": "gx01_pilot_app",
+  "sslVerified": true,
+  "wrongCaRejected": true,
+  "wrongHostnameRejected": true,
+  "frontendAssetVerified": true,
+  "apiMissesAreJson": true,
+  "ownerIsolationVerified": true,
+  "sessionCookieSecure": true,
+  "caseId": "2d21b0d1-a7cd-49e0-8f0b-9c977ec1ea9d",
+  "reportId": "91b71b53-8e0f-47e7-92a9-f2e558206890",
+  "reportSha256": "0cd6c706bcb8529ed35562f01953859f2280bb58ce931c2ed42c12489c885ee6",
+  "bytesSha256": "4f62f8fda70678df81d988c3b7fe7284817cf4e87446d973d702ad95dbb781e5",
+  "evidenceCount": 1,
+  "findingCount": 2,
+  "review": "Synthetic automation, not independent human approval",
+  "backupRestore": {
+    "createdNewDatabase": "gx01_restore_06d4c378890b4ef1992b9c26def68089",
+    "dumpBytes": 38541,
+    "dumpSha256": "a5fc884e6875aa52a4ebee19a63a6fdf3c937a431e6a3f85d3b92edd842daaaa",
+    "tableHashes": {
+      "audit_assets": "63824425b279cf03c1d674192b045026f198cda47b689ed11067d51745da89b0",
+      "audit_cases": "ab4de4be04fcdf23eb72ceb18d3db08c57241a0818bfbd4318aa33bfb1f28b1d",
+      "audit_evidences": "aa9edb44b679b3ceb5d29197271b1ee5577e94418e177b8e892c7628f890a005",
+      "audit_findings": "7b1a7295647aec969f115b12c24c27d0b696194de07b9c92d5f2c8dd55b2c941",
+      "audit_reports": "e9db9a2698d80e30ce813df8e705f53f33a265bf13879e974bd8ef0e1f42f55a"
+    },
+    "sourceUnchanged": true
+  }
+}

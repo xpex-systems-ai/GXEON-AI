@@ -1,0 +1,11 @@
+# GX-01.7 — blueprint ChatGPT → OMNIX
+
+**PLANEJADO, somente arquitetura.** Não criar/publicar plugin/MCP, OAuthapp ou conexãoML. Fluxo alvo: ChatGPT → autenticaçãoOMNIX do usuário → gatewayMCP/APIOMNIX → autorização nominal/tenant/consentimento → agente autorizado → provider adapter read-only → evidence/report → resposta minimizada. Tokens ML jamais vão para modelo, clienteMCP ou argumentos de ferramenta.
+
+Uma integração compartilhada pode atender usuários individualmente autenticados; isso exige autorização individual e não significa plugin próprio por cliente. O [guia oficial de autenticação](https://developers.openai.com/plugins/build/auth), consultado integralmente24/10/2026, descreve OAuth2.1, discovery e PKCE; resource server verifica token/escopos. Autenticação do cliente ChatGPT não substitui autorização do usuário. Configuração final/registro de cliente/publicação dependem da documentação e aprovação vigentes, não foram realizados.
+
+Ferramentas conceituais mínimas: catalog_audit_request(selectedItemIds,testData); catalog_audit_status(runId); catalog_audit_report(runId). O servidor deriva actor/org/conta da credencial e aplica permissão por recurso; não aceita organizationId como prova de autoridade. Nenhuma tool de editar preço/estoque/ads/mensagem/pagamento. Descrições e annotations read-only são metadados; enforcement deve estar no servidor e ser testado.
+
+Erros conceituais tipados: UNAUTHENTICATED, CONSENT_REQUIRED, FORBIDDEN, CONNECTION_REVOKED, POLICY_BLOCKED, RATE_LIMITED, UPSTREAM_UNAVAILABLE, PARTIAL_DATA; respostas sem token/PII nem sugestão de contornar restrição. Job deve revalidar consentimento no consumo e limitar paginação/tempo/custo. Resultado separa dados reais, testData, notverified e planned; todo claim operacional referencia evidenceId.
+
+Antes de habilitar: fechar política ML e subprocessadores; criar identidade/tenancy/vault nominal; testesA/B deIDOR,escopo,audience,refresh/revoke,prompt injection,timeout,limites,exports; revisão humana do SHA; aprovar distribuição/privacidade. API/MCP corporativo documentado no outro repo não foi reconfigurado e não é prova de que essas tools existam. Nenhuma chave/modelo/integração foi provisionada.

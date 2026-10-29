@@ -1,0 +1,100 @@
+{
+  "queriedAt": "2026-10-24T23:46:49.709Z",
+  "head": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+  "base": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "branch": "codex/gxeon-audit-os-v1-gx01",
+  "baseBranch": "main",
+  "draft": true,
+  "merged": false,
+  "state": "open",
+  "localHead": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+  "previousCheckoutDirty": [
+    "M .github/PULL_REQUEST_TEMPLATE.md",
+    " M DEPENDENCY_GRAPH.md",
+    " M DEPLOY_READINESS_REPORT.md",
+    " M GITHUB_ACTIONS_STATUS.md",
+    " M MONOREPO_HEALTH_REPORT.md",
+    " M WORKSPACE_STATUS.md",
+    " M artifacts/mockup-sandbox/src/.generated/mockup-components.ts"
+  ],
+  "oldCheckoutPreserved": true,
+  "freeBytesObserved": 15068712960,
+  "reviews": [],
+  "short": {
+    "count": 30,
+    "counts": {
+      "failure": 24,
+      "success": 6,
+      "pending": 0,
+      "error": 0
+    }
+  },
+  "full": {
+    "count": 42,
+    "counts": {
+      "failure": 30,
+      "success": 12,
+      "pending": 0,
+      "error": 0
+    }
+  },
+  "checkRuns": 29,
+  "workflows": [
+    {
+      "id": 40123524424,
+      "name": "GXEON Monorepo Health",
+      "head": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524424"
+    },
+    {
+      "id": 40123524451,
+      "name": "GXEON Typecheck",
+      "head": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524451"
+    },
+    {
+      "id": 40123524385,
+      "name": "GXEON Build",
+      "head": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524385"
+    },
+    {
+      "id": 40123524394,
+      "name": "Audit OS V1",
+      "head": "c4ee4574d1b6f2a7a7b9d5742f7bb9d38ce5c740",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/40123524394"
+    }
+  ],
+  "diffs": {
+    "full": {
+      "bytes": 3641882,
+      "sha256": "6724dce52a58cdf6304a5354aafb1e387c8efc102cf2d23d9dc8358377729980"
+    },
+    "gx016": {
+      "bytes": 1310206,
+      "sha256": "e49f5957d00bc54543097d808d237b04555a2dfaf91846a1765c005bbde1923d"
+    }
+  },
+  "documentsRead": [
+    {
+      "file": "docs/audit-os/gx-01-5/FINAL_DELIVERY.md",
+      "sha256": "58bbcdf780041af4fae4d688b5d766b398b1429ad5dfd2933f8252eb74b57194"
+    },
+    {
+      "file": "docs/audit-os/gx-01-6/FINAL_DELIVERY.md",
+      "sha256": "3cf68789468e0c2606ca547e1b11b54f7ece688574aa29df36cee3d1de12508a"
+    },
+    {
+      "file": "docs/omnix-ai/README.md",
+      "sha256": "5f3b6d50766d96035ac3a1f862bfc1a2927cfd5c5eeb15e2cf5b689b6e6f4296"
+    }
+  ]
+}

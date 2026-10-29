@@ -1,0 +1,424 @@
+{
+  "queriedAt": "2026-10-25T00:14:03.930Z",
+  "publicReadOnly": true,
+  "site": {
+    "url": "https://xpex-systems-ai.vercel.app/",
+    "status": 200,
+    "contentType": "text/html; charset=utf-8",
+    "title": "XPeX Systems AI — Agentes especializados. Execução verificável.",
+    "bodySha256": "3e894756584e26f13fe9c8efdcb35f044499e9bda663fabd9e4bfee9f6a25b59",
+    "functionalCapabilitiesTested": false
+  },
+  "readme": {
+    "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/blob/main/README.md",
+    "gitBlob": "c9ab481f1b2f7d2bc5d22dffc567f149559c2f83",
+    "bytes": 16781,
+    "sha256": "4764d9abd7e6e52fa4769cc7a893b921db530c8417609888fbb64bb5ac9cedb2"
+  },
+  "tree": {
+    "sha": "1ab659b8044684f7ad9a93a81399582f19bd6d45",
+    "truncated": false,
+    "paths": [
+      {
+        "path": ".github/workflows/action-supply-chain-validation.yml",
+        "sha": "43cc4454f4fc30768e37dd49696e669ec7a969b6"
+      },
+      {
+        "path": ".github/workflows/agent-policy-validation.yml",
+        "sha": "2a19b0ead56f2afae2bf5a9c4b3f768d76e9b9bc"
+      },
+      {
+        "path": ".github/workflows/agent-security-validation.yml",
+        "sha": "b13259535cb569a8e399a582dfae5ce031245997"
+      },
+      {
+        "path": ".github/workflows/assurance-tests.yml",
+        "sha": "2cb76124fdb97c6ba202018998941776b5d40843"
+      },
+      {
+        "path": ".github/workflows/codeql.yml",
+        "sha": "c797eb14bc806ca36d48b165998c0e7e8fe6827c"
+      },
+      {
+        "path": ".github/workflows/corporate-site-validation.yml",
+        "sha": "c0eb2ba845bda143e6ae931fd164a55466068a1d"
+      },
+      {
+        "path": ".github/workflows/dependency-review.yml",
+        "sha": "406564ab221ab848cf3a9ed97b76b86e5728d1da"
+      },
+      {
+        "path": ".github/workflows/enterprise-control-plane-validation.yml",
+        "sha": "c23b78f26836bcff9673fd50725061ec2441e9b2"
+      },
+      {
+        "path": ".github/workflows/founder-discovery-validation.yml",
+        "sha": "7c72130ca7ceb7ced9a06624ad54e674e610c5e6"
+      },
+      {
+        "path": ".github/workflows/governance-validation.yml",
+        "sha": "5c3d95ce36184ae8fb3b5d3cbae9975bce2c86f1"
+      },
+      {
+        "path": ".github/workflows/portfolio-registry-validation.yml",
+        "sha": "29e75698bce19f3124b10bfe6df7dbf7a8621c41"
+      },
+      {
+        "path": ".github/workflows/public-truth-validation.yml",
+        "sha": "6bb94cbcae01ee446178cbbd96edd8da15683e51"
+      },
+      {
+        "path": ".github/workflows/release-attestation.yml",
+        "sha": "9be176eebb8b3a3bdd32bf407d3ccbe4d889d79e"
+      },
+      {
+        "path": ".github/workflows/scorecard.yml",
+        "sha": "acc12883db0f25659bda4d1de13ee85e594f8311"
+      },
+      {
+        "path": ".github/workflows/secret-hygiene.yml",
+        "sha": "30e5651678d0486a7152ec2675a624d5b59aa162"
+      },
+      {
+        "path": ".github/workflows/secret-pattern-scan.yml",
+        "sha": "9967623b63d1674ec90f92a4d7a7485b315b331d"
+      },
+      {
+        "path": ".github/workflows/system-registry-validation.yml",
+        "sha": "11dd036b6b9fd5c1abe66951c5729b4cc0a41d82"
+      },
+      {
+        "path": ".github/workflows/trust-passport-validation.yml",
+        "sha": "934f115a5806fed112d44f86b40b39499351dc4a"
+      },
+      {
+        "path": ".github/workflows/workflow-supply-chain-validation.yml",
+        "sha": "a7c95961a7463a6738f25d798fd5de3bcee83794"
+      },
+      {
+        "path": "README.md",
+        "sha": "c9ab481f1b2f7d2bc5d22dffc567f149559c2f83"
+      },
+      {
+        "path": "docs/ACCELERATOR_APPLICATION_PACK.md",
+        "sha": "d27e7090688c02e7fd1ec592be5fc1ae6de7ca3c"
+      },
+      {
+        "path": "docs/ACCELERATOR_PROFILE.md",
+        "sha": "d5ae074b6a929c4b56ce6fb9d71fa49d21a616ae"
+      },
+      {
+        "path": "docs/AGENTS.md",
+        "sha": "6beb3a2c0717a3324008ed58f9270ab4c655b00b"
+      },
+      {
+        "path": "docs/AGENT_TRUST.md",
+        "sha": "c5a773c26df502c5a6e853bfebae638fe5785a2c"
+      },
+      {
+        "path": "docs/AGENT_TRUST_PASSPORTS.md",
+        "sha": "5ad6a5c68b3d710754ed4b1a756b20449de93d2d"
+      },
+      {
+        "path": "docs/ARCHITECTURE.md",
+        "sha": "e6c8c588fe99e93b8c2a0cf26b52177cf98a4189"
+      },
+      {
+        "path": "docs/ASSURANCE.md",
+        "sha": "2322baad2311101b8a28b682b9e057e1836ebd01"
+      },
+      {
+        "path": "docs/ASSURANCE_MATRIX.md",
+        "sha": "7b2cb3acf9e935cad5ed7d09c0bd57229cc45478"
+      },
+      {
+        "path": "docs/BRAND.md",
+        "sha": "7bb8b302dec64c43a4c6911996ac019ea71306aa"
+      },
+      {
+        "path": "docs/DEMO_READINESS.md",
+        "sha": "be87d1c7a7f95e823cbf20203dc248ddfedc8bcf"
+      },
+      {
+        "path": "docs/DISCOVERY_ENGINE.md",
+        "sha": "bfe721e0ef0c6d1747f31a157a1c4544cb752e0c"
+      },
+      {
+        "path": "docs/ENTERPRISE_AGENT_API.md",
+        "sha": "525682a5de0b65810d11bebe910203129d5bbc05"
+      },
+      {
+        "path": "docs/ENTERPRISE_CONTROL_PLANE.md",
+        "sha": "3707be665a66c771b98ada30d1d28ac2fbfab6f3"
+      },
+      {
+        "path": "docs/FLAGSHIP_CASES.md",
+        "sha": "5878be3b12bbbc3b2ff265da11adc511b9817750"
+      },
+      {
+        "path": "docs/FOUNDER_PROFILE.md",
+        "sha": "e0fcb833e69b968ac94d62cd88260a7b3e7f193b"
+      },
+      {
+        "path": "docs/GITHUB_SECURITY_SETUP.md",
+        "sha": "9590219cb48bde0f4c0c36cc4b67bd5aa270bf03"
+      },
+      {
+        "path": "docs/GLOBAL_LAUNCH_PLAYBOOK.md",
+        "sha": "670a172de5b9a79def4dd46da769418a40a37a23"
+      },
+      {
+        "path": "docs/GXEON_ENTERPRISE_DEMO.md",
+        "sha": "8c907523d8b00edacccb6550a1cb2441331b5f1b"
+      },
+      {
+        "path": "docs/GX_KNOWLEDGE_PLANE.md",
+        "sha": "994c81c2b0fe196ca1167dca5a7095f84ed33a7b"
+      },
+      {
+        "path": "docs/GX_NEURAL_COPILOT_PLUGIN.md",
+        "sha": "49cb80eb9b7518c74f7acc6597764267f349617e"
+      },
+      {
+        "path": "docs/GX_PUBLIC_AGENT.md",
+        "sha": "dc126db26d213163ee47afe3e9458f426fdda97d"
+      },
+      {
+        "path": "docs/INVESTOR_BRIEF.md",
+        "sha": "12035667b0c3af0618eb40e21ded4915f3d13d83"
+      },
+      {
+        "path": "docs/INVESTOR_BRIEF_V2.md",
+        "sha": "5761b0cdb317bde0207c843901ce9da34c424c2b"
+      },
+      {
+        "path": "docs/LINKEDIN_MASTER_PROFILE.md",
+        "sha": "bc111419f4452cf40fc3df1c9c51215e930c33ee"
+      },
+      {
+        "path": "docs/MEDIA_EVIDENCE_TRIAGE.md",
+        "sha": "4c5990625194b684c75bf02cfc316f289f49fafb"
+      },
+      {
+        "path": "docs/PARTNERS.md",
+        "sha": "0b58baf0a54e1c74a4fb4cc96f28ffee12fe2b84"
+      },
+      {
+        "path": "docs/POLICY_TEST_EXECUTION_RESULT.md",
+        "sha": "72fed6e20b74b5a3397c662f565a2b4acff046ea"
+      },
+      {
+        "path": "docs/PORTFOLIO.md",
+        "sha": "feeb55646fd5d5fe7ee407c99bf0d8f32286077a"
+      },
+      {
+        "path": "docs/PRODUCTS.md",
+        "sha": "b62e17107185c6c6d82f6cb2399502313de9e571"
+      },
+      {
+        "path": "docs/PUBLIC_LAUNCH_CHECKLIST.md",
+        "sha": "adb9e08fa936cebedfe35cfd875920e4484c703a"
+      },
+      {
+        "path": "docs/SHOWCASE.md",
+        "sha": "2e85ffa1d63cb0516e12eed3cce0e764432a28ae"
+      },
+      {
+        "path": "docs/SYSTEM_ADMISSION_GATES.md",
+        "sha": "107fdac1a807e1baa0b8b966c9739f2283a650ce"
+      },
+      {
+        "path": "docs/SYSTEM_ONBOARDING.md",
+        "sha": "7a2767c19f3c1b0f645e78749b9809abb8a9b0a2"
+      },
+      {
+        "path": "docs/SYSTEM_STANDARD.md",
+        "sha": "31d8f5645fc5bed5b2da3ff672294bf24ea7e309"
+      },
+      {
+        "path": "docs/TECHNICAL_DUE_DILIGENCE.md",
+        "sha": "ccf1f0baad870364195f26ff69118c3b9d97953d"
+      },
+      {
+        "path": "docs/TECHNOLOGY_MAP.md",
+        "sha": "926723a1932baeb42fe00d7a9c731ad9fca423f1"
+      },
+      {
+        "path": "docs/TRUST.md",
+        "sha": "82bf1e45093efaa9302324783adade4e2f727aa5"
+      },
+      {
+        "path": "docs/TRUST_CENTER.md",
+        "sha": "b756e5d241a6eab393e9d96eff98d2ea76fc684a"
+      },
+      {
+        "path": "docs/TRUST_PASSPORT.md",
+        "sha": "1b5124ea88112d49185a1c5393a6be2f9e577768"
+      },
+      {
+        "path": "docs/VALIDATION_BADGES.md",
+        "sha": "aff9577e26368061a42f301717d1764d62f841a8"
+      },
+      {
+        "path": "docs/company/architecture.md",
+        "sha": "4fa957bc361a0d119567fe11b3007af80cefd822"
+      },
+      {
+        "path": "docs/company/brand-system.md",
+        "sha": "a0686cfd96c62c46391e9c75bc6ba89cfac900fa"
+      },
+      {
+        "path": "docs/company/data-room-index.md",
+        "sha": "079d1fa7ecb3ddfc4ab3fdfa7d2d4491b7c5cf2f"
+      },
+      {
+        "path": "docs/company/executive-summary.md",
+        "sha": "f1dbb8a38fc78dd57c5c98f9688f02c06aceea1b"
+      },
+      {
+        "path": "docs/company/fundraising-readiness.md",
+        "sha": "512b3acdad791ed2d540a57cd9e00456b549c67b"
+      },
+      {
+        "path": "docs/company/governance.md",
+        "sha": "35babad33c2deb76991edcad9c174f6fbe75cc29"
+      },
+      {
+        "path": "docs/company/launch-plan.md",
+        "sha": "c43a685e014d7cafd9dd6c7cff008e08714ca5ac"
+      },
+      {
+        "path": "docs/company/operating-model.md",
+        "sha": "0b24fc8f91455e10411c172f8710463fb12daf0b"
+      },
+      {
+        "path": "docs/company/product-map.md",
+        "sha": "2983c10f66407aedb5c35c6b7cea2fe6cd8fa8be"
+      },
+      {
+        "path": "docs/company/public-platform-spec.md",
+        "sha": "2bb204fe3a17949fa9b686b60d2a3c850774c5be"
+      },
+      {
+        "path": "docs/company/roadmap.md",
+        "sha": "211b02e3d738fec600e5345bb2a92922ace5d286"
+      },
+      {
+        "path": "docs/company/vision.md",
+        "sha": "84298f2610d535804827ca6f760cacc2483a09a0"
+      },
+      {
+        "path": "docs/governance/README.md",
+        "sha": "d270a3c4bc51a04a1c8f3b7a86d17cb924b9a59d"
+      },
+      {
+        "path": "docs/governance/agent-governance.md",
+        "sha": "49e62116b7607644386eadd982aad62e66dad981"
+      },
+      {
+        "path": "docs/governance/agent-kill-switch.md",
+        "sha": "3f47bffb3a69f5c5b29109fc29a705d3570ed886"
+      },
+      {
+        "path": "docs/governance/audit-evidence-standard.md",
+        "sha": "28bb37e3cf960c6e6d103b1f5628c3fac0307aee"
+      },
+      {
+        "path": "docs/governance/autonomy-levels.md",
+        "sha": "ab90b14e1084f387c907f9a6836594b48452b06e"
+      },
+      {
+        "path": "docs/governance/business-continuity.md",
+        "sha": "308d1d9b7e515e16276da536d513bcec1bd44642"
+      },
+      {
+        "path": "docs/governance/certification-readiness.md",
+        "sha": "3a608b2007462e67f0f5dfa60358b9b9e1aeaa0e"
+      },
+      {
+        "path": "docs/governance/continuous-assurance.md",
+        "sha": "9bdc8dbda8d8ec648c885da8f29c4719f4e9d87f"
+      },
+      {
+        "path": "docs/governance/control-catalog.md",
+        "sha": "8d12df967d80792bba63ca94b4dffaf84f8395fb"
+      },
+      {
+        "path": "docs/governance/data-privacy-governance.md",
+        "sha": "ff173a86df5d4333631447762c42ef6c8f245174"
+      },
+      {
+        "path": "docs/governance/enforcement-roadmap.md",
+        "sha": "3dd15cd1a4d9d581ca935f67a78ae4d4e4842521"
+      },
+      {
+        "path": "docs/governance/evaluation-red-team.md",
+        "sha": "e16d3a3ece88bd7c8668a022faf33c04c791855f"
+      },
+      {
+        "path": "docs/governance/exceptions-risk-acceptance.md",
+        "sha": "7aba1ced380d9f98131f79425874d9b0e64ddee8"
+      },
+      {
+        "path": "docs/governance/financial-agent-controls.md",
+        "sha": "f1a9ccb3015a2df8cb5618b378e4091dd1f92cbd"
+      },
+      {
+        "path": "docs/governance/human-oversight.md",
+        "sha": "60ff69dcba3f2b97ea05e933cff801ec2d626e39"
+      },
+      {
+        "path": "docs/governance/incident-response.md",
+        "sha": "fefbd6cef04cc93d8069b34556c6551415fe162e"
+      },
+      {
+        "path": "docs/governance/model-provider-governance.md",
+        "sha": "32076b784b9bf56be9b594c4c0fc233c78dc1f06"
+      },
+      {
+        "path": "docs/governance/repository-security-controls.md",
+        "sha": "58aa468a70a824d02cf82d64257d4553db574e7d"
+      },
+      {
+        "path": "docs/governance/secure-sdlc.md",
+        "sha": "e4be7d5b7efbb284e0973b7b5efaea3b606e3a74"
+      },
+      {
+        "path": "docs/governance/security-baseline.md",
+        "sha": "a639917bc256bede6b1a74183243f6d5e43f2202"
+      },
+      {
+        "path": "docs/governance/standards-alignment-2026.md",
+        "sha": "940dfd2784a5b23eacb5fc2b80b6f3b159f12aec"
+      },
+      {
+        "path": "docs/governance/standards-alignment.md",
+        "sha": "59c79398abfbae34fdd882eff71560800c428f2f"
+      },
+      {
+        "path": "docs/governance/standards-crosswalk.md",
+        "sha": "1daad560bd0f0fd72bbe99a7bcad2d7031f69ec6"
+      },
+      {
+        "path": "docs/governance/third-party-risk.md",
+        "sha": "fff3269bb6990f3301145de0474ae337f8094656"
+      },
+      {
+        "path": "docs/governance/third-party-supply-chain.md",
+        "sha": "11285db7bd7d249af6944c3864d48c974918e6c1"
+      },
+      {
+        "path": "docs/governance/threat-modeling.md",
+        "sha": "90a8b2c9de1879320fb5f22165333a2a38b505eb"
+      },
+      {
+        "path": "docs/governance/transparency-accountability.md",
+        "sha": "9bac4190843b8a23d10ca5246b184ca8851ca4c1"
+      },
+      {
+        "path": "docs/governance/trust-center-spec.md",
+        "sha": "dedffa7a30d8a16f042723f8b7f502f9885b309f"
+      }
+    ]
+  }
+}

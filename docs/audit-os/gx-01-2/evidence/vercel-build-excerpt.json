@@ -1,0 +1,38 @@
+{
+  "deploymentId": "dpl_CiDMtkZcTGStzzLvqbHMUtRegYo8",
+  "referenceHead": "25931726ca4c264d918248ac1ee52a2dbd6e20f6",
+  "readOnly": true,
+  "scope": "xpex-neural",
+  "selectedEvents": [
+    {
+      "date": "2026-10-20T01:55:59.671Z",
+      "type": "stderr",
+      "text": "Error: [STATIC_BUILD_NO_OUT_DIR] No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory."
+    },
+    {
+      "date": "2026-10-20T01:55:59.548Z",
+      "type": "stdout",
+      "text": "\u001b[32m✓ built in 4.93s\u001b[39m"
+    },
+    {
+      "date": "2026-10-20T01:55:59.548Z",
+      "type": "stdout",
+      "text": "\u001b[2mdist/public/\u001b[22m\u001b[2massets/\u001b[22m\u001b[36mindex-Bn3ojI_h.js   \u001b[39m\u001b[1m\u001b[33m1,133.43 kB\u001b[39m\u001b[22m\u001b[2m │ gzip: 289.62 kB\u001b[22m"
+    },
+    {
+      "date": "2026-10-20T01:55:59.548Z",
+      "type": "stdout",
+      "text": "\u001b[2mdist/public/\u001b[22m\u001b[2massets/\u001b[22m\u001b[35mindex-D4v5pmrQ.css  \u001b[39m\u001b[1m\u001b[2m  181.95 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:  25.96 kB\u001b[22m"
+    },
+    {
+      "date": "2026-10-20T01:55:59.548Z",
+      "type": "stdout",
+      "text": "\u001b[2mdist/public/\u001b[22m\u001b[32mindex.html                 \u001b[39m\u001b[1m\u001b[2m    1.40 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   0.55 kB\u001b[22m"
+    },
+    {
+      "date": "2026-10-20T01:55:28.190Z",
+      "type": "stdout",
+      "text": "Cloning github.com/xpex-systems-ai/GXEON-AI (Branch: codex/gxeon-audit-os-v1-gx01, Commit: 2593172)"
+    }
+  ]
+}

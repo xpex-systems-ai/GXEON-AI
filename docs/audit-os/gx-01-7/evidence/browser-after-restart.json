@@ -1,0 +1,17 @@
+{
+  "verifiedAt": "2026-10-25T00:27:47.343Z",
+  "phase": "after-restart",
+  "testData": true,
+  "mechanism": "Supported IAB downloadMedia on visible persistent Baixar relatório JSON link",
+  "filename": "audit-716e50a9-9e27-4847-b254-3b525ad7055c.json",
+  "bytes": 4185,
+  "fileSha256": "7481d153021c6eb87e634e867893206250422dfcd35e9b83216e6e7682029fea",
+  "caseId": "716e50a9-9e27-4847-b254-3b525ad7055c",
+  "reportId": "39beda61-e40b-4307-a735-6015a2e03d77",
+  "sha256": "ba854b50c2b78e439e190b911752a6669971e860e3240802033b43afe4f4d899",
+  "evidenceCount": 1,
+  "findingCount": 2,
+  "status": "CLOSED",
+  "matchesPersistedRecord": true,
+  "browserDownloadVerified": true
+}

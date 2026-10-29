@@ -1,0 +1,118 @@
+{
+  "recordedAt": "2026-10-25T11:15:39.107Z",
+  "environment": "Windows; Node24.19.0; pnpm10.28.1; PG17.11 native loopback; PGlite; synthetic fixtures",
+  "candidate": "d71996bc73502f6c2352c0c687ef1cba90012ea4",
+  "sourceBinding": "candidate-binding.json",
+  "commands": [
+    {
+      "log": "baseline-install.log",
+      "command": "pnpm install --frozen-lockfile",
+      "result": "PASS",
+      "exit": 0
+    },
+    {
+      "log": "inherited-tests.log",
+      "command": "pnpm --filter @workspace/api-server run test:audit (initial inherited code)",
+      "result": "PASS 16/16",
+      "exit": 0
+    },
+    {
+      "log": "assurance-tests.log",
+      "command": "pnpm --filter @workspace/api-server run test:audit",
+      "result": "PASS 17/17",
+      "exit": 0
+    },
+    {
+      "log": "assurance-native-tests.log",
+      "command": "TEST_AUDIT_DATABASE_URL=<isolated fixture> pnpm --filter @workspace/api-server run test:audit",
+      "result": "PASS 18/18",
+      "exit": 0
+    },
+    {
+      "log": "assurance-pilot-db.log",
+      "command": "TEST_AUDIT_PILOT_DATABASE_URL=<isolated fixture> pnpm --filter @workspace/api-server run test:audit-pilot-db",
+      "result": "PASS 1/1",
+      "exit": 0
+    },
+    {
+      "log": "assurance-lint.log",
+      "command": "pnpm run lint:audit",
+      "result": "PASS 32 files / 0 errors",
+      "exit": 0
+    },
+    {
+      "log": "assurance-types.log",
+      "command": "pnpm run typecheck",
+      "result": "PASS",
+      "exit": 0
+    },
+    {
+      "log": "assurance-testTypes.log",
+      "command": "pnpm --filter @workspace/api-server run typecheck:audit-tests",
+      "result": "PASS",
+      "exit": 0
+    },
+    {
+      "log": "local-libs.log",
+      "command": "pnpm run build:libs",
+      "result": "PASS",
+      "exit": 0
+    },
+    {
+      "log": "assurance-apiBuild.log",
+      "command": "pnpm --filter @workspace/api-server run build",
+      "result": "PASS",
+      "exit": 0
+    },
+    {
+      "log": "baseline-dashboardBuild.log",
+      "command": "pnpm --filter @workspace/gxeon-dashboard run build",
+      "result": "PASS (chunk warning)",
+      "exit": 0
+    },
+    {
+      "log": "assurance-codegen.log",
+      "command": "node scripts/audit-staging/codegen-smoke.mjs",
+      "result": "PASS",
+      "exit": 0
+    },
+    {
+      "log": "assurance-compat.log",
+      "command": "node scripts/audit-staging/security-compatibility.mjs",
+      "result": "PASS 8 groups",
+      "exit": 0
+    },
+    {
+      "log": "assurance-verify.log",
+      "command": "pnpm run verify:audit-staging",
+      "result": "PASS 14 groups",
+      "exit": 0
+    },
+    {
+      "log": "assurance-failures.log",
+      "command": "node scripts/audit-staging/recovery-failures.mjs",
+      "result": "PASS",
+      "exit": 0
+    },
+    {
+      "log": "assurance-restore.log",
+      "command": "node scripts/audit-staging/backup-restore.mjs",
+      "result": "PASS new target",
+      "exit": 0
+    },
+    {
+      "log": "assurance-health.log",
+      "command": "pnpm run health:report",
+      "result": "PASS command; radar is not release approval",
+      "exit": 0
+    },
+    {
+      "log": "baseline-audit.log",
+      "command": "pnpm audit --json",
+      "result": "FAIL 4 occurrences / 3 high / 1 moderate",
+      "exit": 1
+    }
+  ],
+  "fullLocalMonorepoBuild": "NOT RUN: existing mobile script clears caches; full Linux build delegated to existing CI on disposable runner",
+  "remoteTests": "NOT TESTED; authorization required"
+}

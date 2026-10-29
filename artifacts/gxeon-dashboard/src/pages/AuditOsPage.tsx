@@ -453,6 +453,7 @@ export default function AuditOsPage() {
 
   return (
     <main className="min-h-screen space-y-6 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,.18),transparent_30%),radial-gradient(circle_at_top_right,rgba(34,211,238,.12),transparent_34%),#05060a] p-6 text-white">
+      <a className="block rounded border border-cyan-500 p-4 text-cyan-200 underline" href="/ops/audit-os/workflow">Abrir fluxo GX-01: escopo autorizado, evidências, revisão e exportação. As leituras privadas desta API exigem credencial Audit OS.</a>
       <section className="rounded-[2rem] border border-amber-300/25 bg-gradient-to-br from-amber-500/15 via-cyan-500/10 to-black/30 p-7 shadow-2xl shadow-cyan-950/30">
         <p className="text-xs font-black uppercase tracking-[0.35em] text-amber-200">
           Internal operator mode · read-only · degraded-safe

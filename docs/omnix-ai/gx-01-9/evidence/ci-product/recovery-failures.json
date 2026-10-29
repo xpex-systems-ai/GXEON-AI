@@ -1,0 +1,35 @@
+{
+  "testData": true,
+  "status": "PASS",
+  "generatedAt": "2026-10-26T21:12:50.146Z",
+  "apiStoppedAndRecovered": true,
+  "databaseStoppedWithApiLive": true,
+  "databaseUnavailableStatus": 503,
+  "recoveredWithoutApiRestart": true,
+  "repeatedReads": 3,
+  "noRecordMutation": true,
+  "before": {
+    "cases": "3",
+    "evidences": "3",
+    "findings": "6",
+    "reports": "2"
+  },
+  "after": {
+    "cases": "3",
+    "evidences": "3",
+    "findings": "6",
+    "reports": "2"
+  },
+  "report": {
+    "caseId": "b9012b07-fe40-4142-beee-bac547569d3c",
+    "reportId": "1a39f30a-8c26-4466-82b5-5e67e2836faf",
+    "sha256": "bd3d12376c387bc7a577834e6a62b6f45e0bea3c265ff19a245ab3060a00eabc",
+    "evidenceCount": 1,
+    "findingCount": 2,
+    "status": "CLOSED",
+    "testData": true
+  },
+  "matchesPersistedRecord": true,
+  "browserDownloadVerified": false,
+  "scope": "Authenticated GX016 loopback test instance only; no remote infrastructure verified"
+}

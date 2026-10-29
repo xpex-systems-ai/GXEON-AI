@@ -1,0 +1,157 @@
+{
+  "preparedAt": "2026-10-25T11:25:27.047Z",
+  "currency": "USD",
+  "days": 30,
+  "seconds": 2592000,
+  "rates": {
+    "memory": 0.00000386,
+    "cpu": 0.00000772,
+    "volume": 6e-8,
+    "egress": 0.05,
+    "backup": 0.015
+  },
+  "assumptionsNotQuotes": true,
+  "humanHourlyAssumptions": {
+    "operations": 25,
+    "support": 25,
+    "independentReview": 60,
+    "legal": 50,
+    "rollback": 25
+  },
+  "A": [
+    {
+      "name": "mínimo",
+      "ram": 1,
+      "cpu": 0.1,
+      "vol": 5,
+      "egress": 5,
+      "backup": 1,
+      "reserve": 5,
+      "usage": 13.033744000000002,
+      "railway": 20.015,
+      "infra": 45.015,
+      "human": 365,
+      "total": 410.015,
+      "hours": {
+        "ops": 2,
+        "support": 1,
+        "review": 4,
+        "legal": 1,
+        "rollback": 0
+      }
+    },
+    {
+      "name": "base",
+      "ram": 2,
+      "cpu": 0.25,
+      "vol": 10,
+      "egress": 20,
+      "backup": 5,
+      "reserve": 10,
+      "usage": 27.568000000000005,
+      "railway": 27.643000000000004,
+      "infra": 57.643,
+      "human": 755,
+      "total": 812.643,
+      "hours": {
+        "ops": 4,
+        "support": 2,
+        "review": 8,
+        "legal": 2,
+        "rollback": 1
+      }
+    },
+    {
+      "name": "acima do previsto",
+      "ram": 4,
+      "cpu": 0.5,
+      "vol": 20,
+      "egress": 100,
+      "backup": 20,
+      "reserve": 15,
+      "usage": 58.13600000000001,
+      "railway": 58.43600000000001,
+      "infra": 93.436,
+      "human": 1270,
+      "total": 1363.436,
+      "hours": {
+        "ops": 8,
+        "support": 4,
+        "review": 12,
+        "legal": 4,
+        "rollback": 2
+      }
+    }
+  ],
+  "B": [
+    {
+      "name": "mínimo",
+      "ram": 2,
+      "cpu": 0.3,
+      "vol": 20,
+      "egress": 100,
+      "backup": 20,
+      "reserve": 15,
+      "usage": 34.123712,
+      "railway": 34.423711999999995,
+      "infra": 69.423712,
+      "human": 905,
+      "total": 974.423712,
+      "hours": {
+        "ops": 4,
+        "support": 4,
+        "review": 8,
+        "legal": 4,
+        "rollback": 1
+      }
+    },
+    {
+      "name": "base",
+      "ram": 4,
+      "cpu": 0.75,
+      "vol": 50,
+      "egress": 300,
+      "backup": 50,
+      "reserve": 25,
+      "usage": 77.80416,
+      "railway": 78.55416,
+      "infra": 123.55416,
+      "human": 1910,
+      "total": 2033.55416,
+      "hours": {
+        "ops": 12,
+        "support": 8,
+        "review": 16,
+        "legal": 8,
+        "rollback": 2
+      }
+    },
+    {
+      "name": "acima do previsto",
+      "ram": 8,
+      "cpu": 2,
+      "vol": 100,
+      "egress": 1000,
+      "backup": 100,
+      "reserve": 50,
+      "usage": 185.61344000000003,
+      "railway": 187.11344000000003,
+      "infra": 257.11344,
+      "human": 3340,
+      "total": 3597.11344,
+      "hours": {
+        "ops": 24,
+        "support": 16,
+        "review": 24,
+        "legal": 16,
+        "rollback": 4
+      }
+    }
+  ],
+  "taxFx": "NOT VERIFIED; not included; BRL=USD*approvedFX+fees+taxes",
+  "approved": false,
+  "newPaidResourcesCreated": false,
+  "providerBillingNotQueried": true,
+  "actualMissionCosts": "NOT VERIFIED",
+  "rounding": "Display USD to cents using decimal half-up; formulas retain unrounded values"
+}

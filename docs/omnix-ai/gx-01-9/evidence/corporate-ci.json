@@ -1,0 +1,67 @@
+{
+  "queriedAt": "2026-10-26T21:22:16.848Z",
+  "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/pull/45",
+  "head": "e965a85880ab8dc83a2459b37b987b434f0bc9ff",
+  "base": "1ab659b8044684f7ad9a93a81399582f19bd6d45",
+  "state": "open",
+  "draft": true,
+  "merged": false,
+  "checks": [
+    {
+      "name": "CodeQL",
+      "head": "e965a85880ab8dc83a2459b37b987b434f0bc9ff",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/runs/121855894474"
+    },
+    {
+      "name": "Vercel Preview Comments",
+      "head": "e965a85880ab8dc83a2459b37b987b434f0bc9ff",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/runs/121855596582"
+    },
+    {
+      "name": "CodeQL / Python",
+      "head": "e965a85880ab8dc83a2459b37b987b434f0bc9ff",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/actions/runs/40403594211/job/121855526250"
+    },
+    {
+      "name": "Scan tracked files for secret material",
+      "head": "e965a85880ab8dc83a2459b37b987b434f0bc9ff",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/actions/runs/40403594266/job/121855526146"
+    },
+    {
+      "name": "Scan for high-confidence secret patterns",
+      "head": "e965a85880ab8dc83a2459b37b987b434f0bc9ff",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/actions/runs/40403594192/job/121855525929"
+    },
+    {
+      "name": "Build corporate site",
+      "head": "e965a85880ab8dc83a2459b37b987b434f0bc9ff",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/actions/runs/40403593940/job/121855525888"
+    },
+    {
+      "name": "Test evidence and governance invariants",
+      "head": "e965a85880ab8dc83a2459b37b987b434f0bc9ff",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/actions/runs/40403593956/job/121855525334"
+    }
+  ],
+  "statuses": [
+    {
+      "context": "Vercel",
+      "state": "success",
+      "url": "https://vercel.com/xpex-neural/xpex-systems-ai/8g4pwHUsppMCGkY92LHJGk93pKq3"
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "queriedAt": "2026-10-21T13:40:49.359Z",
+  "records": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "junior-senas-projects-4226acc3",
+        "name": "gxeon-ai-a",
+        "requestedId": "9eNV4qe6X9oWfLTBkPjxdSqDppan",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_9eNV4qe6X9oWfLTBkPjxdSqDppan",
+        "projectId": "prj_kssB4fuFxooxei5CYvt091ihp77z",
+        "state": "ERROR",
+        "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+        "errorMessage": "No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory.",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "xpex-neural",
+        "name": "gxeon-ai-mockup-sandbox",
+        "requestedId": "3doJ64WW6ZXQaNBH1Dx1Basx4BNP",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_3doJ64WW6ZXQaNBH1Dx1Basx4BNP",
+        "projectId": "prj_mo5cvJX4AXuPNsYXtQO3zYARLsLh",
+        "state": "ERROR",
+        "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+        "errorMessage": "No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory.",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "xpex-neural",
+        "name": "gxeon-ai-ia",
+        "requestedId": "8SWcGD2obVrsZbkfZh7drvQ9SDLB",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_8SWcGD2obVrsZbkfZh7drvQ9SDLB",
+        "projectId": "prj_hODQYobRkk4O6rpZkGZgNkFrNwA4",
+        "state": "READY",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "xpex-neural",
+        "name": "gxeon-ai01",
+        "requestedId": "GsWxj1uqzsCtRchYZ5pQBsDgS8ZM",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_GsWxj1uqzsCtRchYZ5pQBsDgS8ZM",
+        "projectId": "prj_EMDNZwGOLK3bdtOHcVecT84xp4Dp",
+        "state": "QUEUED",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "junior-senas-projects-4226acc3",
+        "name": "gxeo",
+        "requestedId": "DKAr6J7sDFBRudZ2iLNFxNYphT8q",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_DKAr6J7sDFBRudZ2iLNFxNYphT8q",
+        "projectId": "prj_u4vHMlTnqVXLaJwnpTEn8T0JMOmD",
+        "state": "ERROR",
+        "errorCode": "STATIC_BUILD_NO_OUT_DIR",
+        "errorMessage": "No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory.",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "junior-senas-projects-4226acc3",
+        "name": "gxeon-ai-aoo",
+        "requestedId": "AFw5XgWmevRncMjFQMNLSQDdMtox",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_AFw5XgWmevRncMjFQMNLSQDdMtox",
+        "projectId": "prj_F3OFtryPk4YmYwXc3zEJkbZTRZkv",
+        "state": "READY",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "gxeon",
+        "name": "gxeon-audit-os",
+        "requestedId": "BtGVzL5ykRSMQDnCEGGZNC7PWifE",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_BtGVzL5ykRSMQDnCEGGZNC7PWifE",
+        "projectId": "prj_owdXFSlvK1GBrWVuYCqeHpTlYjP4",
+        "state": "READY",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "junior-senas-projects-4226acc3",
+        "name": "gxeon-ai-api-server-611a",
+        "requestedId": "X3UpkeUMU6Hqge2LRCTXGkwQYCvA",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_X3UpkeUMU6Hqge2LRCTXGkwQYCvA",
+        "projectId": "prj_STlhUAtwut0oWBsWD5PjmCFLhjBq",
+        "state": "BUILDING",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "xpex-neural",
+        "name": "gxeon-ai-api-server-sxv4",
+        "requestedId": "9mkSonS3mF1oJsGg2kzqTs6fxvvf",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_9mkSonS3mF1oJsGg2kzqTs6fxvvf",
+        "projectId": "prj_AqiT3Idishevz42J1s9E5LZ3SA85",
+        "state": "QUEUED",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "junior-senas-projects-4226acc3",
+        "name": "gxeon-ai-api-server",
+        "requestedId": "EK87BKHxmXF2hwndHUHmDznM5TdK",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_EK87BKHxmXF2hwndHUHmDznM5TdK",
+        "projectId": "prj_R2ILQClNw9Zk8XCbj0EalzflwtVO",
+        "state": "QUEUED",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "xpex-neural",
+        "name": "ai-ia",
+        "requestedId": "FbsSY9Fk9nKaKpzD7b5XnUgKZMC3",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_FbsSY9Fk9nKaKpzD7b5XnUgKZMC3",
+        "projectId": "prj_tQcb12xWLeTTY6h7Vhw6w4yp5frg",
+        "state": "QUEUED",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "scope": "xpex-neural",
+        "name": "gxeon-ail",
+        "requestedId": "HM7zu3DkHRpiJxVBvP4Sqartq3EA",
+        "head": "1c102b405e79be1b9265419c50b6e07c95da91f9",
+        "isError": false,
+        "id": "dpl_HM7zu3DkHRpiJxVBvP4Sqartq3EA",
+        "projectId": "prj_RYR5u33XB5nE0UkSwyAGKSQft1gZ",
+        "state": "READY",
+        "gitSha": "1c102b405e79be1b9265419c50b6e07c95da91f9"
+      }
+    }
+  ]
+}

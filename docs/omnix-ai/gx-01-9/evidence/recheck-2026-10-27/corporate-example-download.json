@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-28T00:40:02.467Z",
+  "corporateSource": "bcb815932015982f7d85788f797c84c47b5be431",
+  "url": "https://xpex-systems-niseyondw-xpex-neural.vercel.app/examples/omnix-synthetic-report.json",
+  "status": 200,
+  "contentType": "application/json; charset=utf-8",
+  "contentDisposition": "inline; filename=\"omnix-synthetic-report.json\"",
+  "bytes": 4185,
+  "remoteBytesMatchFrozenFixture": true,
+  "sha256": "86c87f8f879615afe538d4f567af96a9c26b95b7648dc37ca2bf4214d3b6dff2",
+  "browserFilePresent": false,
+  "browserFileMatchesFixture": false,
+  "scope": "Static public frozen TEST DATA example; not a new audit or remote API/DB proof"
+}

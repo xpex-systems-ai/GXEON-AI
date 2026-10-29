@@ -1,0 +1,13 @@
+{
+  "artifact": "API TEST ARTIFACT, not browser download",
+  "result": {
+    "caseId": "813d28ef-fd99-4cc8-ae0c-cf9654f2485d",
+    "reportId": "882a245a-cd13-4228-adf3-882aacfae710",
+    "sha256": "9066235d0dce51f9d487562085666c233ceb5141e6500e3f71725b85146286c7",
+    "evidenceCount": 1,
+    "findingCount": 2,
+    "status": "CLOSED",
+    "testData": true,
+    "matchesPersistedRecord": true
+  }
+}

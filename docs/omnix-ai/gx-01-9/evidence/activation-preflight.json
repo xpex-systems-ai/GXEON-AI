@@ -1,0 +1,69 @@
+{
+  "observedAt": "2026-10-26T22:07:09.673Z",
+  "authorization": {
+    "received": true,
+    "source": "Direct user reply to the GX019 dedicated-preview approval question",
+    "project": "omnix-gx019-preview",
+    "environment": "preview-synthetic",
+    "durationDays": 7,
+    "apiCount": 1,
+    "databaseCount": 1,
+    "nodeMajor": 24,
+    "postgresMajor": 17,
+    "region": "us-east4-eqdc4a",
+    "budgetMonthlyUsdBeforeTaxes": 30,
+    "subjectToVerifiedPlanAndSpendControl": true,
+    "production": false,
+    "merge": false,
+    "customerData": false
+  },
+  "account": {
+    "username": "xpex-systems-ai",
+    "workspaceName": "GXEON AI",
+    "workspaceId": "39b76b7c-7d01-480f-83b5-ff6e6eb41ea2",
+    "availableWorkspaces": 1,
+    "existingProjectCount": 2,
+    "planVerified": false,
+    "computeLimitVerified": false
+  },
+  "access": {
+    "connectorMetadataRead": true,
+    "connectorBillingCapability": false,
+    "cliVersion": "5.71.0",
+    "cliSavedLogin": "expired-invalid-grant",
+    "browserUsagePage": "requires GitHub/Railway sign-in",
+    "cliRenewalStarted": true,
+    "renewalComplete": false
+  },
+  "budget": {
+    "documentedHardLimitScope": "workspace, not individual project",
+    "affectsOtherWorkloads": true,
+    "hardLimitChanged": false,
+    "planChanged": false
+  },
+  "postgres": {
+    "defaultTemplateMajor": 18,
+    "defaultTemplateUsed": false,
+    "observedAt": "2026-10-26T22:03:35.171Z",
+    "source": "public GHCR registry",
+    "image": "ghcr.io/railwayapp-templates/postgres-ssl:17",
+    "indexDigest": "sha256:5e806d28c18198f933d25e79989470a47a938f465bf0634e030b416961b3463e",
+    "linuxAmd64Digest": "sha256:577cdc1eaefeaed71abe813ed915c153402175f6d465987cba309c44a4ba6d46",
+    "labels": {
+      "org.opencontainers.image.revision": "09ff77dca25f9af407827b9f27c7de9c5c660790",
+      "org.opencontainers.image.source": "https://github.com/railwayapp-templates/postgres-ssl",
+      "railway.content-key": "manual-09ff77d"
+    },
+    "architecture": "amd64",
+    "os": "linux",
+    "created": "2026-10-23T22:32:35.323650728Z",
+    "containerExecuted": false,
+    "resourceCreated": false,
+    "tlsPinnedSourceRevision": "09ff77dca25f9af407827b9f27c7de9c5c660790",
+    "privateDomainSanInPinnedSource": true,
+    "remoteTlsHandshakeVerified": false
+  },
+  "resourceMutations": [],
+  "status": "AUTHORIZED — BLOCKED ON BILLING ACCESS AND BUDGET VALIDATION",
+  "nextAction": "Complete existing-account sign-in; read workspace plan, current usage and hard limit before any provisioning. Never change a shared-workspace limit without verifying its effect on the two legacy projects."
+}

@@ -1,0 +1,15 @@
+PASS built frontend, proxy, PostgreSQL 17 and restricted role
+PASS authentication, roles, consent, validation and test-data fence
+PASS concurrent intake is idempotent and conflicting scope is rejected
+PASS checks are bounded, concurrent runs do not duplicate evidence or findings
+PASS review gate and concurrent finalization produce one traceable report
+PASS alternative legacy UUID encodings cannot mutate a closed workflow
+PASS application DB role cannot update evidence, delete records or create tables
+PASS legacy inferred baseline cannot mutate a closed GX case by asset reference
+PASS injected intake failure rolls back the entire transaction
+PASS unknown evidence references and stale reviews cannot be finalized
+PASS export rejects tampering, invalid references and changed embedded evidence
+PASS write-disabled mode refuses mutations while retaining report reads
+PASS API and database restart retain closed status, IDs, references and hashes
+PASS logs and public frontend bundle do not contain staging credentials
+{"status":"CLOSED","checks":14,"caseId":"716e50a9-9e27-4847-b254-3b525ad7055c","reportId":"39beda61-e40b-4307-a735-6015a2e03d77","sha256":"ba854b50c2b78e439e190b911752a6669971e860e3240802033b43afe4f4d899","evidenceCount":1,"findingCount":2,"testData":true}

@@ -1,0 +1,26 @@
+{
+  "observedAt": "2026-10-26T22:20:18.137Z",
+  "authorizationReceived": true,
+  "action": "railway_create_project",
+  "requested": {
+    "name": "omnix-gx019-preview",
+    "environment": "preview-synthetic",
+    "workspaceId": "39b76b7c-7d01-480f-83b5-ff6e6eb41ea2",
+    "isPublic": false,
+    "prDeploys": false
+  },
+  "outcome": "REJECTED",
+  "providerMessage": "Your trial has expired. Please select a plan to continue using Railway.",
+  "errorCode": "INVALID_ARGUMENT",
+  "projectCreated": false,
+  "servicesCreated": 0,
+  "volumesProvisioned": 0,
+  "existingProjectCountAfter": 2,
+  "newProjectFoundAfter": false,
+  "budgetChanged": false,
+  "planChanged": false,
+  "productionChanged": false,
+  "cliAccess": "UNAUTHORIZED; OAuth attempt timed out",
+  "browserAccess": "Edge automation blocked while another extension UI is open",
+  "nextAction": "Account owner activates a Railway plan within the approved budget and dismisses Edge extension popup; then re-check billing limits before deployment."
+}

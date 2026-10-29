@@ -1,0 +1,64 @@
+{
+  "head": "52e9c69b9b12215265c7bbb90d6371531663ec6f",
+  "branch": "codex/gxeon-audit-os-v1-gx01",
+  "base": "main",
+  "baseSha": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "draft": true,
+  "merged": false,
+  "reviews": [],
+  "reviewThreads": [],
+  "workflowRuns": [
+    {
+      "name": "GXEON Monorepo Health",
+      "id": 39480740735,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "Audit OS V1",
+      "id": 39480740611,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "GXEON Typecheck",
+      "id": 39480740728,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "GXEON Build",
+      "id": 39480740727,
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "external": {
+    "statuses": 42,
+    "failure": 29,
+    "success": 13,
+    "checkRuns": 28,
+    "comparison": "Previously queued Vercel deployment failed; no newer branch commit"
+  },
+  "browser": {
+    "cua": "failed to write kernel assets: O sistema não pode encontrar o caminho especificado. (os error 3)",
+    "nodeSky": "Same kernel-assets initialization error; no native UI action performed",
+    "downloadVerified": false
+  },
+  "governance": {
+    "externalDecisionOwner": "xpex-systems-ai, designated by user; subject to ownership/permissions confirmation",
+    "independentReviewer": "not designated",
+    "externalWrites": "Specific approval required; no changes/deletions/transfers/publication authorized"
+  },
+  "dependencyBaseline": {
+    "auditExitCode": 1,
+    "advisoryEntries": 125,
+    "reportedFindings": 128,
+    "critical": 14,
+    "high": 74,
+    "moderate": 34,
+    "low": 6,
+    "scope": "Entire workspace; reachability must be assessed"
+  },
+  "localDiskFreeApproxMiB": 249
+}

@@ -1,0 +1,22 @@
+{
+  "id": "dpl_8g4pwHUsppMCGkY92LHJGk93pKq3",
+  "url": "https://xpex-systems-nr6sfgrax-xpex-neural.vercel.app",
+  "project": {
+    "id": "prj_9TzNOpz6Uzz34uHfLrlYAXzXcfgw",
+    "name": "xpex-systems-ai",
+    "framework": "vite"
+  },
+  "git": {
+    "githubCommitRef": "codex/omnix-product-online-gx019",
+    "githubCommitSha": "e965a85880ab8dc83a2459b37b987b434f0bc9ff",
+    "githubCommitMessage": "feat(omnix): add corporate product page and protected preview entry",
+    "githubRepo": "xpex-systems-ai",
+    "githubOrg": "xpex-systems-ai"
+  },
+  "target": null,
+  "source": "git",
+  "state": "READY",
+  "regions": [
+    "iad1"
+  ]
+}

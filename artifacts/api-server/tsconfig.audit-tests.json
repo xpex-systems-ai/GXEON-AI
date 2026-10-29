@@ -1,0 +1,29 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "rootDir": "../..",
+    "lib": [
+      "es2022",
+      "DOM"
+    ],
+    "jsx": "preserve"
+  },
+  "include": [
+    "src/tests/auditWorkflow.test.ts",
+    "src/tests/auditPilot.test.ts",
+    "src/tests/auditPilotDatabase.test.ts",
+    "src/tests/auditOmnixPreview.test.ts",
+    "src/tests/auditPortable.test.ts",
+    "src/tests/auditRender.test.ts",
+    "src/tests/auditDatabaseTrust.test.ts",
+    "src/tests/auditEnterpriseIdentity.test.ts",
+    "src/tests/auditOmnixDistribution.test.ts",
+    "src/tests/auditCommercial.test.ts",
+    "src/tests/auditRuntimeExtensions.test.ts",
+    "src/tests/auditEnterpriseBrowser.test.ts",
+    "src/tests/auditLeadIntake.test.ts",
+    "src/tests/auditTaskContract.test.ts"
+  ],
+  "exclude": []
+}

@@ -1,0 +1,107 @@
+{
+  "ok": true,
+  "caseId": "d513da2e-6d48-4665-b394-0f9ed69b56aa",
+  "reportId": "15cf371e-dc3c-4354-aaeb-3c8a6cb1e664",
+  "sha256": "efcd82c9279146394d26665e4b8648f2936e41066608cbcb7507a6fac623f66d",
+  "report": {
+    "version": "gx01-v1",
+    "caseId": "d513da2e-6d48-4665-b394-0f9ed69b56aa",
+    "title": "[TEST DATA] GX019 · TEST DATA · seletor de arquivo",
+    "testData": true,
+    "finalStatus": "CLOSED",
+    "scope": {
+      "requestId": "a21d1581-34db-46c7-bc5c-dbd3fc158f35",
+      "assetName": "GX019 · TEST DATA · seletor de arquivo",
+      "assetReference": "test-fixture/vercel.json",
+      "authorizationReference": "TEST DATA / autorização de test-submitter-a",
+      "authorized": true,
+      "testData": true,
+      "checks": [
+        "vercel_api_routing",
+        "vercel_security_headers"
+      ]
+    },
+    "review": {
+      "decision": "approve",
+      "reference": "TEST DATA / test-reviewer-a / TEST DATA · revisão automatizada por identidade distinta; não é parecer humano independente",
+      "reviewedAt": "2026-10-28T00:35:49.343Z",
+      "role": "reviewer"
+    },
+    "evidence": [
+      {
+        "id": "15c92fb9-69c9-4072-8305-7b364c25e3c9",
+        "sha256": "1abbc0baf6a050b3c703dc05e873776d44ee0bfcbb1117036df26acfa455c29a",
+        "capturedAt": "2026-10-28T00:31:57.033Z",
+        "source": "operator_submitted_artifact",
+        "content": "{\"rewrites\":[{\"source\":\"/(.*)\",\"destination\":\"/index.html\"}]}\n"
+      }
+    ],
+    "findings": [
+      {
+        "id": "4418d9a3-965e-43e5-a8ca-81729895a06b",
+        "title": "vercel_security_headers",
+        "summary": "Global nonempty header declarations absent from supplied config: content-security-policy, x-content-type-options. Runtime headers were not measured.",
+        "recommendation": "Review header policies and measure the approved deployment separately; static absence alone is not proof of runtime vulnerability.",
+        "evidenceIds": [
+          "15c92fb9-69c9-4072-8305-7b364c25e3c9"
+        ]
+      },
+      {
+        "id": "7b1213d4-c2df-4930-ac59-408ac9542127",
+        "title": "vercel_api_routing",
+        "summary": "An unconditional SPA catch-all precedes any recognized API rewrite in the submitted configuration.",
+        "recommendation": "Exclude /api and /api/* from the SPA fallback; configure only a separately verified backend origin.",
+        "evidenceIds": [
+          "15c92fb9-69c9-4072-8305-7b364c25e3c9"
+        ]
+      }
+    ],
+    "limitations": [
+      "Static inspection of operator-submitted vercel.json only.",
+      "No deployed route, runtime header, external asset ownership or remote provider was verified.",
+      "Review records a separate credential holder's human-review attestation; identity is not independently verified.",
+      "No payments, network scans or external connector writes."
+    ],
+    "generatedAt": "2026-10-28T00:36:38.742Z",
+    "events": [
+      {
+        "at": "2026-10-28T00:31:57.147Z",
+        "role": "operator",
+        "state": "DRAFT",
+        "actorId": "test-submitter-a"
+      },
+      {
+        "at": "2026-10-28T00:34:00.400Z",
+        "role": "operator",
+        "state": "IN_REVIEW",
+        "actorId": "test-submitter-a"
+      },
+      {
+        "at": "2026-10-28T00:35:49.350Z",
+        "role": "reviewer",
+        "state": "READY_FOR_REPORT",
+        "actorId": "test-reviewer-a"
+      },
+      {
+        "at": "2026-10-28T00:36:38.733Z",
+        "role": "operator",
+        "state": "CLOSED",
+        "actorId": "test-submitter-a"
+      }
+    ],
+    "results": [
+      {
+        "checkId": "vercel_api_routing",
+        "outcome": "observed",
+        "summary": "An unconditional SPA catch-all precedes any recognized API rewrite in the submitted configuration.",
+        "recommendation": "Exclude /api and /api/* from the SPA fallback; configure only a separately verified backend origin."
+      },
+      {
+        "checkId": "vercel_security_headers",
+        "outcome": "observed",
+        "summary": "Global nonempty header declarations absent from supplied config: content-security-policy, x-content-type-options. Runtime headers were not measured.",
+        "recommendation": "Review header policies and measure the approved deployment separately; static absence alone is not proof of runtime vulnerability."
+      }
+    ]
+  }
+}

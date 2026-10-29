@@ -1,0 +1,38 @@
+{
+  "recordedAt": "2026-10-27T00:21:29.848Z",
+  "command": "pnpm audit --json",
+  "exit": 1,
+  "vulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 1,
+    "high": 3,
+    "critical": 0
+  },
+  "findings": [
+    {
+      "package": "decode-uri-component",
+      "id": "GHSA-vcc3-ghjq-m6fr",
+      "severity": "moderate",
+      "patched": ">=0.5.0"
+    },
+    {
+      "package": "node-forge",
+      "id": "GHSA-86w9-cpqp-85rv",
+      "severity": "high",
+      "patched": "<0.0.0"
+    },
+    {
+      "package": "http-cache-semantics",
+      "id": "GHSA-ch52-4w7c-c8xp",
+      "severity": "high",
+      "patched": "<0.0.0"
+    },
+    {
+      "package": "zod",
+      "id": "GHSA-mrhx-c7xc-m3w5",
+      "severity": "high",
+      "patched": ">=4.6.6"
+    }
+  ]
+}

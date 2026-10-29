@@ -1,0 +1,225 @@
+{
+  "generatedAt": "2026-10-27T00:26:53.790Z",
+  "candidateSource": "30bdd5cd3b52697f10c0181ab019b79d8282b579",
+  "corporateSource": "e6a52733ffbf40347dec85cf09e112c71a1c8c71",
+  "testDataOnly": true,
+  "privateFixtureValuesChecked": 58,
+  "privateKeysAndDumpsExcluded": true,
+  "records": [
+    {
+      "file": "base-images.json",
+      "bytes": 824,
+      "sha256": "1430057606f544b2b48ea3ed3036ccc68ebf682835b0dfd86813089b1c96e011"
+    },
+    {
+      "file": "checkout-proof.json",
+      "bytes": 429,
+      "sha256": "2d680532107ce873d8fff61ab57ee5137a2a33be47ac818d24a863ba794cde43"
+    },
+    {
+      "file": "ci/portable-harness-ready-jobs-40425879677.json",
+      "bytes": 3631,
+      "sha256": "9137ad42f4fc2b5ba8e0244820ab2cda498c245572b0317f638cce8a12988189"
+    },
+    {
+      "file": "ci/portable-harness-ready-jobs-40425879708.json",
+      "bytes": 3172,
+      "sha256": "dd087ac1625ea9d59a440dc88f2b63888d8b5c6787f8d40427cb19ca35509742"
+    },
+    {
+      "file": "ci/portable-harness-ready-jobs-40425879827.json",
+      "bytes": 21717,
+      "sha256": "037aefaddf3e29c41a00cc2a84732a657a9ff7f6450526f1e4eb446d4bd232db"
+    },
+    {
+      "file": "ci/portable-harness-ready-jobs-40425879936.json",
+      "bytes": 3651,
+      "sha256": "243aa6ac78a0a822fc5493611a90efb5d9303b521e8fb79923ff64bfc0da9bdf"
+    },
+    {
+      "file": "corporate-ci.json",
+      "bytes": 2406,
+      "sha256": "43b3fe969ba083ba582e53a7d7b6bd6650daf0b71f6e81c568b94251e3b77b47"
+    },
+    {
+      "file": "docker/portable-acceptance.json",
+      "bytes": 1918,
+      "sha256": "d51f2d8de1fef06139be0eb09daeb7ea7a4b9c1f1cac6d979962145a686ab09d"
+    },
+    {
+      "file": "docker/portable-report.json",
+      "bytes": 3398,
+      "sha256": "f9d9283fc0c0a5eb70ac7e2e0872bd28ed380ffa46848760288d28d74c2a501c"
+    },
+    {
+      "file": "docker/portable-restart.json",
+      "bytes": 313,
+      "sha256": "3798585cefb66e050694faa11aec7e1dd8fb59b6fcda6135bf2084007bb5f31b"
+    },
+    {
+      "file": "engineering-ci.json",
+      "bytes": 14383,
+      "sha256": "1586acab719b101443952a338d913fedc053c75ca7fcf8b75dfaff0b033206f1"
+    },
+    {
+      "file": "logs/corporate-build.log.gz",
+      "bytes": 377,
+      "sha256": "c19d5035c273c3b6c1c1bd516cbf8ffc9a7e627c47805b8a3c667012ea4e8564"
+    },
+    {
+      "file": "logs/corporate-test-ecosystem.log.gz",
+      "bytes": 511,
+      "sha256": "41b502fad9800b41969c8f1254fe5a5759d29d999ae11de650cf8b278ff50af9"
+    },
+    {
+      "file": "logs/corporate-test-enterprise-agent-api.log.gz",
+      "bytes": 203,
+      "sha256": "f82f57bb31df87ecabfd377746efd0aac71fe69d005a5a4f11a4727f8b2becd8"
+    },
+    {
+      "file": "logs/corporate-test-gx-mcp.log.gz",
+      "bytes": 173,
+      "sha256": "044bfcb58b30192d0c2a3360a5c28c9ac3e22e5325513bf1df6e8121cae6c7e4"
+    },
+    {
+      "file": "logs/corporate-test-gx.log.gz",
+      "bytes": 208,
+      "sha256": "035b936256b9d545b9db09ad42934a359b141f9320f241a4dbe8ddf512447bc3"
+    },
+    {
+      "file": "logs/corporate-test-launch.log.gz",
+      "bytes": 166,
+      "sha256": "a74dd055096e138ea1f196826e43cd77f2dd393875f310c066259f7ed58b504a"
+    },
+    {
+      "file": "logs/final-source-lint.log.gz",
+      "bytes": 91,
+      "sha256": "c670435fd0be0d86679f3d7c24b12500aaa8356eb1094aa8ce2fb90d1be30ea3"
+    },
+    {
+      "file": "logs/first-apiBuild.log.gz",
+      "bytes": 266,
+      "sha256": "49f23a737d70592e01d63aa4310daae16c4b2b3d5cdfea850f3b924dffcb8560"
+    },
+    {
+      "file": "logs/first-tests.log.gz",
+      "bytes": 1688,
+      "sha256": "ac7b57b96aa798126b04a0d8e79955a5e7728ca0bf766b1ad0d8e7ba869b7503"
+    },
+    {
+      "file": "logs/first-testTypes.log.gz",
+      "bytes": 461,
+      "sha256": "471ab67b30094e7ecacc700383f67a714478565a9ae1231f4ea2439440945ced"
+    },
+    {
+      "file": "logs/fixed-testTypes.log.gz",
+      "bytes": 185,
+      "sha256": "23a2ce974455e15c1f44b381bc4bfec28bc6388e2aa20a7a0d54a556a717090c"
+    },
+    {
+      "file": "logs/native1.log.gz",
+      "bytes": 338,
+      "sha256": "515c5612de1a788cbf344ed871905952e5f9d2aa8f62517a7b76b33532bae440"
+    },
+    {
+      "file": "logs/native3.log.gz",
+      "bytes": 1114,
+      "sha256": "ef3516f2f404abd41b7fa4b58bf15ee838d65d01f0d6a1520cbfa67319d52d21"
+    },
+    {
+      "file": "logs/native4.log.gz",
+      "bytes": 261,
+      "sha256": "1b0dc760add335ab9317aaa8afec904f7233bfbf4ebf171b372bbf1fa26313d6"
+    },
+    {
+      "file": "logs/native5.log.gz",
+      "bytes": 1210,
+      "sha256": "5a15f86005e364be6816d29105068e6a3be08628b38cf56077b9203444f205b3"
+    },
+    {
+      "file": "logs/portable-dashboardBuild.log.gz",
+      "bytes": 1055,
+      "sha256": "e9144994e43513a3bf467ff697f39ee8125022719a4234e76a5142afe9c0c591"
+    },
+    {
+      "file": "logs/portable-harness-ready-job-121931386228.log.gz",
+      "bytes": 9152,
+      "sha256": "5e2aba7209c9bf3bc8b54ed9669c72c64c8c3ec80fb411be6a635d3bedda97a9"
+    },
+    {
+      "file": "logs/portable-harness-ready-job-121931387267.log.gz",
+      "bytes": 12951,
+      "sha256": "f00af76a1c363d71300f3b21ef8c23d9a06cf5c47631ac0bfd61e64788010e9b"
+    },
+    {
+      "file": "logs/portable-harness-ready-job-121931387330.log.gz",
+      "bytes": 4719,
+      "sha256": "57ca8adb7f00b5f6a23a7f6ffe28bd376efa3f9b52b72da470db172178f524e8"
+    },
+    {
+      "file": "logs/portable-harness-ready-job-121931387475.log.gz",
+      "bytes": 9530,
+      "sha256": "0df3d22b997cb01878813f671ef1ce32d8a322167bd27cd099974eb80a33051b"
+    },
+    {
+      "file": "logs/portable-harness-ready-job-121931387497.log.gz",
+      "bytes": 9024,
+      "sha256": "d79229d3b215ddd8f77b9f37b2c3ed2eaa57dcd9c819332b82da48c79d73333f"
+    },
+    {
+      "file": "logs/portable-harness-ready-job-121931387711.log.gz",
+      "bytes": 17368,
+      "sha256": "97f59650b4232bd2ed61314d3294ebd8e8d6b742a2846ef2de577b3662f8b039"
+    },
+    {
+      "file": "logs/portable-harness-ready-job-121931388272.log.gz",
+      "bytes": 5601,
+      "sha256": "cb06e93fbd2ab8778b66f6ebe9b5516ffe4d48ef64de29bb70bceab7499d2a3c"
+    },
+    {
+      "file": "logs/portable-types.log.gz",
+      "bytes": 262,
+      "sha256": "be40df4f91efed2e20f2ea41a61b5d90faf893ea5e668da3b7d4dee684c20327"
+    },
+    {
+      "file": "native/portable-acceptance.json",
+      "bytes": 1909,
+      "sha256": "d863f7becc72ac1e6274c60e35969050adbe8e59dbd1323d94961c05d03f7efd"
+    },
+    {
+      "file": "native/portable-report.json",
+      "bytes": 3398,
+      "sha256": "a1f8c5fd4ed3f58e097af480b80b8288dce4c4f5acad9edaa86cd73a2b0859ae"
+    },
+    {
+      "file": "native/portable-restart.json",
+      "bytes": 359,
+      "sha256": "66b493eae443a02d915fd86dfa1938a7d1dbffb66f8b41f48180c8ca25ac7581"
+    },
+    {
+      "file": "runtime/dedicated-runtime.cdx.json",
+      "bytes": 62511,
+      "sha256": "f9539b09a50722a6b5c47cd3c337dc7d656b59f511d43a647c4d6d7df4266546"
+    },
+    {
+      "file": "runtime/dependency-paths.json",
+      "bytes": 10849,
+      "sha256": "350d55fc3d83469b476ba336e32d4abe3e5e3b3ea90f1e2a751d4dd8026d3fa0"
+    },
+    {
+      "file": "runtime/runtime-surface.json",
+      "bytes": 84746,
+      "sha256": "59efd8ed0cb47972219b7c857548b282b3f3a5de98893beaa638f498ac8e688a"
+    },
+    {
+      "file": "workspace-audit-summary.json",
+      "bytes": 765,
+      "sha256": "dfa60b2654900ed33bdebcc8aec353bea56703a86cf5967eaee9473faf158118"
+    },
+    {
+      "file": "workspace-audit.json.gz",
+      "bytes": 2674,
+      "sha256": "b4fccba26a087d57af21181071d60332834b034aaf194cee304c9e81ee8f9327"
+    }
+  ]
+}

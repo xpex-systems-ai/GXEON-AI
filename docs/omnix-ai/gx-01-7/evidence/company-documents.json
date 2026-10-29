@@ -1,0 +1,92 @@
+{
+  "queriedAt": "2026-10-25T00:14:42.369Z",
+  "readOnly": true,
+  "rows": [
+    {
+      "file": "docs/ENTERPRISE_AGENT_API.md",
+      "gitBlob": "525682a5de0b65810d11bebe910203129d5bbc05",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/blob/main/docs/ENTERPRISE_AGENT_API.md",
+      "sha256": "fe74ad33f8c61489df98878e1a1ed5d301f11a3d689fc987710532e60bea6881",
+      "bytes": 3492,
+      "observedLines": [
+        "# XPeX Enterprise Agent API — V1",
+        "## Mission",
+        "## Public architecture",
+        "## Public endpoints",
+        "- REST discovery: `https://xpex-systems-ai.vercel.app/api/agent-api`",
+        "- Enterprise MCP: `https://xpex-systems-ai.vercel.app/api/mcp/enterprise`",
+        "## Enterprise MCP tools",
+        "## What it distributes",
+        "## What makes it different",
+        "## No silent lead harvesting",
+        "## Truth rules",
+        "## Distribution strategy",
+        "## Human mission"
+      ]
+    },
+    {
+      "file": "docs/GX_KNOWLEDGE_PLANE.md",
+      "gitBlob": "994c81c2b0fe196ca1167dca5a7095f84ed33a7b",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/blob/main/docs/GX_KNOWLEDGE_PLANE.md",
+      "sha256": "e5de254b7ad04351d83466ff033afe9bd9386ffd7aff464f1d198896bf8dbadd",
+      "bytes": 2438,
+      "observedLines": [
+        "# GX Ecosystem Knowledge Plane — V1",
+        "## What “neural transfer” means in XPeX",
+        "## System Intelligence Pages",
+        "- GXEON Wallet Command Center",
+        "- GXEON Audit OS",
+        "## Knowledge Graph",
+        "## GX knowledge modes",
+        "### Public GX",
+        "### Private/operator GX",
+        "## Truth boundary"
+      ]
+    },
+    {
+      "file": "docs/company/product-map.md",
+      "gitBlob": "2983c10f66407aedb5c35c6b7cea2fe6cd8fa8be",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/blob/main/docs/company/product-map.md",
+      "sha256": "e7d0be3ab672803b56b3d101399a4299a7a898dfa53e78ed3e8d51c1738c51f7",
+      "bytes": 1957,
+      "observedLines": [
+        "# Product Map V1",
+        "## XPeX Systems AI",
+        "### Core Products",
+        "#### XPeX Systems Command",
+        "#### GXEON",
+        "#### NEXARA Intelligence Fabric",
+        "### Business Verticals",
+        "#### XPeX Academy",
+        "#### XPeX Revenue",
+        "#### XPeX Web3",
+        "#### XPeX Media / Creator",
+        "## Portfolio admission rule",
+        "## Initial portfolio target"
+      ]
+    },
+    {
+      "file": "docs/TECHNOLOGY_MAP.md",
+      "gitBlob": "926723a1932baeb42fe00d7a9c731ad9fca423f1",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/blob/main/docs/TECHNOLOGY_MAP.md",
+      "sha256": "b30a2a53ad23e11482a34d27d3a1bf6405d659bf670045005e2e6402984b4491",
+      "bytes": 1381,
+      "observedLines": [
+        "# XPeX Technology Map",
+        "## Company-owned control layers",
+        "### XPeX Systems Command",
+        "### GXEON",
+        "### XAGF",
+        "### NEXARA",
+        "## Technology ecosystems",
+        "### Source & software lifecycle",
+        "### Cloud/runtime",
+        "### Data",
+        "### AI / model ecosystems",
+        "## Relationship rule",
+        "## Long-term architecture",
+        "GXEON Agents"
+      ]
+    }
+  ]
+}

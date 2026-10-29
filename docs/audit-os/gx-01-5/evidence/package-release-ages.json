@@ -1,0 +1,26 @@
+[
+  {
+    "name": "markdown-it",
+    "version": "14.3.3",
+    "published": "2026-10-16T01:47:54.675Z",
+    "source": "https://registry.npmjs.org/markdown-it"
+  },
+  {
+    "name": "linkify-it",
+    "version": "5.0.2",
+    "published": "2026-07-01T23:50:58.055Z",
+    "source": "https://registry.npmjs.org/linkify-it"
+  },
+  {
+    "name": "js-yaml",
+    "version": "4.3.2",
+    "published": "2026-08-26T20:42:48.747Z",
+    "source": "https://registry.npmjs.org/js-yaml"
+  },
+  {
+    "name": "fast-uri",
+    "version": "3.1.8",
+    "published": "2026-09-15T07:36:25.444Z",
+    "source": "https://registry.npmjs.org/fast-uri"
+  }
+]

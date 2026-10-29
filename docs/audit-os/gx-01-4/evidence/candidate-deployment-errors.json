@@ -1,0 +1,29 @@
+[
+  {
+    "id": "dpl_5BqkX14mwVQMCYFG7t1HcsvWFtTE",
+    "name": "gxeon-ai-mockup-sandbox",
+    "scope": "xpex-neural",
+    "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+    "state": "ERROR",
+    "error": "STATIC_BUILD_NO_OUT_DIR",
+    "message": "No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory."
+  },
+  {
+    "id": "dpl_F16CWUGwrDELihzKBK4Buoaz6vSs",
+    "name": "gxeon-ai",
+    "scope": "xpex-neural",
+    "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+    "state": "ERROR",
+    "error": "STATIC_BUILD_NO_OUT_DIR",
+    "message": "No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory."
+  },
+  {
+    "id": "dpl_UsCVYSCyvJMFxz18q6bDXQKUbTpx",
+    "name": "gxeon-ai-api-server",
+    "scope": "gxeon",
+    "sha": "d20e38db9dd8812d3aa7657846b738137bbfe48d",
+    "state": "ERROR",
+    "error": "STATIC_BUILD_NO_OUT_DIR",
+    "message": "No Output Directory named \"public\" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory."
+  }
+]

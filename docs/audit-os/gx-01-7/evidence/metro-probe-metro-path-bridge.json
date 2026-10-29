@@ -1,0 +1,37 @@
+{
+  "testData": true,
+  "repo": "GXEON-AI-gx017",
+  "mode": "Direct Expo CLI offline startup and bounded own iOS bundle request; no cache deletion",
+  "offlineEnvironmentSupported": true,
+  "expoVersion": "54.0.34",
+  "port": 18081,
+  "ownedPid": 24048,
+  "terminationScope": "Only the directly spawned CLI and its child tree; no unrelated process selected",
+  "cacheDeletionRequested": false,
+  "temporaryFilesRetained": true,
+  "startupHealthMs": 5023,
+  "previousBuildBudgetMs": 60000,
+  "exceededPreviousBudget": false,
+  "childExitCode": null,
+  "bundleResult": {
+    "status": 200,
+    "bytes": 3608265
+  },
+  "samples": [
+    {
+      "elapsedMs": 5023,
+      "127.0.0.1": {
+        "status": 200,
+        "body": "packager-status:running"
+      },
+      "localhost": {
+        "status": 200,
+        "body": "packager-status:running"
+      },
+      "[::1]": {
+        "status": 200,
+        "body": "packager-status:running"
+      }
+    }
+  ]
+}

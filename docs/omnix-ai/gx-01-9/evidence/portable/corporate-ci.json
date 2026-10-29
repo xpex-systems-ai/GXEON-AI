@@ -1,0 +1,67 @@
+{
+  "queriedAt": "2026-10-27T00:22:09.970Z",
+  "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/pull/45",
+  "head": "e6a52733ffbf40347dec85cf09e112c71a1c8c71",
+  "base": "1ab659b8044684f7ad9a93a81399582f19bd6d45",
+  "state": "open",
+  "draft": true,
+  "merged": false,
+  "checks": [
+    {
+      "name": "CodeQL",
+      "head": "e6a52733ffbf40347dec85cf09e112c71a1c8c71",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/runs/121931440144"
+    },
+    {
+      "name": "Scan for high-confidence secret patterns",
+      "head": "e6a52733ffbf40347dec85cf09e112c71a1c8c71",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/actions/runs/40425813709/job/121931167842"
+    },
+    {
+      "name": "Build corporate site",
+      "head": "e6a52733ffbf40347dec85cf09e112c71a1c8c71",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/actions/runs/40425813664/job/121931167602"
+    },
+    {
+      "name": "Test evidence and governance invariants",
+      "head": "e6a52733ffbf40347dec85cf09e112c71a1c8c71",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/actions/runs/40425813729/job/121931167446"
+    },
+    {
+      "name": "Scan tracked files for secret material",
+      "head": "e6a52733ffbf40347dec85cf09e112c71a1c8c71",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/actions/runs/40425813718/job/121931167383"
+    },
+    {
+      "name": "CodeQL / Python",
+      "head": "e6a52733ffbf40347dec85cf09e112c71a1c8c71",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/actions/runs/40425813686/job/121931167348"
+    },
+    {
+      "name": "Vercel Preview Comments",
+      "head": "e6a52733ffbf40347dec85cf09e112c71a1c8c71",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/xpex-systems-ai/runs/121931159929"
+    }
+  ],
+  "statuses": [
+    {
+      "context": "Vercel",
+      "state": "pending",
+      "url": "https://vercel.com/xpex-neural/xpex-systems-ai/CSfU2S8EwNtWKHWizJA6y76k1FEH"
+    }
+  ]
+}

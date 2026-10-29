@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-10-28T14:12:43.388Z",
+  "caseId": "285d03d1-adb2-475b-b5ce-3354af4cc153",
+  "reportId": "3d0cf524-fa4d-4b1e-ab49-4550ccdeffe2",
+  "reportSha256": "17eebed567bffb2643873896f178b7b7166b352fd504f12d45c10237a2fff403",
+  "restartApiAndPostgres": true,
+  "persistedReportUnchanged": true,
+  "sessionInvalidated": true,
+  "databaseTls": true
+}

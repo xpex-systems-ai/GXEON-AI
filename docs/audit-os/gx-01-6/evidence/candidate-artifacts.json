@@ -1,0 +1,45 @@
+{
+  "total_count": 2,
+  "artifacts": [
+    {
+      "id": 12572201312,
+      "node_id": "MDg6QXJ0aWZhY3QxMjU3MjIwMTMxMg==",
+      "name": "gx012-isolated-staging",
+      "size_in_bytes": 7116,
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/artifacts/12572201312",
+      "archive_download_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/artifacts/12572201312/zip",
+      "expired": false,
+      "digest": "sha256:6bb46da18956e9511465adbc7216fda80fb1e42f3a68432fa5fc551db8c40525",
+      "created_at": "2026-10-24T18:58:32Z",
+      "updated_at": "2026-10-24T18:58:32Z",
+      "expires_at": "2027-01-22T18:57:29Z",
+      "workflow_run": {
+        "id": 40123078306,
+        "repository_id": 1192110205,
+        "head_repository_id": 1192110205,
+        "head_branch": "codex/gxeon-audit-os-v1-gx01",
+        "head_sha": "1af24f61c376225c3e94928a1f58c59b2f7e597e"
+      }
+    },
+    {
+      "id": 12571733315,
+      "node_id": "MDg6QXJ0aWZhY3QxMjU3MTczMzMxNQ==",
+      "name": "gx01-test-evidence",
+      "size_in_bytes": 3481,
+      "url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/artifacts/12571733315",
+      "archive_download_url": "https://api.github.com/repos/xpex-systems-ai/GXEON-AI/actions/artifacts/12571733315/zip",
+      "expired": false,
+      "digest": "sha256:09757016182170698c09d0a5dff54aea00b6b74f0f5d1df4fb49f8f0a5cc2ac4",
+      "created_at": "2026-10-24T18:58:38Z",
+      "updated_at": "2026-10-24T18:58:38Z",
+      "expires_at": "2027-01-22T18:57:29Z",
+      "workflow_run": {
+        "id": 40123078306,
+        "repository_id": 1192110205,
+        "head_repository_id": 1192110205,
+        "head_branch": "codex/gxeon-audit-os-v1-gx01",
+        "head_sha": "1af24f61c376225c3e94928a1f58c59b2f7e597e"
+      }
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "testData": true,
+  "status": "PASS",
+  "generator": "orval 8.22.0",
+  "localYamlReferenceFixture": true,
+  "fixtureSha256": "73d0aba09b1f1b1ad3c6749d239afd433c4c8516c3776938706965608b1fd45e",
+  "outputSha256": "b03d0ddaa12728f968468720eece0d0c184bfade3efb10f626bc0160b405f845",
+  "generatedClientTypechecked": true,
+  "repositoryGeneratedSourcesModified": false,
+  "clean": false,
+  "externalSpecFetched": false,
+  "generatedZodSchemaTypechecked": true,
+  "generatedZodSchemaValidated": true,
+  "schemaZodVersion": "4.6.6",
+  "generatedZodSha256": "b8b45d36d95fe3916e72bf23908cec05a4952e59c584d1897d27a7321f1fd1a7"
+}

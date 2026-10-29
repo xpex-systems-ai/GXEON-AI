@@ -1,0 +1,9 @@
+FROM postgres:17-bookworm@sha256:858bb5e98eed02eb8cafbcdc007f9a65d1b613972028944a8ec2133ccaf80d27
+COPY lib/db/drizzle/0002_audit_os_schema.sql /docker-entrypoint-initdb.d/10-audit-schema.sql
+COPY --chmod=755 deploy/self-hosted/postgres-entry.sh /usr/local/bin/omnix-postgres-entry
+COPY --chmod=755 deploy/self-hosted/install-tls.sh /usr/local/bin/omnix-install-tls
+COPY --chmod=755 deploy/self-hosted/init-db.sh /docker-entrypoint-initdb.d/20-audit-grants.sh
+COPY --chmod=755 deploy/self-hosted/install-tls.sh /docker-entrypoint-initdb.d/00-audit-tls.sh
+USER postgres
+ENTRYPOINT ["/usr/local/bin/omnix-postgres-entry"]
+CMD ["postgres", "-c", "listen_addresses=*", "-c", "log_statement=none", "-c", "log_min_error_statement=panic"]

@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/middlewares/auditAccess.ts",
+    "src/routes/auditWorkflow.ts",
+    "src/services/auditWorkflowChecks.ts",
+    "src/services/auditWorkflowService.ts",
+    "src/tests/auditWorkflowDemo.ts"
+  ]
+}

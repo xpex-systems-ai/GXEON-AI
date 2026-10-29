@@ -1,0 +1,26 @@
+{
+  "queriedAt": "2026-10-28T00:44:29.864Z",
+  "repository": "xpex-systems-ai",
+  "head": "b4ab3bcba57f93410e372dfb59888131fd287236",
+  "base": "1ab659b8044684f7ad9a93a81399582f19bd6d45",
+  "draft": true,
+  "merged": false,
+  "deployments": [
+    {
+      "id": 7374061734,
+      "sha": "b4ab3bcba57f93410e372dfb59888131fd287236",
+      "ref": "b4ab3bcba57f93410e372dfb59888131fd287236",
+      "environment": "Preview",
+      "states": [
+        {
+          "state": "success",
+          "environmentUrl": "https://xpex-systems-aggjdj7jx-xpex-neural.vercel.app",
+          "createdAt": "2026-10-28T00:42:10Z"
+        }
+      ]
+    }
+  ],
+  "vercelPreviewLinks": [
+    "https://xpex-systems-ai-git-codex-omnix-product-onli-bfd1db-xpex-neural.vercel.app/"
+  ]
+}

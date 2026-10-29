@@ -1,0 +1,33 @@
+{
+  "queriedAt": "2026-10-28T00:44:27.332Z",
+  "repository": "GXEON-AI",
+  "head": "670449a2d384164cedc8e0449343219fa6b3a4ba",
+  "base": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "draft": true,
+  "merged": false,
+  "deployments": [
+    {
+      "id": 7373939439,
+      "sha": "670449a2d384164cedc8e0449343219fa6b3a4ba",
+      "ref": "670449a2d384164cedc8e0449343219fa6b3a4ba",
+      "environment": "Preview – gxeon-audit-os",
+      "states": [
+        {
+          "state": "success",
+          "environmentUrl": "https://gxeon-audit-omps4v5ln-gxeon.vercel.app",
+          "createdAt": "2026-10-28T00:33:43Z"
+        }
+      ]
+    }
+  ],
+  "vercelPreviewLinks": [
+    "https://ai-ia-git-codex-gxeon-audit-os-v1-gx01-xpex-neural.vercel.app/",
+    "https://gxeon-ai-aoo-git-codex-gx-395c1b-junior-senas-projects-4226acc3.vercel.app/",
+    "https://gxeon-ai-api-server-git-codex-gxeon-audit-os-28049f-xpex-neural.vercel.app/",
+    "https://gxeon-ai-api-server-6-git-4c23b5-junior-senas-projects-4226acc3.vercel.app/",
+    "https://gxeon-ai-ia-git-codex-gxeon-audit-os-v1-gx01-xpex-neural.vercel.app/",
+    "https://gxeon-ai01-git-codex-gxeon-audit-os-v1-gx01-xpex-neural.vercel.app/",
+    "https://gxeon-ail-git-codex-gxeon-audit-os-v1-gx01-xpex-neural.vercel.app/",
+    "https://gxeon-audit-os-git-codex-gxeon-audit-os-v1-gx01-gxeon.vercel.app/"
+  ]
+}

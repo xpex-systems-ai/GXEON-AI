@@ -1,0 +1,35 @@
+# GX-01.8 — inventário read-only de projetos e contextos
+
+Data-base: 25/10/2026. Candidato de código: `d71996bc73502f6c2352c0c687ef1cba90012ea4`. PR [#456](https://github.com/xpex-systems-ai/GXEON-AI/pull/456) DRAFT. Preparação de engenharia; liberação global NO-GO.
+
+Consulta autenticada somente de metadados. Escopos Vercel acessíveis: xpex-neural(62), gxeon(16), junior-senas-projects-4226 acc 3(26), paginação concluída:104 entradas. Selecionadas 14 com metadados de Git do repositório público autorizado; 90 de outros produtos omitidas de propósito, sem investigar dados/env. Contagens de projetos não são os 42 contextos de status da PR. [Registro estruturado](evidence/provider-projects.json) com IDs/datas/URL/SHA/região; nenhuma variável ou valor secreto consultado.
+
+**Projeto canônico externo: nenhum escolhido ou aprovado.** Classificação abaixo é provisória para decisão do proprietário. Todos têm último Git conhecido no SHA 1 dc 8 e 920 a 7 d 47 d 315 c 9482002 ff 9434667 b 596 bf, branch codex/gxeon-audit-os-v 1-gx 01, repo xpex-systems-ai/GXEON-AI. Isso não os associa ao futuro HEADGX 018. Root/output não são retornados pelo conector, em todas as 14 linhas; não significam configuração vazia/raiz. Owner/titularidade/permissões e custos permanecem NOT VERIFIED. target=null não prova ambiente de produção ou preview; todos precisam de confirmação.
+
+| Projeto / Project ID | Scope | Último deployment / estado / erro | Região conhecida | Classe e próximo passo |
+| --- | --- | --- | --- | --- |
+| gxeon-ai-gxeon-dashboard / prj_UBNjAlz7cWsPvNDILUk66440E7nn | team_rvTe2wbTmDcXGPMIMXC8mgRX | dpl_5Csrd39WRaEMVyheexXgCys3sWYU / ERROR / STATIC_BUILD_NO_OUT_DIR | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ail / prj_RYR5u33XB5nE0UkSwyAGKSQft1gZ | team_rvTe2wbTmDcXGPMIMXC8mgRX | dpl_CT4APnLg2xt1BratDRZJwbiSEGob / READY / sem código de erro retornado | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai-api-server / prj_jpULAotL78AU5SlOd5GcyBTI8UWO | team_rvTe2wbTmDcXGPMIMXC8mgRX | dpl_GC7366EkUGfRwZkTy41svRmG7E36 / READY / sem código de erro retornado | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai-ia / prj_hODQYobRkk4O6rpZkGZgNkFrNwA4 | team_rvTe2wbTmDcXGPMIMXC8mgRX | dpl_DB7HtPAQBruPKsTPUC8icPjrBe1H / READY / sem código de erro retornado | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai 01 / prj_EMDNZwGOLK3bdtOHcVecT84xp4Dp | team_rvTe2wbTmDcXGPMIMXC8mgRX | dpl_9Vo8qs5JfN3QuD7G1AoTwfgsmzf6 / READY / sem código de erro retornado | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai / prj_wu5d2rPcPUhdhIQ01P0Y4BddaJT2 | team_rvTe2wbTmDcXGPMIMXC8mgRX | dpl_7e369WUFRzvYFe3hDqJboaBwNRa9 / ERROR / STATIC_BUILD_NO_OUT_DIR | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai-api-server-sxv 4 / prj_AqiT3Idishevz42J1s9E5LZ3SA85 | team_rvTe2wbTmDcXGPMIMXC8mgRX | dpl_2TTf7nhhCBRVkTgwUcLYhj86maFq / ERROR / STATIC_BUILD_NO_OUT_DIR | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai-mockup-sandbox / prj_mo5cvJX4AXuPNsYXtQO3zYARLsLh | team_rvTe2wbTmDcXGPMIMXC8mgRX | dpl_5h7uFQcPsvFDwP8tXuTLg8DoM4DU / ERROR / STATIC_BUILD_NO_OUT_DIR | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-audit-os / prj_owdXFSlvK1GBrWVuYCqeHpTlYjP4 | team_qQ2k1diGpBITcKNCR5eLrVRB | dpl_7DtRiHF82tEfSV5zFCNENhRzJqxm / READY / sem código de erro retornado | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai-api-server / prj_xnxV5ZVur0Sv7f1uvZHADP358nHf | team_qQ2k1diGpBITcKNCR5eLrVRB | dpl_7sus4AbzdTR4ez4TRDc3doLVEBVe / ERROR / STATIC_BUILD_NO_OUT_DIR | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai-api-server-611 a / prj_STlhUAtwut0oWBsWD5PjmCFLhjBq | team_DqK4uMQ3idpdQY7RF42uaGeV | dpl_7gyUm7fZsAWFANBcjLdqB99cTGbK / READY / sem código de erro retornado | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai-aoo / prj_F3OFtryPk4YmYwXc3zEJkbZTRZkv | team_DqK4uMQ3idpdQY7RF42uaGeV | dpl_HcyYysfo4V5pHjG3MKrHpQM69BEm / READY / sem código de erro retornado | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai-api-server / prj_R2ILQClNw9Zk8XCbj0EalzflwtVO | team_DqK4uMQ3idpdQY7RF42uaGeV | dpl_3gPRPnLiwMx4SkjvxL5bAs569E9P / READY / sem código de erro retornado | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+| gxeon-ai-a / prj_kssB4fuFxooxei5CYvt091ihp77z | team_DqK4uMQ3idpdQY7RF42uaGeV | dpl_EefJnToNcvwHRd6KBDF6CFfMnaXc / ERROR / STATIC_BUILD_NO_OUT_DIR | iad 1 | Legado/sandbox provisório; owner confirma finalidade, root/output, titularidade e custo |
+
+Seis deployments latest têm ERROR/STATIC_BUILD_NO_OUT_DIR, oito READY. READY é estado de build do provedor, não demonstra API JSON, TLS, DB, auth ou exportação. Causa confirmada nas seis: diretório de saída esperado não encontrado pelo build da plataforma. Root/output exatos não retornados: não atribuir causa adicional nem afirmar correção sem acesso autorizado à configuração e execução específica. A causa histórica de HTML/404 do app é separada: fallback SPA capturava /api e ausência de backend verificável; ver GX01 docs. Um domínio genérico ou teste local não fecha nenhum projeto externo.
+
+| Outra superfície | Observação real | Ação proposta / permissão |
+| --- | --- | --- |
+| Railway | list_projects exige reautenticação; projetos/conta/plano/região não retornados | owner restabelece acesso se desejar inventário; sem provisionar ou solicitar segredo em conversa |
+| Netlify | integrações/status existentes, sem conector de inventário suficiente nesta sessão | INTEGRAÇÃO NÃO IDENTIFICADA; owner informa projeto/conta/purpose e autoriza leitura específica; nenhuma alteração/desativação |
+| 90 outros projetos Vercel | lista contada, detalhes de outros produtos omitidos | PROJETO DE OUTRO PRODUTO; fora do escopo, preservar |
+| Status inicial PR | 42 contextos combinados distintos,30 failure/12 success; default 30 mostra 24 failure/6 success; 29 check-runs são outra coleção | consultar novamente no HEAD final e registrar separadamente; não tratar 42 como 42 projetos |
+
+Owner indicado: xpex-systems-ai, sujeito à confirmação por projeto. Decisão solicitada: aprovar um novo projeto dedicado ou nomear exatamente o existente e sua finalidade, confirmar conta/root/output/região/plano/orçamento/retention. Não excluir, transferir, reconfigurar, desativar checks nem alterar billing. Push autorizado da PR pode acionar integrações Git já existentes; não houve comando de deploy ou mudança de provedor pelo executor. Nenhum contexto externo foi declarado resolvido.

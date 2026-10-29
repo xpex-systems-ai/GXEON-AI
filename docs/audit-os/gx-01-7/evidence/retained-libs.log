@@ -1,0 +1,6 @@
+
+> workspace@0.0.0 build:libs [WORKSPACE]\GXEON-AI-gx017
+> pnpm --filter @workspace/api-zod run build && pnpm --filter @workspace/api-client-react run build
+
+$ tsc -p tsconfig.json
+$ tsc -p tsconfig.json

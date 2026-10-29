@@ -1,0 +1,13 @@
+{
+  "queriedAt": "2026-10-28T00:56:36.708Z",
+  "head": "30e0b00a219eb4c45d4fd57064b92f1165b1c739",
+  "base": "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+  "testedCheckout": "ebe8301c0a3e0b0957f41186baac85520f954ddd",
+  "parents": [
+    "dbc29fff9a2c55487f85a83db597f41c493af7a8",
+    "30e0b00a219eb4c45d4fd57064b92f1165b1c739"
+  ],
+  "sourceDirty": false,
+  "syntheticPullRequestMerge": true,
+  "actualPullRequestMerged": false
+}

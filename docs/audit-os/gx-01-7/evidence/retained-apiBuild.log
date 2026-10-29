@@ -1,0 +1,13 @@
+
+> @workspace/api-server@0.0.0 build [WORKSPACE]\GXEON-AI-gx017\artifacts\api-server
+> node ./build.mjs
+
+
+  dist\index.mjs          3.7mb
+  dist\audit-pilot.mjs    2.1mb
+  dist\pino-worker.mjs  153.5kb
+  dist\pino-file.mjs    142.2kb
+  dist\pino-pretty.mjs  115.1kb
+  ...and 7 more output files...
+
+Done in 18987ms

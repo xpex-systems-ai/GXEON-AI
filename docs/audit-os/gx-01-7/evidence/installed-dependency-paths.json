@@ -1,0 +1,924 @@
+{
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 1,
+      "moderate": 4,
+      "high": 5,
+      "critical": 0
+    },
+    "dependencies": 1183,
+    "devDependencies": 0,
+    "optionalDependencies": 0,
+    "totalDependencies": 1183
+  },
+  "records": [
+    {
+      "advisory": "GHSA-w5hq-g745-h8pq",
+      "severity": "moderate",
+      "module": "uuid",
+      "version": "7.0.3",
+      "patched": ">=11.1.1",
+      "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/config-plugins>xcode>uuid",
+      "locations": [
+        {
+          "name": "@expo/cli",
+          "version": "54.0.23",
+          "manifest": "node_modules/.pnpm/@expo+cli@54.0.23_expo-rout_ff91a881d4ae11d6fdae385494ac65cd/node_modules/@expo/cli/package.json",
+          "main": "build/bin/cli",
+          "dependencies": {
+            "@0no-co/graphql.web": "^1.0.8",
+            "@expo/code-signing-certificates": "^0.0.6",
+            "@expo/config": "~12.0.13",
+            "@expo/config-plugins": "~54.0.4",
+            "@expo/devcert": "^1.2.1",
+            "@expo/env": "~2.0.8",
+            "@expo/image-utils": "^0.8.8",
+            "@expo/json-file": "^10.0.8",
+            "@expo/metro": "~54.2.0",
+            "@expo/metro-config": "~54.0.14",
+            "@expo/osascript": "^2.3.8",
+            "@expo/package-manager": "^1.9.10",
+            "@expo/plist": "^0.4.8",
+            "@expo/prebuild-config": "^54.0.8",
+            "@expo/schema-utils": "^0.1.8",
+            "@expo/spawn-async": "^1.7.2",
+            "@expo/ws-tunnel": "^1.0.1",
+            "@expo/xcpretty": "^4.3.0",
+            "@react-native/dev-middleware": "0.81.5",
+            "@urql/core": "^5.0.6",
+            "@urql/exchange-retry": "^1.3.0",
+            "accepts": "^1.3.8",
+            "arg": "^5.0.2",
+            "better-opn": "~3.0.2",
+            "bplist-creator": "0.1.0",
+            "bplist-parser": "^0.3.1",
+            "chalk": "^4.0.0",
+            "ci-info": "^3.3.0",
+            "compression": "^1.7.4",
+            "connect": "^3.7.0",
+            "debug": "^4.3.4",
+            "env-editor": "^0.4.1",
+            "expo-server": "^1.0.5",
+            "freeport-async": "^2.0.0",
+            "getenv": "^2.0.0",
+            "glob": "^13.0.0",
+            "lan-network": "^0.1.6",
+            "minimatch": "^9.0.0",
+            "node-forge": "^1.3.3",
+            "npm-package-arg": "^11.0.0",
+            "ora": "^3.4.0",
+            "picomatch": "^3.0.1",
+            "pretty-bytes": "^5.6.0",
+            "pretty-format": "^29.7.0",
+            "progress": "^2.0.3",
+            "prompts": "^2.3.2",
+            "qrcode-terminal": "0.11.0",
+            "require-from-string": "^2.0.2",
+            "requireg": "^0.2.2",
+            "resolve": "^1.22.2",
+            "resolve-from": "^5.0.0",
+            "resolve.exports": "^2.0.3",
+            "semver": "^7.6.0",
+            "send": "^0.19.0",
+            "slugify": "^1.3.4",
+            "source-map-support": "~0.5.21",
+            "stacktrace-parser": "^0.1.10",
+            "structured-headers": "^0.4.1",
+            "tar": "^7.5.2",
+            "terminal-link": "^2.1.1",
+            "undici": "^6.18.2",
+            "wrap-ansi": "^7.0.0",
+            "ws": "^8.12.1"
+          },
+          "peers": {
+            "expo": "*",
+            "expo-router": "*",
+            "react-native": "*"
+          }
+        },
+        {
+          "name": "@expo/config-plugins",
+          "version": "54.0.4",
+          "manifest": "node_modules/.pnpm/@expo+config-plugins@54.0.4/node_modules/@expo/config-plugins/package.json",
+          "main": "build/index.js",
+          "exports": {
+            ".": {
+              "types": "./build/index.d.ts",
+              "default": "./build/index.js"
+            },
+            "./build/android": {
+              "types": "./build/android/index.d.ts",
+              "default": "./build/android/index.js"
+            },
+            "./build/ios": {
+              "types": "./build/ios/index.d.ts",
+              "default": "./build/ios/index.js"
+            },
+            "./build": {
+              "types": "./build/index.d.ts",
+              "default": "./build/index.js"
+            },
+            "./build/*.js": "./build/*.js",
+            "./build/*": "./build/*.js",
+            "./package.json": "./package.json"
+          },
+          "dependencies": {
+            "@expo/config-types": "^54.0.10",
+            "@expo/json-file": "~10.0.8",
+            "@expo/plist": "^0.4.8",
+            "@expo/sdk-runtime-versions": "^1.0.0",
+            "chalk": "^4.1.2",
+            "debug": "^4.3.5",
+            "getenv": "^2.0.0",
+            "glob": "^13.0.0",
+            "resolve-from": "^5.0.0",
+            "semver": "^7.5.4",
+            "slash": "^3.0.0",
+            "slugify": "^1.6.6",
+            "xcode": "^3.0.1",
+            "xml2js": "0.6.0"
+          }
+        },
+        {
+          "name": "xcode",
+          "version": "3.0.1",
+          "manifest": "node_modules/.pnpm/xcode@3.0.1/node_modules/xcode/package.json",
+          "main": "index.js",
+          "dependencies": {
+            "simple-plist": "^1.1.0",
+            "uuid": "^7.0.3"
+          }
+        },
+        {
+          "name": "uuid",
+          "version": "7.0.3",
+          "manifest": "node_modules/.pnpm/uuid@7.0.3/node_modules/uuid/package.json",
+          "main": "dist/index.js"
+        }
+      ]
+    },
+    {
+      "advisory": "GHSA-w5hq-g745-h8pq",
+      "severity": "moderate",
+      "module": "uuid",
+      "version": "3.4.0",
+      "patched": ">=11.1.1",
+      "title": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/ngrok>uuid",
+      "locations": [
+        {
+          "name": "@expo/ngrok",
+          "version": "4.1.3",
+          "manifest": "node_modules/.pnpm/@expo+ngrok@4.1.3/node_modules/@expo/ngrok/package.json",
+          "main": "index.js",
+          "dependencies": {
+            "@expo/ngrok-bin": "2.3.42",
+            "got": "^11.5.1",
+            "uuid": "^3.3.2",
+            "yaml": "^1.10.0"
+          }
+        },
+        {
+          "name": "uuid",
+          "version": "3.4.0",
+          "manifest": "node_modules/.pnpm/uuid@3.4.0/node_modules/uuid/package.json"
+        }
+      ]
+    },
+    {
+      "advisory": "GHSA-g7r4-m6w7-qqqr",
+      "severity": "low",
+      "module": "esbuild",
+      "version": "0.27.3",
+      "patched": ">=0.28.1",
+      "title": "esbuild allows arbitrary file read when running the development server on Windows",
+      "chain": "artifacts__api-server>esbuild",
+      "locations": [
+        {
+          "name": "esbuild",
+          "version": "0.27.3",
+          "manifest": "node_modules/.pnpm/esbuild@0.27.3/node_modules/esbuild/package.json",
+          "main": "lib/main.js"
+        }
+      ]
+    },
+    {
+      "advisory": "GHSA-vcc3-ghjq-m6fr",
+      "severity": "moderate",
+      "module": "decode-uri-component",
+      "version": "0.2.2",
+      "patched": ">=0.5.0",
+      "title": "decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input",
+      "chain": "artifacts__gxeon-dashboard-mobile>expo-router>query-string>decode-uri-component",
+      "locations": [
+        {
+          "name": "expo-router",
+          "version": "6.0.23",
+          "manifest": "node_modules/.pnpm/expo-router@6.0.23_@types+r_04f3cfea3f36377152fc4ab423a44bfe/node_modules/expo-router/package.json",
+          "main": "build/index",
+          "dependencies": {
+            "@expo/metro-runtime": "^6.1.2",
+            "@expo/schema-utils": "^0.1.8",
+            "@radix-ui/react-slot": "1.2.0",
+            "@radix-ui/react-tabs": "^1.1.12",
+            "@react-navigation/bottom-tabs": "^7.4.0",
+            "@react-navigation/native": "^7.1.8",
+            "@react-navigation/native-stack": "^7.3.16",
+            "client-only": "^0.0.1",
+            "debug": "^4.3.4",
+            "escape-string-regexp": "^4.0.0",
+            "expo-server": "^1.0.5",
+            "fast-deep-equal": "^3.1.3",
+            "invariant": "^2.2.4",
+            "nanoid": "^3.3.8",
+            "query-string": "^7.1.3",
+            "react-fast-compare": "^3.2.2",
+            "react-native-is-edge-to-edge": "^1.1.6",
+            "semver": "~7.6.3",
+            "server-only": "^0.0.1",
+            "sf-symbols-typescript": "^2.1.0",
+            "shallowequal": "^1.1.0",
+            "use-latest-callback": "^0.2.1",
+            "vaul": "^1.1.2"
+          },
+          "peers": {
+            "@expo/metro-runtime": "^6.1.2",
+            "@react-navigation/drawer": "^7.5.0",
+            "@testing-library/react-native": ">= 12.0.0",
+            "expo": "*",
+            "expo-constants": "^18.0.13",
+            "expo-linking": "^8.0.11",
+            "react": "*",
+            "react-dom": "*",
+            "react-native": "*",
+            "react-native-gesture-handler": "*",
+            "react-native-reanimated": "*",
+            "react-native-safe-area-context": ">= 5.4.0",
+            "react-native-screens": "*",
+            "react-native-web": "*",
+            "react-server-dom-webpack": "~19.0.4 || ~19.1.5 || ~19.2.4"
+          }
+        },
+        {
+          "name": "query-string",
+          "version": "7.1.3",
+          "manifest": "node_modules/.pnpm/query-string@7.1.3/node_modules/query-string/package.json",
+          "dependencies": {
+            "decode-uri-component": "^0.2.2",
+            "filter-obj": "^1.1.0",
+            "split-on-first": "^1.0.0",
+            "strict-uri-encode": "^2.0.0"
+          }
+        },
+        {
+          "name": "decode-uri-component",
+          "version": "0.2.2",
+          "manifest": "node_modules/.pnpm/decode-uri-component@0.2.2/node_modules/decode-uri-component/package.json"
+        }
+      ]
+    },
+    {
+      "advisory": "GHSA-5p2g-fcmc-qvqq",
+      "severity": "high",
+      "module": "image-size",
+      "version": "1.2.1",
+      "patched": ">=2.0.3",
+      "title": "image-size: JXL and HEIF parsers allow denial of service through infinite loops",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>image-size",
+      "locations": [
+        {
+          "name": "@expo/cli",
+          "version": "54.0.23",
+          "manifest": "node_modules/.pnpm/@expo+cli@54.0.23_expo-rout_ff91a881d4ae11d6fdae385494ac65cd/node_modules/@expo/cli/package.json",
+          "main": "build/bin/cli",
+          "dependencies": {
+            "@0no-co/graphql.web": "^1.0.8",
+            "@expo/code-signing-certificates": "^0.0.6",
+            "@expo/config": "~12.0.13",
+            "@expo/config-plugins": "~54.0.4",
+            "@expo/devcert": "^1.2.1",
+            "@expo/env": "~2.0.8",
+            "@expo/image-utils": "^0.8.8",
+            "@expo/json-file": "^10.0.8",
+            "@expo/metro": "~54.2.0",
+            "@expo/metro-config": "~54.0.14",
+            "@expo/osascript": "^2.3.8",
+            "@expo/package-manager": "^1.9.10",
+            "@expo/plist": "^0.4.8",
+            "@expo/prebuild-config": "^54.0.8",
+            "@expo/schema-utils": "^0.1.8",
+            "@expo/spawn-async": "^1.7.2",
+            "@expo/ws-tunnel": "^1.0.1",
+            "@expo/xcpretty": "^4.3.0",
+            "@react-native/dev-middleware": "0.81.5",
+            "@urql/core": "^5.0.6",
+            "@urql/exchange-retry": "^1.3.0",
+            "accepts": "^1.3.8",
+            "arg": "^5.0.2",
+            "better-opn": "~3.0.2",
+            "bplist-creator": "0.1.0",
+            "bplist-parser": "^0.3.1",
+            "chalk": "^4.0.0",
+            "ci-info": "^3.3.0",
+            "compression": "^1.7.4",
+            "connect": "^3.7.0",
+            "debug": "^4.3.4",
+            "env-editor": "^0.4.1",
+            "expo-server": "^1.0.5",
+            "freeport-async": "^2.0.0",
+            "getenv": "^2.0.0",
+            "glob": "^13.0.0",
+            "lan-network": "^0.1.6",
+            "minimatch": "^9.0.0",
+            "node-forge": "^1.3.3",
+            "npm-package-arg": "^11.0.0",
+            "ora": "^3.4.0",
+            "picomatch": "^3.0.1",
+            "pretty-bytes": "^5.6.0",
+            "pretty-format": "^29.7.0",
+            "progress": "^2.0.3",
+            "prompts": "^2.3.2",
+            "qrcode-terminal": "0.11.0",
+            "require-from-string": "^2.0.2",
+            "requireg": "^0.2.2",
+            "resolve": "^1.22.2",
+            "resolve-from": "^5.0.0",
+            "resolve.exports": "^2.0.3",
+            "semver": "^7.6.0",
+            "send": "^0.19.0",
+            "slugify": "^1.3.4",
+            "source-map-support": "~0.5.21",
+            "stacktrace-parser": "^0.1.10",
+            "structured-headers": "^0.4.1",
+            "tar": "^7.5.2",
+            "terminal-link": "^2.1.1",
+            "undici": "^6.18.2",
+            "wrap-ansi": "^7.0.0",
+            "ws": "^8.12.1"
+          },
+          "peers": {
+            "expo": "*",
+            "expo-router": "*",
+            "react-native": "*"
+          }
+        },
+        {
+          "name": "@expo/metro",
+          "version": "54.2.0",
+          "manifest": "node_modules/.pnpm/@expo+metro@54.2.0/node_modules/@expo/metro/package.json",
+          "exports": {
+            "./package.json": "./package.json",
+            "./*": "./*.js",
+            "./*.js": "./*.js",
+            "./metro": "./metro/index.js",
+            "./metro-babel-transformer": "./metro-babel-transformer/index.js",
+            "./metro-cache": "./metro-cache/index.js",
+            "./metro-cache-key": "./metro-cache-key/index.js",
+            "./metro-config": "./metro-config/index.js",
+            "./metro-config/defaults": "./metro-config/defaults/index.js",
+            "./metro-core": "./metro-core/index.js",
+            "./metro-file-map": "./metro-file-map/index.js",
+            "./metro-file-map/crawlers/node": "./metro-file-map/crawlers/node/index.js",
+            "./metro-file-map/crawlers/watchman": "./metro-file-map/crawlers/watchman/index.js",
+            "./metro-minify-terser": "./metro-minify-terser/index.js",
+            "./metro-resolver": "./metro-resolver/index.js",
+            "./metro-source-map": "./metro-source-map/source-map.js",
+            "./metro-source-map/Consumer": "./metro-source-map/Consumer/index.js",
+            "./metro-symbolicate": "./metro-symbolicate/index.js",
+            "./metro-transform-plugins": "./metro-transform-plugins/index.js",
+            "./metro-transform-worker": "./metro-transform-worker/index.js"
+          },
+          "dependencies": {
+            "metro": "0.83.3",
+            "metro-babel-transformer": "0.83.3",
+            "metro-cache": "0.83.3",
+            "metro-cache-key": "0.83.3",
+            "metro-config": "0.83.3",
+            "metro-core": "0.83.3",
+            "metro-file-map": "0.83.3",
+            "metro-minify-terser": "0.83.3",
+            "metro-resolver": "0.83.3",
+            "metro-runtime": "0.83.3",
+            "metro-source-map": "0.83.3",
+            "metro-symbolicate": "0.83.3",
+            "metro-transform-plugins": "0.83.3",
+            "metro-transform-worker": "0.83.3"
+          }
+        },
+        {
+          "name": "metro",
+          "version": "0.83.3",
+          "manifest": "node_modules/.pnpm/metro@0.83.3/node_modules/metro/package.json",
+          "main": "src/index.js",
+          "exports": {
+            ".": "./src/index.js",
+            "./package.json": "./package.json",
+            "./private/*": "./src/*.js"
+          },
+          "dependencies": {
+            "@babel/code-frame": "^7.24.7",
+            "@babel/core": "^7.25.2",
+            "@babel/generator": "^7.25.0",
+            "@babel/parser": "^7.25.3",
+            "@babel/template": "^7.25.0",
+            "@babel/traverse": "^7.25.3",
+            "@babel/types": "^7.25.2",
+            "accepts": "^1.3.7",
+            "chalk": "^4.0.0",
+            "ci-info": "^2.0.0",
+            "connect": "^3.6.5",
+            "debug": "^4.4.0",
+            "error-stack-parser": "^2.0.6",
+            "flow-enums-runtime": "^0.0.6",
+            "graceful-fs": "^4.2.4",
+            "hermes-parser": "0.32.0",
+            "image-size": "^1.0.2",
+            "invariant": "^2.2.4",
+            "jest-worker": "^29.7.0",
+            "jsc-safe-url": "^0.2.2",
+            "lodash.throttle": "^4.1.1",
+            "metro-babel-transformer": "0.83.3",
+            "metro-cache": "0.83.3",
+            "metro-cache-key": "0.83.3",
+            "metro-config": "0.83.3",
+            "metro-core": "0.83.3",
+            "metro-file-map": "0.83.3",
+            "metro-resolver": "0.83.3",
+            "metro-runtime": "0.83.3",
+            "metro-source-map": "0.83.3",
+            "metro-symbolicate": "0.83.3",
+            "metro-transform-plugins": "0.83.3",
+            "metro-transform-worker": "0.83.3",
+            "mime-types": "^2.1.27",
+            "nullthrows": "^1.1.1",
+            "serialize-error": "^2.1.0",
+            "source-map": "^0.5.6",
+            "throat": "^5.0.0",
+            "ws": "^7.5.10",
+            "yargs": "^17.6.2"
+          }
+        },
+        {
+          "name": "image-size",
+          "version": "1.2.1",
+          "manifest": "node_modules/.pnpm/image-size@1.2.1/node_modules/image-size/package.json",
+          "main": "dist/index.js",
+          "dependencies": {
+            "queue": "6.0.2"
+          }
+        }
+      ]
+    },
+    {
+      "advisory": "GHSA-w3rx-r6r6-pgpr",
+      "severity": "high",
+      "module": "image-size",
+      "version": "1.2.1",
+      "patched": ">=2.0.3",
+      "title": "image-size: ICNS parser allows denial of service through an infinite loop",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>@expo/metro>metro>image-size",
+      "locations": [
+        {
+          "name": "@expo/cli",
+          "version": "54.0.23",
+          "manifest": "node_modules/.pnpm/@expo+cli@54.0.23_expo-rout_ff91a881d4ae11d6fdae385494ac65cd/node_modules/@expo/cli/package.json",
+          "main": "build/bin/cli",
+          "dependencies": {
+            "@0no-co/graphql.web": "^1.0.8",
+            "@expo/code-signing-certificates": "^0.0.6",
+            "@expo/config": "~12.0.13",
+            "@expo/config-plugins": "~54.0.4",
+            "@expo/devcert": "^1.2.1",
+            "@expo/env": "~2.0.8",
+            "@expo/image-utils": "^0.8.8",
+            "@expo/json-file": "^10.0.8",
+            "@expo/metro": "~54.2.0",
+            "@expo/metro-config": "~54.0.14",
+            "@expo/osascript": "^2.3.8",
+            "@expo/package-manager": "^1.9.10",
+            "@expo/plist": "^0.4.8",
+            "@expo/prebuild-config": "^54.0.8",
+            "@expo/schema-utils": "^0.1.8",
+            "@expo/spawn-async": "^1.7.2",
+            "@expo/ws-tunnel": "^1.0.1",
+            "@expo/xcpretty": "^4.3.0",
+            "@react-native/dev-middleware": "0.81.5",
+            "@urql/core": "^5.0.6",
+            "@urql/exchange-retry": "^1.3.0",
+            "accepts": "^1.3.8",
+            "arg": "^5.0.2",
+            "better-opn": "~3.0.2",
+            "bplist-creator": "0.1.0",
+            "bplist-parser": "^0.3.1",
+            "chalk": "^4.0.0",
+            "ci-info": "^3.3.0",
+            "compression": "^1.7.4",
+            "connect": "^3.7.0",
+            "debug": "^4.3.4",
+            "env-editor": "^0.4.1",
+            "expo-server": "^1.0.5",
+            "freeport-async": "^2.0.0",
+            "getenv": "^2.0.0",
+            "glob": "^13.0.0",
+            "lan-network": "^0.1.6",
+            "minimatch": "^9.0.0",
+            "node-forge": "^1.3.3",
+            "npm-package-arg": "^11.0.0",
+            "ora": "^3.4.0",
+            "picomatch": "^3.0.1",
+            "pretty-bytes": "^5.6.0",
+            "pretty-format": "^29.7.0",
+            "progress": "^2.0.3",
+            "prompts": "^2.3.2",
+            "qrcode-terminal": "0.11.0",
+            "require-from-string": "^2.0.2",
+            "requireg": "^0.2.2",
+            "resolve": "^1.22.2",
+            "resolve-from": "^5.0.0",
+            "resolve.exports": "^2.0.3",
+            "semver": "^7.6.0",
+            "send": "^0.19.0",
+            "slugify": "^1.3.4",
+            "source-map-support": "~0.5.21",
+            "stacktrace-parser": "^0.1.10",
+            "structured-headers": "^0.4.1",
+            "tar": "^7.5.2",
+            "terminal-link": "^2.1.1",
+            "undici": "^6.18.2",
+            "wrap-ansi": "^7.0.0",
+            "ws": "^8.12.1"
+          },
+          "peers": {
+            "expo": "*",
+            "expo-router": "*",
+            "react-native": "*"
+          }
+        },
+        {
+          "name": "@expo/metro",
+          "version": "54.2.0",
+          "manifest": "node_modules/.pnpm/@expo+metro@54.2.0/node_modules/@expo/metro/package.json",
+          "exports": {
+            "./package.json": "./package.json",
+            "./*": "./*.js",
+            "./*.js": "./*.js",
+            "./metro": "./metro/index.js",
+            "./metro-babel-transformer": "./metro-babel-transformer/index.js",
+            "./metro-cache": "./metro-cache/index.js",
+            "./metro-cache-key": "./metro-cache-key/index.js",
+            "./metro-config": "./metro-config/index.js",
+            "./metro-config/defaults": "./metro-config/defaults/index.js",
+            "./metro-core": "./metro-core/index.js",
+            "./metro-file-map": "./metro-file-map/index.js",
+            "./metro-file-map/crawlers/node": "./metro-file-map/crawlers/node/index.js",
+            "./metro-file-map/crawlers/watchman": "./metro-file-map/crawlers/watchman/index.js",
+            "./metro-minify-terser": "./metro-minify-terser/index.js",
+            "./metro-resolver": "./metro-resolver/index.js",
+            "./metro-source-map": "./metro-source-map/source-map.js",
+            "./metro-source-map/Consumer": "./metro-source-map/Consumer/index.js",
+            "./metro-symbolicate": "./metro-symbolicate/index.js",
+            "./metro-transform-plugins": "./metro-transform-plugins/index.js",
+            "./metro-transform-worker": "./metro-transform-worker/index.js"
+          },
+          "dependencies": {
+            "metro": "0.83.3",
+            "metro-babel-transformer": "0.83.3",
+            "metro-cache": "0.83.3",
+            "metro-cache-key": "0.83.3",
+            "metro-config": "0.83.3",
+            "metro-core": "0.83.3",
+            "metro-file-map": "0.83.3",
+            "metro-minify-terser": "0.83.3",
+            "metro-resolver": "0.83.3",
+            "metro-runtime": "0.83.3",
+            "metro-source-map": "0.83.3",
+            "metro-symbolicate": "0.83.3",
+            "metro-transform-plugins": "0.83.3",
+            "metro-transform-worker": "0.83.3"
+          }
+        },
+        {
+          "name": "metro",
+          "version": "0.83.3",
+          "manifest": "node_modules/.pnpm/metro@0.83.3/node_modules/metro/package.json",
+          "main": "src/index.js",
+          "exports": {
+            ".": "./src/index.js",
+            "./package.json": "./package.json",
+            "./private/*": "./src/*.js"
+          },
+          "dependencies": {
+            "@babel/code-frame": "^7.24.7",
+            "@babel/core": "^7.25.2",
+            "@babel/generator": "^7.25.0",
+            "@babel/parser": "^7.25.3",
+            "@babel/template": "^7.25.0",
+            "@babel/traverse": "^7.25.3",
+            "@babel/types": "^7.25.2",
+            "accepts": "^1.3.7",
+            "chalk": "^4.0.0",
+            "ci-info": "^2.0.0",
+            "connect": "^3.6.5",
+            "debug": "^4.4.0",
+            "error-stack-parser": "^2.0.6",
+            "flow-enums-runtime": "^0.0.6",
+            "graceful-fs": "^4.2.4",
+            "hermes-parser": "0.32.0",
+            "image-size": "^1.0.2",
+            "invariant": "^2.2.4",
+            "jest-worker": "^29.7.0",
+            "jsc-safe-url": "^0.2.2",
+            "lodash.throttle": "^4.1.1",
+            "metro-babel-transformer": "0.83.3",
+            "metro-cache": "0.83.3",
+            "metro-cache-key": "0.83.3",
+            "metro-config": "0.83.3",
+            "metro-core": "0.83.3",
+            "metro-file-map": "0.83.3",
+            "metro-resolver": "0.83.3",
+            "metro-runtime": "0.83.3",
+            "metro-source-map": "0.83.3",
+            "metro-symbolicate": "0.83.3",
+            "metro-transform-plugins": "0.83.3",
+            "metro-transform-worker": "0.83.3",
+            "mime-types": "^2.1.27",
+            "nullthrows": "^1.1.1",
+            "serialize-error": "^2.1.0",
+            "source-map": "^0.5.6",
+            "throat": "^5.0.0",
+            "ws": "^7.5.10",
+            "yargs": "^17.6.2"
+          }
+        },
+        {
+          "name": "image-size",
+          "version": "1.2.1",
+          "manifest": "node_modules/.pnpm/image-size@1.2.1/node_modules/image-size/package.json",
+          "main": "dist/index.js",
+          "dependencies": {
+            "queue": "6.0.2"
+          }
+        }
+      ]
+    },
+    {
+      "advisory": "GHSA-86w9-cpqp-85rv",
+      "severity": "high",
+      "module": "node-forge",
+      "version": "1.4.0",
+      "patched": "<0.0.0",
+      "title": "node-forge RSA PKCS#1 v1.5 signature verification accepts extra nested DigestAlgorithm elements",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/cli>node-forge",
+      "locations": [
+        {
+          "name": "@expo/cli",
+          "version": "54.0.23",
+          "manifest": "node_modules/.pnpm/@expo+cli@54.0.23_expo-rout_ff91a881d4ae11d6fdae385494ac65cd/node_modules/@expo/cli/package.json",
+          "main": "build/bin/cli",
+          "dependencies": {
+            "@0no-co/graphql.web": "^1.0.8",
+            "@expo/code-signing-certificates": "^0.0.6",
+            "@expo/config": "~12.0.13",
+            "@expo/config-plugins": "~54.0.4",
+            "@expo/devcert": "^1.2.1",
+            "@expo/env": "~2.0.8",
+            "@expo/image-utils": "^0.8.8",
+            "@expo/json-file": "^10.0.8",
+            "@expo/metro": "~54.2.0",
+            "@expo/metro-config": "~54.0.14",
+            "@expo/osascript": "^2.3.8",
+            "@expo/package-manager": "^1.9.10",
+            "@expo/plist": "^0.4.8",
+            "@expo/prebuild-config": "^54.0.8",
+            "@expo/schema-utils": "^0.1.8",
+            "@expo/spawn-async": "^1.7.2",
+            "@expo/ws-tunnel": "^1.0.1",
+            "@expo/xcpretty": "^4.3.0",
+            "@react-native/dev-middleware": "0.81.5",
+            "@urql/core": "^5.0.6",
+            "@urql/exchange-retry": "^1.3.0",
+            "accepts": "^1.3.8",
+            "arg": "^5.0.2",
+            "better-opn": "~3.0.2",
+            "bplist-creator": "0.1.0",
+            "bplist-parser": "^0.3.1",
+            "chalk": "^4.0.0",
+            "ci-info": "^3.3.0",
+            "compression": "^1.7.4",
+            "connect": "^3.7.0",
+            "debug": "^4.3.4",
+            "env-editor": "^0.4.1",
+            "expo-server": "^1.0.5",
+            "freeport-async": "^2.0.0",
+            "getenv": "^2.0.0",
+            "glob": "^13.0.0",
+            "lan-network": "^0.1.6",
+            "minimatch": "^9.0.0",
+            "node-forge": "^1.3.3",
+            "npm-package-arg": "^11.0.0",
+            "ora": "^3.4.0",
+            "picomatch": "^3.0.1",
+            "pretty-bytes": "^5.6.0",
+            "pretty-format": "^29.7.0",
+            "progress": "^2.0.3",
+            "prompts": "^2.3.2",
+            "qrcode-terminal": "0.11.0",
+            "require-from-string": "^2.0.2",
+            "requireg": "^0.2.2",
+            "resolve": "^1.22.2",
+            "resolve-from": "^5.0.0",
+            "resolve.exports": "^2.0.3",
+            "semver": "^7.6.0",
+            "send": "^0.19.0",
+            "slugify": "^1.3.4",
+            "source-map-support": "~0.5.21",
+            "stacktrace-parser": "^0.1.10",
+            "structured-headers": "^0.4.1",
+            "tar": "^7.5.2",
+            "terminal-link": "^2.1.1",
+            "undici": "^6.18.2",
+            "wrap-ansi": "^7.0.0",
+            "ws": "^8.12.1"
+          },
+          "peers": {
+            "expo": "*",
+            "expo-router": "*",
+            "react-native": "*"
+          }
+        },
+        {
+          "name": "node-forge",
+          "version": "1.4.0",
+          "manifest": "node_modules/.pnpm/node-forge@1.4.0/node_modules/node-forge/package.json",
+          "main": "lib/index.js"
+        }
+      ]
+    },
+    {
+      "advisory": "GHSA-ch52-4w7c-c8xp",
+      "severity": "high",
+      "module": "http-cache-semantics",
+      "version": "4.2.0",
+      "patched": "<0.0.0",
+      "title": "http-cache-semantics max-stale handling can disclose cross-user cached responses",
+      "chain": "artifacts__gxeon-dashboard-mobile>@expo/ngrok>got>cacheable-request>http-cache-semantics",
+      "locations": [
+        {
+          "name": "@expo/ngrok",
+          "version": "4.1.3",
+          "manifest": "node_modules/.pnpm/@expo+ngrok@4.1.3/node_modules/@expo/ngrok/package.json",
+          "main": "index.js",
+          "dependencies": {
+            "@expo/ngrok-bin": "2.3.42",
+            "got": "^11.5.1",
+            "uuid": "^3.3.2",
+            "yaml": "^1.10.0"
+          }
+        },
+        {
+          "name": "got",
+          "version": "11.8.6",
+          "manifest": "node_modules/.pnpm/got@11.8.6/node_modules/got/package.json",
+          "main": "dist/source",
+          "dependencies": {
+            "@sindresorhus/is": "^4.0.0",
+            "@szmarczak/http-timer": "^4.0.5",
+            "@types/cacheable-request": "^6.0.1",
+            "@types/responselike": "^1.0.0",
+            "cacheable-lookup": "^5.0.3",
+            "cacheable-request": "^7.0.2",
+            "decompress-response": "^6.0.0",
+            "http2-wrapper": "^1.0.0-beta.5.2",
+            "lowercase-keys": "^2.0.0",
+            "p-cancelable": "^2.0.0",
+            "responselike": "^2.0.0"
+          }
+        },
+        {
+          "name": "cacheable-request",
+          "version": "7.0.4",
+          "manifest": "node_modules/.pnpm/cacheable-request@7.0.4/node_modules/cacheable-request/package.json",
+          "main": "src/index.js",
+          "dependencies": {
+            "clone-response": "^1.0.2",
+            "get-stream": "^5.1.0",
+            "http-cache-semantics": "^4.0.0",
+            "keyv": "^4.0.0",
+            "lowercase-keys": "^2.0.0",
+            "normalize-url": "^6.0.1",
+            "responselike": "^2.0.0"
+          }
+        },
+        {
+          "name": "http-cache-semantics",
+          "version": "4.2.0",
+          "manifest": "node_modules/.pnpm/http-cache-semantics@4.2.0/node_modules/http-cache-semantics/package.json",
+          "main": "index.js"
+        }
+      ]
+    },
+    {
+      "advisory": "GHSA-rj75-hqrm-r3gf",
+      "severity": "moderate",
+      "module": "postcss-selector-parser",
+      "version": "6.0.10",
+      "patched": ">=7.1.6",
+      "title": "PostCSS: Quadratic complexity in flat selector parsing allows CPU exhaustion",
+      "chain": "artifacts__gxeon-dashboard>@tailwindcss/typography>postcss-selector-parser",
+      "locations": [
+        {
+          "name": "@tailwindcss/typography",
+          "version": "0.5.19",
+          "manifest": "node_modules/.pnpm/@tailwindcss+typography@0.5.19_tailwindcss@4.3.0/node_modules/@tailwindcss/typography/package.json",
+          "main": "src/index.js",
+          "dependencies": {
+            "postcss-selector-parser": "6.0.10"
+          },
+          "peers": {
+            "tailwindcss": ">=3.0.0 || insiders || >=4.0.0-alpha.20 || >=4.0.0-beta.1"
+          }
+        },
+        {
+          "name": "postcss-selector-parser",
+          "version": "6.0.10",
+          "manifest": "node_modules/.pnpm/postcss-selector-parser@6.0.10/node_modules/postcss-selector-parser/package.json",
+          "main": "dist/index.js",
+          "dependencies": {
+            "cssesc": "^3.0.0",
+            "util-deprecate": "^1.0.2"
+          }
+        }
+      ]
+    },
+    {
+      "advisory": "GHSA-mrhx-c7xc-m3w5",
+      "severity": "high",
+      "module": "zod",
+      "version": "3.25.76",
+      "patched": ">=4.6.6",
+      "title": "Zod can exhaust memory while validating oversized constrained collections",
+      "chain": "artifacts__gxeon-dashboard>zod",
+      "locations": [
+        {
+          "name": "zod",
+          "version": "3.25.76",
+          "manifest": "node_modules/.pnpm/zod@3.25.76/node_modules/zod/package.json",
+          "main": "./index.cjs",
+          "exports": {
+            "./package.json": "./package.json",
+            ".": {
+              "@zod/source": "./src/index.ts",
+              "types": "./index.d.cts",
+              "import": "./index.js",
+              "require": "./index.cjs"
+            },
+            "./v3": {
+              "@zod/source": "./src/v3/index.ts",
+              "types": "./v3/index.d.cts",
+              "import": "./v3/index.js",
+              "require": "./v3/index.cjs"
+            },
+            "./v4": {
+              "@zod/source": "./src/v4/index.ts",
+              "types": "./v4/index.d.cts",
+              "import": "./v4/index.js",
+              "require": "./v4/index.cjs"
+            },
+            "./v4-mini": {
+              "@zod/source": "./src/v4-mini/index.ts",
+              "types": "./v4-mini/index.d.cts",
+              "import": "./v4-mini/index.js",
+              "require": "./v4-mini/index.cjs"
+            },
+            "./v4/mini": {
+              "@zod/source": "./src/v4/mini/index.ts",
+              "types": "./v4/mini/index.d.cts",
+              "import": "./v4/mini/index.js",
+              "require": "./v4/mini/index.cjs"
+            },
+            "./v4/core": {
+              "@zod/source": "./src/v4/core/index.ts",
+              "types": "./v4/core/index.d.cts",
+              "import": "./v4/core/index.js",
+              "require": "./v4/core/index.cjs"
+            },
+            "./v4/locales": {
+              "@zod/source": "./src/v4/locales/index.ts",
+              "types": "./v4/locales/index.d.cts",
+              "import": "./v4/locales/index.js",
+              "require": "./v4/locales/index.cjs"
+            },
+            "./v4/locales/*": {
+              "@zod/source": "./src/v4/locales/*",
+              "types": "./v4/locales/*",
+              "import": "./v4/locales/*",
+              "require": "./v4/locales/*"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

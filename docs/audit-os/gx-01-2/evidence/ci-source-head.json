@@ -1,0 +1,58 @@
+{
+  "sourceHead": "4fe2e08e9033ad00722b6b22f37a175bf19e15fd",
+  "testCheckout": "245eee31ca53cfffba143c8bc54d5a4d444f2c46",
+  "note": "GitHub Actions pull_request checkout tests the integration merge commit. Workflow artifacts associate this checkout with sourceHead; local native evidence separately binds a clean branch checkout.",
+  "runs": [
+    {
+      "id": 39479943578,
+      "name": "GXEON Typecheck",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39479943578"
+    },
+    {
+      "id": 39479943572,
+      "name": "Audit OS V1",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39479943572"
+    },
+    {
+      "id": 39479943766,
+      "name": "GXEON Build",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39479943766"
+    },
+    {
+      "id": 39479943503,
+      "name": "GXEON Monorepo Health",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/xpex-systems-ai/GXEON-AI/actions/runs/39479943503"
+    }
+  ],
+  "auditJobs": [
+    {
+      "id": 118825571997,
+      "name": "isolated-staging",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 118825572084,
+      "name": "audit-flow",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifact": {
+    "id": 12291467521,
+    "digest": "sha256:9c81ad00d2ef57ed517c96d531e93e1ca55b12120d9baba31f422e3016e128a8",
+    "downloadedAndChecksumVerified": true,
+    "files": [
+      "ci-acceptance.json",
+      "ci-api-report.json"
+    ]
+  }
+}

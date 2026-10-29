@@ -170,9 +170,12 @@ async function startMetro(expoPublicDomain, expoPublicReplId) {
     console.log(`Setting EXPO_PUBLIC_REPL_ID=${expoPublicReplId}`);
   }
 
+  const packageManagerCli = process.env.npm_execpath;
+  if (!packageManagerCli) exitWithError("Run the mobile build through pnpm run build.");
   metroProcess = spawn(
-    "pnpm",
+    process.execPath,
     [
+      packageManagerCli,
       "exec",
       "expo",
       "start",
@@ -225,6 +228,21 @@ async function downloadFile(url, outputPath) {
     const response = await fetch(url, { signal: controller.signal });
 
     if (!response.ok) {
+      // Report only bounded module identifiers from our local compiler. Never dump
+      // the response body, code frames, environment, or a full transformation stack.
+      try {
+        const detail = await response.json();
+        const identifier = (value) => typeof value === "string" &&
+          /^[A-Za-z0-9@./_:\\ -]{1,260}$/.test(value) ? value : undefined;
+        const missing = String(detail.message ?? "").match(/Cannot find module '([@A-Za-z0-9./_-]+)'/);
+        console.error("METRO_DOWNLOAD_FAILED", JSON.stringify({
+          status: response.status,
+          type: identifier(detail.type),
+          originModulePath: identifier(detail.originModulePath),
+          targetModuleName: identifier(detail.targetModuleName),
+          missingModule: identifier(missing?.[1]),
+        }));
+      } catch { /* HTTP status remains the failure when diagnostic JSON is unavailable. */ }
       throw new Error(`HTTP ${response.status}`);
     }
 
