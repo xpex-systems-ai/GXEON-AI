@@ -7,6 +7,7 @@ export type AuditPilotConfig = {
   databaseUrl: string;
   databaseCa?: string;
   databaseNetwork?: AuditDatabaseNetwork;
+  supabaseProjectRef?: string;
   deploymentMode: "railway" | "private" | "render";
   renderIngress?: RenderIngressConfig;
   bindHost: string;
@@ -34,10 +35,16 @@ export function loadAuditPilotConfig(env: NodeJS.ProcessEnv = process.env): Audi
   const mode = env.GXEON_AUDIT_DEPLOYMENT_MODE ?? "railway";
   if (!["railway", "private", "render"].includes(mode) || env.NODE_TLS_REJECT_UNAUTHORIZED === "0") refuse();
   if (!["postgres:", "postgresql:"].includes(database.protocol) ||
-      database.username !== "gx01_pilot_app" ||
-      database.pathname !== "/gx01_pilot" || database.search || database.hash || password.length < 24 || Array.from(password).some(c => c.codePointAt(0)! < 32 || c.codePointAt(0) === 127)) refuse();
-  if (mode === "railway" && !database.hostname.endsWith(".railway.internal")) refuse();
+      !["/gx01_pilot", "/postgres"].includes(database.pathname) ||
+      database.search || database.hash || password.length < 24 || Array.from(password).some(c => c.codePointAt(0)! < 32 || c.codePointAt(0) === 127)) refuse();
   const databaseNetwork = loadAuditDatabaseNetwork(env, mode, database);
+  if (mode === "railway" && !["supabase-direct-ca", "supabase-session-ca"].includes(databaseNetwork) &&
+      !database.hostname.endsWith(".railway.internal")) refuse();
+  // Supabase uses its own postgres database. Legacy isolated gx01_pilot remains unchanged.
+  const isSupabase = ["supabase-direct-ca", "supabase-session-ca"].includes(databaseNetwork);
+  if (database.username !== (databaseNetwork === "supabase-session-ca"
+      ? `gx01_pilot_app.${env.GXEON_AUDIT_SUPABASE_PROJECT_REF}` : "gx01_pilot_app") ||
+      (isSupabase ? database.pathname !== "/postgres" : database.pathname !== "/gx01_pilot")) refuse();
   const certFile = env.GXEON_AUDIT_HTTPS_CERT_FILE, keyFile = env.GXEON_AUDIT_HTTPS_KEY_FILE;
   if (!!certFile !== !!keyFile) refuse();
   if (["private", "render"].includes(mode) && (env.GXEON_AUDIT_DATABASE_HOST !== database.hostname ||
@@ -53,7 +60,9 @@ export function loadAuditPilotConfig(env: NodeJS.ProcessEnv = process.env): Audi
     catch { return true; }
   })) refuse();
   if (renderIngress && bindHost !== "0.0.0.0") refuse();
-  return { port, origins: [...new Set(origins)], databaseUrl: database.href, databaseNetwork, deploymentMode: mode as AuditPilotConfig["deploymentMode"], bindHost,
+  return { port, origins: [...new Set(origins)], databaseUrl: database.href, databaseNetwork,
+    ...(isSupabase ? { supabaseProjectRef: env.GXEON_AUDIT_SUPABASE_PROJECT_REF } : {}),
+    deploymentMode: mode as AuditPilotConfig["deploymentMode"], bindHost,
     ...(renderIngress ? { renderIngress } : {}),
     ...(env.GXEON_AUDIT_FRONTEND_ROOT ? { frontendRoot: env.GXEON_AUDIT_FRONTEND_ROOT } : {}),
     ...(certFile && keyFile ? { https: { certFile, keyFile } } : {}),

@@ -25,7 +25,8 @@ async function start() {
   if (extensions.browser && config.origins[0] !== extensions.browser.origin) throw new Error("ENTERPRISE_BROWSER_ORIGIN_APPROVAL_REQUIRED");
   const pool = new Pool(await auditPilotConnectionOptions(config));
   pool.on("error", () => console.error(JSON.stringify({ event: "audit_database_unavailable" })));
-  try { await assertAuditPilotDatabase(pool, { enterprise: !!extensions.enterprise, commercial: !!extensions.commercial, lead: !!extensions.lead }); }
+  try { await assertAuditPilotDatabase(pool, { enterprise: !!extensions.enterprise, commercial: !!extensions.commercial, lead: !!extensions.lead,
+    supabase: config.databaseNetwork === "supabase-direct-ca" }); }
   catch { await pool.end(); throw new Error("AUDIT_DATABASE_NOT_READY"); }
   const service = createAuditWorkflowService(() => pool.connect());
   const enterprise = extensions.enterprise ? { verify: createEnterpriseTokenVerifier(extensions.enterprise), store: createEnterpriseIdentityStore(() => pool.connect()) } : undefined;

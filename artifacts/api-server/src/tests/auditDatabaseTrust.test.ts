@@ -71,3 +71,110 @@ test("public profile rejects DNS rebinding to private/reserved networks and reta
   // Existing private contract remains private even when a public route is requested accidentally.
   await assert.rejects(auditPilotConnectionOptions({ ...config, databaseNetwork: "private-ca" }, async () => [{ address: "8.8.8.8", family: 4 }]), /PRIVATE_AUDIT_DATABASE_ADDRESS_REQUIRED/);
 });
+
+const supabaseRef = "bdxqxunosdkdvnxuamid"; // Non-secret canonical project ref, never connection authority alone.
+const supabaseHost = `db.${supabaseRef}.supabase.co`;
+const supabaseUrl = new URL(`postgresql://gx01_pilot_app:${randomBytes(32).toString("base64url")}@${supabaseHost}/postgres`);
+const supabaseCa = "-----BEGIN CERTIFICATE-----\\nSYNTHETIC PEM SHAPE ONLY\\n-----END CERTIFICATE-----";
+const supabaseEnv = { GXEON_AUDIT_DATABASE_NETWORK: "supabase-direct-ca", GXEON_AUDIT_DATABASE_HOST: supabaseHost,
+  GXEON_AUDIT_SUPABASE_PROJECT_REF: supabaseRef, GXEON_AUDIT_SUPABASE_SANDBOX: "true", GXEON_AUDIT_DATABASE_TLS_CA: supabaseCa };
+
+test("Supabase direct candidate is exact-project, CA-bound, and synthetic-only by explicit opt-in", () => {
+  assert.equal(loadAuditDatabaseNetwork(supabaseEnv, "private", supabaseUrl), "supabase-direct-ca");
+  assert.equal(loadAuditDatabaseNetwork(supabaseEnv, "render", supabaseUrl), "supabase-direct-ca");
+  for (const patch of [
+    { GXEON_AUDIT_SUPABASE_PROJECT_REF: "aaaaaaaaaaaaaaaaaaaa" },
+    { GXEON_AUDIT_SUPABASE_SANDBOX: "false" },
+    { GXEON_AUDIT_DATABASE_HOST: "db.untrusted.supabase.co" },
+    { GXEON_AUDIT_DATABASE_TLS_CA: "" },
+    { NODE_TLS_REJECT_UNAUTHORIZED: "0" },
+  ]) assert.throws(() => loadAuditDatabaseNetwork({ ...supabaseEnv, ...patch }, "private", supabaseUrl), /AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED/);
+  for (const url of [
+    new URL(supabaseUrl.href.replace("/postgres", "/shared")),
+    new URL(supabaseUrl.href.replace(supabaseHost, `db.aaaaaaaaaaaaaaaaaaaa.supabase.co`)),
+    new URL(supabaseUrl.href.replace("/postgres", ":6543/postgres")),
+  ]) assert.throws(() => loadAuditDatabaseNetwork(supabaseEnv, "private", url), /AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED/);
+  assert.equal(loadAuditDatabaseNetwork(supabaseEnv, "railway", supabaseUrl), "supabase-direct-ca");
+});
+
+test("Supabase direct PostgreSQL candidate pins IPv6 public endpoint, CA and private search path", async () => {
+  const config: AuditPilotConfig = { port: 8443, origins: ["https://omnix.example.invalid"], databaseUrl: supabaseUrl.href,
+    databaseCa: supabaseCa, databaseNetwork: "supabase-direct-ca", deploymentMode: "private", bindHost: "127.0.0.1",
+    supabaseProjectRef: supabaseRef };
+  const options = await auditPilotConnectionOptions(config, async hostname => {
+    assert.equal(hostname, supabaseHost);
+    return [{ address: "2606:4700:4700::1111", family: 6 }];
+  });
+  assert.equal(options.host, "2606:4700:4700::1111");
+  assert.equal(options.database, "postgres");
+  assert.equal(options.user, "gx01_pilot_app");
+  assert.equal(options.options, "-c search_path=omnix_audit,pg_catalog");
+  assert.equal(options.ssl.servername, supabaseHost);
+  assert.equal(options.ssl.rejectUnauthorized, true);
+  assert.equal(options.ssl.minVersion, "TLSv1.2");
+  assert.equal(options.ssl.ca, supabaseCa);
+  assert.equal(options.ssl.checkServerIdentity("2606:4700:4700::1111",
+    { subjectaltname: "DNS:" + supabaseHost } as Parameters<typeof options.ssl.checkServerIdentity>[1]), undefined);
+  assert.ok(options.ssl.checkServerIdentity("2606:4700:4700::1111",
+    { subjectaltname: "DNS:attacker.invalid" } as Parameters<typeof options.ssl.checkServerIdentity>[1]));
+  for (const address of ["127.0.0.1", "169.254.169.254", "::1", "fd12::1", "2001:db8::1"]) {
+    await assert.rejects(auditPilotConnectionOptions(config, async () => [{ address, family: address.includes(":") ? 6 : 4 }]),
+      /PUBLIC_AUDIT_DATABASE_ADDRESS_REQUIRED/);
+  }
+  await assert.rejects(auditPilotConnectionOptions({ ...config, supabaseProjectRef: "aaaaaaaaaaaaaaaaaaaa" },
+    async () => [{ address: "2606:4700:4700::1111", family: 6 }]), /AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED/);
+});
+
+
+const poolerHost = "aws-0-sa-east-1.pooler.supabase.com"; // fixture only: verify the REAL host in the Connect panel.
+const poolerUrl = new URL(`postgresql://gx01_pilot_app.${supabaseRef}:${randomBytes(32).toString("base64url")}@${poolerHost}:5432/postgres`);
+const poolerEnv = { ...supabaseEnv, GXEON_AUDIT_DATABASE_NETWORK: "supabase-session-ca",
+  GXEON_AUDIT_DATABASE_HOST: poolerHost, GXEON_AUDIT_SUPABASE_POOLER_HOST: poolerHost };
+
+test("IPv4 Supabase session pooler binds exact approved host, project role and 5432; never guesses", () => {
+  assert.equal(loadAuditDatabaseNetwork(poolerEnv, "render", poolerUrl), "supabase-session-ca");
+  for (const patch of [
+    { GXEON_AUDIT_SUPABASE_PROJECT_REF: "aaaaaaaaaaaaaaaaaaaa" },
+    { GXEON_AUDIT_SUPABASE_POOLER_HOST: "aws-1-sa-east-1.pooler.supabase.com" },
+    { GXEON_AUDIT_DATABASE_HOST: "evil.invalid" },
+    { GXEON_AUDIT_SUPABASE_SANDBOX: "false" },
+    { GXEON_AUDIT_DATABASE_TLS_CA: "" },
+    { NODE_TLS_REJECT_UNAUTHORIZED: "0" },
+  ]) assert.throws(() => loadAuditDatabaseNetwork({ ...poolerEnv, ...patch }, "render", poolerUrl),
+    /AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED/);
+  for (const replacement of [
+    poolerUrl.href.replace(":5432", ":6543"),
+    poolerUrl.href.replace("/postgres", "/other"),
+    poolerUrl.href.replace(poolerHost, "aws-0-us-west-1.pooler.supabase.com"),
+    poolerUrl.href.replace("gx01_pilot_app.", "postgres."),
+    poolerUrl.href.replace(poolerHost, "db." + supabaseRef + ".supabase.co"),
+  ]) assert.throws(() => loadAuditDatabaseNetwork(poolerEnv, "render", new URL(replacement)),
+    /AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED/);
+});
+
+test("IPv4 Supabase pooler refuses private DNS and verifies the original TLS certificate hostname", async () => {
+  const config: AuditPilotConfig = { port: 10000, origins: ["https://omnix.example.invalid"],
+    databaseUrl: poolerUrl.href, databaseCa: supabaseCa, supabaseProjectRef: supabaseRef,
+    databaseNetwork: "supabase-session-ca", deploymentMode: "render", bindHost: "0.0.0.0" };
+  const options = await auditPilotConnectionOptions(config, async name => {
+    assert.equal(name, poolerHost); return [{ address: "8.8.8.8", family: 4 }];
+  });
+  assert.equal(options.host, "8.8.8.8");
+  assert.equal(options.port, 5432);
+  assert.equal(options.user, "gx01_pilot_app." + supabaseRef);
+  assert.equal(options.database, "postgres");
+  assert.equal(options.ssl.servername, poolerHost);
+  assert.equal(options.ssl.rejectUnauthorized, true);
+  assert.equal(options.ssl.ca, supabaseCa);
+  assert.equal(options.options, "-c search_path=omnix_audit,pg_catalog");
+  assert.equal(options.ssl.checkServerIdentity("8.8.8.8",
+    { subjectaltname: "DNS:" + poolerHost } as Parameters<typeof options.ssl.checkServerIdentity>[1]), undefined);
+  assert.ok(options.ssl.checkServerIdentity("8.8.8.8",
+    { subjectaltname: "DNS:evil.invalid" } as Parameters<typeof options.ssl.checkServerIdentity>[1]));
+  for (const addr of ["127.0.0.1", "10.0.0.1", "169.254.169.254", "::1", "fd12::1"]) {
+    await assert.rejects(auditPilotConnectionOptions(config, async () =>
+      [{ address: addr, family: addr.includes(":") ? 6 : 4 }]), /PUBLIC_AUDIT_DATABASE_ADDRESS_REQUIRED/);
+  }
+  await assert.rejects(auditPilotConnectionOptions(config, async () =>
+    [{ address: "8.8.8.8", family: 4 }, { address: "127.0.0.1", family: 4 }]), /PUBLIC_AUDIT_DATABASE_ADDRESS_REQUIRED/);
+});
