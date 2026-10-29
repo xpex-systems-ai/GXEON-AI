@@ -225,3 +225,35 @@ test("dedicated admission limits bound role rate and concurrent readiness withou
     Object.assign(process.env, previous);
   }
 });
+
+test("Supabase sandbox configuration enforces project pin, CA, HTTPS origin and synthetic-only gates", () => {
+  const ref = "bdxqxunosdkdvnxuamid", host = `db.${ref}.supabase.co`;
+  const certificate = "-----BEGIN CERTIFICATE-----\\nSYNTHETIC TEST CERT\\n-----END CERTIFICATE-----";
+  const valid = { NODE_ENV: "production", PORT: "8443", GXEON_AUDIT_PILOT_ENABLED: "true",
+    GXEON_AUDIT_DB_PROVIDER: "postgres", GXEON_AUDIT_AUTO_RUN_MISSION_006: "false",
+    GXEON_AUDIT_AUTO_CREATE_FIRST_PROPOSAL: "false",
+    GXEON_AUDIT_OPERATOR_TOKEN: synthetic(), GXEON_AUDIT_REVIEWER_TOKEN: synthetic(),
+    GXEON_AUDIT_ALLOWED_ORIGINS: "https://omnix.example.invalid",
+    GXEON_AUDIT_DEPLOYMENT_MODE: "private",
+    GXEON_AUDIT_HTTPS_CERT_FILE: "/private/test-only.crt",
+    GXEON_AUDIT_HTTPS_KEY_FILE: "/private/test-only.key",
+    GXEON_AUDIT_DATABASE_NETWORK: "supabase-direct-ca",
+    GXEON_AUDIT_DATABASE_HOST: host,
+    GXEON_AUDIT_DATABASE_TLS_CA: certificate,
+    GXEON_AUDIT_SUPABASE_PROJECT_REF: ref,
+    GXEON_AUDIT_SUPABASE_SANDBOX: "true",
+    DATABASE_URL: `postgresql://gx01_pilot_app:${synthetic()}@${host}/postgres` };
+  const cfg = loadAuditPilotConfig(valid);
+  assert.equal(cfg.databaseNetwork, "supabase-direct-ca");
+  assert.equal(cfg.supabaseProjectRef, ref);
+  for (const patch of [
+    { GXEON_AUDIT_SUPABASE_SANDBOX: "false" },
+    { GXEON_AUDIT_SUPABASE_PROJECT_REF: "aaaaaaaaaaaaaaaaaaaa" },
+    { GXEON_AUDIT_DATABASE_TLS_CA: "" },
+    { DATABASE_URL: valid.DATABASE_URL.replace("/postgres", "/other") },
+    { DATABASE_URL: valid.DATABASE_URL.replace(host, "db.aaaaaaaaaaaaaaaaaaaa.supabase.co") },
+    { DATABASE_URL: valid.DATABASE_URL.replace("/postgres", ":6543/postgres") },
+    { NODE_TLS_REJECT_UNAUTHORIZED: "0" },
+    { GXEON_AUDIT_AUTO_RUN_MISSION_006: "true" },
+  ]) assert.throws(() => loadAuditPilotConfig({ ...valid, ...patch }), /AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED|AUDIT_PILOT_CONFIGURATION_REQUIRED/);
+});
