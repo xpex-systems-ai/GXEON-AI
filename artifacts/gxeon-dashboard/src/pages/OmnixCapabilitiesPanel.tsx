@@ -174,11 +174,13 @@ export default function OmnixCapabilitiesPanel({
   identityMode = "preview",
   organizationId,
   basePath,
+  onPrepareVercelAudit,
 }: {
   cases?: OmnixCases;
   identityMode?: PortalIdentityMode;
   organizationId?: string;
   basePath?: DistributionBasePath;
+  onPrepareVercelAudit?: () => void;
 }) {
   const distributionBasePath =
     basePath ??
@@ -368,6 +370,31 @@ export default function OmnixCapabilitiesPanel({
                   {specialist.evidenceProduced.join(" ")}
                 </p>
               </details>
+              <div className="ox-actions">
+                {specialist.id === "vercel" ? (
+                  <button
+                    type="button"
+                    className="ox-primary"
+                    disabled={!onPrepareVercelAudit || loading || consulting}
+                    onClick={onPrepareVercelAudit}
+                  >
+                    {onPrepareVercelAudit ? "Preparar auditoria Vercel de teste" : "Auditoria de teste requer operador autorizado"}
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    title="Ainda não existe conexão autenticada deste especialista no OMNIX."
+                  >
+                    Conectar {specialist.provider} — em desenvolvimento
+                  </button>
+                )}
+              </div>
+              <p className="ox-muted">
+                {specialist.id === "vercel"
+                  ? "Ação de preparação local/autorizada: somente vercel.json sintético e dois checks estáticos. Não conecta à API da Vercel nem libera dados reais."
+                  : "Conexão indisponível. Este botão não executa acesso ao provedor, análise remota nem coleta de credenciais."}
+              </p>
             </article>
           ))}
         </>

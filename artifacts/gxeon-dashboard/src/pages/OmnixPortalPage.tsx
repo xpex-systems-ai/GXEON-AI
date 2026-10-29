@@ -935,6 +935,11 @@ export default function OmnixPortalPage() {
                       cases={cases}
                       identityMode={identityMode}
                       organizationId={enterpriseSession?.user.organizationId}
+                      onPrepareVercelAudit={
+                        operator && connection === "online"
+                          ? () => nav("new")
+                          : undefined
+                      }
                     />
                   )}
                   {(view === "dashboard" || view === "history") && (
