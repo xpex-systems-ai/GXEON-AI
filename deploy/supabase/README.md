@@ -16,13 +16,13 @@ The existing website, seven canonical systems, Railway projects and historical S
 
 ## Code candidate (draft PR #462, based on PR #456)
 - `auditDatabaseTrust.ts`: `supabase-direct-ca` network only with exact project ref and host, explicit sandbox flag and certified CA; no pooler or private-IP fallback.
-- `auditPilotConfig.ts`: accepts the Supabase default `postgres` DB only with this profile, retaining Railway/private/Render `gx01_pilot`.
+- `auditPilotConfig.ts`: accepts the Supabase default `postgres` DB only with this profile, retaining existing Railway/private/Render `gx01_pilot`. Candidate runtime hosts: Railway (managed HTTPS ingress), Render (reviewed ingress), or private self-hosted (own HTTPS). This does not mean any host is deployed.
 - `auditPilotConnection.ts`: resolves DNS, denies private/reserved addresses, pins the chosen public IP, keeps original hostname SNI and CA+hostname TLS verification; sets `search_path=omnix_audit,pg_catalog`.
 - `auditPilotDatabase.ts` and `audit-pilot.ts`: startup attests real DB name, dedicated role and exact grants; all existing synthetic-only checks remain.
 - Added negative tests to the same security suites; build/CI results must be checked at the HEAD SHA and may not be reported as PASS while incomplete.
 
 ## Do not deploy blindly
-1. **Free direct connection is IPv6** by default. Verify the actual backend supports IPv6. If not, design and review a separate pinned **session pooler** connection with the right URL, user, port, CA and privileges; never rewrite the hostname/port by guess.
+1. **Free direct connection is IPv6** by default. Verify the actual backend (including Railway if chosen) supports IPv6. If not, design and review a separate pinned **session pooler** connection with the right URL, user, port, CA and privileges; never rewrite the hostname/port by guess.
 2. Obtain Supabase's actual database CA from the project's dashboard or approved system and store privately. Never use `rejectUnauthorized:false`, `sslmode=require` without validation, or disabled TLS.
 3. A human reviewer must confirm DB ownership, RLS, minimum grants, protected egress/ingress, code diff, backups and restoration, IdP/MFA and the fail-closed customer-data gates. Do not treat successful SQL smoke or local synthetic CI as this approval.
 4. Create an application-specific secret in the approved secret manager, enable `gx01_pilot_app LOGIN` through a reviewed private administrative process, verify role constraints and TLS handshake, then test full HTTP: synthetic intake -> checks -> persisted evidence -> distinct review -> final report -> restart -> backup/restore in a *new* database. No value should be checked into GitHub, sent to chat or shared in logs.
