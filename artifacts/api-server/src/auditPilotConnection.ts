@@ -1,7 +1,7 @@
 import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
 import { checkServerIdentity, rootCertificates } from "node:tls";
-import { isPublicAuditAddress, isRenderAuditDatabaseHost, isSupabaseAuditDatabaseHost } from "./auditDatabaseTrust";
+import { isPublicAuditAddress, isRenderAuditDatabaseHost, isSupabaseAuditDatabaseHost, isSupabaseAuditSessionPoolerHost } from "./auditDatabaseTrust";
 import type { AuditPilotConfig } from "./auditPilotConfig";
 
 export function isPrivateAuditAddress(address: string): boolean {
@@ -21,14 +21,22 @@ export async function auditPilotConnectionOptions(config: AuditPilotConfig,
   resolve: Resolve = hostname => lookup(hostname, { all: true })) {
   const url = new URL(config.databaseUrl), hostname = url.hostname.replace(/^\[|\]$/g, "");
   const externalRender = config.databaseNetwork === "render-external-public-ca";
-  const externalSupabase = config.databaseNetwork === "supabase-direct-ca";
+  const directSupabase = config.databaseNetwork === "supabase-direct-ca";
+  const sessionSupabase = config.databaseNetwork === "supabase-session-ca";
+  const externalSupabase = directSupabase || sessionSupabase;
   const publicEndpoint = externalRender || externalSupabase;
   if (externalRender && (config.deploymentMode !== "render" || !isRenderAuditDatabaseHost(hostname) || config.databaseCa || (url.port && url.port !== "5432")))
     throw new Error("AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED");
-  if (externalSupabase && (!["render", "private", "railway"].includes(config.deploymentMode) ||
+  if (directSupabase && (!["render", "private", "railway"].includes(config.deploymentMode) ||
       !isSupabaseAuditDatabaseHost(hostname, config.supabaseProjectRef ?? "") ||
       !config.databaseCa?.includes("-----BEGIN CERTIFICATE-----") ||
       url.pathname !== "/postgres" || (url.port && url.port !== "5432")))
+    throw new Error("AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED");
+  if (sessionSupabase && (![ "render", "private", "railway" ].includes(config.deploymentMode) ||
+      !isSupabaseAuditSessionPoolerHost(hostname) || !config.supabaseProjectRef ||
+      decodeURIComponent(url.username) !== `gx01_pilot_app.${config.supabaseProjectRef}` ||
+      !config.databaseCa?.includes("-----BEGIN CERTIFICATE-----") ||
+      url.pathname !== "/postgres" || url.port !== "5432"))
     throw new Error("AUDIT_DATABASE_IDENTITY_REVIEW_REQUIRED");
   const addresses = isIP(hostname) ? [{ address: hostname, family: isIP(hostname) }] : await resolve(hostname);
   if (!addresses.length || addresses.some(a => !(publicEndpoint ? isPublicAuditAddress(a.address) : isPrivateAuditAddress(a.address))))
