@@ -273,6 +273,16 @@ export function createAuditWorkflowService(
             [id],
           )
         ).rows;
+        // Every read surface, including the enterprise HTTP API, must anchor
+        // stored evidence to the independent digest written at case intake.
+        // A matching digest rewritten inside the evidence record is not proof.
+        const evidence = evidences[0];
+        if (evidences.length !== 1 || !evidence || evidence.case_id !== item.id ||
+            typeof item.metadata.artifactSha256 !== "string" ||
+            typeof evidence.metadata.sha256 !== "string" ||
+            evidence.metadata.sha256 !== item.metadata.artifactSha256 ||
+            digest(evidence.redacted_text) !== item.metadata.artifactSha256)
+          return fail(409, "EVIDENCE_INTEGRITY_FAILED", "Submitted evidence does not match the canonical case intake hash.");
         return { ok: true as const, item, evidences, findings, reports };
       });
     },

@@ -123,6 +123,14 @@ test('GX040 SQL identity, one-time invites, live memberships/delegations and can
     assert.equal((await request('/audits/'+id+'/review','reviewer',{decision:'approve',humanReviewed:true,reviewReference:'GX040 automated identity fixture; not independent release approval'})).status,200);
     assert.equal((await request('/audits/'+id+'/finalize','operator',{})).data.status,'CLOSED');
     assert.equal((await request('/audits/'+id+'/report','operator')).data.report.testData,true);
+    // Enterprise HTTP detail must also refuse altered storage; the private MCP
+    // gateway must not be the only place where evidence hashes are checked.
+    await engine.query('UPDATE audit_evidences SET redacted_text=$1 WHERE case_id=$2',['GX040 TEST DATA altered evidence',id]);
+    const tamperedDetail=await request('/audits/'+id,'reviewer');
+    assert.equal(tamperedDetail.status,409);
+    assert.equal(tamperedDetail.data.code,'EVIDENCE_INTEGRITY_FAILED');
+    await engine.query('UPDATE audit_evidences SET redacted_text=$1 WHERE case_id=$2',[intake.artifact.content,id]);
+    assert.equal((await request('/audits/'+id,'reviewer')).status,200);
     const restricted=await f.token('GX040-operator',{scope:'omnix:access omnix:audits:read omnix:reports:read'});
     assert.equal((await request('/audits/'+id+'/report','operator',undefined,ids.org,restricted)).status,403,'Report embeds evidence and requires evidence scope');
     const delegated=await store.createDelegation(identities.admin!,ids.org,ids.agency,[...enterpriseReadScopes]);
