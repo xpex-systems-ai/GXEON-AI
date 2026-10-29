@@ -246,6 +246,9 @@ test("Supabase sandbox configuration enforces project pin, CA, HTTPS origin and 
   const cfg = loadAuditPilotConfig(valid);
   assert.equal(cfg.databaseNetwork, "supabase-direct-ca");
   assert.equal(cfg.supabaseProjectRef, ref);
+  const railway = loadAuditPilotConfig({ ...valid, GXEON_AUDIT_DEPLOYMENT_MODE: "railway",
+    GXEON_AUDIT_HTTPS_CERT_FILE: undefined, GXEON_AUDIT_HTTPS_KEY_FILE: undefined });
+  assert.equal(railway.databaseNetwork, "supabase-direct-ca");
   for (const patch of [
     { GXEON_AUDIT_SUPABASE_SANDBOX: "false" },
     { GXEON_AUDIT_SUPABASE_PROJECT_REF: "aaaaaaaaaaaaaaaaaaaa" },
