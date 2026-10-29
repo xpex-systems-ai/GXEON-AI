@@ -38,8 +38,9 @@ export function loadAuditPilotConfig(env: NodeJS.ProcessEnv = process.env): Audi
       database.username !== "gx01_pilot_app" ||
       !["/gx01_pilot", "/postgres"].includes(database.pathname) ||
       database.search || database.hash || password.length < 24 || Array.from(password).some(c => c.codePointAt(0)! < 32 || c.codePointAt(0) === 127)) refuse();
-  if (mode === "railway" && !database.hostname.endsWith(".railway.internal")) refuse();
   const databaseNetwork = loadAuditDatabaseNetwork(env, mode, database);
+  if (mode === "railway" && databaseNetwork !== "supabase-direct-ca" &&
+      !database.hostname.endsWith(".railway.internal")) refuse();
   // Supabase uses its own postgres database. Legacy isolated gx01_pilot remains unchanged.
   if ((databaseNetwork === "supabase-direct-ca" && database.pathname !== "/postgres") ||
       (databaseNetwork !== "supabase-direct-ca" && database.pathname !== "/gx01_pilot")) refuse();
